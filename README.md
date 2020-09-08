@@ -1,6 +1,6 @@
 # ALTA - SOEN 490 Project
 
-**This Project will provide a robust and efficient way to audit physical repositories**
+**This Project will provide a robust and efficient way to audit physical repositories.**
 
 Name | GitHub Username
 ------------ | -------------
