@@ -2,7 +2,7 @@
 SOEN 490 Project
 
 ## Objective:
-This Ppoject will provide a robust and efficient way to audit physical repositories.
+This project will provide a robust and efficient way to audit physical repositories.
 
 Name | GitHub Username
 |:------------------------|:--------:|
