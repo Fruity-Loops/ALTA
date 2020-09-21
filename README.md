@@ -1,11 +1,8 @@
 # ALTA - SOEN 490 Project
 
-| Client Build | Server Build | Code Coverage |
-|--------------|--------------|--------------|
-| ![Build Status](https://github.com/Fruity-Loops/ALTA/workflows/build_client/badge.svg) | ![Build Status](https://github.com/Fruity-Loops/ALTA/workflows/build_server/badge.svg) | [![Coverage Status](https://coveralls.io/repos/github/Fruity-Loops/ALTA/badge.svg?branch=master)](https://coveralls.io/github/Fruity-Loops/ALTA?branch=master) |
-
-
-
+| Client Build | Server Build |
+|--------------|--------------|
+| ![Build Status](https://github.com/Fruity-Loops/ALTA/workflows/build_client/badge.svg) | ![Build Status](https://github.com/Fruity-Loops/ALTA/workflows/build_server/badge.svg) |
 
 **This Project will provide a robust and efficient way to audit physical repositories.**
 
