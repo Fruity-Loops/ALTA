@@ -1,4 +1,5 @@
-# ALTA - SOEN 490 Project
+# ALTA
+SOEN 490 Project
 
 | Client Build | Server Build |
 |--------------|--------------|
@@ -7,7 +8,7 @@
 **This Project will provide a robust and efficient way to audit physical repositories.**
 
 Name | GitHub Username
------------- | -------------
+|:------------------------|:--------:|
 Amanda Kolopanis | Amanda-Kolopa
 Avery Singh | Averynder
 Daphne Augier | daphneaugier
