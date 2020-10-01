@@ -1,6 +1,9 @@
 name: build_client
 
-on: [push, pull_request]
+on: 
+  pull_request:
+    branches:
+      - master
 
 jobs:
   test:
