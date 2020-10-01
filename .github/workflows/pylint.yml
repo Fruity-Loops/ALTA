@@ -21,8 +21,8 @@ jobs:
         pip install pylint
 
     - name: Run Lint
+      working-directory: server
       run: |
-        working-directory: server
         REPORT=$(pylint --exit-zero `ls -R|grep .py$|xargs`)
         echo "$REPORT"
         echo ::set-env name=EXPOSED_REPORT::"${REPORT//$'\n'/'%0A%0A'}"
