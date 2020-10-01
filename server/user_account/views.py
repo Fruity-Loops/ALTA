@@ -7,6 +7,7 @@ from .models import CustomUser
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework import generics
 from django.contrib import auth
+from django.contrib.auth.hashers import check_password
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -17,13 +18,13 @@ class RegistrationView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        headers = self.get_success_headers(serializer.data)
 
         # creating token
         signals.post_save.send(sender=self.__class__, user=user, request=self.request)
         token = Token.objects.get(user=user).key
 
-        return Response(data=token, status=status.HTTP_201_CREATED, headers=headers)
+        data = {'user': user.user_name, 'token': token}
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class LoginView(generics.GenericAPIView):
@@ -36,7 +37,9 @@ class LoginView(generics.GenericAPIView):
 
         try:
             user = CustomUser.objects.get(user_name=username)
-            if user.password == password:
+            encrypted_password = user.password
+            is_verified = check_password(password, encrypted_password)
+            if is_verified:
                 has_token = Token.objects.filter(user=user).count()
                 if has_token:
                     token = Token.objects.get(user=user)
