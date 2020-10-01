@@ -1,12 +1,18 @@
 from django.test import TestCase
 
-from django.contrib.auth.models import User
+from .models import CustomUser
 
-class AuthUserTestCase(TestCase):
+
+class CustomUserTestCase(TestCase):
     def setUp(self):
-        User.objects.create(username="test_user", email="test@test.com", id=1)
+        CustomUser.objects.create(user_name="test_user", email="test@test.com", id=1, first_name='test',
+                                  last_name='user', role='SA')
 
     def test_user_creation(self):
         """ User was created correctly """
-        user = User.objects.get(id=1)
-        self.assertEqual(user.username,"test_user")
+        user = CustomUser.objects.get(id=1)
+        self.assertEqual(user.user_name, "test_user")
+        self.assertEqual(user.email, "test@test.com")
+        self.assertEqual(user.first_name, "test")
+        self.assertEqual(user.last_name, "user")
+        self.assertEqual(user.role, "SA")
