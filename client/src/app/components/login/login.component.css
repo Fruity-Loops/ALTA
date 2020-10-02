@@ -1,0 +1,25 @@
+.login-card {
+  margin: 30px 35% 0px 35%;
+  max-width: 400px;
+  max-height: 600px;
+}
+
+.form {
+  padding: 0px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  margin: 0px 20px 0px 20px;
+}
+
+.error {
+  color: red;
+}
+
+.indeterminate {
+  background-color: #64b5f6 !important;
+}
+
+.input-field {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px !important;
+}
