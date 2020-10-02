@@ -13,6 +13,7 @@ from django.contrib.auth.hashers import check_password
 class RegistrationView(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
