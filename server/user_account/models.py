@@ -12,9 +12,9 @@ class CustomUser(AbstractBaseUser):
         ('IM', 'Inventory Manager'),
         ('SK', 'Stock Keeper'),
     )
-    user_name = models.CharField(max_length=30, unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    user_name = models.CharField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     role = models.CharField(max_length=2, choices=USERS)
     is_active = models.BooleanField(default=True)
     email = models.EmailField(verbose_name='email', max_length=255, unique=True)
