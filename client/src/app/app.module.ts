@@ -4,21 +4,24 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
-import { DemoComponent } from './demo/demo.component';
-import { DemoService } from './demo/demo.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { AuthModule } from './modules/auth/auth.module';
+import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DemoComponent,
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatSliderModule,
+    MatToolbarModule,
+    AuthModule,
+    AuthRoutingModule,
   ],
-  providers: [
-    DemoService
-  ],
-  bootstrap: [AppComponent]
+  providers: [],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
