@@ -1,12 +1,10 @@
 from django.test import TestCase
-from .models import CustomUser
-import json
-from django.urls import reverse
-from rest_framework.authtoken.models import Token
+from django.contrib.auth.hashers import check_password
 from rest_framework.test import APITestCase
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
-from django.contrib.auth.hashers import check_password
+from .models import CustomUser
 
 
 class CustomUserTestCase(TestCase):
@@ -40,6 +38,11 @@ class RegistrationTestCase(APITestCase):
                 "last_name": "user", "role": "SA"}
         response = self.client.post("/registration/", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_registration_unauthorized_request(self):
+        """ User can't access the GET method at this particular endpoint """
+        response = self.client.get("/registration/")
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class LoginTest(APITestCase):
