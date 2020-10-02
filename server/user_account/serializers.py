@@ -7,8 +7,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id', 'user_name', 'first_name', 'last_name', 'password', 'role', 'email']
 
-    # overriding save method
     def save(self):
+        """
+        Overriding the serializer save function in order to access the parameters passed in the request
+        before saving them in the database.
+        In this particular case I'm hashing the password.
+        """
+
         user = CustomUser(
             user_name=self.validated_data['user_name'],
             first_name=self.validated_data['first_name'],

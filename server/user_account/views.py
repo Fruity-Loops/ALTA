@@ -53,7 +53,6 @@ class LoginView(generics.GenericAPIView):
                 pass
         except CustomUser.DoesNotExist:
             return Response({'detail': 'Invalid user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            pass
 
 
 class LogoutView(generics.GenericAPIView):
@@ -61,6 +60,11 @@ class LogoutView(generics.GenericAPIView):
         return self.remove_token(request)
 
     def remove_token(self, request):
+        """
+        Deleting user token from the database when he logout.
+        :param request
+        """
+
         try:
             Token.objects.get(user=request.user).delete()
         except Token.DoesNotExist:
