@@ -37,20 +37,26 @@ class LoginView(generics.GenericAPIView):
 
         try:
             user = CustomUser.objects.get(user_name=username)
-            encrypted_password = user.password
-            is_verified = check_password(password, encrypted_password)
-            if is_verified:
-                has_token = Token.objects.filter(user=user).count()
-                if has_token:
-                    token = Token.objects.get(user=user)
-                else:
-                    token = Token.objects.create(user=user)
 
-                data = {'user': username, 'token': token.key}
-                return Response(data, status=status.HTTP_200_OK)
+            if user.is_active:
+                encrypted_password = user.password
+                is_verified = check_password(password, encrypted_password)
+                if is_verified:
+                    has_token = Token.objects.filter(user=user).count()
+                    if has_token:
+                        token = Token.objects.get(user=user)
+                    else:
+                        token = Token.objects.create(user=user)
+
+                    data = {'user': username, 'token': token.key}
+                    return Response(data, status=status.HTTP_200_OK)
+                else:
+                    return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+                    pass
             else:
-                return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-                pass
+                return Response({'detail': 'Please contact admin to activate your account'},
+                                status=status.HTTP_401_UNAUTHORIZED)
+
         except CustomUser.DoesNotExist:
             return Response({'detail': 'Invalid user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 

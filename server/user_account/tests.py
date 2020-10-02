@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import check_password
 
 
 class CustomUserTestCase(TestCase):
+
     def setUp(self):
         CustomUser.objects.create(user_name="test_user", email="test@test.com", id=1, first_name='test',
                                   last_name='user', role='SA')
@@ -29,7 +30,7 @@ class RegistrationTestCase(APITestCase):
     def test_registration_success(self):
         """ User was registered correctly """
         data = {'user_name': 'test_case', 'email': 'test@email.com', "password": "password", "first_name": "test",
-                "last_name": "user", "role": "SA"}
+                "last_name": "user", "role": "SA", "is_active": "True"}
         response = self.client.post("/registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -45,7 +46,7 @@ class LoginTest(APITestCase):
 
     def setUp(self):
         CustomUser.objects.create(user_name="test_user", email="test@test.com", id=1, first_name='test',
-                                  last_name='user', role='SA', password="test")
+                                  last_name='user', role='SA', password="test", is_active=True)
 
     def test_login_invalid_user(self):
         """ User that does not exist in database """
@@ -57,19 +58,27 @@ class LoginTest(APITestCase):
         response = self.client.post("/login/", {"user_name": "test_user", "password": "test"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_login_not_active(self):
+        """ User that has a valid account but is not active """
+        CustomUser.objects.create(user_name="test_user3", email="test3@test.com", id=3, first_name='test',
+                                  last_name='user', role='SA', password="test", is_active=False)
+        response = self.client.post("/login/", {"user_name": "test_user3", "password": "test"})
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
     def test_login_success(self):
         """ User can login successfully """
         CustomUser.objects.create(user_name="test_user2", email="test2@test.com", id=2, first_name='test',
-                                  last_name='user', role='SA', password="test")
+                                  last_name='user', role='SA', password="test", is_active=True)
         user = CustomUser.objects.get(user_name="test_user2")
         self.assertEqual("test", user.password)
         self.assertEqual("test_user2", user.user_name)
 
 
 class LogoutTest(APITestCase):
+
     def setUp(self):
         CustomUser.objects.create(user_name="test_user", email="test@test.com", id=1, first_name='test',
-                                              last_name='user', role='SA', password="test")
+                                  last_name='user', role='SA', password="test", is_active=True)
 
         user = CustomUser.objects.get(user_name="test_user")
 
