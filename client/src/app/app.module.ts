@@ -11,6 +11,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 import { AltaMainModule } from './modules/alta-main/alta-main.module';
 import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-routing.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './services/token-interceptor';
+import { CookieService } from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +28,14 @@ import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-rou
     AltaMainModule,
     AltaMainRoutingModule,
   ],
-  providers: [],
+  providers: [
+    CookieService, //to manage cookie in frontend
+    {
+      provide: HTTP_INTERCEPTORS, //To be able to use the http interceptor in app
+      useClass: TokenInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
