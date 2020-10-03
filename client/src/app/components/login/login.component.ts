@@ -12,6 +12,7 @@ import { TokenService } from 'src/app/services/token.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage: string;
+  body: any;
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +33,12 @@ export class LoginComponent implements OnInit {
   }
 
   loginUser() {
-    this.authService.loginSysAdmin(this.loginForm.value).subscribe(
+    this.body = {
+      user_name: this.loginForm.value.username,
+      password: this.loginForm.value.password,
+    };
+
+    this.authService.loginSysAdmin(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); //setting token in cookie for logged in users
         setTimeout(() => {
