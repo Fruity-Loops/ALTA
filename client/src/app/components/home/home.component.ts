@@ -12,7 +12,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  /****TO LOGOUT*****/
   logout() {
     this.tokenService.DeleteToken(); //Delete token when user logout
     this.router.navigate(['']); //redirect user to login/register pager

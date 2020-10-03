@@ -14,7 +14,6 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
-  showSpinner = false;
 
   //injecting the authService to be able to send data to the backend through it , fb for the formbuilder validations and ROuter to redirect to the desired component when registerd successfully
   constructor(
@@ -40,8 +39,6 @@ export class SignupComponent implements OnInit {
   }
 
   signupUser() {
-    this.showSpinner = true;
-    console.log(this.signupForm.value.username);
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
@@ -59,12 +56,9 @@ export class SignupComponent implements OnInit {
         this.signupForm.reset(); //Reset form once signup
         setTimeout(() => {
           this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 3000);
-        console.log(this.tokenService.GetToken());
+        }, 1000); // waiting 3 seconds before redirecting the user
       },
       (err) => {
-        this.showSpinner = false;
-
         //2 different types of error messages
         //if email already exist
         if (err.error.email) {

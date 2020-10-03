@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validator, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
@@ -12,7 +12,6 @@ import { TokenService } from 'src/app/services/token.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   errorMessage: string;
-  showSpinner = false;
 
   constructor(
     private fb: FormBuilder,
@@ -33,21 +32,15 @@ export class LoginComponent implements OnInit {
   }
 
   loginUser() {
-    this.showSpinner = true;
     this.authService.loginSysAdmin(this.loginForm.value).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); //setting token in cookie for logged in users
         setTimeout(() => {
           this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 3000);
+        }, 1000); // Redirect the user after 3 seconds ( in case we want to add a loading bar when we click on button )
         this.loginForm.reset();
-
-        console.log(this.tokenService.GetToken());
       },
       (err) => {
-        console.log(err);
-        this.showSpinner = false;
-
         if (err.error.detail) {
           this.errorMessage = err.error.detail;
         }
