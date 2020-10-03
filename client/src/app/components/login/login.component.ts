@@ -37,6 +37,9 @@ export class LoginComponent implements OnInit {
     this.authService.loginSysAdmin(this.loginForm.value).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); //setting token in cookie for logged in users
+        setTimeout(() => {
+          this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 3000);
         this.loginForm.reset();
 
         console.log(this.tokenService.GetToken());
@@ -44,6 +47,7 @@ export class LoginComponent implements OnInit {
       (err) => {
         console.log(err);
         this.showSpinner = false;
+
         if (err.error.message) {
           this.errorMessage = err.error.message;
         }

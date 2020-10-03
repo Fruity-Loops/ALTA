@@ -57,9 +57,9 @@ export class SignupComponent implements OnInit {
       (data) => {
         this.tokenService.SetToken(data.token);
         this.signupForm.reset(); //Reset form once signup
-        // setTimeout(() => {
-        //   this.router.navigate(['streams']); //If signup successfull redirect user to component in path:streams (defined in streams-routing.module.ts)
-        // }, 3000);
+        setTimeout(() => {
+          this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 3000);
         console.log(this.tokenService.GetToken());
       },
       (err) => {

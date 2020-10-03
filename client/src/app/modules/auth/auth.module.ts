@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthTabsComponent } from '../../components/auth-tabs/auth-tabs.component';
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { SignupComponent } from 'src/app/components/signup/signup.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @NgModule({
   declarations: [AuthTabsComponent, LoginComponent, SignupComponent],
@@ -21,5 +22,6 @@ import { SignupComponent } from 'src/app/components/signup/signup.component';
     ReactiveFormsModule,
   ],
   exports: [AuthTabsComponent, LoginComponent, SignupComponent],
+  providers: [AuthService],
 })
 export class AuthModule {}
