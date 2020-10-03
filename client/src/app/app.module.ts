@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 
 import { DemoComponent } from './demo/demo.component';
 import { DemoService } from './demo/demo.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DemoComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
