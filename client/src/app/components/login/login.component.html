@@ -13,44 +13,36 @@
       novalidate
       (ngSubmit)="loginUser()"
     >
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="user-name" type="text" formControlName="username" />
-          <label for="user-name">Username</label>
-          <span
-            class="error"
-            *ngIf="
-              !loginForm.controls['username'].valid &&
-              loginForm.controls['username'].touched
-            "
-            ><!-- Handeling error -->
-            Username is required
-          </span>
-        </div>
+      <div>
+        <input id="user-name" type="text" formControlName="username" />
+        <label for="user-name">Username</label>
+        <span
+          class="error"
+          *ngIf="
+            !loginForm.controls['username'].valid &&
+            loginForm.controls['username'].touched
+          "
+          ><!-- Handeling error -->
+          Username is required
+        </span>
       </div>
 
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="password" type="password" formControlName="password" />
-          <label for="password">Password</label>
-          <span
-            class="error"
-            *ngIf="
-              !loginForm.controls['password'].valid &&
-              loginForm.controls['password'].touched
-            "
-            ><!-- Handeling error -->
-            Password is required
-          </span>
-        </div>
+      <div>
+        <input id="password" type="password" formControlName="password" />
+        <label for="password">Password</label>
+        <span
+          class="error"
+          *ngIf="
+            !loginForm.controls['password'].valid &&
+            loginForm.controls['password'].touched
+          "
+          ><!-- Handeling error -->
+          Password is required
+        </span>
       </div>
       <button mat-button id="loginbtn" [disabled]="!loginForm.valid">
         Login
       </button>
     </form>
   </mat-card-content>
-  <!-- <mat-card-actions>
-    <button mat-button>LIKE</button>
-    <button mat-button>SHARE</button>
-  </mat-card-actions> -->
 </mat-card>
