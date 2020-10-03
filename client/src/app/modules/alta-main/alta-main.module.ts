@@ -7,12 +7,6 @@ import { HomeComponent } from 'src/app/components/home/home.component';
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
 })
 export class AltaMainModule {}
