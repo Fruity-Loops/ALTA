@@ -9,6 +9,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthModule } from './modules/auth/auth.module';
 import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
+import { AltaMainModule } from './modules/alta-main/alta-main.module';
+import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-routing.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +22,8 @@ import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
     MatToolbarModule,
     AuthModule,
     AuthRoutingModule,
+    AltaMainModule,
+    AltaMainRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
