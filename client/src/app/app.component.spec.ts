@@ -1,16 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
-import { DemoComponent } from './demo/demo.component';
+import { AuthTabsComponent } from './components/auth-tabs/auth-tabs.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        DemoComponent,
-      ],
-      imports: [ HttpClientTestingModule ]
+      declarations: [AppComponent, AuthTabsComponent],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
   });
 
@@ -20,10 +17,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'alta-front'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('alta-front');
-  });
-
+  // it(`should have as title 'alta-front'`, () => {
+  //   const fixture = TestBed.createComponent(AppComponent);
+  //   const app = fixture.componentInstance;
+  //   expect(app.title).toEqual('alta-front');
+  // });
 });
