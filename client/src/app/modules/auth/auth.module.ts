@@ -9,7 +9,7 @@ import { AuthTabsComponent } from '../../components/auth-tabs/auth-tabs.componen
 import { LoginComponent } from 'src/app/components/login/login.component';
 import { SignupComponent } from 'src/app/components/signup/signup.component';
 import { AuthService } from 'src/app/services/auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AuthTabsComponent, LoginComponent, SignupComponent],
@@ -22,6 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    HttpClient,
   ],
   exports: [AuthTabsComponent, LoginComponent, SignupComponent],
   providers: [AuthService],
