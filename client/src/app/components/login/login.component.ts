@@ -48,8 +48,8 @@ export class LoginComponent implements OnInit {
         console.log(err);
         this.showSpinner = false;
 
-        if (err.error.message) {
-          this.errorMessage = err.error.message;
+        if (err.error.detail) {
+          this.errorMessage = err.error.detail;
         }
       }
     );
