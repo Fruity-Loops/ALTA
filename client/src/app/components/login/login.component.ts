@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validator, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-// import { TokenService } from 'src/app/services/token.service';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private tokenService: TokenService
   ) {}
 
   ngOnInit() {
@@ -35,8 +36,10 @@ export class LoginComponent implements OnInit {
     this.showSpinner = true;
     this.authService.loginSysAdmin(this.loginForm.value).subscribe(
       (data) => {
-        console.log('From login' + data.token);
+        this.tokenService.SetToken(data.token); //setting token in cookie for logged in users
         this.loginForm.reset();
+
+        console.log(this.tokenService.GetToken());
       },
       (err) => {
         console.log(err);

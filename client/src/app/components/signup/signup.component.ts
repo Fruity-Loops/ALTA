@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +20,8 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private tokenService: TokenService
   ) {}
 
   ngOnInit() {
@@ -53,11 +55,12 @@ export class SignupComponent implements OnInit {
     //registerUser is the method defined in authService
     this.authService.registerSysAdmin(this.body).subscribe(
       (data) => {
-        console.log(data.token);
+        this.tokenService.SetToken(data.token);
         this.signupForm.reset(); //Reset form once signup
         // setTimeout(() => {
         //   this.router.navigate(['streams']); //If signup successfull redirect user to component in path:streams (defined in streams-routing.module.ts)
         // }, 3000);
+        console.log(this.tokenService.GetToken());
       },
       (err) => {
         this.showSpinner = false;
