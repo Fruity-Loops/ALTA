@@ -48,7 +48,7 @@ class LoginView(generics.GenericAPIView):
         :return: user_name, token
         """
         data = request.data
-        username = data.get('username', '')
+        username = data.get('user_name', '')
         password = data.get('password', '')
 
         try:
