@@ -11,11 +11,18 @@ from django.contrib.auth.hashers import check_password
 
 
 class RegistrationView(viewsets.ModelViewSet):
+    """
+    Creates a new System Admin in the db.
+    """
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     http_method_names = ['post']
 
     def create(self, request, *args, **kwargs):
+        """
+        :param request: request.data: first_name, last_name, user_name, password, role, email, is_active
+        :return: user_name, token
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -29,11 +36,19 @@ class RegistrationView(viewsets.ModelViewSet):
 
 
 class LoginView(generics.GenericAPIView):
+    """
+    Authenticate a System Admin.
+    """
     serializer_class = LoginSerializer
 
     def post(self, request):
+        """
+        Verify that a System Admin has valid credentials and is active.
+        :param request: request.data: user_name, password
+        :return: user_name, token
+        """
         data = request.data
-        username = data.get('user_name', '')
+        username = data.get('username', '')
         password = data.get('password', '')
 
         try:
@@ -63,7 +78,13 @@ class LoginView(generics.GenericAPIView):
 
 
 class LogoutView(generics.GenericAPIView):
+    """
+    Logout a System Admin.
+    """
     def post(self, request):
+        """
+        :param request: request.user (token)
+        """
         return self.remove_token(request)
 
     def remove_token(self, request):

@@ -7,6 +7,9 @@ from rest_framework.authtoken.models import Token
 
 
 class CustomUser(AbstractBaseUser):
+    """
+    Define the field required to create a user.
+    """
     USERS = (
         ('SA', 'System Admin'),
         ('IM', 'Inventory Manager'),
@@ -27,8 +30,11 @@ class CustomUser(AbstractBaseUser):
     def get_role(self):
         return self.role
 
-    # Create token for user who just registered
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
     def create_auth_token(sender, instance=None, created=False, **kwargs):
+        """
+        :param instance (user)
+        :return token for user who just registered
+        """
         if created:
             Token.objects.create(user=instance)
