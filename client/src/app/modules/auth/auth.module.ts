@@ -7,9 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'; //Reactive fo
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthTabsComponent } from '../../components/auth-tabs/auth-tabs.component';
 import { LoginComponent } from 'src/app/components/login/login.component';
+import { SignupComponent } from 'src/app/components/signup/signup.component';
 
 @NgModule({
-  declarations: [AuthTabsComponent, LoginComponent],
+  declarations: [AuthTabsComponent, LoginComponent, SignupComponent],
   imports: [
     CommonModule,
     MatTabsModule,
@@ -19,6 +20,6 @@ import { LoginComponent } from 'src/app/components/login/login.component';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports: [AuthTabsComponent, LoginComponent],
+  exports: [AuthTabsComponent, LoginComponent, SignupComponent],
 })
 export class AuthModule {}

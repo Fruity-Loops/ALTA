@@ -1,0 +1,106 @@
+<mat-card class="login-card">
+  <mat-card-header>
+    <mat-card-title>Register</mat-card-title>
+    <div id="errorMsg" *ngIf="errorMessage">
+      <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form
+      class="col s12"
+      [formGroup]="signupForm"
+      novalidate
+      (ngSubmit)="signupUser()"
+    >
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="user_name" type="text" formControlName="username" />
+          <label for="username">Username</label>
+          <span
+            class="error"
+            *ngIf="
+              !signupForm.controls['username'].valid &&
+              signupForm.controls['username'].touched
+            "
+            ><!-- Handeling error -->
+            Username is required
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="email" type="email" formControlName="email" />
+          <label for="email">Email</label>
+          <span
+            class="error"
+            *ngIf="
+              !signupForm.controls['email'].valid &&
+              signupForm.controls['email'].touched
+            "
+            ><!-- Handeling error -->
+            Email is required
+          </span>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input id="pass-word" type="password" formControlName="password" />
+          <label for="pass-word">Password</label>
+          <span
+            class="error"
+            *ngIf="
+              !signupForm.controls['password'].valid &&
+              signupForm.controls['password'].touched
+            "
+            ><!-- Handeling error -->
+            Password is required
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field inline col s12">
+          <input id="firstname" type="text" formControlName="firstname" />
+          <label for="firstname">Firstname</label>
+          <span
+            class="error"
+            *ngIf="
+              !signupForm.controls['firstname'].valid &&
+              signupForm.controls['firstname'].touched
+            "
+            ><!-- Handeling error -->
+            Firstname is required
+          </span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field inline col s12">
+          <input id="lastname" type="text" formControlName="lastname" />
+          <label for="lastname">lastname</label>
+          <span
+            class="error"
+            *ngIf="
+              !signupForm.controls['lastname'].valid &&
+              signupForm.controls['lastname'].touched
+            "
+            ><!-- Handeling error -->
+            lastname is required
+          </span>
+        </div>
+      </div>
+      <button
+        class="btn waves-effect"
+        id="signupbtn"
+        [disabled]="!signupForm.valid"
+      >
+        Sign Up</button
+      ><!-- if checks throws error then do not send data -->
+    </form>
+  </mat-card-content>
+  <!-- <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions> -->
+</mat-card>
