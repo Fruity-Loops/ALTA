@@ -10,10 +10,15 @@ import { DashboardListings } from '../dashboardListing';
 export class DashboardComponent implements OnInit {
 
   options = DashboardListings;
+  selectedOption: DashboardOption;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.selectedOption = this.options[0];
   }
 
+  onSelect(option: DashboardOption): void {
+    this.selectedOption = option;
+  }
 }
