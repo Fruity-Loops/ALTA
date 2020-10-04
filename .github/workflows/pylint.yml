@@ -44,7 +44,7 @@ jobs:
 
     - name: Get Diff
       run: |
-        DIFF_REPORT=$(python3 diff_pylint.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
+        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
         echo $DIFF_REPORT
         echo ::set-env name=DIFF::"${DIFF_REPORT//$'\n'/'%0A'}"
 

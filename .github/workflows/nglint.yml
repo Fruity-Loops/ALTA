@@ -5,7 +5,6 @@ on:
     branches:
       - master
 
-
 jobs:
   nglint:
     runs-on: ubuntu-latest
@@ -14,26 +13,49 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v2
-          
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    
+    - name: Checkout master
+      uses: actions/checkout@v2
+      with:
+        ref: 'master'
 
-    - name: Npm install and test
+    - name: Run Lint Master
+      working-directory: client
+      run: |
+        npm i
+        npm i -g @angular/cli
+        REPORT=$(ng lint --force=true)
+        echo "$REPORT"
+        echo ::set-env name=MASTER_REPORT::"${REPORT//$'\n'/'%0A'}"
+    
+    - name: Checkout Branch
+      uses: actions/checkout@v2
+      with:
+        ref: ${{github.ref}}
+
+    - name: Npm install and Lint
       working-directory: client
       run: |         
         npm i
         npm i -g @angular/cli
         REPORT=$(ng lint --force=true)
         echo "$REPORT"
-        echo ::set-env name=EXPOSED_REPORT::"${REPORT//$'\n'/'%0A%0A'}"
+        echo ::set-env name=BRANCH_REPORT::"${REPORT//$'\n'/'%0A'}"
+
+    - name: Get Diff
+      run: |
+        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
+        echo $DIFF_REPORT
+        echo ::set-env name=DIFF::"${DIFF_REPORT//$'\n'/'%0A'}"
+
     - name: Comment
       uses: actions/github-script@v3
-      env: 
-        URL: ${{ github.event.pull_request.comments_url }}
+      env:
+          URL: ${{ github.event.pull_request.comments_url }}
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
@@ -41,5 +63,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: process.env.EXPOSED_REPORT.replace("%0A","\n")
+            body: "NG Lint Report \n\n" + process.env.DIFF.replace("%0A","\n")
           })
