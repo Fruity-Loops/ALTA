@@ -9,7 +9,9 @@ import { DashboardListings } from '../dashboardListing';
 })
 export class DashboardComponent implements OnInit {
 
+  // contains the listing of all dashboard options
   options = DashboardListings;
+  // contains the last option chosen, it defaults to the first
   selectedOption: DashboardOption;
 
   constructor() { }
@@ -18,6 +20,7 @@ export class DashboardComponent implements OnInit {
     this.selectedOption = this.options[0];
   }
 
+  // When clicked the last chosen option is updated
   onSelect(option: DashboardOption): void {
     this.selectedOption = option;
   }
