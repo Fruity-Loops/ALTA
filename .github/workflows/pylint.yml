@@ -1,0 +1,63 @@
+name: Pylint
+
+on: 
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+    
+    - name: Checkout master
+      uses: actions/checkout@v2
+      with:
+        ref: 'master'
+
+    - name: Run Lint Master
+      run: |
+        REPORT=$(pylint --exit-zero `ls -R|grep .py$|xargs`)
+        echo "$REPORT"
+        echo ::set-env name=MASTER_REPORT::"${REPORT//$'\n'/'%0A'}"
+    
+    - name: Checkout Branch
+      uses: actions/checkout@v2
+      with:
+        ref: ${{github.ref}}
+    
+    - name: Get Branch Report
+      run: |
+        REPORT=$(pylint --exit-zero `ls -R|grep .py$|xargs`)
+        echo "$REPORT"
+        echo ::set-env name=BRANCH_REPORT::"${REPORT//$'\n'/'%0A'}"
+
+    - name: Get Diff
+      run: |
+        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
+        echo $DIFF_REPORT
+        echo ::set-env name=DIFF::"${DIFF_REPORT//$'\n'/'%0A'}"
+
+    - name: Comment
+      uses: actions/github-script@v3
+      env:
+          URL: ${{ github.event.pull_request.comments_url }}
+      with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Pylint Report \n\n" + process.env.DIFF.replace("%0A","\n")
+            })
