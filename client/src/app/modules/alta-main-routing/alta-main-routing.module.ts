@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard], //if user has a valid token he will be able to access comment page
+    canActivate: [AuthGuard], // If user has a valid token he will be able to access comment page
   },
 ];
 

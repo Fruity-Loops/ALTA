@@ -23,11 +23,11 @@ export class AuthGuard implements CanActivate {
     | boolean
     | UrlTree {
     const token = this.tokenService.GetToken();
-    //if the token exist
+    // If the token exist
     if (token) {
       return true;
     } else {
-      this.router.navigate(['/']); //if no token exist redirect user to login/register page
+      this.router.navigate(['/']); // If no token exist redirect user to login/register page
       return false;
     }
   }

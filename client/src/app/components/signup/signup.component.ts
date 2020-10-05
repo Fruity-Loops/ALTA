@@ -10,12 +10,13 @@ import { TokenService } from 'src/app/services/token.service';
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
-  //defining type of our form
+  // Defining type of our form
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
 
-  //injecting the authService to be able to send data to the backend through it , fb for the formbuilder validations and ROuter to redirect to the desired component when registerd successfully
+  // Injecting the authService to be able to send data to the backend through it ,
+  // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
@@ -23,14 +24,14 @@ export class SignupComponent implements OnInit {
     private tokenService: TokenService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.init();
   }
 
-  //we initialize the form and set validators to each one in case user forget to specify a field
-  init() {
+  // We initialize the form and set validators to each one in case user forget to specify a field
+  init(): void {
     this.signupForm = this.fb.group({
-      username: ['', Validators.required], //each username,email,password is piped from the HTML using the "formControlName"
+      username: ['', Validators.required], // Each username,email,password is piped from the HTML using the "formControlName"
       email: ['', [Validators.email, Validators.required]],
       password: ['', Validators.required],
       firstname: ['', Validators.required],
@@ -38,7 +39,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  signupUser() {
+  signupUser(): void {
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
@@ -49,23 +50,23 @@ export class SignupComponent implements OnInit {
       password: this.signupForm.value.password,
     };
 
-    //registerUser is the method defined in authService
+    // RegisterUser is the method defined in authService
     this.authService.registerSysAdmin(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token);
-        this.signupForm.reset(); //Reset form once signup
+        this.signupForm.reset(); // Reset form once signup
         setTimeout(() => {
-          this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 1000); // waiting 3 seconds before redirecting the user
+          this.router.navigate(['home']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 1000); // Waiting 3 seconds before redirecting the user
       },
       (err) => {
-        //2 different types of error messages
-        //if email already exist
+        // 2 different types of error messages
+        // If email already exist
         if (err.error.email) {
           this.errorMessage = err.error.email[0];
         }
 
-        //if username already exist
+        // If username already exist
         if (err.error.user_name) {
           this.errorMessage = err.error.user_name[0];
         }

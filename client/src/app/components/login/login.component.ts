@@ -21,18 +21,18 @@ export class LoginComponent implements OnInit {
     private tokenService: TokenService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.init();
   }
 
-  init() {
+  init(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
-  loginUser() {
+  loginUser(): void {
     this.body = {
       user_name: this.loginForm.value.username,
       password: this.loginForm.value.password,
@@ -40,10 +40,10 @@ export class LoginComponent implements OnInit {
 
     this.authService.loginSysAdmin(this.body).subscribe(
       (data) => {
-        this.tokenService.SetToken(data.token); //setting token in cookie for logged in users
+        this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
         setTimeout(() => {
-          this.router.navigate(['home']); //If login successfull redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 1000); // Redirect the user after 3 seconds ( in case we want to add a loading bar when we click on button )
+          this.router.navigate(['home']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
         this.loginForm.reset();
       },
       (err) => {
