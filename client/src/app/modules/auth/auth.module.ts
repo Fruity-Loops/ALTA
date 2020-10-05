@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms'; //Reactive forms provide a model-driven approach to handling form inputs whose values change over tim
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AuthTabsComponent } from '../../components/auth-tabs/auth-tabs.component';
 import { LoginComponent } from 'src/app/components/login/login.component';

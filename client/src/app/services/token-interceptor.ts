@@ -16,7 +16,9 @@ import { TokenService } from './token.service';
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private tokenService: TokenService) {}
 
-  /*The intercept method transforms a request into an Observable that eventually returns the HTTP response. In this sense, each interceptor is fully capable of handling the request entirely by itself */
+  /* The intercept method transforms a request into an Observable that eventually 
+  returns the HTTP response. In this sense, each interceptor is fully capable of 
+  handling the request entirely by itself */
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler

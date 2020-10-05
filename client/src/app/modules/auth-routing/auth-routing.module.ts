@@ -4,7 +4,7 @@ import { AuthTabsComponent } from 'src/app/components/auth-tabs/auth-tabs.compon
 
 const routes: Routes = [
   {
-    path: '', //default route
+    path: '', // Default route
     component: AuthTabsComponent,
   },
 ];
