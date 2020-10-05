@@ -1,9 +1,9 @@
-/*https://angular.io/guide/http*/
-/*With interception, you declare interceptors that inspect and transform HTTP requests 
-from your application to the server. The same interceptors may also inspect and transform the server's 
-responses on their way back to the application. Multiple interceptors form a forward-and-backward 
-chain of request/response handlers. Interceptors can perform a variety of implicit tasks, 
-from authentication to logging, in a routine, standard way, for every HTTP request/response. */
+/* https://angular.io/guide/http*/
+/* With interception, you declare interceptors that inspect and transform HTTP requests
+from your application to the server. The same interceptors may also inspect and transform the server's
+responses on their way back to the application. Multiple interceptors form a forward-and-backward
+chain of request/response handlers. Interceptors can perform a variety of implicit tasks,
+from authentication to logging, in a routine, standard way, for every HTTP request/response.*/
 
 import { Injectable } from '@angular/core';
 import {
@@ -19,8 +19,8 @@ import { TokenService } from './token.service';
 export class TokenInterceptor implements HttpInterceptor {
   constructor(private tokenService: TokenService) {}
 
-  /* The intercept method transforms a request into an Observable that eventually 
-  returns the HTTP response. In this sense, each interceptor is fully capable of 
+  /* The intercept method transforms a request into an Observable that eventually
+  returns the HTTP response. In this sense, each interceptor is fully capable of
   handling the request entirely by itself */
   intercept(
     req: HttpRequest<any>,
