@@ -97,7 +97,6 @@ class LogoutView(generics.GenericAPIView):
             Token.objects.get(user=request.user).delete()
         except Token.DoesNotExist:
             return Response({'detail': 'Invalid Token'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            pass
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
