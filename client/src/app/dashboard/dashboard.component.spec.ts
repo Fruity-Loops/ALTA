@@ -25,7 +25,7 @@ describe('DashboardComponent', () => {
 
   // Default Option
   it('#onSelect should set #selectedOption to "The First option"', () => {
-    expect(component.selectedOption.title).toBe("Create My Account", 'Initial Option');
+    expect(component.selectedOption.title).toBe('Create My Account', 'Initial Option');
   });
 
   // Tests Options are clickable
