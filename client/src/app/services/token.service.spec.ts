@@ -13,11 +13,6 @@ describe('TokenService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should delete a token', () => {
-    service.DeleteToken();
-    expect(service.GetToken()).toBe('');
-  });
-
   it('Should set a token', () => {
     service.SetToken('Token');
     expect(service.GetToken()).toBe('Token');
