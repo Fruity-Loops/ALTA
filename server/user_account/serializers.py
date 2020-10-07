@@ -5,11 +5,13 @@ from .models import CustomUser
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'user_name', 'first_name', 'last_name', 'password', 'role', 'email', 'is_active']
+        fields = ['id', 'user_name', 'first_name', 'last_name',
+                  'password', 'role', 'email', 'is_active']
 
-    def save(self):
+    def save(self): # pylint: disable=arguments-differ
         """
-        Overriding the serializer save function in order to access the parameters passed in the request
+        Overriding the serializer save function in order to
+        access the parameters passed in the request
         before saving them in the database.
         In this particular case I'm hashing the password.
         """
