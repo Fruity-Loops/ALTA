@@ -1,10 +1,10 @@
-from django.urls import path, include
-from . import views
-from rest_framework import routers
-
 """
 Holds urls related to user_account app.
 """
+
+from django.urls import path, include
+from rest_framework import routers
+from . import views
 
 router = routers.DefaultRouter()
 router.register(r'registration', views.RegistrationView)
