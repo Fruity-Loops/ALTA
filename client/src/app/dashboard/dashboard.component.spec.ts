@@ -19,17 +19,15 @@ describe('DashboardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 
-  // Default Option
   it('#onSelect should set #selectedOption to "The First option"', () => {
     expect(component.selectedOption.title).toBe('Create My Account', 'Initial Option');
   });
 
-  // Tests Options are clickable
-  it('should test click 2nd option', () => {
+  it('should test click all selectable options', () => {
     const theSpy = spyOn(component, 'onSelect');
     const elements = fixture.debugElement.queryAll(By.css('li'));
     elements.forEach(element => {
@@ -40,7 +38,6 @@ describe('DashboardComponent', () => {
     });
   });
 
-  // Tests 2nd option was clicked
   it('should test header changed to Modify My Account', () => {
     const elements = fixture.debugElement.queryAll(By.css('li'));
     elements[1].nativeElement.click();
