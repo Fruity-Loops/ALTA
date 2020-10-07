@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DashboardOption } from '../dashboardOption';
-import { DashboardListings } from '../dashboardListing';
+import { DashboardOption } from './dashboardOption';
+import { DashboardListings } from './dashboardListing';
 
 @Component({
   selector: 'app-dashboard',
