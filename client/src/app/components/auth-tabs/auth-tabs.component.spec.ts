@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AuthTabsComponent } from './auth-tabs.component';
 
 describe('AuthTabsComponent', () => {
@@ -8,9 +7,8 @@ describe('AuthTabsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthTabsComponent ]
-    })
-    .compileComponents();
+      declarations: [AuthTabsComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +17,7 @@ describe('AuthTabsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create auth tabs component', () => {
     expect(component).toBeTruthy();
   });
 });
