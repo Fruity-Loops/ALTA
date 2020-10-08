@@ -19,6 +19,6 @@ describe('TokenService', () => {
   });
 
   it('should get token', () => {
-    expect(service.GetToken()).toBe('');
+    expect(service.GetToken()).toBe('Token');
   });
 });
