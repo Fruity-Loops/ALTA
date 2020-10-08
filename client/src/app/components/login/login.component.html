@@ -13,10 +13,11 @@
       novalidate
       (ngSubmit)="loginUser()"
     >
-      <div>
-        <input id="user-name" type="text" formControlName="username" />
-        <label for="user-name">Username</label>
-        <span
+      <mat-form-field appearance="legacy" class="input">
+        <mat-label for="user-name">Username</mat-label>
+        <input matInput id="user-name" type="text" formControlName="username" />
+
+        <mat-error
           class="error"
           *ngIf="
             !loginForm.controls['username'].valid &&
@@ -24,13 +25,18 @@
           "
           ><!-- Handeling error -->
           Username is required
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
 
-      <div>
-        <input id="password" type="password" formControlName="password" />
-        <label for="password">Password</label>
-        <span
+      <mat-form-field appearance="legacy" class="input">
+        <mat-label for="password">Password</mat-label>
+        <input
+          matInput
+          id="password"
+          type="password"
+          formControlName="password"
+        />
+        <mat-error
           class="error"
           *ngIf="
             !loginForm.controls['password'].valid &&
@@ -38,8 +44,9 @@
           "
           ><!-- Handeling error -->
           Password is required
-        </span>
-      </div>
+        </mat-error>
+      </mat-form-field>
+      <br />
       <button mat-button id="loginbtn" [disabled]="!loginForm.valid">
         Login
       </button>

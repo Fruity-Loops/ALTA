@@ -11,7 +11,7 @@ import { SignupComponent } from 'src/app/components/signup/signup.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
+import { MatInputModule } from '@angular/material/input';
 @NgModule({
   declarations: [AuthTabsComponent, LoginComponent, SignupComponent],
   imports: [
@@ -24,6 +24,7 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
+    MatInputModule,
   ],
   exports: [AuthTabsComponent, LoginComponent, SignupComponent],
   providers: [AuthService],
