@@ -1,0 +1,104 @@
+<mat-card class="signup-card">
+  <mat-card-header>
+    <mat-card-title>Register</mat-card-title>
+    <div id="errorMsg" *ngIf="errorMessage">
+      <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form
+      class="col s12"
+      [formGroup]="signupForm"
+      novalidate
+      (ngSubmit)="signupUser()"
+    >
+      <mat-form-field appearance="legacy">
+        <input matInput id="user_name" type="text" formControlName="username" />
+        <mat-label for="username">Username</mat-label>
+        <mat-error
+          class="error"
+          *ngIf="
+            !signupForm.controls['username'].valid &&
+            signupForm.controls['username'].touched
+          "
+          ><!-- Handeling error -->
+          Username is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <input matInput id="email" type="email" formControlName="email" />
+        <mat-label for="email">Email</mat-label>
+        <mat-error
+          class="error"
+          *ngIf="
+            !signupForm.controls['email'].valid &&
+            signupForm.controls['email'].touched
+          "
+          ><!-- Handeling error -->
+          Email is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <input
+          matInput
+          id="pass-word"
+          type="password"
+          formControlName="password"
+        />
+        <mat-label for="pass-word">Password</mat-label>
+        <mat-error
+          class="error"
+          *ngIf="
+            !signupForm.controls['password'].valid &&
+            signupForm.controls['password'].touched
+          "
+          ><!-- Handeling error -->
+          Password is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="legacy">
+        <input
+          matInput
+          id="firstname"
+          type="text"
+          formControlName="firstname"
+        />
+        <mat-label for="firstname">Firstname</mat-label>
+        <mat-error
+          class="error"
+          *ngIf="
+            !signupForm.controls['firstname'].valid &&
+            signupForm.controls['firstname'].touched
+          "
+          ><!-- Handeling error -->
+          Firstname is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="legacy">
+        <input matInput id="lastname" type="text" formControlName="lastname" />
+        <mat-label for="lastname">lastname</mat-label>
+        <mat-error
+          class="error"
+          *ngIf="
+            !signupForm.controls['lastname'].valid &&
+            signupForm.controls['lastname'].touched
+          "
+          ><!-- Handeling error -->
+          lastname is required
+        </mat-error>
+      </mat-form-field>
+      <br />
+      <button
+        mat-button
+        class="btn waves-effect"
+        id="signupbtn"
+        [disabled]="!signupForm.valid"
+      >
+        Sign Up</button
+      ><!-- if checks throws error then do not send data -->
+    </form>
+  </mat-card-content>
+</mat-card>
