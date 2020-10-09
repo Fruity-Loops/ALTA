@@ -10,7 +10,7 @@ import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-rou
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
-import { ModifyClientRoleComponent } from './modify-client-role/modify-client-role.component';
+import { ModifyClientRoleComponent } from './components/modify-client-role/modify-client-role.component';
 
 @NgModule({
   declarations: [AppComponent, ModifyClientRoleComponent],
