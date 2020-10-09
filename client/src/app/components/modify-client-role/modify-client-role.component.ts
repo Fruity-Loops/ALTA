@@ -7,9 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModifyClientRoleComponent implements OnInit {
 
-  constructor() { }
+  display: boolean;
+
+  constructor() {
+    this.display = false;
+  }
 
   ngOnInit(): void {
   }
+
 
 }
