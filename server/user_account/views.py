@@ -8,9 +8,12 @@ from .serializers import UserSerializer, LoginSerializer
 from rest_framework import generics
 from django.contrib import auth
 from django.contrib.auth.hashers import check_password
+from django.core import serializers
+from django.http import HttpResponse
 
 
 class RegistrationView(viewsets.ModelViewSet):
+
     """
     Creates a new System Admin in the db.
     """
@@ -100,3 +103,14 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
+
+
+class AccessAllClients(generics.GenericAPIView):
+    queryset = CustomUser.objects.all()
+    http_method_names = ['get']
+
+    def get(self, request):
+
+        qs = self.get_queryset()
+        qs_json = serializers.serialize('json', qs)
+        return HttpResponse(qs_json, content_type='application/json')
