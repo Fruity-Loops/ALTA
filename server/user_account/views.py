@@ -1,8 +1,11 @@
 from django.db.models import signals
+from django.contrib.auth.hashers import check_password
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import viewsets
+from rest_framework import generics
+from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework import generics
@@ -23,7 +26,8 @@ class RegistrationView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         """
-        :param request: request.data: first_name, last_name, user_name, password, role, email, is_active
+        :param request: request.data: first_name,
+        last_name, user_name, password, role, email, is_active
         :return: user_name, token
         """
         serializer = self.get_serializer(data=request.data)
@@ -31,7 +35,8 @@ class RegistrationView(viewsets.ModelViewSet):
         user = serializer.save()
 
         # creating token
-        signals.post_save.send(sender=self.__class__, user=user, request=self.request)
+        signals.post_save.send(sender=self.__class__,
+                               user=user, request=self.request)
         token = Token.objects.get(user=user).key
 
         data = {'user': user.user_name, 'token': token}
@@ -69,28 +74,30 @@ class LoginView(generics.GenericAPIView):
 
                     data = {'user': username, 'token': token.key}
                     return Response(data, status=status.HTTP_200_OK)
-                else:
-                    return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-                    pass
-            else:
-                return Response({'detail': 'Please contact admin to activate your account'},
+
+                return Response({'detail': 'Invalid credentials'},
+                                status=status.HTTP_401_UNAUTHORIZED)
+
+            return Response({'detail': 'Please contact admin to activate your account'},
                                 status=status.HTTP_401_UNAUTHORIZED)
 
         except CustomUser.DoesNotExist:
-            return Response({'detail': 'Invalid user'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'detail': 'Invalid user'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class LogoutView(generics.GenericAPIView):
     """
     Logout a System Admin.
     """
+
     def post(self, request):
         """
         :param request: request.user (token)
         """
         return self.remove_token(request)
 
-    def remove_token(self, request):
+    def remove_token(self, request): # pylint: disable=no-self-use
         """
         Deleting user token from the database when he logout.
         :param request
@@ -99,7 +106,8 @@ class LogoutView(generics.GenericAPIView):
         try:
             Token.objects.get(user=request.user).delete()
         except Token.DoesNotExist:
-            return Response({'detail': 'Invalid Token'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'detail': 'Invalid Token'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)

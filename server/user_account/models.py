@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser
 from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -20,7 +20,8 @@ class CustomUser(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
     role = models.CharField(max_length=2, choices=USERS)
     is_active = models.BooleanField(default=False)
-    email = models.EmailField(verbose_name='email', max_length=255, unique=True)
+    email = models.EmailField(verbose_name='email',
+                              max_length=255, unique=True)
     # no need to specify password because its build in
 
     USERNAME_FIELD = 'user_name'
@@ -31,7 +32,11 @@ class CustomUser(AbstractBaseUser):
         return self.role
 
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    # TODO: Refactor method
     def create_auth_token(sender, instance=None, created=False, **kwargs):
+        # pylint: disable=no-self-argument
+        # pylint: disable=unused-argument 
+        # pylint: disable=no-self-use 
         """
         :param instance (user)
         :return token for user who just registered
