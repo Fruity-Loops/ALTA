@@ -32,8 +32,11 @@ class CustomUser(AbstractBaseUser):
         return self.role
 
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
+    # TODO: Refactor method
     def create_auth_token(sender, instance=None, created=False, **kwargs):
-        # pylint: disable-all # TODO: Refactor method
+        # pylint: disable=no-self-argument
+        # pylint: disable=unused-argument 
+        # pylint: disable=no-self-use 
         """
         :param instance (user)
         :return token for user who just registered
