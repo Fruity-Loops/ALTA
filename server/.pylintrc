@@ -1,4 +1,6 @@
 [MASTER]
+ignore=manage.py
+ignore-patterns=\d{4}_.*?.py # migration files
 disable=
     C0114, # missing-module-docstring
     C0115, # missing-class-docstring
