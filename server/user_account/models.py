@@ -33,7 +33,7 @@ class CustomUser(AbstractBaseUser):
 
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
     def create_auth_token(sender, instance=None, created=False, **kwargs):
-        # pylint: disable-all
+        # pylint: disable-all # TODO: Refactor method
         """
         :param instance (user)
         :return token for user who just registered
