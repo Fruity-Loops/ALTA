@@ -16,9 +16,10 @@ jobs:
         python-version: 3.8
 
     - name: Install dependencies
+      working-directory: server
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install -r requirements.txt
     
     - name: Checkout master
       uses: actions/checkout@v2
@@ -26,8 +27,9 @@ jobs:
         ref: 'master'
 
     - name: Run Lint Master
+      working-directory: server
       run: |
-        REPORT=$(pylint --exit-zero `ls -R|grep .py$|xargs`)
+        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
         echo ::set-env name=MASTER_REPORT::"${REPORT//$'\n'/'%0A'}"
     
@@ -37,8 +39,9 @@ jobs:
         ref: ${{github.ref}}
     
     - name: Get Branch Report
+      working-directory: server
       run: |
-        REPORT=$(pylint --exit-zero `ls -R|grep .py$|xargs`)
+        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
         echo ::set-env name=BRANCH_REPORT::"${REPORT//$'\n'/'%0A'}"
 
