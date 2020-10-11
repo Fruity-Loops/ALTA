@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class DashboardComponent implements OnInit {
   constructor() { }
 
-  view = "Dashboard";
+  view = 'Dashboard';
 
   ngOnInit(): void {
   }

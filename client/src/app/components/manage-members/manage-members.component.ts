@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ManageMembersComponent implements OnInit {
   constructor() { }
 
-  view = "Manage Members";
+  view = 'Manage Members';
 
   ngOnInit(): void {
   }
