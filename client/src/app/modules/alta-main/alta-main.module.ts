@@ -8,12 +8,16 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { SideNavComponent } from 'src/app/components/sidenav/sidenav.component';
 import { MatModule } from '../material/material-module';
+import { ManageMembersComponent } from 'src/app/components/manage-members/manage-members.component';
+import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     DashboardComponent,
-    SideNavComponent],
+    SideNavComponent,
+    ManageMembersComponent,
+    ModifyMembersComponent],
   imports: [
     CommonModule,
     MatModule,

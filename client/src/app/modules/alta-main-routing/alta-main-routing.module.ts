@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthTabsComponent } from 'src/app/components/auth-tabs/auth-tabs.component';
+import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
-import { ManageMembersComponent } from 'src/app/components/manage-members/manage-members.component';
+import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'manage-members', component: ManageMembersComponent },
+      { path: 'create-members', component: CreateMembersComponent },
+      { path: 'modify-members', component: ModifyMembersComponent }
     ]
   },
 ];

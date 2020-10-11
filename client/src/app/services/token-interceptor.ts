@@ -37,9 +37,10 @@ export class TokenInterceptor implements HttpInterceptor {
     // If token is available in the cookie
     if (token) {
       // We set the Authorization header: token inside the object for every request
-      headersConfig['Authorization'] = `Token ${token}`;
+      const authHeader = 'Authorization';
+      headersConfig[authHeader] = `Token ${token}`;
     }
-    const _req = req.clone({ setHeaders: headersConfig }); // We clone the request
-    return next.handle(_req); // We handle the cloned request
+    const REQ = req.clone({ setHeaders: headersConfig }); // We clone the request
+    return next.handle(REQ); // We handle the cloned request
   }
 }
