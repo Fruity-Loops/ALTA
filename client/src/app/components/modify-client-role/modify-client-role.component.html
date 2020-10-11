@@ -1,2 +1,6 @@
 <button (click)="obtainClients()">Obtain Clients</button>
-<p>{{querrysett}}</p>
+<ul *ngFor="let pers of users">
+    <li>
+        username = {{pers.user_name}}, firstname = {{pers.first_name}}, lastname = {{pers.last_name}}, role = {{pers.role}}, e-mail = {{pers.email}}
+    </li>
+</ul>
