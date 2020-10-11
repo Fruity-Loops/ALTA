@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthTabsComponent } from 'src/app/components/auth-tabs/auth-tabs.component';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
+import { ManageMembersComponent } from 'src/app/components/manage-members/manage-members.component';
 import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'manage-members', component: ManageMembersComponent },
     ]
   },
 ];
