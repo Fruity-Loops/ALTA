@@ -14,6 +14,6 @@ const BASEURL = 'http://localhost:8000';
     constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
 
     getAllClients(): Observable<any> {
-      return this.http.get(`${BASEURL}/getAllClients/`, this.options)
+      return this.http.get(`${BASEURL}/getAllClients/`, this.options);
   }
 }

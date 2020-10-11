@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   // When clicked the last chosen option is updated
   onSelect(option: DashboardOption): void {
     this.selectedOption = option;
-    if (this.selectedOption.title == 'Modify Client Role')
+    if (this.selectedOption.title === 'Modify Client Role')
     {
       this.display = !this.display;
     }
