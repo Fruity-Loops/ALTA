@@ -1,2 +1,18 @@
-<app-dashboard></app-dashboard>
-<button (click)="logout()">Logout</button>
+<mat-drawer-container class="home-container">
+
+    <mat-drawer #drawer opened="true" mode="side">
+        <app-sidenav></app-sidenav>
+    </mat-drawer>
+
+    <mat-drawer-content class="home-content">
+        <button type="button" mat-button (click)="drawer.toggle()">
+            Toggle drawer
+        </button>
+
+        <div role="main">
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-drawer-content>
+
+</mat-drawer-container>

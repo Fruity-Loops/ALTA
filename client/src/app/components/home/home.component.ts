@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 
   logout(): void {
     this.tokenService.DeleteToken(); // Delete token when user logout
-    this.router.navigate(['']); // Redirect user to login/register pager
+    this.router.navigate(['login']); // Redirect user to login/register pager
 
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
