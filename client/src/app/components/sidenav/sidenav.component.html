@@ -1,0 +1,7 @@
+<div class="sidenav">
+    <ul class="options">
+        <li *ngFor="let option of options" [class.selected]="option === selectedOption" routerLink="{{option.routerLink}}">
+            {{option.title}}
+        </li>
+    </ul>
+</div>
