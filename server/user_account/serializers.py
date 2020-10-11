@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'user_name', 'first_name', 'last_name',
                   'password', 'role', 'email', 'is_active']
 
-    def save(self): # pylint: disable=arguments-differ
+    def save(self, **kwargs):
         """
         Overriding the serializer save function in order to
         access the parameters passed in the request
