@@ -9,7 +9,6 @@ import { SidenavService } from 'src/app/services/sidenav.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [SidenavService],
 })
 export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
   mobileQuery: MediaQueryList;
