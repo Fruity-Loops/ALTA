@@ -8,7 +8,6 @@ import { ModifyMembersComponent } from 'src/app/components/modify-members/modify
 import { AuthGuard } from '../../guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: AuthTabsComponent },
   {
     path: '',
     component: HomeComponent,
