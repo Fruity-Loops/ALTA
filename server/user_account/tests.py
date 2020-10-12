@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.test.client import Client as HttpClient
 from rest_framework import status
@@ -32,7 +33,6 @@ class AccessAllClientsTestCase(TestCase):
     def setUpTestData(cls):
         cls.host = "http://localhost"  # or ip
         cls.port = 8001
-        super(cls).__init__
 
         CustomUser.objects.create(user_name="test_user",
                                   email="test@test.com",
@@ -53,7 +53,7 @@ class AccessAllClientsTestCase(TestCase):
         url = self.host + str(self.port) + '/getAllClients/'
         client = HttpClient()
         response = client.get(url)
-        data = response.json()
+        data = json.loads(response.json())
         user = CustomUser.objects.get(user_name="test_user")
         self.assertEqual(data[0]['fields']['user_name'], user.user_name)
         self.assertEqual(data[0]['fields']['email'], user.email)
