@@ -1,11 +1,9 @@
 from django.test import TestCase
+from django.test.client import Client as HttpClient
+from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-from rest_framework import status
 from .models import CustomUser
-from urllib.request import urlopen
-import json
-from django.test.client import Client as HttpClient
 
 
 class CustomUserTestCase(TestCase):
@@ -34,8 +32,8 @@ class AccessAllClientsTestCase(TestCase):
     def setUpTestData(cls):
         cls.host = "http://localhost"  # or ip
         cls.port = 8001
-        super(TestCase, cls).setUpClass()
-        # Set up data for the whole TestCase
+        super(cls).__init__
+
         CustomUser.objects.create(user_name="test_user",
                                   email="test@test.com",
                                   id=9999,
@@ -53,7 +51,6 @@ class AccessAllClientsTestCase(TestCase):
 
     def test_user_is_obtainable(self):
         url = self.host + str(self.port) + '/getAllClients/'
-        # response = urlopen(url)
         client = HttpClient()
         response = client.get(url)
         data = response.json()

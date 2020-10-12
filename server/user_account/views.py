@@ -1,18 +1,12 @@
 from django.db.models import signals
+from django.core import serializers
+from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
-from rest_framework import status
+from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework import viewsets
-from rest_framework import generics
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
-from .serializers import UserSerializer, LoginSerializer
-from rest_framework import generics
-from django.contrib import auth
-from django.contrib.auth.hashers import check_password
-from django.core import serializers
-from django.http import HttpResponse
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -121,4 +115,4 @@ class AccessAllClients(generics.GenericAPIView):
 
         qs = self.get_queryset()
         qs_json = serializers.serialize('json', qs)
-        return HttpResponse(qs_json, content_type='application/json')
+        return JsonResponse(qs_json, safe=False)

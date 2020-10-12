@@ -24,7 +24,7 @@ export class ModifyClientRoleComponent implements OnInit {
   {
     this.dashboardService.getAllClients().subscribe(val =>
       {
-        this.querrysett = JSON.parse(val);
+        this.querrysett = JSON.parse(JSON.parse(val));
         if (this.users.length !== 0)
         {
           this.users = new Array<CustomUser>(0);
