@@ -12,19 +12,16 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
+import { MatModule } from '../material/material-module';
 @NgModule({
   declarations: [AuthTabsComponent, LoginComponent, SignupComponent],
   imports: [
     CommonModule,
-    MatTabsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    MatInputModule,
+    MatModule,
   ],
   exports: [AuthTabsComponent, LoginComponent, SignupComponent],
   providers: [AuthService],
