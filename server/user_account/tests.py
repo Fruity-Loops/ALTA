@@ -3,6 +3,9 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from .models import CustomUser
+from urllib.request import urlopen
+import json
+from django.test.client import Client as HttpClient
 
 
 class CustomUserTestCase(TestCase):
@@ -23,6 +26,49 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.first_name, "test")
         self.assertEqual(user.last_name, "user")
         self.assertEqual(user.role, "SA")
+
+
+class AccessAllClientsTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.host = "http://localhost"  # or ip
+        cls.port = 8001
+        super(TestCase, cls).setUpClass()
+        # Set up data for the whole TestCase
+        CustomUser.objects.create(user_name="test_user",
+                                  email="test@test.com",
+                                  id=9999,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA',
+                                  is_active=True)
+        CustomUser.objects.create(user_name="test_user2",
+                                  email="test2@test.com",
+                                  id=9998,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA',
+                                  is_active=True)
+
+    def test_user_is_obtainable(self):
+        url = self.host + str(self.port) + '/getAllClients/'
+        # response = urlopen(url)
+        client = HttpClient()
+        response = client.get(url)
+        data = response.json()
+        user = CustomUser.objects.get(user_name="test_user")
+        self.assertEqual(data[0]['fields']['user_name'], user.user_name)
+        self.assertEqual(data[0]['fields']['email'], user.email)
+        self.assertEqual(data[0]['fields']['first_name'], user.first_name)
+        self.assertEqual(data[0]['fields']['last_name'], user.last_name)
+        self.assertEqual(data[0]['fields']['role'], user.role)
+        user2 = CustomUser.objects.get(user_name="test_user2")
+        self.assertEqual(data[1]['fields']['user_name'], user2.user_name)
+        self.assertEqual(data[1]['fields']['email'], user2.email)
+        self.assertEqual(data[1]['fields']['first_name'], user2.first_name)
+        self.assertEqual(data[1]['fields']['last_name'], user2.last_name)
+        self.assertEqual(data[1]['fields']['role'], user2.role)
 
 
 class RegistrationTestCase(APITestCase):
