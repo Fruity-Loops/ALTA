@@ -1,15 +1,17 @@
+import json
 from django.db.models import signals
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
-from rest_framework import status
+from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework import viewsets
-from rest_framework import generics
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
 
 
 class RegistrationView(viewsets.ModelViewSet):
+
     """
     Creates a new System Admin in the db.
     """
@@ -104,3 +106,20 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
+
+
+class AccessAllClients(generics.GenericAPIView):
+    queryset = CustomUser.objects.values(
+        'user_name',
+        'first_name',
+        'last_name',
+        'role',
+        'is_active',
+        'email',
+        )
+    http_method_names = ['get']
+
+    def get(self, request):
+        qs = self.get_queryset()
+        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
+        return JsonResponse(qs_json, safe=False)

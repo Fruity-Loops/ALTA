@@ -1,1 +1,12 @@
 <p>Inside {{view}} Component</p>
+<button (click)="obtainClients()">Obtain Clients</button>
+<ul *ngFor="let pers of users">
+    <li>
+        username = {{pers.user_name}},
+        firstname = {{pers.first_name}},
+        lastname = {{pers.last_name}}, 
+        role = {{pers.role}},
+        is_active = {{pers.is_active}},
+        e-mail = {{pers.email}}
+    </li>
+</ul>

@@ -30,6 +30,7 @@ export class TokenInterceptor implements HttpInterceptor {
     const headersConfig = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
+      Authorization: '',
     };
 
     const token = this.tokenService.GetToken(); // Getting the token
@@ -37,10 +38,9 @@ export class TokenInterceptor implements HttpInterceptor {
     // If token is available in the cookie
     if (token) {
       // We set the Authorization header: token inside the object for every request
-      const authHeader = 'Authorization';
-      headersConfig[authHeader] = `Token ${token}`;
+      headersConfig.Authorization = `Token ${token}`;
     }
-    const REQ = req.clone({ setHeaders: headersConfig }); // We clone the request
-    return next.handle(REQ); // We handle the cloned request
+    const reqUpdated = req.clone({ setHeaders: headersConfig }); // We clone the request
+    return next.handle(reqUpdated); // We handle the cloned request
   }
 }

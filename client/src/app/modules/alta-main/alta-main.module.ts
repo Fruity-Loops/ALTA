@@ -27,6 +27,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
     HttpClientModule,
     RouterModule
   ],
-  providers: [AuthService, Router],
+  providers: [AuthService, Router, ModifyMembersComponent],
+
 })
 export class AltaMainModule { }
