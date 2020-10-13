@@ -9,7 +9,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 })
 export class ModifyClientRoleComponent implements OnInit {
 
-  users:User[] = [];
+  users: User[] = [];
   display: boolean;
   querrysett;
 
@@ -20,11 +20,9 @@ export class ModifyClientRoleComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  obtainClients(): void
-  {
+  obtainClients(): void {
     this.dashboardService.getAllClients()
-    .subscribe((user) =>
-      {
+      .subscribe((user) => {
         this.users = JSON.parse(user);
       });
   }
