@@ -8,6 +8,8 @@ from .serializers import UserSerializer, LoginSerializer
 from rest_framework import generics
 from django.contrib import auth
 from django.contrib.auth.hashers import check_password
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -47,6 +49,8 @@ class LoginView(generics.GenericAPIView):
         :param request: request.data: user_name, password
         :return: user_name, token
         """
+        print(request.user)
+        print(request.auth)
         data = request.data
         username = data.get('user_name', '')
         password = data.get('password', '')
@@ -81,6 +85,7 @@ class LogoutView(generics.GenericAPIView):
     """
     Logout a System Admin.
     """
+
     def post(self, request):
         """
         :param request: request.user (token)
@@ -100,3 +105,20 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
+
+
+@api_view(['Get'])
+@permission_classes([IsAuthenticated])
+def restricted(request, *args, **kwargs):
+    print(request.user)
+    print(request.auth)
+    return Response(data="only for logged in user", status=status.HTTP_200_OK)
+
+
+class restricted_class_based_views(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        print(request.user)
+        print(request.auth)
+        return Response(data="only for logged in user class", status=status.HTTP_200_OK)
