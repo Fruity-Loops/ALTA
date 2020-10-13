@@ -6,10 +6,12 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { AuthService } from 'src/app/services/auth.service';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
+import { ModifyClientRoleComponent } from '../../components/modify-client-role/modify-client-role.component';
+import { DashboardService } from 'src/app/services/dashboard.service';
 
 @NgModule({
-  declarations: [HomeComponent, DashboardComponent],
+  declarations: [HomeComponent, DashboardComponent, ModifyClientRoleComponent],
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule, RouterModule],
-  providers: [AuthService],
+  providers: [AuthService, DashboardService],
 })
 export class AltaMainModule {}
