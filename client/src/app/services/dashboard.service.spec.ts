@@ -36,7 +36,7 @@ describe('CoursesService', () => {
 
     service.getAllClients()
       .subscribe(jsonData => {
-        const data = JSON.parse(jsonData);
+        const data = jsonData;
         expect(data.user_name).toEqual(mockUser.user_name);
         expect(data.email).toEqual(mockUser.email);
         expect(data.first_name).toEqual(mockUser.first_name);

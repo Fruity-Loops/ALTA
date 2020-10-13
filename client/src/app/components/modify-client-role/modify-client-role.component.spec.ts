@@ -2,8 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModifyClientRoleComponent } from './modify-client-role.component';
 import { DashboardService } from './../../services/dashboard.service';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-
 
 describe('ModifyClientRoleComponent', () => {
   let component: ModifyClientRoleComponent;
