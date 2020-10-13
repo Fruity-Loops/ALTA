@@ -11,6 +11,7 @@ import { MatModule } from '../material/material-module';
 import { ManageMembersComponent } from 'src/app/components/manage-members/manage-members.component';
 import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
+import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
     DashboardComponent,
     SideNavComponent,
     ManageMembersComponent,
-    ModifyMembersComponent],
+    ModifyMembersComponent,
+    ClientGridviewComponent],
   imports: [
     CommonModule,
     MatModule,
