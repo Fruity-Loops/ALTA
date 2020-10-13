@@ -1,6 +1,8 @@
+import json
 from django.db.models import signals
 from django.core import serializers
 from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
@@ -108,11 +110,17 @@ class LogoutView(generics.GenericAPIView):
 
 
 class AccessAllClients(generics.GenericAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.values(
+        'user_name',
+        'first_name',
+        'last_name',
+        'role',
+        'is_active',
+        'email', 
+        )
     http_method_names = ['get']
 
     def get(self, request):
-
         qs = self.get_queryset()
-        qs_json = serializers.serialize('json', qs)
+        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
         return JsonResponse(qs_json, safe=False)
