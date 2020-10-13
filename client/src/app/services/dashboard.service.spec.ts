@@ -37,15 +37,15 @@ describe('CoursesService', () => {
     service.getAllClients()
       .subscribe(jsonData => {
         const data = JSON.parse(jsonData);
-        expect(data.user_name).toEqual('a');
-        expect(data.email).toEqual('a@gmail.com');
-        expect(data.first_name).toEqual('a');
-        expect(data.last_name).toEqual('a');
-        expect(data.role).toEqual('SA');
+        expect(data.user_name).toEqual(mockUser.user_name);
+        expect(data.email).toEqual(mockUser.email);
+        expect(data.first_name).toEqual(mockUser.first_name);
+        expect(data.last_name).toEqual(mockUser.last_name);
+        expect(data.role).toEqual(mockUser.role);
       });
 
     // This is where the request should be
-    const req = httpTestingController.expectOne('http://localhost:8000/getAllClients/');
+    const req = httpTestingController.expectOne(service.BASEURL + '/getAllClients/');
 
     expect(req.request.method).toEqual('GET');
 

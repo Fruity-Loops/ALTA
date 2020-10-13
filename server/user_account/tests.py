@@ -55,7 +55,6 @@ class AccessAllClientsTestCase(TestCase):
         response = client.get(url)
         data = json.loads(response.json())
         user = CustomUser.objects.get(user_name="test_user")
-        print(data)
         self.assertEqual(data[0]['user_name'], user.user_name)
         self.assertEqual(data[0]['email'], user.email)
         self.assertEqual(data[0]['first_name'], user.first_name)
