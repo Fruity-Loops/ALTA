@@ -1,23 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModifyMembersComponent } from './modify-members.component';
-import { DashboardService } from './../../services/dashboard.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ManageMembersService } from 'src/app/services/manage-members.service';
 
 describe('ModifyMembersComponent', () => {
   let component: ModifyMembersComponent;
   let fixture: ComponentFixture<ModifyMembersComponent>;
-  let service: DashboardService;
+  let service: ManageMembersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ModifyMembersComponent],
-      providers: [DashboardService],
+      providers: [ManageMembersService],
       imports: [HttpClientModule]
     });
 
     fixture = TestBed.createComponent(ModifyMembersComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(DashboardService);
+    service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
   });
 

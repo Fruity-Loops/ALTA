@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
-import { DashboardService } from 'src/app/services/dashboard.service';
+import { ManageMembersService } from 'src/app/services/manage-members.service';
 
 @Component({
   selector: 'app-modify-members',
@@ -12,7 +12,7 @@ export class ModifyMembersComponent implements OnInit {
   display: boolean;
   querrysett;
 
-  constructor(private dashboardService: DashboardService) {
+  constructor(private manageMembersService: ManageMembersService) {
     this.display = false;
   }
   view = 'Modify Members';
@@ -21,7 +21,7 @@ export class ModifyMembersComponent implements OnInit {
   }
 
   obtainClients(): void {
-    this.dashboardService.getAllClients()
+    this.manageMembersService.getAllClients()
       .subscribe((user) => {
         this.users = JSON.parse(user);
       });
