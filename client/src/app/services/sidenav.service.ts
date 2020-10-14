@@ -9,7 +9,6 @@ import { MatDrawerToggleResult, MatSidenav } from '@angular/material/sidenav';
 export class SidenavService {
   private sidenav: MatSidenav;
 
-
   public setSidenav(sidenav: MatSidenav): void {
     this.sidenav = sidenav;
   }
@@ -18,8 +17,7 @@ export class SidenavService {
     return this.sidenav.open();
   }
 
-
-  public close(): Promise<MatDrawerToggleResult>  {
+  public close(): Promise<MatDrawerToggleResult> {
     return this.sidenav.close();
   }
 

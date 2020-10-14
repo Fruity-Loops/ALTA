@@ -36,11 +36,4 @@ export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.sidenavService.setSidenav(this.sidenav);
   }
-
-  logout(): void {
-    this.tokenService.DeleteToken(); // Delete token when user logout
-    this.router.navigate(['login']); // Redirect user to login/register pager
-
-    // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
-  }
 }
