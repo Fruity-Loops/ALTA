@@ -6,8 +6,10 @@ from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
+
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -15,6 +17,7 @@ class RegistrationView(viewsets.ModelViewSet):
     """
     Creates a new System Admin in the db.
     """
+    permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     http_method_names = ['post']
@@ -25,6 +28,21 @@ class RegistrationView(viewsets.ModelViewSet):
         last_name, user_name, password, role, email, is_active
         :return: user_name, token
         """
+        # Retrieve the authenticated user making the request
+        auth_content = {
+        'user': str(request.user),
+        'auth': str(request.auth),
+        }
+        # If not authenticated return 401
+        if auth_content['auth'] is None:
+            return Response({'unauthorized': 'Unauthorized request'},
+            status=status.HTTP_401_UNAUTHORIZED)
+
+        auth_user = CustomUser.objects.get(user_name=auth_content['user'])
+        # TODO: Limit account creation by role
+        if auth_user.role != 'SA':
+            pass
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

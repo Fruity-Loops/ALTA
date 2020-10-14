@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password,
     };
 
-    this.authService.loginSysAdmin(this.body).subscribe(
+    this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
         setTimeout(() => {

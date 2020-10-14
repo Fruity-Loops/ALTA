@@ -11,11 +11,11 @@ const BASEURL = 'http://localhost:8000';
 export class AuthService {
   constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
 
-  registerSysAdmin(body): Observable<any> {
+  register(body): Observable<any> {
     return this.http.post(`${BASEURL}/registration/`, body);
   }
 
-  loginSysAdmin(body): Observable<any> {
+  login(body): Observable<any> {
     return this.http.post(`${BASEURL}/login/`, body);
   }
 }

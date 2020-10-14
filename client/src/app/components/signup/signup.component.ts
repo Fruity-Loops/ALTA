@@ -55,16 +55,14 @@ export class SignupComponent implements OnInit {
       is_active: 'true',
       password: this.signupForm.value.password,
     };
-
     // RegisterUser is the method defined in authService
-<<<<<<< HEAD
-    this.authService.registerSysAdmin(this.body).subscribe(
+    this.authService.register(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token);
         this.signupForm.reset(); // Reset form once signup
         setTimeout(() => {
-          this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 1000); // Waiting 1 seconds before redirecting the user
+          this.router.navigate(['modify-members']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {
         // 2 different types of error messages
@@ -72,30 +70,12 @@ export class SignupComponent implements OnInit {
         if (err.error.email) {
           this.errorMessage = err.error.email[0];
         }
-=======
-    if (this.body.role === 'SA') {
-      this.authService.registerSysAdmin(this.body).subscribe(
-        (data) => {
-          this.tokenService.SetToken(data.token);
-          this.signupForm.reset(); // Reset form once signup
-          setTimeout(() => {
-            this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-          }, 1000); // Waiting 3 seconds before redirecting the user
-        },
-        (err) => {
-          // 2 different types of error messages
-          // If email already exist
-          if (err.error.email) {
-            this.errorMessage = err.error.email[0];
-          }
->>>>>>> 6aaa926... feat:Added the signup form(from the signup component) inside the create members component with a role drop down menu
 
-          // If username already exist
-          if (err.error.user_name) {
-            this.errorMessage = err.error.user_name[0];
-          }
+        // If username already exist
+        if (err.error.user_name) {
+          this.errorMessage = err.error.user_name[0];
         }
-      );
-    }
+      }
+    );
   }
 }
