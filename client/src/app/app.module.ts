@@ -4,12 +4,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from './modules/auth/auth.module';
-import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 import { AltaMainModule } from './modules/alta-main/alta-main.module';
 import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-routing.module';
+import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { MatModule } from './modules/material/material-module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -17,10 +18,11 @@ import { CookieService } from 'ngx-cookie-service';
     BrowserModule,
     BrowserAnimationsModule,
     AuthModule,
-    AuthRoutingModule,
     AltaMainModule,
     AltaMainRoutingModule,
+    AuthRoutingModule,
     HttpClientModule,
+    MatModule
   ],
   providers: [
     CookieService, // To manage cookie in frontend
@@ -32,4 +34,4 @@ import { CookieService } from 'ngx-cookie-service';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

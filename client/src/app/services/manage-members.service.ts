@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
-export class DashboardService {
+export class ManageMembersService {
   // Connection with the backend
   BASEURL = 'http://localhost:8000';
 

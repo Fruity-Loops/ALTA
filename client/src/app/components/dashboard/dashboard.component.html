@@ -1,15 +1,1 @@
-<h2>System Admin Dashboard</h2>
-<h3>Current Setting: {{selectedOption.title}}</h3>
-
-<ul class="options">
-  <li *ngFor="let option of options"
-    [class.selected]="option === selectedOption"
-    (click)="onSelect(option)">
-    {{option.title}}
-  </li>
-</ul>
-
-
-<div id="comp-render" *ngIf="display">
-  <app-modify-client-role></app-modify-client-role>
-</div>
+<p>Inside {{view}} Component</p>

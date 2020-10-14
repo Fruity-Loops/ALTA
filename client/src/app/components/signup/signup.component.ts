@@ -56,8 +56,8 @@ export class SignupComponent implements OnInit {
         this.tokenService.SetToken(data.token);
         this.signupForm.reset(); // Reset form once signup
         setTimeout(() => {
-          this.router.navigate(['home']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 1000); // Waiting 3 seconds before redirecting the user
+          this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }, 1000); // Waiting 1 seconds before redirecting the user
       },
       (err) => {
         // 2 different types of error messages

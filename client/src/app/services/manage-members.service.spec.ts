@@ -1,20 +1,20 @@
 
 import { TestBed } from '@angular/core/testing';
-import { DashboardService } from './dashboard.service';
+import { ManageMembersService } from './manage-members.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-describe('CoursesService', () => {
+describe('ManageMembersService', () => {
   let httpTestingController: HttpTestingController;
-  let service: DashboardService;
+  let service: ManageMembersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [DashboardService],
+      providers: [ManageMembersService],
       imports: [HttpClientTestingModule]
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
-    service = TestBed.inject(DashboardService);
+    service = TestBed.inject(ManageMembersService);
   });
 
   afterEach(() => {
