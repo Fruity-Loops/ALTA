@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 
 @Component({
   selector: 'app-modify-members',
-  templateUrl: '../client-gridview/client-gridview.component.html',
+  templateUrl: 'modify-members.component.html', // ../client-gridview/client-gridview
   styleUrls: ['../client-gridview/client-gridview.component.css', './modify-members.component.css']
 })
 export class ModifyMembersComponent extends ClientGridviewComponent implements OnInit {
   querrysett;
   view = 'Modify Members';
+  @ViewChild(ClientGridviewComponent) appChild: ClientGridviewComponent;
 
   constructor(private manageMembersService: ManageMembersService) {
     super();
-    this.display = false;
-    this.obtainClients();
   }
 
   ngOnInit(): void {
@@ -23,7 +22,7 @@ export class ModifyMembersComponent extends ClientGridviewComponent implements O
   obtainClients(): void {
     this.manageMembersService.getAllClients()
       .subscribe((user) => {
-        this.users = JSON.parse(user);
+        this.appChild.users = JSON.parse(user);
       });
   }
 }

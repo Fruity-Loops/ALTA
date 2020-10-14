@@ -9,11 +9,9 @@ import { User } from 'src/app/models/user.model';
 
 export class ClientGridviewComponent implements OnInit {
   users: User[] = [];
-  display: boolean;
   view = 'Client Gridview';
 
   constructor() {
-    this.display = false;
   }
 
   ngOnInit(): void {
