@@ -7,13 +7,12 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
   templateUrl: 'modify-members.component.html', // ../client-gridview/client-gridview
   styleUrls: ['../client-gridview/client-gridview.component.css', './modify-members.component.css']
 })
-export class ModifyMembersComponent extends ClientGridviewComponent implements OnInit {
+export class ModifyMembersComponent implements OnInit {
   querrysett;
   view = 'Modify Members';
   @ViewChild(ClientGridviewComponent) appChild: ClientGridviewComponent;
 
   constructor(private manageMembersService: ManageMembersService) {
-    super();
   }
 
   ngOnInit(): void {
