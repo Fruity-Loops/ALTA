@@ -10,7 +10,6 @@ import { User } from 'src/app/models/user.model';
 export class ClientGridviewComponent implements OnInit {
   users: User[] = [];
   display: boolean;
-  querrysett;
   view = 'Client Gridview';
 
   constructor() {
@@ -18,9 +17,5 @@ export class ClientGridviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  doSomething(): void {
-
   }
 }
