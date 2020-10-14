@@ -10,6 +10,7 @@ import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
+import { MatModule } from './modules/material/material-module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { CookieService } from 'ngx-cookie-service';
     AltaMainRoutingModule,
     AuthRoutingModule,
     HttpClientModule,
+    MatModule
   ],
   providers: [
     CookieService, // To manage cookie in frontend
