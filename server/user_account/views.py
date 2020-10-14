@@ -15,7 +15,7 @@ from .models import CustomUser
 class RegistrationView(viewsets.ModelViewSet):
 
     """
-    Creates a new System Admin in the db.
+    Creates a new user in the db.
     """
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
@@ -42,6 +42,34 @@ class RegistrationView(viewsets.ModelViewSet):
         # TODO: Limit account creation by role
         if auth_user.role != 'SA':
             pass
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        # creating token
+        signals.post_save.send(sender=self.__class__,
+                               user=user, request=self.request)
+        token = Token.objects.get(user=user).key
+
+        data = {'user': user.user_name, 'token': token}
+        return Response(data, status=status.HTTP_201_CREATED)
+
+class OpenRegistrationView(viewsets.ModelViewSet):
+
+    """
+    OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        """
+        :param request: request.data: first_name,
+        last_name, user_name, password, role, email, is_active
+        :return: user_name, token
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

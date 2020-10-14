@@ -56,12 +56,18 @@ export class SignupComponent implements OnInit {
       password: this.signupForm.value.password,
     };
     // RegisterUser is the method defined in authService
-    this.authService.register(this.body).subscribe(
+    // If you are not logged in you can create any account
+    // TODO: Disable in production
+    const register = this.tokenService.GetToken() ? this.authService.register(this.body) :
+      this.authService.openRegister(this.body);
+
+    register.subscribe(
       (data) => {
         this.tokenService.SetToken(data.token);
         this.signupForm.reset(); // Reset form once signup
         setTimeout(() => {
-          this.router.navigate(['modify-members']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+          // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+          this.router.navigate(['modify-members']);
         }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {

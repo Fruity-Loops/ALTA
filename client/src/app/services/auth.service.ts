@@ -15,6 +15,10 @@ export class AuthService {
     return this.http.post(`${BASEURL}/registration/`, body);
   }
 
+  openRegister(body): Observable<any> {
+    return this.http.post(`${BASEURL}/open-registration/`, body);
+  }
+
   login(body): Observable<any> {
     return this.http.post(`${BASEURL}/login/`, body);
   }
