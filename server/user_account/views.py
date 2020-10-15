@@ -110,12 +110,10 @@ class LogoutView(generics.GenericAPIView):
 
 class AccessAllClients(generics.GenericAPIView):
     queryset = CustomUser.objects.values(
-        'user_name',
         'first_name',
         'last_name',
         'role',
         'is_active',
-        'email',
         )
     http_method_names = ['get']
 

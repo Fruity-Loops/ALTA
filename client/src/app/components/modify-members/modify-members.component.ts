@@ -4,7 +4,7 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
 
 @Component({
   selector: 'app-modify-members',
-  templateUrl: 'modify-members.component.html', // ../client-gridview/client-gridview
+  templateUrl: 'modify-members.component.html',
   styleUrls: ['../client-gridview/client-gridview.component.css', './modify-members.component.css']
 })
 export class ModifyMembersComponent implements OnInit {
