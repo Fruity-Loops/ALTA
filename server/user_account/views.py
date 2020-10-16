@@ -33,10 +33,6 @@ class RegistrationView(viewsets.ModelViewSet):
         'user': str(request.user),
         'auth': str(request.auth),
         }
-        # If not authenticated return 401
-        if auth_content['auth'] is None:
-            return Response({'unauthorized': 'Unauthorized request'},
-            status=status.HTTP_401_UNAUTHORIZED)
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
         # TODO: Limit account creation by role
@@ -47,12 +43,7 @@ class RegistrationView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # creating token
-        signals.post_save.send(sender=self.__class__,
-                               user=user, request=self.request)
-        token = Token.objects.get(user=user).key
-
-        data = {'user': user.user_name, 'token': token}
+        data = {'user': user.user_name, 'token': auth_content['auth']}
         return Response(data, status=status.HTTP_201_CREATED)
 
 class OpenRegistrationView(viewsets.ModelViewSet):
