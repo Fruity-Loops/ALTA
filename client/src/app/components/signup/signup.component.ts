@@ -14,6 +14,11 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
+  roles = [
+    { name: 'System Admin', abbrev: 'SA' },
+    { name: 'Inventory Manager', abbrev: 'IM' },
+    { name: 'Stock Keeper', abbrev: 'SK' },
+  ];
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -22,7 +27,7 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.init();
@@ -36,6 +41,7 @@ export class SignupComponent implements OnInit {
       password: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
+      role: ['', Validators.required],
     });
   }
 
@@ -45,19 +51,24 @@ export class SignupComponent implements OnInit {
       email: this.signupForm.value.email,
       first_name: this.signupForm.value.firstname,
       last_name: this.signupForm.value.lastname,
-      role: 'SA',
+      role: this.signupForm.value.role.abbrev,
       is_active: 'true',
       password: this.signupForm.value.password,
     };
-
     // RegisterUser is the method defined in authService
-    this.authService.registerSysAdmin(this.body).subscribe(
+    // If you are not logged in you can create any account
+    // TODO: Disable in production
+    const register = this.tokenService.GetToken() ? this.authService.register(this.body) :
+      this.authService.openRegister(this.body);
+
+    register.subscribe(
       (data) => {
         this.tokenService.SetToken(data.token);
         this.signupForm.reset(); // Reset form once signup
         setTimeout(() => {
-          this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-        }, 1000); // Waiting 1 seconds before redirecting the user
+          // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+          this.router.navigate(['modify-members']);
+        }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {
         // 2 different types of error messages

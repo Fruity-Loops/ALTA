@@ -52,7 +52,7 @@ describe('AuthService', () => {
       // We run the registerSysAdmin function and we expect that the property name in the response that we
       // Will get when the request is carried (when the observable resolves) out is ‘angular’
       // (The same as in the mockSysAdmin).
-      authService.registerSysAdmin({}).subscribe((sysAdminData) => {
+      authService.register({}).subscribe((sysAdminData) => {
         expect(sysAdminData.user_name).toEqual('angular');
       });
 
@@ -70,14 +70,14 @@ describe('AuthService', () => {
   });
 
   // Test login
-  describe('#loginSysAdmin()', () => {
+  describe('#login()', () => {
     it('returned Observable should match the right data', () => {
       const mockSysAdmin2 = {
         user_name: 'angular',
         password: '12',
       };
 
-      authService.loginSysAdmin({}).subscribe((sysAdminData) => {
+      authService.login({}).subscribe((sysAdminData) => {
         expect(sysAdminData.user_name).toEqual('angular');
       });
 

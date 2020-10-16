@@ -7,7 +7,8 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register(r'registration', views.RegistrationView)
+router.register(r'registration', views.RegistrationView, basename='registration')
+router.register(r'open-registration', views.OpenRegistrationView, basename='open_registration')
 
 urlpatterns = [
     path('', include(router.urls)),
