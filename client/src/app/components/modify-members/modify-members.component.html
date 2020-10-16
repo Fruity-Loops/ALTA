@@ -1,3 +1,16 @@
 <p>Inside {{view}} Component</p>
 <button (click)="obtainClients()">Obtain Clients</button>
 <app-client-gridview></app-client-gridview>
+
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+
+  <div>
+    <label for="name">
+      FirstName
+    </label>
+    <input id="name" type="text" formControlName="name">
+  </div>
+
+  <button class="button" type="submit">Search</button>
+
+</form>

@@ -115,9 +115,22 @@ class AccessAllClients(generics.GenericAPIView):
         'role',
         'is_active',
         )
-    http_method_names = ['get']
 
     def get(self, request):
         qs = self.get_queryset()
         qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
         return JsonResponse(qs_json, safe=False)
+
+
+class AccessSomeClients(generics.GenericAPIView):
+    http_method_names = ['post']
+
+    def post(self, request):
+        data = request.data
+        first_name = data.get('name', '')
+        qs = CustomUser.objects.filter(first_name=first_name).values('first_name',
+        'last_name',
+        'role',
+        'is_active',)
+        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
+        return Response(qs_json, status=status.HTTP_200_OK)
