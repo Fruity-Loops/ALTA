@@ -27,9 +27,19 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run Tests
+    - name: Running tests
       working-directory: server
-      run: |   
+      run: |
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test
+    - name: Running tests with coverage using Pytest
+      working-directory: server/user_account
+      run: |
+        pytest --cov=user_account tests.py
+        pytest --cov-report xml:../cov.xml  --cov=user_account tests.py
+    - name: Uploading tests coverage result to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true #(default = false)

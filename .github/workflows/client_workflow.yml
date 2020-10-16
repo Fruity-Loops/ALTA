@@ -26,4 +26,4 @@ jobs:
           npm i
           npm i -g @angular/cli
           npm audit fix
-          ng test --browsers=ChromeHeadless --sourceMap=false --watch=false 
+          ng test --no-watch --code-coverage --browsers=ChromeHeadless --sourceMap=false --watch=false
