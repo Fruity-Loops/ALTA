@@ -123,5 +123,8 @@
       }
     }
   },
-  "defaultProject": "alta-front"
+  "defaultProject": "alta-front",
+  "cli": {
+    "analytics": false
+  }
 }
