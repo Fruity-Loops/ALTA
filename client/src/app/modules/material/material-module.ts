@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule
   ],
   providers: [],
   exports: [
@@ -32,6 +33,7 @@ import { MatSelectModule } from '@angular/material';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule
   ]
 })
 export class MatModule { }
