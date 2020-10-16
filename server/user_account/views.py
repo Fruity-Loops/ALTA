@@ -9,6 +9,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -35,9 +36,10 @@ class RegistrationView(viewsets.ModelViewSet):
         }
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
-        # TODO: Limit account creation by role
-        if auth_user.role != 'SA':
-            pass
+        #TODO: limit account creation for SK users
+        if auth_user.role != 'SA' and request.data.get('role', '') == 'SA':
+                return Response({'detail': 'Attempted to create an unauthorized account'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -69,6 +71,11 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         # creating token
         signals.post_save.send(sender=self.__class__,
                                user=user, request=self.request)
+        token = Token.objects.get(user=user).key
+
+        # creating token
+        signals.post_save.send(sender=self.__class__,
+                                           user=user, request=self.request)
         token = Token.objects.get(user=user).key
 
         data = {'user': user.user_name, 'token': token}
