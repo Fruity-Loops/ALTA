@@ -9,11 +9,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
-
+from .permissions import isSystemAdmin, isInventoryManager
 
 
 class RegistrationView(viewsets.ModelViewSet):
-
     """
     Creates a new user in the db.
     """
@@ -30,8 +29,8 @@ class RegistrationView(viewsets.ModelViewSet):
         """
         # Retrieve the authenticated user making the request
         auth_content = {
-        'user': str(request.user),
-        'auth': str(request.auth),
+            'user': str(request.user),
+            'auth': str(request.auth),
         }
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
@@ -46,8 +45,8 @@ class RegistrationView(viewsets.ModelViewSet):
         data = {'user': user.user_name, 'token': auth_content['auth']}
         return Response(data, status=status.HTTP_201_CREATED)
 
-class OpenRegistrationView(viewsets.ModelViewSet):
 
+class OpenRegistrationView(viewsets.ModelViewSet):
     """
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
@@ -111,7 +110,7 @@ class LoginView(generics.GenericAPIView):
                                 status=status.HTTP_401_UNAUTHORIZED)
 
             return Response({'detail': 'Please contact admin to activate your account'},
-                                status=status.HTTP_401_UNAUTHORIZED)
+                            status=status.HTTP_401_UNAUTHORIZED)
 
         except CustomUser.DoesNotExist:
             return Response({'detail': 'Invalid user'},
@@ -129,7 +128,7 @@ class LogoutView(generics.GenericAPIView):
         """
         return self.remove_token(request)
 
-    def remove_token(self, request): # pylint: disable=no-self-use
+    def remove_token(self, request):  # pylint: disable=no-self-use
         """
         Deleting user token from the database when he logout.
         :param request
@@ -153,8 +152,9 @@ class AccessAllClients(generics.GenericAPIView):
         'role',
         'is_active',
         'email',
-        )
+    )
     http_method_names = ['get']
+    permission_classes = [IsAuthenticated, isSystemAdmin]
 
     def get(self, request):
         qs = self.get_queryset()
