@@ -27,18 +27,11 @@ export class ModifyMembersComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  obtainClients(): void {
-    this.manageMembersService.getAllClients()
-      .subscribe((user) => {
-        this.appChild.users = JSON.parse(user);
-      });
-  }
-
   onSubmit(customerData): void {
     // Process checkout data here
     this.http.post('http://localhost:8000/getSomeClients/', JSON.stringify(customerData))
         .subscribe((response) => {
-          this.appChild.users = JSON.parse(response.toString());
+          this.appChild.updateClients(JSON.parse(response.toString()));
         });
     this.checkoutForm.reset();
 

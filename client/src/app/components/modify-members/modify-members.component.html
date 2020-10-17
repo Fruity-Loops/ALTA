@@ -1,7 +1,4 @@
 <p>Inside {{view}} Component</p>
-<button mat-button (click)="obtainClients()">Obtain Clients</button>
-<app-client-gridview></app-client-gridview>
-
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
 
   <div>
@@ -9,8 +6,9 @@
       FirstName
     </label>
     <input id="name" type="text" formControlName="name">
+    &nbsp;
+    <button class="button" type="submit">Search</button>
   </div>
 
-  <button class="button" type="submit">Search</button>
-
 </form>
+<app-client-gridview></app-client-gridview>
