@@ -1,14 +1,11 @@
 import json
 from django.db.models import signals
-from django.http import JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
-from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
@@ -154,7 +151,6 @@ class AccessAllClients(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         serializer.is_valid(raise_exception=True)
-        messages.success(request._request, 'Success')
         return Response(serializer.data)
 
     permission_classes = [IsAuthenticated]
