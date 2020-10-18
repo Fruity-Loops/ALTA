@@ -7,9 +7,11 @@ from rest_framework import status, viewsets, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, LoginSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
-
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -145,18 +147,19 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessAllClients(generics.GenericAPIView):
-    queryset = CustomUser.objects.values(
-        'first_name',
-        'last_name',
-        'role',
-        'is_active',
-        )
-
+class AccessAllClients(viewsets.ModelViewSet):
+    @api_view(['Get'])
+    @permission_classes([IsAuthenticated])
     def get(self, request):
-        qs = self.get_queryset()
-        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
-        return JsonResponse(qs_json, safe=False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        serializer.is_valid(raise_exception=True)
+        messages.success(request._request, 'Success')
+        return Response(serializer.data)
+
+    permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
 
 
 class AccessSomeClients(generics.GenericAPIView):

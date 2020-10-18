@@ -27,7 +27,7 @@ export class ClientGridviewComponent implements OnInit {
     // Assign the data to the data source for the table to render
     this.manageMembersService.getAllClients()
       .subscribe((user) => {
-        const users = JSON.parse(user);
+        const users = user;
         this.updateClients(users);
       });
   }

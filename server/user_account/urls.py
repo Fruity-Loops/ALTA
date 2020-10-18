@@ -9,11 +9,11 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'registration', views.RegistrationView, basename='registration')
 router.register(r'open-registration', views.OpenRegistrationView, basename='open_registration')
+router.register(r'getAllClients', views.AccessAllClients, basename='getAllClients/')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
-    path('getAllClients/', views.AccessAllClients.as_view()),
     path('getSomeClients/', views.AccessSomeClients.as_view())
 ]
