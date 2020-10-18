@@ -27,14 +27,10 @@ export class ModifyMembersComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(customerData): void {
-    // Process checkout data here
-    this.http.post('http://localhost:8000/getSomeClients/', JSON.stringify(customerData))
-        .subscribe((response) => {
+  onSubmit(name): void {
+    this.manageMembersService.sendNameToObtainClients(name).subscribe((response) => {
           this.appChild.updateClients(JSON.parse(response.toString()));
         });
     this.checkoutForm.reset();
-
-    console.warn('Your order has been submitted', customerData);
   }
 }
