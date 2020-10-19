@@ -160,6 +160,7 @@ class AccessSomeClients(generics.GenericAPIView):
     http_method_names = ['post']
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         data = request.data
