@@ -29,7 +29,7 @@ export class ModifyMembersComponent implements OnInit {
 
   onSubmit(name): void {
     this.manageMembersService.sendNameToObtainClients(name).subscribe((response) => {
-          this.appChild.updateClients(JSON.parse(response.toString()));
+          this.appChild.updateClients(response);
         });
     this.checkoutForm.reset();
   }

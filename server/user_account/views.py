@@ -1,6 +1,4 @@
-import json
 from django.db.models import signals
-from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
@@ -160,13 +158,12 @@ class AccessAllClients(viewsets.ModelViewSet):
 
 class AccessSomeClients(generics.GenericAPIView):
     http_method_names = ['post']
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
 
     def post(self, request):
         data = request.data
         first_name = data.get('name', '')
-        qs = CustomUser.objects.filter(first_name=first_name).values('first_name',
-        'last_name',
-        'role',
-        'is_active',)
-        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
-        return Response(qs_json, status=status.HTTP_200_OK)
+        qs = CustomUser.objects.filter(first_name=first_name)
+        serializer = ClientGridSerializer(instance=qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
