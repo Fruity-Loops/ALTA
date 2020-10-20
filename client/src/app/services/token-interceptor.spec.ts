@@ -45,7 +45,7 @@ describe('TokenInterceptor', () => {
   });
 
   it('should add content-type and Accept property in http header', () => {
-    authService.loginSysAdmin({}).subscribe((res) => {
+    authService.login({}).subscribe((res) => {
       expect(res).toBeTruthy();
     });
 

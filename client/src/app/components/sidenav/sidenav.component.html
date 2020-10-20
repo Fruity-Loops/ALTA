@@ -1,0 +1,13 @@
+<div class="sidenav">
+    <ul class="options">
+        <li *ngFor="let option of options" [class.selected]="option === selectedOption" class="parent">
+            <h3 id="option" routerLink="{{option.routerLink}}">{{option.title}}</h3>
+            <ul class="subOptions" *ngIf="option.subMenuOptions?.length > 0">
+                <li *ngFor="let subOption of option.subMenuOptions" [class.selected]="subOption === selectedOption"
+                    class="child">
+                    <h4 id="subOption" routerLink="{{subOption.routerLink}}">{{subOption.title}}</h4>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

@@ -1,19 +1,52 @@
-import json
 from django.db.models import signals
-from django.http import JsonResponse
-from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
-from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, LoginSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
 
 
 class RegistrationView(viewsets.ModelViewSet):
 
     """
-    Creates a new System Admin in the db.
+    Creates a new user in the db.
+    """
+    permission_classes = [IsAuthenticated]
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    http_method_names = ['post']
+
+    def create(self, request, *args, **kwargs):
+        """
+        :param request: request.data: first_name,
+        last_name, user_name, password, role, email, is_active
+        :return: user_name, token
+        """
+        # Retrieve the authenticated user making the request
+        auth_content = {
+        'user': str(request.user),
+        'auth': str(request.auth),
+        }
+
+        auth_user = CustomUser.objects.get(user_name=auth_content['user'])
+        # TODO: Limit account creation by role
+        if auth_user.role != 'SA':
+            pass
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+
+        data = {'user': user.user_name, 'token': auth_content['auth']}
+        return Response(data, status=status.HTTP_201_CREATED)
+
+class OpenRegistrationView(viewsets.ModelViewSet):
+
+    """
+    OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
@@ -25,6 +58,7 @@ class RegistrationView(viewsets.ModelViewSet):
         last_name, user_name, password, role, email, is_active
         :return: user_name, token
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -108,18 +142,22 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessAllClients(generics.GenericAPIView):
-    queryset = CustomUser.objects.values(
-        'user_name',
-        'first_name',
-        'last_name',
-        'role',
-        'is_active',
-        'email',
-        )
+class AccessAllClients(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
 
-    def get(self, request):
-        qs = self.get_queryset()
-        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
-        return JsonResponse(qs_json, safe=False)
+
+class AccessSomeClients(generics.GenericAPIView):
+    http_method_names = ['post']
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        first_name = data.get('name', '')
+        qs = CustomUser.objects.filter(first_name=first_name)
+        serializer = ClientGridSerializer(instance=qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

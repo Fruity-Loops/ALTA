@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
-export class DashboardService {
+export class ManageMembersService {
   // Connection with the backend
   BASEURL = 'http://localhost:8000';
 
@@ -14,5 +14,10 @@ export class DashboardService {
 
   getAllClients(): Observable<any> {
     return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`);
+  }
+
+  getSpecificClients(name): Observable<any>
+  {
+    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
   }
 }

@@ -1,0 +1,4 @@
+[run]
+omit = django_server/*
+       */venv/*
+       manage.py
