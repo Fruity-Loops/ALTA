@@ -13,6 +13,7 @@ import { ModifyMembersComponent } from 'src/app/components/modify-members/modify
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { AuthModule } from '../auth/auth.module';
+import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +22,9 @@ import { AuthModule } from '../auth/auth.module';
     DashboardComponent,
     SideNavComponent,
     ManageMembersComponent,
-    CreateMembersComponent,
     ModifyMembersComponent,
+    ClientGridviewComponent,
+    CreateMembersComponent,
   ],
 
   imports: [

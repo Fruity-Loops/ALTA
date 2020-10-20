@@ -1,23 +1,22 @@
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ModifyMembersComponent } from './modify-members.component';
+import { ClientGridviewComponent } from './client-gridview.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { HttpClient } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
 
-describe('ModifyMembersComponent', () => {
-  let component: ModifyMembersComponent;
-  let fixture: ComponentFixture<ModifyMembersComponent>;
+describe('ClientGridViewComponent', () => {
+  let component: ClientGridviewComponent;
+  let fixture: ComponentFixture<ClientGridviewComponent>;
   let service: ManageMembersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ModifyMembersComponent],
-      providers: [ManageMembersService, HttpClient, FormBuilder],
+      declarations: [ClientGridviewComponent],
+      providers: [ManageMembersService],
       imports: [HttpClientModule]
     });
 
-    fixture = TestBed.createComponent(ModifyMembersComponent);
+    fixture = TestBed.createComponent(ClientGridviewComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
