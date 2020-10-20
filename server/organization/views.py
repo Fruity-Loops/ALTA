@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import OrganizationSerializer
 from .models import Organization
+from .permissions import UserOrganizationPermission
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
@@ -15,4 +16,4 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, UserOrganizationPermission]
