@@ -1,14 +1,11 @@
 <p>Inside {{view}} Component</p>
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
 
-  <div>
-    <label for="name">
-      FirstName
-    </label>
-    <input id="name" type="text" formControlName="name">
-    &nbsp;
-    <button class="button" type="submit">Search</button>
-  </div>
+  <mat-form-field class="example-full-width">>
+    <mat-label for="name">FirstName</mat-label>
+    <input matInput [formControl]="nameFormControl" id="name" formControlName="name">
+    <button mat-button type="submit">Search</button>
+  </mat-form-field>
 
 </form>
 <app-client-gridview></app-client-gridview>

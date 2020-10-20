@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-modify-members',
@@ -13,6 +13,10 @@ export class ModifyMembersComponent implements OnInit {
   querrysett;
   view = 'Modify Members';
   checkoutForm;
+  nameFormControl = new FormControl('', [
+    Validators.required
+  ]);
+
   @ViewChild(ClientGridviewComponent) appChild: ClientGridviewComponent;
 
   constructor(
