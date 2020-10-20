@@ -143,17 +143,10 @@ class LogoutView(generics.GenericAPIView):
 
 
 class AccessAllClients(viewsets.ModelViewSet):
-    @api_view(['Get'])
-    @permission_classes([IsAuthenticated])
-    def get(self, request):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        serializer.is_valid(raise_exception=True)
-        return Response(serializer.data)
-
-    permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']
 
 
 class AccessSomeClients(generics.GenericAPIView):
