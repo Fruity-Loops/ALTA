@@ -16,8 +16,8 @@ export class ManageMembersService {
     return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`);
   }
 
-  sendNameToObtainClients(name): Observable<any>
+  getSpecificClients(name): Observable<any>
   {
-    return this.http.post('http://localhost:8000/getSomeClients/', JSON.stringify(name));
+    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
   }
 }

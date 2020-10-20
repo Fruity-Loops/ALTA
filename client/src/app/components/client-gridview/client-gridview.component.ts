@@ -23,17 +23,19 @@ export class ClientGridviewComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private changeDetectorRefs: ChangeDetectorRef) {
     this.users = new Array<User>();
+  }
 
+  ngOnInit(): void {
+    this.init();
+  }
+
+  init(): void {
     // Assign the data to the data source for the table to render
     this.manageMembersService.getAllClients()
       .subscribe((user) => {
         const users = user;
-        this.updateClients(users);
+        this.populateTable(users);
       });
-  }
-
-  ngOnInit(): void {
-
   }
 
   applyFilter(event: Event): void {
@@ -43,7 +45,7 @@ export class ClientGridviewComponent implements OnInit {
     }
   }
 
-  updateClients(clients): void {
+  populateTable(clients): void {
       this.users = new Array<User>();
       clients.forEach(element => {
         this.users.push(element);

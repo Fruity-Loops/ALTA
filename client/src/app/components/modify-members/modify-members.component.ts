@@ -28,8 +28,8 @@ export class ModifyMembersComponent implements OnInit {
   }
 
   onSubmit(name): void {
-    this.manageMembersService.sendNameToObtainClients(name).subscribe((response) => {
-          this.appChild.updateClients(response);
+    this.manageMembersService.getSpecificClients(name).subscribe((response) => {
+          this.appChild.populateTable(response);
         });
     this.checkoutForm.reset();
   }
