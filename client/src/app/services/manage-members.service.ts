@@ -15,4 +15,9 @@ export class ManageMembersService {
   getAllClients(): Observable<any> {
     return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`);
   }
+
+  getSpecificClients(name): Observable<any>
+  {
+    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
+  }
 }

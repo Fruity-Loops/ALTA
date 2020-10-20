@@ -1,12 +1,9 @@
 <p>Inside {{view}} Component</p>
-<button mat-button (click)="obtainClients()">Obtain Clients</button>
-<ul *ngFor="let pers of users">
-    <li>
-        username = {{pers.user_name}},
-        firstname = {{pers.first_name}},
-        lastname = {{pers.last_name}}, 
-        role = {{pers.role}},
-        is_active = {{pers.is_active}},
-        e-mail = {{pers.email}}
-    </li>
-</ul>
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit(checkoutForm.value)">
+  <mat-form-field >
+    <mat-label for="name">FirstName</mat-label>
+    <input matInput [formControl]="nameFormControl" id="name" formControlName="name">
+  </mat-form-field>
+  <button mat-button type="submit">Search</button>
+</form>
+<app-client-gridview></app-client-gridview>

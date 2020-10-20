@@ -1,6 +1,4 @@
-import json
 from django.test import TestCase
-from django.test.client import Client as HttpClient
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
@@ -29,44 +27,61 @@ class CustomUserTestCase(TestCase):
 
 
 class AccessAllClientsTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        # Create each type of user that could be making the registration request
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin',
+            email='system_admin@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True)
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.host = "http://localhost"  # or ip
-        cls.port = 8001
+        CustomUser.objects.create(
+            user_name='inventory_manager',
+            email='inventory_manager@email.com',
+            password='password',
+            first_name='inventory',
+            last_name='manager',
+            role='IM',
+            is_active=True)
 
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=9999,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  is_active=True)
-        CustomUser.objects.create(user_name="test_user2",
-                                  email="test2@test.com",
-                                  id=9998,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  is_active=True)
+        # Create each type of user that could be registered
+        self.registered_system_admin = {
+            'user_name': 'system_admin',
+            'email': 'system_admin@email.com',
+            'password': 'password',
+            'first_name': 'system',
+            'last_name': 'admin',
+            'role': 'SA',
+            'is_active': True}
 
-    def test_user_is_obtainable(self):
-        url = self.host + str(self.port) + '/getAllClients/'
-        client = HttpClient()
-        response = client.get(url)
-        data = json.loads(response.json())
-        user = CustomUser.objects.get(user_name="test_user")
-        self.assertEqual(data[0]['user_name'], user.user_name)
-        self.assertEqual(data[0]['email'], user.email)
-        self.assertEqual(data[0]['first_name'], user.first_name)
-        self.assertEqual(data[0]['last_name'], user.last_name)
-        self.assertEqual(data[0]['role'], user.role)
-        user2 = CustomUser.objects.get(user_name="test_user2")
-        self.assertEqual(data[1]['user_name'], user2.user_name)
-        self.assertEqual(data[1]['email'], user2.email)
-        self.assertEqual(data[1]['first_name'], user2.first_name)
-        self.assertEqual(data[1]['last_name'], user2.last_name)
-        self.assertEqual(data[1]['role'], user2.role)
+        self.registered_inventory_manager = {
+            'user_name': 'inventory_manager',
+            'email': 'inventory_manager@email.com',
+            'password': 'password',
+            'first_name': 'inventory',
+            'last_name': 'manager',
+            'role': 'IM',
+            'is_active': True}
+
+    def test_obtain_all_clients(self):
+        # Authenticate a system admin
+        self.client.force_authenticate(user=self.system_admin)
+        request = self.client.get("/getAllClients/", self.registered_system_admin)
+        # self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+        data = request.data
+        self.assertEqual(data[0]['first_name'], self.registered_system_admin['first_name'])
+        self.assertEqual(data[0]['last_name'], self.registered_system_admin['last_name'])
+        self.assertEqual(data[0]['role'], self.registered_system_admin['role'])
+        self.assertEqual(data[0]['is_active'], self.registered_system_admin['is_active'])
+        self.assertEqual(data[1]['first_name'], self.registered_inventory_manager['first_name'])
+        self.assertEqual(data[1]['last_name'], self.registered_inventory_manager['last_name'])
+        self.assertEqual(data[1]['role'], self.registered_inventory_manager['role'])
+        self.assertEqual(data[1]['is_active'], self.registered_inventory_manager['is_active'])
+
 
 class RegistrationTestCase(APITestCase):
     def setUp(self):
