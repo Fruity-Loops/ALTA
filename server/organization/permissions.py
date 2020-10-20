@@ -1,0 +1,20 @@
+from rest_framework.permissions import BasePermission
+from django_server.permissions import isSystemAdmin, isInventoryManager
+
+
+class UserOrganizationPermission(BasePermission):
+
+    def has_permission(self, request, view):
+        """
+             Overriding default has_permission method in order to add Custom permissions to our views
+             This can be used either inside the permission_class directly or you can call it from other permission files
+             :param request:
+             :param view:
+             :return: True/False : Whether the user is allowed to perform CRUD
+             """
+        if view.action in ['list', 'retrieve', 'update', 'partial_update']:
+            return isSystemAdmin.has_permission(None, request, None) or isInventoryManager.has_permission(None, request, None)
+        elif view.action in ['create', 'destroy']:
+            return isSystemAdmin.has_permission(None, request, None)
+        else:
+            return False
