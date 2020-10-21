@@ -1,16 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
+import { FormBuilder } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { ManageOrganizationsComponent } from './manage-organizations.component';
 
 describe('ManageOrganizationsComponent', () => {
   let component: ManageOrganizationsComponent;
   let fixture: ComponentFixture<ManageOrganizationsComponent>;
+  let organizationService: ManageOrganizationsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ManageOrganizationsComponent ]
-    })
-    .compileComponents();
+      declarations: [ManageOrganizationsComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        FormBuilder,
+        {
+          provide: ManageOrganizationsService,
+        },
+      ],
+    }).compileComponents();
+
+    organizationService = TestBed.inject(ManageOrganizationsService);
   });
 
   beforeEach(() => {
