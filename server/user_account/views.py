@@ -3,7 +3,6 @@ from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
@@ -160,4 +159,24 @@ class AccessSomeClients(generics.GenericAPIView):
         first_name = data.get('name', '')
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ModifyClient(generics.GenericAPIView):
+    http_method_names = ['post']
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        variable_column = data.get('category', '')
+        entry = data.get('field', '')
+        id1 = data.get('id', '')
+        if entry == 'false':
+            entry = False
+        elif entry == 'true':
+            entry = True
+        CustomUser.objects.filter(id=id1).update(**{variable_column: entry})
+        serializer = ClientGridSerializer(instance=self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
