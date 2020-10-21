@@ -1,13 +1,27 @@
-<ul>
-    <li *ngFor="let organization of organizations">
+<h1>Organizations : </h1><h3>(Click on organization to update/delete)</h3>
+<br>
+
+<mat-form-field >
+    <mat-label for="name">Organization Name</mat-label>
+    <input matInput type="text" [(ngModel)]="selectedOrganization.org_name" >
+</mat-form-field>
+
+<button mat-raised-button *ngIf="selectedOrganization.org_id != -1" (click)="updateOrganization()">Update Organization</button>
+<button mat-raised-button (click)="createOrganization()">Create Organization</button>
+<button mat-raised-button color="warn" *ngIf="selectedOrganization.org_id != -1" (click)="deleteOrganization()">DELETE Organization</button>
+<mat-error class="error" *ngIf="errorMessage">
+          <!-- Handeling error -->
+          {{errorMessage}}
+</mat-error>
+
+<mat-divider></mat-divider>
+<mat-list  *ngFor="let organization of organizations">
+    <mat-list-item>
+        <h3  (click)="organizationClicked(organization)">{{ organization.org_name }}</h3>
+    </mat-list-item>
+    <mat-divider></mat-divider>
+    <!-- <li *ngFor="let organization of organizations">
       <h2  (click)="organizationClicked(organization)">{{ organization.org_name }}</h2>
-    </li>
-</ul>
-
-<hr />
-Organization Name <input type="text" [(ngModel)]="selectedOrganization.org_name" /><br />
-
-<button *ngIf="selectedOrganization.org_id != -1" (click)="updateOrganization()">Put</button>
-<button (click)="createOrganization()">Post</button>
-<button *ngIf="selectedOrganization.org_id != -1" (click)="deleteOrganization()">DELETE</button>
+    </li> -->
+</mat-list>
   

@@ -10,21 +10,24 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class ManageOrganizationsComponent implements OnInit {
   organizations = []
   selectedOrganization
+  errorMessage = ""
 
   constructor(private organizationsService: ManageOrganizationsService,private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getAllOrganizations()
     this.selectedOrganization = { org_id: -1, org_name: "", status: "" };
+    this.errorMessage = ""
   }
 
   getAllOrganizations(): void {
     this.organizationsService.getAllOrganizations().subscribe(
       (data) => {
          this.organizations= data;
+         this.errorMessage=""
       },
       (err)=>{
-        console.log(err)
+        this.errorMessage = err
       }
     )
   }
@@ -34,9 +37,10 @@ export class ManageOrganizationsComponent implements OnInit {
     this.organizationsService.getOneOrganization(organization.org_id).subscribe(
       (data)=> {
         this.selectedOrganization = data
+        this.errorMessage=""
       },
       (err)=>{
-        console.log(err)
+        this.errorMessage = err
       }
     )
   }
@@ -46,9 +50,10 @@ export class ManageOrganizationsComponent implements OnInit {
       (data)=>{
          this.selectedOrganization = data
          this.getAllOrganizations()
+         this.errorMessage=""
       },
       (err)=>{
-        console.log(err)
+        this.errorMessage = err.error.org_name
       }
     )
   }
@@ -57,9 +62,10 @@ export class ManageOrganizationsComponent implements OnInit {
     this.organizationsService.createOrganization(this.selectedOrganization).subscribe(
       (data) => {
         this.organizations.push(data)
+        this.errorMessage=""
       },
       (err)=>{
-        console.log(err)
+        this.errorMessage = err.error.org_name
       }
     )
   }
@@ -68,9 +74,10 @@ export class ManageOrganizationsComponent implements OnInit {
     this.organizationsService.deleteOrganization(this.selectedOrganization.org_id).subscribe(
       (data)=>{
         this.getAllOrganizations()
+        this.errorMessage=""
       },
       (err)=>{
-        console.log(err)
+        this.errorMessage = err.error.detail
       }
     )
   }
