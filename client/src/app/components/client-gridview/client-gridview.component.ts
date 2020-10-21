@@ -16,6 +16,7 @@ export class ClientGridviewComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   users: Array<User>;
   view = 'Client Gridview';
+  editField: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -55,4 +56,12 @@ export class ClientGridviewComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
   }
 
+  updateList(id: number, property: string, event: any) {
+    const editField = event.target.textContent;
+    this.users[id][property] = editField;
+  }
+
+  changeValue(id: number, property: string, event: any) {
+    this.editField = event.target.textContent;
+  }
 }

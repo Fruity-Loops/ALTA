@@ -4,25 +4,33 @@
       <!-- ID Column -->
       <ng-container matColumnDef="First Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.first_name}} </td>
+        <td mat-cell *matCellDef="let row" >
+          <span (keyup)="changeValue(id, 'first_name', $event)" (blur)="updateList(id, 'first_name', $event)" contenteditable="true">{{row.first_name}}</span>
+        </td>
       </ng-container>
   
       <!-- Progress Column -->
       <ng-container matColumnDef="Last Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.last_name}} </td>
+        <td mat-cell *matCellDef="let row" >
+          <span (keyup)="changeValue(id, 'last_name', $event)" (blur)="updateList(id, 'last_name', $event)" contenteditable="true">{{row.last_name}}</span>
+        </td>
       </ng-container>
   
       <!-- Name Column -->
       <ng-container matColumnDef="Is Active">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Is Active </th>
-        <td mat-cell *matCellDef="let row"> {{row.is_active}} </td>
+        <td mat-cell *matCellDef="let row" >
+          <span (keyup)="changeValue(id, 'is_active', $event)" (blur)="updateList(id, 'is_active', $event)" contenteditable="true">{{row.is_active}}</span>
+        </td>
       </ng-container>
   
       <!-- Color Column -->
       <ng-container matColumnDef="Role">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
-        <td mat-cell *matCellDef="let row" > {{row.role}} </td>
+        <td mat-cell *matCellDef="let row" >
+          <span (keyup)="changeValue(id, 'role', $event)" (blur)="updateList(id, 'role', $event)" contenteditable="true">{{row.role}}</span>
+        </td>
       </ng-container>
   
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
