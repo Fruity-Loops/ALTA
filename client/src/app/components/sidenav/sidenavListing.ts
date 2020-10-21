@@ -16,4 +16,6 @@ export const SideNavListings: SideNavOption[] = [
       { title: 'Modify Members', routerLink: 'modify-members', subMenuOptions: [] },
     ]
   },
+  { title: 'Manage Organizations', routerLink: 'manage-organizations', subMenuOptions: [] }
+  
 ];

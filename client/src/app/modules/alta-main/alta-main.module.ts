@@ -14,6 +14,7 @@ import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
+import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ClientGridviewComponent } from 'src/app/components/client-gridview/clie
     ModifyMembersComponent,
     ClientGridviewComponent,
     CreateMembersComponent,
+    ManageOrganizationsComponent
   ],
 
   imports: [
