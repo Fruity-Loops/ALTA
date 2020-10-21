@@ -17,20 +17,20 @@ export class ManageOrganizationsService {
   }
 
   getOneOrganization(id): Observable<any> {
-    return this.http.get(`${BASEURL}/organization/${id}`);
+    return this.http.get(`${BASEURL}/organization/${id}/`);
   }
 
   updateOrganization(organization): Observable<any> {
     const body = { org_name: organization.org_name };
-    return this.http.put(`${BASEURL}/organization/${organization.id}`, body);
+    return this.http.put(`${BASEURL}/organization/${organization.org_id}/`, body);
   }
 
   createOrganization(organization): Observable<any> {
-    const body = { org_name: organization };
+    const body = { org_name: organization.org_name };
     return this.http.post(`${BASEURL}/organization/`,body);
   }
 
   deleteOrganization(id): Observable<any> {
-    return this.http.delete(`${BASEURL}/organization/${id}`);
+    return this.http.delete(`${BASEURL}/organization/${id}/`);
 }
 }
