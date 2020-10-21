@@ -1,16 +1,13 @@
-import json
 from django.db.models import signals
-from django.http import JsonResponse
-from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
-from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from .serializers import UserSerializer, LoginSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
 from rest_framework.permissions import IsAuthenticated
-
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -152,18 +149,22 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessAllClients(generics.GenericAPIView):
-    queryset = CustomUser.objects.values(
-        'user_name',
-        'first_name',
-        'last_name',
-        'role',
-        'is_active',
-        'email',
-        )
+class AccessAllClients(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
 
-    def get(self, request):
-        qs = self.get_queryset()
-        qs_json = json.dumps(list(qs), cls=DjangoJSONEncoder)
-        return JsonResponse(qs_json, safe=False)
+
+class AccessSomeClients(generics.GenericAPIView):
+    http_method_names = ['post']
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+        first_name = data.get('name', '')
+        qs = CustomUser.objects.filter(first_name=first_name)
+        serializer = ClientGridSerializer(instance=qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
