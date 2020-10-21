@@ -56,12 +56,16 @@ export class ClientGridviewComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
   }
 
-  updateList(id: number, property: string, event: any) {
+  updateList(id: number, property: string, event: any): void {
     const editField = event.target.textContent;
     this.users[id][property] = editField;
+    this.manageMembersService.modifyClientInfo(property, editField, id).subscribe((user) => {
+      const users = user;
+      this.populateTable(users);
+    });
   }
 
-  changeValue(id: number, property: string, event: any) {
+  changeValue(id: number, property: string, event: any): void {
     this.editField = event.target.textContent;
   }
 }

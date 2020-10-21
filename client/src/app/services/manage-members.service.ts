@@ -20,4 +20,9 @@ export class ManageMembersService {
   {
     return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
   }
+
+  modifyClientInfo(category, field, id): Observable<any>
+  {
+    return this.http.post(`${this.BASEURL}/modifyClients/`, JSON.stringify({'category': category, 'field': field, 'id': id}));
+  }
 }
