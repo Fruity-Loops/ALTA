@@ -15,6 +15,7 @@ import { CreateMembersComponent } from 'src/app/components/create-members/create
 import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
+import { ManageMembersService } from 'src/app/services/manage-members.service';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { ManageOrganizationsComponent } from 'src/app/components/manage-organiza
     RouterModule,
     AuthModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
 
 })
 export class AltaMainModule { }
