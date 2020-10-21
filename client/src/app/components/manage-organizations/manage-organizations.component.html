@@ -1,5 +1,13 @@
 <ul>
     <li *ngFor="let organization of organizations">
-      <h2>{{ organization.org_name }}</h2>
+      <h2  (click)="organizationClicked(organization)">{{ organization.org_name }}</h2>
     </li>
-  </ul>
+</ul>
+
+<hr />
+Organization Name <input type="text" [(ngModel)]="selectedOrganization.org_name" /><br />
+
+<button *ngIf="selectedOrganization.org_id != -1" (click)="updateOrganization()">Put</button>
+<button (click)="createOrganization()">Post</button>
+<button *ngIf="selectedOrganization.org_id != -1" (click)="deleteOrganization()">DELETE</button>
+  

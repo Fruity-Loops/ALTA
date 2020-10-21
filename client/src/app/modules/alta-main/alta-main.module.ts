@@ -16,6 +16,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
+import { FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,
-    AuthModule
+    AuthModule,
+    FormsModule,
   ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
 
