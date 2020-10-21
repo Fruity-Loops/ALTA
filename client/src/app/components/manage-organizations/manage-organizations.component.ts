@@ -65,7 +65,13 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage=""
       },
       (err)=>{
-        this.errorMessage = err.error.org_name
+        if(err.error.org_name){
+           this.errorMessage = err.error.org_name
+        }
+
+        if(err.error.detail){
+          this.errorMessage = err.error.detail
+        }
       }
     )
   }
