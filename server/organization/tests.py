@@ -8,7 +8,7 @@ from rest_framework.test import APIClient
 from user_account.models import CustomUser
 
 
-class OpenRegistrationTestCase(APITestCase):
+class OrganizationTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
