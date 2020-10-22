@@ -16,5 +16,5 @@ urlpatterns = [
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
     path('getSomeClients/', views.AccessSomeClients.as_view()),
-    path('modifyClients/', views.ModifyClient.as_view()),
+    path('modifyClient/', views.ModifyClient.as_view()),
 ]

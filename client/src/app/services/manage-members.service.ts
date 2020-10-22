@@ -3,6 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
 
+interface Body {
+  [key: string]: any;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,6 +27,10 @@ export class ManageMembersService {
 
   modifyClientInfo(category, field, id): Observable<any>
   {
-    return this.http.post(`${this.BASEURL}/modifyClients/`, JSON.stringify({'category': category, 'field': field, 'id': id}));
+    const sendMe: Body = {};
+    sendMe.category = category;
+    sendMe.field = field;
+    sendMe.id = id;
+    return this.http.post(`${this.BASEURL}/modifyClient/`, JSON.stringify(sendMe));
   }
 }

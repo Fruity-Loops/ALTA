@@ -56,7 +56,8 @@ export class ClientGridviewComponent implements OnInit {
       this.changeDetectorRefs.detectChanges();
   }
 
-  updateList(id: number, property: string, event: any): void {
+  // Modifies the user by calling the API and then refreshes the table
+  updateUser(id: number, property: string, event: any): void {
     const editField = event.target.textContent;
     this.users[id][property] = editField;
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe((user) => {
