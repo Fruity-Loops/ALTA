@@ -1,9 +1,5 @@
-import json
-from django.test import TestCase
-from django.test.client import Client as HttpClient
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from user_account.models import CustomUser
 
@@ -15,20 +11,20 @@ class OrganizationTestCase(APITestCase):
 
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.create(
-            user_name='system_admin',
-            email='system_admin@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
+            user_name='system_admin1',
+            email='system_admin1@email.com',
+            password='password1',
+            first_name='system1',
+            last_name='admin1',
             role='SA',
             is_active=True)
 
         self.inventory_manager = CustomUser.objects.create(
-            user_name='inventory_manager',
-            email='inventory_manager@email.com',
-            password='password',
-            first_name='inventory',
-            last_name='manager',
+            user_name='inventory_manager1',
+            email='inventory_manager1@email.com',
+            password='password1',
+            first_name='inventory1',
+            last_name='manage1r',
             role='IM',
             is_active=True)
 
