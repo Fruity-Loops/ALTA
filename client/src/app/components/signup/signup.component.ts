@@ -14,6 +14,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
+  currentRole;
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -31,6 +32,14 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
+    this.authService.getCurrentRole()
+      .subscribe((data) => {
+        this.currentRole = data;
+
+        if(this.currentRole !== 'SA') {
+        this.roles.shift();
+      }
+      });
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field
