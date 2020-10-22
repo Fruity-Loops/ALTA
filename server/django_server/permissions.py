@@ -14,10 +14,7 @@ class isSystemAdmin(BasePermission):
         :return: True/False : Whether the user is a SysAdmin or Not
         """
         user = CustomUser.objects.get(user_name=request.user)
-        if user.role == 'SA':
-            return True
-        else:
-            return False
+        return user.role == 'SA'
 
 
 class isInventoryManager(BasePermission):
@@ -32,7 +29,4 @@ class isInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(user_name=request.user)
-        if user.role == 'IM':
-            return True
-        else:
-            return False
+        return user.role == 'IM'
