@@ -27,10 +27,10 @@ export class ManageOrganizationsService {
 
   createOrganization(organization): Observable<any> {
     const body = { org_name: organization.org_name };
-    return this.http.post(`${BASEURL}/organization/`,body);
+    return this.http.post(`${BASEURL}/organization/`, body);
   }
 
   deleteOrganization(id): Observable<any> {
     return this.http.delete(`${BASEURL}/organization/${id}/`);
-}
+  }
 }

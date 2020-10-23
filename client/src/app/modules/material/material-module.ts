@@ -29,7 +29,6 @@ import {MatListModule} from '@angular/material/list';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule
-    
   ],
   providers: [],
   exports: [
