@@ -10,7 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material/';
 import { MatTableModule } from '@angular/material/';
-
+import {MatDividerModule} from '@angular/material/divider';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -25,7 +26,9 @@ import { MatTableModule } from '@angular/material/';
     MatInputModule,
     MatSelectModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDividerModule,
+    MatListModule
   ],
   providers: [],
   exports: [
@@ -39,7 +42,9 @@ import { MatTableModule } from '@angular/material/';
     MatInputModule,
     MatSelectModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDividerModule,
+    MatListModule
   ]
 })
 export class MatModule { }
