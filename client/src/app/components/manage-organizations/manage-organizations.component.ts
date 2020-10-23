@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
-  selectedOrganization : any;
+  selectedOrganization;
   errorMessage = '';
 
   constructor(private organizationsService: ManageOrganizationsService, private fb: FormBuilder) { }
@@ -17,7 +17,7 @@ export class ManageOrganizationsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllOrganizations();
     this.selectedOrganization = { org_id: -1, org_name: '', status: '' };
-    this.errorMessage = ''
+    this.errorMessage = '';
   }
 
   getAllOrganizations(): void {
@@ -65,11 +65,11 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage = '';
       },
       (err) => {
-        if(err.error.org_name){
+        if(err.error.org_name) {
            this.errorMessage = err.error.org_name;
         }
 
-        if(err.error.detail){
+        if(err.error.detail) {
           this.errorMessage = err.error.detail;
         }
       }

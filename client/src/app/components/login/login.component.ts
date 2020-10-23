@@ -40,9 +40,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.body).subscribe(
       (data) => {
-        this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
-        
-        if(data.role === 'SA'){
+        this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users   
+        if(data.role === 'SA') {
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
           }, 1000);
