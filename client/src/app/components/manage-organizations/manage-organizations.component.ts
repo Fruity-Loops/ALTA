@@ -5,14 +5,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-manage-organizations',
   templateUrl: './manage-organizations.component.html',
-  styleUrls: ['./manage-organizations.component.css']
+  styleUrls: ['./manage-organizations.component.css'],
 })
 export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
   selectedOrganization;
   errorMessage = '';
 
-  constructor(private organizationsService: ManageOrganizationsService, private fb: FormBuilder) { }
+  constructor(private organizationsService: ManageOrganizationsService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.getAllOrganizations();
@@ -23,8 +23,8 @@ export class ManageOrganizationsComponent implements OnInit {
   getAllOrganizations(): void {
     this.organizationsService.getAllOrganizations().subscribe(
       (data) => {
-         this.organizations = data;
-         this.errorMessage = '';
+        this.organizations = data;
+        this.errorMessage = '';
       },
       (err) => {
         this.errorMessage = err;
@@ -33,7 +33,6 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   organizationClicked(organization): void {
-    // console.log(organization.org_id)
     this.organizationsService.getOneOrganization(organization.org_id).subscribe(
       (data) => {
         this.selectedOrganization = data;
@@ -48,9 +47,9 @@ export class ManageOrganizationsComponent implements OnInit {
   updateOrganization(): void {
     this.organizationsService.updateOrganization(this.selectedOrganization).subscribe(
       (data) => {
-         this.selectedOrganization = data;
-         this.getAllOrganizations();
-         this.errorMessage = '';
+        this.selectedOrganization = data;
+        this.getAllOrganizations();
+        this.errorMessage = '';
       },
       (err) => {
         this.errorMessage = err.error.org_name;
@@ -65,11 +64,11 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage = '';
       },
       (err) => {
-        if(err.error.org_name) {
-           this.errorMessage = err.error.org_name;
+        if (err.error.org_name) {
+          this.errorMessage = err.error.org_name;
         }
 
-        if(err.error.detail) {
+        if (err.error.detail) {
           this.errorMessage = err.error.detail;
         }
       }
