@@ -17,6 +17,16 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
   view = 'Client Gridview';
   editField: string;
+  body: any;
+  roles = [
+    { name: 'System Admin', abbrev: 'SA' },
+    { name: 'Inventory Manager', abbrev: 'IM' },
+    { name: 'Stock Keeper', abbrev: 'SK' },
+  ];
+  booleans = [
+    {value: 'true'},
+    {value: 'false'}];
+    selectedItem: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -58,7 +68,15 @@ export class ClientGridviewComponent implements OnInit {
 
   // Modifies the user by calling the API and then refreshes the table
   updateUser(id: number, property: string, event: any): void {
-    const editField = event.target.textContent;
+    let editField;
+    if (typeof event === 'string')
+    {
+      editField = event;
+    }
+    else
+    {
+      editField = event.target.textContent;
+    }
     this.users[id][property] = editField;
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe((user) => {
       const users = user;
