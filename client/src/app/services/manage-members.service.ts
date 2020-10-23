@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -13,7 +14,13 @@ export class ManageMembersService {
   constructor(private http: HttpClient) { } // We inject the http client in the constructor to do our REST operations
 
   getAllClients(): Observable<any> {
-    return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`);
+    return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`)
+    .pipe(
+      catchError((err: HttpErrorResponse) => {
+        console.error(`Error: ${err.status}: ${err.error}`);
+        return EMPTY; // TODO: Implement proper error handling
+      })
+    );
   }
 
   getSpecificClients(name): Observable<any>
