@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+from organization.models import Organization
 
 
 class CustomUser(AbstractBaseUser):
@@ -22,7 +23,8 @@ class CustomUser(AbstractBaseUser):
     is_active = models.BooleanField(default=False)
     email = models.EmailField(verbose_name='email',
                               max_length=255, unique=True)
-    # no need to specify password because its build in
+    # no need to specify password and id because its build in
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'role']
