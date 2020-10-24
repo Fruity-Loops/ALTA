@@ -17,12 +17,12 @@ export class ManageMembersService {
   constructor(private http: HttpClient) { } // We inject the http client in the constructor to do our REST operations
 
   getAllClients(): Observable<any> {
-    return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`);
+    return this.http.get<User[]>(`${this.BASEURL}/accessClients/`);
   }
 
   getSpecificClients(name): Observable<any>
   {
-    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
+    return this.http.post(`${this.BASEURL}/accessClients/post/`, JSON.stringify(name));
   }
 
   modifyClientInfo(category, field, id): Observable<any>
@@ -31,6 +31,6 @@ export class ManageMembersService {
     sendMe.category = category;
     sendMe.field = field;
     sendMe.id = id;
-    return this.http.post(`${this.BASEURL}/modifyClient/`, JSON.stringify(sendMe));
+    return this.http.post(`${this.BASEURL}/accessClients/update_client/`, JSON.stringify(sendMe));
   }
 }

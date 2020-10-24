@@ -4,8 +4,10 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
+
 
 
 class RegistrationView(viewsets.ModelViewSet):
@@ -141,19 +143,13 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessAllClients(viewsets.ModelViewSet):
+class AccessClients(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get']
+    http_method_names = ['get', 'post']
 
-
-class AccessSomeClients(generics.GenericAPIView):
-    http_method_names = ['post']
-    queryset = CustomUser.objects.all()
-    serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated]
-
+    @action(detail=False, methods=['POST'])
     def post(self, request):
         data = request.data
         first_name = data.get('name', '')
@@ -161,13 +157,7 @@ class AccessSomeClients(generics.GenericAPIView):
         serializer = ClientGridSerializer(instance=qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-class ModifyClient(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated]
-    http_method_names = ['post']
-
+    @action(detail=False, methods=['POST'])
     def update_client(self, request):
         data = request.data
         variable_column = data.get('category', '')
@@ -178,5 +168,5 @@ class ModifyClient(viewsets.ModelViewSet):
         elif entry == 'true':
             entry = True
         CustomUser.objects.filter(id=id1).update(**{variable_column: entry})
-        serializer = self.get_serializer(data=entry)
+        serializer = ClientGridSerializer(instance=self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
