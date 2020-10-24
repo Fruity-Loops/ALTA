@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'user_account',
+    'organization',
 
     # 3rd party
     'rest_framework',

@@ -41,7 +41,7 @@ class RegistrationView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        data = {'user': user.user_name, 'token': auth_content['auth']}
+        data = {'user': user.user_name,'token': auth_content['auth']}
         return Response(data, status=status.HTTP_201_CREATED)
 
 class OpenRegistrationView(viewsets.ModelViewSet):
@@ -102,7 +102,7 @@ class LoginView(generics.GenericAPIView):
                     else:
                         token = Token.objects.create(user=user)
 
-                    data = {'user': username, 'token': token.key}
+                    data = {'user': username, 'role': user.role,  'token': token.key}
                     return Response(data, status=status.HTTP_200_OK)
 
                 return Response({'detail': 'Invalid credentials'},
