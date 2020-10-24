@@ -10,7 +10,6 @@ from .models import CustomUser
 
 
 class RegistrationView(viewsets.ModelViewSet):
-
     """
     Creates a new user in the db.
     """
@@ -27,8 +26,8 @@ class RegistrationView(viewsets.ModelViewSet):
         """
         # Retrieve the authenticated user making the request
         auth_content = {
-        'user': str(request.user),
-        'auth': str(request.auth),
+            'user': str(request.user),
+            'auth': str(request.auth),
         }
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
@@ -40,11 +39,12 @@ class RegistrationView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        data = {'user': user.user_name,'token': auth_content['auth']}
+        data = {'user': user.user_name, 'organization': user.organization.org_id,
+                'token': auth_content['auth']}
         return Response(data, status=status.HTTP_201_CREATED)
 
-class OpenRegistrationView(viewsets.ModelViewSet):
 
+class OpenRegistrationView(viewsets.ModelViewSet):
     """
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
@@ -68,7 +68,7 @@ class OpenRegistrationView(viewsets.ModelViewSet):
                                user=user, request=self.request)
         token = Token.objects.get(user=user).key
 
-        data = {'user': user.user_name, 'token': token}
+        data = {'user': user.user_name, 'organization': user.organization.org_id, 'token': token}
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -101,14 +101,15 @@ class LoginView(generics.GenericAPIView):
                     else:
                         token = Token.objects.create(user=user)
 
-                    data = {'user': username, 'role': user.role,  'token': token.key}
+                    data = {'user': username, 'role': user.role,
+                            'organization_id': user.organization.org_id, 'token': token.key}
                     return Response(data, status=status.HTTP_200_OK)
 
                 return Response({'detail': 'Invalid credentials'},
                                 status=status.HTTP_401_UNAUTHORIZED)
 
             return Response({'detail': 'Please contact admin to activate your account'},
-                                status=status.HTTP_401_UNAUTHORIZED)
+                            status=status.HTTP_401_UNAUTHORIZED)
 
         except CustomUser.DoesNotExist:
             return Response({'detail': 'Invalid user'},
@@ -126,7 +127,7 @@ class LogoutView(generics.GenericAPIView):
         """
         return self.remove_token(request)
 
-    def remove_token(self, request): # pylint: disable=no-self-use
+    def remove_token(self, request):  # pylint: disable=no-self-use
         """
         Deleting user token from the database when he logout.
         :param request
