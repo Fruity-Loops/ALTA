@@ -162,13 +162,13 @@ class AccessSomeClients(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ModifyClient(generics.GenericAPIView):
-    http_method_names = ['post']
+class ModifyClient(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
+    http_method_names = ['post']
 
-    def post(self, request):
+    def update_client(self, request):
         data = request.data
         variable_column = data.get('category', '')
         entry = data.get('field', '')
@@ -178,5 +178,5 @@ class ModifyClient(generics.GenericAPIView):
         elif entry == 'true':
             entry = True
         CustomUser.objects.filter(id=id1).update(**{variable_column: entry})
-        serializer = ClientGridSerializer(instance=self.get_queryset(), many=True)
+        serializer = self.get_serializer(data=entry)
         return Response(serializer.data, status=status.HTTP_200_OK)
