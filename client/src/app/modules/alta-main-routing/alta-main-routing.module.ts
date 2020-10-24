@@ -4,6 +4,7 @@ import { AuthTabsComponent } from 'src/app/components/auth-tabs/auth-tabs.compon
 import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
+import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 import { AuthGuard } from '../../guards/auth.guard';
 
@@ -20,7 +21,8 @@ const routes: Routes = [
       },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMembersComponent },
-      { path: 'modify-members', component: ModifyMembersComponent }
+      { path: 'modify-members', component: ModifyMembersComponent },
+      {path: 'manage-organizations', component: ManageOrganizationsComponent}
     ]
   },
 ];
