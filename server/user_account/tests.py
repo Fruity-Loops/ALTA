@@ -4,17 +4,20 @@ from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 from .models import CustomUser
+from organization.models import Organization
 
 
 class CustomUserTestCase(TestCase):
 
     def setUp(self):
+        organization = Organization.objects.create(org_name="Test")
         CustomUser.objects.create(user_name="test_user",
                                   email="test@test.com",
                                   id=1,
                                   first_name='test',
                                   last_name='user',
-                                  role='SA')
+                                  role='SA',
+                                  organization=organization)
 
     def test_user_creation(self):
         """ User was created correctly """
@@ -86,6 +89,8 @@ class AccessAllClientsTestCase(TestCase):
 class RegistrationTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
+
+        organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.create(
             user_name='system_admin',
@@ -94,7 +99,8 @@ class RegistrationTestCase(APITestCase):
             first_name='system',
             last_name='admin',
             role='SA',
-            is_active=True)
+            is_active=True,
+            organization=organization)
 
         self.inventory_manager = CustomUser.objects.create(
             user_name='inventory_manager',
@@ -103,7 +109,8 @@ class RegistrationTestCase(APITestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
-            is_active=True)
+            is_active=True,
+            organization=organization)
 
         self.stock_keeper = CustomUser.objects.create(
             user_name='stock_keeper',
@@ -112,7 +119,8 @@ class RegistrationTestCase(APITestCase):
             first_name='stock',
             last_name='keeper',
             role='SK',
-            is_active=True)
+            is_active=True,
+            organization=organization)
 
         # Create each type of user that could be registered
         self.registered_system_admin = {
@@ -122,7 +130,8 @@ class RegistrationTestCase(APITestCase):
             'first_name': 'registered',
             'last_name': 'system_admin',
             'role': 'SA',
-            'is_active': 'True'}
+            'is_active': 'True',
+            "organization": organization.org_id}
 
         self.registered_inventory_manager = {
             'user_name': 'registered_IM',
@@ -131,7 +140,8 @@ class RegistrationTestCase(APITestCase):
             'first_name': 'registered',
             'last_name': 'inventory_manager',
             'role': 'IM',
-            'is_active': 'True'}
+            'is_active': 'True',
+            "organization": organization.org_id}
 
         self.registered_stock_keepeer = {
             'user_name': 'registered_SK',
@@ -140,7 +150,8 @@ class RegistrationTestCase(APITestCase):
             'first_name': 'registered',
             'last_name': 'stock_keepeer',
             'role': 'SK',
-            'is_active': 'True'}
+            'is_active': 'True',
+            "organization": organization.org_id}
 
     def test_registration_success(self):
         """ User was registered correctly """
@@ -176,13 +187,15 @@ class OpenRegistrationTestCase(APITestCase):
 
     def test_registration_success(self):
         """ User was registered correctly """
+        organization = Organization.objects.create(org_name="Test")
         data = {'user_name': 'test_case',
                 'email': 'test@email.com',
                 "password": "password",
                 "first_name": "test",
                 "last_name": "user",
                 "role": "SA",
-                "is_active": "True"}
+                "is_active": "True",
+                "organization": organization.org_id}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -198,6 +211,7 @@ class OpenRegistrationTestCase(APITestCase):
         response = self.client.get("/open-registration/")
         self.assertEqual(response.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 class LoginTest(APITestCase):
 
