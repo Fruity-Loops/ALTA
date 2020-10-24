@@ -17,6 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
   view = 'Client Gridview';
   editField: string;
+  errorMessage: string;
   body: any;
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
@@ -78,9 +79,23 @@ export class ClientGridviewComponent implements OnInit {
       editField = event.target.textContent;
     }
     this.users[id][property] = editField;
-    this.manageMembersService.modifyClientInfo(property, editField, id).subscribe((user) => {
+    this.manageMembersService.modifyClientInfo(property, editField, id).subscribe(
+    (user) => {
       const users = user;
       this.populateTable(users);
+    },
+    (err) => {
+      // If name contains illegal characters
+      if (err.error.last_name) {
+        this.errorMessage = err.error.last_name[0];
+        console.log(this.errorMessage);
+      }
+
+      // If name contains illegal characters
+      if (err.error.first_name) {
+        this.errorMessage = err.error.first_name[0];
+        console.log(this.errorMessage);
+      }
     });
   }
 
