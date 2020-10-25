@@ -24,7 +24,7 @@ class CustomUser(AbstractBaseUser):
     email = models.EmailField(verbose_name='email',
                               max_length=255, unique=True)
     # no need to specify password and id because its build in
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
 
     USERNAME_FIELD = 'user_name'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'role']

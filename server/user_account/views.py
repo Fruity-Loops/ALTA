@@ -38,9 +38,13 @@ class RegistrationView(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+        if user.organization is None:
+            data = {'user': user.user_name, 'organization': '',
+                    'token': auth_content['auth']}
+        else:
+            data = {'user': user.user_name, 'organization': user.organization.org_id,
+                    'token': auth_content['auth']}
 
-        data = {'user': user.user_name, 'organization': user.organization.org_id,
-                'token': auth_content['auth']}
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -68,7 +72,10 @@ class OpenRegistrationView(viewsets.ModelViewSet):
                                user=user, request=self.request)
         token = Token.objects.get(user=user).key
 
-        data = {'user': user.user_name, 'organization': user.organization.org_id, 'token': token}
+        if user.organization is None:
+            data = {'user': user.user_name, 'organization': '', 'token': token}
+        else:
+            data = {'user': user.user_name, 'organization': user.organization.org_id, 'token': token}
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -101,8 +108,13 @@ class LoginView(generics.GenericAPIView):
                     else:
                         token = Token.objects.create(user=user)
 
-                    data = {'user': username, 'role': user.role,
-                            'organization_id': user.organization.org_id, 'token': token.key}
+                    if user.organization is None:
+                        data = {'user': username, 'role': user.role,
+                                'organization': '', 'token': token.key}
+                    else:
+                        data = {'user': username, 'role': user.role,
+                                'organization': user.organization.org_id, 'token': token.key}
+
                     return Response(data, status=status.HTTP_200_OK)
 
                 return Response({'detail': 'Invalid credentials'},
