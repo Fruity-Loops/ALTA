@@ -147,7 +147,7 @@ class AccessClients(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post']
+    # http_method_names = ['get', 'post', 'put']
 
     @action(detail=False, methods=['POST'])
     def post(self, request):
@@ -155,18 +155,4 @@ class AccessClients(viewsets.ModelViewSet):
         first_name = data.get('name', '')
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['POST'])
-    def update_client(self, request):
-        data = request.data
-        variable_column = data.get('category', '')
-        entry = data.get('field', '')
-        id1 = data.get('id', '')
-        if entry == 'false':
-            entry = False
-        elif entry == 'true':
-            entry = True
-        CustomUser.objects.filter(id=id1).update(**{variable_column: entry})
-        serializer = ClientGridSerializer(instance=self.get_queryset(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

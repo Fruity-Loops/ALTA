@@ -38,10 +38,10 @@ export class ClientGridviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.init();
+    this.getAllClients();
   }
 
-  init(): void {
+  getAllClients(): void {
     // Assign the data to the data source for the table to render
     this.manageMembersService.getAllClients()
       .subscribe((user) => {
@@ -82,9 +82,11 @@ export class ClientGridviewComponent implements OnInit {
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe(
     (user) => {
       const users = user;
-      this.populateTable(users);
+      // this.populateTable(users);
+      this.getAllClients();
     },
     (err) => {
+      console.log(err);
       // If name contains illegal characters
       if (err.error.last_name) {
         this.errorMessage = err.error.last_name[0];

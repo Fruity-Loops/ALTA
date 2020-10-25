@@ -34,10 +34,7 @@ export class ManageMembersService {
 
   modifyClientInfo(category, field, id): Observable<any>
   {
-    const sendMe: Body = {};
-    sendMe.category = category;
-    sendMe.field = field;
-    sendMe.id = id;
-    return this.http.post(`${this.BASEURL}/accessClients/update_client/`, JSON.stringify(sendMe));
+    const sendMe = {[category]: field};
+    return this.http.patch(`${this.BASEURL}/accessClients/${id}/`, sendMe);
   }
 }
