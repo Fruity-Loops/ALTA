@@ -42,10 +42,18 @@ export class LoginComponent implements OnInit {
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
         if (data.role === 'SA') {
+          localStorage.setItem('role', data.role);
+          localStorage.setItem('username', data.user);
+
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
           }, 1000);
         } else {
+          localStorage.setItem('role', data.role);
+          localStorage.setItem('organization_id', data.organization_id);
+          localStorage.setItem('username', data.user);
+          localStorage.setItem('organization_name', data.organization_name);
+
           setTimeout(() => {
             this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
