@@ -3,8 +3,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
-from .models import CustomUser
 from organization.models import Organization
+from .models import CustomUser
 
 
 class CustomUserTestCase(TestCase):
@@ -131,7 +131,17 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
-            "organization": organization.org_id}
+            'organization': organization.org_id}
+
+        self.registered_system_admin_2 = {
+            'user_name': 'registered_SA',
+            'email': 'registered_SA@email.com',
+            'password': 'password',
+            'first_name': 'registered',
+            'last_name': 'system_admin',
+            'role': 'SA',
+            'is_active': 'True',
+            'organization': ''}
 
         self.registered_inventory_manager = {
             'user_name': 'registered_IM',
@@ -141,7 +151,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'inventory_manager',
             'role': 'IM',
             'is_active': 'True',
-            "organization": organization.org_id}
+            'organization': organization.org_id}
 
         self.registered_stock_keepeer = {
             'user_name': 'registered_SK',
@@ -151,13 +161,20 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'stock_keepeer',
             'role': 'SK',
             'is_active': 'True',
-            "organization": organization.org_id}
+            'organization': organization.org_id}
 
-    def test_registration_success(self):
-        """ User was registered correctly """
+    def test_registration_success_linked_to_organization(self):
+        """ User was registered correctly along with its organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
         request = self.client.post("/registration/", self.registered_system_admin)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+
+    def test_registration_success_not_linked_to_organization(self):
+        """ User was registered correctly without an organization"""
+        # Authenticate a system admin
+        self.client.force_authenticate(user=self.system_admin)
+        request = self.client.post("/registration/", self.registered_system_admin_2)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_failure_unauthorized_request(self):
@@ -185,8 +202,8 @@ class RegistrationTestCase(APITestCase):
 
 class OpenRegistrationTestCase(APITestCase):
 
-    def test_registration_success(self):
-        """ User was registered correctly """
+    def test_registration_success_linked_to_organization(self):
+        """ User was registered correctly with its organization"""
         organization = Organization.objects.create(org_name="Test")
         data = {'user_name': 'test_case',
                 'email': 'test@email.com',
@@ -198,6 +215,20 @@ class OpenRegistrationTestCase(APITestCase):
                 "organization": organization.org_id}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_registration_success_not_linked_to_organization(self):
+        """ User was registered correctly without its organization"""
+        data = {'user_name': 'test_case',
+                'email': 'test@email.com',
+                "password": "password",
+                "first_name": "test",
+                "last_name": "user",
+                "role": "SA",
+                "is_active": "True",
+                "organization": ""}
+        response = self.client.post("/open-registration/", data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
 
     def test_registration_failure(self):
         """ User can't register if missing fields """
