@@ -24,9 +24,9 @@ export class ClientGridviewComponent implements OnInit {
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
-  booleans = [
-    {value: 'true'},
-    {value: 'false'}];
+  isActive = [
+    {value: true},
+    {value: false}];
     selectedItem: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -71,7 +71,7 @@ export class ClientGridviewComponent implements OnInit {
   updateUser(id: number, property: string, event: any): void {
     let editField;
     // Dropdown values are sent as events, editable text such as the names are sent via string
-    if (typeof event === 'string')
+    if (typeof event === 'string' || typeof event === 'boolean')
     {
       editField = event;
     }
