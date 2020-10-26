@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
+import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,6 +15,8 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
+  organizations = [];
+  selected_organization;
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -26,8 +29,9 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private tokenService: TokenService
-  ) { }
+    private tokenService: TokenService,
+    private organizationsService: ManageOrganizationsService
+  ) {}
 
   ngOnInit(): void {
     this.init();
@@ -42,10 +46,19 @@ export class SignupComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       role: ['', Validators.required],
+      organization: [''],
     });
+
+    this.getAllOrganizations();
   }
 
   signupUser(): void {
+    if (this.signupForm.value.organization.org_id) {
+      this.selected_organization = this.signupForm.value.organization.org_id;
+    } else {
+      this.selected_organization = '';
+    }
+
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
@@ -54,12 +67,14 @@ export class SignupComponent implements OnInit {
       role: this.signupForm.value.role.abbrev,
       is_active: 'true',
       password: this.signupForm.value.password,
+      organization: this.selected_organization,
     };
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
     // TODO: Disable in production
-    const register = this.tokenService.GetToken() ? this.authService.register(this.body) :
-      this.authService.openRegister(this.body);
+    const register = this.tokenService.GetToken()
+      ? this.authService.register(this.body)
+      : this.authService.openRegister(this.body);
 
     register.subscribe(
       (data) => {
@@ -81,6 +96,18 @@ export class SignupComponent implements OnInit {
         if (err.error.user_name) {
           this.errorMessage = err.error.user_name[0];
         }
+      }
+    );
+  }
+
+  getAllOrganizations(): void {
+    this.organizationsService.getAllOrganizations().subscribe(
+      (data) => {
+        this.organizations = data;
+        this.errorMessage = '';
+      },
+      (err) => {
+        this.errorMessage = err;
       }
     );
   }

@@ -73,6 +73,14 @@
         </mat-option>
       </mat-select>
       <br />
+      <br />
+      <mat-select formControlName="organization">
+        <mat-option value="">Choose an organization</mat-option> <p>(optional)</p>
+        <mat-option *ngFor="let organization of organizations" [value]="organization">
+          {{ organization.org_name }}
+        </mat-option>
+      </mat-select>
+      <br />
       <br/>
       <button mat-button class="btn waves-effect" id="signupbtn" [disabled]="!signupForm.valid">
         Sign Up</button><!-- if checks throws error then do not send data -->
