@@ -229,7 +229,6 @@ class OpenRegistrationTestCase(APITestCase):
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
     def test_registration_failure(self):
         """ User can't register if missing fields """
         data = {'user_name': 'test_case', "password": "password", "first_name": "test",
@@ -282,8 +281,8 @@ class LoginTest(APITestCase):
             "/login/", {"user_name": "test_user3", "password": "test"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_login_success(self):
-        """ User can login successfully """
+    def test_login_success_with_existing_token(self):
+        """ User can login successfully and has a token already in db"""
         CustomUser.objects.create(user_name="test_user2",
                                   email="test2@test.com",
                                   id=2,
@@ -292,6 +291,40 @@ class LoginTest(APITestCase):
                                   role='SA',
                                   password="test",
                                   is_active=True)
+
+        user = CustomUser.objects.get(user_name="test_user2")
+        self.token = Token.objects.create(user=user)
+        self.assertEqual("test", user.password)
+        self.assertEqual("test_user2", user.user_name)
+
+    def test_login_success_without_existing_token(self):
+        """ User can login successfully and doesn't have token in db"""
+        CustomUser.objects.create(user_name="test_user2",
+                                  email="test2@test.com",
+                                  id=2,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA',
+                                  password="test",
+                                  is_active=True)
+
+        user = CustomUser.objects.get(user_name="test_user2")
+        self.assertEqual("test", user.password)
+        self.assertEqual("test_user2", user.user_name)
+
+    def test_login_success_user_linked_to_organization(self):
+        """ User can login successfully and is linked to an organization"""
+        organization = Organization.objects.create(org_name="Test")
+        CustomUser.objects.create(user_name="test_user2",
+                                  email="test2@test.com",
+                                  id=3,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA',
+                                  password="test",
+                                  is_active=True,
+                                  organization=organization
+                                  )
 
         user = CustomUser.objects.get(user_name="test_user2")
         self.assertEqual("test", user.password)
