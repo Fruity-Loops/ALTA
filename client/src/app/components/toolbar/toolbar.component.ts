@@ -29,7 +29,7 @@ export class ToolbarComponent implements OnInit {
 
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
 
-    //Deleting session stored locally to avoid security issues
+    // Deleting session stored locally to avoid security issues
     localStorage.removeItem('organization_name');
     localStorage.removeItem('username');
     localStorage.removeItem('role');
