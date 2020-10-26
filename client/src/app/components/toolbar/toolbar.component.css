@@ -1,3 +1,6 @@
 .spacer {
-    flex: 1 1 auto;
-  }
+  flex: 1 1 auto;
+}
+.org {
+  margin-left: 30px;
+}

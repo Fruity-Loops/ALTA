@@ -16,7 +16,7 @@ import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -28,19 +28,10 @@ import { FormsModule} from '@angular/forms';
     ModifyMembersComponent,
     ClientGridviewComponent,
     CreateMembersComponent,
-    ManageOrganizationsComponent
+    ManageOrganizationsComponent,
   ],
 
-  imports: [
-    CommonModule,
-    MatModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    AuthModule,
-    FormsModule,
-  ],
+  imports: [CommonModule, MatModule, ReactiveFormsModule, HttpClientModule, RouterModule, AuthModule, FormsModule],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
-
 })
-export class AltaMainModule { }
+export class AltaMainModule {}
