@@ -29,12 +29,12 @@ export class ManageMembersService {
 
   getSpecificClients(name): Observable<any>
   {
-    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
+    return this.http.post(`${this.BASEURL}/searchClients/`, name);
   }
 
   modifyClientInfo(category, field, id): Observable<any>
   {
-    const sendMe = {[category]: field};
-    return this.http.patch(`${this.BASEURL}/accessClients/${id}/`, sendMe);
+    const body = {[category]: field};
+    return this.http.patch(`${this.BASEURL}/accessClients/${id}/`, body);
   }
 }

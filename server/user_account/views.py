@@ -144,21 +144,13 @@ class LogoutView(generics.GenericAPIView):
 
 
 class AccessClients(viewsets.ModelViewSet):
+    http_method_names = ['get', 'patch']
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-    # http_method_names = ['get', 'post', 'put']
 
-    # @action(detail=False, methods=['POST'])
-    # def post(self, request):
-    #     data = request.data
-    #     first_name = data.get('name', '')
-    #     qs = CustomUser.objects.filter(first_name=first_name)
-    #     serializer = ClientGridSerializer(instance=qs, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
-class AccessSomeClients(generics.GenericAPIView):
-    http_method_names = ['post']
+class SearchClients(generics.GenericAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]

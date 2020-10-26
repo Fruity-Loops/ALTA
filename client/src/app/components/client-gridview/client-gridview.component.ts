@@ -70,6 +70,7 @@ export class ClientGridviewComponent implements OnInit {
   // Modifies the user by calling the API and then refreshes the table
   updateUser(id: number, property: string, event: any): void {
     let editField;
+    // Dropdown values are sent as events, editable text such as the names are sent via string
     if (typeof event === 'string')
     {
       editField = event;
@@ -78,12 +79,11 @@ export class ClientGridviewComponent implements OnInit {
     {
       editField = event.target.textContent;
     }
-    this.users[id-1][property] = editField;
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe(
     (response) => {
+      this.users[id-1][property] = response[property];
     },
     (err) => {
-      console.log(err);
       // If name contains illegal characters
       if (err.error.last_name) {
         this.errorMessage = err.error.last_name[0];
