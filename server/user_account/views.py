@@ -149,7 +149,20 @@ class AccessClients(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     # http_method_names = ['get', 'post', 'put']
 
-    @action(detail=False, methods=['POST'])
+    # @action(detail=False, methods=['POST'])
+    # def post(self, request):
+    #     data = request.data
+    #     first_name = data.get('name', '')
+    #     qs = CustomUser.objects.filter(first_name=first_name)
+    #     serializer = ClientGridSerializer(instance=qs, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AccessSomeClients(generics.GenericAPIView):
+    http_method_names = ['post']
+    queryset = CustomUser.objects.all()
+    serializer_class = ClientGridSerializer
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         data = request.data
         first_name = data.get('name', '')
