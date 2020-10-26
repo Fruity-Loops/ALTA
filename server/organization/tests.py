@@ -54,3 +54,17 @@ class OrganizationTestCase(APITestCase):
         response = self.client.get("/organization/")
         self.assertEqual(response.status_code,
                          status.HTTP_401_UNAUTHORIZED)
+
+    def test_organization_unauthorized_clearence(self):
+        """ IM can create or delete an organization """
+        self.client.force_authenticate(user=self.inventory_manager)
+        response = self.client.delete("/organization/")
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_get_all_organization(self):
+        """ IM can get a list of organization """
+        self.client.force_authenticate(user=self.inventory_manager)
+        response = self.client.get("/organization/")
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
