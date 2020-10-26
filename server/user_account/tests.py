@@ -28,6 +28,10 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.last_name, "user")
         self.assertEqual(user.role, "SA")
 
+    def test_get_role(self):
+        user = CustomUser.objects.get(id=1)
+        self.assertEqual(user.get_role, "SA")
+
 
 class AccessAllClientsTestCase(TestCase):
     def setUp(self):
@@ -264,7 +268,7 @@ class LoginTest(APITestCase):
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
         response = self.client.post(
-            "/login/", {"user_name": "test_user", "password": "test"})
+            "/login/", {"user_name": "test_user", "password": "test12"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_not_active(self):
@@ -283,52 +287,68 @@ class LoginTest(APITestCase):
 
     def test_login_success_with_existing_token(self):
         """ User can login successfully and has a token already in db"""
-        CustomUser.objects.create(user_name="test_user2",
-                                  email="test2@test.com",
-                                  id=2,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test",
-                                  is_active=True)
+        user = CustomUser(user_name="test_user2",
+                          email="test2@test.com",
+                          id=2,
+                          first_name='test',
+                          last_name='user',
+                          role='SA',
+                          is_active=True)
+        user.set_password("12")
+        user.save()
 
         user = CustomUser.objects.get(user_name="test_user2")
         self.token = Token.objects.create(user=user)
-        self.assertEqual("test", user.password)
-        self.assertEqual("test_user2", user.user_name)
+
+        self.credentials = {
+            'user_name': 'test_user2',
+            'password': '12'
+        }
+
+        response = self.client.post("/login/", self.credentials)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_without_existing_token(self):
         """ User can login successfully and doesn't have token in db"""
-        CustomUser.objects.create(user_name="test_user2",
-                                  email="test2@test.com",
-                                  id=2,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test",
-                                  is_active=True)
+        user = CustomUser(user_name="test_user2",
+                          email="test2@test.com",
+                          id=2,
+                          first_name='test',
+                          last_name='user',
+                          role='SA',
+                          is_active=True)
+        user.set_password("12")
+        user.save()
 
-        user = CustomUser.objects.get(user_name="test_user2")
-        self.assertEqual("test", user.password)
-        self.assertEqual("test_user2", user.user_name)
+        self.credentials = {
+            'user_name': 'test_user2',
+            'password': '12'
+        }
+
+        response = self.client.post("/login/", self.credentials)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_user_linked_to_organization(self):
         """ User can login successfully and is linked to an organization"""
         organization = Organization.objects.create(org_name="Test")
-        CustomUser.objects.create(user_name="test_user2",
-                                  email="test2@test.com",
-                                  id=3,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test",
-                                  is_active=True,
-                                  organization=organization
-                                  )
+        user = CustomUser(user_name="test",
+                          email="tes@test.com",
+                          id=3,
+                          first_name='test',
+                          last_name='user',
+                          role='SA',
+                          is_active=True,
+                          organization=organization)
+        user.set_password("12")
+        user.save()
 
-        user = CustomUser.objects.get(user_name="test_user2")
-        self.assertEqual("test", user.password)
-        self.assertEqual("test_user2", user.user_name)
+        self.credentials = {
+            'user_name': 'test',
+            'password': '12'
+        }
+
+        response = self.client.post("/login/", self.credentials)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class LogoutTest(APITestCase):
