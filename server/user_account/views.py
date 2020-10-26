@@ -148,11 +148,7 @@ class LogoutView(generics.GenericAPIView):
         :param request
         """
 
-        try:
-            Token.objects.get(user=request.user).delete()
-        except Token.DoesNotExist:
-            return Response({'detail': 'Invalid Token'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        Token.objects.get(user=request.user).delete()
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
