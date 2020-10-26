@@ -16,7 +16,7 @@ export class SignupComponent implements OnInit {
   errorMessage: string;
   body: any;
   organizations = [];
-  selected_organization;
+  selectedOrganization;
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -54,9 +54,9 @@ export class SignupComponent implements OnInit {
 
   signupUser(): void {
     if (this.signupForm.value.organization.org_id) {
-      this.selected_organization = this.signupForm.value.organization.org_id;
+      this.selectedOrganization = this.signupForm.value.organization.org_id;
     } else {
-      this.selected_organization = '';
+      this.selectedOrganization = '';
     }
 
     this.body = {
@@ -67,7 +67,7 @@ export class SignupComponent implements OnInit {
       role: this.signupForm.value.role.abbrev,
       is_active: 'true',
       password: this.signupForm.value.password,
-      organization: this.selected_organization,
+      organization: this.selectedOrganization,
     };
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
