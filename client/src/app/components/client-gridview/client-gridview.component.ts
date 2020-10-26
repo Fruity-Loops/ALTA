@@ -78,25 +78,20 @@ export class ClientGridviewComponent implements OnInit {
     {
       editField = event.target.textContent;
     }
-    this.users[id][property] = editField;
+    this.users[id-1][property] = editField;
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe(
-    (user) => {
-      const users = user;
-      // this.populateTable(users);
-      this.getAllClients();
+    (response) => {
     },
     (err) => {
       console.log(err);
       // If name contains illegal characters
       if (err.error.last_name) {
         this.errorMessage = err.error.last_name[0];
-        console.log(this.errorMessage);
       }
 
       // If name contains illegal characters
       if (err.error.first_name) {
         this.errorMessage = err.error.first_name[0];
-        console.log(this.errorMessage);
       }
     });
   }
