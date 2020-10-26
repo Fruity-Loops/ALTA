@@ -75,7 +75,8 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         if user.organization is None:
             data = {'user': user.user_name, 'organization': '', 'token': token}
         else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id, 'token': token}
+            data = {'user': user.user_name, 'organization': user.organization.org_id,
+                    'token': token}
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -113,7 +114,9 @@ class LoginView(generics.GenericAPIView):
                                 'organization': '', 'token': token.key}
                     else:
                         data = {'user': username, 'role': user.role,
-                                'organization': user.organization.org_id, 'token': token.key}
+                                'organization_id': user.organization.org_id,
+                                'organization_name': user.organization.org_name,
+                                'token': token.key}
 
                     return Response(data, status=status.HTTP_200_OK)
 
