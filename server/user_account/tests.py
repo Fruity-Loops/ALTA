@@ -368,3 +368,27 @@ class LogoutTest(APITestCase):
         self.api_authentication_invalid_token()
         response = self.client.post('/logout/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class SearchClientsTest(APITestCase):
+    def setUp(self):
+        self.client = APIClient()
+        # Create each type of user that could be making the registration request
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin',
+            email='system_admin@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True)
+
+    def test_search_clients(self):
+        """ Search clients by firstname """
+        # Authenticate a system admin
+        self.client.force_authenticate(user=self.system_admin)
+        data = {
+            'name': 'system'
+        }
+        response = self.client.post("/getSomeClients/", data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
