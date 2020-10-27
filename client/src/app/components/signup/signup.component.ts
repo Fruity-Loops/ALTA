@@ -15,8 +15,8 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
-  organizations = [];
-  selectedOrganization;
+  organizations: any = [];
+  selectedOrganization: any;
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
