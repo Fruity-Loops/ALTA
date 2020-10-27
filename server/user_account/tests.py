@@ -106,26 +106,6 @@ class RegistrationTestCase(APITestCase):
             is_active=True,
             organization=organization)
 
-        self.inventory_manager = CustomUser.objects.create(
-            user_name='inventory_manager',
-            email='inventory_manager@email.com',
-            password='password',
-            first_name='inventory',
-            last_name='manager',
-            role='IM',
-            is_active=True,
-            organization=organization)
-
-        self.stock_keeper = CustomUser.objects.create(
-            user_name='stock_keeper',
-            email='stock_keeper@email.com',
-            password='password',
-            first_name='stock',
-            last_name='keeper',
-            role='SK',
-            is_active=True,
-            organization=organization)
-
         # Create each type of user that could be registered
         self.registered_system_admin = {
             'user_name': 'registered_SA',
@@ -146,26 +126,6 @@ class RegistrationTestCase(APITestCase):
             'role': 'SA',
             'is_active': 'True',
             'organization': ''}
-
-        self.registered_inventory_manager = {
-            'user_name': 'registered_IM',
-            'email': 'registered_IM@email.com',
-            'password': 'password',
-            'first_name': 'registered',
-            'last_name': 'inventory_manager',
-            'role': 'IM',
-            'is_active': 'True',
-            'organization': organization.org_id}
-
-        self.registered_stock_keepeer = {
-            'user_name': 'registered_SK',
-            'email': 'registered_SK@email.com',
-            'password': 'password',
-            'first_name': 'registered',
-            'last_name': 'stock_keepeer',
-            'role': 'SK',
-            'is_active': 'True',
-            'organization': organization.org_id}
 
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
@@ -297,15 +257,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        user = CustomUser.objects.get(user_name="test_user2")
-        self.token = Token.objects.create(user=user)
-
-        self.credentials = {
-            'user_name': 'test_user2',
-            'password': '12'
-        }
-
-        response = self.client.post("/login/", self.credentials)
+        response = self.client.post("/login/", {'user_name': 'test_user2', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_without_existing_token(self):
@@ -320,12 +272,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        self.credentials = {
-            'user_name': 'test_user2',
-            'password': '12'
-        }
-
-        response = self.client.post("/login/", self.credentials)
+        response = self.client.post("/login/", {'user_name': 'test_user2', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_user_linked_to_organization(self):
@@ -342,12 +289,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        self.credentials = {
-            'user_name': 'test',
-            'password': '12'
-        }
-
-        response = self.client.post("/login/", self.credentials)
+        response = self.client.post("/login/", {'user_name': 'test', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 

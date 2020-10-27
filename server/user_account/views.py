@@ -3,7 +3,6 @@ from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
