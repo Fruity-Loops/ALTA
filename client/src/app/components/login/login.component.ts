@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
         if (data.role === 'SA') {
+          // Storing in a session locally attributes of the SA (SA are not assigned to any organization)
           localStorage.setItem('role', data.role);
           localStorage.setItem('username', data.user);
 
@@ -49,6 +50,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['manage-organizations']);
           }, 1000);
         } else {
+          // Storing in a session locally attributes of the IM
           localStorage.setItem('role', data.role);
           localStorage.setItem('organization_id', data.organization_id);
           localStorage.setItem('username', data.user);
