@@ -61,6 +61,9 @@ export class LoginComponent implements OnInit {
           }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
         }
         this.loginForm.reset();
+        Object.keys(this.loginForm.controls).forEach(key =>{
+          this.loginForm.controls[key].setErrors(null)
+       });
       },
       (err) => {
         if (err.error.detail) {
