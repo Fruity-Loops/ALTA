@@ -1,4 +1,10 @@
-<div>
+<div id='loginOnly' *ngIf="!openRegistraion">
+      <h1>ALTA Auditing System</h1>
+      <app-login></app-login>
+</div>
+
+
+<div id=loginWithRegistration *ngIf="openRegistraion">
   <mat-tab-group mat-align-tabs="center">
     <mat-tab label="Login">
       <app-login></app-login>

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
-import { AuthTabsComponent } from './components/auth-tabs/auth-tabs.component';
+import { GreetingComponent } from './components/greeting/greeting.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent, AuthTabsComponent],
+      declarations: [AppComponent, GreetingComponent],
       imports: [HttpClientTestingModule],
     }).compileComponents();
   });

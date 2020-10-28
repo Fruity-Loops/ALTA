@@ -17,7 +17,7 @@ class UserOrganizationPermission(BasePermission):
         if view.action in ['list', 'retrieve', 'update', 'partial_update']:
             return IsSystemAdmin.has_permission(None, request, None)\
                    or IsInventoryManager.has_permission(None, request, None)
-        elif view.action in ['create', 'destroy']:
+        if view.action in ['create', 'destroy']:
             return IsSystemAdmin.has_permission(None, request, None)
 
         return False

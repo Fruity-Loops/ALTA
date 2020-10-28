@@ -5,12 +5,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SignupComponent } from './signup.component';
 import { FormBuilder } from '@angular/forms';
+import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 describe('SignupComponent', () => {
   let component: SignupComponent;
   let fixture: ComponentFixture<SignupComponent>;
   let authService: AuthService;
   let tokenService: TokenService;
+  let manageOrganizationsService: ManageOrganizationsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -24,11 +26,15 @@ describe('SignupComponent', () => {
         {
           provide: TokenService,
         },
+        {
+          provide: ManageOrganizationsService,
+        },
       ],
     }).compileComponents();
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
+    manageOrganizationsService = TestBed.inject(ManageOrganizationsService);
   });
 
   beforeEach(() => {

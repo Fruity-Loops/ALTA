@@ -3,6 +3,9 @@
         <mat-icon>menu</mat-icon>
     </button>
     <h1 class="title">ALTA</h1>
+    <h4 class="org" *ngIf="organization">Organization: {{organization}}</h4>
+    <h4 class="org" >Role: {{loggedInUserRole}}</h4>
     <span class="spacer"></span>
+    <h4>Welcome {{loggedInUser}}</h4>
     <button mat-button (click)="logout()">Logout</button>
 </mat-toolbar>

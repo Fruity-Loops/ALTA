@@ -1,48 +1,39 @@
 <mat-card class="login-card">
   <mat-card-header>
     <mat-card-title>Login</mat-card-title>
-    <div id="errorMsg" *ngIf="errorMessage">
-      <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+    <div id="loginStatus">
+      <div id="errorMsg" *ngIf="errorMessage">
+        <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+      </div>
+      <div id="successMsg" *ngIf="successMessage">
+        <mat-card-subtitle>{{ successMessage }}</mat-card-subtitle>
+      </div>
     </div>
   </mat-card-header>
 
   <mat-card-content>
-    <form
-      class="col s12"
-      [formGroup]="loginForm"
-      novalidate
-      (ngSubmit)="loginUser()"
-    >
+    <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
       <mat-form-field appearance="legacy" class="input">
         <mat-label for="user-name">Username</mat-label>
         <input matInput id="user-name" type="text" formControlName="username" />
 
-        <mat-error
-          class="error"
-          *ngIf="
+        <mat-error class="error" *ngIf="
             !loginForm.controls['username'].valid &&
             loginForm.controls['username'].touched
-          "
-          ><!-- Handeling error -->
+          ">
+          <!-- Handeling error -->
           Username is required
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="legacy" class="input">
         <mat-label for="password">Password</mat-label>
-        <input
-          matInput
-          id="password"
-          type="password"
-          formControlName="password"
-        />
-        <mat-error
-          class="error"
-          *ngIf="
+        <input matInput id="password" type="password" formControlName="password" />
+        <mat-error class="error" *ngIf="
             !loginForm.controls['password'].valid &&
             loginForm.controls['password'].touched
-          "
-          ><!-- Handeling error -->
+          ">
+          <!-- Handeling error -->
           Password is required
         </mat-error>
       </mat-form-field>
