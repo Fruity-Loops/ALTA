@@ -3,11 +3,11 @@ import { environment } from 'src/environments/environment';
 
 
 @Component({
-  selector: 'app-auth-tabs',
-  templateUrl: './auth-tabs.component.html',
-  styleUrls: ['./auth-tabs.component.css'],
+  selector: 'greeting',
+  templateUrl: './greeting.component.html',
+  styleUrls: ['./greeting.component.css'],
 })
-export class AuthTabsComponent implements OnInit {
+export class GreetingComponent implements OnInit {
   openRegistraion: boolean = environment.open_registration;
   constructor() {}
 
