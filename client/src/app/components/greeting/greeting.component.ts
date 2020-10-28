@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment';
 
 
 @Component({
-  selector: 'greeting',
+  selector: 'app-greeting',
   templateUrl: './greeting.component.html',
   styleUrls: ['./greeting.component.css'],
 })
