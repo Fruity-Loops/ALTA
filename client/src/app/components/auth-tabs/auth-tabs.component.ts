@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-auth-tabs',
@@ -7,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./auth-tabs.component.css'],
 })
 export class AuthTabsComponent implements OnInit {
+  openRegistraion: boolean = environment.open_registration;
   constructor() {}
 
   ngOnInit(): void {}
