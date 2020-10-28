@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthTabsComponent } from 'src/app/components/auth-tabs/auth-tabs.component';
+import { GreetingComponent } from 'src/app/components/greeting/greeting.component';
 import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';

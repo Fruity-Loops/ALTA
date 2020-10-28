@@ -71,7 +71,6 @@ export class SignupComponent implements OnInit {
     };
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
-    // TODO: Disable in production
     const register = this.tokenService.GetToken()
       ? this.authService.register(this.body)
       : this.authService.openRegister(this.body);
