@@ -11,6 +11,13 @@
 #errorMsg {
   background: #f6b2b5;
   width: 100%;
-  height: 50px;
+  height: 40px;
+  text-align: center;
+}
+
+#successMsg {
+  background: #a9f69b;
+  width: 100%;
+  height: 40px;
   text-align: center;
 }
