@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
     private router: Router,
     private tokenService: TokenService,
     private organizationsService: ManageOrganizationsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.init();
@@ -49,7 +49,10 @@ export class SignupComponent implements OnInit {
       organization: [''],
     });
 
-    this.getAllOrganizations();
+    if (this.tokenService.GetToken()) {
+      this.getAllOrganizations();
+    }
+
   }
 
   signupUser(): void {
@@ -106,7 +109,7 @@ export class SignupComponent implements OnInit {
         this.errorMessage = '';
       },
       (err) => {
-        this.errorMessage = err;
+        this.errorMessage = err.error ? err.error.detail : err.statusText;
       }
     );
   }
