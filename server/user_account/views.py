@@ -172,3 +172,11 @@ class AccessSomeClients(generics.GenericAPIView):
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CurrentRole(viewsets.ModelViewSet):
+    http_method_names = ['get']
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        return Response(request.user.role, status=status.HTTP_200_OK)

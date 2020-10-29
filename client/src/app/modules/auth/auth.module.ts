@@ -8,8 +8,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatModule } from '../material/material-module';
+import { SignupDirective } from 'src/app/components/signup/signup.directive';
 @NgModule({
-  declarations: [GreetingComponent, LoginComponent, SignupComponent],
+  declarations: [GreetingComponent, LoginComponent, SignupComponent, SignupDirective],
   imports: [
     CommonModule,
     FormsModule,

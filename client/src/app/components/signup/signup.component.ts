@@ -33,9 +33,23 @@ export class SignupComponent implements OnInit {
     private tokenService: TokenService,
     private organizationsService: ManageOrganizationsService
   ) { }
-
+  loggedInUserRole;
   ngOnInit(): void {
     this.init();
+/* Robert's code to get role - stored on frontend at login
+    this.loggedInUserRole = localStorage.getItem('role');
+    if(this.loggedInUserRole != 'SA') {
+      this.roles.shift();
+    }
+*/
+    this.authService.getCurrentRole()
+      .subscribe((data) => {
+        this.loggedInUserRole = data;
+
+        if(this.loggedInUserRole !== 'SA') {
+        this.roles.shift();
+      }
+      });
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {User} from '../models/user.model';
 
 // Connection with the backend
 const BASEURL = 'http://localhost:8000';
@@ -21,5 +22,9 @@ export class AuthService {
 
   login(body): Observable<any> {
     return this.http.post(`${BASEURL}/login/`, body);
+  }
+
+  getCurrentRole(): Observable<any> {
+    return this.http.get<User>(`${BASEURL}/current_role/`);
   }
 }

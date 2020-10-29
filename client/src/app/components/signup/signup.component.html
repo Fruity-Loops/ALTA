@@ -74,7 +74,7 @@
       </mat-select>
       <br />
       <br />
-      <mat-select formControlName="organization">
+      <mat-select appSignup formControlName="organization">
         <mat-option value="">Choose an organization</mat-option> <p>(optional)</p>
         <mat-option *ngFor="let organization of organizations" [value]="organization">
           {{ organization.org_name }}
