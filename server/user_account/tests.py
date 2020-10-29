@@ -26,7 +26,7 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.role, "SA")
 
 
-class AccessAllClientsTestCase(TestCase):
+class AccessClientsTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         # Create each type of user that could be making the registration request
@@ -42,6 +42,15 @@ class AccessAllClientsTestCase(TestCase):
         CustomUser.objects.create(
             user_name='inventory_manager',
             email='inventory_manager@email.com',
+            password='password',
+            first_name='inventory',
+            last_name='manager',
+            role='IM',
+            is_active=True)
+
+        CustomUser.objects.create(
+            user_name='inventory_manager2',
+            email='inventory_manager2@email.com',
             password='password',
             first_name='inventory',
             last_name='manager',
@@ -67,6 +76,19 @@ class AccessAllClientsTestCase(TestCase):
             'role': 'IM',
             'is_active': True}
 
+        self.registered_inventory_manager2 = {
+            'user_name': 'inventory_manager2',
+            'email': 'inventory_manager2@email.com',
+            'password': 'password',
+            'first_name': 'inventory',
+            'last_name': 'manager',
+            'role': 'IM',
+            'is_active': True}
+
+        self.search_for_ims = {
+            'name': 'inventory'
+        }
+
     def test_obtain_all_clients(self):
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
@@ -82,6 +104,18 @@ class AccessAllClientsTestCase(TestCase):
         self.assertEqual(data[1]['role'], self.registered_inventory_manager['role'])
         self.assertEqual(data[1]['is_active'], self.registered_inventory_manager['is_active'])
 
+    def test_obtain_inventory_managers(self):
+        self.client.force_authenticate(user=self.system_admin)
+        request = self.client.post("/searchClients/", self.search_for_ims)
+        data = request.data
+        self.assertEqual(data[0]['first_name'], self.registered_inventory_manager['first_name'])
+        self.assertEqual(data[0]['last_name'], self.registered_inventory_manager['last_name'])
+        self.assertEqual(data[0]['role'], self.registered_inventory_manager['role'])
+        self.assertEqual(data[0]['is_active'], self.registered_inventory_manager['is_active'])
+        self.assertEqual(data[1]['first_name'], self.registered_inventory_manager2['first_name'])
+        self.assertEqual(data[1]['last_name'], self.registered_inventory_manager2['last_name'])
+        self.assertEqual(data[1]['role'], self.registered_inventory_manager2['role'])
+        self.assertEqual(data[1]['is_active'], self.registered_inventory_manager2['is_active'])
 
 class RegistrationTestCase(APITestCase):
     def setUp(self):
