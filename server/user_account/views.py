@@ -4,7 +4,6 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.decorators import action
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
 
@@ -144,6 +143,9 @@ class LogoutView(generics.GenericAPIView):
 
 
 class AccessClients(viewsets.ModelViewSet):
+    """
+    Allows obtaining all clients and updating them
+    """
     http_method_names = ['get', 'patch']
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
@@ -151,13 +153,16 @@ class AccessClients(viewsets.ModelViewSet):
 
 
 class SearchClients(generics.GenericAPIView):
+    """
+    Allows searching through the client list and returning the matches
+    """
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         data = request.data
-        first_name = data.get('name', '')
+        first_name = data.get('first_name')
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

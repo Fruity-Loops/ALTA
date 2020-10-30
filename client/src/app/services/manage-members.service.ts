@@ -27,9 +27,9 @@ export class ManageMembersService {
     );
   }
 
-  getSpecificClients(name): Observable<any>
+  getSpecificClients(firstName): Observable<any>
   {
-    return this.http.post(`${this.BASEURL}/searchClients/`, name);
+    return this.http.post(`${this.BASEURL}/searchClients/`, firstName);
   }
 
   modifyClientInfo(category, field, id): Observable<any>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { User } from 'src/app/models/user.model';
-import {AfterViewInit, ViewChild} from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
@@ -80,9 +80,7 @@ export class ClientGridviewComponent implements OnInit {
       editField = event.target.textContent;
     }
     this.manageMembersService.modifyClientInfo(property, editField, id).subscribe(
-    (response) => {
-      this.users[id-1][property] = response[property];
-    },
+    (response) => {this.users[id - 1][property] = response[property]; },
     (err) => {
       // If name contains illegal characters
       if (err.error.last_name) {
@@ -94,9 +92,5 @@ export class ClientGridviewComponent implements OnInit {
         this.errorMessage = err.error.first_name[0];
       }
     });
-  }
-
-  changeValue(id: number, property: string, event: any): void {
-    this.editField = event.target.textContent;
   }
 }

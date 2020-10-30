@@ -24,15 +24,15 @@ export class ModifyMembersComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient) {
     this.checkoutForm = this.formBuilder.group({
-      name: '',
+      first_name: '',
     });
   }
 
   ngOnInit(): void {
   }
 
-  onSubmit(name): void {
-    this.manageMembersService.getSpecificClients(name).subscribe((response) => {
+  onSubmit(firstName): void {
+    this.manageMembersService.getSpecificClients(firstName).subscribe((response) => {
           this.appChild.populateTable(response);
         });
     this.checkoutForm.reset();

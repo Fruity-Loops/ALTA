@@ -86,14 +86,13 @@ class AccessClientsTestCase(TestCase):
             'is_active': True}
 
         self.search_for_ims = {
-            'name': 'inventory'
+            'first_name': 'inventory'
         }
 
     def test_obtain_all_clients(self):
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
         request = self.client.get("/accessClients/", self.registered_system_admin)
-        # self.assertEqual(request.status_code, status.HTTP_201_CREATED)
         data = request.data
         self.assertEqual(data[0]['first_name'], self.registered_system_admin['first_name'])
         self.assertEqual(data[0]['last_name'], self.registered_system_admin['last_name'])
