@@ -17,7 +17,7 @@ export class SignupComponent implements OnInit {
   body: any;
   organizations: any = [];
   selectedOrganization: any;
-  signUpButtonLabel = 'Register Account'
+  signUpButtonLabel = 'Register Account';
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
