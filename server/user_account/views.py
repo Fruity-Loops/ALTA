@@ -8,7 +8,6 @@ from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
 
 
-
 class RegistrationView(viewsets.ModelViewSet):
     """
     Creates a new user in the db.
