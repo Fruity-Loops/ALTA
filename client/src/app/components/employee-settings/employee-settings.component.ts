@@ -27,6 +27,7 @@ export class EmployeeSettingsComponent implements OnInit {
         "last_name": employee.last_name,
         "role": employee.role,
         "is_active": employee.is_active,
+        "email": employee.email,
       };
     })
 
