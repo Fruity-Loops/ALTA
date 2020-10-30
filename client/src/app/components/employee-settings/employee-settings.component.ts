@@ -6,7 +6,7 @@ import {User} from "../../models/user.model";
 @Component({
   selector: 'app-employee-settings',
   templateUrl: './employee-settings.component.html',
-  styleUrls: ['./employee-settings.component.css']
+  styleUrls: ['./employee-settings.component.scss']
 })
 export class EmployeeSettingsComponent implements OnInit {
 
