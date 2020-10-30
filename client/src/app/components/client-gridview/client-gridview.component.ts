@@ -61,6 +61,7 @@ export class ClientGridviewComponent implements OnInit {
       this.users = new Array<User>();
       clients.forEach(element => {
         this.users.push(element);
+        console.log(element);
       });
       this.dataSource = new MatTableDataSource(this.users);
       this.dataSource.paginator = this.paginator;
@@ -92,5 +93,8 @@ export class ClientGridviewComponent implements OnInit {
         this.errorMessage = err.error.first_name[0];
       }
     });
+  }
+  changeValue(id: number, property: string, event: any): void {
+    this.editField = event.target.textContent;
   }
 }

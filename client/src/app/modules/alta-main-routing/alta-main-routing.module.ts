@@ -7,6 +7,7 @@ import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 import { AuthGuard } from '../../guards/auth.guard';
+import {EmployeeSettingsComponent} from "../../components/employee-settings/employee-settings.component";
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMembersComponent },
       { path: 'modify-members', component: ModifyMembersComponent },
-      {path: 'manage-organizations', component: ManageOrganizationsComponent}
+      {path: 'manage-organizations', component: ManageOrganizationsComponent},
+      {path: 'modify-members/:ID', component: EmployeeSettingsComponent}
     ]
   },
 ];

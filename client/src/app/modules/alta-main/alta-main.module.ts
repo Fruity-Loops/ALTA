@@ -16,7 +16,8 @@ import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule} from '@angular/forms';
+import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { FormsModule } from '@angular/forms';
     ClientGridviewComponent,
     CreateMembersComponent,
     ManageOrganizationsComponent,
+    EmployeeSettingsComponent
   ],
 
   imports: [CommonModule, MatModule, ReactiveFormsModule, HttpClientModule, RouterModule, AuthModule, FormsModule],
