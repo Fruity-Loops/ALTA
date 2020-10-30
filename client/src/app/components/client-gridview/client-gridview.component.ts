@@ -61,7 +61,6 @@ export class ClientGridviewComponent implements OnInit {
       this.users = new Array<User>();
       clients.forEach(element => {
         this.users.push(element);
-        console.log(element);
       });
       this.dataSource = new MatTableDataSource(this.users);
       this.dataSource.paginator = this.paginator;
