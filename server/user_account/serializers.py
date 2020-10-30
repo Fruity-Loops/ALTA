@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'user_name', 'first_name', 'last_name',
-                  'password', 'role', 'email', 'is_active']
+                  'password', 'role', 'email', 'is_active', 'organization']
 
     def save(self, **kwargs):
         """
@@ -22,7 +22,8 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=self.validated_data['last_name'],
             role=self.validated_data['role'],
             email=self.validated_data['email'],
-            is_active=self.validated_data['is_active']
+            is_active=self.validated_data['is_active'],
+            organization=self.validated_data['organization']
         )
 
         # hash password
