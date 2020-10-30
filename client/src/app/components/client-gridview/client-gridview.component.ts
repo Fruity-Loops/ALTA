@@ -15,7 +15,7 @@ export class ClientGridviewComponent implements OnInit {
   displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role'];
   dataSource: MatTableDataSource<User>;
   users: Array<User>;
-  view = 'Client Gridview';
+  //view = 'Client Gridview';
   editField: string;
   errorMessage: string;
   body: any;
