@@ -21,12 +21,13 @@ export class EmployeeSettingsComponent implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get("ID");
 
     this.manageMembersService.getEmployee(id).subscribe(employee => {
-      let the_id = employee.id;
-      let first_name = employee.first_name;
-      let last_name = employee.last_name;
-      let role = employee.role;
-      let is_active = employee.is_active;
-      this.employee = {"id":the_id, "first_name":first_name, "last_name":last_name, "role":role, "is_active": is_active};
+      this.employee = {
+        "id": employee.id,
+        "first_name": employee.first_name,
+        "last_name": employee.last_name,
+        "role": employee.role,
+        "is_active": employee.is_active,
+      };
     })
 
   }
