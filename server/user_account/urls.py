@@ -2,7 +2,7 @@
 Holds urls related to user_account app.
 """
 
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from . import views
 
@@ -16,4 +16,5 @@ urlpatterns = [
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
     path('searchClients/', views.SearchClients.as_view()),
+    path('employee/<the_id>', views.get_employee)
 ]

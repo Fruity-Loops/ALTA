@@ -4,8 +4,18 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
+
+
+# TODO: Remove this when registration view is updated (and don't forget to remove the associated URL)
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_employee(request, the_id):
+    employee = CustomUser.objects.get(id=the_id)
+    employee_serializer = ClientGridSerializer(employee)
+    return Response(employee_serializer.data, status=status.HTTP_200_OK)
 
 
 class RegistrationView(viewsets.ModelViewSet):
