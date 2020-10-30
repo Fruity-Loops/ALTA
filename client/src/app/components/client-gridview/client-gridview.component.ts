@@ -12,7 +12,7 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
 })
 
 export class ClientGridviewComponent implements OnInit {
-  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role'];
+  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role', 'Settings'];
   dataSource: MatTableDataSource<User>;
   users: Array<User>;
   //view = 'Client Gridview';
