@@ -37,4 +37,9 @@ export class ManageMembersService {
     const body = {[category]: field};
     return this.http.patch(`${this.BASEURL}/accessClients/${id}/`, body);
   }
+
+  getEmployee(id): Observable<any>
+  {
+    return this.http.get(`${this.BASEURL}/employee/${id}`);
+  }
 }
