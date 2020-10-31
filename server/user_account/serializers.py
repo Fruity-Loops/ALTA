@@ -50,3 +50,28 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['user_name', 'first_name', 'last_name', 'email']
+
+
+class UserPasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['password']
+
+    def save(self, **kwargs):
+        """
+        Overriding the serializer save function in order to
+        access the parameters passed in the request
+        before saving them in the database.
+        In this particular case I'm hashing the password.
+        """
+
+        # Retrieving the ID of the user that we are trying to update from the view
+        target_user_id = self.context['view'].kwargs['pk']
+        user = CustomUser.objects.get(id=target_user_id)
+
+        # hash password
+        password = self.validated_data['password']
+        user.set_password(password)
+
+        user.save()
+        return user
