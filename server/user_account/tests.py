@@ -401,3 +401,50 @@ class UpdateProfileTest(APITestCase):
             "/updateProfile/" + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
+
+
+class ChangePasswordTest(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        organization = Organization.objects.create(org_name="Test")
+        # Create each type of user that could be making the request
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin',
+            email='system_admin@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.test_user = CustomUser.objects.create(
+            user_name='test',
+            email='test@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.sys_admin_id = self.system_admin.id
+        self.test_user_id = self.test_user.id
+
+    def test_update_another_user_password(self):
+        """ User can't update the password of another user """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            "/changePassword/" + str(self.test_user_id) + "/", {"password": "12"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_password(self):
+        """ User can update his own password """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            "/changePassword/" + str(self.sys_admin_id) + "/", {"password": "12"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
