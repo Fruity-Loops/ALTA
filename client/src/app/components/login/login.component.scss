@@ -1,7 +1,14 @@
+@import "./src/theme.scss";
+
+
 .login-card {
   margin: 30px 35% 30% 35%;
-  width: 350px;
+  padding-top: 2%;
+  width: 290px;
   max-height: 600px;
+  text-align: center;
+  background-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary,100);
 }
 
 .error {
@@ -21,3 +28,16 @@
   height: 40px;
   text-align: center;
 }
+
+mat-label {
+  color: map-get($alta-primary, 200);
+}
+
+.mat-form-field {
+  width: 90%;
+}
+
+button {
+  margin: 5%;
+}
+

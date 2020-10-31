@@ -9,7 +9,7 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
 @Component({
   selector: 'app-client-gridview',
   templateUrl: './client-gridview.component.html',
-  styleUrls: ['./client-gridview.component.css']
+  styleUrls: ['./client-gridview.component.scss']
 })
 
 export class ClientGridviewComponent implements OnInit {
