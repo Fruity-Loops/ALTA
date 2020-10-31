@@ -1,3 +1,7 @@
+"""
+This file provides functionality for all the endpoints for interacting with user accounts
+"""
+
 from django.db.models import signals
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
@@ -7,13 +11,15 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
 from .models import CustomUser
-from rest_framework.parsers import JSONParser
 
 
-# TODO: Remove this when registration view is updated (and don't forget to remove the associated URL)
+# TODO: Remove this when registration view is updated and don't forget to remove the associated URL
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
 def get_employee(request, the_id):
+    """
+    Function for getting an employee and updating it
+    """
     employee = CustomUser.objects.get(id=the_id)
 
     if request.method == 'GET':
@@ -26,6 +32,7 @@ def get_employee(request, the_id):
             employee_serializer.save()
             return Response(employee_serializer.data, status=status.HTTP_200_OK)
         return Response(employee_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(status=status.HTTP_301_MOVED_PERMANENTLY)
 
 
 class RegistrationView(viewsets.ModelViewSet):
