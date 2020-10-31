@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { User } from 'src/app/models/user.model';
-import { AfterViewInit, ViewChild } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -17,7 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role'];
+  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role', 'Settings'];
   filterTerm: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -27,7 +27,6 @@ export class ClientGridviewComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private changeDetectorRefs: ChangeDetectorRef) {
     this.users = new Array<User>();
-
     this.manageMembersService.getAllClients()
     .subscribe((user) => {
       const users = user;

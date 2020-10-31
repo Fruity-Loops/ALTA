@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
+
+interface Body {
+  [key: string]: any;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +18,8 @@ export class ManageMembersService {
   constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
 
   getAllClients(): Observable<any> {
-    return this.http.get<User[]>(`${this.BASEURL}/getAllClients/`).pipe(
+    return this.http.get<User[]>(`${this.BASEURL}/accessClients/`)
+    .pipe(
       catchError((err: HttpErrorResponse) => {
         console.error(`Error: ${err.status}: ${err.error}`);
         return EMPTY; // TODO: Implement proper error handling
@@ -22,7 +27,13 @@ export class ManageMembersService {
     );
   }
 
-  getSpecificClients(name): Observable<any> {
-    return this.http.post(`${this.BASEURL}/getSomeClients/`, JSON.stringify(name));
+  updateClientInfo(employee, id): Observable<any>
+  {
+    return this.http.put(`${this.BASEURL}/employee/${id}`, employee);
+  }
+
+  getEmployee(id): Observable<any>
+  {
+    return this.http.get(`${this.BASEURL}/employee/${id}`);
   }
 }
