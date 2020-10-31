@@ -2,7 +2,7 @@
 Holds urls related to user_account app.
 """
 
-from django.urls import path, include, re_path
+from django.urls import path, include
 from rest_framework import routers
 from . import views
 
