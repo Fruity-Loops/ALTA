@@ -182,19 +182,3 @@ class AccessClients(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-
-
-class SearchClients(generics.GenericAPIView):
-    """
-    Allows searching through the client list and returning the matches
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        data = request.data
-        first_name = data.get('first_name')
-        qs = CustomUser.objects.filter(first_name=first_name)
-        serializer = ClientGridSerializer(instance=qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
