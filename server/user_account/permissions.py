@@ -1,6 +1,5 @@
 from rest_framework.permissions import BasePermission
-from django_server.permissions import IsSystemAdmin, IsInventoryManager, IsCurrentUserTargetUser
-from .models import CustomUser
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser
 
 
 class UserAccountPermission(BasePermission):

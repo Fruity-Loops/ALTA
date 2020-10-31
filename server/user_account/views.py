@@ -4,10 +4,11 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, UserProfileSerializer, UserPasswordSerializer
+from django_server.permissions import IsCurrentUserTargetUser
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, \
+    UserProfileSerializer, UserPasswordSerializer
 from .models import CustomUser
 from .permissions import UserAccountPermission
-from django_server.permissions import IsCurrentUserTargetUser
 
 
 class CustomUserView(viewsets.ModelViewSet):
