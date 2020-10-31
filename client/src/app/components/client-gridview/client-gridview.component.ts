@@ -19,6 +19,7 @@ export class ClientGridviewComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role'];
   filterTerm: string;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -50,5 +51,4 @@ export class ClientGridviewComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.changeDetectorRefs.detectChanges();
   }
-
 }
