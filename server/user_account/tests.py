@@ -150,11 +150,11 @@ class RegistrationTestCase(APITestCase):
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_registration_failure_method_not_allowed(self):
-        """ User can't access the GET method at this particular endpoint """
+        """ User can't access the PUT method at this particular endpoint """
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.get("/registration/")
+        request = self.client.put("/registration/")
         self.assertEqual(request.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
+                         status.HTTP_403_FORBIDDEN)
 
     def test_registration_failure_missing_fields(self):
         """ Can't register user with missing fields """
@@ -354,3 +354,50 @@ class SearchClientsTest(APITestCase):
         }
         response = self.client.post("/getSomeClients/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class UpdateProfileTest(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        organization = Organization.objects.create(org_name="Test")
+        # Create each type of user that could be making the request
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin',
+            email='system_admin@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.test_user = CustomUser.objects.create(
+            user_name='test',
+            email='test@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.sys_admin_id = self.system_admin.id
+        self.test_user_id = self.test_user.id
+
+    def test_update_another_user_information(self):
+        """ User can't update the info of another user """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            "/updateProfile/" + str(self.test_user_id) + "/", {"user_name": "test_us"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_information(self):
+        """ User can update his own info """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            "/updateProfile/" + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
