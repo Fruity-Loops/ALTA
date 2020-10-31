@@ -1,8 +1,7 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ManageMembersService} from "../../services/manage-members.service";
 import {ActivatedRoute} from "@angular/router";
 import {User} from "../../models/user.model";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-employee-settings',
@@ -17,7 +16,6 @@ export class EmployeeSettingsComponent implements OnInit {
   password: string = this.defaultPassword;
   @Input() role: string;
   @Input() is_active: string;
-  updateGroup: FormGroup;
 
   active_states = [
     {state: 'active'}, {state: 'disabled'}
@@ -28,9 +26,7 @@ export class EmployeeSettingsComponent implements OnInit {
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
 
-  constructor(private manageMembersService: ManageMembersService,
-              private activatedRoute: ActivatedRoute,
-              private fb: FormBuilder) {}
+  constructor(private manageMembersService: ManageMembersService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     let id = this.activatedRoute.snapshot.paramMap.get("ID");
@@ -64,10 +60,6 @@ export class EmployeeSettingsComponent implements OnInit {
       this.employee = this.employee_copy;
       this.setSelectors();
     }
-  }
-
-  updateUser(): void {
-    console.log("hello")
   }
 
 }
