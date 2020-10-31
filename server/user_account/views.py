@@ -21,8 +21,7 @@ def get_employee(request, the_id):
         return Response(employee_serializer.data, status=status.HTTP_200_OK)
 
     if request.method == "PUT":
-        employee_data = JSONParser().parse(request)
-        employee_serializer = ClientGridSerializer(employee, data=employee_data)
+        employee_serializer = ClientGridSerializer(employee, data=request.data)
         if employee_serializer.is_valid():
             employee_serializer.save()
             return Response(employee_serializer.data, status=status.HTTP_200_OK)
