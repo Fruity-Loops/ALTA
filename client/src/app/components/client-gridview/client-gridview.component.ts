@@ -26,27 +26,22 @@ export class ClientGridviewComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private changeDetectorRefs: ChangeDetectorRef) {
     this.users = new Array<User>();
+
+    this.manageMembersService.getAllClients()
+    .subscribe((user) => {
+      const users = user;
+      this.populateTable(users);
+    });
   }
 
   ngOnInit(): void {
-    this.init();
   }
 
-  init(): void {
-    // Assign the data to the data source for the table to render
-    this.manageMembersService.getAllClients()
-      .subscribe((user) => {
-        const users = user;
-        this.populateTable(users);
-      });
-  }
-
-  applyFilter(filterTerm: string):void {
+  applyFilter(filterTerm: string): void {
     this.dataSource.filter = filterTerm;
   }
 
   populateTable(clients): void {
-    this.users = new Array<User>();
     clients.forEach(element => {
       this.users.push(element);
     });
