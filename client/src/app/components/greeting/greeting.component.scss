@@ -1,6 +1,21 @@
-.center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
+@import "./src/theme.scss";
+
+
+.logo-img {
+  padding-top: 10%;
+}
+
+::ng-deep .mat-tab-label {
+  color: map-get($alta-accent, 300);
+}
+
+/* active tab */
+::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label-active {
+  color: map-get($alta-accent, 200);
+  background-color: map-get($alta-primary, 500);
+}
+
+/* ink bar */
+::ng-deep .mat-ink-bar {
+  background-color: map-get($alta-accent, 500) !important;
 }
