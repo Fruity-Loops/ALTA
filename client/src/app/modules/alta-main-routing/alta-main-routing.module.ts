@@ -6,8 +6,8 @@ import { DashboardComponent } from 'src/app/components/dashboard/dashboard.compo
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { AuthGuard } from '../../guards/auth.guard';
-import {EmployeeSettingsComponent} from "../../components/employee-settings/employee-settings.component";
-import {ClientGridviewComponent} from "../../components/client-gridview/client-gridview.component";
+import {EmployeeSettingsComponent} from '../../components/employee-settings/employee-settings.component';
+import {ClientGridviewComponent} from '../../components/client-gridview/client-gridview.component';
 
 const routes: Routes = [
   {

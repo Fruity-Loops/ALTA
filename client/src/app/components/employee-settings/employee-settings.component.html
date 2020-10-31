@@ -33,8 +33,8 @@
 
           <mat-form-field>
             <mat-label for="active">Active</mat-label>
-            <mat-select id="active" [(ngModel)]="is_active" [disabled]="!edit">
-              <mat-option *ngFor="let active of active_states" [value]="active.state">
+            <mat-select id="active" [(ngModel)]="isActive" [disabled]="!edit">
+              <mat-option *ngFor="let active of activeStates" [value]="active.state">
                 {{active.state}}
               </mat-option>
             </mat-select>

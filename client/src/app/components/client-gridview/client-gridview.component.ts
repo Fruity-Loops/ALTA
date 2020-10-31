@@ -17,7 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role', "Settings"];
+  displayedColumns: string[] = ['First Name', 'Is Active', 'Last Name', 'Role', 'Settings'];
   filterTerm: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
