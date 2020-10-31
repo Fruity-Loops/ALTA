@@ -32,7 +32,6 @@ def get_employee(request, the_id):
             employee_serializer.save()
             return Response(employee_serializer.data, status=status.HTTP_200_OK)
         return Response(employee_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(status=status.HTTP_301_MOVED_PERMANENTLY)
 
 
 class RegistrationView(viewsets.ModelViewSet):

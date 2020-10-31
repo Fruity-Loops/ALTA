@@ -405,3 +405,6 @@ class EmployeeTest(APITestCase):
         self.assertEqual(data['role'], 'IM')
         self.assertEqual(data['is_active'], False)
         self.assertEqual(data['email'], 'test2@test.com')
+
+        failed_response = self.client.put('/employee/1', {'random': 37})
+        self.assertEqual(failed_response.status_code, status.HTTP_400_BAD_REQUEST)
