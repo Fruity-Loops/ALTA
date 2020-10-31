@@ -10,9 +10,10 @@ from .permissions import UserAccountPermission
 from django_server.permissions import IsCurrentUserTargetUser
 
 
-class RegistrationView(viewsets.ModelViewSet):
+class CustomUserView(viewsets.ModelViewSet):
     """
     Creates a new user in the db.
+    Gets a specific user from db.
     """
     permission_classes = [IsAuthenticated, UserAccountPermission]
     queryset = CustomUser.objects.all()
@@ -47,13 +48,6 @@ class RegistrationView(viewsets.ModelViewSet):
                     'token': auth_content['auth']}
 
         return Response(data, status=status.HTTP_201_CREATED)
-
-    # def partial_update(self, request, *args, **kwargs):
-    #     # Get our data
-    #     movies = Movie.objects.all()
-    #     # Decide how we want to return it to the API, the specific fields that we want to return defined in serializer
-    #     serializer = MovieMiniSerializer(movies, many=True)
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
