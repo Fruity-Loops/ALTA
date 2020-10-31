@@ -1,0 +1,15 @@
+@import "~@angular/material/theming";
+@include mat-core();
+
+
+$my-custom-primary: mat-palette($alta-primary);
+$my-custom-accent: mat-palette($alta-accent);
+$my-custom-warn: mat-palette($mat-red);
+
+$alta-theme: mat-light-theme($my-custom-primary, $my-custom-accent, $my-custom-warn);
+
+@include angular-material-theme($alta-theme);
+
+
+
+//"./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

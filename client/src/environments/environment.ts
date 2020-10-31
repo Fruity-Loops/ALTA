@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  open_registration: false, // Set to 'true' to allow registartion from the greeting page
+  open_registration: true, // Set to 'true' to allow registartion from the greeting page
 };
 
 /*

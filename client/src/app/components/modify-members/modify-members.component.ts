@@ -7,7 +7,7 @@ import {FormBuilder, FormControl, FormGroupDirective, NgForm, Validators} from '
 @Component({
   selector: 'app-modify-members',
   templateUrl: 'modify-members.component.html',
-  styleUrls: ['../client-gridview/client-gridview.component.css', './modify-members.component.scss']
+  styleUrls: ['../client-gridview/client-gridview.component.scss', './modify-members.component.scss']
 })
 export class ModifyMembersComponent implements OnInit {
   querrysett;

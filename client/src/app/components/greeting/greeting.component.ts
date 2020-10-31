@@ -11,5 +11,14 @@ export class GreetingComponent implements OnInit {
   openRegistraion: boolean = environment.open_registration;
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
+
+  ngAfterViewInit() {
+    document.querySelector('body').classList.add('greeting');
+  }
+
+  ngOnDestroy() {
+    document.querySelector('body').classList.remove('greeting');
+  }
 }
