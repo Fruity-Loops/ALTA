@@ -383,3 +383,25 @@ class EmployeeTest(APITestCase):
         self.assertEqual(data['last_name'], 'user')
         self.assertEqual(data['role'], 'SA')
         self.assertEqual(data['is_active'], True)
+
+    def test_put_employee(self):
+        """ Testing to see if we can update the employee we inserted """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.put('/employee/1', {
+            'id': 1,
+            'email': "test2@test.com",
+            'first_name': 'test2',
+            'last_name': 'user2',
+            'role': 'IM',
+            'is_active': False
+        })
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        employee = self.client.get('/employee/1')
+        data = employee.data
+        self.assertEqual(data['first_name'], 'test2')
+        self.assertEqual(data['last_name'], 'user2')
+        self.assertEqual(data['role'], 'IM')
+        self.assertEqual(data['is_active'], False)
+        self.assertEqual(data['email'], 'test2@test.com')
