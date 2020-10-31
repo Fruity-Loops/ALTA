@@ -14,11 +14,11 @@ export class GreetingComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     document.querySelector('body').classList.add('greeting');
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     document.querySelector('body').classList.remove('greeting');
   }
 }
