@@ -31,7 +31,10 @@ export class EmployeeSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('ID');
+    this.getEmployee();
+  }
 
+  getEmployee(): void {
     this.manageMembersService.getEmployee(this.id).subscribe(employee => {
       this.employee = {
         id: employee.id,
@@ -45,7 +48,6 @@ export class EmployeeSettingsComponent implements OnInit {
       this.setSelectors();
       this.employeeCopy = this.employee;
     });
-
   }
 
   setSelectors(): void {
