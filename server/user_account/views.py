@@ -4,7 +4,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, UserProfileSerializer
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, UserProfileSerializer, UserPasswordSerializer
 from .models import CustomUser
 from .permissions import UserAccountPermission
 from django_server.permissions import IsCurrentUserTargetUser
@@ -177,11 +177,21 @@ class AccessSomeClients(generics.GenericAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class UpdateUserProfile(generics.UpdateAPIView):
+class UpdateUserProfileView(generics.UpdateAPIView):
     """
     This view will only be responsible of updating Logged In user own information
     Http_methods_allowed are PUT and PATCH
     """
     queryset = CustomUser.objects.all()
     serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """
+    This view will only be responsible of updating Logged In user own information
+    Http_methods_allowed are PUT and PATCH
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserPasswordSerializer
     permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
