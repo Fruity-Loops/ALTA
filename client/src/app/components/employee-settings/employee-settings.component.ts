@@ -16,6 +16,7 @@ export class EmployeeSettingsComponent implements OnInit {
   password: string = this.defaultPassword;
   @Input() role: string;
   @Input() is_active: string;
+  id: string;
 
   active_states = [
     {state: 'active'}, {state: 'disabled'}
@@ -29,9 +30,9 @@ export class EmployeeSettingsComponent implements OnInit {
   constructor(private manageMembersService: ManageMembersService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    let id = this.activatedRoute.snapshot.paramMap.get("ID");
+    this.id = this.activatedRoute.snapshot.paramMap.get("ID");
 
-    this.manageMembersService.getEmployee(id).subscribe(employee => {
+    this.manageMembersService.getEmployee(this.id).subscribe(employee => {
       this.employee = {
         id: employee.id,
         first_name: employee.first_name,
@@ -60,6 +61,20 @@ export class EmployeeSettingsComponent implements OnInit {
       this.employee = this.employee_copy;
       this.setSelectors();
     }
+  }
+
+  submit(): void {
+    this.employee.is_active = this.is_active === "active";
+
+    this.roles.forEach(role => {
+      if(role.name === this.role) {
+        this.employee.role = role.abbrev;
+      }
+    })
+
+    this.manageMembersService.updateClientInfo(this.employee, this.id).subscribe(response => {
+      location.reload();
+    });
   }
 
 }

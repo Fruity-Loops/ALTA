@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import { Observable, EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
@@ -36,6 +36,11 @@ export class ManageMembersService {
   {
     const body = {[category]: field};
     return this.http.patch(`${this.BASEURL}/accessClients/${id}/`, body);
+  }
+
+  updateClientInfo(employee, id): Observable<any>
+  {
+    return this.http.put(`${this.BASEURL}/employee/${id}`, employee);
   }
 
   getEmployee(id): Observable<any>
