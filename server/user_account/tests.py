@@ -93,6 +93,7 @@ class AccessAllClientsTestCase(TestCase):
 class RegistrationTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
         organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the registration request
@@ -131,28 +132,28 @@ class RegistrationTestCase(APITestCase):
         """ User was registered correctly along with its organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post("/user/", self.registered_system_admin)
+        request = self.client.post(self.url, self.registered_system_admin)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_success_not_linked_to_organization(self):
         """ User was registered correctly without an organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post("/user/", self.registered_system_admin_2)
+        request = self.client.post(self.url, self.registered_system_admin_2)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_failure_unauthorized_request(self):
         """ Non authenticated user cannot register another user"""
         # Not an authenticated user
         self.client.force_authenticate(user=None)
-        request = self.client.post("/user/", self.registered_system_admin)
+        request = self.client.post(self.url, self.registered_system_admin)
         self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_registration_failure_method_not_allowed(self):
         """ User can't access the PUT method at this particular endpoint """
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.put("/user/")
+        request = self.client.put(self.url)
         self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -160,7 +161,7 @@ class RegistrationTestCase(APITestCase):
         """ Can't register user with missing fields """
         self.client.force_authenticate(user=self.system_admin)
         registered_missing_fields = {'user_name': 'missing_fields'}
-        request = self.client.post("/user/", registered_missing_fields)
+        request = self.client.post(self.url, registered_missing_fields)
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -170,7 +171,7 @@ class OpenRegistrationTestCase(APITestCase):
         """ User was registered correctly with its organization"""
         organization = Organization.objects.create(org_name="Test")
         data = {'user_name': 'test_case',
-                'email': 'test@email.com',
+                'email': 'test3@email.com',
                 "password": "password",
                 "first_name": "test",
                 "last_name": "user",
@@ -183,7 +184,7 @@ class OpenRegistrationTestCase(APITestCase):
     def test_registration_success_not_linked_to_organization(self):
         """ User was registered correctly without its organization"""
         data = {'user_name': 'test_case',
-                'email': 'test@email.com',
+                'email': 'test2@email.com',
                 "password": "password",
                 "first_name": "test",
                 "last_name": "user",
@@ -375,7 +376,7 @@ class UpdateProfileTest(APITestCase):
 
         self.test_user = CustomUser.objects.create(
             user_name='test',
-            email='test@email.com',
+            email='test1@email.com',
             password='password',
             first_name='system',
             last_name='admin',
