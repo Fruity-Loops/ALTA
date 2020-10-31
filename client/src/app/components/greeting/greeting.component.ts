@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 
@@ -7,7 +7,8 @@ import { environment } from 'src/environments/environment';
   templateUrl: './greeting.component.html',
   styleUrls: ['./greeting.component.scss'],
 })
-export class GreetingComponent implements OnInit {
+export class GreetingComponent implements OnInit, OnDestroy, AfterViewInit{
+
   openRegistraion: boolean = environment.open_registration;
   constructor() {}
 
