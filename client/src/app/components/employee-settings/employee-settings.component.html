@@ -1,11 +1,59 @@
 <div class="edit-container">
-  <mat-card>
-    <div>{{employee.first_name}}</div>
-    <div>{{employee.last_name}}</div>
-    <div>{{employee.role}}</div>
-    <div>{{employee.id}}</div>
-    <div>{{employee.is_active}}</div>
-    <div>{{employee.email}}</div>
-  </mat-card>
+  <button mat-button (click)="editMode(!edit)">{{edit ? "Cancel": "Edit"}}</button>
+
+  <div *ngIf="employee">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          {{edit? "Update": ""}} {{employee?.first_name + " " + employee?.last_name}}
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+          <mat-form-field>
+            <mat-label for="First Name"></mat-label>
+            <input matInput id="first_name" type="text" [disabled]="true" [value]="employee.first_name"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="Last Name"></mat-label>
+            <input matInput id="last_name" type="text" [disabled]="true" [value]="employee.last_name"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="email">Email</mat-label>
+            <input matInput id="email" type="text" [(ngModel)]="employee.email" email [disabled]="!edit"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="password">Password</mat-label>
+            <input matInput id="password" type="password" [(ngModel)]="password" minlength="5" [disabled]="!edit"/>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="active">Active</mat-label>
+            <mat-select id="active" [(ngModel)]="is_active" [disabled]="!edit">
+              <mat-option *ngFor="let active of active_states" [value]="active.state">
+                {{active.state}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label for="role">Role</mat-label>
+            <mat-select id="role2" [(ngModel)]="role" [disabled]="!edit">
+              <mat-option *ngFor="let role of roles" [value]=role.name>
+                {{role.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        <button mat-button>Submit</button>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
 </div>
 
