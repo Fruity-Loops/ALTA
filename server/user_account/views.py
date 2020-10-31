@@ -4,18 +4,20 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer
+from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, UserProfileSerializer
 from .models import CustomUser
+from .permissions import UserAccountPermission
+from django_server.permissions import IsCurrentUserTargetUser
 
 
 class RegistrationView(viewsets.ModelViewSet):
     """
     Creates a new user in the db.
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, UserAccountPermission]
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-    http_method_names = ['post']
+    http_method_names = ['post', 'get']
 
     def create(self, request, *args, **kwargs):
         """
@@ -45,6 +47,13 @@ class RegistrationView(viewsets.ModelViewSet):
                     'token': auth_content['auth']}
 
         return Response(data, status=status.HTTP_201_CREATED)
+
+    # def partial_update(self, request, *args, **kwargs):
+    #     # Get our data
+    #     movies = Movie.objects.all()
+    #     # Decide how we want to return it to the API, the specific fields that we want to return defined in serializer
+    #     serializer = MovieMiniSerializer(movies, many=True)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
@@ -172,3 +181,13 @@ class AccessSomeClients(generics.GenericAPIView):
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateUserProfile(generics.UpdateAPIView):
+    """
+    This view will only be responsible of updating Logged In user own information
+    Http_methods_allowed are PUT and PATCH
+    """
+    queryset = CustomUser.objects.all()
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]

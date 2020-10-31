@@ -15,5 +15,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
-    path('getSomeClients/', views.AccessSomeClients.as_view())
+    path('getSomeClients/', views.AccessSomeClients.as_view()),
+    path('updateProfile/<int:pk>/', views.UpdateUserProfile.as_view())
 ]
