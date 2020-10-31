@@ -8,7 +8,7 @@ import { ManageOrganizationsService } from 'src/app/services/manage-organization
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
   // Defining type of our form
