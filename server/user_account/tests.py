@@ -351,3 +351,35 @@ class LogoutTest(APITestCase):
         self.api_authentication_invalid_token()
         response = self.client.post('/logout/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class EmployeeTest(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        CustomUser.objects.create(user_name="test_user",
+                                  email="test@test.com",
+                                  id=1,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA', password="test",
+                                  is_active=True)
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin',
+            email='system_admin@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True)
+
+    def test_get_employee(self):
+        """ Testing to see if we can get the employee we inserted """
+        self.client.force_authenticate(user=self.system_admin)
+        employee = self.client.get('/employee/1')
+        data = employee.data
+        self.assertEqual(data['first_name'], 'test')
+        self.assertEqual(data['last_name'], 'user')
+        self.assertEqual(data['role'], 'SA')
+        self.assertEqual(data['is_active'], True)
