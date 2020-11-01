@@ -3,4 +3,6 @@ export interface User {
     last_name: string;
     role: string;
     is_active: boolean;
+    id: number;
+    email: string;
 }

@@ -33,7 +33,7 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.get_role, "SA")
 
 
-class AccessAllClientsTestCase(TestCase):
+class AccessClientsTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
         # Create each type of user that could be making the registration request
@@ -49,6 +49,15 @@ class AccessAllClientsTestCase(TestCase):
         CustomUser.objects.create(
             user_name='inventory_manager',
             email='inventory_manager@email.com',
+            password='password',
+            first_name='inventory',
+            last_name='manager',
+            role='IM',
+            is_active=True)
+
+        CustomUser.objects.create(
+            user_name='inventory_manager2',
+            email='inventory_manager2@email.com',
             password='password',
             first_name='inventory',
             last_name='manager',
@@ -74,11 +83,23 @@ class AccessAllClientsTestCase(TestCase):
             'role': 'IM',
             'is_active': True}
 
+        self.registered_inventory_manager2 = {
+            'user_name': 'inventory_manager2',
+            'email': 'inventory_manager2@email.com',
+            'password': 'password',
+            'first_name': 'inventory',
+            'last_name': 'manager',
+            'role': 'IM',
+            'is_active': True}
+
+        self.search_for_ims = {
+            'first_name': 'inventory'
+        }
+
     def test_obtain_all_clients(self):
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.get("/getAllClients/", self.registered_system_admin)
-        # self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+        request = self.client.get("/accessClients/", self.registered_system_admin)
         data = request.data
         self.assertEqual(data[0]['first_name'], self.registered_system_admin['first_name'])
         self.assertEqual(data[0]['last_name'], self.registered_system_admin['last_name'])
@@ -332,10 +353,18 @@ class LogoutTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class SearchClientsTest(APITestCase):
+class EmployeeTest(APITestCase):
+
     def setUp(self):
         self.client = APIClient()
-        # Create each type of user that could be making the registration request
+
+        CustomUser.objects.create(user_name="test_user",
+                                  email="test@test.com",
+                                  id=1,
+                                  first_name='test',
+                                  last_name='user',
+                                  role='SA', password="test",
+                                  is_active=True)
         self.system_admin = CustomUser.objects.create(
             user_name='system_admin',
             email='system_admin@email.com',
@@ -345,12 +374,37 @@ class SearchClientsTest(APITestCase):
             role='SA',
             is_active=True)
 
-    def test_search_clients(self):
-        """ Search clients by firstname """
-        # Authenticate a system admin
+    def test_get_employee(self):
+        """ Testing to see if we can get the employee we inserted """
         self.client.force_authenticate(user=self.system_admin)
-        data = {
-            'name': 'system'
-        }
-        response = self.client.post("/getSomeClients/", data)
+        employee = self.client.get('/employee/1')
+        data = employee.data
+        self.assertEqual(data['first_name'], 'test')
+        self.assertEqual(data['last_name'], 'user')
+        self.assertEqual(data['role'], 'SA')
+        self.assertEqual(data['is_active'], True)
+
+    def test_put_employee(self):
+        """ Testing to see if we can update the employee we inserted """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.put('/employee/1', {
+            'id': 1,
+            'email': "test2@test.com",
+            'first_name': 'test2',
+            'last_name': 'user2',
+            'role': 'IM',
+            'is_active': False
+        })
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        employee = self.client.get('/employee/1')
+        data = employee.data
+        self.assertEqual(data['first_name'], 'test2')
+        self.assertEqual(data['last_name'], 'user2')
+        self.assertEqual(data['role'], 'IM')
+        self.assertEqual(data['is_active'], False)
+        self.assertEqual(data['email'], 'test2@test.com')
+
+        failed_response = self.client.put('/employee/1', {'random': 37})
+        self.assertEqual(failed_response.status_code, status.HTTP_400_BAD_REQUEST)
