@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SidenavService } from 'src/app/services/sidenav.service';
 import { TokenService } from 'src/app/services/token.service';
+import { CurrentUserService } from 'src/app/services/current-user.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -9,34 +10,42 @@ import { TokenService } from 'src/app/services/token.service';
   styleUrls: ['./toolbar.component.css'],
 })
 export class ToolbarComponent implements OnInit {
-  constructor(private tokenService: TokenService, private router: Router, private sidenav: SidenavService) {}
+  constructor(
+    private tokenService: TokenService,
+    private router: Router,
+    private sidenav: SidenavService,
+    private currentUser: CurrentUserService
+  ) {}
 
   isVisible = true;
   @Output() drawerEvent = new EventEmitter<boolean>();
   organization;
   loggedInUser;
   loggedInUserRole;
+  subscription;
 
   ngOnInit(): void {
-    this.organization = localStorage.getItem('organization_name');
-    this.loggedInUser = localStorage.getItem('username');
-    this.loggedInUserRole = localStorage.getItem('role');
+    this.subscription = this.currentUser.sharedUser
+      .subscribe(
+          ([username, role, org]) => {
+          this.loggedInUser = username;
+          this.loggedInUserRole = role;
+          this.organization = org;
+      });
   }
 
   logout(): void {
     this.tokenService.DeleteToken(); // Delete token when user logout
+    this.currentUser.setLogOut();   // Extra step - sets the sharedUser data to an Invalid
     this.router.navigate(['login']); // Redirect user to login/register pager
-
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
-
-    // Deleting session stored locally to avoid security issues
-    localStorage.removeItem('organization_name');
-    localStorage.removeItem('username');
-    localStorage.removeItem('role');
-    localStorage.removeItem('organization_id');
   }
 
   toggleDrawer(): void {
     this.sidenav.toggle();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

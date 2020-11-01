@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
+import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 @Component({
@@ -18,9 +19,9 @@ export class SignupComponent implements OnInit {
   organizations: any = [];
   selectedOrganization: any;
   signUpButtonLabel = 'Register Account'
-  currentRole;
+  currentRole;  //
+  subscription;  //
   roles = [
-    { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
@@ -32,18 +33,22 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService,
-    private organizationsService: ManageOrganizationsService
+    private organizationsService: ManageOrganizationsService,
+    private currentUser: CurrentUserService
   ) { }
 
   ngOnInit(): void {
     this.init();
-    this.authService.getCurrentRole()
+    this.subscription = this.currentUser.sharedRole
       .subscribe((data) => {
         this.currentRole = data;
-
-        if(this.currentRole !== 'SA') {
-        this.roles.shift();
-      }
+        if(this.currentRole == 'SA') {
+            this.roles = [
+              { name: 'System Admin', abbrev: 'SA' },
+              { name: 'Inventory Manager', abbrev: 'IM' },
+              { name: 'Stock Keeper', abbrev: 'SK' },
+            ];
+        }
       });
   }
 
@@ -122,5 +127,9 @@ export class SignupComponent implements OnInit {
         this.errorMessage = err.error ? err.error.detail : err.statusText;
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

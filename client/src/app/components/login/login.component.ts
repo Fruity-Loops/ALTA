@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
+import { CurrentUserService } from 'src/app/services/current-user.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private currentUser: CurrentUserService
   ) { }
 
   ngOnInit(): void {
@@ -42,21 +44,12 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
+        this.currentUser.setLogIn(data.user, data.role, data.organization);  // Sets the logged in user's role for sharedRole
         if (data.role === 'SA') {
-          // Storing in a session locally attributes of the SA (SA are not assigned to any organization)
-          localStorage.setItem('role', data.role);
-          localStorage.setItem('username', data.user);
-
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
           }, 1000);
         } else {
-          // Storing in a session locally attributes of the IM
-          localStorage.setItem('role', data.role);
-          localStorage.setItem('organization_id', data.organization_id);
-          localStorage.setItem('username', data.user);
-          localStorage.setItem('organization_name', data.organization_name);
-
           setTimeout(() => {
             this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )

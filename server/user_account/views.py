@@ -181,4 +181,6 @@ class CurrentRole(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        return Response(request.user.role, status=status.HTTP_200_OK)
+        data = {'user': request.user.user_name, 'role': request.user.role,
+                'organization': ''}
+        return Response(data, status=status.HTTP_200_OK)
