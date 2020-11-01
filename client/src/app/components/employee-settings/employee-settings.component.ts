@@ -18,6 +18,7 @@ export class EmployeeSettingsComponent implements OnInit {
   @Input() isActive: string;
   id: string;
   isLoggedInUser = false;
+  body: any;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = [
@@ -88,5 +89,21 @@ export class EmployeeSettingsComponent implements OnInit {
       .subscribe((response) => {
         location.reload();
       });
+  }
+
+  submitPassword(): void {
+    this.employee.is_active = this.isActive === 'active';
+
+    this.body = {
+      password: this.password,
+    };
+    this.manageMembersService.updatePassword(this.body, this.id).subscribe(
+      (response) => {
+        location.reload();
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

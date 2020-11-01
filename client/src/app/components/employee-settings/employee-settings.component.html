@@ -26,11 +26,6 @@
             <input matInput id="email" type="text" [(ngModel)]="employee.email" email [disabled]="!edit"/>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label for="password">Password</mat-label>
-            <input matInput id="password" type="password" [(ngModel)]="password" minlength="5" [disabled]="!edit"/>
-          </mat-form-field>
-
           <mat-form-field *ngIf="!isLoggedInUser">
             <mat-label for="active">Active</mat-label>
             <mat-select id="active" [(ngModel)]="isActive" [disabled]="!edit">
@@ -50,6 +45,33 @@
           </mat-form-field>
 
         <button mat-button (click)="submit()">Submit</button>
+
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
+
+<div class="edit-container" *ngIf="isLoggedInUser">
+
+  <div *ngIf="employee">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          {{edit? "Update": ""}} Password
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+
+
+          <mat-form-field>
+            <mat-label for="password">Password</mat-label>
+            <input matInput id="password" type="password" [(ngModel)]="password" minlength="5" [disabled]="!edit"/>
+          </mat-form-field>
+
+
+        <button mat-button (click)="submitPassword()">Submit</button>
 
       </mat-card-content>
     </mat-card>
