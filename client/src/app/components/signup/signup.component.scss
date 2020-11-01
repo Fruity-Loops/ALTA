@@ -91,6 +91,7 @@ span.center {
 
 ::ng-deep mat-card {
   width: 95%;
+  max-width: 900px;
 }
 
 div.form-group {
@@ -106,4 +107,8 @@ div.form-group {
   padding-left: 20%;
   padding-right: 20%;
   margin: 0%;
+}
+
+img {
+  border-radius: 90%;
 }
