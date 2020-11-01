@@ -361,6 +361,7 @@ class UpdateProfileTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
         organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the request
@@ -391,7 +392,7 @@ class UpdateProfileTest(APITestCase):
         """ User can't update the info of another user """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(
-            "/updateProfile/" + str(self.test_user_id) + "/", {"user_name": "test_us"})
+            self.url + str(self.test_user_id) + "/", {"user_name": "test_us"})
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -399,7 +400,7 @@ class UpdateProfileTest(APITestCase):
         """ User can update his own info """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(
-            "/updateProfile/" + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
+            self.url + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
 
@@ -408,8 +409,9 @@ class ChangePasswordTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
-        self.sa = CustomUser.objects.create(
+        self.s_a = CustomUser.objects.create(
             user_name='system',
             email='system@email.com',
             password='123',
@@ -418,7 +420,7 @@ class ChangePasswordTest(APITestCase):
             role='SA',
             is_active=True)
 
-        self.tu = CustomUser.objects.create(
+        self.t_u = CustomUser.objects.create(
             user_name='test12',
             email='test12@email.com',
             password='123',
@@ -427,29 +429,31 @@ class ChangePasswordTest(APITestCase):
             role='SA',
             is_active=True)
 
-        self.sa_id = self.sa.id
-        self.tu_id = self.tu.id
+        self.sa_id = self.s_a.id
+        self.tu_id = self.t_u.id
 
     def test_update_another_user_password(self):
         """ User can't update the password of another user """
-        self.client.force_authenticate(user=self.sa)
+        self.client.force_authenticate(user=self.s_a)
         response = self.client.patch(
-            "/changePassword/" + str(self.tu_id) + "/", {"password": "12"})
+            self.url + str(self.tu_id) + "/", {"password": "12"})
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_password(self):
         """ User can update his own password """
-        self.client.force_authenticate(user=self.sa)
+        self.client.force_authenticate(user=self.s_a)
         response = self.client.patch(
-            "/changePassword/" + str(self.sa_id) + "/", {"password": "123456"})
+            self.url + str(self.sa_id) + "/", {"password": "123456"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
+
 
 class RetreivePersonalInfoTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
         self.user = CustomUser.objects.create(
             user_name='user',
@@ -476,7 +480,7 @@ class RetreivePersonalInfoTest(APITestCase):
         """ User can't update the password of another user """
         self.client.force_authenticate(user=self.user)
         response = self.client.get(
-            "/user/" + str(self.imp_id) + "/")
+            self.url + str(self.imp_id) + "/")
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -484,6 +488,6 @@ class RetreivePersonalInfoTest(APITestCase):
         """ User can update his own password """
         self.client.force_authenticate(user=self.user)
         response = self.client.get(
-            "/user/" + str(self.us_id) + "/")
+            self.url + str(self.us_id) + "/")
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
