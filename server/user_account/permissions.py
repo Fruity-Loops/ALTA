@@ -14,7 +14,7 @@ class UserAccountPermission(BasePermission):
              :param view: Where i can retrieve the arguments passed in url, actions ..
              :return: True/False : Whether the user is allowed to perform CRUD
         """
-        if view.action in ['retrieve']:
+        if view.action in ['retrieve', 'update', 'partial_update']:
             return IsCurrentUserTargetUser.has_permission(None, request, view)
 
         if view.action in ['create']:

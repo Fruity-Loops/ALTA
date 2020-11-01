@@ -13,13 +13,27 @@ from .permissions import UserAccountPermission
 
 class CustomUserView(viewsets.ModelViewSet):
     """
-    Creates a new user in the db.
-    Gets a specific user from db.
+    Creates a new user in the db using POST.
+    Gets a specific user from db using GET.
+    Updates a specific user information using PATCH.
+    Updates a specifc user password using PUT.
     """
     permission_classes = [IsAuthenticated, UserAccountPermission]
     queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-    http_method_names = ['post', 'get']
+    http_method_names = ['post', 'get', 'patch', 'put']
+
+    def get_serializer_class(self):
+        """
+        Overriding default serializer class to specify custom serializer
+        for each view action
+        :param: actions
+        :return: serializer
+        """
+        if self.action == 'partial_update':
+            return UserProfileSerializer
+        if self.action == 'update':
+            return UserPasswordSerializer
+        return UserSerializer
 
     def create(self, request, *args, **kwargs):
         """
@@ -176,23 +190,3 @@ class AccessSomeClients(generics.GenericAPIView):
         qs = CustomUser.objects.filter(first_name=first_name)
         serializer = ClientGridSerializer(instance=qs, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class UpdateUserProfileView(generics.UpdateAPIView):
-    """
-    This view will only be responsible of updating Logged In user own information
-    Http_methods_allowed are PUT and PATCH
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserProfileSerializer
-    permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
-
-
-class ChangePasswordView(generics.UpdateAPIView):
-    """
-    This view will only be responsible of updating Logged In user own information
-    Http_methods_allowed are PUT and PATCH
-    """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserPasswordSerializer
-    permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
