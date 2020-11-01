@@ -1,2 +1,8 @@
+coverage:
+  status:
+    project:
+      default:
+        target: 80% #We want our project to have minimum 80% test coverage, goal is 100% test coverage.
+        threshold: 10% #Commit can drop upto 10% when compared to previous base commit coverage. If it drops more than 10% this will not pass.
 fixes:
   - "::server/"

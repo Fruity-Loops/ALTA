@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
@@ -8,7 +8,7 @@ import { ManageOrganizationsService } from 'src/app/services/manage-organization
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css'],
+  styleUrls: ['./signup.component.scss'],
 })
 export class SignupComponent implements OnInit {
   // Defining type of our form
@@ -17,7 +17,7 @@ export class SignupComponent implements OnInit {
   body: any;
   organizations: any = [];
   selectedOrganization: any;
-  signUpButtonLabel = 'Register Account'
+  signUpButtonLabel = 'Register Account';
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -87,6 +87,8 @@ export class SignupComponent implements OnInit {
           // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           this.router.navigate(['modify-members']);
         }, 1000); // Waiting 1 second before redirecting the user
+        this.resetForm();
+
       },
       (err) => {
         // 2 different types of error messages
@@ -101,6 +103,13 @@ export class SignupComponent implements OnInit {
         }
       }
     );
+  }
+
+  resetForm(): void {
+    this.signupForm.reset();
+    Object.keys(this.signupForm.controls).forEach(key => {
+      this.signupForm.controls[key].setErrors(null);
+    });
   }
 
   getAllOrganizations(): void {

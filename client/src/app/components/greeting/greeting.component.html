@@ -1,14 +1,32 @@
-<div id='loginOnly' *ngIf="!openRegistraion">
-      <h1>ALTA Auditing System</h1>
-      <app-login></app-login>
+
+
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center">
+    <div class="logo-img" fxLayout="row" fxLayoutAlign="center start">
+      <img mat-card-image src="assets/img/logo.svg">
+    </div>
 </div>
 
 
-<div id=loginWithRegistration *ngIf="openRegistraion">
-  <mat-tab-group mat-align-tabs="center">
-    <mat-tab label="Login">
+<div class="container" fxLayout fxLayout.xs="column" fxLayoutAlign="center center">
+
+  <div class="login-form" fxFlex="50%">
+
+    <div id='loginOnly' *ngIf="!openRegistraion">
       <app-login></app-login>
-    </mat-tab>
-    <mat-tab label="Register"> <app-signup></app-signup> </mat-tab>
-  </mat-tab-group>
+    </div>
+
+    <div id=loginWithRegistration *ngIf="openRegistraion">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Login">
+          <app-login></app-login>
+        </mat-tab>
+        <mat-tab label="Register">
+          <app-signup></app-signup>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
 </div>
+
+</div>
+

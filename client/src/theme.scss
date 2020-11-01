@@ -1,0 +1,78 @@
+@import "./node_modules/@angular/material/_theming.scss";
+@include mat-core();
+
+$alta-primary: (
+  50 : #e5e8ea,
+  100 : #bfc5cb,
+  200 : #949ea9,
+  300 : #697786,
+  400 : #48596c,
+  500 : #283c52,
+  600 : #24364b,
+  700 : #1e2e41,
+  800 : #182738,
+  900 : #0f1a28,
+  A100 : #68a4ff,
+  A200 : #3586ff,
+  A400 : #0267ff,
+  A700 : #005ce7,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$alta-accent: (
+  50 : #eaf7f8,
+  100 : #c9ebef,
+  200 : #a6dee4,
+  300 : #82d0d9,
+  400 : #67c6d0,
+  500 : #4cbcc8,
+  600 : #45b6c2,
+  700 : #3cadbb,
+  800 : #33a5b4,
+  900 : #2497a7,
+  A100 : #e4fbff,
+  A200 : #b1f4ff,
+  A400 : #7eeeff,
+  A700 : #64eaff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #fff,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+
+$my-custom-primary: mat-palette($alta-primary);
+$my-custom-accent: mat-palette($alta-accent);
+$my-custom-warn: mat-palette($mat-red);
+
+$alta-theme: mat-light-theme($my-custom-primary, $my-custom-accent, $my-custom-warn);
+
+@include angular-material-theme($alta-theme);
+

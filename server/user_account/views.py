@@ -1,3 +1,7 @@
+"""
+This file provides functionality for all the endpoints for interacting with user accounts
+"""
+
 from django.db.models import signals
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
@@ -6,8 +10,30 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer, \
     UserProfileSerializer, UserPasswordSerializer
+from rest_framework.decorators import api_view, permission_classes
 from .models import CustomUser
 from .permissions import UserAccountPermission
+
+
+# TODO: Remove this when registration view is updated and don't forget to remove the associated URL
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def get_employee(request, the_id):
+    """
+    Function for getting an employee and updating it
+    """
+    employee = CustomUser.objects.get(id=the_id)
+
+    if request.method == 'GET':
+        employee_serializer = ClientGridSerializer(employee)
+        return Response(employee_serializer.data, status=status.HTTP_200_OK)
+
+    if request.method == "PUT":
+        employee_serializer = ClientGridSerializer(employee, data=request.data)
+        if employee_serializer.is_valid():
+            employee_serializer.save()
+            return Response(employee_serializer.data, status=status.HTTP_200_OK)
+        return Response(employee_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CustomUserView(viewsets.ModelViewSet):
@@ -170,22 +196,11 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessAllClients(viewsets.ModelViewSet):
+class AccessClients(viewsets.ModelViewSet):
+    """
+    Allows obtaining all clients and updating them
+    """
+    http_method_names = ['get', 'patch']
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get']
-
-
-class AccessSomeClients(generics.GenericAPIView):
-    http_method_names = ['post']
-    queryset = CustomUser.objects.all()
-    serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        data = request.data
-        first_name = data.get('name', '')
-        qs = CustomUser.objects.filter(first_name=first_name)
-        serializer = ClientGridSerializer(instance=qs, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)

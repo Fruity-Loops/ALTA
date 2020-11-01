@@ -45,7 +45,7 @@ describe('ManageMembersService', () => {
       });
 
     // This is where the request should be
-    const req = httpTestingController.expectOne(service.BASEURL + '/getAllClients/');
+    const req = httpTestingController.expectOne(service.BASEURL + '/accessClients/');
 
     expect(req.request.method).toEqual('GET');
 
