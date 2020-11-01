@@ -15,7 +15,8 @@ class UserAccountPermission(BasePermission):
              :return: True/False : Whether the user is allowed to perform CRUD
         """
         if view.action in ['retrieve', 'update', 'partial_update']:
-            return IsCurrentUserTargetUser.has_permission(None, request, view)
+            return IsCurrentUserTargetUser.has_permission(None, request, view) or \
+                   IsSystemAdmin.has_permission(None, request, None)
 
         if view.action in ['create']:
             return IsSystemAdmin.has_permission(None, request, None)

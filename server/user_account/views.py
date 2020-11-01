@@ -15,33 +15,12 @@ from .models import CustomUser
 from .permissions import UserAccountPermission
 
 
-# TODO: Remove this when registration view is updated and don't forget to remove the associated URL
-@api_view(['GET', 'PUT'])
-@permission_classes([IsAuthenticated])
-def get_employee(request, the_id):
-    """
-    Function for getting an employee and updating it
-    """
-    employee = CustomUser.objects.get(id=the_id)
-
-    if request.method == 'GET':
-        employee_serializer = ClientGridSerializer(employee)
-        return Response(employee_serializer.data, status=status.HTTP_200_OK)
-
-    if request.method == "PUT":
-        employee_serializer = ClientGridSerializer(employee, data=request.data)
-        if employee_serializer.is_valid():
-            employee_serializer.save()
-            return Response(employee_serializer.data, status=status.HTTP_200_OK)
-        return Response(employee_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class CustomUserView(viewsets.ModelViewSet):
     """
     Creates a new user in the db using POST.
     Gets a specific user from db using GET.
     Updates a specific user information using PATCH.
-    Updates a specifc user password using PUT.
+    Updates a specific user password using PUT.
     """
     permission_classes = [IsAuthenticated, UserAccountPermission]
     queryset = CustomUser.objects.all()
@@ -55,7 +34,7 @@ class CustomUserView(viewsets.ModelViewSet):
         :return: serializer
         """
         if self.action == 'partial_update':
-            return UserProfileSerializer
+            return ClientGridSerializer
         if self.action == 'update':
             return UserPasswordSerializer
         return UserSerializer
@@ -152,10 +131,10 @@ class LoginView(generics.GenericAPIView):
                         token = Token.objects.create(user=user)
 
                     if user.organization is None:
-                        data = {'user': username, 'role': user.role,
+                        data = {'user': username, 'user_id': user.id, 'role': user.role,
                                 'organization': '', 'token': token.key}
                     else:
-                        data = {'user': username, 'role': user.role,
+                        data = {'user': username, 'user_id': user.id, 'role': user.role,
                                 'organization_id': user.organization.org_id,
                                 'organization_name': user.organization.org_name,
                                 'token': token.key}
@@ -200,7 +179,7 @@ class AccessClients(viewsets.ModelViewSet):
     """
     Allows obtaining all clients and updating them
     """
-    http_method_names = ['get', 'patch']
+    http_method_names = ['get', 'put']
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]

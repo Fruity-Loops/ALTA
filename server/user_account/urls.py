@@ -14,6 +14,5 @@ router.register(r'accessClients', views.AccessClients, basename='accessClients/'
 urlpatterns = [
     path('', include(router.urls)),
     path('login/', views.LoginView.as_view()),
-    path('logout/', views.LogoutView.as_view()),
-    path('employee/<the_id>', views.get_employee)
+    path('logout/', views.LogoutView.as_view())
 ]
