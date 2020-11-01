@@ -435,7 +435,7 @@ class ChangePasswordTest(APITestCase):
     def test_update_another_user_password(self):
         """ User can't update the password of another user """
         self.client.force_authenticate(user=self.s_a)
-        response = self.client.patch(
+        response = self.client.put(
             self.url + str(self.tu_id) + "/", {"password": "12"})
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
@@ -443,7 +443,7 @@ class ChangePasswordTest(APITestCase):
     def test_update_own_user_password(self):
         """ User can update his own password """
         self.client.force_authenticate(user=self.s_a)
-        response = self.client.patch(
+        response = self.client.put(
             self.url + str(self.sa_id) + "/", {"password": "123456"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
