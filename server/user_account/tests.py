@@ -354,52 +354,6 @@ class LogoutTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class EmployeeTest(APITestCase):
-
-    def setUp(self):
-        self.client = APIClient()
-
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=1,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA', password="test",
-                                  is_active=True)
-        self.system_admin = CustomUser.objects.create(
-            user_name='system_admin',
-            email='system_admin@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
-            role='SA',
-            is_active=True)
-
-    def test_get_employee(self):
-        """ Testing to see if we can get the employee we inserted """
-        self.client.force_authenticate(user=self.system_admin)
-        employee = self.client.get('/employee/1')
-        data = employee.data
-        self.assertEqual(data['first_name'], 'test')
-        self.assertEqual(data['last_name'], 'user')
-        self.assertEqual(data['role'], 'SA')
-        self.assertEqual(data['is_active'], True)
-
-    def test_put_employee(self):
-        """ Testing to see if we can update the employee we inserted """
-        self.client.force_authenticate(user=self.system_admin)
-        response = self.client.put('/employee/1', {
-            'id': 1,
-            'email': "test2@test.com",
-            'first_name': 'test2',
-            'last_name': 'user2',
-            'role': 'IM',
-            'is_active': False
-        })
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
 class UpdateProfileTest(APITestCase):
 
     def setUp(self):
@@ -418,6 +372,15 @@ class UpdateProfileTest(APITestCase):
             is_active=True,
             organization=organization)
 
+        self.manager = CustomUser.objects.create(
+            user_name='inventory1',
+            email='manager2@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
+            is_active=True)
+
         self.test_user = CustomUser.objects.create(
             user_name='test',
             email='test1@email.com',
@@ -433,7 +396,7 @@ class UpdateProfileTest(APITestCase):
 
     def test_update_another_user_information(self):
         """ User can't update the info of another user """
-        self.client.force_authenticate(user=self.system_admin)
+        self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.test_user_id) + "/", {"user_name": "test_us"})
         self.assertEqual(response.status_code,
@@ -463,6 +426,15 @@ class ChangePasswordTest(APITestCase):
             role='SA',
             is_active=True)
 
+        self.i_m = CustomUser.objects.create(
+            user_name='inventory',
+            email='manager@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
+            is_active=True)
+
         self.t_u = CustomUser.objects.create(
             user_name='test12',
             email='test12@email.com',
@@ -476,8 +448,9 @@ class ChangePasswordTest(APITestCase):
         self.tu_id = self.t_u.id
 
     def test_update_another_user_password(self):
-        """ User can't update the password of another user """
-        self.client.force_authenticate(user=self.s_a)
+        """ User can't update the password of another user unless he is
+         an admin or the same user """
+        self.client.force_authenticate(user=self.i_m)
         response = self.client.put(
             self.url + str(self.tu_id) + "/", {"password": "12"})
         self.assertEqual(response.status_code,
@@ -516,12 +489,21 @@ class RetreivePersonalInfoTest(APITestCase):
             role='SA',
             is_active=True)
 
+        self.inventory = CustomUser.objects.create(
+            user_name='inventory',
+            email='manager1@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
+            is_active=True)
+
         self.us_id = self.user.id
         self.imp_id = self.imposter.id
 
     def test_update_another_user_password(self):
-        """ User can't update the password of another user """
-        self.client.force_authenticate(user=self.user)
+        """ User can't update the password of another user unless if he is an admin """
+        self.client.force_authenticate(user=self.inventory)
         response = self.client.get(
             self.url + str(self.imp_id) + "/")
         self.assertEqual(response.status_code,

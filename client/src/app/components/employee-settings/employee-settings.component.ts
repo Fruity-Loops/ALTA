@@ -35,7 +35,8 @@ export class EmployeeSettingsComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('ID');
     this.getEmployee();
 
-    if (this.id == localStorage.getItem('user_id')) {
+    // Verifying that the logged in user is accessing his informations
+    if (this.id === localStorage.getItem('user_id')) {
       this.isLoggedInUser = true;
     }
   }
