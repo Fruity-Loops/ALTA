@@ -97,8 +97,6 @@ export class EmployeeSettingsComponent implements OnInit {
   }
 
   submitPassword(): void {
-    this.employee.is_active = this.isActive === 'active';
-
     this.body = {
       password: this.password,
     };
