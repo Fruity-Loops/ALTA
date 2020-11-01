@@ -11,6 +11,14 @@
   color: map-get($alta-primary,100);
 }
 
+.centerMe {
+  margin: auto;
+  padding: 2%;
+  width: 350px;
+  z-index: 1;
+  text-align: center;
+}
+
 .error {
   color: red;
 }
@@ -29,12 +37,8 @@
   text-align: center;
 }
 
-mat-label {
-  color: map-get($alta-primary, 200);
-}
-
 .mat-form-field {
-  width: 90%;
+  width: 100%;
 }
 
 .mat-form-field + .mat-form-field {
@@ -44,7 +48,6 @@ mat-label {
 
 ::ng-deep mat-select {
   color: map-get($alta-primary, 200);
-  padding: 2%;
 }
 
 ::ng-deep .mat-select-value {
@@ -53,9 +56,54 @@ mat-label {
 
 ::ng-deep .mat-option {
   color: map-get($alta-primary, 200) !important;
-  background-color: map-get($alta-primary, 800) !important;
 }
 
-button {
-  margin: 5%;
+::ng-deep p.blank-colour {
+  color: map-get($alta-primary, 200) !important;
+}
+
+::ng-deep mat-card-title {
+  color: map-get($alta-primary, 500);
+}
+
+button.save {
+  position: absolute;
+  padding-left: 4%;
+  padding-right: 4%;
+  margin-left: 72%;
+  margin-top: 9%;
+  z-index: 2;
+  border-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary, 500);
+}
+
+.mat-stroked-button:not([disabled]) {
+  border-color: map-get($alta-primary, 500);
+}
+
+span.center {
+  margin: auto;
+}
+
+::ng-deep mat-label {
+  color: map-get($alta-primary, 500);
+}
+
+::ng-deep mat-card {
+  width: 95%;
+}
+
+div.form-group {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-left: 20%;
+  padding-right: 20%;
+  margin: 0%;
 }

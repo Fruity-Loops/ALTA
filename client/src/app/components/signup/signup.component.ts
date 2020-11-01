@@ -17,7 +17,8 @@ export class SignupComponent implements OnInit {
   body: any;
   organizations: any = [];
   selectedOrganization: any;
-  signUpButtonLabel = 'Register Account';
+  myOrganization: string;
+  signUpButtonLabel = 'Save';
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -54,6 +55,10 @@ export class SignupComponent implements OnInit {
       this.getAllOrganizations();
     }
 
+    this.myOrganization = localStorage.getItem('organization_name');
+    if (this.myOrganization === 'undefined') {
+      this.myOrganization = 'No Organization';
+    }
   }
 
   signupUser(): void {
