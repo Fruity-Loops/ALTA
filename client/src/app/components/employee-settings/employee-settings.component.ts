@@ -30,10 +30,15 @@ export class EmployeeSettingsComponent implements OnInit {
   constructor(
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) {
+    // If the ID changes in the route param then reload the component
+    this.activatedRoute.params.subscribe((routeParams) => {
+      this.id = routeParams.ID;
+      this.ngOnInit();
+    });
+  }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('ID');
     this.getEmployee();
 
     // Verifying that the logged in user is accessing his informations
