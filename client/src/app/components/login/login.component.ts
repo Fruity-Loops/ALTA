@@ -8,7 +8,7 @@ import { CurrentUserService } from 'src/app/services/current-user.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -56,10 +56,7 @@ export class LoginComponent implements OnInit {
         }
         this.successMessage = 'Login Successful';
         this.errorMessage = null;
-        this.loginForm.reset();
-        Object.keys(this.loginForm.controls).forEach(key => {
-          this.loginForm.controls[key].setErrors(null);
-        });
+        this.resetForm();
       },
       (err) => {
         if (err.error.detail) {
@@ -67,5 +64,12 @@ export class LoginComponent implements OnInit {
         }
       }
     );
+  }
+
+  resetForm(): void {
+    this.loginForm.reset();
+    Object.keys(this.loginForm.controls).forEach(key => {
+      this.loginForm.controls[key].setErrors(null);
+    });
   }
 }

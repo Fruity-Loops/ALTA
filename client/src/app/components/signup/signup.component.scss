@@ -1,0 +1,61 @@
+@import "./src/theme.scss";
+
+
+.signup-card {
+  margin: 30px 35% 30% 35%;
+  padding: 2%;
+  width: 350px;
+  max-height: 600px;
+  text-align: center;
+  background-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary,100);
+}
+
+.error {
+  color: red;
+}
+
+#errorMsg {
+  background: #f6b2b5;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+}
+
+#successMsg {
+  background: #a9f69b;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+}
+
+mat-label {
+  color: map-get($alta-primary, 200);
+}
+
+.mat-form-field {
+  width: 90%;
+}
+
+.mat-form-field + .mat-form-field {
+  padding-top: 5%;
+}
+
+
+::ng-deep mat-select {
+  color: map-get($alta-primary, 200);
+  padding: 2%;
+}
+
+::ng-deep .mat-select-value {
+  color: map-get($alta-primary, 200) !important;
+}
+
+::ng-deep .mat-option {
+  color: map-get($alta-primary, 200) !important;
+  background-color: map-get($alta-primary, 800) !important;
+}
+
+button {
+  margin: 5%;
+}

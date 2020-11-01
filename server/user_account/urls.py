@@ -9,12 +9,12 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'registration', views.RegistrationView, basename='registration')
 router.register(r'open-registration', views.OpenRegistrationView, basename='open_registration')
-router.register(r'getAllClients', views.AccessAllClients, basename='getAllClients/')
+router.register(r'accessClients', views.AccessClients, basename='accessClients/')
 router.register(r'current_role', views.CurrentRole, basename='current_role')
 
 urlpatterns = [
     path('', include(router.urls)),
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
-    path('getSomeClients/', views.AccessSomeClients.as_view())
+    path('employee/<the_id>', views.get_employee)
 ]

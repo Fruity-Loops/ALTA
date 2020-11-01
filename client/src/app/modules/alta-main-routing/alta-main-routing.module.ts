@@ -5,8 +5,9 @@ import { CreateMembersComponent } from 'src/app/components/create-members/create
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
-import { ModifyMembersComponent } from 'src/app/components/modify-members/modify-members.component';
 import { AuthGuard } from '../../guards/auth.guard';
+import {EmployeeSettingsComponent} from '../../components/employee-settings/employee-settings.component';
+import {ClientGridviewComponent} from '../../components/client-gridview/client-gridview.component';
 
 const routes: Routes = [
   {
@@ -21,8 +22,9 @@ const routes: Routes = [
       },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMembersComponent },
-      { path: 'modify-members', component: ModifyMembersComponent },
-      {path: 'manage-organizations', component: ManageOrganizationsComponent}
+      { path: 'modify-members', component: ClientGridviewComponent },
+      {path: 'manage-organizations', component: ManageOrganizationsComponent},
+      {path: 'modify-members/:ID', component: EmployeeSettingsComponent}
     ]
   },
 ];
