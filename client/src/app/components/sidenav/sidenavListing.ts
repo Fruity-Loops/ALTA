@@ -44,7 +44,7 @@ export const SideNavListings: SideNavOption[] = [
     subMenuOptions: [],
   },
   {
-    title: 'Edit Profile',
+    title: 'Settings',
     routerLink: 'modify-members/' + loggedInUser,
     subMenuOptions: [],
   },

@@ -12,7 +12,7 @@ export class EmployeeSettingsComponent implements OnInit {
   @Input() employee: User;
   @Input() employeeCopy: User;
   edit = false;
-  defaultPassword = 'XXXXXXXXXXXX';
+  defaultPassword = '';
   password: string = this.defaultPassword;
   @Input() role: string;
   @Input() isActive: string;
@@ -81,6 +81,7 @@ export class EmployeeSettingsComponent implements OnInit {
   }
 
   submit(): void {
+    //update user info
     this.employee.is_active = this.isActive === 'active';
 
     this.roles.forEach((role) => {
@@ -94,19 +95,20 @@ export class EmployeeSettingsComponent implements OnInit {
       .subscribe((response) => {
         location.reload();
       });
-  }
 
-  submitPassword(): void {
-    this.body = {
-      password: this.password,
-    };
-    this.manageMembersService.updatePassword(this.body, this.id).subscribe(
-      (response) => {
-        location.reload();
-      },
-      (err) => {
-        console.log(err);
-      }
-    );
+    // update user password
+    if (this.password.length > 0) {
+      this.body = {
+        password: this.password,
+      };
+      this.manageMembersService.updatePassword(this.body, this.id).subscribe(
+        (response) => {
+          location.reload();
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
   }
 }
