@@ -18,7 +18,7 @@ export class SignupComponent implements OnInit {
   body: any;
   organizations: any = [];
   selectedOrganization: any;
-  signUpButtonLabel = 'Register Account'
+  signUpButtonLabel = 'Save';
   currentRole;  //
   subscription;  //
   roles = [
@@ -67,7 +67,6 @@ export class SignupComponent implements OnInit {
     if (this.tokenService.GetToken()) {
       this.getAllOrganizations();
     }
-
   }
 
   signupUser(): void {

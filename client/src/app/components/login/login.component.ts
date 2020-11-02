@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
 
   resetForm(): void {
     this.loginForm.reset();
-    Object.keys(this.loginForm.controls).forEach(key => {
+    Object.keys(this.loginForm.controls).forEach((key) => {
       this.loginForm.controls[key].setErrors(null);
     });
   }
