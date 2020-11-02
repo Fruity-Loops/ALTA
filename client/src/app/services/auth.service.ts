@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
 
   register(body): Observable<any> {
-    return this.http.post(`${BASEURL}/registration/`, body);
+    return this.http.post(`${BASEURL}/user/`, body);
   }
 
   openRegister(body): Observable<any> {

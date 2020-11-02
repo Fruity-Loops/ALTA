@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.init();
@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
           // Storing in a session locally attributes of the SA (SA are not assigned to any organization)
           localStorage.setItem('role', data.role);
           localStorage.setItem('username', data.user);
+          localStorage.setItem('user_id', data.user_id);
 
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
@@ -56,6 +57,7 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('organization_id', data.organization_id);
           localStorage.setItem('username', data.user);
           localStorage.setItem('organization_name', data.organization_name);
+          localStorage.setItem('user_id', data.user_id);
 
           setTimeout(() => {
             this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
@@ -75,7 +77,7 @@ export class LoginComponent implements OnInit {
 
   resetForm(): void {
     this.loginForm.reset();
-    Object.keys(this.loginForm.controls).forEach(key => {
+    Object.keys(this.loginForm.controls).forEach((key) => {
       this.loginForm.controls[key].setErrors(null);
     });
   }

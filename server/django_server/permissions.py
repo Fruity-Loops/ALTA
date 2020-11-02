@@ -32,3 +32,21 @@ class IsInventoryManager(BasePermission):
         """
         user = CustomUser.objects.get(user_name=request.user)
         return user.role == 'IM'
+
+
+class IsCurrentUserTargetUser(BasePermission):
+    message = "You must be the login user to modify your own account"
+
+    def has_permission(self, request, view):
+        """
+        Overriding default has_permission method in order to add Custom permissions to our views
+        This can be used either inside the permission_class directly or you can call it
+        from other permission files
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is a Inventory Manager or Not
+        """
+        current_user = request.user
+        target_user = CustomUser.objects.get(id=view.kwargs['pk'])
+
+        return current_user == target_user

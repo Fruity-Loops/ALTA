@@ -58,7 +58,7 @@ describe('AuthService', () => {
 
       // We expect that we can call the endpoint defined as a param of expectOne, which is checking
       // That there is just one request.
-      const req = httpMock.expectOne(`${BASEURL}/registration/`);
+      const req = httpMock.expectOne(`${BASEURL}/user/`);
 
       // We also check that the type of request is a POST.
       expect(req.request.method).toEqual('POST');

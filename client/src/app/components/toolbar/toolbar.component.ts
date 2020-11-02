@@ -9,7 +9,11 @@ import { TokenService } from 'src/app/services/token.service';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
-  constructor(private tokenService: TokenService, private router: Router, private sidenav: SidenavService) {}
+  constructor(
+    private tokenService: TokenService,
+    private router: Router,
+    private sidenav: SidenavService
+  ) {}
 
   isVisible = true;
   @Output() drawerEvent = new EventEmitter<boolean>();
@@ -34,6 +38,7 @@ export class ToolbarComponent implements OnInit {
     localStorage.removeItem('username');
     localStorage.removeItem('role');
     localStorage.removeItem('organization_id');
+    localStorage.removeItem('user_id');
   }
 
   toggleDrawer(): void {

@@ -114,6 +114,7 @@ class AccessClientsTestCase(TestCase):
 class RegistrationTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
         organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the registration request
@@ -152,28 +153,28 @@ class RegistrationTestCase(APITestCase):
         """ User was registered correctly along with its organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post("/registration/", self.registered_system_admin)
+        request = self.client.post(self.url, self.registered_system_admin)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_success_not_linked_to_organization(self):
         """ User was registered correctly without an organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post("/registration/", self.registered_system_admin_2)
+        request = self.client.post(self.url, self.registered_system_admin_2)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_failure_unauthorized_request(self):
         """ Non authenticated user cannot register another user"""
         # Not an authenticated user
         self.client.force_authenticate(user=None)
-        request = self.client.post("/registration/", self.registered_system_admin)
+        request = self.client.post(self.url, self.registered_system_admin)
         self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_registration_failure_method_not_allowed(self):
-        """ User can't access the GET method at this particular endpoint """
+        """ User can't access the PUT method at this particular endpoint """
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.get("/registration/")
+        request = self.client.put(self.url)
         self.assertEqual(request.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
 
@@ -181,7 +182,7 @@ class RegistrationTestCase(APITestCase):
         """ Can't register user with missing fields """
         self.client.force_authenticate(user=self.system_admin)
         registered_missing_fields = {'user_name': 'missing_fields'}
-        request = self.client.post("/registration/", registered_missing_fields)
+        request = self.client.post(self.url, registered_missing_fields)
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -191,7 +192,7 @@ class OpenRegistrationTestCase(APITestCase):
         """ User was registered correctly with its organization"""
         organization = Organization.objects.create(org_name="Test")
         data = {'user_name': 'test_case',
-                'email': 'test@email.com',
+                'email': 'test3@email.com',
                 "password": "password",
                 "first_name": "test",
                 "last_name": "user",
@@ -204,7 +205,7 @@ class OpenRegistrationTestCase(APITestCase):
     def test_registration_success_not_linked_to_organization(self):
         """ User was registered correctly without its organization"""
         data = {'user_name': 'test_case',
-                'email': 'test@email.com',
+                'email': 'test2@email.com',
                 "password": "password",
                 "first_name": "test",
                 "last_name": "user",
@@ -353,18 +354,14 @@ class LogoutTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class EmployeeTest(APITestCase):
+class UpdateProfileTest(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.url = "/user/"
 
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=1,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA', password="test",
-                                  is_active=True)
+        organization = Organization.objects.create(org_name="Test")
+        # Create each type of user that could be making the request
         self.system_admin = CustomUser.objects.create(
             user_name='system_admin',
             email='system_admin@email.com',
@@ -372,39 +369,150 @@ class EmployeeTest(APITestCase):
             first_name='system',
             last_name='admin',
             role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.manager = CustomUser.objects.create(
+            user_name='inventory1',
+            email='manager2@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
             is_active=True)
 
-    def test_get_employee(self):
-        """ Testing to see if we can get the employee we inserted """
+        self.test_user = CustomUser.objects.create(
+            user_name='test',
+            email='test1@email.com',
+            password='password',
+            first_name='system',
+            last_name='admin',
+            role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.sys_admin_id = self.system_admin.id
+        self.test_user_id = self.test_user.id
+
+    def test_update_another_user_information(self):
+        """ User can't update the info of another user """
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(
+            self.url + str(self.test_user_id) + "/", {"user_name": "test_us"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_information(self):
+        """ User can update his own info """
         self.client.force_authenticate(user=self.system_admin)
-        employee = self.client.get('/employee/1')
-        data = employee.data
-        self.assertEqual(data['first_name'], 'test')
-        self.assertEqual(data['last_name'], 'user')
-        self.assertEqual(data['role'], 'SA')
-        self.assertEqual(data['is_active'], True)
+        response = self.client.patch(
+            self.url + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
 
-    def test_put_employee(self):
-        """ Testing to see if we can update the employee we inserted """
-        self.client.force_authenticate(user=self.system_admin)
-        response = self.client.put('/employee/1', {
-            'id': 1,
-            'email': "test2@test.com",
-            'first_name': 'test2',
-            'last_name': 'user2',
-            'role': 'IM',
-            'is_active': False
-        })
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+class ChangePasswordTest(APITestCase):
 
-        employee = self.client.get('/employee/1')
-        data = employee.data
-        self.assertEqual(data['first_name'], 'test2')
-        self.assertEqual(data['last_name'], 'user2')
-        self.assertEqual(data['role'], 'IM')
-        self.assertEqual(data['is_active'], False)
-        self.assertEqual(data['email'], 'test2@test.com')
+    def setUp(self):
+        self.client = APIClient()
+        self.url = "/user/"
 
-        failed_response = self.client.put('/employee/1', {'random': 37})
-        self.assertEqual(failed_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.s_a = CustomUser.objects.create(
+            user_name='system',
+            email='system@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='SA',
+            is_active=True)
+
+        self.i_m = CustomUser.objects.create(
+            user_name='inventory',
+            email='manager@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
+            is_active=True)
+
+        self.t_u = CustomUser.objects.create(
+            user_name='test12',
+            email='test12@email.com',
+            password='123',
+            first_name='test',
+            last_name='user',
+            role='SA',
+            is_active=True)
+
+        self.sa_id = self.s_a.id
+        self.tu_id = self.t_u.id
+
+    def test_update_another_user_password(self):
+        """ User can't update the password of another user unless he is
+         an admin or the same user """
+        self.client.force_authenticate(user=self.i_m)
+        response = self.client.put(
+            self.url + str(self.tu_id) + "/", {"password": "12"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_password(self):
+        """ User can update his own password """
+        self.client.force_authenticate(user=self.s_a)
+        response = self.client.put(
+            self.url + str(self.sa_id) + "/", {"password": "123456"})
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
+
+
+class RetreivePersonalInfoTest(APITestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+        self.url = "/user/"
+
+        self.user = CustomUser.objects.create(
+            user_name='user',
+            email='user@email.com',
+            password='123',
+            first_name='user',
+            last_name='test',
+            role='SA',
+            is_active=True)
+
+        self.imposter = CustomUser.objects.create(
+            user_name='imposter',
+            email='imposter@email.com',
+            password='123',
+            first_name='imposter',
+            last_name='user',
+            role='SA',
+            is_active=True)
+
+        self.inventory = CustomUser.objects.create(
+            user_name='inventory',
+            email='manager1@email.com',
+            password='123',
+            first_name='sy',
+            last_name='ad',
+            role='IM',
+            is_active=True)
+
+        self.us_id = self.user.id
+        self.imp_id = self.imposter.id
+
+    def test_update_another_user_password(self):
+        """ User can't update the password of another user unless if he is an admin """
+        self.client.force_authenticate(user=self.inventory)
+        response = self.client.get(
+            self.url + str(self.imp_id) + "/")
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_password(self):
+        """ User can update his own password """
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(
+            self.url + str(self.us_id) + "/")
+        self.assertEqual(response.status_code,
+                         status.HTTP_200_OK)
