@@ -26,11 +26,10 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscription = this.currentUser.sharedUser
-      .subscribe(
-          ([username, role, org]) => {
-          this.loggedInUser = username;
-          this.loggedInUserRole = role;
-          this.organization = org;
+      .subscribe((data) => {
+          this.loggedInUser = data.username;
+          this.loggedInUserRole = data.role;
+          this.organization = data.org;
       });
   }
 

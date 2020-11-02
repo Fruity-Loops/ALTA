@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user.model';
 
@@ -15,18 +16,23 @@ export class CurrentUserService {
   private role = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
 
-  //Access individual observer
-  sharedUsername = this.username.asObservable();
-  sharedRole = this.role.asObservable();
-  sharedOrganization = this.organization.asObservable();
-
-  //Access batch of observers
-  sharedUser = combineLatest(this.sharedUsername, this.sharedRole, this.sharedOrganization);
+  //Access Observables through mapped data
+  sharedUser = combineLatest(this.username.asObservable(),
+                             this.role.asObservable(),
+                             this.organization.asObservable())
+                             .pipe(map(([username, role, org]) => {
+                                return {
+                                  username: this.username.value,
+                                  role: this.role.value,
+                                  org: this.organization.value
+                                }
+                             }));
 
   subscription;
 
   constructor(private http: HttpClient) {
-    //gets the logged in user's role from backend
+
+    //Gets the logged in user's username, role, organization from backend
     this.subscription = this.getCurrentRole()
       .subscribe((data) => {
         this.username.next(data.user);

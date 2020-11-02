@@ -39,9 +39,9 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
-    this.subscription = this.currentUser.sharedRole
+    this.subscription = this.currentUser.sharedUser
       .subscribe((data) => {
-        this.currentRole = data;
+        this.currentRole = data.role;
         if(this.currentRole == 'SA') {
             this.roles = [
               { name: 'System Admin', abbrev: 'SA' },
