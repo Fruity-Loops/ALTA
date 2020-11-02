@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map,  debounceTime } from 'rxjs/operators';
 
 // Connection with the backend
 const BASEURL = 'http://localhost:8000';
@@ -31,7 +31,7 @@ export class AuthService {
                                   org_id: this.organization_id.value,
                                   org: this.organization.value
                                 }
-                             }));
+                             }), debounceTime(0));
 
   constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
 

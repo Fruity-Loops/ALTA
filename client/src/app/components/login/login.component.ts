@@ -3,7 +3,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
-import { CurrentUserService } from 'src/app/services/current-user.service';
 
 @Component({
   selector: 'app-login',
@@ -20,8 +19,7 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService,
-    private currentUser: CurrentUserService
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {

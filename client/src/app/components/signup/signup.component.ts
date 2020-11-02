@@ -40,7 +40,7 @@ export class SignupComponent implements OnInit {
     this.subscription = this.authService.sharedUser
       .subscribe((data) => {
         this.currentRole = data.role;
-        if(this.currentRole == 'SA') {
+        if(data.role == 'SA') {
             this.roles = [
               { name: 'System Admin', abbrev: 'SA' },
               { name: 'Inventory Manager', abbrev: 'IM' },

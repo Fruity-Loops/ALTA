@@ -1,6 +1,6 @@
 import { SideNavOption } from './sidenavOption';
 
-const loggedInUser = localStorage.getItem('user_id');
+const loggedInUser = localStorage.getItem('id');
 
 // These are the menu options listed that can be chosen from the sidenav menu
 export const SideNavListings: SideNavOption[] = [
@@ -37,11 +37,6 @@ export const SideNavListings: SideNavOption[] = [
         subMenuOptions: [],
       },
     ],
-  },
-  {
-    title: 'Manage Organizations',
-    routerLink: 'manage-organizations',
-    subMenuOptions: [],
   },
   {
     title: 'Settings',
