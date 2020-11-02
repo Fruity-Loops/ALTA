@@ -1,94 +1,123 @@
-<div class="login" fxLayoutAlign="center stretch">
-<mat-card class="signup-card">
+<mat-card>
   <mat-card-header>
-<!--    <mat-card-title>Register</mat-card-title>-->
+    <mat-card-title>Profile Creation</mat-card-title>
     <div id="errorMsg" *ngIf="errorMessage">
       <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
     </div>
   </mat-card-header>
-
+  <mat-divider></mat-divider>
   <mat-card-content>
+    <button mat-stroked-button  id="signupbtn" [disabled]="!signupForm.valid" class="save">
+      {{signUpButtonLabel}}</button><!-- if checks throws error then do not send data -->
+    <div class="centerMe">
+    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Blank Display Pic" width="100" height="100">
+    </div>
     <form class="col s12" [formGroup]="signupForm" novalidate (ngSubmit)="signupUser()">
-
-
-      <mat-form-field appearance="legacy">
-        <input matInput id="user_name" type="text" formControlName="username" />
-        <mat-label for="username">Username</mat-label>
-        <mat-error class="error" *ngIf="
-            !signupForm.controls['username'].valid &&
-            signupForm.controls['username'].touched
-          ">
-          <!-- Handeling error -->
-          Username is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="legacy">
-        <input matInput id="email" type="email" formControlName="email" />
-        <mat-label for="email">Email</mat-label>
-        <mat-error class="error" *ngIf="
-            !signupForm.controls['email'].valid &&
-            signupForm.controls['email'].touched
-          ">
-          <!-- Handeling error -->
-          Email is required
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="legacy">
-        <input matInput id="pass-word" type="password" formControlName="password" />
-        <mat-label for="pass-word">Password</mat-label>
-        <mat-error class="error" *ngIf="
-            !signupForm.controls['password'].valid &&
-            signupForm.controls['password'].touched
-          ">
-          <!-- Handeling error -->
-          Password is required
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="legacy">
-        <input matInput id="firstname" type="text" formControlName="firstname" />
-        <mat-label for="firstname">First name</mat-label>
-        <mat-error class="error" *ngIf="
-            !signupForm.controls['firstname'].valid &&
-            signupForm.controls['firstname'].touched
-          ">
-          <!-- Handeling error -->
-          First name is required
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field appearance="legacy">
-        <input matInput id="lastname" type="text" formControlName="lastname" />
-        <mat-label for="lastname">Last name</mat-label>
-        <mat-error class="error" *ngIf="
-            !signupForm.controls['lastname'].valid &&
-            signupForm.controls['lastname'].touched
-          ">
-          <!-- Handeling error -->
-          Last name is required
-        </mat-error>
-      </mat-form-field>
-      <br />
-
-
-      <mat-form-field appearance="fill">
-      <mat-select formControlName="role" required>
-        <mat-option *ngFor="let role of roles" [value]="role"> {{ role.name }} </mat-option>
-      </mat-select>
-        <mat-label>Choose a role</mat-label>
-      </mat-form-field>
-      <br />
-      <mat-form-field appearance="fill">
-      <mat-select formControlName="organization">
-        <mat-option *ngFor="let organization of organizations" [value]="organization"> {{ organization.org_name }} </mat-option>
-      </mat-select>
-        <mat-label>Choose an organization</mat-label>
-      </mat-form-field>
-      <br />
-      <button mat-raised-button class="btn waves-effect" id="signupbtn" color="accent" [disabled]="!signupForm.valid">
-        {{signUpButtonLabel}}</button><!-- if checks throws error then do not send data -->
+      <mat-grid-list cols="2" rowHeight="38:9">
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">First Name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="firstname" type="text" formControlName="firstname"placeholder="First name"/>
+              <mat-error class="error" *ngIf="
+                  !signupForm.controls['firstname'].valid &&
+                  signupForm.controls['firstname'].touched
+                ">
+                <!-- Handeling error -->
+                Firstname is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+          
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">E-mail address:</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput id="email" type="email" formControlName="email" placeholder="E-mail address"/>
+            <mat-error class="error" *ngIf="
+                !signupForm.controls['email'].valid &&
+                signupForm.controls['email'].touched
+              ">
+              <!-- Handeling error -->
+              Email is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+          <mat-label for="lastname">Last name:</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput id="lastname" type="text" formControlName="lastname" placeholder="Last name"/>
+            <mat-error class="error" *ngIf="
+                !signupForm.controls['lastname'].valid &&
+                signupForm.controls['lastname'].touched
+              ">
+              <!-- Handeling error -->
+              lastname is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="username">Employee ID:</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput id="user_name" type="text" formControlName="username" placeholder="Employee ID"/>
+            <mat-error class="error" *ngIf="
+                !signupForm.controls['username'].valid &&
+                signupForm.controls['username'].touched
+              ">
+              <!-- Handeling error -->
+              Username is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="pass-word">Password:</mat-label>
+          <mat-form-field appearance="outline">
+            <input matInput id="pass-word" type="password" formControlName="password" placeholder="Password"/>
+            <mat-error class="error" *ngIf="
+                !signupForm.controls['password'].valid &&
+                signupForm.controls['password'].touched
+              ">
+              <!-- Handeling error -->
+              Password is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="pass-word">Role:</mat-label>
+            <mat-form-field appearance="outline">
+          <mat-select formControlName="role">
+            <mat-option value="">Choose a role</mat-option>
+            <mat-option *ngFor="let role of roles" [value]="role">
+              {{ role.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="pass-word">Organization:</mat-label>
+            <mat-form-field appearance="outline">
+          <mat-select formControlName="organization">
+            <mat-option value="">Choose an organization</mat-option> <p class="blank-colour">(optional)</p>
+            <mat-option *ngFor="let organization of organizations" [value]="organization">
+              {{ organization.org_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        </mat-grid-tile>
+      </mat-grid-list>
     </form>
-
   </mat-card-content>
 </mat-card>
-</div>
+

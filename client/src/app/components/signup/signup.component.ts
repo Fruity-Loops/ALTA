@@ -17,7 +17,7 @@ export class SignupComponent implements OnInit {
   body: any;
   organizations: any = [];
   selectedOrganization: any;
-  signUpButtonLabel = 'Register Account';
+  signUpButtonLabel = 'Save';
   roles = [
     { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -53,7 +53,6 @@ export class SignupComponent implements OnInit {
     if (this.tokenService.GetToken()) {
       this.getAllOrganizations();
     }
-
   }
 
   signupUser(): void {
