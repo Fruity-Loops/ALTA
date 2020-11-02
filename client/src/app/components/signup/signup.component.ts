@@ -3,7 +3,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
-import { CurrentUserService } from 'src/app/services/current-user.service';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 @Component({
@@ -19,8 +18,8 @@ export class SignupComponent implements OnInit {
   organizations: any = [];
   selectedOrganization: any;
   signUpButtonLabel = 'Save';
-  currentRole;  //
-  subscription;  //
+  currentRole;
+  subscription;
   roles = [
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
@@ -33,13 +32,12 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService,
-    private organizationsService: ManageOrganizationsService,
-    private currentUser: CurrentUserService
+    private organizationsService: ManageOrganizationsService
   ) { }
 
   ngOnInit(): void {
     this.init();
-    this.subscription = this.currentUser.sharedUser
+    this.subscription = this.authService.sharedUser
       .subscribe((data) => {
         this.currentRole = data.role;
         if(this.currentRole == 'SA') {

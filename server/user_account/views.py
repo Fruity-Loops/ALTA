@@ -47,6 +47,7 @@ class CustomUserView(viewsets.ModelViewSet):
         :return: permission
         """
         if self.action in ['retrieve', 'update', 'partial_update']:
+
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
@@ -198,11 +199,3 @@ class AccessClients(viewsets.ModelViewSet):
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
 
-class CurrentRole(viewsets.ModelViewSet):
-    http_method_names = ['get']
-    permission_classes = [IsAuthenticated]
-
-    def list(self, request):
-        data = {'user': request.user.user_name, 'role': request.user.role,
-                'organization': ''}
-        return Response(data, status=status.HTTP_200_OK)

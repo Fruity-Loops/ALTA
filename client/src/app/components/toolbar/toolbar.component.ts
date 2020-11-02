@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { SidenavService } from 'src/app/services/sidenav.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { TokenService } from 'src/app/services/token.service';
-import { CurrentUserService } from 'src/app/services/current-user.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -14,7 +14,7 @@ export class ToolbarComponent implements OnInit {
     private tokenService: TokenService,
     private router: Router,
     private sidenav: SidenavService,
-    private currentUser: CurrentUserService
+    private authService: AuthService
   ) {}
 
   isVisible = true;
@@ -25,7 +25,7 @@ export class ToolbarComponent implements OnInit {
   subscription;
 
   ngOnInit(): void {
-    this.subscription = this.currentUser.sharedUser
+    this.subscription = this.authService.sharedUser
       .subscribe((data) => {
           this.loggedInUser = data.username;
           this.loggedInUserRole = data.role;
@@ -35,7 +35,7 @@ export class ToolbarComponent implements OnInit {
 
   logout(): void {
     this.tokenService.DeleteToken(); // Delete token when user logout
-    this.currentUser.setLogOut();   // Extra step - sets the sharedUser data to an Invalid
+    this.authService.setLogOut();   // Extra step - sets the sharedUser data to ''
     this.router.navigate(['login']); // Redirect user to login/register pager
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }

@@ -12,8 +12,10 @@ const BASEURL = 'http://localhost:8000';
 })
 export class CurrentUserService {
 
+  private user_id = new BehaviorSubject('');
   private username = new BehaviorSubject('');
   private role = new BehaviorSubject('');
+  private organization_id = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
 
   //Access Observables through mapped data
@@ -31,7 +33,7 @@ export class CurrentUserService {
   subscription;
 
   constructor(private http: HttpClient) {
-
+/*
     //Gets the logged in user's username, role, organization from backend
     this.subscription = this.getCurrentRole()
       .subscribe((data) => {
@@ -39,6 +41,7 @@ export class CurrentUserService {
         this.role.next(data.role);
         this.organization.next(data.organization);
       });
+*/
   }
 
   setLogIn(loggedInUser: any,
@@ -55,7 +58,4 @@ export class CurrentUserService {
     this.organization.next('Invalid');
   }
 
-  getCurrentRole(): Observable<any> {
-    return this.http.get<User>(`${BASEURL}/current_role/`);
-  }
 }

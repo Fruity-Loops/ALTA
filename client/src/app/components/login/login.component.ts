@@ -44,7 +44,8 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
-        this.currentUser.setLogIn(data.user, data.role, data.organization);  // Sets the logged in user's role for sharedRole
+        //Set the logged in user's data for components to use when hiding or displaying elements
+        this.authService.setLogin(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
         if (data.role === 'SA') {
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
