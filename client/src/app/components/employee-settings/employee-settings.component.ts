@@ -81,7 +81,7 @@ export class EmployeeSettingsComponent implements OnInit {
   }
 
   submit(): void {
-    //update user info
+    // update user info
     this.employee.is_active = this.isActive === 'active';
 
     this.roles.forEach((role) => {
