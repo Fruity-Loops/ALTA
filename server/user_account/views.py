@@ -8,10 +8,10 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
-from .permissions import UserAccountPermission
 
 
 class CustomUserView(viewsets.ModelViewSet):
@@ -21,7 +21,6 @@ class CustomUserView(viewsets.ModelViewSet):
     Updates a specific user information using PATCH.
     Updates a specific user password using PUT.
     """
-    permission_classes = [IsAuthenticated, UserAccountPermission]
     queryset = CustomUser.objects.all()
     http_method_names = ['post', 'get', 'patch', 'put']
 
@@ -37,6 +36,20 @@ class CustomUserView(viewsets.ModelViewSet):
         if self.action == 'update':
             return UserPasswordSerializer
         return UserSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        Overriding default permission class to specify custom permission
+        for each view action
+        :param: actions
+        :return: permission
+        """
+        if self.action in ['retrieve', 'update', 'partial_update']:
+            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
+        else:
+            permission_classes = [IsAuthenticated, IsSystemAdmin]
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         """
