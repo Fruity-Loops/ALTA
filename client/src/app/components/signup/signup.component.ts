@@ -3,7 +3,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
-import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 @Component({
   selector: 'app-signup',
@@ -31,8 +30,7 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private tokenService: TokenService,
-    private organizationsService: ManageOrganizationsService
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
@@ -61,10 +59,6 @@ export class SignupComponent implements OnInit {
       role: ['', Validators.required],
       organization: [''],
     });
-
-    if (this.tokenService.GetToken()) {
-      this.getAllOrganizations();
-    }
   }
 
   signupUser(): void {
@@ -121,18 +115,6 @@ export class SignupComponent implements OnInit {
     Object.keys(this.signupForm.controls).forEach(key => {
       this.signupForm.controls[key].setErrors(null);
     });
-  }
-
-  getAllOrganizations(): void {
-    this.organizationsService.getAllOrganizations().subscribe(
-      (data) => {
-        this.organizations = data;
-        this.errorMessage = '';
-      },
-      (err) => {
-        this.errorMessage = err.error ? err.error.detail : err.statusText;
-      }
-    );
   }
 
   ngOnDestroy() {
