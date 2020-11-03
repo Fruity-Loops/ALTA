@@ -34,7 +34,6 @@ describe('AuthService', () => {
   // Angular default test added when you generate a service using the CLI
   it('should be created', () => {
     expect(authService).toBeTruthy();
-    
     // Expects a GET call to backend that passes a null user_id
     const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
     expect(reqId.request.method).toEqual('GET');
@@ -81,7 +80,6 @@ describe('AuthService', () => {
   describe('#login()', () => {
     it('returned Observable should match the right data', () => {
       const mockSysAdmin2 = {
-        //user_id: 1,
         user_name: 'angular',
         password: '12',
       };

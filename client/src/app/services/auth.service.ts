@@ -43,7 +43,7 @@ export class AuthService {
             this.username.next(data.user_name);
             this.role.next(data.role);
             this.organizationId.next(data.organization);
-            //TODO: update GET call to return organization's name
+            // TODO: update GET call to return organization's name
             this.organization.next(data.organization_name);
           });
     }
