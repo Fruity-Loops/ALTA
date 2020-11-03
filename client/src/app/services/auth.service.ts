@@ -65,7 +65,7 @@ export class AuthService {
     return this.http.get(`${BASEURL}/user/${id}/`);
   }
 
-  private setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
+  setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
       this.userId.next(nextUserId);
       this.username.next(nextUser);
       this.role.next(nextRole);
@@ -74,11 +74,7 @@ export class AuthService {
 
       localStorage.setItem('id', nextUserId);
   }
-
-  setLogin(loggedInUserId: any, loggedInUser: any, loggedInRole: any, loggedInOrgId: any, loggedInOrg: any): void {
-     this.setNext(loggedInUserId, loggedInUser, loggedInRole, loggedInOrgId, loggedInOrg);
-  }
-
+  
   setLogOut(): void {
     this.setNext('', '', '', '', '');
   }
