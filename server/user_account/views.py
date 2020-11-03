@@ -12,7 +12,6 @@ from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
-from rest_framework.permissions import IsAuthenticated
 
 
 class CustomUserView(viewsets.ModelViewSet):
@@ -197,4 +196,3 @@ class AccessClients(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
-
