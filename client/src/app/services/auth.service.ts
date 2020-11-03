@@ -20,23 +20,23 @@ export class AuthService {
   subscription;
 
   // Access Observables through mapped data
-  sharedUser = combineLatest(this.userId.asObservable(),
+  sharedUser = combineLatest([this.userId.asObservable(),
                              this.username.asObservable(),
                              this.role.asObservable(),
                              this.organizationId.asObservable(),
-                             this.organization.asObservable())
-                             .pipe(map(([user_id, username, role, org_id, org]) => {
+                             this.organization.asObservable()])
+                             .pipe(map(([userId, username, role, orgId, org]) => {
                                 return {
-                                  user_id: this.userId.value,
+                                  userId: this.userId.value,
                                   username: this.username.value,
                                   role: this.role.value,
-                                  org_id: this.organizationId.value,
+                                  orgId: this.organizationId.value,
                                   org: this.organization.value
-                                }
+                                };
                              }), debounceTime(0));
 
   constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
-    if(localStorage.getItem('id') !== '') {
+    if (localStorage.getItem('id') !== '') {
         this.subscription = this.getCurrentUser(localStorage.getItem('id'))
           .subscribe((data) => {
             this.userId.next(data.user_id);
@@ -82,7 +82,7 @@ export class AuthService {
     this.setNext('', '', '', '', '');
   }
 
-  OnDestroy() {
+  OnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

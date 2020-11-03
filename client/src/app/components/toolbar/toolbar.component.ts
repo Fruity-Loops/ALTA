@@ -29,7 +29,7 @@ export class ToolbarComponent implements OnInit {
       .subscribe((data) => {
           this.loggedInUser = data.username;
           this.loggedInUserRole = data.role;
-          this.organization = data.org;
+          this.organization = data.orgId;
       });
   }
 
@@ -44,7 +44,7 @@ export class ToolbarComponent implements OnInit {
     this.sidenav.toggle();
   }
 
-  OnDestroy() {
+  OnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

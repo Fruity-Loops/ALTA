@@ -115,7 +115,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  OnDestroy() {
+  OnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }

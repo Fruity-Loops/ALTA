@@ -27,7 +27,7 @@ export class SideNavComponent implements OnInit {
       });
   }
 
-  OnDestroy() {
+  OnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }
