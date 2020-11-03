@@ -11,26 +11,26 @@ const BASEURL = 'http://localhost:8000';
 })
 export class AuthService {
 
-  private user_id = new BehaviorSubject('');
+  private userId = new BehaviorSubject('');
   private username = new BehaviorSubject('');
   private role = new BehaviorSubject('');
-  private organization_id = new BehaviorSubject('');
+  private organizationId = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
 
   subscription;
 
-  //Access Observables through mapped data
-  sharedUser = combineLatest(this.user_id.asObservable(),
+  // Access Observables through mapped data
+  sharedUser = combineLatest(this.userId.asObservable(),
                              this.username.asObservable(),
                              this.role.asObservable(),
-                             this.organization_id.asObservable(),
+                             this.organizationId.asObservable(),
                              this.organization.asObservable())
                              .pipe(map(([user_id, username, role, org_id, org]) => {
                                 return {
-                                  user_id: this.user_id.value,
+                                  user_id: this.userId.value,
                                   username: this.username.value,
                                   role: this.role.value,
-                                  org_id: this.organization_id.value,
+                                  org_id: this.organizationId.value,
                                   org: this.organization.value
                                 }
                              }), debounceTime(0));
@@ -39,10 +39,10 @@ export class AuthService {
     if(localStorage.getItem('id') !== '') {
         this.subscription = this.getCurrentUser(localStorage.getItem('id'))
           .subscribe((data) => {
-            this.user_id.next(data.user_id);
+            this.userId.next(data.user_id);
             this.username.next(data.user_name);
             this.role.next(data.role);
-            this.organization_id.next(data.organization_id);
+            this.organizationId.next(data.organization_id);
             this.organization.next(data.organization_name);
           });
     }
@@ -64,26 +64,18 @@ export class AuthService {
     return this.http.get(`${BASEURL}/user/${id}/`);
   }
 
-  private setNext(nextUser_Id: any,
-          nextUser: any,
-          nextRole: any,
-          nextOrg_Id: any,
-          nextOrg: any): void {
-    this.user_id.next(nextUser_Id);
-    this.username.next(nextUser);
-    this.role.next(nextRole);
-    this.organization_id.next(nextOrg_Id);
-    this.organization.next(nextOrg);
+  private setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
+      this.userId.next(nextUserId);
+      this.username.next(nextUser);
+      this.role.next(nextRole);
+      this.organizationId.next(nextOrgId);
+      this.organization.next(nextOrg);
 
-    localStorage.setItem('id', nextUser_Id);
+      localStorage.setItem('id', nextUserId);
   }
 
-  setLogin(loggedInUser_Id: any,
-           loggedInUser: any,
-           loggedInRole: any,
-           loggedInOrg_Id: any,
-           loggedInOrg: any): void {
-     this.setNext(loggedInUser_Id, loggedInUser, loggedInRole, loggedInOrg_Id, loggedInOrg);
+  setLogin(loggedInUserId: any, loggedInUser: any, loggedInRole: any, loggedInOrgId: any, loggedInOrg: any): void {
+     this.setNext(loggedInUserId, loggedInUser, loggedInRole, loggedInOrgId, loggedInOrg);
   }
 
   setLogOut(): void {

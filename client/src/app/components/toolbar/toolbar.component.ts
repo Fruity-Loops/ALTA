@@ -44,7 +44,7 @@ export class ToolbarComponent implements OnInit {
     this.sidenav.toggle();
   }
 
-  ngOnDestroy() {
+  OnDestroy() {
     this.subscription.unsubscribe();
   }
 }

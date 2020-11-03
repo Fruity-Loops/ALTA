@@ -17,7 +17,6 @@ export class SignupComponent implements OnInit {
   organizations: any = [];
   selectedOrganization: any;
   signUpButtonLabel = 'Save';
-  currentRole;
   subscription;
   roles = [
     { name: 'Inventory Manager', abbrev: 'IM' },
@@ -37,8 +36,7 @@ export class SignupComponent implements OnInit {
     this.init();
     this.subscription = this.authService.sharedUser
       .subscribe((data) => {
-        this.currentRole = data.role;
-        if(data.role == 'SA') {
+        if (data.role === 'SA') {
             this.roles = [
               { name: 'System Admin', abbrev: 'SA' },
               { name: 'Inventory Manager', abbrev: 'IM' },
@@ -117,7 +115,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  ngOnDestroy() {
+  OnDestroy() {
     this.subscription.unsubscribe();
   }
 }
