@@ -16,7 +16,7 @@
   <mat-card-content>
     <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
       <mat-form-field appearance="legacy" class="input">
-        <mat-label for="user-name">Username</mat-label>
+        <mat-label for="user-name">E-mail address</mat-label>
         <input matInput id="user-name" type="text" formControlName="username" />
 
         <mat-error class="error" *ngIf="
@@ -24,7 +24,7 @@
             loginForm.controls['username'].touched
           ">
           <!-- Handeling error -->
-          Username is required
+          Email is required
         </mat-error>
       </mat-form-field>
 
