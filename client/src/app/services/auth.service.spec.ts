@@ -34,6 +34,10 @@ describe('AuthService', () => {
   // Angular default test added when you generate a service using the CLI
   it('should be created', () => {
     expect(authService).toBeTruthy();
+    
+    // Expects a GET call to backend that passes a null user_id
+    const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
+    expect(reqId.request.method).toEqual('GET');
   });
 
   // Test registration
@@ -66,6 +70,10 @@ describe('AuthService', () => {
       // Then we ‘flush’ or respond with the mock data that we pass as a parameter,
       // And that causes the Observable to resolve and evaluate the expect on line 55.
       req.flush(mockSysAdmin);
+
+      // Expects a GET call to backend that passes a null user_id
+      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
+      expect(reqId.request.method).toEqual('GET');
     });
   });
 
@@ -73,6 +81,7 @@ describe('AuthService', () => {
   describe('#login()', () => {
     it('returned Observable should match the right data', () => {
       const mockSysAdmin2 = {
+        //user_id: 1,
         user_name: 'angular',
         password: '12',
       };
@@ -86,6 +95,9 @@ describe('AuthService', () => {
       expect(req.request.method).toEqual('POST');
 
       req.flush(mockSysAdmin2);
+
+      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
+      expect(reqId.request.method).toEqual('GET');
     });
   });
 });
