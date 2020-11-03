@@ -42,7 +42,8 @@ export class AuthService {
             this.userId.next(data.user_id);
             this.username.next(data.user_name);
             this.role.next(data.role);
-            this.organizationId.next(data.organization_id);
+            this.organizationId.next(data.organization);
+            //TODO: update GET call to return organization's name
             this.organization.next(data.organization_name);
           });
     }
