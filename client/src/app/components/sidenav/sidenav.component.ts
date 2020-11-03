@@ -24,20 +24,10 @@ export class SideNavComponent implements OnInit {
     this.subscription = this.authService.sharedUser
       .subscribe((data) => {
         this.currentRole = data.role;
-        //TODO: improve method of removing options unavailable to SA users
-        if(data.role == 'SA') {
-          this.options.splice(4, 0, {
-            title: 'Manage Organizations',
-            routerLink: 'manage-organizations',
-            subMenuOptions: [],
-          });
-        } else {
-          this.options = SideNavListings;
-        }
       });
   }
 
-  ngOnDestroy() {
+  OnDestroy() {
     this.subscription.unsubscribe();
   }
 }

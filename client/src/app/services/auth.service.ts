@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
@@ -16,6 +16,8 @@ export class AuthService {
   private role = new BehaviorSubject('');
   private organization_id = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
+
+  subscription;
 
   //Access Observables through mapped data
   sharedUser = combineLatest(this.user_id.asObservable(),
@@ -35,7 +37,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
     if(localStorage.getItem('id') !== '') {
-        this.getCurrentUser(localStorage.getItem('id'))
+        this.subscription = this.getCurrentUser(localStorage.getItem('id'))
           .subscribe((data) => {
             this.user_id.next(data.user_id);
             this.username.next(data.user_name);
@@ -86,5 +88,9 @@ export class AuthService {
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
+  }
+
+  OnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
