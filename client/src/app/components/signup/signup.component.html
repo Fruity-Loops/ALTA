@@ -103,8 +103,20 @@
         </mat-form-field>
         </div>
         </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="pass-word">Organization:</mat-label>
+            <mat-form-field appearance="outline">
+          <mat-select formControlName="organization">
+            <mat-option value="">Choose an organization</mat-option> <p class="blank-colour">(optional)</p>
+            <mat-option *ngFor="let organization of organizations" [value]="organization">
+              {{ organization.org_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        </div>
+        </mat-grid-tile>
       </mat-grid-list>
     </form>
   </mat-card-content>
 </mat-card>
-
