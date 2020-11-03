@@ -1,16 +1,16 @@
-import { AppPage } from './app.po';
+import { GreetingPage } from './greeting.po';
 import { browser, logging } from 'protractor';
 
-describe('workspace-project App', () => {
-  let page: AppPage;
+describe('E2E Greeting Page', () => {
+  let page: GreetingPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new GreetingPage();
   });
 
-  it('should display welcome message', () => {
+  it('should render login form', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('alta-front app is running!');
+    expect(page.getLoginForm()).toBeTruthy();
   });
 
   afterEach(async () => {
