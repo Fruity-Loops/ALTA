@@ -12,5 +12,5 @@ describe('E2E Greeting Page', () => {
     page.navigateTo();
     expect(page.getLoginForm()).toBeTruthy();
   });
-  
+
 });

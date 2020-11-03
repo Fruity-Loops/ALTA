@@ -1,3 +1,4 @@
+import { env } from 'src/environments/environment';
 // Http testing module and mocking controller
 import {
   HttpClientTestingModule,
@@ -10,7 +11,7 @@ import { AuthService } from './auth.service';
 describe('AuthService', () => {
   let authService: AuthService;
   let httpMock: HttpTestingController;
-  const BASEURL = 'http://localhost:8000';
+  const BASEURL = env.api_root;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

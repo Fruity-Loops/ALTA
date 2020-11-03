@@ -1,3 +1,4 @@
+import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
@@ -17,7 +18,7 @@ interface Body {
 })
 export class ManageMembersService {
   // Connection with the backend
-  BASEURL = 'http://localhost:8000';
+  BASEURL = env.api_root;
 
   constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
 

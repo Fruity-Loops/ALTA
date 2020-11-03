@@ -1,9 +1,10 @@
+import { env } from '../../src/environments/environment';
 var http = require('http')
 
 describe('Test Backend', () => {
 
   it('backend service should be online', () => {
-    http.get("http://localhost:8000/", (res) => {
+    http.get(env.api_root, (res) => {
       var api = '';
       res.on("data", function (endpoint) {
         api += endpoint;
