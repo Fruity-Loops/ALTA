@@ -48,6 +48,8 @@ class CustomUserView(viewsets.ModelViewSet):
         if self.action in ['retrieve', 'update', 'partial_update']:
 
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
+        if self.action in ['create']:
+            permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
@@ -65,21 +67,25 @@ class CustomUserView(viewsets.ModelViewSet):
         }
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
-        # TODO: Limit account creation by role
-        if auth_user.role != 'SA':
-            pass
+        # Limit account creation by role
+        if (auth_user.role == 'SA') or (auth_user.role == 'IM' and (auth_user.organization_id == request.data.get('organization', ''))):
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        if user.organization is None:
-            data = {'user': user.user_name, 'organization': '',
-                    'token': auth_content['auth']}
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+
+            if user.organization is None:
+                data = {'user': user.user_name, 'organization': '',
+                            'token': auth_content['auth']}
+            else:
+                data = {'user': user.user_name, 'organization': user.organization.org_id,
+                            'token': auth_content['auth']}
+
+                return Response(data, status=status.HTTP_201_CREATED)
+
         else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id,
-                    'token': auth_content['auth']}
-
-        return Response(data, status=status.HTTP_201_CREATED)
+            return Response({'detail': 'Attempted to create an unauthorized account'},
+                            status=status.HTTP_401_UNAUTHORIZED)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
