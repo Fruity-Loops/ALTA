@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { AuthService } from 'src/app/services/auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SideNavComponent } from './sidenav.component';
 import { SideNavListings } from './sidenavListing';
@@ -7,14 +9,21 @@ import { SideNavListings } from './sidenavListing';
 describe('SideNavComponent', () => {
   let component: SideNavComponent;
   let fixture: ComponentFixture<SideNavComponent>;
+  let authService: AuthService;
 
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [SideNavComponent]
-    })
-      .compileComponents();
+      declarations: [SideNavComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [
+        {
+          provide: AuthService,
+        }
+      ],
+    }).compileComponents();
+
+    authService = TestBed.inject(AuthService);
   });
 
   beforeEach(() => {

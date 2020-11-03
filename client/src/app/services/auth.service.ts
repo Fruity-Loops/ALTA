@@ -34,15 +34,16 @@ export class AuthService {
                              }), debounceTime(0));
 
   constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
-
-    this.getCurrentUser(localStorage.getItem('id'))
-      .subscribe((data) => {
-        this.user_id.next(data.user_id);
-        this.username.next(data.user_name);
-        this.role.next(data.role);
-        this.organization_id.next(data.organization_id);
-        this.organization.next(data.organization_name);
-      });
+    if(localStorage.getItem('id') !== '') {
+        this.getCurrentUser(localStorage.getItem('id'))
+          .subscribe((data) => {
+            this.user_id.next(data.user_id);
+            this.username.next(data.user_name);
+            this.role.next(data.role);
+            this.organization_id.next(data.organization_id);
+            this.organization.next(data.organization_name);
+          });
+    }
   }
 
   register(body): Observable<any> {
