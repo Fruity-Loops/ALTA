@@ -81,7 +81,7 @@ class CustomUserView(viewsets.ModelViewSet):
                 data = {'user': user.user_name, 'organization': user.organization.org_id,
                             'token': auth_content['auth']}
 
-                return Response(data, status=status.HTTP_201_CREATED)
+            return Response(data, status=status.HTTP_201_CREATED)
 
         else:
             return Response({'detail': 'Attempted to create an unauthorized account'},
