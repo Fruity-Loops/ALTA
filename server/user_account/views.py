@@ -66,10 +66,9 @@ class CustomUserView(viewsets.ModelViewSet):
         }
 
         auth_user = CustomUser.objects.get(user_name=auth_content['user'])
-        #TODO: limit account creation for SK users
-        if auth_user.role != 'SA' and request.data.get('role', '') == 'SA':
-                return Response({'detail': 'Attempted to create an unauthorized account'},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # TODO: Limit account creation by role
+        if auth_user.role != 'SA':
+            pass
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
