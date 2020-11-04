@@ -1,0 +1,47 @@
+[
+    {
+        "model": "user_account.customuser",
+        "pk": null,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$IpewaBfp2FPu$xsy5D9oc6bSp/jZPLjIw0K7/uCd/hI8SGo/cjheOqgE=",
+            "last_login": null,
+            "user_name": "system_admin",
+            "first_name": "system",
+            "last_name": "admin",
+            "role": "SA",
+            "is_active": true,
+            "email": "system_admin@email.com",
+            "organization": null
+        }
+    },
+    {
+        "model": "user_account.customuser",
+        "pk": null,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$w5q0NJHiVE5Q$+yLo1mHn69EVg5PjtOxUU80VwPkh8d6dWB/lYlKQp0Q=",
+            "last_login": null,
+            "user_name": "inventory_manager",
+            "first_name": "inventory",
+            "last_name": "manager",
+            "role": "IM",
+            "is_active": true,
+            "email": "inventory@manager.com",
+            "organization": null
+        }
+    },
+    {
+        "model": "user_account.customuser",
+        "pk": null,
+        "fields": {
+            "password": "pbkdf2_sha256$180000$ZudHhhNxZ2H3$sAf1JV/2A02isqsTcPr8VgxVnamVtijn3rcvcvcHcDw=",
+            "last_login": null,
+            "user_name": "stock_keeper",
+            "first_name": "stock",
+            "last_name": "keeper",
+            "role": "SK",
+            "is_active": true,
+            "email": "stock@keeper.com",
+            "organization": null
+        }
+    }
+]
