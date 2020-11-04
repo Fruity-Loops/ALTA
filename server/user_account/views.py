@@ -8,7 +8,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsPermittedToCreate
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
@@ -48,7 +48,7 @@ class CustomUserView(viewsets.ModelViewSet):
         if self.action in ['retrieve', 'update', 'partial_update']:
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
         elif self.action in ['create']:
-            permission_classes = [IsAuthenticated, IsPermittedToCreate | IsSystemAdmin]
+            permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
