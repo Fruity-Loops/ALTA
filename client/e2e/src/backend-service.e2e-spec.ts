@@ -1,18 +1,18 @@
 import { env } from '../../src/environments/environment';
-var http = require('http')
+const http = require('http');
 
 describe('Test Backend', () => {
 
   it('backend service should be online', () => {
     http.get(env.api_root, (res) => {
-      var api = '';
-      res.on("data", function (endpoint) {
+      let api = '';
+      res.on('data', (endpoint) => {
         api += endpoint;
       });
 
-      res.on('end', function () {
-        expect(res.statusCode).toBe(400);
+      res.on('end', () => {
+        expect(res.statusCode).toBe(200);
       });
-    })
+    });
   });
 });
