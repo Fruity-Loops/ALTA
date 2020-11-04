@@ -18,8 +18,8 @@ export class SignupComponent implements OnInit {
   organizations: any = [];
   selectedOrganization: any;
   signUpButtonLabel = 'Save';
+  subscription;
   roles = [
-    { name: 'System Admin', abbrev: 'SA' },
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
@@ -36,6 +36,16 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {
     this.init();
+    this.subscription = this.authService.sharedUser
+      .subscribe((data) => {
+        if (data.role === 'SA') {
+            this.roles = [
+              { name: 'System Admin', abbrev: 'SA' },
+              { name: 'Inventory Manager', abbrev: 'IM' },
+              { name: 'Stock Keeper', abbrev: 'SK' },
+            ];
+        }
+      });
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field
@@ -121,5 +131,9 @@ export class SignupComponent implements OnInit {
         this.errorMessage = err.error ? err.error.detail : err.statusText;
       }
     );
+  }
+
+  OnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

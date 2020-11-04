@@ -31,7 +31,15 @@ class IsInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(user_name=request.user)
-        return user.role == 'IM'
+
+        if view in ['list']:
+            return user.role == 'IM'
+        else:
+            if user.role == 'IM':
+                if request.data.get('role', '') != 'SA' and \
+                        user.organization_id == request.data.get('organization', ''):
+                    return True
+            return False
 
 
 class IsCurrentUserTargetUser(BasePermission):

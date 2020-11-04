@@ -62,6 +62,10 @@ describe('TokenInterceptor', () => {
     );
     expect(httpReq.request.headers.get('Accept')).toBe('application/json');
 
+    // Expects a GET call to backend that passes a null user_id
+    const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
+    expect(reqId.request.method).toEqual('GET');
+
     //  TODO: Should check out how to see if tokens are set
     // Expect(httpReq.request.headers.has('Authorization')).toEqual(true);
   });
