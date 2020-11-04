@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AuthService } from 'src/app/services/auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SidenavService } from 'src/app/services/sidenav.service';
 import { ToolbarComponent } from './toolbar.component';
@@ -6,17 +8,23 @@ import { ToolbarComponent } from './toolbar.component';
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
+  let authService: AuthService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ToolbarComponent ],
-      imports: [ RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         {
           provide: SidenavService,
-        }],
-    })
-    .compileComponents();
+        },
+        {
+          provide: AuthService,
+        }
+        ],
+    }).compileComponents();
+
+    authService = TestBed.inject(AuthService);
   });
 
   beforeEach(() => {
