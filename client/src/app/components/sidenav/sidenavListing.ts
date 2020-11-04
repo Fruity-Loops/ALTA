@@ -24,19 +24,8 @@ export const SideNavListings: SideNavOption[] = [
   },
   {
     title: 'Manage Members',
-    routerLink: 'manage-members',
-    subMenuOptions: [
-      {
-        title: 'Create Members',
-        routerLink: 'create-members',
-        subMenuOptions: [],
-      },
-      {
-        title: 'Modify Members',
-        routerLink: 'modify-members',
-        subMenuOptions: [],
-      },
-    ],
+    routerLink: 'modify-members',
+    subMenuOptions: [],
   },
   {
     title: 'Manage Organizations',
