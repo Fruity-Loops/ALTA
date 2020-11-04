@@ -47,6 +47,9 @@ class CustomUserView(viewsets.ModelViewSet):
         """
         if self.action in ['retrieve', 'update', 'partial_update']:
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
+
+        # TODO: Validate requested user id matches requested organization in DB
+        # for permissions unrelated to create
         elif self.action in ['create']:
             permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         else:
