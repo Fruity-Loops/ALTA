@@ -23,7 +23,8 @@ const routes: Routes = [
       { path: 'create-members', component: CreateMembersComponent },
       { path: 'modify-members', component: ClientGridviewComponent },
       { path: 'manage-organizations', component: ManageOrganizationsComponent },
-      { path: 'modify-members/:ID', component: EmployeeSettingsComponent }
+      { path: 'modify-members/:ID', component: EmployeeSettingsComponent },
+      { path: 'settings', component: EmployeeSettingsComponent }
     ]
   },
 ];
