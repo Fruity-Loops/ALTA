@@ -243,14 +243,14 @@ class LoginTest(APITestCase):
     def test_login_invalid_user(self):
         """ User that does not exist in database """
         response = self.client.post(
-            "/login/", {"user_name": "test_us", "password": "test"})
+            "/login/", {"email": "t@test.com", "password": "test"})
         self.assertEqual(response.status_code,
                          status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
         response = self.client.post(
-            "/login/", {"user_name": "test_user", "password": "test12"})
+            "/login/", {"email": "test@test.com", "password": "test12"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_not_active(self):
@@ -264,7 +264,7 @@ class LoginTest(APITestCase):
                                   password="test",
                                   is_active=False)
         response = self.client.post(
-            "/login/", {"user_name": "test_user3", "password": "test"})
+            "/login/", {"email": "test3@test.com", "password": "test"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_success_with_existing_token(self):
@@ -279,7 +279,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        response = self.client.post("/login/", {'user_name': 'test_user2', 'password': '12'})
+        response = self.client.post("/login/", {'email': 'test2@test.com', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_without_existing_token(self):
@@ -294,7 +294,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        response = self.client.post("/login/", {'user_name': 'test_user2', 'password': '12'})
+        response = self.client.post("/login/", {'email': 'test2@test.com', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_user_linked_to_organization(self):
@@ -311,7 +311,7 @@ class LoginTest(APITestCase):
         user.set_password("12")
         user.save()
 
-        response = self.client.post("/login/", {'user_name': 'test', 'password': '12'})
+        response = self.client.post("/login/", {'email': 'tes@test.com', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
