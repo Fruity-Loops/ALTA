@@ -8,7 +8,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsPermittedToCreate
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
@@ -46,10 +46,9 @@ class CustomUserView(viewsets.ModelViewSet):
         :return: permission
         """
         if self.action in ['retrieve', 'update', 'partial_update']:
-
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
-        if self.action in ['create']:
-            permission_classes = [IsAuthenticated]
+        elif self.action in ['create']:
+            permission_classes = [IsAuthenticated, IsPermittedToCreate | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
@@ -66,26 +65,18 @@ class CustomUserView(viewsets.ModelViewSet):
             'auth': str(request.auth),
         }
 
-        auth_user = CustomUser.objects.get(user_name=auth_content['user'])
-        # Limit account creation by role
-        if (auth_user.role == 'SA') or (auth_user.role == 'IM' and (auth_user.organization_id == request.data.get('organization', ''))):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
 
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            user = serializer.save()
-
-            if user.organization is None:
-                data = {'user': user.user_name, 'organization': '',
+        if user.organization is None:
+             data = {'user': user.user_name, 'organization': '',
                             'token': auth_content['auth']}
-            else:
-                data = {'user': user.user_name, 'organization': user.organization.org_id,
-                            'token': auth_content['auth']}
-
-            return Response(data, status=status.HTTP_201_CREATED)
-
         else:
-            return Response({'detail': 'Attempted to create an unauthorized account'},
-                            status=status.HTTP_401_UNAUTHORIZED)
+            data = {'user': user.user_name, 'organization': user.organization.org_id,
+                        'token': auth_content['auth']}
+
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
