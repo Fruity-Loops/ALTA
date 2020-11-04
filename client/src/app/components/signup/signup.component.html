@@ -7,8 +7,6 @@
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content>
-    <button mat-stroked-button  id="signupbtn" [disabled]="!signupForm.valid" class="save">
-      {{signUpButtonLabel}}</button><!-- if checks throws error then do not send data -->
     <div class="centerMe">
     <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Blank Display Pic" width="100" height="100">
     </div>
@@ -117,6 +115,8 @@
         </div>
         </mat-grid-tile>
       </mat-grid-list>
+      <button mat-stroked-button  id="signupbtn" [disabled]="!signupForm.valid">
+        {{signUpButtonLabel}}</button>
     </form>
   </mat-card-content>
 </mat-card>
