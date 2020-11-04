@@ -70,7 +70,7 @@ class CustomUserView(viewsets.ModelViewSet):
         user = serializer.save()
 
         if user.organization is None:
-             data = {'user': user.user_name, 'organization': '',
+            data = {'user': user.user_name, 'organization': '',
                             'token': auth_content['auth']}
         else:
             data = {'user': user.user_name, 'organization': user.organization.org_id,

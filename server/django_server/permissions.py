@@ -18,6 +18,19 @@ class IsSystemAdmin(BasePermission):
         return user.role == 'SA'
 
 
+def registration_permission(request):
+    """
+    Helper method to identify the permissions an Inventory Manager has when creating users
+    :param request:
+    :param view:
+    :return: True/False : Whether the Inventory Manager is permitted to create requested user
+    """
+    if request.data.get('role', '') != 'SA' and \
+            request.user.organization_id == request.data.get('organization', ''):
+        return True
+    return False
+
+
 class IsInventoryManager(BasePermission):
     message = "You must be an Inventory Manager to do this operation"
 
@@ -32,22 +45,9 @@ class IsInventoryManager(BasePermission):
         """
         user = CustomUser.objects.get(user_name=request.user)
 
-        if user.role == 'IM':
-            if request.method == 'POST':
-                return self.registration_permission(request)
-        return True
-
-    def registration_permission(self, request):
-        """
-        Helper method to identify the permissions an Inventory Manager has when creating users
-        :param request:
-        :param view:
-        :return: True/False : Whether the Inventory Manager is permitted to create the requested user
-        """
-        if request.data.get('role', '') != 'SA':
-            if request.user.organization_id == request.data.get('organization', ''):
-                return True
-        return False
+        if user.role == 'IM' and request.method == 'POST':
+            return registration_permission(request)
+        return user.role == 'IM'
 
 
 class IsCurrentUserTargetUser(BasePermission):
@@ -66,4 +66,3 @@ class IsCurrentUserTargetUser(BasePermission):
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
 
         return current_user == target_user
-

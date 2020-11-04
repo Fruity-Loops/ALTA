@@ -74,7 +74,7 @@ export class AuthService {
 
       localStorage.setItem('id', nextUserId);
   }
-  
+
   setLogOut(): void {
     this.setNext('', '', '', '', '');
   }
