@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SideNavComponent } from './sidenav.component';
-import { SideNavListings } from './sidenavListing';
+import { SystemNavListings } from './sidenavListing';
 
 describe('SideNavComponent', () => {
   let component: SideNavComponent;

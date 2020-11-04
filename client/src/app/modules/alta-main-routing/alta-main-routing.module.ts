@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { GreetingComponent } from 'src/app/components/greeting/greeting.component';
 import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
@@ -23,8 +22,8 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMembersComponent },
       { path: 'modify-members', component: ClientGridviewComponent },
-      {path: 'manage-organizations', component: ManageOrganizationsComponent},
-      {path: 'modify-members/:ID', component: EmployeeSettingsComponent}
+      { path: 'manage-organizations', component: ManageOrganizationsComponent },
+      { path: 'modify-members/:ID', component: EmployeeSettingsComponent }
     ]
   },
 ];

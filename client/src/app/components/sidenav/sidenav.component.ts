@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
-import { SideNavListings } from './sidenavListing';
 import { AuthService } from 'src/app/services/auth.service';
+import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sidenav',
@@ -10,24 +11,27 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SideNavComponent implements OnInit {
   // contains the listing of all sidenav menu items
-  options = SideNavListings;
+  options = SystemNavListings;
   // contains the last option chosen, it defaults to the first
   selectedOption: SideNavOption;
-  currentRole;
+
   subscription;
 
-  constructor(private authService: AuthService) {}
+  constructor(private router: Router,
+              private authService: AuthService) { }
 
   ngOnInit(): void {
     this.selectedOption = this.options[0];
-
-    this.subscription = this.authService.sharedUser
-      .subscribe((data) => {
-        this.currentRole = data.role;
-      });
+    this.subscription = this.authService.getOrgMode().subscribe(orgMode => {
+      if (orgMode) {
+        this.options = OrganizationNavListings;
+      } else {
+        this.options = SystemNavListings;
+      }
+    })
   }
 
-  OnDestroy(): void {
+  onDestroy() {
     this.subscription.unsubscribe();
   }
 }

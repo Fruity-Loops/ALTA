@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-manage-organizations',
@@ -12,7 +13,9 @@ export class ManageOrganizationsComponent implements OnInit {
   selectedOrganization;
   errorMessage = '';
 
-  constructor(private organizationsService: ManageOrganizationsService, private fb: FormBuilder) {}
+  constructor(private organizationsService: ManageOrganizationsService,
+              private fb: FormBuilder,
+              private authService: AuthService) {}
 
   ngOnInit(): void {
     this.getAllOrganizations();
@@ -85,5 +88,9 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage = err.error.detail;
       }
     );
+  }
+
+  turnOnOrgMode(organization): void {
+    this.authService.turnOnOrgMode(organization.org_id);
   }
 }

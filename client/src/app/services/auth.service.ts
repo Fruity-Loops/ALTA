@@ -2,6 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
+import {Router} from "@angular/router";
 
 // Connection with the backend
 const BASEURL = 'http://localhost:8000';
@@ -35,18 +36,36 @@ export class AuthService {
                                 };
                              }), debounceTime(0));
 
-  constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
+  constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
+              private router: Router) {
     if (localStorage.getItem('id') !== '') {
-        this.subscription = this.getCurrentUser(localStorage.getItem('id'))
-          .subscribe((data) => {
-            this.userId.next(data.user_id);
-            this.username.next(data.user_name);
-            this.role.next(data.role);
-            this.organizationId.next(data.organization);
-            // TODO: update GET call to return organization's name
-            this.organization.next(data.organization_name);
-          });
+      this.subscription = this.getCurrentUser(localStorage.getItem('id'))
+        .subscribe((data) => {
+          this.userId.next(data.user_id);
+          this.username.next(data.user_name);
+          this.role.next(data.role);
+          this.organizationId.next(data.organization);
+          // TODO: update GET call to return organization's name
+          this.organization.next(data.organization_name);
+        });
     }
+  }
+  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  getOrgMode(): BehaviorSubject<boolean> {
+    return this.orgMode;
+  }
+
+  turnOnOrgMode(org_id): void {
+    localStorage.setItem("organization_id", org_id);
+    this.orgMode.next(true);
+    this.router.navigate(['dashboard']);
+  }
+
+  turnOffOrgMode(): void {
+    localStorage.removeItem("organization_id");
+    this.router.navigate(['manage-organizations']);
+    this.orgMode.next(false);
   }
 
   register(body): Observable<any> {
