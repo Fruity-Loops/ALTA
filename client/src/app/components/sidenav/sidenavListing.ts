@@ -1,9 +1,8 @@
 import { SideNavOption } from './sidenavOption';
 
-const loggedInUser = localStorage.getItem('id');
 let settings: SideNavOption = {
   title: 'Settings',
-  routerLink: 'modify-members/' + loggedInUser,
+  routerLink: 'settings',
   subMenuOptions: [],
 }
 
