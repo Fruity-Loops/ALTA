@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import {Router} from "@angular/router";
+import {Navigation, NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {TokenService} from "../../services/token.service";
 
 @Component({
@@ -16,7 +16,8 @@ export class SideNavComponent implements OnInit {
   // contains the last option chosen, it defaults to the first
   selectedOption: SideNavOption;
 
-  subscription;
+  authSubscription;
+  routeSubscription;
   loggedInUser;
   loggedInUserRole;
 
@@ -32,18 +33,19 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedOption = this.options[0];
-    this.subscription = this.authService.getOrgMode().subscribe(orgMode => {
+    this.authSubscription = this.authService.getOrgMode().subscribe(orgMode => {
       if (orgMode) {
         this.options = OrganizationNavListings;
       } else {
         this.options = SystemNavListings;
       }
     });
-    this.subscription = this.authService.sharedUser
+    this.authSubscription = this.authService.sharedUser
       .subscribe((data) => {
         this.loggedInUser = data.username;
         this.loggedInUserRole = this.roles[data.role];
       });
+    this.setSelected();
   }
 
   exitOrg(): void {
@@ -57,7 +59,22 @@ export class SideNavComponent implements OnInit {
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
 
+  setSelected(): void {
+    this.routeSubscription = this.router.events.subscribe(value => {
+      if (value instanceof NavigationStart) {
+        this.options.forEach(navOption => {
+          if ('/' + navOption.routerLink === value.url) {
+            this.selectedOption = navOption;
+            return;
+          }
+        });
+      }
+    });
+
+  }
+
   onDestroy() {
-    this.subscription.unsubscribe();
+    this.authSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 }
