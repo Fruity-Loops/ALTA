@@ -47,6 +47,9 @@ export class AuthService {
           this.organizationId.next(data.organization);
           // TODO: update GET call to return organization's name
           this.organization.next(data.organization_name);
+          if (data.role === "IM") {
+            this.turnOnOrgMode(data.organization);
+          }
         });
     }
   }
@@ -63,9 +66,14 @@ export class AuthService {
   }
 
   turnOffOrgMode(): void {
-    localStorage.removeItem("organization_id");
-    this.router.navigate(['manage-organizations']);
-    this.orgMode.next(false);
+    if (this.role.getValue() === "SA") {
+      localStorage.removeItem("organization_id");
+      this.router.navigate(['manage-organizations']);
+      this.orgMode.next(false);
+    } else {
+      this.router.navigate(['dashboard']);
+    }
+
   }
 
   register(body): Observable<any> {
