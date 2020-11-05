@@ -9,7 +9,6 @@ import { DashboardComponent } from 'src/app/components/dashboard/dashboard.compo
 import { SideNavComponent } from 'src/app/components/sidenav/sidenav.component';
 import { MatModule } from '../material/material-module';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
-import { CreateMembersComponent } from 'src/app/components/create-members/create-members.component';
 import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
@@ -24,7 +23,6 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
     DashboardComponent,
     SideNavComponent,
     ClientGridviewComponent,
-    CreateMembersComponent,
     ManageOrganizationsComponent,
     EmployeeSettingsComponent
   ],

@@ -3,20 +3,20 @@ import { AuthService } from 'src/app/services/auth.service';
 import { TokenService } from 'src/app/services/token.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SignupComponent } from './signup.component';
+import { CreateMemberComponent } from './create-member.component';
 import { FormBuilder } from '@angular/forms';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 describe('SignupComponent', () => {
-  let component: SignupComponent;
-  let fixture: ComponentFixture<SignupComponent>;
+  let component: CreateMemberComponent;
+  let fixture: ComponentFixture<CreateMemberComponent>;
   let authService: AuthService;
   let tokenService: TokenService;
   let manageOrganizationsService: ManageOrganizationsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SignupComponent],
+      declarations: [CreateMemberComponent],
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         FormBuilder,
@@ -38,12 +38,12 @@ describe('SignupComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SignupComponent);
+    fixture = TestBed.createComponent(CreateMemberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create signup component', () => {
+  it('should create create-member component', () => {
     expect(component).toBeTruthy();
   });
 });

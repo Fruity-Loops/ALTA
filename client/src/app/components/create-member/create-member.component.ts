@@ -7,10 +7,10 @@ import { ManageOrganizationsService } from 'src/app/services/manage-organization
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss'],
+  templateUrl: './create-member.component.html',
+  styleUrls: ['./create-member.component.scss'],
 })
-export class SignupComponent implements OnInit {
+export class CreateMemberComponent implements OnInit {
   // Defining type of our form
   signupForm: FormGroup;
   errorMessage: string;
@@ -91,7 +91,7 @@ export class SignupComponent implements OnInit {
     register.subscribe(
       (data) => {
         this.tokenService.SetToken(data.token);
-        this.signupForm.reset(); // Reset form once signup
+        this.signupForm.reset(); // Reset form once create-member
         setTimeout(() => {
           // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           this.router.navigate(['modify-members']);
