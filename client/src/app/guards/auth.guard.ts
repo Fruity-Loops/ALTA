@@ -8,12 +8,13 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TokenService } from '../services/token.service';
+import {AuthService} from "../services/auth.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private tokenService: TokenService) {}
+  constructor(private router: Router, private tokenService: TokenService, private authService: AuthService) {}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
@@ -25,7 +26,16 @@ export class AuthGuard implements CanActivate {
     const token = this.tokenService.GetToken();
     // If the token exist
     if (token) {
+      this.authService.sharedUser.subscribe(data => {
+        if (data.role === 'SA') {
+          this.router.navigate(['manage-organizations']);
+        } else if (data.role === 'IM') {
+          this.router.navigate(['dashboard'])
+        }
+
+      })
       return true;
+
     } else {
       this.router.navigate(['login']); // If no token exist redirect user to login/register page
       return false;
