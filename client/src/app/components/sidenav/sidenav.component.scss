@@ -13,6 +13,7 @@
   height: 150px;
   background: #283C52;
   text-align: center;
+  cursor: pointer;
 }
 
 .footer {
@@ -24,11 +25,18 @@
   background: #283C52;
 }
 
+.footer:hover {
+  background: #394D63;
+  cursor: pointer;
+}
+
 .text-color {
   color: #AFBDD1;
+  opacity: 0.87;
 }
 
 .small-text {
   font-size: 80%;
   color: #AFBDD1;
+  opacity: 0.5;
 }
