@@ -33,13 +33,6 @@ export class ToolbarComponent implements OnInit {
       });
   }
 
-  logout(): void {
-    this.tokenService.DeleteToken(); // Delete token when user logout
-    this.authService.setLogOut();   // Extra step - sets the sharedUser data to ''
-    this.router.navigate(['login']); // Redirect user to login/register pager
-    // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
-  }
-
   toggleDrawer(): void {
     this.sidenav.toggle();
   }

@@ -3,6 +3,7 @@ import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
 import {Router} from "@angular/router";
+import {TokenService} from "../../services/token.service";
 
 @Component({
   selector: 'app-sidenav',
@@ -26,7 +27,8 @@ export class SideNavComponent implements OnInit {
   }
 
   constructor(private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private tokenService: TokenService) { }
 
   ngOnInit(): void {
     this.selectedOption = this.options[0];
@@ -46,6 +48,13 @@ export class SideNavComponent implements OnInit {
 
   exitOrg(): void {
     this.authService.turnOffOrgMode();
+  }
+
+  logout(): void {
+    this.tokenService.DeleteToken(); // Delete token when user logout
+    this.authService.setLogOut();   // Extra step - sets the sharedUser data to ''
+    this.router.navigate(['login']); // Redirect user to login/register pager
+    // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
 
   onDestroy() {
