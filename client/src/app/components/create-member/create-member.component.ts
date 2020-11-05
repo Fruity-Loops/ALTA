@@ -15,7 +15,7 @@ export class CreateMemberComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
-  selectedOrganization: any;
+  selectedOrganization: any = '';
   signUpButtonLabel = 'Save';
   subscription;
   roles = [
@@ -34,13 +34,13 @@ export class CreateMemberComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.init();
     this.subscription = this.authService.getOrgMode()
       .subscribe(orgMode => {
         if (orgMode) {
           this.selectedOrganization = localStorage.getItem("organization_id");
           this.showRoles = true;
         }
+        this.init();
       });
   }
 
@@ -52,23 +52,18 @@ export class CreateMemberComponent implements OnInit {
       password: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      role: ['', Validators.required],
+      role: this.showRoles ? ['', Validators.required] : undefined,
     });
   }
 
   signupUser(): void {
-    if (this.signupForm.value.organization.org_id) {
-      this.selectedOrganization = this.signupForm.value.organization.org_id;
-    } else {
-      this.selectedOrganization = '';
-    }
 
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
       first_name: this.signupForm.value.firstname,
       last_name: this.signupForm.value.lastname,
-      role: this.signupForm.value.role.abbrev,
+      role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : "SA",
       is_active: 'true',
       password: this.signupForm.value.password,
       organization: this.selectedOrganization,
