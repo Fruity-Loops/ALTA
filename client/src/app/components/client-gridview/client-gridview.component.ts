@@ -17,7 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First_Name', 'Last_Name','Status', 'Settings'];
+  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Status', 'Settings'];
   filterTerm: string;
   selected = 'All';
 
@@ -48,7 +48,7 @@ export class ClientGridviewComponent implements OnInit {
     });
     this.dataSource = new MatTableDataSource(this.users);
     this.dataSource.paginator = this.paginator;
-    this.dataSource.paginator._intl.itemsPerPageLabel ='Rows per page:';
+    this.dataSource.paginator._intl.itemsPerPageLabel = 'Rows per page:';
     this.dataSource.sort = this.sort;
     this.changeDetectorRefs.detectChanges();
   }
