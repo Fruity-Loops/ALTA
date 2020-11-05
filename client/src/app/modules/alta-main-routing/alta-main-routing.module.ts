@@ -14,6 +14,11 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard], // If user has a valid token he will be able to access comment page
     children: [
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMemberComponent },
       { path: 'modify-members', component: ClientGridviewComponent },

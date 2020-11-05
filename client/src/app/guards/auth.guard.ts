@@ -26,16 +26,7 @@ export class AuthGuard implements CanActivate {
     const token = this.tokenService.GetToken();
     // If the token exist
     if (token) {
-      this.authService.sharedUser.subscribe(data => {
-        if (data.role === 'SA') {
-          this.router.navigate(['manage-organizations']);
-        } else if (data.role === 'IM') {
-          this.router.navigate(['dashboard'])
-        }
-
-      })
       return true;
-
     } else {
       this.router.navigate(['login']); // If no token exist redirect user to login/register page
       return false;

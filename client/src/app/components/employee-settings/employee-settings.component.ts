@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ManageMembersService } from '../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-employee-settings',
@@ -19,6 +20,7 @@ export class EmployeeSettingsComponent implements OnInit {
   id: string;
   isLoggedInUser = false;
   body: any;
+  signupForm: FormGroup;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = [
@@ -29,7 +31,8 @@ export class EmployeeSettingsComponent implements OnInit {
 
   constructor(
     private manageMembersService: ManageMembersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
   ) {
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
@@ -45,6 +48,15 @@ export class EmployeeSettingsComponent implements OnInit {
     if (this.id === localStorage.getItem('id')) {
       this.isLoggedInUser = true;
     }
+
+    this.signupForm = this.fb.group({
+      username: ['', Validators.required], // Each username,email,password is piped from the HTML using the "formControlName"
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      role: ['', Validators.required],
+    });
   }
 
   getEmployee(): void {
@@ -59,7 +71,6 @@ export class EmployeeSettingsComponent implements OnInit {
       };
 
       this.setSelectors();
-      this.employeeCopy = this.employee;
     });
   }
 
@@ -75,8 +86,7 @@ export class EmployeeSettingsComponent implements OnInit {
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
     if (!turnOn) {
-      this.employee = this.employeeCopy;
-      this.setSelectors();
+      this.submit();
     }
   }
 

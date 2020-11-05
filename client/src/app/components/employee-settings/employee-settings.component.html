@@ -1,59 +1,84 @@
-<div class="edit-container">
-  <button mat-button (click)="editMode(!edit)">{{edit ? "Cancel": "Edit"}}</button>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{isLoggedInUser? "Profile" : "Employee"}} Settings</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+    <mat-card-content>
+      <button mat-stroked-button id="signupbtn" (click)="editMode(!edit)" class="save">
+        {{edit ? "Save": "Edit"}}</button><!-- if checks throws error then do not send data -->
+      <div class="centerMe">
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Blank Display Pic" width="100" height="100" />
+      </div>
+      <mat-grid-list cols="2" rowHeight="38:9">
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">First Name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="firstname" type="text" [disabled]="!edit"  [value]="employee.first_name"/>
+            </mat-form-field>
+          </div>
 
-  <div *ngIf="employee">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>
-          {{edit? "Update": ""}} {{employee?.first_name + " " + employee?.last_name}}
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-
-          <mat-form-field>
-            <mat-label for="First Name"></mat-label>
-            <input matInput id="first_name" type="text" [disabled]="!edit"  [value]="employee.first_name"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label for="Last Name"></mat-label>
-            <input matInput id="last_name" type="text" [disabled]="!edit" [value]="employee.last_name"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label for="email">Email</mat-label>
-            <input matInput id="email" type="text" [(ngModel)]="employee.email" email [disabled]="!edit"/>
-          </mat-form-field>
-
-          <mat-form-field>
-            <mat-label for="password">Password</mat-label>
-            <input matInput id="password" type="password" [(ngModel)]="password" minlength="5" [disabled]="!edit"/>
-          </mat-form-field>
-
-          <mat-form-field *ngIf="!isLoggedInUser">
-            <mat-label for="active">Active</mat-label>
-            <mat-select id="active" [(ngModel)]="isActive" [disabled]="!edit">
-              <mat-option *ngFor="let active of activeStates" [value]="active.state">
-                {{active.state}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-
-          <mat-form-field *ngIf="!isLoggedInUser">
-            <mat-label for="role">Role</mat-label>
-            <mat-select id="role2" [(ngModel)]="role" [disabled]="!edit">
-              <mat-option *ngFor="let role of roles" [value]=role.name>
-                {{role.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-        <button mat-button (click)="submit()">Submit</button>
-
-      </mat-card-content>
-    </mat-card>
-
-  </div>
-</div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">E-mail address:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="email" type="email" placeholder="E-mail address"
+                     [(ngModel)]="employee.email" email [disabled]="!edit"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="lastname">Last name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="lastname" type="text" placeholder="Last name"
+                     [disabled]="!edit" [value]="employee.last_name"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="username">Employee ID:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="user_name" type="text" placeholder="Employee ID" [disabled]="!edit"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="pass-word">Password:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="pass-word" type="password" placeholder="Password"
+                     [(ngModel)]="password" minlength="5" [disabled]="!edit"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!isLoggedInUser">
+          <div class="form-group">
+            <mat-label for="pass-word">Role:</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select>
+                <mat-option value="">Choose a role</mat-option>
+                <mat-option *ngFor="let role of roles" [value]="role">
+                  {{ role.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!isLoggedInUser">
+          <div class="form-group">
+            <mat-label for="is-active">Is Active</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select id="active" [(ngModel)]="isActive" [disabled]="!edit">
+                <mat-option *ngFor="let active of activeStates" [value]="active.state">
+                  {{active.state}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+</mat-card>
