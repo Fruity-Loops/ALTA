@@ -18,6 +18,8 @@ export class AuthService implements OnInit {
   private organizationId = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
 
+  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   subscription;
 
   // Access Observables through mapped data
@@ -40,7 +42,7 @@ export class AuthService implements OnInit {
               private router: Router) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (localStorage.getItem('id') !== '') {
       this.subscription = this.getCurrentUser(localStorage.getItem('id'))
         .subscribe((data) => {
@@ -56,8 +58,6 @@ export class AuthService implements OnInit {
         });
     }
   }
-
-  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   getOrgMode(): BehaviorSubject<boolean> {
     return this.orgMode;
