@@ -22,7 +22,7 @@ class CustomUserView(viewsets.ModelViewSet):
     Updates a specific user password using PUT.
     """
     queryset = CustomUser.objects.all()
-    http_method_names = ['post', 'get', 'patch', 'put']
+    http_method_names = ['post', 'get', 'patch', 'put', 'list']
 
     def get_serializer_class(self):
         """
@@ -50,7 +50,7 @@ class CustomUserView(viewsets.ModelViewSet):
 
         # TODO: Validate requested user id matches requested organization in DB
         # for permissions unrelated to create
-        elif self.action in ['create']:
+        elif self.action in ['create', 'list']:
             permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
@@ -80,6 +80,12 @@ class CustomUserView(viewsets.ModelViewSet):
                         'token': auth_content['auth']}
 
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')).exclude(role='SA')\
+            .exclude(id=request.user.id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
@@ -188,13 +194,13 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessClients(viewsets.ModelViewSet):
+class AccessMembers(viewsets.ModelViewSet):
     """
     Allows obtaining all clients and updating them
     """
-    http_method_names = ['get', 'put']
+    http_method_names = ['get']
     serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsSystemAdmin]
 
     def get_queryset(self):
-        return CustomUser.objects.exclude(id=self.request.user.id)
+        return CustomUser.objects.filter(role='SA').exclude(id=self.request.user.id)

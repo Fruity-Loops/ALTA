@@ -32,8 +32,8 @@ class IsInventoryManager(BasePermission):
         """
         user = CustomUser.objects.get(user_name=request.user)
 
-        if view in ['list']:
-            return user.role == 'IM'
+        if view.action in ['list']:
+            return user.role == 'IM' and str(user.organization_id) == request.GET.get("organization", '')
         else:
             if user.role == 'IM':
                 if request.data.get('role', '') != 'SA' and \
