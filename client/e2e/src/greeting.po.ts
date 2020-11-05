@@ -8,4 +8,17 @@ export class GreetingPage {
   getLoginForm(): ElementFinder {
     return element(by.tagName('app-login'));
   }
+
+  getEmailInputField(): ElementFinder {
+    return element(by.id('email'));
+  }
+
+  getPasswordInputField(): ElementFinder {
+    return element(by.id('password'));
+  }
+
+  getLoginButton(): ElementFinder {
+    return element(by.id('loginbtn'));
+  }
+
 }

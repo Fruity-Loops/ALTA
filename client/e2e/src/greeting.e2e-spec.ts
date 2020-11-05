@@ -1,6 +1,6 @@
 import { env } from '../../src/environments/environment';
 import { GreetingPage } from './greeting.po';
-import { browser, logging } from 'protractor';
+import { browser, ExpectedConditions } from 'protractor';
 
 describe('E2E Greeting Page', () => {
   let page: GreetingPage;
@@ -14,4 +14,13 @@ describe('E2E Greeting Page', () => {
     expect(page.getLoginForm()).toBeTruthy();
   });
 
+
+  it('should login succesfully to organization page', () => {
+    page.navigateTo();
+    page.getEmailInputField().sendKeys('system_admin@email.com');
+    page.getPasswordInputField().sendKeys('password');
+    page.getLoginButton().click();
+    const pageAfterLogin = 'manage-organizations';
+    browser.wait(ExpectedConditions.urlContains(pageAfterLogin), 5000);
+  });
 });
