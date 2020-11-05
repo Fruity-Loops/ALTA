@@ -40,10 +40,6 @@ export class ToolbarComponent implements OnInit {
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
 
-  exitOrg(): void {
-    this.authService.turnOffOrgMode();
-  }
-
   toggleDrawer(): void {
     this.sidenav.toggle();
   }

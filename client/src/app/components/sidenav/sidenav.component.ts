@@ -44,6 +44,10 @@ export class SideNavComponent implements OnInit {
       });
   }
 
+  exitOrg(): void {
+    this.authService.turnOffOrgMode();
+  }
+
   onDestroy() {
     this.subscription.unsubscribe();
   }
