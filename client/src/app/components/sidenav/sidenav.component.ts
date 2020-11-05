@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import {Navigation, NavigationEnd, NavigationStart, Router} from "@angular/router";
-import {TokenService} from "../../services/token.service";
+import { NavigationStart, Router} from '@angular/router';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -22,10 +22,10 @@ export class SideNavComponent implements OnInit {
   loggedInUserRole;
 
   roles = {
-    "SA": "System Administrator",
-    "IM": "Inventory Manager",
-    "SK": "Stock Keeper"
-  }
+    SA: 'System Administrator',
+    IM: 'Inventory Manager',
+    SK: 'Stock Keeper'
+  };
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -77,7 +77,7 @@ export class SideNavComponent implements OnInit {
     });
   }
 
-  onDestroy() {
+  onDestroy(): void {
     this.authSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
 
@@ -21,7 +21,7 @@ export class CreateMemberComponent implements OnInit {
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
-  showRoles: boolean = false;
+  showRoles = false;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -36,7 +36,7 @@ export class CreateMemberComponent implements OnInit {
     this.subscription = this.authService.getOrgMode()
       .subscribe(orgMode => {
         if (orgMode) {
-          this.selectedOrganization = localStorage.getItem("organization_id");
+          this.selectedOrganization = localStorage.getItem('organization_id');
           this.showRoles = true;
         }
         this.init();
@@ -62,7 +62,7 @@ export class CreateMemberComponent implements OnInit {
       email: this.signupForm.value.email,
       first_name: this.signupForm.value.firstname,
       last_name: this.signupForm.value.lastname,
-      role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : "SA",
+      role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.signupForm.value.password,
       organization: this.selectedOrganization,

@@ -6,7 +6,7 @@ import { ManageOrganizationsComponent } from 'src/app/components/manage-organiza
 import { AuthGuard } from '../../guards/auth.guard';
 import {EmployeeSettingsComponent} from '../../components/employee-settings/employee-settings.component';
 import {ClientGridviewComponent} from '../../components/client-gridview/client-gridview.component';
-import {CreateMemberComponent} from "../../components/create-member/create-member.component";
+import {CreateMemberComponent} from '../../components/create-member/create-member.component';
 
 const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {AuthService} from "../../services/auth.service";
+import { FormBuilder } from '@angular/forms';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-manage-organizations',

@@ -15,7 +15,7 @@ import { ManageOrganizationsComponent } from 'src/app/components/manage-organiza
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule} from '@angular/forms';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
-import {MatMenuModule} from "@angular/material/menu";
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
