@@ -2,17 +2,17 @@
   <img class="pic" src="assets/img/logo.svg" width="150" height="150">
 </div>
 <div class="sidenav">
-    <ul class="options">
+    <div class="options">
 
-        <li *ngFor="let option of options" [class.selected]="option === selectedOption" class="parent">
-            <h3 id="option" routerLink="{{option.routerLink}}">{{option.title}}</h3>
-            <ul class="subOptions" *ngIf="option.subMenuOptions?.length > 0">
-                <li *ngFor="let subOption of option.subMenuOptions" [class.selected]="subOption === selectedOption"
-                    class="child">
-                    <h4 id="subOption" routerLink="{{subOption.routerLink}}">{{subOption.title}}</h4>
-                </li>
-            </ul>
-        </li>
+        <div *ngFor="let option of options" [class.selected]="option === selectedOption" class="parent">
+            <div id="option" routerLink="{{option.routerLink}}" class="option-tab">{{option.title}}</div>
+<!--            <ul class="subOptions" *ngIf="option.subMenuOptions?.length > 0">-->
+<!--                <li *ngFor="let subOption of option.subMenuOptions" [class.selected]="subOption === selectedOption"-->
+<!--                    class="child">-->
+<!--                    <h4 id="subOption" routerLink="{{subOption.routerLink}}">{{subOption.title}}</h4>-->
+<!--                </li>-->
+<!--            </ul>-->
+        </div>
       <div class="footer">
         <mat-list>
           <mat-list-item [matMenuTriggerFor]="menu">
@@ -31,6 +31,6 @@
           </button>
         </mat-menu>
       </div>
-    </ul>
+    </div>
 
 </div>

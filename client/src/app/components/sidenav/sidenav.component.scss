@@ -1,9 +1,5 @@
-.sidenav{
-    padding: 0 25px 0 0;
-}
-
 .options {
-    list-style-type: none;
+    padding: 25px 15px 0 15px;
   }
 
 .header {
@@ -17,7 +13,21 @@
 }
 
 .selected {
-  background:#000000;
+  background: #283C52;
+  border-radius: 4px;
+  color: #4ECEC9;
+}
+
+.option-tab {
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-size: 115%;
+}
+
+.option-tab:hover {
+  cursor: pointer;
+  color: #F2F2F2;
+  background: #394D63;
 }
 
 .footer {
