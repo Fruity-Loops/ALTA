@@ -15,7 +15,6 @@ export class CreateMemberComponent implements OnInit {
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
-  organizations: any = [];
   selectedOrganization: any;
   signUpButtonLabel = 'Save';
   subscription;
@@ -23,6 +22,7 @@ export class CreateMemberComponent implements OnInit {
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
+  showRoles: boolean = false;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -30,20 +30,16 @@ export class CreateMemberComponent implements OnInit {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private tokenService: TokenService,
-    private organizationsService: ManageOrganizationsService
+    private tokenService: TokenService
   ) { }
 
   ngOnInit(): void {
     this.init();
-    this.subscription = this.authService.sharedUser
-      .subscribe((data) => {
-        if (data.role === 'SA') {
-            this.roles = [
-              { name: 'System Admin', abbrev: 'SA' },
-              { name: 'Inventory Manager', abbrev: 'IM' },
-              { name: 'Stock Keeper', abbrev: 'SK' },
-            ];
+    this.subscription = this.authService.getOrgMode()
+      .subscribe(orgMode => {
+        if (orgMode) {
+          this.selectedOrganization = localStorage.getItem("organization_id");
+          this.showRoles = true;
         }
       });
   }
@@ -57,12 +53,7 @@ export class CreateMemberComponent implements OnInit {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       role: ['', Validators.required],
-      organization: [''],
     });
-
-    if (this.tokenService.GetToken()) {
-      this.getAllOrganizations();
-    }
   }
 
   signupUser(): void {
@@ -119,18 +110,6 @@ export class CreateMemberComponent implements OnInit {
     Object.keys(this.signupForm.controls).forEach(key => {
       this.signupForm.controls[key].setErrors(null);
     });
-  }
-
-  getAllOrganizations(): void {
-    this.organizationsService.getAllOrganizations().subscribe(
-      (data) => {
-        this.organizations = data;
-        this.errorMessage = '';
-      },
-      (err) => {
-        this.errorMessage = err.error ? err.error.detail : err.statusText;
-      }
-    );
   }
 
   OnDestroy(): void {
