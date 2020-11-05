@@ -37,7 +37,7 @@ class IsInventoryManager(BasePermission):
         else:
             if user.role == 'IM':
                 if request.data.get('role', '') != 'SA' and \
-                        user.organization_id == request.data.get('organization', ''):
+                        str(user.organization_id) == request.data.get('organization', ''):
                     return True
             return False
 
