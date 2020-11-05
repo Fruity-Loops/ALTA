@@ -20,7 +20,7 @@ button.create {
   position: absolute;
   display: inline;
   margin-top: 0.7em;
-  margin-left: 655px;
+  margin-left: 690px;
   border-color: map-get($alta-primary, 500);
   color: map-get($alta-primary, 500);
 }
@@ -74,7 +74,8 @@ div.dropdown {
 }
 
 ::ng-deep mat-card {
-  
+  min-width: 800px;
+  max-width: 800px;
   width: 800px;
 }
 
