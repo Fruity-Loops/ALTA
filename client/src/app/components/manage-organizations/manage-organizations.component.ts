@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
+import { ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { ManageMembersService } from 'src/app/services/manage-members.service';
+import { Organization } from '../../models/organization';
+
 
 @Component({
   selector: 'app-manage-organizations',
@@ -11,6 +19,14 @@ export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
   selectedOrganization;
   errorMessage = '';
+
+  dataSource: MatTableDataSource<Organization>;
+  displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
+  filterTerm: string;
+  selected = 'All';
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private organizationsService: ManageOrganizationsService, private fb: FormBuilder) {}
 
@@ -24,7 +40,9 @@ export class ManageOrganizationsComponent implements OnInit {
     this.organizationsService.getAllOrganizations().subscribe(
       (data) => {
         this.organizations = data;
+        console.log(data);
         this.errorMessage = '';
+        this.dataSource = new MatTableDataSource(this.organizations);
       },
       (err) => {
         this.errorMessage = err;
@@ -85,5 +103,9 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage = err.error.detail;
       }
     );
+  }
+
+  applyFilter(filterTerm: string): void {
+    this.dataSource.filter = filterTerm;
   }
 }
