@@ -28,14 +28,14 @@ export class LoginComponent implements OnInit {
 
   init(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
   loginUser(): void {
     this.body = {
-      user_name: this.loginForm.value.username,
+      email: this.loginForm.value.email,
       password: this.loginForm.value.password,
     };
 
