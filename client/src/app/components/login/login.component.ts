@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.init();
@@ -28,37 +28,27 @@ export class LoginComponent implements OnInit {
 
   init(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
   loginUser(): void {
     this.body = {
-      user_name: this.loginForm.value.username,
+      email: this.loginForm.value.email,
       password: this.loginForm.value.password,
     };
 
     this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
+        // Set the logged in user's data for components to use when hiding or displaying elements
+        this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
         if (data.role === 'SA') {
-          // Storing in a session locally attributes of the SA (SA are not assigned to any organization)
-          localStorage.setItem('role', data.role);
-          localStorage.setItem('username', data.user);
-          localStorage.setItem('user_id', data.user_id);
-
           setTimeout(() => {
             this.router.navigate(['manage-organizations']);
           }, 1000);
         } else {
-          // Storing in a session locally attributes of the IM
-          localStorage.setItem('role', data.role);
-          localStorage.setItem('organization_id', data.organization_id);
-          localStorage.setItem('username', data.user);
-          localStorage.setItem('organization_name', data.organization_name);
-          localStorage.setItem('user_id', data.user_id);
-
           setTimeout(() => {
             this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )

@@ -14,7 +14,7 @@ class IsSystemAdmin(BasePermission):
         :param view:
         :return: True/False : Whether the user is a SysAdmin or Not
         """
-        user = CustomUser.objects.get(user_name=request.user)
+        user = CustomUser.objects.get(email=request.user)
         return user.role == 'SA'
 
 
@@ -30,8 +30,16 @@ class IsInventoryManager(BasePermission):
         :param view:
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
-        user = CustomUser.objects.get(user_name=request.user)
-        return user.role == 'IM'
+        user = CustomUser.objects.get(email=request.user)
+
+        if view in ['list']:
+            return user.role == 'IM'
+        else:
+            if user.role == 'IM':
+                if request.data.get('role', '') != 'SA' and \
+                        user.organization_id == request.data.get('organization', ''):
+                    return True
+            return False
 
 
 class IsCurrentUserTargetUser(BasePermission):

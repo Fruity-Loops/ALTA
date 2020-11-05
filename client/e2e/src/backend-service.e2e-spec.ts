@@ -14,7 +14,7 @@ describe('Test Backend Connection', () => {
         expect(res.statusCode).toBe(200);
       });
     });
-    req.on('error', (err) => {    
+    req.on('error', (err) => {
       console.error('Test Backend Connection,', err);
       process.exit(1); // If cannot connect, stop all tests early
     });

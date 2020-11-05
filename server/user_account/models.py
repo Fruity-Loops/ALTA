@@ -26,8 +26,8 @@ class CustomUser(AbstractBaseUser):
     # no need to specify password and id because its build in
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
 
-    USERNAME_FIELD = 'user_name'
-    REQUIRED_FIELDS = ['email', 'first_name', 'last_name', 'role']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['user_name', 'first_name', 'last_name', 'role']
 
     @property
     def get_role(self):

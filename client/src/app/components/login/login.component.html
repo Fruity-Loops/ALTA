@@ -16,16 +16,26 @@
   <mat-card-content>
     <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
       <mat-form-field appearance="legacy" class="input">
-        <mat-label for="user-name">Username</mat-label>
-        <input matInput id="user-name" type="text" formControlName="username" />
+        <mat-label for="email">E-mail address</mat-label>
+        <input matInput id="email" type="text" formControlName="email" />
 
         <mat-error class="error" *ngIf="
-            !loginForm.controls['username'].valid &&
-            loginForm.controls['username'].touched
+            loginForm.controls['email'].errors?.required &&
+            loginForm.controls['email'].touched
           ">
           <!-- Handeling error -->
-          Username is required
+          Email is required
         </mat-error>
+
+        <mat-error class="error" *ngIf="
+            loginForm.controls['email'].errors?.email &&
+            !loginForm.controls['email'].errors?.required &&
+            loginForm.controls['email'].touched
+          ">
+          <!-- Handeling error -->
+          Email format is not valid
+        </mat-error>
+
       </mat-form-field>
 
       <mat-form-field appearance="legacy" class="input">

@@ -8,7 +8,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
@@ -47,6 +47,11 @@ class CustomUserView(viewsets.ModelViewSet):
         """
         if self.action in ['retrieve', 'update', 'partial_update']:
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
+
+        # TODO: Validate requested user id matches requested organization in DB
+        # for permissions unrelated to create
+        elif self.action in ['create']:
+            permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
@@ -63,20 +68,16 @@ class CustomUserView(viewsets.ModelViewSet):
             'auth': str(request.auth),
         }
 
-        auth_user = CustomUser.objects.get(user_name=auth_content['user'])
-        # TODO: Limit account creation by role
-        if auth_user.role != 'SA':
-            pass
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
+
         if user.organization is None:
             data = {'user': user.user_name, 'organization': '',
-                    'token': auth_content['auth']}
+                            'token': auth_content['auth']}
         else:
             data = {'user': user.user_name, 'organization': user.organization.org_id,
-                    'token': auth_content['auth']}
+                        'token': auth_content['auth']}
 
         return Response(data, status=status.HTTP_201_CREATED)
 
@@ -122,15 +123,15 @@ class LoginView(generics.GenericAPIView):
     def post(self, request):
         """
         Verify that a System Admin has valid credentials and is active.
-        :param request: request.data: user_name, password
+        :param request: request.data: email, password
         :return: user_name, token
         """
         data = request.data
-        username = data.get('user_name', '')
+        email = data.get('email', '')
         password = data.get('password', '')
 
         try:
-            user = CustomUser.objects.get(user_name=username)
+            user = CustomUser.objects.get(email=email)
 
             if user.is_active:
                 encrypted_password = user.password
@@ -143,10 +144,10 @@ class LoginView(generics.GenericAPIView):
                         token = Token.objects.create(user=user)
 
                     if user.organization is None:
-                        data = {'user': username, 'user_id': user.id, 'role': user.role,
+                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
                                 'organization': '', 'token': token.key}
                     else:
-                        data = {'user': username, 'user_id': user.id, 'role': user.role,
+                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
                                 'organization_id': user.organization.org_id,
                                 'organization_name': user.organization.org_name,
                                 'token': token.key}
