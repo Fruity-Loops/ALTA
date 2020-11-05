@@ -32,7 +32,6 @@ export class SideNavComponent implements OnInit {
               private tokenService: TokenService) { }
 
   ngOnInit(): void {
-    this.selectedOption = this.options[0];
     this.authSubscription = this.authService.getOrgMode().subscribe(orgMode => {
       if (orgMode) {
         this.options = OrganizationNavListings;
@@ -45,7 +44,8 @@ export class SideNavComponent implements OnInit {
         this.loggedInUser = data.username;
         this.loggedInUserRole = this.roles[data.role];
       });
-    this.setSelected();
+    this.setSelected(this.router.url);
+    this.subscribeSelected();
   }
 
   exitOrg(): void {
@@ -59,18 +59,22 @@ export class SideNavComponent implements OnInit {
     // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
 
-  setSelected(): void {
+  subscribeSelected(): void {
     this.routeSubscription = this.router.events.subscribe(value => {
       if (value instanceof NavigationStart) {
-        this.options.forEach(navOption => {
-          if ('/' + navOption.routerLink === value.url) {
-            this.selectedOption = navOption;
-            return;
-          }
-        });
+        this.setSelected(value.url);
       }
     });
 
+  }
+
+  setSelected(url): void {
+    this.options.forEach(navOption => {
+      if ('/' + navOption.routerLink === url) {
+        this.selectedOption = navOption;
+        return;
+      }
+    });
   }
 
   onDestroy() {
