@@ -5,4 +5,30 @@
 .options {
     list-style-type: none;
   }
-  
+
+.header {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: #283C52;
+  text-align: center;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 3px solid #50DFC5;
+  background: #283C52;
+}
+
+.text-color {
+  color: #AFBDD1;
+}
+
+.small-text {
+  font-size: 80%;
+  color: #AFBDD1;
+}

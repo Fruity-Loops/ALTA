@@ -1,6 +1,13 @@
 .spacer {
-  flex: 1 1 auto;
+  margin: auto;
 }
 .org {
   margin-left: 30px;
+}
+
+.max-size {
+  width: 95%;
+  margin: auto;
+  background: #FFFFFF;
+  border: 1px solid #EAEAEB;
 }

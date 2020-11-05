@@ -16,6 +16,14 @@ export class SideNavComponent implements OnInit {
   selectedOption: SideNavOption;
 
   subscription;
+  loggedInUser;
+  loggedInUserRole;
+
+  roles = {
+    "SA": "System Administrator",
+    "IM": "Inventory Manager",
+    "SK": "Stock Keeper"
+  }
 
   constructor(private router: Router,
               private authService: AuthService) { }
@@ -28,7 +36,12 @@ export class SideNavComponent implements OnInit {
       } else {
         this.options = SystemNavListings;
       }
-    })
+    });
+    this.subscription = this.authService.sharedUser
+      .subscribe((data) => {
+        this.loggedInUser = data.username;
+        this.loggedInUserRole = this.roles[data.role];
+      });
   }
 
   onDestroy() {
