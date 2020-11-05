@@ -6,6 +6,7 @@ import {
 
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -15,7 +16,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Import the HttpClient mocking services
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
     });
 
     // Inject the http, test controller, and service-under-test
@@ -34,9 +35,6 @@ describe('AuthService', () => {
   // Angular default test added when you generate a service using the CLI
   it('should be created', () => {
     expect(authService).toBeTruthy();
-    // Expects a GET call to backend that passes a null user_id
-    const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-    expect(reqId.request.method).toEqual('GET');
   });
 
   // Test registration
@@ -69,10 +67,6 @@ describe('AuthService', () => {
       // Then we ‘flush’ or respond with the mock data that we pass as a parameter,
       // And that causes the Observable to resolve and evaluate the expect on line 55.
       req.flush(mockSysAdmin);
-
-      // Expects a GET call to backend that passes a null user_id
-      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-      expect(reqId.request.method).toEqual('GET');
     });
   });
 
@@ -93,9 +87,6 @@ describe('AuthService', () => {
       expect(req.request.method).toEqual('POST');
 
       req.flush(mockSysAdmin2);
-
-      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-      expect(reqId.request.method).toEqual('GET');
     });
   });
 });

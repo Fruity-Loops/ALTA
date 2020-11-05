@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
@@ -10,7 +10,7 @@ const BASEURL = 'http://localhost:8000';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnInit {
 
   private userId = new BehaviorSubject('');
   private username = new BehaviorSubject('');
@@ -38,6 +38,9 @@ export class AuthService {
 
   constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
               private router: Router) {
+  }
+
+  ngOnInit() {
     if (localStorage.getItem('id') !== '') {
       this.subscription = this.getCurrentUser(localStorage.getItem('id'))
         .subscribe((data) => {
@@ -53,6 +56,7 @@ export class AuthService {
         });
     }
   }
+
   orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   getOrgMode(): BehaviorSubject<boolean> {
