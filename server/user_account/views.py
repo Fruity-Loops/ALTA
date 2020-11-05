@@ -193,6 +193,8 @@ class AccessClients(viewsets.ModelViewSet):
     Allows obtaining all clients and updating them
     """
     http_method_names = ['get', 'put']
-    queryset = CustomUser.objects.all()
     serializer_class = ClientGridSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return CustomUser.objects.exclude(id=self.request.user.id)
