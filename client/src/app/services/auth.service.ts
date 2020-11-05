@@ -37,7 +37,7 @@ export class AuthService {
                              }), debounceTime(0));
 
   constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
-    if (localStorage.getItem('id') !== '') {
+    if (localStorage.getItem('id')) {
         this.subscription = this.getCurrentUser(localStorage.getItem('id'))
           .subscribe((data) => {
             this.userId.next(data.user_id);
