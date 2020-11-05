@@ -6,7 +6,8 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 150px;
+  padding-top: 10px;
+  height: 80px;
   background: #283C52;
   text-align: center;
   cursor: pointer;
@@ -15,6 +16,7 @@
 .selected {
   background: #283C52;
   border-radius: 4px;
+  border: 0;
   color: #4ECEC9;
 }
 
