@@ -64,6 +64,19 @@ export class SideNavComponent implements OnInit {
       if (value instanceof NavigationEnd) {
         this.setSelected(value.url);
       }
+      if (value instanceof NavigationStart && value.navigationTrigger == "popstate") {
+        let inNavOptions = this.checkInSelection(value.url);
+        console.log(inNavOptions);
+        if (!inNavOptions) {
+          if (this.authService.getOrgMode().getValue()) {
+            this.authService.setOrgMode(false);
+            this.options = SystemNavListings;
+          } else {
+            this.authService.setOrgMode(true);
+            this.options = OrganizationNavListings;
+          }
+        }
+      }
     });
 
   }
@@ -75,6 +88,16 @@ export class SideNavComponent implements OnInit {
         return;
       }
     });
+  }
+
+  checkInSelection(url): boolean {
+    let found = false;
+    this.options.forEach(navOption => {
+      if ('/' + navOption.routerLink === url) {
+        found = true;
+      }
+    });
+    return found;
   }
 
   onDestroy(): void {

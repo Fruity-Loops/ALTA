@@ -22,9 +22,11 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMemberComponent },
       { path: 'modify-members', component: ClientGridviewComponent },
+      { path: 'sa-modify-members', component: ClientGridviewComponent },
       { path: 'manage-organizations', component: ManageOrganizationsComponent },
       { path: 'modify-members/:ID', component: EmployeeSettingsComponent },
-      { path: 'settings', component: EmployeeSettingsComponent }
+      { path: 'settings', component: EmployeeSettingsComponent },
+      { path: 'sa-settings', component: EmployeeSettingsComponent },
     ]
   },
 ];

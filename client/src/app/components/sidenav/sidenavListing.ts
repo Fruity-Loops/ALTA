@@ -15,10 +15,14 @@ export const SystemNavListings: SideNavOption[] = [
   },
   {
     title: 'Manage Members',
-    routerLink: 'modify-members',
+    routerLink: 'sa-modify-members',
     subMenuOptions: [],
   },
-  settings
+  {
+    title: 'Settings',
+    routerLink: 'sa-settings',
+    subMenuOptions: [],
+  }
 ];
 
 export const OrganizationNavListings: SideNavOption[] = [
@@ -35,5 +39,9 @@ export const OrganizationNavListings: SideNavOption[] = [
     routerLink: 'modify-members',
     subMenuOptions: [],
   },
-  settings
+  {
+    title: 'Settings',
+    routerLink: 'settings',
+    subMenuOptions: [],
+  }
 ];

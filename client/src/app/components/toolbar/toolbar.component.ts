@@ -23,6 +23,9 @@ export class ToolbarComponent implements OnInit {
   loggedInUser;
   loggedInUserRole;
   subscription;
+  orgModeSub;
+
+  orgMode: boolean;
 
   ngOnInit(): void {
     this.subscription = this.authService.sharedUser
@@ -31,6 +34,9 @@ export class ToolbarComponent implements OnInit {
           this.loggedInUserRole = data.role;
           this.organization = data.org;
       });
+    this.orgModeSub = this.authService.getOrgMode().subscribe(value => {
+      this.orgMode = value;
+    });
   }
 
   toggleDrawer(): void {

@@ -60,6 +60,10 @@ export class AuthService {
     return this.orgMode;
   }
 
+  setOrgMode(state: boolean): void {
+    this.orgMode.next(state);
+  }
+
   turnOnOrgMode(org): void {
     localStorage.setItem('organization_id', org.organization);
     localStorage.setItem('organization', org.organization_name);
