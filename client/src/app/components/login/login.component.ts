@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit {
         this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
         if (data.role === 'SA') {
           setTimeout(() => {
+            this.authService.turnOffOrgMode();
             this.router.navigate(['manage-organizations']);
           }, 1000);
         } else {

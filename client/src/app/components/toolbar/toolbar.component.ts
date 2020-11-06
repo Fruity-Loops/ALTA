@@ -29,7 +29,7 @@ export class ToolbarComponent implements OnInit {
       .subscribe((data) => {
           this.loggedInUser = data.username;
           this.loggedInUserRole = data.role;
-          this.organization = data.orgId;
+          this.organization = data.org;
       });
   }
 
