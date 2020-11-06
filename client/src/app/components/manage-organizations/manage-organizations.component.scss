@@ -11,6 +11,11 @@
   margin-left: -50px;
 }
 
+.mat-row:hover {
+  cursor: pointer;
+  background: #F2F2F2;
+}
+
 input.mat-input-element {
   padding-left:35px;
   position: relative;
