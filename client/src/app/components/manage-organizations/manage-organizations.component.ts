@@ -83,7 +83,6 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   openUpdateOrgDialog(organization): void {
-    console.log(organization);
     const dialogRef = this.dialog.open(OrganizationDialog, {
       width: '250px',
       data: {
