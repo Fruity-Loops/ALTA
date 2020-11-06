@@ -66,7 +66,6 @@ export class SideNavComponent implements OnInit {
       }
       if (value instanceof NavigationStart && value.navigationTrigger == "popstate") {
         let inNavOptions = this.checkInSelection(value.url);
-        console.log(inNavOptions);
         if (!inNavOptions) {
           if (this.authService.getOrgMode().getValue()) {
             this.authService.setOrgMode(false);
