@@ -10,7 +10,7 @@ const BASEURL = 'http://localhost:8000';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnInit {
+export class AuthService {
 
   private userId = new BehaviorSubject('');
   private username = new BehaviorSubject('');
@@ -40,9 +40,6 @@ export class AuthService implements OnInit {
 
   constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
               private router: Router) {
-  }
-
-  ngOnInit(): void {
     if (localStorage.getItem('id') !== '') {
       this.subscription = this.getCurrentUser(localStorage.getItem('id'))
         .subscribe((data) => {
