@@ -14,7 +14,7 @@ class IsSystemAdmin(BasePermission):
         :param view:
         :return: True/False : Whether the user is a SysAdmin or Not
         """
-        user = CustomUser.objects.get(user_name=request.user)
+        user = CustomUser.objects.get(email=request.user)
         return user.role == 'SA'
 
 def get_self_org(user, request):
@@ -34,7 +34,7 @@ class IsInventoryManager(BasePermission):
         :param view:
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
-        user = CustomUser.objects.get(user_name=request.user)
+        user = CustomUser.objects.get(email=request.user)
 
         if view.action in ['list']:
             return user.role == 'IM' and str(user.organization_id) == request.GET.\

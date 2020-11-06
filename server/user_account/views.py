@@ -129,15 +129,15 @@ class LoginView(generics.GenericAPIView):
     def post(self, request):
         """
         Verify that a System Admin has valid credentials and is active.
-        :param request: request.data: user_name, password
+        :param request: request.data: email, password
         :return: user_name, token
         """
         data = request.data
-        username = data.get('user_name', '')
+        email = data.get('email', '')
         password = data.get('password', '')
 
         try:
-            user = CustomUser.objects.get(user_name=username)
+            user = CustomUser.objects.get(email=email)
 
             if user.is_active:
                 encrypted_password = user.password
@@ -150,10 +150,10 @@ class LoginView(generics.GenericAPIView):
                         token = Token.objects.create(user=user)
 
                     if user.organization is None:
-                        data = {'user': username, 'user_id': user.id, 'role': user.role,
+                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
                                 'organization': '', 'token': token.key}
                     else:
-                        data = {'user': username, 'user_id': user.id, 'role': user.role,
+                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
                                 'organization_id': user.organization.org_id,
                                 'organization_name': user.organization.org_name,
                                 'token': token.key}
