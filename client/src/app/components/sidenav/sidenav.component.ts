@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import { NavigationStart, Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { TokenService } from '../../services/token.service';
 
 @Component({
@@ -61,7 +61,7 @@ export class SideNavComponent implements OnInit {
 
   subscribeSelected(): void {
     this.routeSubscription = this.router.events.subscribe(value => {
-      if (value instanceof NavigationStart) {
+      if (value instanceof NavigationEnd) {
         this.setSelected(value.url);
       }
     });
