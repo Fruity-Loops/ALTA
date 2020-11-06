@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 import {AuthService} from '../../services/auth.service';
@@ -10,9 +10,11 @@ import { MatSort } from '@angular/material/sort';
 import { Organization } from '../../models/organization';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
-export interface DialogData {
-  animal: string;
-  name: string;
+interface DialogData {
+  textInput: string,
+  placeholder: string,
+  title: string,
+  buttonDesc: string
 }
 
 @Component({
@@ -68,10 +70,9 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  updateOrganization(): void {
-    this.organizationsService.updateOrganization(this.selectedOrganization).subscribe(
+  updateOrganization(organization): void {
+    this.organizationsService.updateOrganization(organization).subscribe(
       (data) => {
-        this.selectedOrganization = data;
         this.getAllOrganizations();
         this.errorMessage = '';
       },
@@ -79,6 +80,25 @@ export class ManageOrganizationsComponent implements OnInit {
         this.errorMessage = err.error.org_name;
       }
     );
+  }
+
+  openUpdateOrgDialog(organization): void {
+    console.log(organization);
+    const dialogRef = this.dialog.open(OrganizationDialog, {
+      width: '250px',
+      data: {
+        textInput: organization.org_name,
+        placeholder: 'Edit Organization',
+        title: 'Edit Organization',
+        buttonDesc: 'Update'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result !== organization.org_name) {
+        this.updateOrganization({...organization, org_name: result});
+      }
+    });
   }
 
   createOrganization(orgName: string): void {
@@ -100,26 +120,34 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  deleteOrganization(): void {
-    this.organizationsService.deleteOrganization(this.selectedOrganization.org_id).subscribe(
-      (data) => {
-        this.getAllOrganizations();
-        this.errorMessage = '';
-      },
-      (err) => {
-        this.errorMessage = err.error.detail;
-      }
-    );
+  deleteOrganization(organization): void {
+    // this.organizationsService.deleteOrganization(this.selectedOrganization.org_id).subscribe(
+    //   (data) => {
+    //     this.getAllOrganizations();
+    //     this.errorMessage = '';
+    //   },
+    //   (err) => {
+    //     this.errorMessage = err.error.detail;
+    //   }
+    // );
+    console.log(organization);
   }
 
   openCreateDialog(): void {
     const dialogRef = this.dialog.open(OrganizationDialog, {
       width: '250px',
-      data: ''
+      data: {
+        textInput: '',
+        placeholder: 'Enter Organization',
+        title: 'Organization',
+        buttonDesc: 'Create'
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.createOrganization(result);
+      if (result) {
+        this.createOrganization(result);
+      }
     });
   }
 
@@ -142,6 +170,6 @@ export class OrganizationDialog {
 
   constructor(
     public dialogRef: MatDialogRef<OrganizationDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {}
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
 }

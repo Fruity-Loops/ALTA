@@ -36,7 +36,7 @@ button.create {
   padding-left: 60px;
 }
 
-::ng-deep .mat-select-value {
+.mat-select-value {
   color: map-get($alta-primary, 500);
 }
 

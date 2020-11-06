@@ -48,9 +48,17 @@
           <td mat-cell *matCellDef="let row">Montreal, QC</td>
         </ng-container>
 
-        <ng-container matColumnDef="2">
+        <ng-container matColumnDef="2" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
-            <td mat-cell *matCellDef="let row">
+            <td mat-cell *matCellDef="let row" [matMenuTriggerFor]="menu">
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openUpdateOrgDialog(row)">
+                  <span>Update</span>
+                </button>
+                <button mat-menu-item (click)="deleteOrganization(row)">
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
                 <div class="example-button-container">
                     <button mat-icon-button disabled aria-label="Example icon button with a home icon">
                       <mat-icon>more_vert</mat-icon>
