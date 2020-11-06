@@ -17,6 +17,10 @@ class IsSystemAdmin(BasePermission):
         user = CustomUser.objects.get(user_name=request.user)
         return user.role == 'SA'
 
+def get_self_org(user, request):
+    return str(user.organization_id) == request.parser_context['kwargs']['pk'] and request.path.\
+        startswith('/organization')
+
 
 class IsInventoryManager(BasePermission):
     message = "You must be an Inventory Manager to do this operation"
@@ -37,7 +41,8 @@ class IsInventoryManager(BasePermission):
         else:
             if user.role == 'IM':
                 if request.data.get('role', '') != 'SA' and \
-                        str(user.organization_id) == request.data.get('organization', ''):
+                        (str(user.organization_id) == request.data.get('organization', '') or
+                         get_self_org(user, request)):
                     return True
             return False
 
