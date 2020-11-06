@@ -50,23 +50,23 @@
 }
 
 
-::ng-deep mat-select {
+.mat-select {
   color: map-get($alta-primary, 200);
 }
 
-::ng-deep .mat-select-value {
+.mat-select-value {
   color: map-get($alta-primary, 200) !important;
 }
 
-::ng-deep .mat-option {
+.mat-option {
   color: map-get($alta-primary, 200) !important;
 }
 
-::ng-deep p.blank-colour {
+p.blank-colour {
   color: map-get($alta-primary, 200) !important;
 }
 
-::ng-deep mat-card-title {
+.mat-card-title {
   color: map-get($alta-primary, 500);
 }
 
@@ -89,11 +89,11 @@ span.center {
   margin: auto;
 }
 
-::ng-deep mat-label {
+.mat-label {
   color: map-get($alta-primary, 500);
 }
 
-::ng-deep mat-card {
+.mat-card {
   width: 95%;
   max-width: 900px;
 }
