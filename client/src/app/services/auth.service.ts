@@ -1,9 +1,8 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { ManageOrganizationsService } from './manage-organizations.service';
 
 // Connection with the backend
 const BASEURL = 'http://localhost:8000';
@@ -48,10 +47,10 @@ export class AuthService {
           this.username.next(data.user_name);
           this.role.next(data.role);
           this.organizationId.next(data.organization);
-          this.organization.next(localStorage.getItem("organization"));
+          this.organization.next(localStorage.getItem('organization'));
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({organization_name: localStorage.getItem("organization"), ...data});
+            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data});
           }
         });
     }

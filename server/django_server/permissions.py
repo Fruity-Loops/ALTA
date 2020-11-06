@@ -37,14 +37,15 @@ class IsInventoryManager(BasePermission):
         user = CustomUser.objects.get(user_name=request.user)
 
         if view.action in ['list']:
-            return user.role == 'IM' and str(user.organization_id) == request.GET.get("organization", '')
-        else:
-            if user.role == 'IM':
-                if request.data.get('role', '') != 'SA' and \
-                        (str(user.organization_id) == request.data.get('organization', '') or
-                         get_self_org(user, request)):
-                    return True
-            return False
+            return user.role == 'IM' and str(user.organization_id) == request.GET.\
+                get("organization", '')
+
+        if user.role == 'IM':
+            if request.data.get('role', '') != 'SA' and \
+                    (str(user.organization_id) == request.data.get('organization', '') or
+                     get_self_org(user, request)):
+                return True
+        return False
 
 
 class IsCurrentUserTargetUser(BasePermission):

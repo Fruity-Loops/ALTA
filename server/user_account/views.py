@@ -82,8 +82,8 @@ class CustomUserView(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
-        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')).exclude(role='SA')\
-            .exclude(id=request.user.id)
+        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", ''))\
+            .exclude(role='SA').exclude(id=request.user.id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
