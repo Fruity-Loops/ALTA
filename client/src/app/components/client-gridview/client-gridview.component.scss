@@ -20,7 +20,8 @@ button.create {
   position: absolute;
   display: inline;
   margin-top: 0.7em;
-  margin-left: 690px;
+  right: 0;
+  margin-right: 10%;
   border-color: map-get($alta-primary, 500);
   color: map-get($alta-primary, 500);
 }
@@ -73,15 +74,8 @@ div.dropdown {
   display: inline-block;
 }
 
-::ng-deep mat-card {
-  min-width: 800px;
-  max-width: 800px;
-  width: 800px;
-}
-
 ::ng-deep mat-table {
   width: 100%;
-  max-width: 700px;
 }
 
 ::ng-deep .mat-form-field-flex > .mat-form-field-infix { padding-top:0em; border:0em;}
