@@ -29,12 +29,10 @@ DEBUG = os.getenv('DEBUG', 'false')
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ORIGIN_ALLOW_ALL = True
 # ALLOW API REQUESTS FROM ANGULAR FRONTEND
-# CORS_ORIGIN_WHITELIST = [
-#     "*"#os.getenv('ANGULAR_URL', 'http://localhost:4200')
-# ]
+CORS_ORIGIN_WHITELIST = [
+    os.getenv('ANGULAR_URL', 'http://localhost:4200')
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
