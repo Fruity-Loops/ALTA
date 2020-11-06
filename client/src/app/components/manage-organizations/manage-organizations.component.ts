@@ -82,6 +82,11 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
+  preventPropagation(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   openUpdateOrgDialog(organization): void {
     const dialogRef = this.dialog.open(OrganizationDialogComponent, {
       width: '250px',
