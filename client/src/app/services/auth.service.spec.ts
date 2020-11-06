@@ -34,8 +34,6 @@ describe('AuthService', () => {
 
   // Angular default test added when you generate a service using the CLI
   it('should be created', () => {
-    const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-    expect(reqId.request.method).toEqual('GET');
     expect(authService).toBeTruthy();
   });
 
@@ -51,9 +49,6 @@ describe('AuthService', () => {
         role: 'SA',
         is_active: 'true',
       };
-      // Expects a GET call to backend that passes a null user_id
-      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-      expect(reqId.request.method).toEqual('GET');
 
 
       // We run the registerSysAdmin function and we expect that the property name in the response that we
@@ -83,9 +78,6 @@ describe('AuthService', () => {
         user_name: 'angular',
         password: '12',
       };
-
-      const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-      expect(reqId.request.method).toEqual('GET');
 
       authService.login({}).subscribe((sysAdminData) => {
         expect(sysAdminData.user_name).toEqual('angular');
