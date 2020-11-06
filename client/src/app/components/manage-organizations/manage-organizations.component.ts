@@ -121,16 +121,33 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   deleteOrganization(organization): void {
-    // this.organizationsService.deleteOrganization(this.selectedOrganization.org_id).subscribe(
-    //   (data) => {
-    //     this.getAllOrganizations();
-    //     this.errorMessage = '';
-    //   },
-    //   (err) => {
-    //     this.errorMessage = err.error.detail;
-    //   }
-    // );
-    console.log(organization);
+    this.organizationsService.deleteOrganization(organization.org_id).subscribe(
+      (data) => {
+        this.getAllOrganizations();
+        this.errorMessage = '';
+      },
+      (err) => {
+        this.errorMessage = err.error.detail;
+      }
+    );
+  }
+
+  openDeleteDialog(organization): void {
+    const dialogRef = this.dialog.open(OrganizationDialog, {
+      width: '400px',
+      data: {
+        textInput: '',
+        placeholder: 'Organization Name',
+        title: 'Please type the name of the organization to validate deletion.',
+        buttonDesc: 'Delete'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result === organization.org_name) {
+        this.deleteOrganization(organization);
+      }
+    });
   }
 
   openCreateDialog(): void {
