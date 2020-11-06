@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
 import {AuthService} from '../../services/auth.service';
@@ -8,6 +8,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { Organization } from '../../models/organization';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-manage-organizations',
@@ -18,9 +24,11 @@ export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
   selectedOrganization;
   errorMessage = '';
+
   constructor(private organizationsService: ManageOrganizationsService,
               private fb: FormBuilder,
-              private authService: AuthService) {}
+              private authService: AuthService,
+              public dialog: MatDialog) {}
   dataSource: MatTableDataSource<Organization>;
   displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
@@ -39,7 +47,6 @@ export class ManageOrganizationsComponent implements OnInit {
     this.organizationsService.getAllOrganizations().subscribe(
       (data) => {
         this.organizations = data;
-        console.log(data);
         this.errorMessage = '';
         this.dataSource = new MatTableDataSource(this.organizations);
       },
@@ -74,10 +81,11 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  createOrganization(): void {
-    this.organizationsService.createOrganization(this.selectedOrganization).subscribe(
+  createOrganization(orgName: string): void {
+    this.organizationsService.createOrganization({org_name: orgName}).subscribe(
       (data) => {
         this.organizations.push(data);
+        this.getAllOrganizations();
         this.errorMessage = '';
       },
       (err) => {
@@ -104,6 +112,17 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
+  openCreateDialog(): void {
+    const dialogRef = this.dialog.open(OrganizationDialog, {
+      width: '250px',
+      data: ''
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.createOrganization(result);
+    });
+  }
+
   turnOnOrgMode(organization): void {
     this.authService.turnOnOrgMode(organization.org_id);
   }
@@ -112,4 +131,17 @@ export class ManageOrganizationsComponent implements OnInit {
   applyFilter(filterTerm: string): void {
     this.dataSource.filter = filterTerm;
   }
+}
+
+
+@Component({
+  selector: 'organization-dialog',
+  templateUrl: 'organization-dialog.html',
+})
+export class OrganizationDialog {
+
+  constructor(
+    public dialogRef: MatDialogRef<OrganizationDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: string) {}
+
 }

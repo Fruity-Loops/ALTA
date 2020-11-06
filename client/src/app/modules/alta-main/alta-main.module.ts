@@ -11,11 +11,15 @@ import { MatModule } from '../material/material-module';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
-import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
+import {
+  ManageOrganizationsComponent,
+  OrganizationDialog
+} from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule} from '@angular/forms';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -25,10 +29,12 @@ import {MatMenuModule} from '@angular/material/menu';
     SideNavComponent,
     ClientGridviewComponent,
     ManageOrganizationsComponent,
-    EmployeeSettingsComponent
+    EmployeeSettingsComponent,
+    OrganizationDialog
   ],
 
-    imports: [CommonModule, MatModule, ReactiveFormsModule, HttpClientModule, RouterModule, AuthModule, FormsModule, MatMenuModule],
+    imports: [CommonModule, MatModule, ReactiveFormsModule, HttpClientModule, RouterModule, AuthModule, FormsModule,
+      MatMenuModule, MatDialogModule],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
 })
 export class AltaMainModule {}

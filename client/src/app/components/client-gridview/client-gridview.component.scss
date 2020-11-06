@@ -22,6 +22,8 @@ button.create {
   margin-top: 0.7em;
   right: 0;
   margin-right: 10%;
+  padding-left: 3em;
+  padding-right: 3em;
   border-color: map-get($alta-primary, 500);
   color: map-get($alta-primary, 500);
 }

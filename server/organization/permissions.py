@@ -14,6 +14,7 @@ class UserOrganizationPermission(BasePermission):
              :param view:
              :return: True/False : Whether the user is allowed to perform CRUD
         """
+        print(request.data)
         if view.action in ['list', 'retrieve', 'update', 'partial_update']:
             return IsSystemAdmin.has_permission(None, request, None)\
                    or IsInventoryManager.has_permission(None, request, view)
