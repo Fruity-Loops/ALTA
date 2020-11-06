@@ -2,8 +2,8 @@ import {Injectable, OnDestroy, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
-import {Router} from '@angular/router';
-import {ManageOrganizationsService} from "./manage-organizations.service";
+import { Router } from '@angular/router';
+import { ManageOrganizationsService } from './manage-organizations.service';
 
 // Connection with the backend
 const BASEURL = 'http://localhost:8000';
@@ -22,7 +22,6 @@ export class AuthService {
   orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!localStorage.getItem('organization_id'));
 
   subscription;
-  orgSubscription;
 
   // Access Observables through mapped data
   sharedUser = combineLatest([this.userId.asObservable(),
@@ -41,8 +40,7 @@ export class AuthService {
                              }), debounceTime(0));
 
   constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
-              private router: Router,
-              private manageOrganizations: ManageOrganizationsService) {
+              private router: Router) {
     if (localStorage.getItem('id')) {
       this.subscription = this.getCurrentUser(localStorage.getItem('id'))
         .subscribe((data) => {
@@ -50,13 +48,11 @@ export class AuthService {
           this.username.next(data.user_name);
           this.role.next(data.role);
           this.organizationId.next(data.organization);
+          this.organization.next(localStorage.getItem("organization"));
           // TODO: update GET call to return organization's name
-          this.manageOrganizations.getOneOrganization(data.organization).subscribe(value => {
-            this.organization.next(data.org_name);
-            if (data.role === 'IM') {
-              this.turnOnOrgMode({organization_name: value.org_name, ...data});
-            }
-          });
+          if (data.role === 'IM') {
+            this.turnOnOrgMode({organization_name: localStorage.getItem("organization"), ...data});
+          }
         });
     }
   }
@@ -67,6 +63,7 @@ export class AuthService {
 
   turnOnOrgMode(org): void {
     localStorage.setItem('organization_id', org.organization);
+    localStorage.setItem('organization', org.organization_name);
     this.organization.next(org.organization_name);
     this.orgMode.next(true);
     this.router.navigate(['dashboard']);
@@ -112,6 +109,12 @@ export class AuthService {
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
+    localStorage.removeItem('id');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('role');
+    localStorage.removeItem('role');
+    localStorage.removeItem('organization');
+    localStorage.removeItem('organization_id');
   }
 
   OnDestroy(): void {

@@ -11,10 +11,10 @@ import { Organization } from '../../models/organization';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 interface DialogData {
-  textInput: string,
-  placeholder: string,
-  title: string,
-  buttonDesc: string
+  textInput: string;
+  placeholder: string;
+  title: string;
+  buttonDesc: string;
 }
 
 @Component({
@@ -83,7 +83,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   openUpdateOrgDialog(organization): void {
-    const dialogRef = this.dialog.open(OrganizationDialog, {
+    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
       width: '250px',
       data: {
         textInput: organization.org_name,
@@ -132,7 +132,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   openDeleteDialog(organization): void {
-    const dialogRef = this.dialog.open(OrganizationDialog, {
+    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
       width: '400px',
       data: {
         textInput: '',
@@ -150,7 +150,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(OrganizationDialog, {
+    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
       width: '250px',
       data: {
         textInput: '',
@@ -179,13 +179,13 @@ export class ManageOrganizationsComponent implements OnInit {
 
 
 @Component({
-  selector: 'organization-dialog',
+  selector: 'app-organization-dialog',
   templateUrl: 'organization-dialog.html',
 })
-export class OrganizationDialog {
+export class OrganizationDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<OrganizationDialog>,
+    public dialogRef: MatDialogRef<OrganizationDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
 }
