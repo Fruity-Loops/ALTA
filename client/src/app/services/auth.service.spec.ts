@@ -7,6 +7,7 @@ import {
 
 import { TestBed } from '@angular/core/testing';
 import { AuthService } from './auth.service';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -16,7 +17,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Import the HttpClient mocking services
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
     });
 
     // Inject the http, test controller, and service-under-test
@@ -49,6 +50,7 @@ describe('AuthService', () => {
         role: 'SA',
         is_active: 'true',
       };
+
 
       // We run the registerSysAdmin function and we expect that the property name in the response that we
       // Will get when the request is carried (when the observable resolves) out is ‘angular’

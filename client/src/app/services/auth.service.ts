@@ -3,6 +3,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -17,6 +18,8 @@ export class AuthService {
   private role = new BehaviorSubject('');
   private organizationId = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
+
+  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!localStorage.getItem('organization_id'));
 
   subscription;
 
@@ -36,18 +39,50 @@ export class AuthService {
                                 };
                              }), debounceTime(0));
 
-  constructor(private http: HttpClient) { // We inject the http client in the constructor to do our REST operations
+  constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
+              private router: Router) {
     if (localStorage.getItem('id')) {
-        this.subscription = this.getCurrentUser(localStorage.getItem('id'))
-          .subscribe((data) => {
-            this.userId.next(data.user_id);
-            this.username.next(data.user_name);
-            this.role.next(data.role);
-            this.organizationId.next(data.organization);
-            // TODO: update GET call to return organization's name
-            this.organization.next(data.organization_name);
-          });
+      this.subscription = this.getCurrentUser(localStorage.getItem('id'))
+        .subscribe((data) => {
+          this.userId.next(data.user_id);
+          this.username.next(data.user_name);
+          this.role.next(data.role);
+          this.organizationId.next(data.organization);
+          this.organization.next(localStorage.getItem('organization'));
+          // TODO: update GET call to return organization's name
+          if (data.role === 'IM') {
+            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data});
+          }
+        });
     }
+  }
+
+  getOrgMode(): BehaviorSubject<boolean> {
+    return this.orgMode;
+  }
+
+  setOrgMode(state: boolean): void {
+    this.orgMode.next(state);
+  }
+
+  turnOnOrgMode(org): void {
+    localStorage.setItem('organization_id', org.organization);
+    localStorage.setItem('organization', org.organization_name);
+    this.organization.next(org.organization_name);
+    this.orgMode.next(true);
+    this.router.navigate(['dashboard']);
+  }
+
+  turnOffOrgMode(): void {
+    if (this.role.getValue() === 'SA') {
+      localStorage.removeItem('organization_id');
+      this.router.navigate(['manage-organizations']);
+      this.orgMode.next(false);
+      this.organization.next('');
+    } else {
+      this.router.navigate(['dashboard']);
+    }
+
   }
 
   register(body): Observable<any> {
@@ -78,6 +113,12 @@ export class AuthService {
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
+    localStorage.removeItem('id');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('role');
+    localStorage.removeItem('role');
+    localStorage.removeItem('organization');
+    localStorage.removeItem('organization_id');
   }
 
   OnDestroy(): void {

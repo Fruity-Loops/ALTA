@@ -1,23 +1,76 @@
-<h1>Organizations : </h1><h3>(Click on organization to update/delete)</h3>
-<br>
-
-<mat-form-field >
-    <mat-label for="name">Organization Name</mat-label>
-    <input matInput type="text" [(ngModel)]="selectedOrganization.org_name" >
-</mat-form-field>
-
-<button mat-raised-button *ngIf="selectedOrganization.org_id != -1" (click)="updateOrganization()">Update Organization</button>
-<button mat-raised-button (click)="createOrganization()">Create Organization</button>
-<button mat-raised-button color="warn" *ngIf="selectedOrganization.org_id != -1" (click)="deleteOrganization()">DELETE Organization</button>
-<mat-error class="error" *ngIf="errorMessage">
-          <!-- Handeling error -->
-          {{errorMessage}}
-</mat-error>
-
-<mat-divider></mat-divider>
-<mat-list  *ngFor="let organization of organizations">
-    <mat-list-item>
-        <h3  (click)="organizationClicked(organization)">{{ organization.org_name }}</h3>
-    </mat-list-item>
+<mat-card>
+    <button mat-stroked-button  id="create" class="create" (click)="openCreateDialog()">Add</button>
+    <mat-card-title>Organizations</mat-card-title>
+    <div class="example-button-container">
+      <button mat-icon-button disabled aria-label="Example icon button with a home icon">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+  <div class="search-header">
+      <mat-form-field appearance="fill">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Organizations">
+      </mat-form-field>
+  </div>
+  <mat-label class="moveMeRight">Show: </mat-label>
+  <div class="dropdown">
+    <mat-form-field appearance="standard">
+        <mat-select [(value)]="selected" aria-selected="true">
+          <mat-option value="All">All</mat-option>
+        </mat-select>
+      </mat-form-field>
+  </div>
     <mat-divider></mat-divider>
-</mat-list> 
+    <div >
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="1">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+            <td mat-cell *matCellDef="let row"> pic </td>
+          </ng-container>
+
+        <ng-container matColumnDef="Company_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Company name </th>
+          <td mat-cell *matCellDef="let row"> {{row.org_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Activated_On">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Activated On </th>
+          <td mat-cell *matCellDef="let row"> Active </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+          <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address">
+          <th mat-header-cell *matHeaderCellDef> Address</th>
+          <td mat-cell *matCellDef="let row">Montreal, QC</td>
+        </ng-container>
+
+        <ng-container matColumnDef="2" >
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+            <td mat-cell *matCellDef="let row" [matMenuTriggerFor]="menu" (click)="preventPropagation($event)">
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openUpdateOrgDialog(row)">
+                  <span>Update</span>
+                </button>
+                <button mat-menu-item (click)="openDeleteDialog(row)">
+                  <span>Delete</span>
+                </button>
+              </mat-menu>
+                <div class="example-button-container">
+                    <button mat-icon-button mat-button>
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                  </div>
+            </td>
+          </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="turnOnOrgMode(row)"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    </div>
+  </mat-card>

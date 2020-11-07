@@ -29,12 +29,12 @@ export class EmployeeSettingsComponent implements OnInit {
 
   constructor(
     private manageMembersService: ManageMembersService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
-      this.id = routeParams.ID;
-      this.ngOnInit();
+        this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
+        this.ngOnInit();
     });
   }
 
@@ -42,7 +42,7 @@ export class EmployeeSettingsComponent implements OnInit {
     this.getEmployee();
 
     // Verifying that the logged in user is accessing his informations
-    if (this.id === localStorage.getItem('user_id')) {
+    if (this.id === localStorage.getItem('id')) {
       this.isLoggedInUser = true;
     }
   }
@@ -59,7 +59,6 @@ export class EmployeeSettingsComponent implements OnInit {
       };
 
       this.setSelectors();
-      this.employeeCopy = this.employee;
     });
   }
 
@@ -75,8 +74,7 @@ export class EmployeeSettingsComponent implements OnInit {
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
     if (!turnOn) {
-      this.employee = this.employeeCopy;
-      this.setSelectors();
+      this.submit();
     }
   }
 

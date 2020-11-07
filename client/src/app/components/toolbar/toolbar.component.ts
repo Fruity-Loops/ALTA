@@ -23,21 +23,20 @@ export class ToolbarComponent implements OnInit {
   loggedInUser;
   loggedInUserRole;
   subscription;
+  orgModeSub;
+
+  orgMode: boolean;
 
   ngOnInit(): void {
     this.subscription = this.authService.sharedUser
       .subscribe((data) => {
           this.loggedInUser = data.username;
           this.loggedInUserRole = data.role;
-          this.organization = data.orgId;
+          this.organization = data.org;
       });
-  }
-
-  logout(): void {
-    this.tokenService.DeleteToken(); // Delete token when user logout
-    this.authService.setLogOut();   // Extra step - sets the sharedUser data to ''
-    this.router.navigate(['login']); // Redirect user to login/register pager
-    // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
+    this.orgModeSub = this.authService.getOrgMode().subscribe(value => {
+      this.orgMode = value;
+    });
   }
 
   toggleDrawer(): void {
