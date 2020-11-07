@@ -1,5 +1,6 @@
 import { by, element, ElementFinder } from 'protractor';
 
+// Navigation through the SIDE MENU
 export class Navigation {
 
     manageOrganizationOption(): ElementFinder {

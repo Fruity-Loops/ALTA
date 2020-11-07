@@ -10,7 +10,7 @@ describe('E2E Greeting Page', () => {
 
   it('should render login form', () => {
     page.navigateTo();
-    expect(page.getLoginForm()).toBeTruthy();
+    expect(page.getLoginForm().isDisplayed()).toBeTruthy();
   });
 
 
