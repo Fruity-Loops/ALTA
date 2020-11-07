@@ -96,20 +96,6 @@ class AccessClientsTestCase(TestCase):
             'first_name': 'inventory'
         }
 
-    def test_obtain_all_clients(self):
-        # Authenticate a system admin
-        self.client.force_authenticate(user=self.system_admin)
-        request = self.client.get("/accessClients/", self.registered_system_admin)
-        data = request.data
-        self.assertEqual(data[0]['first_name'], self.registered_system_admin['first_name'])
-        self.assertEqual(data[0]['last_name'], self.registered_system_admin['last_name'])
-        self.assertEqual(data[0]['role'], self.registered_system_admin['role'])
-        self.assertEqual(data[0]['is_active'], self.registered_system_admin['is_active'])
-        self.assertEqual(data[1]['first_name'], self.registered_inventory_manager['first_name'])
-        self.assertEqual(data[1]['last_name'], self.registered_inventory_manager['last_name'])
-        self.assertEqual(data[1]['role'], self.registered_inventory_manager['role'])
-        self.assertEqual(data[1]['is_active'], self.registered_inventory_manager['is_active'])
-
 
 class RegistrationTestCase(APITestCase):
     def setUp(self):

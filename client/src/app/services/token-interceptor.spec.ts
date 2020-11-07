@@ -4,6 +4,7 @@ import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { TokenInterceptor } from './token-interceptor';
 import { AuthService } from './auth.service';
@@ -21,7 +22,7 @@ describe('TokenInterceptor', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Import the HttpClient mocking services
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         {
           provide: HTTP_INTERCEPTORS,
@@ -45,6 +46,7 @@ describe('TokenInterceptor', () => {
   });
 
   it('should add content-type and Accept property in http header', () => {
+
     authService.login({}).subscribe((res) => {
       expect(res).toBeTruthy();
     });
@@ -61,10 +63,6 @@ describe('TokenInterceptor', () => {
       'application/json'
     );
     expect(httpReq.request.headers.get('Accept')).toBe('application/json');
-
-    // Expects a GET call to backend that passes a null user_id
-    const reqId = httpMock.expectOne(`${BASEURL}/user/null/`);
-    expect(reqId.request.method).toEqual('GET');
 
     //  TODO: Should check out how to see if tokens are set
     // Expect(httpReq.request.headers.has('Authorization')).toEqual(true);

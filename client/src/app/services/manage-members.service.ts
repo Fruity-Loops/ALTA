@@ -7,6 +7,7 @@ import {
 import { Observable, EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { User } from '../models/user.model';
+import {AuthService} from './auth.service';
 
 interface Body {
   [key: string]: any;
@@ -19,15 +20,22 @@ export class ManageMembersService {
   // Connection with the backend
   BASEURL = 'http://localhost:8000';
 
-  constructor(private http: HttpClient) {} // We inject the http client in the constructor to do our REST operations
+  constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
+              private authService: AuthService) {}
 
   getAllClients(): Observable<any> {
-    return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
-      catchError((err: HttpErrorResponse) => {
-        console.error(`Error: ${err.status}: ${err.error}`);
-        return EMPTY; // TODO: Implement proper error handling
-      })
-    );
+    if (this.authService.getOrgMode().getValue()) {
+      return this.http.get(`${this.BASEURL}/user/`,
+        {params: {organization: localStorage.getItem('organization_id')}});
+    } else {
+      return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
+        catchError((err: HttpErrorResponse) => {
+          console.error(`Error: ${err.status}: ${err.error}`);
+          return EMPTY; // TODO: Implement proper error handling
+        })
+      );
+    }
+
   }
 
   updateClientInfo(employee, id): Observable<any> {

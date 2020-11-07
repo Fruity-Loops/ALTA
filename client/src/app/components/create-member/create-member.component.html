@@ -11,7 +11,7 @@
     <button mat-stroked-button id="signupbtn" [disabled]="!signupForm.valid" class="save">
       {{signUpButtonLabel}}</button><!-- if checks throws error then do not send data -->
     <div class="centerMe">
-    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Blank Display Pic" width="100" height="100">
+    <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Blank Display Pic" width="100" height="100" />
     </div>
       <mat-grid-list cols="2" rowHeight="38:9">
         <mat-grid-tile>
@@ -90,7 +90,7 @@
           </mat-form-field>
         </div>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="showRoles">
           <div class="form-group">
             <mat-label for="pass-word">Role:</mat-label>
             <mat-form-field appearance="outline">
@@ -98,19 +98,6 @@
             <mat-option value="">Choose a role</mat-option>
             <mat-option *ngFor="let role of roles" [value]="role">
               {{ role.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        </div>
-        </mat-grid-tile>
-        <mat-grid-tile>
-          <div class="form-group">
-            <mat-label for="pass-word">Organization:</mat-label>
-            <mat-form-field appearance="outline">
-          <mat-select formControlName="organization">
-            <mat-option value="">Choose an organization</mat-option> <p class="blank-colour">(optional)</p>
-            <mat-option *ngFor="let organization of organizations" [value]="organization">
-              {{ organization.org_name }}
             </mat-option>
           </mat-select>
         </mat-form-field>

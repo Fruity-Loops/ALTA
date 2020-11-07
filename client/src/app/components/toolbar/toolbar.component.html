@@ -1,11 +1,6 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="tool-bar">
     <button mat-icon-button (click)="toggleDrawer()">
         <mat-icon>menu</mat-icon>
     </button>
-    <h1 class="title">ALTA</h1>
-    <h4 class="org" *ngIf="organization">Organization: {{organization}}</h4>
-    <h4 class="org" >Role: {{loggedInUserRole}}</h4>
-    <span class="spacer"></span>
-    <h4>Welcome {{loggedInUser}}</h4>
-    <button mat-button (click)="logout()">Logout</button>
+    <span class="spacer"><h4 class="org" *ngIf="orgMode">{{organization}}</h4></span>
 </mat-toolbar>
