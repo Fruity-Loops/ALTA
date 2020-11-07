@@ -1,4 +1,3 @@
-import { env } from '../../src/environments/environment';
 import { GreetingPage } from './greeting.po';
 import { browser, ExpectedConditions } from 'protractor';
 
