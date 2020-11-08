@@ -7,14 +7,14 @@ teardown () {
     trap SIGINT
     kill $(lsof -t -i:$DJANGO_PORT)
     cd ../server
-    yes yes | python manage.py flush --settings django_server.test_settings
-    echo "yes"                  
+    yes yes | python manage.py flush --settings django_server.test_settings && echo "yes"                  
     exit                     
 }
 
 trap teardown INT
 cd server
 source ./venv/Scripts/activate
+yes yes | python manage.py flush --settings django_server.test_settings && echo "yes"
 python manage.py migrate --settings django_server.test_settings
 python manage.py loaddata users.json --settings django_server.test_settings
 kill -9 $(lsof -t -i:$DJANGO_PORT)
