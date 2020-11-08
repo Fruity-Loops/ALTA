@@ -18,4 +18,50 @@ export class SettingsPage {
     return element(by.id('pass-word'));
   }
 
+  getRoleDropDown(): ElementFinder {
+    return element(by.className('roleDropDown'));
+  }
+
+  getRoleSA(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'System Admin')
+    );
+  }
+
+  getRoleIM(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'Inventory Manager')
+    );
+  }
+
+  getRoleSK(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'Stock Keeper')
+    );
+  }
+
+  getStatusDropDown(): ElementFinder {
+    return element(by.className('statusDropDown'));
+  }
+
+  getStatusActive(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'active')
+    );
+  }
+
+  getRoleInactive(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'disabled')
+    );
+  }
+
+
+
+
 }

@@ -21,4 +21,8 @@ export class ManageMembersPage {
       firstName)
       );
   }
+
+  getEmplopyeeSettingsButton(): ElementFinder {
+    return element(by.className('cell_settings'));
+  }
 }

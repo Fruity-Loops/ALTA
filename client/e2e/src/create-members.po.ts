@@ -31,10 +31,7 @@ export class CreateMembersPage {
   }
 
   getRoleDropDown(): ElementFinder {
-    return element(by.cssContainingText(
-      '.mat-option-text',
-      'Choose a role')
-    );
+    return element(by.className('roleDropDown'));
   }
 
   getRoleIM(): ElementFinder {

@@ -54,7 +54,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * iii) The user enters the organization's name into the popup input field.
    * iv) The user submits the updated organization's name by selecting the Update button.
    */
-  it('update an organization’s name:', () => {
+  it('should update an organization’s name', () => {
     organizationPage.getCellMatMenu().click();
     organizationPage.getOrganizationMatMenuItemUpdate().click();
     const orgNameDialogueField = organizationPage.getOrganizationNameDialogueField();
@@ -72,7 +72,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * iii) The user enters the organization's name into the popup input field to validate the deletion.
    * iv)  The user deletes the organization by selecting the Delete button.
    */
-  it('update an organization’s name:', () => {
+  it('should delete an organization', () => {
     organizationPage.getCellMatMenu().click();
     organizationPage.getOrganizationMatMenuItemDelete().click();
     const orgNameDialogueField = organizationPage.getOrganizationNameDialogueField();

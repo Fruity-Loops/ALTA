@@ -58,7 +58,7 @@
           <div class="form-group">
             <mat-label for="pass-word">Role:</mat-label>
             <mat-form-field appearance="outline">
-              <mat-select [(ngModel)]="role" [disabled]="!edit">
+              <mat-select class="roleDropDown" [(ngModel)]="role" [disabled]="!edit">
                 <mat-option *ngFor="let role of roles" [value]="role.name">
                   {{ role.name }}
                 </mat-option>
@@ -70,7 +70,7 @@
           <div class="form-group">
             <mat-label for="is-active">Is Active</mat-label>
             <mat-form-field appearance="outline">
-              <mat-select id="active" [(ngModel)]="isActive" [disabled]="!edit">
+              <mat-select class="statusDropDown" id="active" [(ngModel)]="isActive" [disabled]="!edit">
                 <mat-option *ngFor="let active of activeStates" [value]="active.state">
                   {{active.state}}
                 </mat-option>

@@ -15,6 +15,7 @@ describe('AT-1.2 System administrator modifies their account information', () =>
    * Given that the user is logged in as a system administrator and selects the Settings side menu option
    */
   it('should navigate to settings page', () => {
+    nav.home().click();
     nav.settingsOption().click();
     browser.wait(ExpectedConditions.urlContains('settings'), 5000);
   });
@@ -27,7 +28,9 @@ describe('AT-1.2 System administrator modifies their account information', () =>
    */
   it('should edit user information', () => {
     settingsPage.getEditSaveButton().click();
-    settingsPage.getEmailInputField().sendKeys('new_email');
+    settingsPage.getEmailInputField().clear();
+    settingsPage.getEmailInputField().sendKeys('new_email@email.com');
+    settingsPage.getPasswordInputField().clear();
     settingsPage.getPasswordInputField().sendKeys('new_pass');
     settingsPage.getEditSaveButton().click();
     browser.wait(ExpectedConditions.urlContains('settings'), 5000);
