@@ -2,7 +2,7 @@ import { browser, by, element, ElementFinder } from 'protractor';
 
 export class CreateMembersPage {
   navigateTo(): Promise<unknown> {
-    const route = `${browser.baseUrl}/create-members`
+    const route = `${browser.baseUrl}/create-members`;
     return browser.get(route) as Promise<unknown>;
   }
 
@@ -28,5 +28,5 @@ export class CreateMembersPage {
 
   getSaveButton(): ElementFinder {
     return element(by.id('signupbtn'));
-  }  
+  }
 }

@@ -2,7 +2,7 @@ import { browser, by, element, ElementFinder } from 'protractor';
 
 export class SettingsPage {
   navigateTo(): Promise<unknown> {
-    const route = `${browser.baseUrl}/settings`
+    const route = `${browser.baseUrl}/settings`;
     return browser.get(route) as Promise<unknown>;
   }
 

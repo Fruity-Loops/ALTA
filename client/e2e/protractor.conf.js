@@ -11,7 +11,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [ // Order of specs
     './src/**/backend-service.e2e-spec.ts',
-    './src/**/greeting.e2e-spec.ts',
+    './src/**/organization.e2e-spec.ts',
     './src/**/*.e2e-spec.ts',
   ],
   capabilities: {

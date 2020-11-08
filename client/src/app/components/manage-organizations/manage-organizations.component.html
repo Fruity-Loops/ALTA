@@ -30,7 +30,7 @@
 
         <ng-container matColumnDef="Company_name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Company name </th>
-          <td mat-cell *matCellDef="let row"> {{row.org_name}} </td>
+          <td class="cell_org_name" classmat-cell *matCellDef="let row"> {{row.org_name}} </td>
         </ng-container>
 
         <ng-container matColumnDef="Activated_On">
@@ -40,22 +40,22 @@
 
         <ng-container matColumnDef="Status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-          <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+          <td class="cell_org_status" mat-cell *matCellDef="let row"> {{row.status}} </td>
         </ng-container>
 
         <ng-container matColumnDef="Address">
           <th mat-header-cell *matHeaderCellDef> Address</th>
-          <td mat-cell *matCellDef="let row">Montreal, QC</td>
+          <td class="cell_org_address" mat-cell *matCellDef="let row">Montreal, QC</td>
         </ng-container>
 
         <ng-container matColumnDef="2" >
             <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
             <td mat-cell *matCellDef="let row" [matMenuTriggerFor]="menu" (click)="preventPropagation($event)">
               <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="openUpdateOrgDialog(row)">
+                <button class="org_mat_menu_item_update" mat-menu-item (click)="openUpdateOrgDialog(row)">
                   <span>Update</span>
                 </button>
-                <button mat-menu-item (click)="openDeleteDialog(row)">
+                <button class="org_mat_menu_item_delete" mat-menu-item (click)="openDeleteDialog(row)">
                   <span>Delete</span>
                 </button>
               </mat-menu>

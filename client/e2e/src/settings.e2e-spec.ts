@@ -1,15 +1,15 @@
-import { Navigation } from './navigation.po'
+import { Navigation } from './navigation.po';
 import { browser, ExpectedConditions } from 'protractor';
 import { SettingsPage } from './settings.po';
 
 
 /**
- * Supports Acceptance Test AT-1.2: System administrator modifies their account information 
+ * Supports Acceptance Test AT-1.2: System administrator modifies their account information
  * https://github.com/Fruity-Loops/ALTA/issues/130
  */
 describe('AT-1.2 System administrator modifies their account information', () => {
-  let settingsPage: SettingsPage = new SettingsPage();
-  let nav: Navigation = new Navigation(); 
+  const settingsPage: SettingsPage = new SettingsPage();
+  const nav: Navigation = new Navigation();
 
   /**
    * Given that the user is logged in as a system administrator and selects the Settings side menu option
@@ -27,7 +27,7 @@ describe('AT-1.2 System administrator modifies their account information', () =>
    */
   it('should edit user information', () => {
     settingsPage.getEditSaveButton().click();
-    settingsPage.getEmailInputField().sendKeys('new_email')
+    settingsPage.getEmailInputField().sendKeys('new_email');
     settingsPage.getPasswordInputField().sendKeys('new_pass');
     settingsPage.getEditSaveButton().click();
     browser.wait(ExpectedConditions.urlContains('settings'), 5000);
