@@ -43,7 +43,7 @@ class LoginSerializer(serializers.ModelSerializer):
 class ClientGridSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['user_name', 'first_name', 'last_name', 'role', 'is_active', 'id']
+        fields = ['user_name', 'first_name', 'last_name', 'email', 'role', 'is_active', 'id']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
