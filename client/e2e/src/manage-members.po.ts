@@ -10,7 +10,7 @@ export class ManageMembersPage {
     return element(by.id('create'));
   }
 
-  getAdminMembersTable(): ElementFinder {
+  getMembersTable(): ElementFinder {
     return element(by.tagName('table'));
   }
 

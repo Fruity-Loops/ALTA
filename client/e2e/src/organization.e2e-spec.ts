@@ -39,7 +39,6 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * iii) The user submits the new organization by selecting the Create button.
    */
   it('should register a new organization', () => {
-
     organizationPage.getAddOrganizationButton().click();
     organizationPage.getOrganizationNameDialogueField().sendKeys(newOrganizationName);
     organizationPage.getCreateOrganizationDialogueButton().click();

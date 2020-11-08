@@ -29,4 +29,25 @@ export class CreateMembersPage {
   getSaveButton(): ElementFinder {
     return element(by.id('signupbtn'));
   }
+
+  getRoleDropDown(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'Choose a role')
+    );
+  }
+
+  getRoleIM(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'Inventory Manager')
+    );
+  }
+
+  getRoleSK(): ElementFinder {
+    return element(by.cssContainingText(
+      '.mat-option-text',
+      'Stock Keeper')
+    );
+  }
 }

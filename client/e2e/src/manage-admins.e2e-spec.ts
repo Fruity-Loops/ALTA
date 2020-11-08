@@ -28,7 +28,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
    * The user selects the Create button to display an empty form for the user to input the new user’s information
    */
   it('should navigate to create members page', () => {
-    expect(manageMembersPage.getAdminMembersTable().isDisplayed()).toBeTruthy();
+    expect(manageMembersPage.getMembersTable().isDisplayed()).toBeTruthy();
     manageMembersPage.getCreateMemberButton().click();
     browser.wait(ExpectedConditions.urlContains('create-members'), 5000);
   });
@@ -52,8 +52,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
     createMembersPage.getPasswordField().sendKeys(systemAdmin.password);
     createMembersPage.getSaveButton().click();
 
-    browser.wait(ExpectedConditions.urlContains('modify-members'), 5000);
-    expect(manageMembersPage.getFirstNameColumn(systemAdmin.firstname).isDisplayed()).toBeTruthy();
-
+    browser.wait(ExpectedConditions.visibilityOf(
+      manageMembersPage.getFirstNameColumn(systemAdmin.firstname)), 5000);
   });
 });

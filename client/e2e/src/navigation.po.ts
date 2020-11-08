@@ -7,6 +7,8 @@ export class Navigation {
         return element(by.id('alta_logo'));
     }
 
+    // Default View
+
     manageOrganizationOption(): ElementFinder {
         return element(by.cssContainingText(
             '.option-tab',
@@ -26,6 +28,15 @@ export class Navigation {
         return element(by.cssContainingText(
             '.option-tab',
             'Settings')
+            );
+    }
+
+    // Organization View
+
+    employeesOption(): ElementFinder {
+        return element(by.cssContainingText(
+            '.option-tab',
+            'Employees')
             );
     }
 }
