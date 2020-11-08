@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { env } from 'src/environments/environment';
 
 
 @Component({
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 })
 export class GreetingComponent implements OnInit, OnDestroy, AfterViewInit{
 
-  openRegistraion: boolean = environment.open_registration;
+  openRegistraion: boolean = env.open_registration;
   constructor() {}
 
   ngOnInit(): void {

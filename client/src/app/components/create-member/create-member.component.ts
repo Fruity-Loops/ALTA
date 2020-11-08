@@ -74,8 +74,7 @@ export class CreateMemberComponent implements OnInit {
       : this.authService.openRegister(this.body);
 
     register.subscribe(
-      (data) => {
-        this.tokenService.SetToken(data.token);
+      () => {
         this.signupForm.reset(); // Reset form once create-member
         setTimeout(() => {
           // Redirect user to component in path:home (defined in alta-home-routing.module.ts)

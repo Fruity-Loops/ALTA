@@ -1,9 +1,10 @@
+import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Connection with the backend
-const BASEURL = 'http://localhost:8000';
+const BASEURL = env.api_root;
 
 @Injectable({
   providedIn: 'root'

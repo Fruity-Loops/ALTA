@@ -25,23 +25,23 @@
 
       <ng-container matColumnDef="First_Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.first_name}} </td>
+        <td class="cell_first_name" mat-cell *matCellDef="let row"> {{row.first_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Last_Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.last_name}} </td>
+        <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-        <td mat-cell *matCellDef="let row"> {{row.is_active}} </td>
+        <td class="cell_is_active" mat-cell *matCellDef="let row"> {{row.is_active}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Settings">
         <th mat-header-cell *matHeaderCellDef> Settings</th>
         <td mat-cell *matCellDef="let row">
-          <a [routerLink]="['/modify-members', row.id]">
+          <a class="cell_settings" [routerLink]="['/modify-members', row.id]">
             <span class="dot"></span>
           </a>
         </td>

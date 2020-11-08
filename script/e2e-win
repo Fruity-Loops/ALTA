@@ -1,0 +1,26 @@
+#!/bin/bash  
+# script to setup, run and teardown end-to-end testing environment
+
+DJANGO_PORT=8000
+
+teardown () {
+    trap SIGINT
+    kill $(lsof -t -i:$DJANGO_PORT)
+    cd ../server
+    yes yes | python manage.py flush --settings django_server.test_settings && echo "yes"                  
+    exit                     
+}
+
+trap teardown INT
+cd server
+source ./venv/Scripts/activate
+yes yes | python manage.py flush --settings django_server.test_settings && echo "yes"
+python manage.py migrate --settings django_server.test_settings
+python manage.py loaddata users.json --settings django_server.test_settings
+kill -9 $(lsof -t -i:$DJANGO_PORT)
+python manage.py runserver 127.0.0.1:$DJANGO_PORT --settings django_server.test_settings &
+cd ../client
+ng e2e
+teardown
+
+trap SIGINT
