@@ -2,7 +2,6 @@
 This file provides functionality for all the endpoints for interacting with user accounts
 """
 
-from django.db.models import signals
 from django.contrib.auth.hashers import check_password
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
@@ -107,16 +106,10 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
-        # creating token
-        signals.post_save.send(sender=self.__class__,
-                               user=user, request=self.request)
-        token = Token.objects.get(user=user).key
-
         if user.organization is None:
-            data = {'user': user.user_name, 'organization': '', 'token': token}
+            data = {'user': user.user_name, 'organization': ''}
         else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id,
-                    'token': token}
+            data = {'user': user.user_name, 'organization': user.organization.org_id }
         return Response(data, status=status.HTTP_201_CREATED)
 
 
