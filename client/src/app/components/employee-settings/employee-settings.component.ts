@@ -19,6 +19,7 @@ export class EmployeeSettingsComponent implements OnInit {
   id: string;
   isLoggedInUser = false;
   body: any;
+  canEditFields = false;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = [
@@ -64,6 +65,9 @@ export class EmployeeSettingsComponent implements OnInit {
 
   setSelectors(): void {
     this.isActive = this.employee.is_active ? 'active' : 'disabled';
+    if (this.employee.role === 'IM') {
+      this.canEditFields = true;
+    }
     this.roles.forEach((role) => {
       if (role.abbrev === this.employee.role) {
         this.role = role.name;

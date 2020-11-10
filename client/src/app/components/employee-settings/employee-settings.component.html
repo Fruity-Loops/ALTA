@@ -14,7 +14,7 @@
           <div class="form-group">
             <mat-label for="power">First Name:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="firstname" type="text" [disabled]=true [value]="employee.first_name"/>
+              <input matInput id="firstname" type="text" [disabled]="!canEditFields || !edit" [value]="employee.first_name"/>
             </mat-form-field>
           </div>
 
@@ -33,7 +33,7 @@
             <mat-label for="lastname">Last name:</mat-label>
             <mat-form-field appearance="outline">
               <input matInput id="lastname" type="text" placeholder="Last name"
-                     [disabled]=true [value]="employee.last_name"/>
+                     [disabled]="!canEditFields || !edit" [value]="employee.last_name"/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
