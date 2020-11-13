@@ -45,6 +45,8 @@ class IsInventoryManager(BasePermission):
                     (str(user.organization_id) == request.data.get('organization', '') or
                      get_self_org(user, request)):
                 return True
+            if view.action in ['retrieve']:     # Used for obtaining the settings
+                return True
         return False
 
 

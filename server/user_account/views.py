@@ -45,7 +45,7 @@ class CustomUserView(viewsets.ModelViewSet):
         :return: permission
         """
         if self.action in ['retrieve', 'update', 'partial_update']:
-            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser | IsSystemAdmin]
+            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser, IsInventoryManager | IsSystemAdmin]
 
         # TODO: Validate requested user id matches requested organization in DB
         # for permissions unrelated to create
