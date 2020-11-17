@@ -7,7 +7,8 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
+from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager,\
+    get_self_org, get_self_org_query, get_self_org_body
 from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
     UserPasswordSerializer
 from .models import CustomUser
@@ -44,13 +45,20 @@ class CustomUserView(viewsets.ModelViewSet):
         :param: actions
         :return: permission
         """
-        if self.action in ['retrieve', 'update', 'partial_update']:
-            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser, IsInventoryManager | IsSystemAdmin]
-
-        # TODO: Validate requested user id matches requested organization in DB
-        # for permissions unrelated to create
-        elif self.action in ['create', 'list']:
+        # Used for Verifying Correct Organization
+        user = CustomUser.objects.get(email=self.request.user)
+        if self.action in ['create']:
             permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+        elif self.action in ['list']:
+            get_self_org_query(user, self.request)
+            permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+        elif self.action in ['retrieve', 'update']:
+            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser, IsInventoryManager\
+                                  | IsSystemAdmin]
+        elif self.action in ['partial_update']:
+            get_self_org_body(user, self.request)
+            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser, IsInventoryManager \
+                                  | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]

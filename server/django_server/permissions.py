@@ -17,9 +17,18 @@ class IsSystemAdmin(BasePermission):
         user = CustomUser.objects.get(email=request.user)
         return user.role == 'SA'
 
+
 def get_self_org(user, request):
     return str(user.organization_id) == request.parser_context['kwargs']['pk'] and request.path.\
         startswith('/organization')
+
+
+def get_self_org_query(user, request):
+    return str(user.organization_id) == request.GET.get("organization", '')
+
+
+def get_self_org_body(user, request):
+    return str(user.organization_id) == request.data.get('organization', '')
 
 
 class IsInventoryManager(BasePermission):
@@ -35,19 +44,7 @@ class IsInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(email=request.user)
-
-        if view.action in ['list']:
-            return user.role == 'IM' and str(user.organization_id) == request.GET.\
-                get("organization", '')
-
-        if user.role == 'IM':
-            if request.data.get('role', '') != 'SA' and \
-                    (str(user.organization_id) == request.data.get('organization', '') or
-                     get_self_org(user, request)):
-                return True
-            if view.action in ['retrieve']:     # Used for obtaining the settings
-                return True
-        return False
+        return user.role == 'IM'
 
 
 class IsCurrentUserTargetUser(BasePermission):
@@ -64,5 +61,4 @@ class IsCurrentUserTargetUser(BasePermission):
         """
         current_user = request.user
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
-
         return current_user == target_user
