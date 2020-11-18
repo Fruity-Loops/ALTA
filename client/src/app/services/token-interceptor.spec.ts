@@ -1,3 +1,4 @@
+import { env } from 'src/environments/environment';
 // We want to test that an appropriate header configuration
 // Is added to each http request before sending it to server
 import {
@@ -14,7 +15,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 describe('TokenInterceptor', () => {
   let authService: AuthService;
   let httpMock: HttpTestingController;
-  const BASEURL = 'http://localhost:8000';
+  const BASEURL = env.api_root;
 
   // BeforeEach function runs before every test
   // Allowing us to register a new TestBed module that registers both the

@@ -1,11 +1,12 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import { env } from 'src/environments/environment';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { map,  debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 // Connection with the backend
-const BASEURL = 'http://localhost:8000';
+const BASEURL = env.api_root;
 
 @Injectable({
   providedIn: 'root',
