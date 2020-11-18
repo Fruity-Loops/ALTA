@@ -13,5 +13,5 @@ class ItemViewSet(viewsets.ModelViewSet):
 
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
