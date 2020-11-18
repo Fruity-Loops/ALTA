@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from .load_csv_to_db import populate_items
+import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_account.urls')),
     path('', include('organization.urls'))
 ]
+
+current_path = os.path.dirname(__file__)
+csv = os.path.join(current_path, "dummyData.csv")
+populate_items(csv, "Items")
