@@ -46,7 +46,11 @@ class CustomUserView(viewsets.ModelViewSet):
         :return: permission
         """
         # Used for Verifying Correct Organization
-        user = CustomUser.objects.get(email=self.request.user)
+        try:
+            user = CustomUser.objects.get(email=self.request.user)
+        except CustomUser.DoesNotExist:
+            permission_classes = [IsAuthenticated, IsSystemAdmin]
+
         if self.action in ['create']:
             permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         elif self.action in ['list']:

@@ -2,12 +2,18 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from user_account.models import CustomUser
-
+from organization.models import Organization
 
 class OrganizationTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
+
+        self.organization = Organization.objects.create(
+            org_id=1,
+            org_name='1',
+            status=False
+        )
 
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.create(
@@ -26,6 +32,7 @@ class OrganizationTestCase(APITestCase):
             first_name='inventory1',
             last_name='manage1r',
             role='IM',
+            organization=self.organization,
             is_active=True)
 
     def test_create_organization_sys_admin_success(self):
@@ -65,6 +72,6 @@ class OrganizationTestCase(APITestCase):
     def test_get_all_organization(self):
         """ IM can get a list of organization """
         self.client.force_authenticate(user=self.inventory_manager)
-        response = self.client.get("/organization/")
+        response = self.client.get("/organization/", {'organization': 1})
         self.assertEqual(response.status_code,
-                         status.HTTP_403_FORBIDDEN)
+                         status.HTTP_200_OK)
