@@ -15,8 +15,10 @@ def get_collection(collection_name):
 def clean_data(csv_file):
     df = pd.read_csv(csv_file)
 
-    # Renaming column to be the unique identifier in mongodb
-    df = df.rename(columns={'Batch Number': '_id'})
+    # Renaming column to be compatible with models fields ( which doesn't contain spaces'
+    df = df.rename(columns={'Batch Number': '_id', 'Part Number':'Part_Number',
+                            'Part Description': 'Part_Description','Serial Number':'Serial_Number',
+                            'Average Cost':'Average_Cost','Unit of Measure (UoM)':'Unit_of_Measure'})
 
     # Cleaning dataframe
     df = df.dropna(subset=['_id'])
