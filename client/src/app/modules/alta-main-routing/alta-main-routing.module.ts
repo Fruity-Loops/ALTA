@@ -4,9 +4,10 @@ import { DashboardComponent } from 'src/app/components/dashboard/dashboard.compo
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { AuthGuard } from '../../guards/auth.guard';
-import {EmployeeSettingsComponent} from '../../components/employee-settings/employee-settings.component';
-import {ClientGridviewComponent} from '../../components/client-gridview/client-gridview.component';
-import {CreateMemberComponent} from '../../components/create-member/create-member.component';
+import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
+import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
+import { CreateMemberComponent } from '../../components/create-member/create-member.component';
+import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 
 const routes: Routes = [
   {
@@ -17,7 +18,7 @@ const routes: Routes = [
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
+        pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'create-members', component: CreateMemberComponent },
@@ -27,7 +28,8 @@ const routes: Routes = [
       { path: 'modify-members/:ID', component: EmployeeSettingsComponent },
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
-    ]
+      { path: 'manage-items', component: ManageInventoryItemsComponent },
+    ],
   },
 ];
 
@@ -35,4 +37,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AltaMainRoutingModule { }
+export class AltaMainRoutingModule {}

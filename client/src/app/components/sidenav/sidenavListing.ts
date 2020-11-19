@@ -22,7 +22,7 @@ export const SystemNavListings: SideNavOption[] = [
     title: 'Settings',
     routerLink: 'sa-settings',
     subMenuOptions: [],
-  }
+  },
 ];
 
 export const OrganizationNavListings: SideNavOption[] = [
@@ -31,8 +31,7 @@ export const OrganizationNavListings: SideNavOption[] = [
   {
     title: 'Template',
     routerLink: 'template',
-    subMenuOptions: [
-    ],
+    subMenuOptions: [],
   },
   {
     title: 'Employees',
@@ -40,8 +39,13 @@ export const OrganizationNavListings: SideNavOption[] = [
     subMenuOptions: [],
   },
   {
+    title: 'Inventory Items',
+    routerLink: 'manage-items',
+    subMenuOptions: [],
+  },
+  {
     title: 'Settings',
     routerLink: 'settings',
     subMenuOptions: [],
-  }
+  },
 ];
