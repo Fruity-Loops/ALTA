@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build:
+  pylint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       run: |
         REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
-        echo ::set-env name=MASTER_REPORT::"${REPORT//$'\n'/'%0A'}"
+        echo "MASTER_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
     
     - name: Checkout Branch
       uses: actions/checkout@v2
@@ -43,13 +43,13 @@ jobs:
       run: |
         REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
-        echo ::set-env name=BRANCH_REPORT::"${REPORT//$'\n'/'%0A'}"
+        echo "BRANCH_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
 
     - name: Get Diff
       run: |
         DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
         echo $DIFF_REPORT
-        echo ::set-env name=DIFF::"${DIFF_REPORT//$'\n'/'%0A'}"
+        echo "DIFF=${DIFF_REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
 
     - name: Comment
       uses: actions/github-script@v3
