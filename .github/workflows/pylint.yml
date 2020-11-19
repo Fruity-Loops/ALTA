@@ -47,9 +47,9 @@ jobs:
 
     - name: Get Diff
       run: |
-        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
+        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT}" "${BRANCH_REPORT}")
         echo $DIFF_REPORT
-        echo "DIFF=${DIFF_REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
+        echo "DIFF=${DIFF_REPORT//$'\n'/'\n'}" >> $GITHUB_ENV
 
     - name: Comment
       uses: actions/github-script@v3
@@ -62,5 +62,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: "Pylint Report \n\n" + process.env.DIFF.replace("%0A","<br />")
+              body: "Pylint Report \n\n" + process.env.DIFF
             })
