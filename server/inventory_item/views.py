@@ -1,6 +1,5 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from django_server.permissions import IsInventoryManager
 
 from .serializers import ItemSerializer
 from .models import Item

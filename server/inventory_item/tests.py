@@ -11,11 +11,11 @@ class ItemTestCase(APITestCase):
 
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.create(
-            user_name='system_admin1',
-            email='system_admin1@email.com',
-            password='password1',
-            first_name='system1',
-            last_name='admin1',
+            user_name='system_admin2',
+            email='system_admin2@email.com',
+            password='password2',
+            first_name='system2',
+            last_name='admin2',
             role='SA',
             is_active=True)
 

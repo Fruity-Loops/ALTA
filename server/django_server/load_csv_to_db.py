@@ -7,23 +7,25 @@ def get_collection(collection_name):
     client = pym.MongoClient("mongodb://localhost:27017/")
 
     # Specifying a DB
-    db = client["alta_development"]
+    database = client["alta_development"]
 
-    return db[collection_name]
+    return database[collection_name]
 
 
 def clean_data(csv_file):
-    df = pd.read_csv(csv_file)
+    dataframe = pd.read_csv(csv_file)
 
     # Renaming column to be compatible with models fields ( which doesn't contain spaces'
-    df = df.rename(columns={'Batch Number': '_id', 'Part Number':'Part_Number',
-                            'Part Description': 'Part_Description','Serial Number':'Serial_Number',
-                            'Average Cost':'Average_Cost','Unit of Measure (UoM)':'Unit_of_Measure'})
+    dataframe = dataframe.rename(columns={'Batch Number': '_id', 'Part Number': 'Part_Number',
+                                          'Part Description': 'Part_Description',
+                                          'Serial Number': 'Serial_Number',
+                                          'Average Cost': 'Average_Cost',
+                                          'Unit of Measure (UoM)': 'Unit_of_Measure'})
 
     # Cleaning dataframe
-    df = df.dropna(subset=['_id'])
+    dataframe = dataframe.dropna(subset=['_id'])
 
-    return df.to_dict('records')
+    return dataframe.to_dict('records')
 
 
 def populate_items(csv_file, collection_name):
@@ -33,9 +35,9 @@ def populate_items(csv_file, collection_name):
     try:
         collection.insert_many(dict_of_records)
         print("Data inserted successfully")
-    except pym.errors.BulkWriteError as e:
-        for i in range(len(e.details["writeErrors"])):
+    except pym.errors.BulkWriteError as error:
+        for i in range(len(error.details["writeErrors"])):
 
             # If the error is different to duplicate key entry
-            if e.details["writeErrors"][i]["code"] != 11000:
+            if error.details["writeErrors"][i]["code"] != 11000:
                 print("An error occured")
