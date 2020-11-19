@@ -13,13 +13,14 @@ import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
 import {
   ManageOrganizationsComponent,
-  OrganizationDialogComponent
+  OrganizationDialogComponent,
 } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
 
 @NgModule({
   declarations: [
@@ -30,11 +31,21 @@ import { MatDialogModule } from '@angular/material/dialog';
     ClientGridviewComponent,
     ManageOrganizationsComponent,
     EmployeeSettingsComponent,
-    OrganizationDialogComponent
+    OrganizationDialogComponent,
+    ManageInventoryItemsComponent,
   ],
 
-    imports: [CommonModule, MatModule, ReactiveFormsModule, HttpClientModule, RouterModule, AuthModule, FormsModule,
-      MatMenuModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    MatModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    RouterModule,
+    AuthModule,
+    FormsModule,
+    MatMenuModule,
+    MatDialogModule,
+  ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
 })
 export class AltaMainModule {}
