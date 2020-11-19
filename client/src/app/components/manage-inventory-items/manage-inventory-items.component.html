@@ -1,1 +1,90 @@
-<p>manage-inventory-items works!</p>
+<mat-card>
+    <mat-card-title>Inventory Items</mat-card-title>
+    <mat-divider></mat-divider>
+    <div >
+      <table mat-table [dataSource]="dataSource" matSort>
+  
+        <ng-container matColumnDef="Batch_Number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Batch Number </th>
+          <td class="cell_batch_number" mat-cell *matCellDef="let row"> {{row._id}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Location">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+          <td class="cell_location" mat-cell *matCellDef="let row"> {{row.Location}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Plant">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Plant </th>
+          <td class="cell_plant" mat-cell *matCellDef="let row"> {{row.Plant}} </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Zone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Zone </th>
+            <td class="cell_zone" mat-cell *matCellDef="let row"> {{row.Zone}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Aisle">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Aisle </th>
+            <td class="cell_Aisle" mat-cell *matCellDef="let row"> {{row.Aisle}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Part_Number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Part_Number </th>
+            <td class="cell_Part_Number" mat-cell *matCellDef="let row"> {{row.Part_Number}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Part_Description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Part_Description </th>
+            <td class="cell_Part_Description" mat-cell *matCellDef="let row"> {{row.Part_Description}} </td>
+          </ng-container>
+         
+          <ng-container matColumnDef="Serial_Number">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Serial_Number </th>
+            <td class="cell_Serial_Number" mat-cell *matCellDef="let row"> {{row.Serial_Number}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Condition">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Condition </th>
+            <td class="cell_Condition" mat-cell *matCellDef="let row"> {{row.Condition}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+            <td class="cell_Category" mat-cell *matCellDef="let row"> {{row.Category}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Owner">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Owner </th>
+            <td class="cell_Owner" mat-cell *matCellDef="let row"> {{row.Owner}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Criticality">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Criticality </th>
+            <td class="cell_Criticality" mat-cell *matCellDef="let row"> {{row.Criticality}} </td>
+          </ng-container>
+         
+          <ng-container matColumnDef="Average_Cost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Average_Cost </th>
+            <td class="cell_SAverage_Cost" mat-cell *matCellDef="let row"> {{row.Average_Cost}} </td>
+          </ng-container>
+          
+          <ng-container matColumnDef="Quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+            <td class="cell_Quantity" mat-cell *matCellDef="let row"> {{row.Quantity}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Unit_of_Measure">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Unit_of_Measure </th>
+            <td class="cell_Unit_of_Measure" mat-cell *matCellDef="let row"> {{row.Unit_of_Measure}} </td>
+          </ng-container>
+
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    </div>
+  </mat-card>
+  
