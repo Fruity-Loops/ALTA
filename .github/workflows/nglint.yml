@@ -48,7 +48,7 @@ jobs:
 
     - name: Get Diff
       run: |
-        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT//$'%0A'/'\n'}" "${BRANCH_REPORT//$'%0A'/'\n'}")
+        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT}" "${BRANCH_REPORT}")
         echo $DIFF_REPORT
         echo "DIFF=${DIFF_REPORT//$'\n'/'/n'}" >> $GITHUB_ENV
 
