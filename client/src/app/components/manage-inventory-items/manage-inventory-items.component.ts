@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
-import { InventoryItem } from '../../models/InventoryItem';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -17,24 +16,8 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   constructor(private itemsService: ManageInventoryItemsService) {}
 
-  dataSource: MatTableDataSource<InventoryItem>;
-  displayedColumns: string[] = [
-    'Batch_Number',
-    'Location',
-    'Plant',
-    'Zone',
-    'Aisle',
-    'Part_Number',
-    'Part_Description',
-    'Serial_Number',
-    'Condition',
-    'Category',
-    'Owner',
-    'Criticality',
-    'Average_Cost',
-    'Quantity',
-    'Unit_of_Measure',
-  ];
+  dataSource: MatTableDataSource<any>;
+  displayedColumns: string[] = [];
   filterTerm: string;
   selected = 'All';
 
@@ -48,6 +31,12 @@ export class ManageInventoryItemsComponent implements OnInit {
   getAllItems(): void {
     this.itemsService.getAllItems().subscribe(
       (data) => {
+        // Getting the field name of the item object returned and populating the column of the table
+        for (const key in data[0]) {
+          if (key != null) {
+            this.displayedColumns.push(key);
+          }
+        }
         this.items = data;
         this.errorMessage = '';
         this.dataSource = new MatTableDataSource(this.items);
