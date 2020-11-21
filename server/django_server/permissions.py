@@ -57,6 +57,7 @@ class IsInventoryManager(BasePermission):
             if found_false is not None and not found_false:
                 return False
 
+        # Used to ensure only the requests accounted for are being made
         sent_proper_organization = False
         for found_true in correct_organization:
             if found_true:
@@ -65,7 +66,7 @@ class IsInventoryManager(BasePermission):
         if not sent_proper_organization:
             return False
 
-        if user.role in ['IM', 'SA']:
+        if user.role in ['IM']:
             return True
         return False
 
