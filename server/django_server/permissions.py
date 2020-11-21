@@ -17,9 +17,18 @@ class IsSystemAdmin(BasePermission):
         user = CustomUser.objects.get(email=request.user)
         return user.role == 'SA'
 
+
 def get_self_org(user, request):
     return str(user.organization_id) == request.parser_context['kwargs']['pk'] and request.path.\
         startswith('/organization')
+
+
+def get_self_org_query(user, request):
+    return str(user.organization_id) == request.GET.get("organization", '')
+
+
+def get_self_org_body(user, request):
+    return str(user.organization_id) == request.data.get('organization', '')
 
 
 class IsInventoryManager(BasePermission):
@@ -35,16 +44,21 @@ class IsInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(email=request.user)
+        correct_organization = [None, None, None]
+        if request.GET.get("organization", None) is not None:
+            correct_organization[0] = get_self_org_query(user, request)
+        if request.data.get('organization', None) is not None:
+            correct_organization[1] = get_self_org_body(user, request)
+        if request.parser_context['kwargs'] is not None:
+            if 'pk' in request.parser_context['kwargs']:
+                correct_organization[2] = get_self_org(user, request)
 
-        if view.action in ['list']:
-            return user.role == 'IM' and str(user.organization_id) == request.GET.\
-                get("organization", '')
+        for found_false in correct_organization:
+            if found_false is not None and not found_false:
+                return False
 
-        if user.role == 'IM':
-            if request.data.get('role', '') != 'SA' and \
-                    (str(user.organization_id) == request.data.get('organization', '') or
-                     get_self_org(user, request)):
-                return True
+        if user.role in ['IM', 'SA']:
+            return True
         return False
 
 

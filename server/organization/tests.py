@@ -67,4 +67,4 @@ class OrganizationTestCase(APITestCase):
         self.client.force_authenticate(user=self.inventory_manager)
         response = self.client.get("/organization/")
         self.assertEqual(response.status_code,
-                         status.HTTP_403_FORBIDDEN)
+                         status.HTTP_200_OK)
