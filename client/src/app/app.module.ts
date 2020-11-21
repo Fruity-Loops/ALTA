@@ -24,7 +24,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     AuthRoutingModule,
     HttpClientModule,
     MatModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers: [
     CookieService, // To manage cookie in frontend
@@ -36,4 +36,4 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
