@@ -1,4 +1,3 @@
-from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from django_server.load_csv_to_db import main
 
