@@ -16,7 +16,7 @@ Including another URLconf
 import os
 from django.contrib import admin
 from django.urls import path, include
-from .load_csv_to_db import populate_items
+from .load_csv_to_db import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,5 @@ urlpatterns = [
     path('', include('inventory_item.urls'))
 ]
 
-current_path = os.path.dirname(__file__)
-csv = os.path.join(current_path, "dummyData.csv")
-populate_items(csv, "inventory_item_item")
+# Initialize inventory Items collection
+main(True)
