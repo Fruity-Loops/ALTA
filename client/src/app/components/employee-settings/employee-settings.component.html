@@ -45,7 +45,7 @@
             </mat-form-field>
           </div>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="isLoggedInUser">
           <div class="form-group">
             <mat-label for="pass-word">Password:</mat-label>
             <mat-form-field appearance="outline">

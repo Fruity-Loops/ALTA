@@ -15,6 +15,9 @@ class IsSystemAdmin(BasePermission):
         :return: True/False : Whether the user is a SysAdmin or Not
         """
         user = CustomUser.objects.get(email=request.user)
+        if request.data.get('password', '') != '':
+            return IsCurrentUserTargetUser.has_permission(self, request, view)
+
         return user.role == 'SA'
 
 
