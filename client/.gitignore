@@ -150,3 +150,11 @@ baseline.json
 
 # Jetbrains
 **/.idea/*
+
+# Web directory
+www/
+
+.sass-cache
+platforms
+plugins
+*.swp
