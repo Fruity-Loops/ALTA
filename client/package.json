@@ -24,6 +24,7 @@
     "@angular/router": "~10.1.0",
     "@capacitor/android": "^2.4.3",
     "@capacitor/core": "2.4.3",
+    "@capacitor/ios": "^2.4.3",
     "@ionic/angular": "^5.5.1",
     "@schematics/angular": "^10.2.0",
     "ngx-cookie-service": "^10.1.1",
