@@ -54,6 +54,15 @@
             </mat-form-field>
           </div>
         </mat-grid-tile>
+        <mat-grid-tile *ngIf="!isSystemAdmin">
+          <div class="form-group">
+            <mat-label for="location">Employment Location:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="location" type="text" [disabled]="!edit"
+                     [(ngModel)]="location"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
         <mat-grid-tile *ngIf="!isLoggedInUser">
           <div class="form-group">
             <mat-label for="pass-word">Role:</mat-label>

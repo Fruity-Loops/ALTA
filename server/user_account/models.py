@@ -21,6 +21,7 @@ class CustomUser(AbstractBaseUser):
     last_name = models.CharField(max_length=255)
     role = models.CharField(max_length=2, choices=USERS)
     is_active = models.BooleanField(default=False)
+    location = models.CharField(max_length=255, blank=True, null=True)
     email = models.EmailField(verbose_name='email',
                               max_length=255, unique=True)
     # no need to specify password and id because its build in
