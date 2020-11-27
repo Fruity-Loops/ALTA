@@ -12,7 +12,7 @@ def start():
 
 
 def start_new_job(job_id, time):
-    scheduler.add_job(main, 'interval', minutes=time, id=job_id)
+    scheduler.add_job(main, 'interval', minutes=time, id=job_id, args=(job_id,))
     print_all_job()
     get_specific_job(job_id)
 

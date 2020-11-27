@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from inventory_item.updater import start_new_job
 
 
 class Organization(models.Model):

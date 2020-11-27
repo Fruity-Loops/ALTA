@@ -25,4 +25,4 @@ urlpatterns = [
 ]
 
 # Initialize inventory Items collection
-main(True)
+main('', True)
