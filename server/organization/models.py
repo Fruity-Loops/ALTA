@@ -12,6 +12,6 @@ class Organization(models.Model):
 
 
 @receiver(post_save, sender=Organization)
-def execute_job(sender, instance, **kwargs):
+def execute_job(instance, **kwargs):
     print('post save callback')
     start_new_job(instance.org_name, instance.inventory_items_refresh_job)
