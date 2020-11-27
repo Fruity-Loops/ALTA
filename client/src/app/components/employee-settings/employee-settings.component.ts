@@ -100,6 +100,8 @@ export class EmployeeSettingsComponent implements OnInit {
       }
     });
 
+    this.employee.location = this.location;
+
     this.manageMembersService
       .updateClientInfo(this.employee, this.id)
       .subscribe((response) => {

@@ -17,7 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Status', 'Settings'];
+  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Location', 'Status', 'Settings'];
   filterTerm: string;
   selected = 'All';
 
