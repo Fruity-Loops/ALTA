@@ -1,8 +1,8 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
-from django_server.load_csv_to_db import main
 import pymongo as pym
+from django_server.load_csv_to_db import main
 
 
 # Making connection to mongoclient
@@ -22,7 +22,7 @@ scheduler = BackgroundScheduler(jobstores=job_stores)
 def start():
     """
     starts the scheduler
-    all the jobs that are stored in the jobs 
+    all the jobs that are stored in the jobs
     collection will be retrieved
     """
     scheduler.start()
@@ -45,7 +45,7 @@ def scheduler_listener(event):
 
 
 def start_new_job(job_id, time):
-    scheduler.add_job(main, 'interval', minutes=time, id=job_id, args=(job_id,))
+    scheduler.add_job(main, 'interval', minutes=time, id=job_id, args=(job_id,),replace_existing=True)
     print_all_job()
     get_specific_job(job_id)
 
@@ -56,10 +56,10 @@ def print_all_job():
     print("#####################")
 
 
-def get_specific_job(id):
-    job = scheduler.get_job(id)
+def get_specific_job(job_id):
+    job = scheduler.get_job(job_id)
     print("#############")
-    print("###" + str(id) + "### " + str(job))
+    print("###" + str(job_id) + "### " + str(job))
     print("#############")
 
 
