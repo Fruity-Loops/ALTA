@@ -97,6 +97,10 @@ export class AuthService {
     return this.http.post(`${BASEURL}/login/`, body);
   }
 
+  loginMobile(body): Observable<any> {
+    return this.http.post(`${BASEURL}/login-mobile/`, body);
+  } 
+
   getCurrentUser(id): Observable<any> {
     return this.http.get(`${BASEURL}/user/${id}/`);
   }

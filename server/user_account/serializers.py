@@ -39,6 +39,10 @@ class LoginSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['email', 'password']
 
+class LoginMobileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'password']
 
 class ClientGridSerializer(serializers.ModelSerializer):
     class Meta:

@@ -20,12 +20,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'true')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-# ALLOW API REQUESTS FROM ANGULAR FRONTEND
-CORS_ORIGIN_WHITELIST = [
-    os.getenv('ANGULAR_URL', 'http://localhost:4200')
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
