@@ -235,7 +235,7 @@ class LoginTest(APITestCase):
                                   first_name='test',
                                   last_name='user',
                                   role='SA',
-                                  password="test",
+                                  password="test", #NOSONAR
                                   is_active=True)
 
     def test_login_invalid_user(self):
