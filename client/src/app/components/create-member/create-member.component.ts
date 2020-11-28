@@ -62,7 +62,7 @@ export class CreateMemberComponent implements OnInit {
       email: this.signupForm.value.email,
       first_name: this.signupForm.value.firstname,
       last_name: this.signupForm.value.lastname,
-      location: this.signupForm.value.location == undefined ? null : this.signupForm.value.location,
+      location: this.signupForm.value.location === undefined ? null : this.signupForm.value.location,
       role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.signupForm.value.password,
