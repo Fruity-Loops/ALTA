@@ -33,12 +33,12 @@
         <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
       </ng-container>
 
-      <ng-container matColumnDef="Role">
+      <ng-container  matColumnDef="Role">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
         <td class="cell_role" mat-cell *matCellDef="let row"> {{row.role}} </td>
       </ng-container>
 
-      <ng-container *ngIf="!systemAdminTable" matColumnDef="Location">
+      <ng-container matColumnDef="Location">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
         <td class="cell_location" mat-cell *matCellDef="let row"> {{row.location}} </td>
       </ng-container>
