@@ -26,6 +26,10 @@ class IsSystemAdmin(BasePermission):
 
 
 def get_self_org(user, request):
+    if request.path[0:5] == "/user":
+        other_user = CustomUser.objects.get(id=request.parser_context['kwargs']['pk'])
+        return user.organization_id == other_user.organization_id and other_user.role != 'SA'
+
     return str(user.organization_id) == request.parser_context['kwargs']['pk'] and request.path.\
         startswith('/organization')
 
