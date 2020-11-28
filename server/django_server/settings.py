@@ -27,9 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'false')
 
-# TODO: remove later "testserver" im just adding this to allow the creating
-#  of the dummy organization for the loading script of inventory items
-ALLOWED_HOSTS = ["testserver"]
+ALLOWED_HOSTS = []
 
 # ALLOW API REQUESTS FROM ANGULAR FRONTEND
 CORS_ORIGIN_WHITELIST = [
