@@ -66,8 +66,8 @@ export class EmployeeSettingsComponent implements OnInit {
 
   setSelectors(): void {
     this.isActive = this.employee.is_active ? 'active' : 'disabled';
-    this.location = this.employee.location == undefined ? '' : this.employee.location;
-    if (this.employee.role == 'SA') {
+    this.location = this.employee.location === undefined ? '' : this.employee.location;
+    if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
       this.roles = [

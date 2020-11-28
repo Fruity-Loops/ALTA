@@ -48,14 +48,14 @@ export class ClientGridviewComponent implements OnInit {
   }
 
   populateTable(clients): void {
-    if(clients[0].role == 'SA') {
+    if (clients[0].role === 'SA') {
       this.displayedColumns = ['First_Name', 'Last_Name', 'Status', 'Settings'];
     } else {
       this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
     }
     clients.forEach(element => {
       this.roles.forEach((role) => {
-        if (role.abbrev == element.role) {
+        if (role.abbrev === element.role) {
           element.role = role.name;
         }
       });

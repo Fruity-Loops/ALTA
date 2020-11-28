@@ -57,7 +57,6 @@ export class CreateMemberComponent implements OnInit {
   }
 
   signupUser(): void {
-    console.log(this.signupForm.value.location);
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
