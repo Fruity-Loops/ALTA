@@ -8,7 +8,12 @@ const routes: Routes = [
   {
     path: 'mobile-home',
     component: MobileHomeComponent,
-    canActivate: [AuthGuard], 
+    canActivate: [AuthGuard],
+  },
+  {
+    path: '',
+    component: MobileHomeComponent,
+    canActivate: [AuthGuard],
   },
 ];
 

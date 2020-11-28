@@ -36,10 +36,10 @@ export class LoginComponent implements OnInit {
   }
 
   loginUser(): void {
-    if (this.platform.is("desktop")) {
+    if (this.platform.is('desktop')) {
       this.loginBrowser();
     }
-    else if ( this.platform.is("android") || this.platform.is("ios") ) {
+    else if (this.platform.is('android') || this.platform.is('ios')) {
       this.loginMobile();
     }
   }
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  loginMobile() {
+  loginMobile(): void  {
     this.body = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password,
@@ -87,21 +87,22 @@ export class LoginComponent implements OnInit {
     this.authService.loginMobile(this.body)
       .subscribe(
         (data) => {
-          this.tokenService.SetToken(data.token); 
-          this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);      
+          this.tokenService.SetToken(data.token);
+          this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
           if ((data.role === 'SK') || (data.role === 'IM')) {
             this.successMessage = 'Login Successful';
+            this.errorMessage = null;
             setTimeout(() => {
               this.authService.turnOnOrgMode({ organization: data.organization_id, ...data });
-              this.router.navigate(['']);
+              this.router.navigate(['mobile-home']);
             }, 1000);
           }
           else {
-            this.errorMessage = "Invalid client"
+            this.errorMessage = 'Invalid client';
           }
         },
         (err) => {
-          this.errorMessage = err.error.detail ? err.error.detail : err.error.status
+          this.errorMessage = err.error.detail ? err.error.detail : err.error.status;
         }
       );
   }
