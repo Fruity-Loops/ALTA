@@ -15,13 +15,6 @@ class IsSystemAdmin(BasePermission):
         :return: True/False : Whether the user is a SysAdmin or Not
         """
         user = CustomUser.objects.get(email=request.user)
-
-        if request.method == 'PATCH':
-            if request.data.get('role', '') == 'SA':
-                return False
-            if request.data.get('password', '') != '':
-                return IsCurrentUserTargetUser.has_permission(self, request, view)
-
         return user.role == 'SA'
 
 
@@ -96,5 +89,9 @@ class IsCurrentUserTargetUser(BasePermission):
         """
         current_user = request.user
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
+
+        if request.data.get('email', '') != '' or \
+                request.data.get('is_active', '') != '':
+            return True
 
         return current_user == target_user

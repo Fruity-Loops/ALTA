@@ -17,7 +17,7 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[];
+  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Status', 'Settings'];
   roles = [
       { name: 'System Admin', abbrev: 'SA'},
       { name: 'Inventory Manager', abbrev: 'IM' },
@@ -48,17 +48,12 @@ export class ClientGridviewComponent implements OnInit {
   }
 
   populateTable(clients): void {
-    if (clients[0].role === 'SA') {
-      this.displayedColumns = ['First_Name', 'Last_Name', 'Status', 'Settings'];
-    } else {
+    if (clients[0].role !== 'SA') {
       this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
     }
     clients.forEach(element => {
-      this.roles.forEach((role) => {
-        if (role.abbrev === element.role) {
-          element.role = role.name;
-        }
-      });
+      let obj = this.roles.find(o => o.abbrev === element.role);
+      element.role = obj.name;
       this.users.push(element);
     });
     this.dataSource = new MatTableDataSource(this.users);
