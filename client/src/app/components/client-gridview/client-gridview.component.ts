@@ -17,13 +17,12 @@ export class ClientGridviewComponent implements OnInit {
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
+  displayedColumns: string[];
   roles = [
       { name: 'System Admin', abbrev: 'SA'},
       { name: 'Inventory Manager', abbrev: 'IM' },
       { name: 'Stock Keeper', abbrev: 'SK' },
   ];
-  systemAdminTable = false;
   filterTerm: string;
   selected = 'All';
 
@@ -50,8 +49,9 @@ export class ClientGridviewComponent implements OnInit {
 
   populateTable(clients): void {
     if(clients[0].role == 'SA') {
-      this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Status', 'Settings'];
-      this.systemAdminTable = true;
+      this.displayedColumns = ['First_Name', 'Last_Name', 'Status', 'Settings'];
+    } else {
+      this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
     }
     clients.forEach(element => {
       this.roles.forEach((role) => {
