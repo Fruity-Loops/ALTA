@@ -1,0 +1,7 @@
+{
+  "name": "alta-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
