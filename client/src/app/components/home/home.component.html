@@ -1,6 +1,6 @@
 <div class="main-container" [class.is-mobile]="mobileQuery.matches">
 
-    <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0" autosize>
 
         <mat-sidenav #sidenav opened="true" [mode]="mobileQuery.matches ? 'over' : 'side'"
             [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="side-nav">

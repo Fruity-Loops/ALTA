@@ -12,6 +12,7 @@ import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { IonicModule } from '@ionic/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +26,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     HttpClientModule,
     MatModule,
     FlexLayoutModule,
+    IonicModule.forRoot(),
   ],
   providers: [
     CookieService, // To manage cookie in frontend
