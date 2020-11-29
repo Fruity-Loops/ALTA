@@ -173,7 +173,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   turnOnOrgMode(organization): void {
-    this.authService.turnOnOrgMode({organization: organization.org_id, organization_name: organization.org_name});
+    this.authService.turnOnOrgMode({organization: organization.org_id, organization_name: organization.org_name}, true);
   }
 
 

@@ -11,13 +11,13 @@ import { ManageInventoryItemsComponent } from 'src/app/components/manage-invento
 
 const routes: Routes = [
   {
-    path: 'home',
+    path: '',
     component: HomeComponent,
     canActivate: [AuthGuard], // If user has a valid token he will be able to access comment page
     children: [
       {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent },
@@ -30,11 +30,6 @@ const routes: Routes = [
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
     ],
-  },
-  {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
   },
 ];
 

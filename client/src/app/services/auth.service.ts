@@ -51,7 +51,7 @@ export class AuthService {
           this.organization.next(localStorage.getItem('organization'));
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data});
+            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
           }
         });
     }
@@ -65,12 +65,14 @@ export class AuthService {
     this.orgMode.next(state);
   }
 
-  turnOnOrgMode(org): void {
+  turnOnOrgMode(org, doNavigate): void {
     localStorage.setItem('organization_id', org.organization);
     localStorage.setItem('organization', org.organization_name);
     this.organization.next(org.organization_name);
     this.orgMode.next(true);
+    if (doNavigate){
     this.router.navigate(['dashboard']);
+    };
   }
 
   turnOffOrgMode(): void {
