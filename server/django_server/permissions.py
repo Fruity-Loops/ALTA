@@ -87,7 +87,6 @@ class IsCurrentUserTargetUser(BasePermission):
         :param view: Getting the targeted pk passed in the URL
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
-        current_user = CustomUser.objects.get(email=request.user)
+        current_user = request.user
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
-
         return current_user == target_user
