@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 
 from .serializers import ItemSerializer
 from .models import Item
@@ -14,3 +15,5 @@ class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
+    # pagination
+    pagination_class = PageNumberPagination

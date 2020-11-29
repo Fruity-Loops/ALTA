@@ -12,7 +12,13 @@ const BASEURL = env.api_root;
 export class ManageInventoryItemsService {
   constructor(private http: HttpClient) {}
 
-  getAllItems(): Observable<any> {
-    return this.http.get(`${BASEURL}/item/`);
+  getPageItems(page) : Observable<any> {
+    if(page === '') {
+      return this.http.get(`${BASEURL}/item/?page=1`);
+    }
+    else {
+      return this.http.get(page);
+    }
   }
+
 }
