@@ -1,0 +1,20 @@
+.loginGroup {
+    --padding-top: 10%;
+}
+
+.header {
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: 10px;
+    height: 80px;
+    background: #283C52;
+    text-align: center;
+  }
+
+.errorMessage {
+    font-size: small;
+    color: #000;
+    background: var(--ion-color-danger);
+
+}

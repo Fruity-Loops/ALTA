@@ -27,11 +27,6 @@ const routes: Routes = [
       }
     ]
   },
-  {
-    path: '',
-    redirectTo: '/page1',
-    pathMatch: 'full'
-  }
 ];
 
 @NgModule({

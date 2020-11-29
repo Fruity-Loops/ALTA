@@ -1,11 +1,22 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('./sidenav/sidenav.module').then( m => m.SidenavPageModule)
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule),
   },
+  {
+    path: '',
+    loadChildren: () => import('./sidenav/sidenav.module').then( m => m.SidenavPageModule),
+    canLoad: [AuthGuard]
+  },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  }
 ];
 @NgModule({
   imports: [

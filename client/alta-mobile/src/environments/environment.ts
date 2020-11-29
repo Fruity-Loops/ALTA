@@ -2,8 +2,10 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false
+export const env = {
+  production: false,
+  api_root: 'https://eb8fc108d6c1.ngrok.io',
+  open_registration: false, // Set to 'true' to allow registartion from the greeting page
 };
 
 /*
