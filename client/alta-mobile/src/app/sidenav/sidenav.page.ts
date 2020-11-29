@@ -7,15 +7,20 @@ import { MenuController } from '@ionic/angular';
   styleUrls: ['./sidenav.page.scss'],
 })
 export class SidenavPage implements OnInit {
+  sideNav = 'sideNavId'
 
   constructor(private menu: MenuController) { }
 
   ngOnInit() {
   }
 
-  openCustom() {
-    this.menu.enable(true, 'custom');
-    this.menu.open('custom');
+  open() {
+    this.menu.enable(true, this.sideNav);
+    this.menu.open(this.sideNav);
+  }
+
+  close() {
+    this.menu.close();
   }
 
 }

@@ -1,14 +1,14 @@
-<ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
+<ion-menu side="start" contentId="main" menuId=sideNav class="sideNavMenu">
   <ion-header>
     <ion-toolbar color="tertiary">
-      <ion-title>Custom Menu</ion-title>
+      <ion-title>ALTA</ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-list>
-      <ion-item routerLink="/page1">Page 1</ion-item>
-      <ion-item routerLink="/page2">Page 2</ion-item>
-      <ion-item routerLink="/page3">Page 3</ion-item>
+      <ion-item (click)="close()" routerLink="/page1">Page 1</ion-item>
+      <ion-item (click)="close()" routerLink="/page2">Page 2</ion-item>
+      <ion-item (click)="close()" routerLink="/page3">Page 3</ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
