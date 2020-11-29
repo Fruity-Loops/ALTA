@@ -116,4 +116,4 @@ if len(sys.argv) > 1:
 else:
     print("\n The following will be executed: Backend, Frontend, E2E, Linters")
     time.sleep(5)
-    execute(False, False, False, True)
+    execute(True, True, True, True)
