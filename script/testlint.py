@@ -8,6 +8,21 @@ import time
 import sys
 import webbrowser
 
+python_interpreter = ""
+
+try:
+    proc2 = subprocess.run(["python3", "--version"])
+    # if no error was raised modify 
+    python_interpreter = "python3"
+except:
+    print("Attempting to replace with regular python interpreter")
+    try:
+        proc = subprocess.run(["python", "--version"])
+        python_interpreter = "python"
+    except:
+        print("No valid python interpreter is accessible through cli")
+        exit(1)
+
 
 def execute(back, front, e2e, lint):
     os.chdir(os.path.dirname(os.getcwd()))
@@ -44,10 +59,11 @@ def execute(back, front, e2e, lint):
             "\n\n\n**************************************************\n\n\n")
         time.sleep(5)
         kill_port()
-        os.system("python manage.py flush --no-input --settings django_server.test_settings")
-        os.system("python manage.py migrate --settings django_server.test_settings")
-        os.system("python manage.py loaddata users.json --settings django_server.test_settings")
-        subprocess.Popen("manage.py runserver 127.0.0.1:8000 --settings django_server.test_settings", shell=True)
+        os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py loaddata users.json --settings django_server.test_settings')
+        subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
+                         f'--settings django_server.test_settings', shell=True)
         os.chdir(os.path.dirname(os.getcwd()))
         os.chdir("client")
         os.system("ng e2e")
