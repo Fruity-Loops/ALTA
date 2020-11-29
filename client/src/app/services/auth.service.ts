@@ -70,9 +70,9 @@ export class AuthService {
     localStorage.setItem('organization', org.organization_name);
     this.organization.next(org.organization_name);
     this.orgMode.next(true);
-    if (doNavigate){
-    this.router.navigate(['dashboard']);
-    };
+      if (doNavigate){
+        this.router.navigate(['dashboard']);
+      };
   }
 
   turnOffOrgMode(): void {
