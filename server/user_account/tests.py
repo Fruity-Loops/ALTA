@@ -353,7 +353,7 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -428,7 +428,7 @@ class UpdateProfileTest(APITestCase):
 
 
 class ChangePasswordTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
