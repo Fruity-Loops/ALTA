@@ -422,9 +422,9 @@ class UpdateProfileTest(APITestCase):
     def test_im_update_sk_user_information(self):
         """ Inventory manager can update Stock Keeper's info"""
         self.client.force_authenticate(user=self.manager)
-        response = self.client.patch(self.url + str(self.stock_keeper.id) + \
+        response = self.client.patch(self.url + str(self.stock_keeper.id) +
                                      "/", {"email": "1@gmail.com"})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class ChangePasswordTest(APITestCase):
