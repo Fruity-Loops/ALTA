@@ -52,7 +52,7 @@ export class ClientGridviewComponent implements OnInit {
       this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
     }
     clients.forEach(element => {
-      let obj = this.roles.find(o => o.abbrev === element.role);
+      const obj = this.roles.find(o => o.abbrev === element.role);
       element.role = obj.name;
       this.users.push(element);
     });
