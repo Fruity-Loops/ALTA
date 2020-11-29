@@ -1,13 +1,13 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { ViewChild } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {ViewChild} from '@angular/core';
 
-import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
+import {ManageInventoryItemsService} from 'src/app/services/manage-inventory-items.service';
 
-import { MatPaginator } from '@angular/material/paginator';
-import {PageEvent} from "@angular/material/paginator";
+import {MatPaginator} from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 
 
 @Component({
@@ -32,7 +32,8 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
-  constructor(private itemsService: ManageInventoryItemsService) {}
+  constructor(private itemsService: ManageInventoryItemsService) {
+  }
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
@@ -69,9 +70,9 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   paginatorAction(event): void {
     let page = '';
-    if(event['pageIndex']>event['previousPageIndex']){
+    if (event['pageIndex'] > event['previousPageIndex']) {
       page = this.data['next'];
-    } else if (event['pageIndex']<event['previousPageIndex']){
+    } else if (event['pageIndex'] < event['previousPageIndex']) {
       page = this.data['previous'];
     }
 
@@ -88,10 +89,10 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   // updates data in table
   updatePaginator(): void {
-      this.length = this.data['count'];
-      this.pageSize = this.data['results'].length;
-      this.items = this.data['results'];
-      this.errorMessage = '';
-      this.dataSource = new MatTableDataSource(this.items);
+    this.length = this.data['count'];
+    this.pageSize = this.data['results'].length;
+    this.items = this.data['results'];
+    this.errorMessage = '';
+    this.dataSource = new MatTableDataSource(this.items);
   }
 }
