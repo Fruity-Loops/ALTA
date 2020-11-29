@@ -170,48 +170,8 @@ class LoginMobileView(generics.GenericAPIView):
     serializer_class = LoginMobileSerializer
 
     def post(self, request):
-        """
-        Verify that a Stock Keeper or Inventory Manager has valid credentials and is active.
-        :param request: request.data: email, password
-        :return: user_name, token
-        """
-        data = request.data
-        email = data.get('email', '')
-        password = data.get('password', '')
-
-        try:
-            user = CustomUser.objects.get(email=email)
-
-            if user.is_active:
-                encrypted_password = user.password
-                is_verified = check_password(password, encrypted_password)
-                if is_verified:
-                    has_token = Token.objects.filter(user=user).count()
-                    if has_token:
-                        token = Token.objects.get(user=user)
-                    else:
-                        token = Token.objects.create(user=user)
-
-                    if user.organization is None:
-                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                                'organization': '', 'token': token.key}
-                    else:
-                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                                'organization_id': user.organization.org_id,
-                                'organization_name': user.organization.org_name,
-                                'token': token.key}
-
-                    return Response(data, status=status.HTTP_200_OK)
-
-                return Response({'detail': 'Invalid credentials'},
-                                status=status.HTTP_401_UNAUTHORIZED)
-
-            return Response({'detail': 'Please contact admin to activate your account'},
-                            status=status.HTTP_401_UNAUTHORIZED)
-
-        except CustomUser.DoesNotExist:
-            return Response({'detail': 'Invalid user'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        pass # TODO: Implement mobile specific endpoint
+             # Should be implemented when different options to password auth are determined
 
 class LogoutView(generics.GenericAPIView):
     """

@@ -13,15 +13,10 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { IonicModule } from '@ionic/angular';
-import { MobileHomeComponent } from './mobile-components/mobile-home/mobile-home.component';
-import { MobileRoutingModule } from './modules/mobile-routing/mobile-routing.module';
-import { MobileSidenavComponent } from './mobile-components/mobile-sidenav/mobile-sidenav.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MobileHomeComponent,
-    MobileSidenavComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +24,6 @@ import { MobileSidenavComponent } from './mobile-components/mobile-sidenav/mobil
     AuthModule,
     AltaMainModule,
     AltaMainRoutingModule,
-    MobileRoutingModule,
     AuthRoutingModule,
     HttpClientModule,
     MatModule,
