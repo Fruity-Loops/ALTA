@@ -21,7 +21,7 @@ export class CreateMemberComponent implements OnInit {
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
-  showRoles = false;
+  isEmployee = false;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -37,7 +37,7 @@ export class CreateMemberComponent implements OnInit {
       .subscribe(orgMode => {
         if (orgMode) {
           this.selectedOrganization = localStorage.getItem('organization_id');
-          this.showRoles = true;
+          this.isEmployee = true;
         }
         this.init();
       });
@@ -51,17 +51,18 @@ export class CreateMemberComponent implements OnInit {
       password: ['', Validators.required],
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
-      role: this.showRoles ? ['', Validators.required] : undefined,
+      role: this.isEmployee ? ['', Validators.required] : undefined,
+      location: this.isEmployee ? ['', Validators.required] : undefined,
     });
   }
 
   signupUser(): void {
-
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
       first_name: this.signupForm.value.firstname,
       last_name: this.signupForm.value.lastname,
+      location: this.signupForm.value.location === undefined ? null : this.signupForm.value.location,
       role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.signupForm.value.password,

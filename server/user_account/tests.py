@@ -17,6 +17,7 @@ class CustomUserTestCase(TestCase):
                                   first_name='test',
                                   last_name='user',
                                   role='SA',
+                                  location='',
                                   organization=organization)
 
     def test_user_creation(self):
@@ -27,6 +28,7 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.first_name, "test")
         self.assertEqual(user.last_name, "user")
         self.assertEqual(user.role, "SA")
+        self.assertEqual(user.location, "")
 
     def test_get_role(self):
         user = CustomUser.objects.get(id=1)
@@ -53,6 +55,7 @@ class AccessClientsTestCase(TestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
+            location='YUL',
             is_active=True)
 
         CustomUser.objects.create(
@@ -62,6 +65,7 @@ class AccessClientsTestCase(TestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
+            location='YUL',
             is_active=True)
 
         # Create each type of user that could be registered
@@ -81,6 +85,7 @@ class AccessClientsTestCase(TestCase):
             'first_name': 'inventory',
             'last_name': 'manager',
             'role': 'IM',
+            'location': 'YUL',
             'is_active': True}
 
         self.registered_inventory_manager2 = {
@@ -90,6 +95,7 @@ class AccessClientsTestCase(TestCase):
             'first_name': 'inventory',
             'last_name': 'manager',
             'role': 'IM',
+            'location': 'YUL',
             'is_active': True}
 
         self.search_for_ims = {
@@ -112,6 +118,7 @@ class RegistrationTestCase(APITestCase):
             last_name='admin',
             role='SA',
             is_active=True,
+            location='',
             organization=organization)
 
         # Create each type of user that could be registered
@@ -123,6 +130,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
+            'location': '',
             'organization': organization.org_id}
 
         self.registered_system_admin_2 = {
@@ -133,6 +141,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
+            'location': '',
             'organization': ''}
 
     def test_registration_success_linked_to_organization(self):
@@ -184,6 +193,7 @@ class OpenRegistrationTestCase(APITestCase):
                 "last_name": "user",
                 "role": "SA",
                 "is_active": "True",
+                'location': '',
                 "organization": organization.org_id}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -197,6 +207,7 @@ class OpenRegistrationTestCase(APITestCase):
                 "last_name": "user",
                 "role": "SA",
                 "is_active": "True",
+                'location': '',
                 "organization": ""}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -223,7 +234,8 @@ class LoginTest(APITestCase):
                                   id=1,
                                   first_name='test',
                                   last_name='user',
-                                  role='SA', password="test",
+                                  role='SA',
+                                  password="test", #NOSONAR
                                   is_active=True)
 
     def test_login_invalid_user(self):
@@ -365,6 +377,7 @@ class UpdateProfileTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.test_user = CustomUser.objects.create(
@@ -419,6 +432,7 @@ class ChangePasswordTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.t_u = CustomUser.objects.create(
@@ -482,6 +496,7 @@ class RetreivePersonalInfoTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.us_id = self.user.id

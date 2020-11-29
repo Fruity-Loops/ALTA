@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'user_name', 'first_name', 'last_name',
-                  'password', 'role', 'email', 'is_active', 'organization']
+                  'password', 'role', 'email', 'location', 'is_active', 'organization']
 
     def save(self, **kwargs):
         """
@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=self.validated_data['last_name'],
             role=self.validated_data['role'],
             email=self.validated_data['email'],
+            location=self.validated_data['location'],
             is_active=self.validated_data['is_active'],
             organization=self.validated_data['organization']
         )
@@ -43,7 +44,8 @@ class LoginSerializer(serializers.ModelSerializer):
 class ClientGridSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['user_name', 'first_name', 'last_name', 'email', 'role', 'is_active', 'id']
+        fields = ['user_name', 'first_name', 'last_name', 'email',
+                  'role', 'location', 'is_active', 'id']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
