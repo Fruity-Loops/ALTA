@@ -7,7 +7,7 @@ import { MenuController } from '@ionic/angular';
   styleUrls: ['./sidenav.page.scss'],
 })
 export class SidenavPage implements OnInit {
-  sideNav = 'sideNavId'
+  sideNav = 'sideNavId';
 
   constructor(private menu: MenuController) { }
 

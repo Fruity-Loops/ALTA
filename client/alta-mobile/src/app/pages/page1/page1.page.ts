@@ -19,7 +19,7 @@ export class Page1Page implements OnInit {
 
   async logout() {
     await this.authService.logout();
-    this.router.navigateByUrl('login', { replaceUrl: true })
+    this.router.navigateByUrl('login', { replaceUrl: true });
 
   }
 

@@ -46,16 +46,16 @@ export class LoginPage implements OnInit {
           header: 'Error',
           message: res.error.detail,
           buttons: ['Dismiss'],
-        })
+        });
         await alert.present();
       }
-    )
+    );
   }
 
   get email() {
     return this.formGroup.get('email');
   }
-  
+
   get password() {
     return this.formGroup.get('password');
   }

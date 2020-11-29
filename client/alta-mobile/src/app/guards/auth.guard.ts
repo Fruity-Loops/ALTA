@@ -12,24 +12,24 @@ export class AuthGuard implements CanLoad {
   constructor(
     private router: Router,
     private authService: AuthService
-    ) {}
+  ) { }
 
   canLoad(): Observable<boolean> {
     // Verify that the user is authenticated
     return this.authService.isAuthenticated.pipe(
       filter(isNonNull),
-      take(1), 
+      take(1),
       map(isAuthenticated => {
-        if (!isAuthenticated) { 
+        if (!isAuthenticated) {
           // If not authenticated navigate to login page
-          this.router.navigateByUrl('login')
+          this.router.navigateByUrl('login');
         }
-        else{
+        else {
           return true;
         }
 
       })
-    )
+    );
   }
 }
 
