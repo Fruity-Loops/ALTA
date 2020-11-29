@@ -12,7 +12,7 @@ import webbrowser
 def execute(back, front, e2e, lint):
     os.chdir(os.path.dirname(os.getcwd()))
 
-    if back == "1":
+    if back:
         os.chdir("server")
         print(
             "\n\n\n**************************************************\n\n\n"
@@ -24,7 +24,7 @@ def execute(back, front, e2e, lint):
         time.sleep(5)
         webbrowser.open('file://' + os.path.realpath("htmlcov/index.html"))
         os.chdir(os.path.dirname(os.getcwd()))
-    if front == "1":
+    if front:
         os.chdir("client")
 
         print(
@@ -36,7 +36,7 @@ def execute(back, front, e2e, lint):
         time.sleep(5)
         webbrowser.open('file://' + os.path.realpath("coverage/alta-front/index.html"))
         os.chdir(os.path.dirname(os.getcwd()))
-    if e2e == "1":
+    if e2e:
         os.chdir("server")
         print(
             "\n\n\n**************************************************\n\n\n"
@@ -54,7 +54,7 @@ def execute(back, front, e2e, lint):
         kill_port()
         os.chdir(os.path.dirname(os.getcwd()))
         time.sleep(5)
-    if lint == "1":
+    if lint:
         os.chdir("server")
         print(
             "\n\n\n**************************************************\n\n\n"
@@ -73,7 +73,7 @@ def execute(back, front, e2e, lint):
         time.sleep(5)
         os.chdir(os.path.dirname(os.getcwd()))
         os.chdir("client")
-        os.system("ng lint --force=true")
+        os.system("ng lint")
         os.chdir(os.path.dirname(os.getcwd()))
         time.sleep(5)
 
@@ -96,15 +96,15 @@ if len(sys.argv) > 1:
     if argument.lower() == 'alltests':
         print("\n The following will be executed: Backend, Frontend, E2E")
         time.sleep(5)
-        execute("1", "1", "1", "0")
+        execute(True, True, True, False)
     elif argument.lower() == 'tests':
         print("\n The following will be executed: Backend, Frontend")
         time.sleep(5)
-        execute("1", "1", "0", "0")
+        execute(True, True, False, False)
     elif argument.lower() == 'linters':
         print("\n The following will be executed: Linters")
         time.sleep(5)
-        execute("0", "0", "0", "1")
+        execute(False, False, False, True)
     else:
         print(
             "\nArgument not recognized.\n\n"
@@ -116,4 +116,4 @@ if len(sys.argv) > 1:
 else:
     print("\n The following will be executed: Backend, Frontend, E2E, Linters")
     time.sleep(5)
-    execute("1", "1", "1", "1")
+    execute(False, False, False, True)
