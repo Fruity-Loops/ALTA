@@ -116,7 +116,7 @@ if len(sys.argv) > 1:
     if argument.lower() == 'alltests':
         print("\n The following will be executed: Backend, Frontend, E2E")
         time.sleep(5)
-        execute(True, True, True, False)
+        execute(True, True, False, False)
     elif argument.lower() == 'tests':
         print("\n The following will be executed: Backend, Frontend")
         time.sleep(5)
@@ -128,7 +128,7 @@ if len(sys.argv) > 1:
     elif argument.lower() == 'e2e':
         print("\n The following will be executed: Linters")
         time.sleep(5)
-        execute(False, False, True, False)
+        execute(False, False, False, False)
     else:
         print(
             "\nArgument not recognized.\n\n"
@@ -141,4 +141,4 @@ if len(sys.argv) > 1:
 else:
     print("\n The following will be executed: Backend, Frontend, E2E, Linters")
     time.sleep(5)
-    execute(True, True, True, True)
+    execute(True, True, False, True)
