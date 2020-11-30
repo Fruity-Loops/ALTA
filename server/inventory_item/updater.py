@@ -5,18 +5,39 @@ import pymongo as pym
 from django_server.load_csv_to_db import main
 
 
-# Making connection to mongoclient
-client = pym.MongoClient("mongodb://localhost:27017/")
+class Singleton(type):
+    """
+    A metaclass that ensures the singleton restriction
+    """
+    _instances = {}
 
-job_stores = {
-    'default': MongoDBJobStore(database="alta_development",
-                               collection="jobs", client=client)
-}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
-# This will get you a BackgroundScheduler with a MongoDBJobStore
-# named “default” to replace the default one  and a ThreadPoolExecutor
-# named “default” with a default maximum thread count of 10.
-scheduler = BackgroundScheduler(jobstores=job_stores)
+
+class Scheduler(metaclass=Singleton):
+    """
+    Creates an object that holds the scheduler
+    """
+
+    def __init__(self, db_host, db_name):
+        # Making connection to mongoclient
+        client = pym.MongoClient(db_host)
+
+        job_stores = {
+            'default': MongoDBJobStore(database=db_name,
+                                       collection="jobs", client=client)
+        }
+
+        # This will get you a BackgroundScheduler with a MongoDBJobStore
+        # named “default” to replace the default one  and a ThreadPoolExecutor
+        # named “default” with a default maximum thread count of 10.
+        self.scheduler = BackgroundScheduler(jobstores=job_stores)
+
+
+scheduler = Scheduler("mongodb://localhost:27017/", "alta_development").scheduler
 
 
 def start():
