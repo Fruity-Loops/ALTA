@@ -128,6 +128,7 @@ class RegistrationTestCase(APITestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
+            location='',
             is_active=True,
             organization=organization)
 
@@ -162,6 +163,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'keeper',
             'role': 'SK',
             'is_active': 'True',
+            'location': '',
             'organization': organization.org_id
         }
 
