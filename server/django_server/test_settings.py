@@ -5,6 +5,7 @@ Test settings file used for end to end testing
 
 import os
 from dotenv import load_dotenv
+import django_server.settings as settings
 
 load_dotenv()
 
@@ -35,25 +36,7 @@ REST_FRAMEWORK = {
 
 # Application definition
 
-INSTALLED_APPS = [
-    # Django apps
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    # Local apps
-    'user_account',
-    'organization',
-
-    # 3rd party
-    'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders',
-
-]
+INSTALLED_APPS = settings.INSTALLED_APPS
 
 AUTH_USER_MODEL = 'user_account.CustomUser'  # changes the built in user model to ours
 
