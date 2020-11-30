@@ -85,3 +85,5 @@ def get_specific_job(job_id):
 
 
 scheduler.add_listener(scheduler_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
+
+# TODO find a way to delete all the jobs created during testing phase
