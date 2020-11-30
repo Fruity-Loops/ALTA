@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import OrganizationSerializer
 from .models import Organization
 from .permissions import UserOrganizationPermission
+from django_server.permissions import IsSystemAdmin, IsInventoryManager
 from inventory_item.updater import start_new_job
 
 
@@ -23,7 +24,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     API endpoint that allow a user to update the timing at which
     the Inventory Data is refreshed
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManager]
 
     def post(self, request):
         data = request.data
@@ -35,6 +36,8 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
             organization = Organization.objects.get(org_id=org_id)
 
             if organization:
+                organization.inventory_items_refresh_job = new_job_timing
+                organization.save()
                 start_new_job(org_id, new_job_timing)
                 return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
             else:
