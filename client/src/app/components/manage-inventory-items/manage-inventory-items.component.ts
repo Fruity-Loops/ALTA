@@ -69,12 +69,10 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   paginatorAction(event): void {
-    console.log(event)
     // page index starts at 1
     this.pageIndex = 1+event['pageIndex'];
     this.pageSize = event['pageSize'];
 
-    console.log(this.pageIndex)
 
 
     this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
