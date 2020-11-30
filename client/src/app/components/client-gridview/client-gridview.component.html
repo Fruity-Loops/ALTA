@@ -33,6 +33,16 @@
         <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
       </ng-container>
 
+      <ng-container  matColumnDef="Role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+        <td class="cell_role" mat-cell *matCellDef="let row"> {{row.role}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Location </th>
+        <td class="cell_location" mat-cell *matCellDef="let row"> {{row.location}} </td>
+      </ng-container>
+
       <ng-container matColumnDef="Status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
         <td class="cell_is_active" mat-cell *matCellDef="let row"> {{row.is_active}} </td>

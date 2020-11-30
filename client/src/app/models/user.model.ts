@@ -5,4 +5,5 @@ export interface User {
     is_active: boolean;
     id: number;
     email: string;
+    location: string;
 }

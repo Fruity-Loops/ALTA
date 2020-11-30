@@ -22,13 +22,11 @@ export class ManageOrganizationsService {
   }
 
   updateOrganization(organization): Observable<any> {
-    const body = { org_name: organization.org_name };
-    return this.http.put(`${BASEURL}/organization/${organization.org_id}/`, body);
+    return this.http.patch(`${BASEURL}/organization/${organization.org_id}/`, organization);
   }
 
   createOrganization(organization): Observable<any> {
-    const body = { org_name: organization.org_name };
-    return this.http.post(`${BASEURL}/organization/`, body);
+    return this.http.post(`${BASEURL}/organization/`, organization);
   }
 
   deleteOrganization(id): Observable<any> {
