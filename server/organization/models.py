@@ -15,4 +15,4 @@ class Organization(models.Model):
 @receiver(post_save, sender=Organization)
 def execute_job(instance, **kwargs):
     print('post save callback')
-    start_new_job(instance.org_id, instance.inventory_items_refresh_job)
+    start_new_job(str(instance.org_id), instance.inventory_items_refresh_job)

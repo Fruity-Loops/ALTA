@@ -46,22 +46,22 @@ def populate_items(csv_file, collection_name, org_id):
                 print("An error occured")
 
 
-def update_items(csv_file, collection_name, org_name, org_id):
+def update_items(csv_file, collection_name, org_id):
     collection = get_collection(collection_name)
     dict_of_records = clean_data(csv_file, org_id)
 
     try:
         for document in dict_of_records:
             collection.update({'_id': document["_id"]}, document, upsert=True)
-        print("Data Refreshed for organization: " + str(org_name))
+        print("Data Refreshed for organization ID: " + str(org_id))
     except pym.errors.BulkWriteError as error:
         print(error)
 
 
-def main(org_name, is_initializing=False):
+def main(org_id, is_initializing=False):
     current_path = os.path.dirname(__file__)
     csv = os.path.join(current_path, "test_organization.csv")
     if is_initializing:
         populate_items(csv, "inventory_item_item", 1)
     else:
-        update_items(csv, "inventory_item_item", org_name, 1)
+        update_items(csv, "inventory_item_item", org_id, 1)
