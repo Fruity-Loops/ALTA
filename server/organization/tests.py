@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
 from user_account.models import CustomUser
+import factory
+from django.db.models import signals
 
 
 class OrganizationTestCase(APITestCase):
@@ -28,6 +30,7 @@ class OrganizationTestCase(APITestCase):
             role='IM',
             is_active=True)
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def test_create_organization_sys_admin_success(self):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
@@ -72,6 +75,7 @@ class OrganizationTestCase(APITestCase):
 
 class InventoryItemRefreshTestCase(APITestCase):
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
         self.client = APIClient()
 
@@ -90,7 +94,7 @@ class InventoryItemRefreshTestCase(APITestCase):
     def update_organization_inventory_item_refresh_time_success(self):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.system_admin)
-        data={"org_id": self.organization.org_id, "new_job_timing": "14"}
+        data = {"org_id": self.organization.org_id, "new_job_timing": "14"}
         response = self.client.post("/organization/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -100,6 +104,6 @@ class InventoryItemRefreshTestCase(APITestCase):
         organization that doesnt exist
         """
         self.client.force_authenticate(user=self.system_admin)
-        data={"org_id": "1234", "new_job_timing": "14"}
+        data = {"org_id": "1234", "new_job_timing": "14"}
         response = self.client.post("/organization/", data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)

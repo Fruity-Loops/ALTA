@@ -3,12 +3,15 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
+import factory
+from django.db.models import signals
 from organization.models import Organization
 from .models import CustomUser
 
 
 class CustomUserTestCase(TestCase):
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
         organization = Organization.objects.create(org_name="Test")
         CustomUser.objects.create(user_name="test_user",
@@ -104,6 +107,8 @@ class AccessClientsTestCase(TestCase):
 
 
 class RegistrationTestCase(APITestCase):
+
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -212,6 +217,7 @@ class RegistrationTestCase(APITestCase):
 
 class OpenRegistrationTestCase(APITestCase):
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly with its organization"""
         organization = Organization.objects.create(org_name="Test")
@@ -324,6 +330,7 @@ class LoginTest(APITestCase):
         response = self.client.post("/login/", {'email': 'test2@test.com', 'password': '12'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def test_login_success_user_linked_to_organization(self):
         """ User can login successfully and is linked to an organization"""
         organization = Organization.objects.create(org_name="Test")
@@ -382,7 +389,7 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
-    # pylint: disable=too-many-instance-attributes
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
