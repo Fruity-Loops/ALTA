@@ -76,5 +76,5 @@ class ItemTestCase(APITestCase):
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.get("/item/?page=1&page_size=1")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['results']['Part_Number'], self.item_one.Part_Number)
+        self.assertEqual(response.data['results'][0]['Part_Number'], self.item_one.Part_Number)
 
