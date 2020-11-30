@@ -121,6 +121,17 @@ class RegistrationTestCase(APITestCase):
             location='',
             organization=organization)
 
+        self.inventory_manager = CustomUser.objects.create(
+            user_name='inventory_manager',
+            email='inventory_manager@email.com',
+            password='password',
+            first_name='inventory',
+            last_name='manager',
+            role='IM',
+            location='',
+            is_active=True,
+            organization=organization)
+
         # Create each type of user that could be registered
         self.registered_system_admin = {
             'user_name': 'registered_SA',
@@ -143,6 +154,18 @@ class RegistrationTestCase(APITestCase):
             'is_active': 'True',
             'location': '',
             'organization': ''}
+
+        self.store_keeper = {
+            'user_name': 'sk',
+            'email': 'sk@email.com',
+            'password': 'password',
+            'first_name': 'stock',
+            'last_name': 'keeper',
+            'role': 'SK',
+            'is_active': 'True',
+            'location': '',
+            'organization': organization.org_id
+        }
 
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
@@ -179,6 +202,12 @@ class RegistrationTestCase(APITestCase):
         registered_missing_fields = {'user_name': 'missing_fields'}
         request = self.client.post(self.url, registered_missing_fields)
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_im_creates_sk(self):
+        """ IM can create a stock keeper"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.store_keeper)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
 
 class OpenRegistrationTestCase(APITestCase):
@@ -353,7 +382,7 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -390,6 +419,16 @@ class UpdateProfileTest(APITestCase):
             is_active=True,
             organization=organization)
 
+        self.stock_keeper = CustomUser.objects.create(
+            user_name='sk',
+            email='sk@email.com',
+            password='password',
+            first_name='stock',
+            last_name='keeper',
+            role='SK',
+            is_active=True,
+            organization=organization)
+
         self.sys_admin_id = self.system_admin.id
         self.test_user_id = self.test_user.id
 
@@ -409,9 +448,16 @@ class UpdateProfileTest(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
 
+    def test_im_update_sk_user_information(self):
+        """ Inventory manager can update Stock Keeper's info"""
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(self.url + str(self.stock_keeper.id) +
+                                     "/", {"email": "1@gmail.com"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class ChangePasswordTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -444,6 +490,15 @@ class ChangePasswordTest(APITestCase):
             role='SA',
             is_active=True)
 
+        self.s_k = CustomUser.objects.create(
+            user_name='sk',
+            email='sk@email.com',
+            password='password',
+            first_name='stock',
+            last_name='keeper',
+            role='SK',
+            is_active=True)
+
         self.sa_id = self.s_a.id
         self.tu_id = self.t_u.id
 
@@ -463,6 +518,12 @@ class ChangePasswordTest(APITestCase):
             self.url + str(self.sa_id) + "/", {"password": "123456"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
+
+    def test_im_update_sk_password(self):
+        self.client.force_authenticate(user=self.i_m)
+        response = self.client.put(
+            self.url + str(self.s_k.id) + "/", {"password": "a"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class RetreivePersonalInfoTest(APITestCase):
