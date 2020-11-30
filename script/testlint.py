@@ -7,17 +7,18 @@ from signal import SIGTERM
 import time
 import sys
 import webbrowser
+import platform
 
 python_interpreter = ""
 
 try:
-    proc2 = subprocess.run(["python3", "--version"])
+    subprocess.check_output(["python3", "--version"])
     # if no error was raised modify 
     python_interpreter = "python3"
 except:
     print("Attempting to replace with regular python interpreter")
     try:
-        proc = subprocess.run(["python", "--version"])
+        subprocess.check_output(["python", "--version"])
         python_interpreter = "python"
     except:
         print("No valid python interpreter is accessible through cli")
@@ -66,7 +67,8 @@ def execute(back, front, e2e, lint):
                          f'--settings django_server.test_settings', shell=True)
         os.chdir(os.path.dirname(os.getcwd()))
         os.chdir("client")
-        os.system("ng e2e")
+        p1 = subprocess.Popen("ng e2e", shell=True)
+        p1.wait()
         kill_port()
         os.chdir(os.path.dirname(os.getcwd()))
         time.sleep(5)
@@ -100,11 +102,13 @@ def execute(back, front, e2e, lint):
 
 
 def kill_port():
-    for proc in process_iter():
-        for conns in proc.connections(kind='inet'):
-            if conns.laddr.port == 8000:
-                proc.send_signal(SIGTERM)
-
+    if platform.system() == "Windows":
+        for proc in process_iter():
+            for conns in proc.connections(kind='inet'):
+                if conns.laddr.port == 8000:
+                    proc.send_signal(SIGTERM)
+    elif platform.system() == "Linux":
+        os.system("fuser -k 8000/tcp")
 
 if len(sys.argv) > 1:
     argument = sys.argv[1]
@@ -121,6 +125,10 @@ if len(sys.argv) > 1:
         print("\n The following will be executed: Linters")
         time.sleep(5)
         execute(False, False, False, True)
+    elif argument.lower() == 'e2e':
+        print("\n The following will be executed: Linters")
+        time.sleep(5)
+        execute(False, False, True, False)
     else:
         print(
             "\nArgument not recognized.\n\n"
@@ -128,7 +136,8 @@ if len(sys.argv) > 1:
             "python testlint.py\n"
             "python testlint.py alltests\n"
             "python testlint.py tests\n"
-            "python testlint.py linters")
+            "python testlint.py linters\n"
+            "python testlint.py e2e")
 else:
     print("\n The following will be executed: Backend, Frontend, E2E, Linters")
     time.sleep(5)
