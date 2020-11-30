@@ -17,6 +17,7 @@ class CustomUserTestCase(TestCase):
                                   first_name='test',
                                   last_name='user',
                                   role='SA',
+                                  location='',
                                   organization=organization)
 
     def test_user_creation(self):
@@ -27,6 +28,7 @@ class CustomUserTestCase(TestCase):
         self.assertEqual(user.first_name, "test")
         self.assertEqual(user.last_name, "user")
         self.assertEqual(user.role, "SA")
+        self.assertEqual(user.location, "")
 
     def test_get_role(self):
         user = CustomUser.objects.get(id=1)
@@ -53,6 +55,7 @@ class AccessClientsTestCase(TestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
+            location='YUL',
             is_active=True)
 
         CustomUser.objects.create(
@@ -62,6 +65,7 @@ class AccessClientsTestCase(TestCase):
             first_name='inventory',
             last_name='manager',
             role='IM',
+            location='YUL',
             is_active=True)
 
         # Create each type of user that could be registered
@@ -81,6 +85,7 @@ class AccessClientsTestCase(TestCase):
             'first_name': 'inventory',
             'last_name': 'manager',
             'role': 'IM',
+            'location': 'YUL',
             'is_active': True}
 
         self.registered_inventory_manager2 = {
@@ -90,6 +95,7 @@ class AccessClientsTestCase(TestCase):
             'first_name': 'inventory',
             'last_name': 'manager',
             'role': 'IM',
+            'location': 'YUL',
             'is_active': True}
 
         self.search_for_ims = {
@@ -112,6 +118,7 @@ class RegistrationTestCase(APITestCase):
             last_name='admin',
             role='SA',
             is_active=True,
+            location='',
             organization=organization)
 
         self.inventory_manager = CustomUser.objects.create(
@@ -133,6 +140,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
+            'location': '',
             'organization': organization.org_id}
 
         self.registered_system_admin_2 = {
@@ -143,6 +151,7 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
+            'location': '',
             'organization': ''}
 
         self.store_keeper = {
@@ -211,6 +220,7 @@ class OpenRegistrationTestCase(APITestCase):
                 "last_name": "user",
                 "role": "SA",
                 "is_active": "True",
+                'location': '',
                 "organization": organization.org_id}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -224,6 +234,7 @@ class OpenRegistrationTestCase(APITestCase):
                 "last_name": "user",
                 "role": "SA",
                 "is_active": "True",
+                'location': '',
                 "organization": ""}
         response = self.client.post("/open-registration/", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -250,7 +261,8 @@ class LoginTest(APITestCase):
                                   id=1,
                                   first_name='test',
                                   last_name='user',
-                                  role='SA', password="test",
+                                  role='SA',
+                                  password="test", #NOSONAR
                                   is_active=True)
 
     def test_login_invalid_user(self):
@@ -368,7 +380,7 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -392,6 +404,7 @@ class UpdateProfileTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.test_user = CustomUser.objects.create(
@@ -401,6 +414,16 @@ class UpdateProfileTest(APITestCase):
             first_name='system',
             last_name='admin',
             role='SA',
+            is_active=True,
+            organization=organization)
+
+        self.stock_keeper = CustomUser.objects.create(
+            user_name='sk',
+            email='sk@email.com',
+            password='password',
+            first_name='stock',
+            last_name='keeper',
+            role='SK',
             is_active=True,
             organization=organization)
 
@@ -423,9 +446,16 @@ class UpdateProfileTest(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
 
+    def test_im_update_sk_user_information(self):
+        """ Inventory manager can update Stock Keeper's info"""
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(self.url + str(self.stock_keeper.id) +
+                                     "/", {"email": "1@gmail.com"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class ChangePasswordTest(APITestCase):
-
+    # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
@@ -446,6 +476,7 @@ class ChangePasswordTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.t_u = CustomUser.objects.create(
@@ -455,6 +486,15 @@ class ChangePasswordTest(APITestCase):
             first_name='test',
             last_name='user',
             role='SA',
+            is_active=True)
+
+        self.s_k = CustomUser.objects.create(
+            user_name='sk',
+            email='sk@email.com',
+            password='password',
+            first_name='stock',
+            last_name='keeper',
+            role='SK',
             is_active=True)
 
         self.sa_id = self.s_a.id
@@ -476,6 +516,12 @@ class ChangePasswordTest(APITestCase):
             self.url + str(self.sa_id) + "/", {"password": "123456"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
+
+    def test_im_update_sk_password(self):
+        self.client.force_authenticate(user=self.i_m)
+        response = self.client.put(
+            self.url + str(self.s_k.id) + "/", {"password": "a"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class RetreivePersonalInfoTest(APITestCase):
@@ -509,6 +555,7 @@ class RetreivePersonalInfoTest(APITestCase):
             first_name='sy',
             last_name='ad',
             role='IM',
+            location='YUL',
             is_active=True)
 
         self.us_id = self.user.id

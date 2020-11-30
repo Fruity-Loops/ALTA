@@ -16,8 +16,10 @@ export class EmployeeSettingsComponent implements OnInit {
   password: string = this.defaultPassword;
   @Input() role: string;
   @Input() isActive: string;
+  @Input() location: string;
   id: string;
   isLoggedInUser = false;
+  isSystemAdmin = false;
   body: any;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
@@ -56,14 +58,24 @@ export class EmployeeSettingsComponent implements OnInit {
         role: employee.role,
         is_active: employee.is_active,
         email: employee.email,
+        location: employee.location,
       };
-
       this.setSelectors();
     });
   }
 
   setSelectors(): void {
     this.isActive = this.employee.is_active ? 'active' : 'disabled';
+    this.location = this.employee.location === undefined ? '' : this.employee.location;
+    if (this.employee.role === 'SA') {
+      this.isSystemAdmin = true;
+    } else {
+      this.roles = [
+        { name: 'Inventory Manager', abbrev: 'IM' },
+        { name: 'Stock Keeper', abbrev: 'SK' },
+      ];
+    }
+
     this.roles.forEach((role) => {
       if (role.abbrev === this.employee.role) {
         this.role = role.name;
@@ -87,6 +99,8 @@ export class EmployeeSettingsComponent implements OnInit {
         this.employee.role = role.abbrev;
       }
     });
+
+    this.employee.location = this.location;
 
     this.manageMembersService
       .updateClientInfo(this.employee, this.id)
