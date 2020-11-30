@@ -81,6 +81,17 @@ export class SideNavComponent implements OnInit {
   }
 
   setSelected(url): void {
+    if (url === '/create-members') {
+      if (this.options === SystemNavListings) {
+        url = '/sa-modify-members';
+      }
+      else if (this.options === OrganizationNavListings){
+        url = '/modify-members';
+      }
+
+    }
+
+
     this.options.forEach(navOption => {
       if ('/' + navOption.routerLink === url) {
         this.selectedOption = navOption;

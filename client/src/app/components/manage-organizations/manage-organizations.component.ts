@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import { Component, Inject, Input, OnInit, Optional, TemplateRef } from '@angular/core';
 import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
 
-import {AuthService} from '../../services/auth.service';
-import { FormBuilder } from '@angular/forms';
+import { AuthService } from '../../services/auth.service';
+import { FormBuilder, NgForm } from '@angular/forms';
 import { ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,11 +26,14 @@ export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
   selectedOrganization;
   errorMessage = '';
+  orgEdit;
 
-  constructor(private organizationsService: ManageOrganizationsService,
-              private fb: FormBuilder,
-              private authService: AuthService,
-              public dialog: MatDialog) {}
+  constructor(
+    private organizationsService: ManageOrganizationsService,
+    private fb: FormBuilder,
+    private authService: AuthService,
+    public dialog: MatDialog
+  ) { }
   dataSource: MatTableDataSource<Organization>;
   displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
@@ -38,6 +41,11 @@ export class ManageOrganizationsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('updateOrgDialog') updateOrgDialog: TemplateRef<any>;
+  @ViewChild('createOrgDialog') createOrgDialog: TemplateRef<any>;
+
+  @Input() isActive: string;
+  activeStates = [{ status: 'active' }, { status: 'disabled' }];
 
   ngOnInit(): void {
     this.getAllOrganizations();
@@ -88,25 +96,27 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   openUpdateOrgDialog(organization): void {
-    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-      width: '250px',
-      data: {
-        textInput: organization.org_name,
-        placeholder: 'Edit Organization',
-        title: 'Edit Organization',
-        buttonDesc: 'Update'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result !== organization.org_name) {
-        this.updateOrganization({...organization, org_name: result});
-      }
-    });
+    this.selectedOrganization = organization;
+    this.isActive = organization.status ? 'active' : 'disabled';
+    const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
-  createOrganization(orgName: string): void {
-    this.organizationsService.createOrganization({org_name: orgName}).subscribe(
+  onSubmitUpdateOrg(form: NgForm): void {
+    if (form.status !== 'INVALID') {
+      const orgStatus = form.value.status === 'active' ? true : false;
+      this.updateOrganization({
+        org_id: this.selectedOrganization.org_id,
+        org_name: form.value.name,
+        address: form.value.address,
+        status: orgStatus
+      });
+      this.dialog.closeAll();
+    }
+  }
+
+
+  createOrganization(organization): void {
+    this.organizationsService.createOrganization(organization).subscribe(
       (data) => {
         this.organizations.push(data);
         this.getAllOrganizations();
@@ -124,56 +134,23 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  deleteOrganization(organization): void {
-    this.organizationsService.deleteOrganization(organization.org_id).subscribe(
-      (data) => {
-        this.getAllOrganizations();
-        this.errorMessage = '';
-      },
-      (err) => {
-        this.errorMessage = err.error.detail;
-      }
-    );
-  }
-
-  openDeleteDialog(organization): void {
-    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-      width: '400px',
-      data: {
-        textInput: '',
-        placeholder: 'Organization Name',
-        title: 'Please type the name of the organization to validate deletion.',
-        buttonDesc: 'Delete'
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result === organization.org_name) {
-        this.deleteOrganization(organization);
-      }
-    });
-  }
-
   openCreateDialog(): void {
-    const dialogRef = this.dialog.open(OrganizationDialogComponent, {
-      width: '250px',
-      data: {
-        textInput: '',
-        placeholder: 'Enter Organization',
-        title: 'Organization',
-        buttonDesc: 'Create'
-      }
-    });
+    this.dialog.open(this.createOrgDialog);
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.createOrganization(result);
-      }
-    });
+  onSubmitCreateOrg(form: NgForm): void {
+    if (form.status !== 'INVALID') {
+      this.createOrganization({
+        org_name: form.value.name,
+        address: form.value.address,
+        status: true
+      });
+      this.dialog.closeAll();
+    }
   }
 
   turnOnOrgMode(organization): void {
-    this.authService.turnOnOrgMode({organization: organization.org_id, organization_name: organization.org_name});
+    this.authService.turnOnOrgMode({ organization: organization.org_id, organization_name: organization.org_name }, true);
   }
 
 
@@ -191,6 +168,6 @@ export class OrganizationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<OrganizationDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
 }

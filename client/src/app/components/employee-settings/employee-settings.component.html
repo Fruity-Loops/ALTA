@@ -41,11 +41,11 @@
           <div class="form-group">
             <mat-label for="username">Employee ID:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="user_name" type="text" placeholder="Employee ID" [disabled]="!edit"/>
+              <input matInput id="user_name" type="text" placeholder="Employee ID" [disabled]=true/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="isLoggedInUser">
           <div class="form-group">
             <mat-label for="pass-word">Password:</mat-label>
             <mat-form-field appearance="outline">
@@ -54,11 +54,20 @@
             </mat-form-field>
           </div>
         </mat-grid-tile>
+        <mat-grid-tile *ngIf="!isSystemAdmin">
+          <div class="form-group">
+            <mat-label for="location">Employment Location:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="location" type="text" [disabled]=true
+                     [(ngModel)]="location"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
         <mat-grid-tile *ngIf="!isLoggedInUser">
           <div class="form-group">
             <mat-label for="pass-word">Role:</mat-label>
             <mat-form-field appearance="outline">
-              <mat-select class="roleDropDown" [(ngModel)]="role" [disabled]="!edit">
+              <mat-select class="roleDropDown" [(ngModel)]="role" [disabled]=true>
                 <mat-option *ngFor="let role of roles" [value]="role.name">
                   {{ role.name }}
                 </mat-option>
