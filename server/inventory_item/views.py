@@ -6,6 +6,12 @@ from .serializers import ItemSerializer
 from .models import Item
 
 
+class ItemResultsSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+
 class ItemViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows organizations to be viewed or edited.
@@ -16,4 +22,4 @@ class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
     # pagination
-    pagination_class = PageNumberPagination
+    pagination_class = ItemResultsSetPagination

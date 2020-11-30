@@ -13,12 +13,8 @@ export class ManageInventoryItemsService {
   constructor(private http: HttpClient) {
   }
 
-  getPageItems(page): Observable<any> {
-    if (page === '') {
-      return this.http.get(`${BASEURL}/item/?page=1`);
-    } else {
-      return this.http.get(page);
-    }
+  getPageItems(page, page_size): Observable<any> {
+      return this.http.get(`${BASEURL}/item/?page=${page}&page_size=${page_size}`);
   }
 
 }

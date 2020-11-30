@@ -19,8 +19,8 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   // MatPaginator Inputs
   length = 0;
-  pageSize = 0;
-  pageIndex = 0;
+  pageSize = 25;
+  pageIndex = 1;
   previousPageIndex = 0;
 
 
@@ -48,7 +48,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   getItems(): void {
-    this.itemsService.getPageItems('').subscribe(
+    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
       (data) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
@@ -69,14 +69,15 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   paginatorAction(event): void {
-    let page = '';
-    if (event['pageIndex'] > event['previousPageIndex']) {
-      page = this.data['next'];
-    } else if (event['pageIndex'] < event['previousPageIndex']) {
-      page = this.data['previous'];
-    }
+    console.log(event)
+    // page index starts at 1
+    this.pageIndex = 1+event['pageIndex'];
+    this.pageSize = event['pageSize'];
 
-    this.itemsService.getPageItems(page).subscribe(
+    console.log(this.pageIndex)
+
+
+    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
       (data) => {
         this.data = data;
         this.updatePaginator()
