@@ -1,7 +1,6 @@
 import os
 import pymongo as pym
 import pandas as pd
-import random
 
 
 def get_collection(collection_name):
@@ -27,7 +26,6 @@ def clean_data(csv_file, org_id):
     # Cleaning dataframe
     dataframe = dataframe.dropna(subset=['_id'])
 
-    # TODO : remove that when centralized db implemented
     dataframe["organization"] = org_id
 
     return dataframe.to_dict('records')

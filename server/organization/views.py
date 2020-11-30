@@ -1,12 +1,12 @@
 from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django_server.permissions import IsSystemAdmin, IsInventoryManager
+from inventory_item.updater import start_new_job
 
 from .serializers import OrganizationSerializer
 from .models import Organization
 from .permissions import UserOrganizationPermission
-from django_server.permissions import IsSystemAdmin, IsInventoryManager
-from inventory_item.updater import start_new_job
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
