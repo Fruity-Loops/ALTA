@@ -1,0 +1,7 @@
+{
+  "name": "alta-mobile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

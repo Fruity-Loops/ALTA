@@ -121,6 +121,17 @@ class RegistrationTestCase(APITestCase):
             location='',
             organization=organization)
 
+        self.inventory_manager = CustomUser.objects.create(
+            user_name='inventory_manager',
+            email='inventory_manager@email.com',
+            password='password',
+            first_name='inventory',
+            last_name='manager',
+            role='IM',
+            location='',
+            is_active=True,
+            organization=organization)
+
         # Create each type of user that could be registered
         self.registered_system_admin = {
             'user_name': 'registered_SA',
@@ -143,6 +154,18 @@ class RegistrationTestCase(APITestCase):
             'is_active': 'True',
             'location': '',
             'organization': ''}
+
+        self.store_keeper = {
+            'user_name': 'sk',
+            'email': 'sk@email.com',
+            'password': 'password',
+            'first_name': 'stock',
+            'last_name': 'keeper',
+            'role': 'SK',
+            'is_active': 'True',
+            'location': '',
+            'organization': organization.org_id
+        }
 
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
@@ -179,6 +202,12 @@ class RegistrationTestCase(APITestCase):
         registered_missing_fields = {'user_name': 'missing_fields'}
         request = self.client.post(self.url, registered_missing_fields)
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_im_creates_sk(self):
+        """ IM can create a stock keeper"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.store_keeper)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
 
 class OpenRegistrationTestCase(APITestCase):

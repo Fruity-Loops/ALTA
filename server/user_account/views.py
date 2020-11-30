@@ -8,8 +8,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django_server.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
-from .serializers import UserSerializer, LoginSerializer, ClientGridSerializer,\
-    UserPasswordSerializer
+from .serializers import UserSerializer, LoginSerializer, LoginMobileSerializer,\
+     ClientGridSerializer, UserPasswordSerializer
 from .models import CustomUser
 
 
@@ -164,6 +164,15 @@ class LoginView(generics.GenericAPIView):
             return Response({'detail': 'Invalid user'},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class LoginMobileView(generics.GenericAPIView):
+    """
+    Authenticate a Mobile Log in.
+    """
+    serializer_class = LoginMobileSerializer
+
+    def post(self, request):
+        pass # TODO: Implement mobile specific endpoint
+             # Should be implemented when different options to password auth are determined
 
 class LogoutView(generics.GenericAPIView):
     """

@@ -15,7 +15,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { IonicModule } from '@ionic/angular';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
