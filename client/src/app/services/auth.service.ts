@@ -2,7 +2,7 @@ import { env } from 'src/environments/environment';
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map,  debounceTime } from 'rxjs/operators';
+import { map, debounceTime } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 // Connection with the backend
@@ -25,22 +25,23 @@ export class AuthService {
 
   // Access Observables through mapped data
   sharedUser = combineLatest([this.userId.asObservable(),
-                             this.username.asObservable(),
-                             this.role.asObservable(),
-                             this.organizationId.asObservable(),
-                             this.organization.asObservable()])
-                             .pipe(map(([userId, username, role, orgId, org]) => {
-                                return {
-                                  userId: this.userId.value,
-                                  username: this.username.value,
-                                  role: this.role.value,
-                                  orgId: this.organizationId.value,
-                                  org: this.organization.value
-                                };
-                             }), debounceTime(0));
+  this.username.asObservable(),
+  this.role.asObservable(),
+  this.organizationId.asObservable(),
+  this.organization.asObservable()])
+    .pipe(map(([userId, username, role, orgId, org]) => {
+      return {
+        userId: this.userId.value,
+        username: this.username.value,
+        role: this.role.value,
+        orgId: this.organizationId.value,
+        org: this.organization.value
+      };
+    }), debounceTime(0));
 
-  constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
-              private router: Router) {
+  constructor(
+    private http: HttpClient, // We inject the http client in the constructor to do our REST operations
+    private router: Router) {
     if (localStorage.getItem('id')) {
       this.subscription = this.getCurrentUser(localStorage.getItem('id'))
         .subscribe((data) => {
@@ -51,7 +52,7 @@ export class AuthService {
           this.organization.next(localStorage.getItem('organization'));
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
+            this.turnOnOrgMode({ organization_name: localStorage.getItem('organization'), ...data }, false);
           }
         });
     }
@@ -70,9 +71,9 @@ export class AuthService {
     localStorage.setItem('organization', org.organization_name);
     this.organization.next(org.organization_name);
     this.orgMode.next(true);
-      if (doNavigate){
-        this.router.navigate(['dashboard']);
-      };
+    if (doNavigate) {
+      this.router.navigate(['dashboard']);
+    }
   }
 
   turnOffOrgMode(): void {
@@ -104,13 +105,13 @@ export class AuthService {
   }
 
   setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
-      this.userId.next(nextUserId);
-      this.username.next(nextUser);
-      this.role.next(nextRole);
-      this.organizationId.next(nextOrgId);
-      this.organization.next(nextOrg);
+    this.userId.next(nextUserId);
+    this.username.next(nextUser);
+    this.role.next(nextRole);
+    this.organizationId.next(nextOrgId);
+    this.organization.next(nextOrg);
 
-      localStorage.setItem('id', nextUserId);
+    localStorage.setItem('id', nextUserId);
   }
 
   setLogOut(): void {
