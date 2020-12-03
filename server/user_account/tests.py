@@ -226,7 +226,6 @@ class UpdateProfileTest(APITestCase):
         self.stock_keeper = CustomUser.objects.get(user_name="sk")
 
         self.sys_admin_id = self.system_admin.id
-        # self.test_user_id = self.test_user.id
 
     def test_update_another_user_information(self):
         """ User can't update the info of another user """
