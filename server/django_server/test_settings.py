@@ -5,6 +5,7 @@ Test settings file used for end to end testing
 
 import os
 from dotenv import load_dotenv
+import django_server.settings as settings
 
 load_dotenv()
 
@@ -20,12 +21,9 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'true')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-# ALLOW API REQUESTS FROM ANGULAR FRONTEND
-CORS_ORIGIN_WHITELIST = [
-    os.getenv('ANGULAR_URL', 'http://localhost:4200')
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -38,25 +36,7 @@ REST_FRAMEWORK = {
 
 # Application definition
 
-INSTALLED_APPS = [
-    # Django apps
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-
-    # Local apps
-    'user_account',
-    'organization',
-
-    # 3rd party
-    'rest_framework',
-    'rest_framework.authtoken',
-    'corsheaders',
-
-]
+INSTALLED_APPS = settings.INSTALLED_APPS
 
 AUTH_USER_MODEL = 'user_account.CustomUser'  # changes the built in user model to ours
 

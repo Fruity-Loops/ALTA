@@ -17,15 +17,17 @@ class CustomUserTestCase(TestCase):
 
 
 class RegistrationTestCase(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations.json"]
 
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
 
-        organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.get(user_name="sa")
+
+        self.inventory_manager = CustomUser.objects.get(user_name="im")
+        organization = self.inventory_manager.organization
 
         # Create each type of user that could be registered
         self.registered_system_admin = {
@@ -49,6 +51,18 @@ class RegistrationTestCase(APITestCase):
             'is_active': 'True',
             'location': '',
             'organization': ''}
+
+        self.store_keeper = {
+            'user_name': 'sk2',
+            'email': 'sk2@email.com',
+            'password': 'password',
+            'first_name': 'stock2',
+            'last_name': 'keeper2',
+            'role': 'SK',
+            'is_active': 'True',
+            'location': '',
+            'organization': organization.org_id
+        }
 
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
@@ -85,6 +99,12 @@ class RegistrationTestCase(APITestCase):
         registered_missing_fields = {'user_name': 'missing_fields'}
         request = self.client.post(self.url, registered_missing_fields)
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_im_creates_sk(self):
+        """ IM can create a stock keeper"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.store_keeper)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
 
 class OpenRegistrationTestCase(APITestCase):

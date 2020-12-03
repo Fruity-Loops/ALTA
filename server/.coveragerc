@@ -1,4 +1,13 @@
 [run]
 omit = django_server/*
        */venv/*
+       */usr/lib/*
+       */usr/local/lib/*
+       manage.py
+
+[report]
+omit = django_server/*
+       */venv/*
+       */usr/lib/*
+       */usr/local/lib/*
        manage.py

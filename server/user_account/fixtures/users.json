@@ -28,7 +28,7 @@
         "is_active": true,
         "location": "Florida",
         "email": "im@test.com",
-        "organization": 2
+        "organization": 1
     }
 },
 {
@@ -44,7 +44,7 @@
         "is_active": true,
         "location": "Florida",
         "email": "sk@test.com",
-        "organization": 2
+        "organization": 1
     }
 },
 {
