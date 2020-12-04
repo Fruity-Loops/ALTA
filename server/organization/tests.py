@@ -1,9 +1,10 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
-from user_account.models import CustomUser
-import factory
 from django.db.models import signals
+import factory
+from user_account.models import CustomUser
+from .models import Organization
 
 
 class OrganizationTestCase(APITestCase):

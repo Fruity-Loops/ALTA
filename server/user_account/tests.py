@@ -1,10 +1,10 @@
-from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 import factory
 from django.db.models import signals
+from django.test import TestCase
 from organization.models import Organization
 from .models import CustomUser
 
