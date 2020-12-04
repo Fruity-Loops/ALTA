@@ -51,13 +51,12 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItems();
+    this.init();
+  }
 
+  init(): void {
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
-    });
-
-    this.subscription = this.authService.sharedUser.subscribe((data) => {
-      this.organization = data.org;
     });
   }
 
@@ -71,6 +70,7 @@ export class ManageInventoryItemsComponent implements OnInit {
             this.displayedColumns.push(key);
           }
         }
+
         this.displayedColumns.pop(); // deleting the last column which refers to the organization
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
