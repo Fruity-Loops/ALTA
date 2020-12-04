@@ -65,7 +65,8 @@ export class ManageInventoryItemsComponent implements OnInit {
       (data) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
-        for (const key in data['results'][0]) {
+        const results = 'results';
+        for (const key in data[results][0]) {
           if (key != null) {
             this.displayedColumns.push(key);
           }
@@ -84,8 +85,10 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   paginatorAction(event): void {
     // page index starts at 1
-    this.pageIndex = 1 + event['pageIndex'];
-    this.pageSize = event['pageSize'];
+    const pageIndex = 'pageIndex';
+    const pageSize = 'pageSize';
+    this.pageIndex = 1 + event[pageIndex];
+    this.pageSize = event[pageSize];
 
     this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
       (data) => {
@@ -100,9 +103,11 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   // updates data in table
   updatePaginator(): void {
-    this.length = this.data['count'];
-    this.pageSize = this.data['results'].length;
-    this.items = this.data['results'];
+    const count = 'count';
+    const results = 'results';
+    this.length = this.data[count];
+    this.pageSize = this.data[results].length;
+    this.items = this.data[results];
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
   }
