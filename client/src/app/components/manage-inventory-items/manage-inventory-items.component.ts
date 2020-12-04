@@ -3,6 +3,7 @@ import { ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
@@ -22,6 +23,9 @@ export class ManageInventoryItemsComponent implements OnInit {
   pageIndex = 1;
   previousPageIndex = 0;
   timeForm: FormGroup;
+  body: any;
+  subscription: any;
+  organization: any;
 
   // MatPaginator Output
   pageEvent: PageEvent;
@@ -33,7 +37,8 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   constructor(
     private itemsService: ManageInventoryItemsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authService: AuthService
   ) {}
 
   dataSource: MatTableDataSource<any>;
@@ -49,6 +54,10 @@ export class ManageInventoryItemsComponent implements OnInit {
 
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
+    });
+
+    this.subscription = this.authService.sharedUser.subscribe((data) => {
+      this.organization = data.org;
     });
   }
 
@@ -98,6 +107,18 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.items);
   }
   refreshTime(): void {
-    console.log('test');
+    this.body = {
+      new_job_timing: this.timeForm.value.time,
+      org_id: localStorage.getItem('organization_id'),
+    };
+
+    this.itemsService.updateRefreshItemsTime(this.body).subscribe(
+      (data) => {
+        this.timeForm.reset();
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
   }
 }
