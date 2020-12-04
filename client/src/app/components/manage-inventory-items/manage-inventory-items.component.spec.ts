@@ -1,8 +1,9 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {ManageInventoryItemsService} from 'src/app/services/manage-inventory-items.service';
-import {HttpClientModule} from '@angular/common/http';
-import {RouterTestingModule} from '@angular/router/testing';
-import {ManageInventoryItemsComponent} from './manage-inventory-items.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ManageInventoryItemsComponent } from './manage-inventory-items.component';
+import { FormBuilder } from '@angular/forms';
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
@@ -12,7 +13,7 @@ describe('ManageInventoryItemsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ManageInventoryItemsComponent],
-      providers: [ManageInventoryItemsService],
+      providers: [FormBuilder, { provide: ManageInventoryItemsService }],
       imports: [HttpClientModule, RouterTestingModule],
     });
 
