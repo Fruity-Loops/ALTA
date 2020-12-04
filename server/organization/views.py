@@ -24,7 +24,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     API endpoint that allow a user to update the timing at which
     the Inventory Data is refreshed
     """
-    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManager]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         data = request.data

@@ -62,6 +62,6 @@ def main(org_id, is_initializing=False):
     current_path = os.path.dirname(__file__)
     csv = os.path.join(current_path, "test_organization.csv")
     if is_initializing:
-        populate_items(csv, "inventory_item_item", 1)
+        populate_items(csv, "inventory_item_item", 4)
     else:
-        update_items(csv, "inventory_item_item", org_id, 1)
+        update_items(csv, "inventory_item_item", org_id)
