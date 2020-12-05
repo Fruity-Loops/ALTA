@@ -53,9 +53,8 @@ class IsInventoryManager(BasePermission):
             correct_organization[0] = get_self_org_query(user, request)
         if request.data.get('organization', None) is not None:
             correct_organization[1] = get_self_org_body(user, request)
-        if request.parser_context['kwargs'] is not None:
-            if 'pk' in request.parser_context['kwargs']:
-                correct_organization[2] = get_self_org(user, request)
+        if request.parser_context['kwargs'] is not None and 'pk' in request.parser_context['kwargs']:
+            correct_organization[2] = get_self_org(user, request)
 
         for found_false in correct_organization:
             if found_false is not None and not found_false:
