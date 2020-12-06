@@ -22,7 +22,10 @@ class Scheduler(metaclass=Singleton):
     Creates an object that holds the scheduler
     """
 
-    def __init__(self, db_host, db_name):
+    def __init__(self):
+        db_host = "mongodb://localhost:27017/"
+        db_name = "alta_development"
+
         # Making connection to mongoclient
         client = pym.MongoClient(db_host)
 
@@ -35,9 +38,24 @@ class Scheduler(metaclass=Singleton):
         # named “default” to replace the default one  and a ThreadPoolExecutor
         # named “default” with a default maximum thread count of 10.
         self.scheduler = BackgroundScheduler(jobstores=job_stores)
+        self.scheduler.add_listener(self.scheduler_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
+
+    def scheduler_listener(self, event):
+        """
+        :paramScheduler events
+        are fired on certain occasions, and may carry additional information
+        in them concerning the details of that particular event. It is possible
+        to listen to only particular types of events by giving the appropriate mask argument
+        to add_listener(), OR’ing the different constants together. The listener callable is
+        called with one argument, the event object.
+        """
+        if event.exception:
+            print('The job crashed :(')
+        else:
+            print('The job worked :)')
 
 
-scheduler = Scheduler("mongodb://localhost:27017/", "alta_development").scheduler
+scheduler = Scheduler().scheduler
 
 
 def start():
@@ -48,21 +66,6 @@ def start():
     """
     scheduler.start()
     print_all_job()
-
-
-def scheduler_listener(event):
-    """
-    :paramScheduler events
-    are fired on certain occasions, and may carry additional information
-    in them concerning the details of that particular event. It is possible
-    to listen to only particular types of events by giving the appropriate mask argument
-    to add_listener(), OR’ing the different constants together. The listener callable is
-    called with one argument, the event object.
-    """
-    if event.exception:
-        print('The job crashed :(')
-    else:
-        print('The job worked :)')
 
 
 def start_new_job(job_id, time):
@@ -83,6 +86,3 @@ def get_specific_job(job_id):
     print("#############")
     print("###" + str(job_id) + "### " + str(job))
     print("#############")
-
-
-scheduler.add_listener(scheduler_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)

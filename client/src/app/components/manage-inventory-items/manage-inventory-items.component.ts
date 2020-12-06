@@ -114,7 +114,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   refreshTime(): void {
     this.body = {
       new_job_timing: this.timeForm.value.time,
-      org_id: localStorage.getItem('organization_id'),
+      organization: localStorage.getItem('organization_id'),
     };
 
     this.itemsService.updateRefreshItemsTime(this.body).subscribe(
