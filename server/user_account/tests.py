@@ -66,6 +66,18 @@ class RegistrationTestCase(APITestCase):
             'organization': organization.org_id
         }
 
+        self.im2 = {
+            'user_name': 'im2',
+            'email': 'im2@email.com',
+            'password': 'password',
+            'first_name': 'inventory2',
+            'last_name': 'manager2',
+            'role': 'IM',
+            'is_active': 'True',
+            'location': '',
+            'organization': organization.org_id
+        }
+
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
         # Authenticate a system admin
@@ -107,6 +119,32 @@ class RegistrationTestCase(APITestCase):
         self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.post(self.url, self.store_keeper)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+
+    def test_im_creates_im(self):
+        """ IM can create an IM"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.im2)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+
+    def test_im_creates_sa(self):
+        """ IM can't create an SA"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.registered_system_admin_2)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_im_creates_sk_diff_org(self):
+        """ IM can't create a stock keeper in a different organization"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        self.store_keeper["organization"] = ""
+        request = self.client.post(self.url, self.store_keeper)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_im_creates_im_diff_org(self):
+        """ IM can't create an inventory manager in a different organization"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        self.im2["organization"] = ""
+        request = self.client.post(self.url, self.im2)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class OpenRegistrationTestCase(APITestCase):
