@@ -8,129 +8,26 @@ from .models import CustomUser
 
 
 class CustomUserTestCase(TestCase):
-
-    def setUp(self):
-        organization = Organization.objects.create(org_name="Test")
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=1,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  location='',
-                                  organization=organization)
+    # Having the fixtures loads the entries into the db for testing
+    fixtures = ["users.json"]
 
     def test_user_creation(self):
         """ User was created correctly """
-        user = CustomUser.objects.get(id=1)
-        self.assertEqual(user.user_name, "test_user")
-        self.assertEqual(user.email, "test@test.com")
-        self.assertEqual(user.first_name, "test")
-        self.assertEqual(user.last_name, "user")
-        self.assertEqual(user.role, "SA")
-        self.assertEqual(user.location, "")
-
-    def test_get_role(self):
-        user = CustomUser.objects.get(id=1)
-        self.assertEqual(user.get_role, "SA")
-
-
-class AccessClientsTestCase(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        # Create each type of user that could be making the registration request
-        self.system_admin = CustomUser.objects.create(
-            user_name='system_admin',
-            email='system_admin@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
-            role='SA',
-            is_active=True)
-
-        CustomUser.objects.create(
-            user_name='inventory_manager',
-            email='inventory_manager@email.com',
-            password='password',
-            first_name='inventory',
-            last_name='manager',
-            role='IM',
-            location='YUL',
-            is_active=True)
-
-        CustomUser.objects.create(
-            user_name='inventory_manager2',
-            email='inventory_manager2@email.com',
-            password='password',
-            first_name='inventory',
-            last_name='manager',
-            role='IM',
-            location='YUL',
-            is_active=True)
-
-        # Create each type of user that could be registered
-        self.registered_system_admin = {
-            'user_name': 'system_admin',
-            'email': 'system_admin@email.com',
-            'password': 'password',
-            'first_name': 'system',
-            'last_name': 'admin',
-            'role': 'SA',
-            'is_active': True}
-
-        self.registered_inventory_manager = {
-            'user_name': 'inventory_manager',
-            'email': 'inventory_manager@email.com',
-            'password': 'password',
-            'first_name': 'inventory',
-            'last_name': 'manager',
-            'role': 'IM',
-            'location': 'YUL',
-            'is_active': True}
-
-        self.registered_inventory_manager2 = {
-            'user_name': 'inventory_manager2',
-            'email': 'inventory_manager2@email.com',
-            'password': 'password',
-            'first_name': 'inventory',
-            'last_name': 'manager',
-            'role': 'IM',
-            'location': 'YUL',
-            'is_active': True}
-
-        self.search_for_ims = {
-            'first_name': 'inventory'
-        }
+        CustomUser.objects.get(id=1)
 
 
 class RegistrationTestCase(APITestCase):
+    fixtures = ["users.json", "organizations.json"]
+
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
 
-        organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the registration request
-        self.system_admin = CustomUser.objects.create(
-            user_name='system_admin',
-            email='system_admin@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
-            role='SA',
-            is_active=True,
-            location='',
-            organization=organization)
+        self.system_admin = CustomUser.objects.get(user_name="sa")
 
-        self.inventory_manager = CustomUser.objects.create(
-            user_name='inventory_manager',
-            email='inventory_manager@email.com',
-            password='password',
-            first_name='inventory',
-            last_name='manager',
-            role='IM',
-            location='',
-            is_active=True,
-            organization=organization)
+        self.inventory_manager = CustomUser.objects.get(user_name="im")
+        organization = self.inventory_manager.organization
 
         # Create each type of user that could be registered
         self.registered_system_admin = {
@@ -156,11 +53,11 @@ class RegistrationTestCase(APITestCase):
             'organization': ''}
 
         self.store_keeper = {
-            'user_name': 'sk',
-            'email': 'sk@email.com',
+            'user_name': 'sk2',
+            'email': 'sk2@email.com',
             'password': 'password',
-            'first_name': 'stock',
-            'last_name': 'keeper',
+            'first_name': 'stock2',
+            'last_name': 'keeper2',
             'role': 'SK',
             'is_active': 'True',
             'location': '',
@@ -256,16 +153,7 @@ class OpenRegistrationTestCase(APITestCase):
 
 
 class LoginTest(APITestCase):
-
-    def setUp(self):
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=1,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test", #NOSONAR
-                                  is_active=True)
+    fixtures = ["users.json"]
 
     def test_login_invalid_user(self):
         """ User that does not exist in database """
@@ -277,83 +165,26 @@ class LoginTest(APITestCase):
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
         response = self.client.post(
-            "/login/", {"email": "test@test.com", "password": "test12"})
+            "/login/", {"email": "sa2@test.com", "password": "test12"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_not_active(self):
         """ User that has a valid account but is not active """
-        CustomUser.objects.create(user_name="test_user3",
-                                  email="test3@test.com",
-                                  id=3,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test",
-                                  is_active=False)
         response = self.client.post(
-            "/login/", {"email": "test3@test.com", "password": "test"})
+            "/login/", {"email": "sa2@test.com", "password": "sa"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_login_success_with_existing_token(self):
-        """ User can login successfully and has a token already in db"""
-        user = CustomUser(user_name="test_user2",
-                          email="test2@test.com",
-                          id=2,
-                          first_name='test',
-                          last_name='user',
-                          role='SA',
-                          is_active=True)
-        user.set_password("12")
-        user.save()
-
-        response = self.client.post("/login/", {'email': 'test2@test.com', 'password': '12'})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_login_success_without_existing_token(self):
         """ User can login successfully and doesn't have token in db"""
-        user = CustomUser(user_name="test_user2",
-                          email="test2@test.com",
-                          id=2,
-                          first_name='test',
-                          last_name='user',
-                          role='SA',
-                          is_active=True)
-        user.set_password("12")
-        user.save()
-
-        response = self.client.post("/login/", {'email': 'test2@test.com', 'password': '12'})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_login_success_user_linked_to_organization(self):
-        """ User can login successfully and is linked to an organization"""
-        organization = Organization.objects.create(org_name="Test")
-        user = CustomUser(user_name="test",
-                          email="tes@test.com",
-                          id=3,
-                          first_name='test',
-                          last_name='user',
-                          role='SA',
-                          is_active=True,
-                          organization=organization)
-        user.set_password("12")
-        user.save()
-
-        response = self.client.post("/login/", {'email': 'tes@test.com', 'password': '12'})
+        response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class LogoutTest(APITestCase):
-    def setUp(self):
-        CustomUser.objects.create(user_name="test_user",
-                                  email="test@test.com",
-                                  id=1,
-                                  first_name='test',
-                                  last_name='user',
-                                  role='SA',
-                                  password="test",
-                                  is_active=True)
+    fixtures = ["users.json"]
 
-        user = CustomUser.objects.get(user_name="test_user")
+    def setUp(self):
+        user = CustomUser.objects.get(user_name="sa")
 
         self.token = Token.objects.create(user=user)
         self.api_authentication_valid_token()
@@ -382,61 +213,25 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
+    fixtures = ["users.json"]
+
     # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
 
-        organization = Organization.objects.create(org_name="Test")
         # Create each type of user that could be making the request
-        self.system_admin = CustomUser.objects.create(
-            user_name='system_admin',
-            email='system_admin@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
-            role='SA',
-            is_active=True,
-            organization=organization)
-
-        self.manager = CustomUser.objects.create(
-            user_name='inventory1',
-            email='manager2@email.com',
-            password='123',
-            first_name='sy',
-            last_name='ad',
-            role='IM',
-            location='YUL',
-            is_active=True)
-
-        self.test_user = CustomUser.objects.create(
-            user_name='test',
-            email='test1@email.com',
-            password='password',
-            first_name='system',
-            last_name='admin',
-            role='SA',
-            is_active=True,
-            organization=organization)
-
-        self.stock_keeper = CustomUser.objects.create(
-            user_name='sk',
-            email='sk@email.com',
-            password='password',
-            first_name='stock',
-            last_name='keeper',
-            role='SK',
-            is_active=True,
-            organization=organization)
+        self.system_admin = CustomUser.objects.get(user_name="sa")
+        self.manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
 
         self.sys_admin_id = self.system_admin.id
-        self.test_user_id = self.test_user.id
 
     def test_update_another_user_information(self):
         """ User can't update the info of another user """
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
-            self.url + str(self.test_user_id) + "/", {"user_name": "test_us"})
+            self.url + str(self.sys_admin_id) + "/", {"user_name": "sa"})
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -444,7 +239,7 @@ class UpdateProfileTest(APITestCase):
         """ User can update his own info """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(
-            self.url + str(self.sys_admin_id) + "/", {"user_name": "test_us"})
+            self.url + str(self.sys_admin_id) + "/", {"user_name": "sa"})
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
 
@@ -457,57 +252,23 @@ class UpdateProfileTest(APITestCase):
 
 
 class ChangePasswordTest(APITestCase):
+    fixtures = ["users.json"]
     # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
 
-        self.s_a = CustomUser.objects.create(
-            user_name='system',
-            email='system@email.com',
-            password='123',
-            first_name='sy',
-            last_name='ad',
-            role='SA',
-            is_active=True)
-
-        self.i_m = CustomUser.objects.create(
-            user_name='inventory',
-            email='manager@email.com',
-            password='123',
-            first_name='sy',
-            last_name='ad',
-            role='IM',
-            location='YUL',
-            is_active=True)
-
-        self.t_u = CustomUser.objects.create(
-            user_name='test12',
-            email='test12@email.com',
-            password='123',
-            first_name='test',
-            last_name='user',
-            role='SA',
-            is_active=True)
-
-        self.s_k = CustomUser.objects.create(
-            user_name='sk',
-            email='sk@email.com',
-            password='password',
-            first_name='stock',
-            last_name='keeper',
-            role='SK',
-            is_active=True)
-
+        self.s_a = CustomUser.objects.get(user_name="sa")
+        self.i_m = CustomUser.objects.get(user_name="im")
+        self.s_k = CustomUser.objects.get(user_name="sk")
         self.sa_id = self.s_a.id
-        self.tu_id = self.t_u.id
 
     def test_update_another_user_password(self):
         """ User can't update the password of another user unless he is
          an admin or the same user """
         self.client.force_authenticate(user=self.i_m)
         response = self.client.put(
-            self.url + str(self.tu_id) + "/", {"password": "12"})
+            self.url + str(self.sa_id) + "/", {"password": "12"})
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -527,47 +288,21 @@ class ChangePasswordTest(APITestCase):
 
 
 class RetreivePersonalInfoTest(APITestCase):
+    fixtures = ["users.json"]
 
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
 
-        self.user = CustomUser.objects.create(
-            user_name='user',
-            email='user@email.com',
-            password='123',
-            first_name='user',
-            last_name='test',
-            role='SA',
-            is_active=True)
-
-        self.imposter = CustomUser.objects.create(
-            user_name='imposter',
-            email='imposter@email.com',
-            password='123',
-            first_name='imposter',
-            last_name='user',
-            role='SA',
-            is_active=True)
-
-        self.inventory = CustomUser.objects.create(
-            user_name='inventory',
-            email='manager1@email.com',
-            password='123',
-            first_name='sy',
-            last_name='ad',
-            role='IM',
-            location='YUL',
-            is_active=True)
-
+        self.user = CustomUser.objects.get(user_name="sa")
+        self.inventory = CustomUser.objects.get(user_name="im")
         self.us_id = self.user.id
-        self.imp_id = self.imposter.id
 
     def test_update_another_user_password(self):
         """ User can't update the password of another user unless if he is an admin """
         self.client.force_authenticate(user=self.inventory)
         response = self.client.get(
-            self.url + str(self.imp_id) + "/")
+            self.url + str(self.us_id) + "/")
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
