@@ -7,7 +7,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
+from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager, IsHigherInOrganization
 from .serializers import UserSerializer, LoginSerializer, LoginMobileSerializer,\
      ClientGridSerializer, UserPasswordSerializer
 from .models import CustomUser
@@ -46,7 +46,9 @@ class CustomUserView(viewsets.ModelViewSet):
         """
         if self.action in ['retrieve']:
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ['partial_update']:
+            permission_classes = [IsAuthenticated, (IsCurrentUserTargetUser | IsHigherInOrganization)]
+        elif self.action in ['update']:
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
         # TODO: Validate requested user id matches requested organization in DB
         # for permissions unrelated to create

@@ -153,7 +153,7 @@ class OpenRegistrationTestCase(APITestCase):
 
 
 class LoginTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
 
     def test_login_invalid_user(self):
         """ User that does not exist in database """
@@ -181,7 +181,7 @@ class LoginTest(APITestCase):
 
 
 class LogoutTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
 
     def setUp(self):
         user = CustomUser.objects.get(user_name="sa")
@@ -213,7 +213,7 @@ class LogoutTest(APITestCase):
 
 
 class UpdateProfileTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
 
     # pylint: disable=too-many-instance-attributes
     def setUp(self):
@@ -248,11 +248,11 @@ class UpdateProfileTest(APITestCase):
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(self.url + str(self.stock_keeper.id) +
                                      "/", {"email": "1@gmail.com"})
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class ChangePasswordTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
     # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
@@ -288,7 +288,7 @@ class ChangePasswordTest(APITestCase):
 
 
 class RetreivePersonalInfoTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
 
     def setUp(self):
         self.client = APIClient()

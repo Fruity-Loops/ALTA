@@ -89,3 +89,25 @@ class IsCurrentUserTargetUser(BasePermission):
         current_user = request.user
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
         return current_user == target_user
+
+
+class IsHigherInOrganization(BasePermission):
+    message = "You must be of a higher rank then the employee you are trying to modify"
+    user_roles = ["SA", "IM", "SK"]
+
+    def has_permission(self, request, view):
+        """
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is allowed to modify the user
+        """
+        current_user_org = request.user.organization
+        target_user_org = CustomUser.objects.get(id=view.kwargs['pk']).organization
+        current_user_role = self.user_roles.index(request.user.role)
+        target_user_role = self.user_roles.index(CustomUser.objects.get(id=view.kwargs['pk']).role)
+        if current_user_role == 0 and target_user_role > 0:
+            return True
+        if current_user_org and target_user_org:
+            if current_user_org == target_user_org:
+                return current_user_role < target_user_role
+        return False
