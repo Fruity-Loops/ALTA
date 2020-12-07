@@ -276,20 +276,63 @@ class UpdateProfileTest(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
-    def test_update_own_user_information(self):
-        """ User can update his own info """
-        self.client.force_authenticate(user=self.system_admin)
-        response = self.client.patch(
-            self.url + str(self.sys_admin_id) + "/", {"user_name": "sa"})
-        self.assertEqual(response.status_code,
-                         status.HTTP_200_OK)
-
     def test_im_update_sk_user_information(self):
         """ Inventory manager can update Stock Keeper's info"""
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(self.url + str(self.stock_keeper.id) +
                                      "/", {"email": "1@gmail.com"})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_update_own_user_information(self):
+        """ Users can update their own regular info """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            self.url + str(self.sys_admin_id) + "/", {"user_name": "sa"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(
+            self.url + str(self.manager.id) + "/", {"user_name": "im"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.patch(
+            self.url + str(self.stock_keeper.id) + "/", {"user_name": "sk"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_own_user_email(self):
+        """ Only SAs can update their own email """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            self.url + str(self.sys_admin_id) + "/", {"email": "1@test.com"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(
+            self.url + str(self.manager.id) + "/", {"email": "1@test.com"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.patch(
+            self.url + str(self.stock_keeper.id) + "/", {"email": "1@test.com"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_own_user_role(self):
+        """ Users shouldn't be able to update their own roles """
+        self.client.force_authenticate(user=self.system_admin)
+        response = self.client.patch(
+            self.url + str(self.sys_admin_id) + "/", {"role": "IM"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.manager)
+        response = self.client.patch(
+            self.url + str(self.manager.id) + "/", {"role": "SA"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.patch(
+            self.url + str(self.stock_keeper.id) + "/", {"role": "SA"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class ChangePasswordTest(APITestCase):
@@ -314,12 +357,21 @@ class ChangePasswordTest(APITestCase):
                          status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_password(self):
-        """ User can update his own password """
+        """ Users can update their own password """
         self.client.force_authenticate(user=self.s_a)
         response = self.client.put(
             self.url + str(self.sa_id) + "/", {"password": "123456"})
-        self.assertEqual(response.status_code,
-                         status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.i_m)
+        response = self.client.put(
+            self.url + str(self.i_m.id) + "/", {"password": "123456"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.s_k)
+        response = self.client.put(
+            self.url + str(self.s_k.id) + "/", {"password": "123456"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_im_update_sk_password(self):
         self.client.force_authenticate(user=self.i_m)
