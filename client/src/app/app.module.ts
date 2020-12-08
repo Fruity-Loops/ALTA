@@ -12,12 +12,10 @@ import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AuditTemplateComponent } from './components/audit-template/audit-template.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AuditTemplateComponent,
   ],
   imports: [
     BrowserModule,

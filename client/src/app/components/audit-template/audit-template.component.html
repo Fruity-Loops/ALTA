@@ -1,1 +1,107 @@
-<p>audit-template works!</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Audit Template Creation</mat-card-title>
+    <div id="errorMsg" *ngIf="errorMessage">
+      <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <form class="col s12" [formGroup]="templateForm" novalidate (ngSubmit)="createTemplate()">
+  <mat-card-content>
+    <button mat-stroked-button id="create-template-button" [disabled]="!templateForm.valid" class="save">
+      {{templateButtonLabel}}</button><!-- if checks throws error then do not send data -->
+    <div class="centerMe">
+    </div>
+      <mat-grid-list cols="4" rowHeight="38:9">
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Title:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="title" type="text" formControlName="title" placeholder="title"/>
+              <mat-error class="error" *ngIf="
+                  !templateForm.controls['title'].valid &&
+                  templateForm.controls['title'].touched
+                ">
+                <!-- Handeling error -->
+                title is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Location:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="location" type="text" formControlName="location" placeholder="Location"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Plant:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="plant" type="text" formControlName="plant" placeholder="Plant"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Zones:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="zones" type="text" formControlName="zones" placeholder="Zones"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Aisles:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="aisles" type="text" formControlName="aisles" placeholder="Aisles"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Bins:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="bins" type="text" formControlName="bins" placeholder="Bins"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Part Number:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="partNumber" type="text" formControlName="partNumber" placeholder="Part Number"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Serial Number:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="serialNumber" type="text" formControlName="serialNumber" placeholder="Serial Number"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">Description:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="description" type="text" formControlName="description" placeholder="Description"/>
+            </mat-form-field>
+          </div>
+
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+  </form>
+</mat-card>

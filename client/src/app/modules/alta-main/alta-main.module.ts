@@ -21,6 +21,7 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
     EmployeeSettingsComponent,
     OrganizationDialogComponent,
     ManageInventoryItemsComponent,
+    AuditTemplateComponent,
   ],
 
   imports: [
