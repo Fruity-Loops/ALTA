@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../services/audit-template.service';
@@ -39,9 +39,9 @@ export class AuditTemplateComponent implements OnInit {
       plant: [''],
       // Todo: custom validator https://angular.io/guide/form-validation#built-in-validator-functions
       // The custom validator needs to if all the values are comma separated integers only
-      zones: [''],
-      aisles: [''],
-      bins: [''],
+      zones: ['', this.commaSeparatedStringsValidator()],
+      aisles: ['', this.commaSeparatedIntegersValidator()],
+      bins: ['', this.commaSeparatedIntegersValidator()],
       part_number: [''],
       serial_number: [''],
       description: [''],
@@ -98,6 +98,24 @@ export class AuditTemplateComponent implements OnInit {
       }
     );
 
+  }
+
+  // A validator that checks if the string has only comma separated integers
+  commaSeparatedIntegersValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const validationRegex = /^(\d+(,\d+)*)?$/;
+      const forbidden = validationRegex.test(control.value);
+      return !forbidden ? {forbiddenName: {value: control.value}} : null;
+    };
+  }
+
+  // A validator that checks if the string has only comma separated strings
+  commaSeparatedStringsValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const validationRegex = /^([A-z]+(,[A-z]+)*)?$/;
+      const forbidden = validationRegex.test(control.value);
+      return !forbidden ? {forbiddenName: {value: control.value}} : null;
+    };
   }
 
   resetForm(): void {

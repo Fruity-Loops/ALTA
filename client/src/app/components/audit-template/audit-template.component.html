@@ -52,6 +52,13 @@
             <mat-label for="power">Zones:</mat-label>
             <mat-form-field appearance="outline">
               <input matInput id="zones" type="text" formControlName="zones" placeholder="Zones"/>
+              <mat-error class="error" *ngIf="
+                  !templateForm.controls['zones'].valid &&
+                  templateForm.controls['zones'].touched
+                ">
+                <!-- Handeling error -->
+                Comma Separated Strings Only (e.g., A,C,Z)
+              </mat-error>
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -61,6 +68,13 @@
             <mat-label for="power">Aisles:</mat-label>
             <mat-form-field appearance="outline">
               <input matInput id="aisles" type="text" formControlName="aisles" placeholder="Aisles"/>
+              <mat-error class="error" *ngIf="
+                  !templateForm.controls['aisles'].valid &&
+                  templateForm.controls['aisles'].touched
+                ">
+                <!-- Handeling error -->
+                Comma Separated Integers Only (e.g., 1,4,11)
+              </mat-error>
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -70,6 +84,13 @@
             <mat-label for="power">Bins:</mat-label>
             <mat-form-field appearance="outline">
               <input matInput id="bins" type="text" formControlName="bins" placeholder="Bins"/>
+              <mat-error class="error" *ngIf="
+                  !templateForm.controls['bins'].valid &&
+                  templateForm.controls['bins'].touched
+                ">
+                <!-- Handeling error -->
+                Comma Separated Integers Only (e.g., 1,4,11)
+              </mat-error>
             </mat-form-field>
           </div>
         </mat-grid-tile>
