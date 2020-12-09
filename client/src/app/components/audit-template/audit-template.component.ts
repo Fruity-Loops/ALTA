@@ -29,15 +29,21 @@ export class AuditTemplateComponent implements OnInit {
 
   // We initialize the form and set validators to each one in case user forget to specify a field
   ngOnInit(): void {
+    this.initializeForm();
+  }
+
+  initializeForm(): void {
     this.templateForm = this.fb.group({
       title: ['', Validators.required],
       location: [''],
       plant: [''],
+      // Todo: custom validator https://angular.io/guide/form-validation#built-in-validator-functions
+      // The custom validator needs to if all the values are comma separated integers only
       zones: [''],
       aisles: [''],
       bins: [''],
-      partNumber: [''],
-      serialNumber: [''],
+      part_number: [''],
+      serial_number: [''],
       description: [''],
     });
   }
@@ -50,8 +56,8 @@ export class AuditTemplateComponent implements OnInit {
       zones: this.templateForm.value.zones,
       aisles: this.templateForm.value.aisles,
       bins: this.templateForm.value.bins,
-      partNumber: this.templateForm.value.partNumber,
-      serialNumber: this.templateForm.value.serialNumber,
+      part_number: this.templateForm.value.part_number,
+      serial_number: this.templateForm.value.serial_number,
       description: this.templateForm.value.description,
     };
 
@@ -67,6 +73,12 @@ export class AuditTemplateComponent implements OnInit {
     if (isBodyEmpty) {
       this.errorMessage = 'Please specify at least one filter for the template';
     }
+
+    // Todo: Convert comma separated values into an array of strings or integers
+    this.body.zones = this.body.zones.replace(/\s/g, '').split(',');
+    this.body.aisles = this.body.aisles.replace(/\s/g, '').split(',').map((value) => parseInt(value, 10));
+    this.body.bins = this.body.bins.replace(/\s/g, '').split(',').map((value) => parseInt(value, 10));
+
 
     this.auditTemplateService.createTemplate(this.body).subscribe(
       () => {
@@ -93,6 +105,10 @@ export class AuditTemplateComponent implements OnInit {
     Object.keys(this.templateForm.controls).forEach(key => {
       this.templateForm.controls[key].setErrors(null);
     });
+
+    // initialize the form fields to an empty string rather than Null
+    this.initializeForm();
+
   }
 
 }
