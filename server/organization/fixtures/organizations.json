@@ -1,0 +1,11 @@
+[
+{
+    "model": "organization.organization",
+    "pk": 1,
+    "fields": {
+        "org_name": "test",
+        "address": "Florida",
+        "status": true
+    }
+}
+]

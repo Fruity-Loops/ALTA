@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from django_server.permissions import IsSystemAdmin, IsInventoryManager
+from user_account.permissions import IsSystemAdmin, IsInventoryManager
 
 
 class UserOrganizationPermission(BasePermission):
