@@ -96,7 +96,7 @@ class InventoryItemRefreshTestCase(APITestCase):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.system_admin)
         data = {"org_id": self.organization.org_id, "new_job_timing": "14"}
-        response = self.client.post("/organization/", data)
+        response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def update_organization_inventory_item_refresh_time_fail(self):
@@ -106,5 +106,5 @@ class InventoryItemRefreshTestCase(APITestCase):
         """
         self.client.force_authenticate(user=self.system_admin)
         data = {"org_id": "1234", "new_job_timing": "14"}
-        response = self.client.post("/organization/", data)
+        response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
