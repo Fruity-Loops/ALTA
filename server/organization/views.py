@@ -2,7 +2,7 @@ from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from inventory_item.updater import start_new_job
-from django_server.permissions import IsInventoryManager, IsSystemAdmin
+from user_account.permissions import IsInventoryManager, IsSystemAdmin
 
 from .serializers import OrganizationSerializer
 from .models import Organization
