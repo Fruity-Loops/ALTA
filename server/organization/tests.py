@@ -1,7 +1,10 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.test import APIClient
+from django.db.models import signals
+import factory
 from user_account.models import CustomUser
+from .models import Organization
 
 
 class OrganizationTestCase(APITestCase):
@@ -28,6 +31,7 @@ class OrganizationTestCase(APITestCase):
             role='IM',
             is_active=True)
 
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def test_create_organization_sys_admin_success(self):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
@@ -68,3 +72,39 @@ class OrganizationTestCase(APITestCase):
         response = self.client.get("/organization/")
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
+
+
+class InventoryItemRefreshTestCase(APITestCase):
+
+    @factory.django.mute_signals(signals.pre_save, signals.post_save)
+    def setUp(self):
+        self.client = APIClient()
+
+        self.organization = Organization.objects.create(org_name="Test")
+
+        self.system_admin = CustomUser.objects.create(
+            user_name='system_admin1',
+            email='system_admin1@email.com',
+            password='password1',
+            first_name='system1',
+            last_name='admin1',
+            role='SA',
+            is_active=True,
+            organization=self.organization.org_id)
+
+    def update_organization_inventory_item_refresh_time_success(self):
+        """ Timing has been updated correctly """
+        self.client.force_authenticate(user=self.system_admin)
+        data = {"org_id": self.organization.org_id, "new_job_timing": "14"}
+        response = self.client.post("/InventoryItemRefreshTime/", data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def update_organization_inventory_item_refresh_time_fail(self):
+        """
+        Timing can't be updated correctly for an
+        organization that doesnt exist
+        """
+        self.client.force_authenticate(user=self.system_admin)
+        data = {"org_id": "1234", "new_job_timing": "14"}
+        response = self.client.post("/InventoryItemRefreshTime/", data)
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)

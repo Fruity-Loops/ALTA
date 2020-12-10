@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     # Local apps
     'user_account',
     'organization',
-    'inventory_item',
+    'inventory_item.apps.ItemsConfig',
 
     # 3rd party
     'rest_framework',
