@@ -194,7 +194,7 @@ class OpenRegistrationTestCase(APITestCase):
 
 
 class LoginTest(APITestCase):
-    fixtures = ["users.json"]
+    fixtures = ["users.json", "organizations"]
 
     def test_login_invalid_user(self):
         """ User that does not exist in database """
@@ -215,10 +215,20 @@ class LoginTest(APITestCase):
             "/login/", {"email": "sa2@test.com", "password": "sa"})
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_login_success_without_existing_token(self):
-        """ User can login successfully and doesn't have token in db"""
+    # def test_login_success_without_existing_token(self):
+    #     """ User can login successfully and doesn't have token in db"""
+    #     response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
+    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_users_with_or_without_organization(self):
         response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['organization'], "")
+
+        response = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'sk',\
+                                                'organization': 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['organization_name'], 'test')
 
 
 class LogoutTest(APITestCase):
