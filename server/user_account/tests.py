@@ -198,7 +198,7 @@ class LoginTest(APITestCase):
         response = self.client.post(
             "/login/", {"email": "t@test.com", "password": "test"})
         self.assertEqual(response.status_code,
-                         status.HTTP_500_INTERNAL_SERVER_ERROR)
+                         status.HTTP_401_UNAUTHORIZED)
 
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
@@ -220,7 +220,7 @@ class LoginTest(APITestCase):
     def test_users_with_or_without_organization(self):
         response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization'], "")
+        self.assertEqual(response.data['organization_name'], "")
 
         response = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'sk',\
                                                 'organization': 1})
