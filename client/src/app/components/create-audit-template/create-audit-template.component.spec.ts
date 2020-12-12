@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuditTemplateComponent } from './audit-template.component';
+import { CreateAuditTemplateComponent } from './create-audit-template.component';
 
 describe('AuditTemplateComponent', () => {
-  let component: AuditTemplateComponent;
-  let fixture: ComponentFixture<AuditTemplateComponent>;
+  let component: CreateAuditTemplateComponent;
+  let fixture: ComponentFixture<CreateAuditTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuditTemplateComponent ]
+      declarations: [ CreateAuditTemplateComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AuditTemplateComponent);
+    fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

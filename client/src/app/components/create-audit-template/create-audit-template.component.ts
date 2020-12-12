@@ -6,11 +6,11 @@ import {AuditTemplateService} from '../../services/audit-template.service';
 
 
 @Component({
-  selector: 'app-audit-template',
-  templateUrl: './audit-template.component.html',
-  styleUrls: ['./audit-template.component.scss']
+  selector: 'app-create-audit-template',
+  templateUrl: './create-audit-template.component.html',
+  styleUrls: ['./create-audit-template.component.scss']
 })
-export class AuditTemplateComponent implements OnInit {
+export class CreateAuditTemplateComponent implements OnInit {
 
   // Defining type of our form
   templateForm: FormGroup;

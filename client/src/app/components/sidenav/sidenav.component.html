@@ -4,8 +4,12 @@
 <div class="sidenav">
     <div class="options">
 
+<!--        TODO: display submenu items inside menu items-->
         <div *ngFor="let option of options" [class.selected]="option === selectedOption" class="parent">
             <div id="option" routerLink="{{option.routerLink}}" class="option-tab">{{option.title}}</div>
+            <div *ngFor="let subMenuOption of option.subMenuOptions" [class.selected]="subMenuOption === selectedOption" class="parent">
+              <div id="sub-menu-option" routerLink="{{subMenuOption.routerLink}}" class="option-tab">{{subMenuOption.title}}</div>
+            </div>
         </div>
       <div class="footer">
         <mat-list>
