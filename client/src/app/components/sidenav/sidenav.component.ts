@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { TokenService } from '../../services/token.service';
+import { Roles } from '../../models/roles.model';
+import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 
 @Component({
   selector: 'app-sidenav',
@@ -21,11 +23,7 @@ export class SideNavComponent implements OnInit {
   loggedInUser;
   loggedInUserRole;
 
-  roles = {
-    SA: 'System Administrator',
-    IM: 'Inventory Manager',
-    SK: 'Stock Keeper'
-  };
+  roles: Roles;
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -42,7 +40,7 @@ export class SideNavComponent implements OnInit {
     this.authSubscription = this.authService.sharedUser
       .subscribe((data) => {
         this.loggedInUser = data.username;
-        this.loggedInUserRole = this.roles[data.role];
+        this.loggedInUserRole = this.roles.roles[data.role];
       });
     this.setSelected(this.router.url);
     this.subscribeSelected();

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ResolveStart, Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
 
 @Component({
@@ -17,10 +17,6 @@ export class CreateMemberComponent implements OnInit {
   selectedOrganization: any = '';
   signUpButtonLabel = 'Save';
   subscription;
-  roles = [
-    { name: 'Inventory Manager', abbrev: 'IM' },
-    { name: 'Stock Keeper', abbrev: 'SK' },
-  ];
   isEmployee = false;
 
   // Injecting the authService to be able to send data to the backend through it ,
