@@ -129,40 +129,35 @@ class LoginView(generics.GenericAPIView):
         data = request.data
         email = data.get('email', '')
         password = data.get('password', '')
+        org_id = ""
+        org_name = ""
+        response = None
 
         try:
             user = CustomUser.objects.get(email=email)
 
-            if user.is_active:
-                encrypted_password = user.password
-                is_verified = check_password(password, encrypted_password)
-                if is_verified:
-                    has_token = Token.objects.filter(user=user).count()
-                    if has_token:
-                        token = Token.objects.get(user=user)
-                    else:
-                        token = Token.objects.create(user=user)
+            is_verified = check_password(password, user.password)
+            if is_verified and user.is_active:
+                has_token = Token.objects.filter(user=user).count()
+                if has_token:
+                    token = Token.objects.get(user=user)
+                else:
+                    token = Token.objects.create(user=user)
+                if user.organization:
+                    org_id = user.organization.org_id
+                    org_name = user.organization.org_name
+                data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'organization_id': org_id,
+                        'organization_name': org_name,
+                        'token': token.key}
 
-                    if user.organization is None:
-                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                                'organization': '', 'token': token.key}
-                    else:
-                        data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                                'organization_id': user.organization.org_id,
-                                'organization_name': user.organization.org_name,
-                                'token': token.key}
+                response = Response(data, status=status.HTTP_200_OK)
 
-                    return Response(data, status=status.HTTP_200_OK)
+        finally:
+            if response:
+                return response
+            return Response({"detail": "Failed to Login"}, status=status.HTTP_401_UNAUTHORIZED)
 
-                return Response({'detail': 'Invalid credentials'},
-                                status=status.HTTP_401_UNAUTHORIZED)
-
-            return Response({'detail': 'Please contact admin to activate your account'},
-                            status=status.HTTP_401_UNAUTHORIZED)
-
-        except CustomUser.DoesNotExist:
-            return Response({'detail': 'Invalid user'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class LoginMobileView(generics.GenericAPIView):
     """
