@@ -22,6 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/create-audit-template/create-audit-template.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CreateAuditTemplateComponent } from '../../components/create-audit-temp
     OrganizationDialogComponent,
     ManageInventoryItemsComponent,
     CreateAuditTemplateComponent,
+    AuditTemplateComponent,
   ],
 
   imports: [
