@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { TokenService } from '../../services/token.service';
-import { Roles } from '../../models/roles.model';
+import roles from '../../models/roles.json';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
 
 @Component({
@@ -23,8 +23,6 @@ export class SideNavComponent implements OnInit {
   loggedInUser;
   loggedInUserRole;
 
-  roles: Roles;
-
   constructor(private router: Router,
               private authService: AuthService,
               private tokenService: TokenService) { }
@@ -40,7 +38,10 @@ export class SideNavComponent implements OnInit {
     this.authSubscription = this.authService.sharedUser
       .subscribe((data) => {
         this.loggedInUser = data.username;
-        this.loggedInUserRole = this.roles.roles[data.role];
+        roles.forEach(role => {
+          if (role.abbrev === data.role)
+          this.loggedInUserRole = role.name;
+        });        
       });
     this.setSelected(this.router.url);
     this.subscribeSelected();

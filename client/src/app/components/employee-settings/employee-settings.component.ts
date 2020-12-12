@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ManageMembersService } from '../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
-import { Roles } from '../../models/roles.model';
+import roles from '../../models/roles.json';
 
 @Component({
   selector: 'app-employee-settings',
@@ -24,7 +24,7 @@ export class EmployeeSettingsComponent implements OnInit {
   body: any;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
-  roles: Roles;
+  roles = roles;
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -67,10 +67,10 @@ export class EmployeeSettingsComponent implements OnInit {
     if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
-      this.roles.roles.filter(({ abbrev}) => abbrev !== "SA");
+      this.roles.filter(({ abbrev}) => abbrev !== "SA");
     }
 
-    this.roles.roles.forEach((role) => {
+    this.roles.forEach((role) => {
       if (role.abbrev === this.employee.role) {
         this.role = role.name;
       }
@@ -88,7 +88,7 @@ export class EmployeeSettingsComponent implements OnInit {
     // update user info
     this.employee.is_active = this.isActive === 'active';
 
-    this.roles.roles.forEach((role) => {
+    this.roles.forEach((role) => {
       if (role.name === this.role) {
         this.employee.role = role.abbrev;
       }
