@@ -1,1 +1,6 @@
 <p>audit-template works!</p>
+<mat-grid-list cols="2" rowHeight="100:9">
+  <mat-grid-tile *ngFor="let template of auditTemplates">
+      <mat-list-item>title:   {{template.title}}</mat-list-item>
+  </mat-grid-tile>
+</mat-grid-list>

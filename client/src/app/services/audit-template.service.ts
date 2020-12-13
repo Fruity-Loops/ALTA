@@ -16,4 +16,9 @@ export class AuditTemplateService {
   createTemplate(templateBody): Observable<any> {
       return this.http.post(`${BASEURL}/template/`, templateBody);
   }
+
+  getAuditTemplates(): Observable<any> {
+      return this.http.get(`${BASEURL}/template/`);
+  }
+
 }
