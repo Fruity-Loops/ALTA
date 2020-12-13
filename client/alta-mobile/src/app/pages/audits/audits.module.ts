@@ -3,20 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-
-import { Page2PageRoutingModule } from './page2-routing.module';
-
-import { Page2Page } from './page2.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { AuditsRoutingModule } from './audits-routing.module';
+import { AuditsPage } from './audits.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    Page2PageRoutingModule,
+    AuditsRoutingModule,
     ComponentsModule,
   ],
-  declarations: [Page2Page]
+  declarations: [AuditsPage]
 })
-export class Page2PageModule {}
+export class AuditsModule {}
