@@ -12,17 +12,8 @@ const BASEURL = env.api_root;
 export class ManageInventoryItemsService {
   constructor(private http: HttpClient) {}
 
-  getPageItems(page, pageSize): Observable<any> {
-    let test = ""
-    let params = new HttpParams();
-    params = params.append('test', test);
-    console.log(params);
-    params = params.append('page', page);
-    params = params.append('page_size', pageSize);
-    console.log(params);
-    params = params.append('page', page);
+  getPageItems(params): Observable<any> {
     return this.http.get(`${BASEURL}/item/`, {params: params});
-    // /?page=${page}&page_size=${pageSize}`);
   }
 
   updateRefreshItemsTime(body): Observable<any> {

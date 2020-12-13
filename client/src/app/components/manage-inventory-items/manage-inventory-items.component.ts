@@ -11,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import {HttpParams} from "@angular/common/http";
+import {tryResolvePackage} from "tslint/lib/utils";
 
 import { Router } from '@angular/router';
 
@@ -39,6 +41,9 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
+  //Http params
+  params = new HttpParams();
+
   inventoryItemToAudit = [];
 
   constructor(
@@ -58,6 +63,8 @@ export class ManageInventoryItemsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit(): void {
+    this.params = this.params.append('page', String(this.pageIndex));
+    this.params = this.params.append('page_size', String(this.pageSize));
     this.getItems();
     this.init();
     this.inventoryItemToAudit = [];
@@ -68,26 +75,26 @@ export class ManageInventoryItemsComponent implements OnInit {
       time: ['', Validators.required],
     });
     this.searchForm = this.fb.group({
-      item_id: [''],
-      item_location: [''],
-      item_plant: [''],
-      item_zone: [''],
-      item_aisle: [''],
-      item_part_number: [''],
-      item_sn: [''],
-      item_condition: [''],
-      item_category: [''],
-      item_owner: [''],
-      item_criticality: [''],
-      item_average_cost: [''],
-      item_quantity: [''],
-      item_unit_of_measure: [''],
-      item_organization: [''],
+      _id: [''],
+      Location: [''],
+      Plant: [''],
+      Zone: [''],
+      Aisle: [''],
+      Part_Number: [''],
+      Serial_Number: [''],
+      Condition: [''],
+      Category: [''],
+      Owner: [''],
+      Criticality: [''],
+      Average_Cost: [''],
+      Quantity: [''],
+      Unit_of_Measure: [''],
+      organization: [''],
     });
   }
 
   getItems(): void {
-    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
+    this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
@@ -117,16 +124,23 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.pageIndex = 1 + event[pageIndex];
     this.pageSize = event[pageSize];
 
-    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
+    this.params = this.params.set('page', String(this.pageIndex));
+    this.params = this.params.set('page_size', String(this.pageSize));
+
+    this.updatePage();
+  }
+
+  updatePage(): void {
+    this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
-        console.log(data);
         this.updatePaginator();
       },
       (err) => {
         this.errorMessage = err;
       }
     );
+
   }
 
   // updates data in table
@@ -156,6 +170,15 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
+  searchItem()  {
+    for(let value in this.searchForm.value){
+      if(this.searchForm.value[value] == ""){
+        this.params = this.params.delete(value);
+      } else {
+        this.params = this.params.set(value, this.searchForm.value[value]);
+      }
+    }
+    this.updatePage();
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: any): void {
     if (this.inventoryItemToAudit.includes(value)) {
