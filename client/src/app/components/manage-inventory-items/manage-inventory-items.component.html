@@ -2,8 +2,8 @@
   <button mat-stroked-button [disabled]="inventoryItemToAudit.length<=0" id="create" class="create" (click)="submitAudit()">Start Audit</button>
   <mat-card-title>Inventory Items</mat-card-title>
   <div id ="refresh">
-  <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">    
-  <mat-form-field appearance="outline">
+  <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">
+      <mat-form-field appearance="outline">
     <input matInput id="time" type="number" formControlName="time" placeholder="Time in minutes"/>
   </mat-form-field>
   <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
