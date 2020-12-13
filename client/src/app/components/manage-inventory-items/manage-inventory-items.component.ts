@@ -133,7 +133,6 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
-        console.log(data);
         this.updatePaginator();
       },
       (err) => {
