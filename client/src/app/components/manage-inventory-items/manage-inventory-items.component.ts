@@ -11,8 +11,7 @@ import {PageEvent} from '@angular/material/paginator';
 
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {HttpParams} from "@angular/common/http";
-import {tryResolvePackage} from "tslint/lib/utils";
+import {HttpParams} from '@angular/common/http';
 
 import { Router } from '@angular/router';
 
@@ -41,7 +40,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
-  //Http params
+  // Http URL params
   params = new HttpParams();
 
   inventoryItemToAudit = [];
@@ -170,9 +169,9 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
-  searchItem() {
-    for (let value in this.searchForm.value) {
-      if (this.searchForm.value[value] == "") {
+  searchItem(): void {
+    for (const value in this.searchForm.value) {
+      if (this.searchForm.value[value] === '') {
         this.params = this.params.delete(value);
       } else {
         this.params = this.params.set(value, this.searchForm.value[value]);
