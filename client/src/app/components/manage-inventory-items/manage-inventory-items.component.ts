@@ -26,6 +26,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   pageIndex = 1;
   previousPageIndex = 0;
   timeForm: FormGroup;
+  searchForm: FormGroup;
   body: any;
   subscription: any;
   organization: any;
@@ -65,6 +66,23 @@ export class ManageInventoryItemsComponent implements OnInit {
   init(): void {
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
+    });
+    this.searchForm = this.fb.group({
+      item_id: [''],
+      item_location: [''],
+      item_plant: [''],
+      item_zone: [''],
+      item_aisle: [''],
+      item_part_number: [''],
+      item_sn: [''],
+      item_condition: [''],
+      item_category: [''],
+      item_owner: [''],
+      item_criticality: [''],
+      item_average_cost: [''],
+      item_quantity: [''],
+      item_unit_of_measure: [''],
+      item_organization: [''],
     });
   }
 
@@ -168,5 +186,9 @@ export class ManageInventoryItemsComponent implements OnInit {
         this.errorMessage = err;
       }
     );
+  }
+
+  searchItem() : void{
+
   }
 }
