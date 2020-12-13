@@ -1,9 +1,9 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatSidenav } from '@angular/material/sidenav';
-import { TokenService } from 'src/app/services/token.service';
-import { Router } from '@angular/router';
-import { SidenavService } from 'src/app/services/sidenav.service';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSidenav} from '@angular/material/sidenav';
+import {TokenService} from 'src/app/services/token.service';
+import {Router} from '@angular/router';
+import {SidenavService} from 'src/app/services/sidenav.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +13,7 @@ import { SidenavService } from 'src/app/services/sidenav.service';
 export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
-  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
   constructor(
     changeDetectorRef: ChangeDetectorRef,
@@ -27,7 +27,8 @@ export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this.mobileQueryListener);

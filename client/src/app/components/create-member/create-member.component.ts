@@ -28,7 +28,8 @@ export class CreateMemberComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.subscription = this.authService.getOrgMode()

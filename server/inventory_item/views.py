@@ -30,4 +30,3 @@ class ItemViewSet(viewsets.ModelViewSet):
     filterset_fields = ['_id', 'Location', 'Plant', 'Zone', 'Aisle', 'Part_Number', 'Serial_Number',
                         'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity', 'Unit_of_Measure',
                         'organization']
-

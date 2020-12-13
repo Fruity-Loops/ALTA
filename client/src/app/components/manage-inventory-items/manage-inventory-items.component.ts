@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
-import { MatPaginator } from '@angular/material/paginator';
-import { PageEvent } from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
 import {HttpParams} from "@angular/common/http";
 import {tryResolvePackage} from "tslint/lib/utils";
 
@@ -170,9 +170,9 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
-  searchItem()  {
-    for(let value in this.searchForm.value){
-      if(this.searchForm.value[value] == ""){
+  searchItem() {
+    for (let value in this.searchForm.value) {
+      if (this.searchForm.value[value] == "") {
         this.params = this.params.delete(value);
       } else {
         this.params = this.params.set(value, this.searchForm.value[value]);

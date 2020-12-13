@@ -1,59 +1,59 @@
 <div class="login" fxLayoutAlign="center">
 
-<mat-card class="login-card">
-  <mat-card-header>
-<!--    <mat-card-title>Login</mat-card-title>-->
-    <div id="loginStatus">
-      <div id="errorMsg" *ngIf="errorMessage">
-        <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+  <mat-card class="login-card">
+    <mat-card-header>
+      <!--    <mat-card-title>Login</mat-card-title>-->
+      <div id="loginStatus">
+        <div id="errorMsg" *ngIf="errorMessage">
+          <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+        </div>
+        <div id="successMsg" *ngIf="successMessage">
+          <mat-card-subtitle>{{ successMessage }}</mat-card-subtitle>
+        </div>
       </div>
-      <div id="successMsg" *ngIf="successMessage">
-        <mat-card-subtitle>{{ successMessage }}</mat-card-subtitle>
-      </div>
-    </div>
-  </mat-card-header>
+    </mat-card-header>
 
-  <mat-card-content>
-    <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
-      <mat-form-field appearance="legacy" class="input">
-        <mat-label for="email">E-mail address</mat-label>
-        <input matInput id="email" type="text" formControlName="email" />
+    <mat-card-content>
+      <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
+        <mat-form-field appearance="legacy" class="input">
+          <mat-label for="email">E-mail address</mat-label>
+          <input matInput id="email" type="text" formControlName="email"/>
 
-        <mat-error class="error" *ngIf="
+          <mat-error class="error" *ngIf="
             loginForm.controls['email'].errors?.required &&
             loginForm.controls['email'].touched
           ">
-          <!-- Handeling error -->
-          Email is required
-        </mat-error>
+            <!-- Handeling error -->
+            Email is required
+          </mat-error>
 
-        <mat-error class="error" *ngIf="
+          <mat-error class="error" *ngIf="
             loginForm.controls['email'].errors?.email &&
             !loginForm.controls['email'].errors?.required &&
             loginForm.controls['email'].touched
           ">
-          <!-- Handeling error -->
-          Email format is not valid
-        </mat-error>
+            <!-- Handeling error -->
+            Email format is not valid
+          </mat-error>
 
-      </mat-form-field>
+        </mat-form-field>
 
-      <mat-form-field appearance="legacy" class="input">
-        <mat-label for="password">Password</mat-label>
-        <input matInput id="password" type="password" formControlName="password" />
-        <mat-error class="error" *ngIf="
+        <mat-form-field appearance="legacy" class="input">
+          <mat-label for="password">Password</mat-label>
+          <input matInput id="password" type="password" formControlName="password"/>
+          <mat-error class="error" *ngIf="
             !loginForm.controls['password'].valid &&
             loginForm.controls['password'].touched
           ">
-          <!-- Handeling error -->
-          Password is required
-        </mat-error>
-      </mat-form-field>
-      <br />
-      <button mat-raised-button id="loginbtn" color="accent" [disabled]="!loginForm.valid">
-        Login
-      </button>
-    </form>
-  </mat-card-content>
-</mat-card>
+            <!-- Handeling error -->
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        <br/>
+        <button mat-raised-button id="loginbtn" color="accent" [disabled]="!loginForm.valid">
+          Login
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

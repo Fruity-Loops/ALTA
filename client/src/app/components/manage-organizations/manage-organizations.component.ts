@@ -1,14 +1,14 @@
-import { Component, Inject, Input, OnInit, Optional, TemplateRef } from '@angular/core';
-import { ManageOrganizationsService } from 'src/app/services/manage-organizations.service';
+import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
+import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
 
-import { AuthService } from '../../services/auth.service';
-import { FormBuilder, NgForm } from '@angular/forms';
-import { ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { Organization } from '../../models/organization';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {AuthService} from '../../services/auth.service';
+import {FormBuilder, NgForm} from '@angular/forms';
+import {ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {Organization} from '../../models/organization';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 interface DialogData {
   textInput: string;
@@ -33,7 +33,9 @@ export class ManageOrganizationsComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     public dialog: MatDialog
-  ) { }
+  ) {
+  }
+
   dataSource: MatTableDataSource<Organization>;
   displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
@@ -45,11 +47,11 @@ export class ManageOrganizationsComponent implements OnInit {
   @ViewChild('createOrgDialog') createOrgDialog: TemplateRef<any>;
 
   @Input() isActive: string;
-  activeStates = [{ status: 'active' }, { status: 'disabled' }];
+  activeStates = [{status: 'active'}, {status: 'disabled'}];
 
   ngOnInit(): void {
     this.getAllOrganizations();
-    this.selectedOrganization = { org_id: -1, org_name: '', status: '' };
+    this.selectedOrganization = {org_id: -1, org_name: '', status: ''};
     this.errorMessage = '';
   }
 
@@ -150,7 +152,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   turnOnOrgMode(organization): void {
-    this.authService.turnOnOrgMode({ organization: organization.org_id, organization_name: organization.org_name }, true);
+    this.authService.turnOnOrgMode({organization: organization.org_id, organization_name: organization.org_name}, true);
   }
 
 
@@ -168,6 +170,7 @@ export class OrganizationDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<OrganizationDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
 
 }
