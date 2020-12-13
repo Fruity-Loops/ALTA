@@ -1,5 +1,14 @@
 <mat-card>
   <mat-card-title>Inventory Items</mat-card-title>
+  <div id ="refresh">
+  <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">    
+  <mat-form-field appearance="outline">
+    <input matInput id="time" type="number" formControlName="time" placeholder="Time in minutes"/>
+  </mat-form-field>
+  <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
+    Update Refresh time</button>
+</form>
+</div>
   <mat-divider></mat-divider>
   <div>
     <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>

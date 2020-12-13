@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     # Local apps
     'user_account',
     'organization',
-    'inventory_item',
+    'inventory_item.apps.ItemsConfig',
     'audit_template',
 
     # 3rd party
