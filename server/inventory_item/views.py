@@ -7,6 +7,8 @@ import django_filters.rest_framework
 from .serializers import ItemSerializer
 from .models import Item
 
+import django_filters.rest_framework
+
 
 class ItemResultsSetPagination(PageNumberPagination):
     page_size = 25
@@ -28,5 +30,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     # filter
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
     filterset_fields = ['_id', 'Location', 'Plant', 'Zone', 'Aisle', 'Part_Number', 'Serial_Number',
-                        'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity',
-                        'Unit_of_Measure', 'organization']
+                        'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity', 'Unit_of_Measure',
+                        'organization']
+
