@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router, RoutesRecognized} from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import roles from '../../models/roles.json';
 import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import {routes} from '../../modules/alta-main-routing/alta-main-routing.module';
 
 @Component({
   selector: 'app-sidenav',
@@ -82,10 +83,10 @@ export class SideNavComponent implements OnInit {
   setSelected(url): void {
     if (url === '/create-members') {
       if (this.options === SystemNavListings) {
-        url = '/sa-modify-members';
+        url = routes[0].children[4];// '/sa-modify-members';
       }
       else if (this.options === OrganizationNavListings){
-        url = '/modify-members';
+        url = routes[0].children[3]; // '/modify-members';
       }
 
     }
