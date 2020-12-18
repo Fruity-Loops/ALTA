@@ -46,6 +46,7 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItems();
+    this.inventory_item_to_audit = [];
   }
 
   getItems(): void {
