@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ViewChild } from '@angular/core';
 
-import {ManageInventoryItemsService} from 'src/app/services/manage-inventory-items.service';
+import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
 
-import {MatPaginator} from '@angular/material/paginator';
-import {PageEvent} from '@angular/material/paginator';
+import { MatPaginator } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -16,13 +17,11 @@ import {MatSort} from '@angular/material/sort';
   styleUrls: ['./manage-inventory-items.component.scss'],
 })
 export class ManageInventoryItemsComponent implements OnInit {
-
   // MatPaginator Inputs
   length = 0;
   pageSize = 25;
   pageIndex = 1;
   previousPageIndex = 0;
-
 
   // MatPaginator Output
   pageEvent: PageEvent;
@@ -32,11 +31,13 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
-  constructor(private itemsService: ManageInventoryItemsService) {
-  }
+  inventory_item_to_audit = [];
+
+  constructor(private itemsService: ManageInventoryItemsService) {}
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
+  displayedColumns_static: string[] = []; //to add a static column among all the dynamic ones
   filterTerm: string;
   selected = 'All';
 
@@ -57,10 +58,11 @@ export class ManageInventoryItemsComponent implements OnInit {
             this.displayedColumns.push(key);
           }
         }
-        this.updatePaginator()
+        // this.displayedColumns.push('Select'); // adding column to select items to start an audit
+        this.displayedColumns_static = this.displayedColumns.concat(['Select']);
+        this.updatePaginator();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-
       },
       (err) => {
         this.errorMessage = err;
@@ -70,15 +72,13 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   paginatorAction(event): void {
     // page index starts at 1
-    this.pageIndex = 1+event['pageIndex'];
+    this.pageIndex = 1 + event['pageIndex'];
     this.pageSize = event['pageSize'];
-
-
 
     this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
       (data) => {
         this.data = data;
-        this.updatePaginator()
+        this.updatePaginator();
       },
       (err) => {
         this.errorMessage = err;
@@ -93,5 +93,17 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.items = this.data['results'];
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
+  }
+
+  onChange(value: any) {
+    if (this.inventory_item_to_audit.includes(value)) {
+      this.inventory_item_to_audit.splice(
+        this.inventory_item_to_audit.indexOf(value),
+        1
+      );
+    } else {
+      this.inventory_item_to_audit.push(value);
+    }
+    console.log(this.inventory_item_to_audit);
   }
 }
