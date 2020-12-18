@@ -58,7 +58,7 @@ export class ManageInventoryItemsComponent implements OnInit {
             this.displayedColumns.push(key);
           }
         }
-        // this.displayedColumns.push('Select'); // adding column to select items to start an audit
+        // adding column to select items to start an audit
         this.displayedColumns_static = this.displayedColumns.concat(['Select']);
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
@@ -95,6 +95,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.items);
   }
 
+  // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: any) {
     if (this.inventory_item_to_audit.includes(value)) {
       this.inventory_item_to_audit.splice(
