@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
-
 @Component({
-  selector: 'app-page1',
-  templateUrl: './page1.page.html',
-  styleUrls: ['./page1.page.scss'],
+  selector: 'app-settings',
+  templateUrl: './settings.page.html',
+  styleUrls: ['./settings.page.scss'],
 })
-export class Page1Page implements OnInit {
+export class SettingsPage implements OnInit {
 
   constructor(
     private router: Router,
@@ -22,5 +21,4 @@ export class Page1Page implements OnInit {
     this.router.navigateByUrl('login', { replaceUrl: true });
 
   }
-
 }
