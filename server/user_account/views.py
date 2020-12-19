@@ -21,7 +21,7 @@ class CustomUserView(viewsets.ModelViewSet):
     Updates a specific user password using PUT.
     """
     queryset = CustomUser.objects.all()
-    http_method_names = ['post', 'get', 'patch', 'put', 'list']
+    http_method_names = ['post', 'get', 'patch', 'list']
 
     def get_serializer_class(self):
         """
@@ -30,9 +30,9 @@ class CustomUserView(viewsets.ModelViewSet):
         :param: actions
         :return: serializer
         """
-        if self.action == 'partial_update':
+        if self.action == 'partial_update' and 'password' not in self.request.data:
             return ClientGridSerializer
-        if self.action == 'update':
+        elif self.action == 'partial_update':
             return UserPasswordSerializer
         return UserSerializer
 
@@ -46,7 +46,7 @@ class CustomUserView(viewsets.ModelViewSet):
         """
         if self.action in ['retrieve']:
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
-        elif self.action in ['update', 'partial_update']:
+        elif self.action in ['partial_update']:
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
         # TODO: Validate requested user id matches requested organization in DB
         # for permissions unrelated to create
