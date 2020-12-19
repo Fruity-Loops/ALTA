@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
-from .serializers import UserSerializer, LoginSerializer, LoginMobileSerializer,\
+from .serializers import UserSerializer, LoginSerializer, \
      ClientGridSerializer, UserPasswordSerializer
 from .models import CustomUser
 
@@ -163,7 +163,7 @@ class LoginMobileView(generics.GenericAPIView):
     """
     Authenticate a Mobile Log in.
     """
-    serializer_class = LoginMobileSerializer
+    serializer_class = LoginSerializer
 
     def post(self, request):
         pass # TODO: Implement mobile specific endpoint
