@@ -9,20 +9,20 @@ const routes: Routes = [
     component: SidenavPage,
     children: [
       {
-        path: 'page1',
+        path: 'dashboard',
         loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
-        path: 'page2',
+        path: 'audits',
         loadChildren: () => import('../pages/audits/audits.module').then(m => m.AuditsModule)
       },
       {
-        path: 'page3',
+        path: 'settings',
         loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule)
       },
       {
         path: '',
-        redirectTo: 'page1',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
       }
     ]
