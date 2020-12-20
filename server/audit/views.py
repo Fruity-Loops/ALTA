@@ -13,5 +13,5 @@ class AuditViewSet(viewsets.ModelViewSet):
 
     queryset = Audit.objects.all()
     serializer_class = AuditSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager]
+    permission_classes = [IsAuthenticated]
     http_method_names = ['get', 'post']

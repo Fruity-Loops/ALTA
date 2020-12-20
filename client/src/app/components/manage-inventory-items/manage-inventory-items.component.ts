@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
+import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
@@ -9,7 +10,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -32,8 +33,13 @@ export class ManageInventoryItemsComponent implements OnInit {
   errorMessage = '';
 
   inventory_item_to_audit = [];
+  body: any;
 
-  constructor(private itemsService: ManageInventoryItemsService) {}
+  constructor(
+    private itemsService: ManageInventoryItemsService,
+    private auditService: ManageAuditsService,
+    private router: Router
+  ) {}
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
@@ -106,6 +112,23 @@ export class ManageInventoryItemsComponent implements OnInit {
     } else {
       this.inventory_item_to_audit.push(value);
     }
-    console.log(this.inventory_item_to_audit);
+  }
+
+  submitAudit() {
+    this.body = {
+      inventory_items: this.inventory_item_to_audit,
+    };
+    this.auditService.createAudit(this.body).subscribe(
+      (data) => {
+        this.inventory_item_to_audit = [];
+        setTimeout(() => {
+          // Redirect user to component dashboard
+          this.router.navigate(['dashboard']);
+        }, 1000); // Waiting 1 second before redirecting the user
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
   }
 }
