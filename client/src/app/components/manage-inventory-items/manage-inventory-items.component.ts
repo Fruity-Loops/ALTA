@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
 import { MatPaginator } from '@angular/material/paginator';
@@ -23,6 +25,10 @@ export class ManageInventoryItemsComponent implements OnInit {
   pageSize = 25;
   pageIndex = 1;
   previousPageIndex = 0;
+  timeForm: FormGroup;
+  body: any;
+  subscription: any;
+  organization: any;
 
   // MatPaginator Output
   pageEvent: PageEvent;
@@ -33,12 +39,13 @@ export class ManageInventoryItemsComponent implements OnInit {
   errorMessage = '';
 
   inventory_item_to_audit = [];
-  body: any;
+  bodyAudit: any;
 
   constructor(
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   dataSource: MatTableDataSource<any>;
@@ -52,7 +59,14 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getItems();
+    this.init();
     this.inventory_item_to_audit = [];
+  }
+
+  init(): void {
+    this.timeForm = this.fb.group({
+      time: ['', Validators.required],
+    });
   }
 
   getItems(): void {
@@ -60,12 +74,13 @@ export class ManageInventoryItemsComponent implements OnInit {
       (data) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
-        for (const key in data['results'][0]) {
+        const results = 'results';
+        for (const key in data[results][0]) {
           if (key != null) {
             this.displayedColumns.push(key);
           }
         }
-        // adding column to select items to start an audit
+        this.displayedColumns.pop(); // deleting the last column which refers to the organization
         this.displayedColumns_static = this.displayedColumns.concat(['Select']);
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
@@ -79,8 +94,10 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   paginatorAction(event): void {
     // page index starts at 1
-    this.pageIndex = 1 + event['pageIndex'];
-    this.pageSize = event['pageSize'];
+    const pageIndex = 'pageIndex';
+    const pageSize = 'pageSize';
+    this.pageIndex = 1 + event[pageIndex];
+    this.pageSize = event[pageSize];
 
     this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
       (data) => {
@@ -95,11 +112,28 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   // updates data in table
   updatePaginator(): void {
-    this.length = this.data['count'];
-    this.pageSize = this.data['results'].length;
-    this.items = this.data['results'];
+    const count = 'count';
+    const results = 'results';
+    this.length = this.data[count];
+    this.pageSize = this.data[results].length;
+    this.items = this.data[results];
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
+  }
+  refreshTime(): void {
+    this.body = {
+      new_job_timing: this.timeForm.value.time,
+      organization: localStorage.getItem('organization_id'),
+    };
+
+    this.itemsService.updateRefreshItemsTime(this.body).subscribe(
+      (data) => {
+        this.timeForm.reset();
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
   }
 
   // If an Inventory item checkbox is selected then add the id to the list
@@ -115,7 +149,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   submitAudit() {
-    this.body = {
+    this.bodyAudit = {
       inventory_items: this.inventory_item_to_audit,
     };
     this.auditService.createAudit(this.body).subscribe(

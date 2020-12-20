@@ -13,10 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-import os
 from django.contrib import admin
 from django.urls import path, include
-from .load_csv_to_db import populate_items
+from .load_csv_to_db import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +25,5 @@ urlpatterns = [
     path('', include('audit.urls'))
 ]
 
-current_path = os.path.dirname(__file__)
-csv = os.path.join(current_path, "dummyData.csv")
-populate_items(csv, "inventory_item_item")
+# Initialize inventory Items collection
+main('', True)
