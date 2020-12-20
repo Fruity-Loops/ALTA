@@ -80,6 +80,7 @@ export class ManageInventoryItemsComponent implements OnInit {
             this.displayedColumns.push(key);
           }
         }
+
         this.displayedColumns.pop(); // deleting the last column which refers to the organization
         this.displayedColumns_static = this.displayedColumns.concat(['Select']);
         this.updatePaginator();
@@ -120,6 +121,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
   }
+
   refreshTime(): void {
     this.body = {
       new_job_timing: this.timeForm.value.time,
@@ -151,8 +153,9 @@ export class ManageInventoryItemsComponent implements OnInit {
   submitAudit() {
     this.bodyAudit = {
       inventory_items: this.inventory_item_to_audit,
+      organization: localStorage.getItem('organization_id'),
     };
-    this.auditService.createAudit(this.body).subscribe(
+    this.auditService.createAudit(this.bodyAudit).subscribe(
       (data) => {
         this.inventory_item_to_audit = [];
         setTimeout(() => {
