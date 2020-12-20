@@ -15,6 +15,7 @@ trap teardown INT
 cd server
 source ./venv/bin/activate
 yes yes | python manage.py flush --settings django_server.test_settings && echo "yes"
+python manage.py makemigrations --settings django_server.test_settings
 python manage.py migrate --settings django_server.test_settings 
 python manage.py loaddata users.json --settings django_server.test_settings
 fuser -k $DJANGO_PORT/tcp
