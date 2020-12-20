@@ -100,13 +100,6 @@ class RegistrationTestCase(APITestCase):
         self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
-    def test_registration_failure_method_not_allowed(self):
-        """ User can't access the PUT method at this particular endpoint """
-        self.client.force_authenticate(user=self.system_admin)
-        request = self.client.put(self.url)
-        self.assertEqual(request.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
-
     def test_registration_failure_missing_fields(self):
         """ Can't register user with missing fields """
         self.client.force_authenticate(user=self.system_admin)
