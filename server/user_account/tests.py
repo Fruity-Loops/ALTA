@@ -214,11 +214,11 @@ class LoginTest(APITestCase):
     #     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_users_with_or_without_organization(self):
-        response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
+        response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'password'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['organization_name'], "")
 
-        response = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'sk',\
+        response = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'password',\
                                                 'organization': 1})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['organization_name'], 'test')
