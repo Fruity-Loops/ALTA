@@ -77,3 +77,30 @@ class UserPasswordSerializer(serializers.ModelSerializer):
 
         user.save()
         return user
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = []
+
+    def save(self):
+        user = None
+        can_save = True
+        for save_field, value in self.data.items():
+            can_save = can_save and self.validated_data[save_field]
+        if 'email' in self.data:
+            try:
+                user = CustomUser.objects.get(email=self.data['email'])
+            except:
+                user = None
+        if can_save:
+            if not user:
+                user = CustomUser()
+            for save_field in self.data:
+                if save_field == 'password':
+                    user.set_password(value)
+                else:
+                    setattr(user, save_field, self.data[save_field])
+                user.save()
+        return user

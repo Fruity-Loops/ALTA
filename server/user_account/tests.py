@@ -7,7 +7,7 @@ from django.db.models import signals
 from django.test import TestCase
 from organization.models import Organization
 from .models import CustomUser
-
+import json
 
 class CustomUserTestCase(TestCase):
     # Having the fixtures loads the entries into the db for testing
@@ -409,3 +409,40 @@ class RetreivePersonalInfoTest(APITestCase):
             self.url + str(self.us_id) + "/")
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
+
+
+class TestTestCase(APITestCase):
+    fixtures = ["users.json", "organizations.json"]
+    return_fields = ["id", "user_name", "first_name", "last_name", "email"]
+    return_fields_2 = ["first_name"]
+    save_fields = {"user_name": "test", "first_name": "a", "last_name": "b", "email": "test@test.com"}
+    fields_to_filter = [json.dumps({"organization": "1"})]
+    fields_to_exclude = [json.dumps({"role": "IM"})]
+
+    def setUp(self):
+        self.client = APIClient()
+        self.url = "/test/"
+        self.user = CustomUser.objects.get(user_name="sa")
+        self.inventory = CustomUser.objects.get(user_name="im")
+
+    def test_sa_patch(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.patch(self.url + '1/', {"fields_to_save": {'first_name': 'YOLO'}}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['first_name'], 'YOLO')
+
+    def test_sa_get(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.get(self.url, {"fields_to_return": self.return_fields,
+                                              "fields_to_filter": self.fields_to_filter,
+                                              "fields_to_exclude": self.fields_to_exclude})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]['id'], 3)
+        response = self.client.get(self.url + '1/', {"fields_to_return": self.return_fields})
+        self.assertEqual(response.data['id'], 1)
+
+    def test_sa_post(self):
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(self.url, {'fields_to_save': self.save_fields}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['user'], 'test')
