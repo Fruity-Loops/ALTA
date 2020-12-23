@@ -93,8 +93,8 @@ export class AuthService {
   }
 
   getCurrentUser(id): Observable<any> {
-    let return_fields = ["id", "user_name", "first_name", "last_name", "email", "organization", "role", "location", "is_active"];
-    return this.http.get(`${BASEURL}/user/${id}/`, {params: {"fields_to_return": return_fields}});
+    const returnFields = ['id', 'user_name', 'first_name', 'last_name', 'email', 'organization', 'role', 'location', 'is_active'];
+    return this.http.get(`${BASEURL}/user/${id}/`, {params: {fields_to_return: returnFields}});
   }
 
   openRegister(body): Observable<any> {

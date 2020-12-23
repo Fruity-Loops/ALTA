@@ -1,17 +1,17 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-
+import json
 from django.contrib.auth.hashers import check_password
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import serializers
 from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
 from .serializers import CustomUserSerializer
 from .models import CustomUser
-from rest_framework import serializers
-import json
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
@@ -88,10 +88,13 @@ class LoginView(generics.GenericAPIView):
 
                 response = Response(data, status=status.HTTP_200_OK)
 
-        finally:
-            if response:
-                return response
-            return Response({"detail": "Failed to Login"}, status=status.HTTP_401_UNAUTHORIZED)
+        except ObjectDoesNotExist:
+            response = None
+
+        if not response:
+            response = Response({"detail": "Failed to Login"},
+                                status=status.HTTP_401_UNAUTHORIZED)
+        return response
 
 
 class LoginMobileView(generics.GenericAPIView):
@@ -135,7 +138,7 @@ class CustomUserView(viewsets.ModelViewSet):
     fields_to_filter = None
     fields_to_exclude = None
 
-    def setup(self):
+    def set_me_up(self):
         self.fields_to_save = self.request.GET.get('fields_to_save')
         if not self.fields_to_save and 'fields_to_save' in self.request.data:
             self.fields_to_save = self.request.data['fields_to_save']
@@ -159,7 +162,7 @@ class CustomUserView(viewsets.ModelViewSet):
         return field_variable
 
     def get_permissions(self):
-        self.setup()
+        self.set_me_up()
         if self.action in ['retrieve']:
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
         elif self.action in ['partial_update']:
@@ -180,7 +183,7 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
-        if not type(serializer_class) == serializers.ListSerializer and self.fields_to_return:
+        if type(serializer_class) != serializers.ListSerializer and self.fields_to_return:
             serializer_class.Meta.fields = self.fields_to_return
         return serializer_class(*args, **kwargs)
 
@@ -196,7 +199,8 @@ class CustomUserView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         if not user:
-            return Response({'status': 'failed because empty info sent'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status': 'failed because empty info sent'},
+                            status=status.HTTP_400_BAD_REQUEST)
         if user.organization is None:
             data = {'user': user.user_name, 'organization': '',
                             'token': auth_content['auth']}
@@ -206,12 +210,13 @@ class CustomUserView(viewsets.ModelViewSet):
 
         return Response(data, status=status.HTTP_201_CREATED)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(context=kwargs['pk'], data=self.fields_to_save, partial=partial)
+        serializer = self.get_serializer(context=kwargs['pk'],
+                                         data=self.fields_to_save, partial=partial)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        serializer.save()
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
