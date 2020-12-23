@@ -8,94 +8,22 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
-from .serializers import UserSerializer, LoginSerializer, \
-     ClientGridSerializer, UserPasswordSerializer, CustomUserSerializer
+from .serializers import CustomUserSerializer
 from .models import CustomUser
 from rest_framework import serializers
 import json
-
-class CustomUserView(viewsets.ModelViewSet):
-    """
-    Creates a new user in the db using POST.
-    Gets a specific user from db using GET.
-    Updates a specific user information using PATCH.
-    Updates a specific user password using PUT.
-    """
-    queryset = CustomUser.objects.all()
-    http_method_names = ['post', 'get', 'patch', 'list']
-
-    def get_serializer_class(self):
-        """
-        Overriding default serializer class to specify custom serializer
-        for each view action
-        :param: actions
-        :return: serializer
-        """
-        if self.action == 'partial_update' and 'password' not in self.request.data:
-            return ClientGridSerializer
-        elif self.action == 'partial_update':
-            return UserPasswordSerializer
-        return UserSerializer
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        Overriding default permission class to specify custom permission
-        for each view action
-        :param: actions
-        :return: permission
-        """
-        if self.action in ['retrieve']:
-            permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
-        elif self.action in ['partial_update']:
-            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
-        # TODO: Validate requested user id matches requested organization in DB
-        # for permissions unrelated to create
-        elif self.action in ['create', 'list']:
-            permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
-        else:
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
-        return [permission() for permission in permission_classes]
-
-    def create(self, request, *args, **kwargs):
-        """
-        :param request: request.data: first_name,
-        last_name, user_name, password, role, email, is_active
-        :return: user_name, token
-        """
-        # Retrieve the authenticated user making the request
-        auth_content = {
-            'user': str(request.user),
-            'auth': str(request.auth),
-        }
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-
-        if user.organization is None:
-            data = {'user': user.user_name, 'organization': '',
-                            'token': auth_content['auth']}
-        else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id,
-                        'token': auth_content['auth']}
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def list(self, request):
-        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", ''))\
-            .exclude(role='SA').exclude(id=request.user.id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
     """
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
     http_method_names = ['post']
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = CustomUserSerializer
+        serializer_class.Meta.fields = list(self.request.data['fields_to_save'].keys())
+        return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         """
@@ -103,15 +31,16 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         last_name, user_name, password, role, email, is_active
         :return: user_name, token
         """
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-
-        if user.organization is None:
-            data = {'user': user.user_name, 'organization': ''}
-        else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id }
+        user = None
+        data = None
+        if 'fields_to_save' in request.data:
+            serializer = self.get_serializer(data=request.data['fields_to_save'])
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        if user:
+            data = {'success': 'success'}
+        if not data:
+            return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
 
 
@@ -119,7 +48,12 @@ class LoginView(generics.GenericAPIView):
     """
     Authenticate a System Admin.
     """
-    serializer_class = LoginSerializer
+    # serializer_class = CustomUserSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = CustomUserSerializer
+        serializer_class.Meta.fields = ['email', 'password']
+        return serializer_class(*args, **kwargs)
 
     def post(self, request):
         """
@@ -164,11 +98,12 @@ class LoginMobileView(generics.GenericAPIView):
     """
     Authenticate a Mobile Log in.
     """
-    serializer_class = LoginSerializer
+    serializer_class = CustomUserSerializer
 
     def post(self, request):
         pass # TODO: Implement mobile specific endpoint
              # Should be implemented when different options to password auth are determined
+
 
 class LogoutView(generics.GenericAPIView):
     """
@@ -193,19 +128,7 @@ class LogoutView(generics.GenericAPIView):
                         status=status.HTTP_200_OK)
 
 
-class AccessMembers(viewsets.ModelViewSet):
-    """
-    Allows obtaining all clients and updating them
-    """
-    http_method_names = ['get']
-    serializer_class = ClientGridSerializer
-    permission_classes = [IsAuthenticated, IsSystemAdmin]
-
-    def get_queryset(self):
-        return CustomUser.objects.filter(role='SA').exclude(id=self.request.user.id)
-
-
-class TestStuff(viewsets.ModelViewSet):
+class CustomUserView(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch']
     fields_to_return = None
     fields_to_save = None
@@ -272,7 +195,8 @@ class TestStuff(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=self.fields_to_save)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-
+        if not user:
+            return Response({'status': 'failed because empty info sent'}, status=status.HTTP_400_BAD_REQUEST)
         if user.organization is None:
             data = {'user': user.user_name, 'organization': '',
                             'token': auth_content['auth']}
@@ -285,13 +209,12 @@ class TestStuff(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(data=self.fields_to_save, partial=partial)
+        serializer = self.get_serializer(context=kwargs['pk'], data=self.fields_to_save, partial=partial)
         serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
+        user = serializer.save()
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
         return Response(serializer.data)

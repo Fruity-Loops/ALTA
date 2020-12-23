@@ -32,7 +32,10 @@ def get_self_org_query(user, request):
 
 
 def get_self_org_body(user, request):
-    return str(user.organization_id) == request.data.get('organization', '')
+    if 'fields_to_save' in request.data:
+        if 'organization' in request.data['fields_to_save']:
+            return user.organization_id == request.data['fields_to_save']['organization']
+    return False
 
 
 class IsInventoryManager(BasePermission):
@@ -51,7 +54,7 @@ class IsInventoryManager(BasePermission):
         correct_organization = [None, None, None]
         if request.GET.get("organization", None) is not None:
             correct_organization[0] = get_self_org_query(user, request)
-        if request.data.get('organization', None) is not None:
+        if request.data.get('fields_to_save', None) is not None:
             correct_organization[1] = get_self_org_body(user, request)
         if request.parser_context['kwargs'] is not None and 'pk' in request.parser_context['kwargs']:
             correct_organization[2] = get_self_org(user, request)
