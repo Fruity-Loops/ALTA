@@ -89,11 +89,16 @@ export class AuthService {
   }
 
   register(body): Observable<any> {
-    return this.http.post(`${BASEURL}/user/`, body);
+    return this.http.post(`${BASEURL}/user/`, {fields_to_save: body});
+  }
+
+  getCurrentUser(id): Observable<any> {
+    let return_fields = ["id", "user_name", "first_name", "last_name", "email", "organization", "role", "location", "is_active"];
+    return this.http.get(`${BASEURL}/user/${id}/`, {params: {"fields_to_return": return_fields}});
   }
 
   openRegister(body): Observable<any> {
-    return this.http.post(`${BASEURL}/open-registration/`, body);
+    return this.http.post(`${BASEURL}/open-registration/`, {fields_to_save: body});
   }
 
   login(body): Observable<any> {
@@ -102,10 +107,6 @@ export class AuthService {
 
   loginMobile(body): Observable<any> {
     return this.http.post(`${BASEURL}/login-mobile/`, body);
-  }
-
-  getCurrentUser(id): Observable<any> {
-    return this.http.get(`${BASEURL}/user/${id}/`);
   }
 
   setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
