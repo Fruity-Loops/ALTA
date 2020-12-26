@@ -38,7 +38,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
-  inventory_item_to_audit = [];
+  inventoryItemToAudit = [];
   bodyAudit: any;
 
   constructor(
@@ -50,7 +50,7 @@ export class ManageInventoryItemsComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
-  displayedColumns_static: string[] = []; //to add a static column among all the dynamic ones
+  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
   filterTerm: string;
   selected = 'All';
 
@@ -60,7 +60,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   ngOnInit(): void {
     this.getItems();
     this.init();
-    this.inventory_item_to_audit = [];
+    this.inventoryItemToAudit = [];
   }
 
   init(): void {
@@ -82,7 +82,7 @@ export class ManageInventoryItemsComponent implements OnInit {
         }
 
         this.displayedColumns.pop(); // deleting the last column which refers to the organization
-        this.displayedColumns_static = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
+        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -139,25 +139,25 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   // If an Inventory item checkbox is selected then add the id to the list
-  onChange(value: any) {
-    if (this.inventory_item_to_audit.includes(value)) {
-      this.inventory_item_to_audit.splice(
-        this.inventory_item_to_audit.indexOf(value),
+  onChange(value: any): void {
+    if (this.inventoryItemToAudit.includes(value)) {
+      this.inventoryItemToAudit.splice(
+        this.inventoryItemToAudit.indexOf(value),
         1
       );
     } else {
-      this.inventory_item_to_audit.push(value);
+      this.inventoryItemToAudit.push(value);
     }
   }
 
-  submitAudit() {
+  submitAudit(): void {
     this.bodyAudit = {
-      inventory_items: this.inventory_item_to_audit,
+      inventory_items: this.inventoryItemToAudit,
       organization: localStorage.getItem('organization_id'),
     };
     this.auditService.createAudit(this.bodyAudit).subscribe(
       (data) => {
-        this.inventory_item_to_audit = [];
+        this.inventoryItemToAudit = [];
         setTimeout(() => {
           // Redirect user to component dashboard
           this.router.navigate(['dashboard']);
