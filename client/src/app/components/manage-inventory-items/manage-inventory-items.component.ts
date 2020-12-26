@@ -82,7 +82,7 @@ export class ManageInventoryItemsComponent implements OnInit {
         }
 
         this.displayedColumns.pop(); // deleting the last column which refers to the organization
-        this.displayedColumns_static = this.displayedColumns.concat(['Select']);
+        this.displayedColumns_static = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
