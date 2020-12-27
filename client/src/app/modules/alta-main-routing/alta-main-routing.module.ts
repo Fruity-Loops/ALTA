@@ -8,6 +8,7 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
 import { CreateMemberComponent } from '../../components/create-member/create-member.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
+import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,7 @@ const routes: Routes = [
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
+      { path: 'assign-sk', component: AssignStockKeepersComponent },
     ],
   },
 ];

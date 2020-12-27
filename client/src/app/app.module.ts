@@ -12,10 +12,12 @@ import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { AssignStockKeepersComponent } from './components/assign-stock-keepers/assign-stock-keepers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AssignStockKeepersComponent,
   ],
   imports: [
     BrowserModule,
