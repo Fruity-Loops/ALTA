@@ -36,7 +36,6 @@ export class EmployeeSettingsComponent implements OnInit {
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
         this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
-        this.ngOnInit();
     });
   }
 
