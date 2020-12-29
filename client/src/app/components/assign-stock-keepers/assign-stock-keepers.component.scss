@@ -57,17 +57,35 @@
   hyphens: auto;
 }
 
-button.assign {
+#bottom-buttons {
   position: absolute;
-  display: inline;
-  margin-top: 0.7em;
   right: 0;
-  margin-right: 10%;
+}
+
+button.bottom-assign {
+  position: absolute;
+  left: -280px;
+  margin-right: 0.5%;
   padding-left: 3em;
   padding-right: 3em;
-  //border-color: map-get($alta-primary, 500);
-
   background: white;
   color: #2196F3;
   border: 1px solid #2196F3 !important;
+}
+
+button.bottom-cancel {
+  position: absolute;
+  right: 0;
+  margin-right: 1.2em;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+.mat-card-header {
+  position: inline;
+  left: 0;
+  margin-left: -11px;
 }

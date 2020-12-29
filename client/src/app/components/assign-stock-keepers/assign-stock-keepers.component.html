@@ -2,12 +2,16 @@
   <mat-card-title>Select Stock-Keepers</mat-card-title>
   <mat-divider></mat-divider>
   <div>
-    <mat-card-subtitle>TODO: Upload location</mat-card-subtitle>
+    <mat-card-header>
+      <mat-card-title>TODO: Upload location</mat-card-title>
+    </mat-card-header>
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Check_Boxes">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Select </th>
-        <td class="cell_check_boxes" mat-cell *matCellDef="let row"> <mat-checkbox></mat-checkbox></td>
+        <td class="cell_check_boxes" mat-cell *matCellDef="let row"> <input type="checkbox">
+
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="First_Name">
@@ -23,6 +27,11 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  <button mat-stroked-button  id="assign" class="assign" routerLink="/create-members">Assign</button> <!-- TODO: update route -->
+  <br><br>
+    <div id="bottom-buttons">
+      <button mat-stroked-button  id="assign" class="bottom-assign" routerLink="/create-members">Assign</button> <!-- TODO: update route -->
+      <button mat-stroked-button  id="cancel" class="bottom-cancel" routerLink="/create-members">Cancel</button> <!-- TODO: update route -->
+    </div>
+  <br><br>
   </div>
 </mat-card>
