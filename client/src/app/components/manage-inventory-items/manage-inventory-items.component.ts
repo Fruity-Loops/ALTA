@@ -39,7 +39,6 @@ export class ManageInventoryItemsComponent implements OnInit {
   errorMessage = '';
 
   inventoryItemToAudit = [];
-  bodyAudit: any;
 
   constructor(
     private itemsService: ManageInventoryItemsService,
@@ -151,11 +150,12 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   submitAudit(): void {
-    this.bodyAudit = {
+    let bodyAudit: any;
+    bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
       organization: localStorage.getItem('organization_id'),
     };
-    this.auditService.createAudit(this.bodyAudit).subscribe(
+    this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
         this.inventoryItemToAudit = [];
         setTimeout(() => {

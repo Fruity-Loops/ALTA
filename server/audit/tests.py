@@ -35,3 +35,5 @@ class AuditTestCase(APITestCase):
         response = self.client.post("/audit/", {"inventory_items": [self.item_one._id, self.item_two._id]})
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
+        self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
+        self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
