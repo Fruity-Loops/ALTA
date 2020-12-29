@@ -1,12 +1,16 @@
-<div >
+<mat-card>
+  <mat-card-title>Select Stock-Keepers</mat-card-title>
+  <mat-divider></mat-divider>
+  <div>
+    <mat-card-subtitle>TODO: Upload location</mat-card-subtitle>
     <table mat-table [dataSource]="dataSource" matSort>
 
-        <ng-container matColumnDef="Check_Boxes">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-            <td class="cell_check_boxes" mat-cell *matCellDef="let row"> hi </td>
-          </ng-container>
-      
-        <ng-container matColumnDef="First_Name">
+      <ng-container matColumnDef="Check_Boxes">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Select </th>
+        <td class="cell_check_boxes" mat-cell *matCellDef="let row"> <mat-checkbox></mat-checkbox></td>
+      </ng-container>
+
+      <ng-container matColumnDef="First_Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
         <td class="cell_first_name" mat-cell *matCellDef="let row"> {{row.first_name}} </td>
       </ng-container>
@@ -16,11 +20,9 @@
         <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
       </ng-container>
 
-      
-
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  <button mat-stroked-button  id="assign" class="assign" routerLink="/create-members">Assign</button> <!-- TODO: update route -->
   </div>
+</mat-card>
