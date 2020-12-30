@@ -22,7 +22,7 @@ class OpenRegistrationView(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
-        serializer_class.Meta.fields = list(self.request.data['fields_to_save'].keys())
+        serializer_class.Meta.fields = list(self.request.data.keys())
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -33,8 +33,8 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         """
         user = None
         data = None
-        if 'fields_to_save' in request.data:
-            serializer = self.get_serializer(data=request.data['fields_to_save'])
+        if request.data:
+            serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
         if user:
@@ -66,7 +66,8 @@ class LoginView(generics.GenericAPIView):
         password = data.get('password', '')
         org_id = ""
         org_name = ""
-        response = None
+        response = Response({"detail": "Failed to Login"},
+                                status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             user = CustomUser.objects.get(email=email)
@@ -89,11 +90,8 @@ class LoginView(generics.GenericAPIView):
                 response = Response(data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            response = None
+            return response
 
-        if not response:
-            response = Response({"detail": "Failed to Login"},
-                                status=status.HTTP_401_UNAUTHORIZED)
         return response
 
 
@@ -138,15 +136,12 @@ class CustomUserView(viewsets.ModelViewSet):
     fields_to_filter = None
     fields_to_exclude = None
 
-    def set_me_up(self):
-        self.fields_to_save = self.request.GET.get('fields_to_save')
-        if not self.fields_to_save and 'fields_to_save' in self.request.data:
-            self.fields_to_save = self.request.data['fields_to_save']
-        self.fields_to_return = self.request.GET.getlist('fields_to_return')
-        if 'fields_to_return' in self.request.data:
-            self.fields_to_return = self.request.data.get('fields_to_return')
-        elif not self.fields_to_return:
+    def set_me_up(self, saving=False):
+        if saving:
+            self.fields_to_save = self.request.data
             self.fields_to_return = list(self.fields_to_save.keys())
+        else:
+            self.fields_to_return = self.request.GET.getlist('fields_to_return')
         self.fields_to_filter = self.field_dictionary_setter('fields_to_filter')
         self.fields_to_exclude = self.field_dictionary_setter('fields_to_exclude')
 
@@ -155,20 +150,23 @@ class CustomUserView(viewsets.ModelViewSet):
         if self.request.GET.getlist(field_name):
             field_variable = {}
             list_of_items = self.request.GET.getlist(field_name)
+            list = []
             for item in list_of_items:
                 item = json.loads(item)
-                for i in item:
-                    field_variable[i] = item[i]
+                list.append(item)
+                return list
         return field_variable
 
     def get_permissions(self):
-        self.set_me_up()
-        if self.action in ['retrieve']:
+        if self.action in ['retrieve', 'list']:
+            self.set_me_up(saving=False)
+            permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
+        elif self.action in ['create']:
+            self.set_me_up(saving=True)
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
         elif self.action in ['partial_update']:
+            self.set_me_up(saving=True)
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
-        elif self.action in ['create', 'list']:
-            permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
@@ -176,9 +174,11 @@ class CustomUserView(viewsets.ModelViewSet):
     def get_queryset(self):
         final_queryset = CustomUser.objects.filter().exclude()
         if self.fields_to_filter:
-            final_queryset = CustomUser.objects.filter(**self.fields_to_filter)
+            for item in self.fields_to_filter:
+                final_queryset = final_queryset.filter(**item)
         if self.fields_to_exclude:
-            final_queryset = final_queryset.exclude(**self.fields_to_exclude)
+            for item in self.fields_to_exclude:
+                final_queryset = final_queryset.exclude(**item)
         return final_queryset
 
     def get_serializer(self, *args, **kwargs):

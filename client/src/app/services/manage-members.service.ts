@@ -46,11 +46,11 @@ export class ManageMembersService {
   }
 
   updateClientInfo(employee, id): Observable<any> {
-    return this.http.patch(`${this.BASEURL}/user/${id}/`, {fields_to_save: employee});
+    return this.http.patch(`${this.BASEURL}/user/${id}/`, employee);
   }
 
   updatePassword(password, id): Observable<any> {
-    return this.http.patch(`${this.BASEURL}/user/${id}/`, {fields_to_save: password});
+    return this.http.patch(`${this.BASEURL}/user/${id}/`, password);
   }
 
   getEmployee(id): Observable<any> {

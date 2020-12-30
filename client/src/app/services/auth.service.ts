@@ -89,7 +89,7 @@ export class AuthService {
   }
 
   register(body): Observable<any> {
-    return this.http.post(`${BASEURL}/user/`, {fields_to_save: body});
+    return this.http.post(`${BASEURL}/user/`, body);
   }
 
   getCurrentUser(id): Observable<any> {
@@ -98,7 +98,7 @@ export class AuthService {
   }
 
   openRegister(body): Observable<any> {
-    return this.http.post(`${BASEURL}/open-registration/`, {fields_to_save: body});
+    return this.http.post(`${BASEURL}/open-registration/`, body);
   }
 
   login(body): Observable<any> {

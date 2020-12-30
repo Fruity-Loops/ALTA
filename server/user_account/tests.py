@@ -41,7 +41,8 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'system_admin',
             'role': 'SA',
             'is_active': 'True',
-            'organization': organization.org_id}
+            'organization': organization.org_id,
+            'location': ''}
 
         self.registered_system_admin_2 = {
             'user_name': 'registered_SA',
@@ -60,8 +61,8 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'keeper2',
             'role': 'SK',
             'is_active': 'True',
-            'organization': organization.org_id
-        }
+            'organization': organization.org_id,
+            'location': ''}
 
         self.im2 = {
             'user_name': 'im2',
@@ -71,14 +72,14 @@ class RegistrationTestCase(APITestCase):
             'last_name': 'manager2',
             'role': 'IM',
             'is_active': 'True',
-            'organization': organization.org_id
-        }
+            'organization': organization.org_id,
+            'location': ''}
 
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly along with its organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post(self.url, {'fields_to_save': self.registered_system_admin},
+        request = self.client.post(self.url, self.registered_system_admin,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
@@ -86,7 +87,7 @@ class RegistrationTestCase(APITestCase):
         """ User was registered correctly without an organization"""
         # Authenticate a system admin
         self.client.force_authenticate(user=self.system_admin)
-        request = self.client.post(self.url, {'fields_to_save': self.registered_system_admin_2},
+        request = self.client.post(self.url, self.registered_system_admin_2,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
@@ -94,7 +95,7 @@ class RegistrationTestCase(APITestCase):
         """ Non authenticated user cannot register another user"""
         # Not an authenticated user
         self.client.force_authenticate(user=None)
-        request = self.client.post(self.url, {'fields_to_save': self.registered_system_admin},
+        request = self.client.post(self.url, self.registered_system_admin,
                                    format='json')
         self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
@@ -103,28 +104,28 @@ class RegistrationTestCase(APITestCase):
         """ Can't register user with missing fields """
         self.client.force_authenticate(user=self.system_admin)
         registered_missing_fields = {'user_name': 'missing_fields', "location": ""}
-        request = self.client.post(self.url, {'fields_to_save': registered_missing_fields},
+        request = self.client.post(self.url, registered_missing_fields,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_im_creates_sk(self):
         """ IM can create a stock keeper"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, {'fields_to_save': self.store_keeper},
+        request = self.client.post(self.url, self.store_keeper,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_im_creates_im(self):
         """ IM can create an IM"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, {'fields_to_save': self.im2},
+        request = self.client.post(self.url, self.im2,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_im_creates_sa(self):
         """ IM can't create an SA"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, {'fields_to_save': self.registered_system_admin_2},
+        request = self.client.post(self.url, self.registered_system_admin_2,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -132,7 +133,7 @@ class RegistrationTestCase(APITestCase):
         """ IM can't create a stock keeper in a different organization"""
         self.client.force_authenticate(user=self.inventory_manager)
         self.store_keeper["organization"] = ""
-        request = self.client.post(self.url, {'fields_to_save': self.store_keeper},
+        request = self.client.post(self.url, self.store_keeper,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -140,7 +141,7 @@ class RegistrationTestCase(APITestCase):
         """ IM can't create an inventory manager in a different organization"""
         self.client.force_authenticate(user=self.inventory_manager)
         self.im2["organization"] = ""
-        request = self.client.post(self.url, {'fields_to_save': self.im2},
+        request = self.client.post(self.url, self.im2,
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -158,8 +159,9 @@ class OpenRegistrationTestCase(APITestCase):
                 "last_name": "user",
                 "role": "SA",
                 "is_active": "True",
+                "location": "",
                 "organization": organization.org_id}
-        response = self.client.post("/open-registration/", {'fields_to_save': data}, format='json')
+        response = self.client.post("/open-registration/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_registration_success_not_linked_to_organization(self):
@@ -170,15 +172,17 @@ class OpenRegistrationTestCase(APITestCase):
                 "first_name": "test",
                 "last_name": "user",
                 "role": "SA",
+                "location": "",
+                "organization": "",
                 "is_active": "True"}
-        response = self.client.post("/open-registration/", {'fields_to_save': data}, format='json')
+        response = self.client.post("/open-registration/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_registration_failure(self):
         """ User can't register if missing fields """
         data = {'user_name': 'test_case', "password": "password", "first_name": "test",
                 "last_name": "user", "role": "SA", "location": ""}
-        response = self.client.post("/open-registration/", {'fields_to_save': data}, format='json')
+        response = self.client.post("/open-registration/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_registration_unauthorized_request(self):
@@ -279,7 +283,7 @@ class UpdateProfileTest(APITestCase):
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
-            {'fields_to_save': {"user_name": "random"}}, format='json')
+            {"user_name": "random"}, format='json')
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -287,26 +291,26 @@ class UpdateProfileTest(APITestCase):
         """ Inventory manager can update Stock Keeper's info"""
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(self.url + str(self.stock_keeper.id) +
-                                     "/", {'fields_to_save': self.save_email}, format='json')
+                                     "/", self.save_email, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_information(self):
         """ Users can update their own regular info """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(self.url + str(self.sys_admin_id) + "/",
-                                     {'fields_to_save': {"user_name": "random"}}, format='json')
+                                     {"user_name": "random"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.manager.id) + "/",
-            {'fields_to_save': {"user_name": "random1"}}, format='json')
+            {"user_name": "random1"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.stock_keeper)
         response = self.client.patch(
             self.url + str(self.stock_keeper.id) + "/",
-            {'fields_to_save': {"user_name": "random2"}}, format='json')
+            {"user_name": "random2"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_own_user_email(self):
@@ -314,19 +318,19 @@ class UpdateProfileTest(APITestCase):
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
-            {'fields_to_save': self.save_email}, format='json')
+            self.save_email, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.manager.id) + "/",
-            {'fields_to_save': self.save_email}, format='json')
+            self.save_email, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.client.force_authenticate(user=self.stock_keeper)
         response = self.client.patch(
             self.url + str(self.stock_keeper.id) + "/",
-            {'fields_to_save': self.save_email}, format='json')
+            self.save_email, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_own_user_role(self):
@@ -334,19 +338,19 @@ class UpdateProfileTest(APITestCase):
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
-            {'fields_to_save': {"role": "IM"}}, format='json')
+            {"role": "IM"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.manager.id) + "/",
-            {'fields_to_save': {"role": "SA"}}, format='json')
+            {"role": "SA"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.stock_keeper)
         response = self.client.patch(
             self.url + str(self.stock_keeper.id) + "/",
-            {'fields_to_save': {"role": "SA"}}, format='json')
+            {"role": "SA"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -368,7 +372,7 @@ class ChangePasswordTest(APITestCase):
          an admin or the same user """
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
-            self.url + str(self.sa_id) + "/", {'fields_to_save': self.save_fields}, format='json')
+            self.url + str(self.sa_id) + "/", self.save_fields, format='json')
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -376,17 +380,17 @@ class ChangePasswordTest(APITestCase):
         """ Users can update their own password """
         self.client.force_authenticate(user=self.s_a)
         response = self.client.patch(
-            self.url + str(self.sa_id) + "/", {'fields_to_save': self.save_fields}, format='json')
+            self.url + str(self.sa_id) + "/", self.save_fields, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
-            self.url + str(self.i_m.id) + "/", {'fields_to_save': self.save_fields}, format='json')
+            self.url + str(self.i_m.id) + "/", self.save_fields, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.s_k)
         response = self.client.patch(
-            self.url + str(self.s_k.id) + "/", {'fields_to_save': self.save_fields}, format='json')
+            self.url + str(self.s_k.id) + "/", self.save_fields, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_im_update_sk_password(self):
@@ -431,7 +435,7 @@ class TestTestCase(APITestCase):
     save_fields = {"user_name": "test", "first_name": "a",
                    "last_name": "b", "email": "test@test.com"}
     fields_to_filter = [json.dumps({"organization": "1"})]
-    fields_to_exclude = [json.dumps({"role": "IM"})]
+    fields_to_exclude = [json.dumps({"role": "IM"}), json.dumps({"role": "SA"})]
 
     def setUp(self):
         self.client = APIClient()
@@ -442,7 +446,7 @@ class TestTestCase(APITestCase):
     def test_sa_patch(self):
         self.client.force_authenticate(user=self.user)
         response = self.client.patch(self.url + '1/'
-                                     , {"fields_to_save":{'first_name': 'YOLO'}}, format='json')
+                                     , {'first_name': 'YOLO'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['first_name'], 'YOLO')
 
@@ -456,8 +460,15 @@ class TestTestCase(APITestCase):
         response = self.client.get(self.url + '1/', {"fields_to_return": self.return_fields})
         self.assertEqual(response.data['id'], 1)
 
+        response = self.client.get(self.url, {"fields_to_return": self.return_fields,
+                                              "fields_to_filter": self.fields_to_filter})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = self.client.get(self.url, {"fields_to_return": self.return_fields})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
     def test_sa_post(self):
         self.client.force_authenticate(user=self.user)
-        response = self.client.post(self.url, {'fields_to_save': self.save_fields}, format='json')
+        response = self.client.post(self.url, self.save_fields, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['user'], 'test')
