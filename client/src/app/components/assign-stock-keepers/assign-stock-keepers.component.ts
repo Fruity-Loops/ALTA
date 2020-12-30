@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -21,6 +22,8 @@ export class AssignStockKeepersComponent implements OnInit {
     { name: 'Inventory Manager', abbrev: 'IM' },
     { name: 'Stock Keeper', abbrev: 'SK' },
   ];
+  panelOpenState: boolean = false;
+  allExpandState = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 

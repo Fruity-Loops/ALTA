@@ -61,10 +61,29 @@
   hyphens: auto;
 }
 
-#bottom-buttons {
+.bottom-buttons {
   position: absolute;
-  right: 0;
+  right: 1.5%;
   margin-top:30px;
+}
+
+#top-div {
+ height: 0px;
+}
+
+.location-title {
+  padding-bottom:2px;
+}
+
+.top-buttons {
+  position: relative;
+  top: -50px;
+  margin-right: 0.5%;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
 }
 
 button.bottom-discard {

@@ -1,15 +1,20 @@
 <mat-card>
   <mat-card-title>Select Stock-Keepers</mat-card-title>
-  <mat-divider></mat-divider>
+  <div id="top-div" align="end">
+    <button mat-button class="top-buttons">Expand All </button>
+    <button mat-button class="top-buttons">Collapse All </button>
+  </div>
 </mat-card>
-<mat-card>
-  <mat-card-header>
-      <mat-card-title>Montreal</mat-card-title>
+<br>
+
+<mat-expansion-panel [expanded]="allExpandState" (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+	<mat-expansion-panel-header>
+		<mat-card-header>
+      <mat-card-title class="location-title" >Montreal</mat-card-title>
     </mat-card-header>
-  <!-- TODO: add in arrow to collapse and expand location -->
-  <mat-divider></mat-divider>
-  <div id="table-div">
-    <table mat-table [dataSource]="dataSource" matSort>
+	</mat-expansion-panel-header>
+
+	<table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Check_Boxes">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Select </th>
@@ -32,12 +37,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div id="bottom-buttons">
+
+</mat-expansion-panel>
+
+<div class="bottom-buttons">
       <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
       <button mat-stroked-button  id="assign" class="bottom-assign" routerLink="/create-members">Assign</button> <!-- TODO: update route -->
-    </div>
-  </div>
-</mat-card>
+</div>
 
 <ng-template #discardDialog>
   <h2 matDialogTitle>Discard Audit</h2>
