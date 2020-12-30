@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import {NavigationEnd, NavigationStart, Router, RoutesRecognized} from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { TokenService } from '../../services/token.service';
-import roles from '../../models/roles.json';
-import { resolveSanitizationFn } from '@angular/compiler/src/render3/view/template';
+import roles from '../../fixtures/roles.json';
 import {routes} from '../../modules/alta-main-routing/alta-main-routing.module';
 
 @Component({

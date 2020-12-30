@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ManageMembersService } from '../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
-import roles from '../../models/roles.json';
+import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-employee-settings',
