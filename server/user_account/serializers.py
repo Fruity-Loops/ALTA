@@ -9,25 +9,25 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = []
 
     def save(self):
-        can_save = True
         user = None
-        for save_field in list(self.data.keys()):
-            can_save = can_save and self.validated_data[save_field]
-        if self.context:
-            try:
+        data = dict(self.validated_data)
+        try:
+            if self.context:
                 user = CustomUser.objects.get(pk=self.context)
-            except ObjectDoesNotExist:
-                user = None
-        if can_save:
-            if not user and 'user_name' in self.data:
+        except ObjectDoesNotExist:
+            pass
+        if 'user_name' in data and 'email' in data and not user:
+            if data['user_name'] and data['email']:
                 user = CustomUser()
-            for save_field in self.data:
-                if save_field == 'password':
-                    user.set_password(self.data[save_field])
-                elif save_field == 'organization':
-                    setattr(user, save_field,
-                            Organization.objects.get(org_id=self.data[save_field]))
-                else:
-                    setattr(user, save_field, self.data[save_field])
-                user.save()
+        if user:
+            self.save_password(user, data)
+            for save_field in data:
+                setattr(user, save_field, data[save_field])
+            user.save()
         return user
+
+    def save_password(self, user, data):
+        if 'password' in data:
+            if data['password']:
+                user.set_password(data['password'])
+            del data['password']
