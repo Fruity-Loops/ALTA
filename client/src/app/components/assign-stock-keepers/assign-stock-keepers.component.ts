@@ -3,7 +3,8 @@ import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { User } from 'src/app/models/user.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ViewChild } from '@angular/core';
+import { ViewChild, TemplateRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -23,8 +24,16 @@ export class AssignStockKeepersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private manageMembersService: ManageMembersService) 
+  constructor(private manageMembersService: ManageMembersService, private dialog: MatDialog)
   { }
+
+  openDialogWithRef(ref: TemplateRef<any>) {
+    this.dialog.open(ref);
+  }
+
+  closeDialog() {
+    this.dialog.closeAll();
+  }
 
   ngOnInit(): void {
     this.users = new Array<User>();
@@ -38,11 +47,12 @@ export class AssignStockKeepersComponent implements OnInit {
   populateTable(clients): void {
     clients.forEach(element => {
       const obj = this.roles.find(o => o.abbrev === element.role);
-      element.role = obj.name;
-      this.users.push(element);
+      if (element.role === 'SK')
+        this.users.push(element);
     });
     this.dataSource = new MatTableDataSource(this.users);
     this.dataSource.paginator = this.paginator;
   }
+
 
 }

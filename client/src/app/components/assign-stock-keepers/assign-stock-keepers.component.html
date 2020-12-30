@@ -1,10 +1,14 @@
 <mat-card>
   <mat-card-title>Select Stock-Keepers</mat-card-title>
   <mat-divider></mat-divider>
-  <div>
-    <mat-card-header>
-      <mat-card-title>TODO: Upload location</mat-card-title>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+      <mat-card-title>Montreal</mat-card-title>
     </mat-card-header>
+  <!-- TODO: add in arrow to collapse and expand location -->
+  <mat-divider></mat-divider>
+  <div id="table-div">
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Check_Boxes">
@@ -27,11 +31,19 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  <br><br>
+
     <div id="bottom-buttons">
+      <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
       <button mat-stroked-button  id="assign" class="bottom-assign" routerLink="/create-members">Assign</button> <!-- TODO: update route -->
-      <button mat-stroked-button  id="cancel" class="bottom-cancel" routerLink="/create-members">Cancel</button> <!-- TODO: update route -->
     </div>
-  <br><br>
   </div>
 </mat-card>
+
+<ng-template #discardDialog>
+  <h2 matDialogTitle>Discard Audit</h2>
+  <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
+  <div mat-dialog-actions align="end">
+    <button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
+    <button mat-button (click)="closeDialog()">Cancel</button>
+  </div>
+</ng-template>
