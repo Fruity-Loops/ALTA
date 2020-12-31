@@ -59,7 +59,7 @@ export class AssignStockKeepersComponent implements OnInit {
       });
 
 
-    }); 
+    });
   }
 
   openDialogWithRef(ref: TemplateRef<any>) {

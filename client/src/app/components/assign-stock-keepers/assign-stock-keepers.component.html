@@ -1,16 +1,14 @@
 <mat-card>
   <mat-card-title>Select Stock-Keepers</mat-card-title>
   <div id="top-div" align="end">
-    <button mat-button class="top-buttons">Expand All </button>
-    <button mat-button class="top-buttons">Collapse All </button>
+    <button mat-button class="top-buttons" (click)="allExpandState=true">Expand All </button>
+    <button mat-button class="top-buttons" (click)="allExpandState=false">Collapse All </button>
   </div>
 </mat-card>
 <br>
 
 <mat-expansion-panel *ngFor="let item of locationsAndUsers;" class="mat-expand"
-                     [expanded]="allExpandState"
-                     (opened)="panelOpenState=true"
-                     (closed)="panelOpenState=false" >
+                     [expanded]="allExpandState" >
 	<mat-expansion-panel-header>
 		<mat-card-header>
       <mat-card-title class="location-title" >{{item.location}}</mat-card-title>
