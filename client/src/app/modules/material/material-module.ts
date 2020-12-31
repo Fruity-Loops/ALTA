@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
@@ -31,6 +32,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule,
+    MatCheckboxModule,
     MatGridListModule
   ],
   providers: [],
@@ -49,6 +51,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatDividerModule,
     MatListModule,
     MatGridListModule,
+    MatCheckboxModule,
     MatExpansionModule
   ]
 })

@@ -12,7 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 export class AssignStockKeepersComponent implements OnInit {
-
+  skToAssign = [];
   dataSource: MatTableDataSource<User>
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name'];
   locationsAndUsers: Array<any>;
@@ -24,6 +24,7 @@ export class AssignStockKeepersComponent implements OnInit {
 
   ngOnInit(): void {
     this.locationsAndUsers = new Array<any>();
+    this.skToAssign = [];
     this.manageMembersService.getAllClients()
     .subscribe((user) => {
       const users = user;
@@ -52,14 +53,23 @@ export class AssignStockKeepersComponent implements OnInit {
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {
       item.users.forEach(user => {
-
         const data = this.dataSource.data;
         data.push(user);
         this.dataSource.data = data;
       });
-
-
     });
+  }
+
+  // If an Inventory item checkbox is selected then add the id to the list
+  onChange(value: any): void {
+    if (this.skToAssign.includes(value)) {
+      this.skToAssign.splice(
+        this.skToAssign.indexOf(value),
+        1
+      );
+    } else {
+      this.skToAssign.push(value);
+    }
   }
 
   openDialogWithRef(ref: TemplateRef<any>) {
