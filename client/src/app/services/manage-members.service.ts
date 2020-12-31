@@ -20,22 +20,16 @@ interface Body {
 export class ManageMembersService {
   // Connection with the backend
   BASEURL = env.api_root;
-  returnFields = ['id', 'user_name', 'first_name', 'last_name', 'email', 'organization', 'role', 'location', 'is_active'];
 
   constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
               private authService: AuthService) {}
 
   getAllClients(): Observable<any> {
-    const excluder = [JSON.stringify({id: localStorage.getItem('id')})];
     if (this.authService.getOrgMode().getValue()) {
-      const filter = [JSON.stringify({organization: localStorage.getItem('organization_id')})];
       return this.http.get(`${this.BASEURL}/user/`,
-        {params: {organization: localStorage.getItem('organization_id'),
-        fields_to_return: this.returnFields, fields_to_filter: filter, fields_to_exclude: excluder}});
+        {params: {organization: localStorage.getItem('organization_id')}});
     } else {
-      const filter = [JSON.stringify({role: 'SA'})];
-      return this.http.get<User[]>(`${this.BASEURL}/user/`, {params:
-        {fields_to_return: this.returnFields, fields_to_filter: filter, fields_to_exclude: excluder}}).pipe(
+      return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
         catchError((err: HttpErrorResponse) => {
           console.error(`Error: ${err.status}: ${err.error}`);
           return EMPTY; // TODO: Implement proper error handling
@@ -54,6 +48,6 @@ export class ManageMembersService {
   }
 
   getEmployee(id): Observable<any> {
-    return this.http.get(`${this.BASEURL}/user/${id}/`, {params: {fields_to_return: this.returnFields}});
+    return this.http.get(`${this.BASEURL}/user/${id}/`);
   }
 }

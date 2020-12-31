@@ -131,41 +131,11 @@ class LogoutView(generics.GenericAPIView):
 
 class CustomUserView(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch']
-    fields_to_return = None
-    fields_to_save = None
-    fields_to_filter = None
-    fields_to_exclude = None
-
-    def set_me_up(self, saving=False):
-        if saving:
-            self.fields_to_save = self.request.data
-            self.fields_to_return = list(self.fields_to_save.keys())
-        else:
-            self.fields_to_return = self.request.GET.getlist('fields_to_return')
-        self.fields_to_filter = self.field_dictionary_setter('fields_to_filter')
-        self.fields_to_exclude = self.field_dictionary_setter('fields_to_exclude')
-
-    def field_dictionary_setter(self, field_name):
-        field_variable = None
-        if self.request.GET.getlist(field_name):
-            field_variable = {}
-            list_of_items = self.request.GET.getlist(field_name)
-            list = []
-            for item in list_of_items:
-                item = json.loads(item)
-                list.append(item)
-                return list
-        return field_variable
 
     def get_permissions(self):
-        if self.action in ['retrieve', 'list']:
-            self.set_me_up(saving=False)
-            permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
-        elif self.action in ['create']:
-            self.set_me_up(saving=True)
+        if self.action in ['create', 'retrieve', 'list']:
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
         elif self.action in ['partial_update']:
-            self.set_me_up(saving=True)
             permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
@@ -173,18 +143,16 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def get_queryset(self):
         final_queryset = CustomUser.objects.filter().exclude()
-        if self.fields_to_filter:
-            for item in self.fields_to_filter:
-                final_queryset = final_queryset.filter(**item)
-        if self.fields_to_exclude:
-            for item in self.fields_to_exclude:
-                final_queryset = final_queryset.exclude(**item)
         return final_queryset
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
-        if type(serializer_class) != serializers.ListSerializer and self.fields_to_return:
-            serializer_class.Meta.fields = self.fields_to_return
+        if self.action == 'partial_update':
+            serializer_class.Meta.fields = list(self.request.data.keys())
+        elif self.action == 'create':
+            serializer_class.Meta.fields = list(self.request.data.keys())
+        else:
+            serializer_class.Meta.fields = ['first_name', 'last_name', 'email', 'role', 'is_active', 'id', 'location']
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -195,7 +163,7 @@ class CustomUserView(viewsets.ModelViewSet):
             'auth': str(request.auth),
         }
 
-        serializer = self.get_serializer(data=self.fields_to_save)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         if not user:
@@ -210,16 +178,39 @@ class CustomUserView(viewsets.ModelViewSet):
 
         return Response(data, status=status.HTTP_201_CREATED)
 
-    def update(self, request, **kwargs):
+    def list(self, request):
+        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')) \
+            .exclude(role='SA').exclude(id=request.user.id)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(context=kwargs['pk'],
-                                         data=self.fields_to_save, partial=partial)
+        serializer = self.get_serializer(data=request.data, partial=partial, context=kwargs['pk'])
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        self.perform_update(serializer)
 
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
+
         return Response(serializer.data)
+
+
+class AccessMembers(viewsets.ModelViewSet):
+    """
+    Allows obtaining all clients and updating them
+    """
+    http_method_names = ['get']
+    permission_classes = [IsAuthenticated, IsSystemAdmin]
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = CustomUserSerializer
+        serializer_class.Meta.fields = ['user_name', 'first_name', 'last_name', 'email',
+                  'role', 'location', 'is_active', 'id']
+        return serializer_class(*args, **kwargs)
+
+    def get_queryset(self):
+        return CustomUser.objects.filter(role='SA').exclude(id=self.request.user.id)
