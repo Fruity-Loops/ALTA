@@ -32,7 +32,8 @@ class AuditTestCase(APITestCase):
     def test_create_audit(self):
         """ Create audit """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.post("/audit/", {"inventory_items": [self.item_one._id, self.item_two._id]})
+        response = self.client.post("/audit/",
+                                    {"inventory_items": [self.item_one._id, self.item_two._id]})
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
         self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
