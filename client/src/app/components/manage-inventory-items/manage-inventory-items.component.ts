@@ -76,7 +76,6 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.searchForm = this.fb.group({
       _id: [''],
       Location: [''],
-      Plant: [''],
       Zone: [''],
       Aisle: [''],
       Part_Number: [''],
@@ -84,7 +83,6 @@ export class ManageInventoryItemsComponent implements OnInit {
       Condition: [''],
       Category: [''],
       Owner: [''],
-      Criticality: [''],
       Average_Cost: [''],
       Quantity: [''],
       Unit_of_Measure: [''],
@@ -122,7 +120,6 @@ export class ManageInventoryItemsComponent implements OnInit {
     const pageSize = 'pageSize';
     this.pageIndex = 1 + event[pageIndex];
     this.pageSize = event[pageSize];
-
     this.params = this.params.set('page', String(this.pageIndex));
     this.params = this.params.set('page_size', String(this.pageSize));
 
@@ -147,7 +144,11 @@ export class ManageInventoryItemsComponent implements OnInit {
     const count = 'count';
     const results = 'results';
     this.length = this.data[count];
-    this.pageSize = this.data[results].length;
+    if(this.pageIndex>0){
+      // Angular paginator starts at 0, Django pagination starts at 1
+      this.pageIndex = this.pageIndex - 1;
+    }
+    // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
@@ -170,6 +171,10 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   searchItem(): void {
+
+    this.pageIndex = 1;
+    this.params = this.params.set('page', String(this.pageIndex));
+
     for (const value in this.searchForm.value) {
       if (this.searchForm.value[value] === '') {
         this.params = this.params.delete(value);

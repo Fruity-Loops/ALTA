@@ -13,16 +13,13 @@
   </div>
   <div>
 
-    <mat-card-title>Search Items</mat-card-title>
+    <mat-card-title>Filter Items</mat-card-title>
     <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchItem()">
       <mat-form-field appearance="outline">
         <input matInput id="item_id" type="string" formControlName="_id" placeholder="ID"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput id="item_location2" type="string" formControlName="Location" placeholder="Location"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_plant" type="string" formControlName="Plant" placeholder="Plant"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput id="item_zone" type="string" formControlName="Zone" placeholder="Zone"/>
@@ -44,9 +41,6 @@
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput id="item_owner" type="string" formControlName="Owner" placeholder="Owner"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_criticality" type="string" formControlName="Criticality" placeholder="Criticality"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
         <input matInput id="item_average_cost" type="string" formControlName="Average_Cost" placeholder="Average Cost"/>
@@ -92,6 +86,7 @@
       [length]="length"
       [pageSize]="pageSize"
       [pageSizeOptions]="[25,50,100]"
+      [pageIndex]="pageIndex"
       (page)="paginatorAction($event)">
     </mat-paginator>
 
