@@ -7,10 +7,13 @@
 </mat-card>
 <br>
 
-<mat-expansion-panel [expanded]="allExpandState" (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
+<mat-expansion-panel *ngFor="let item of locationsAndUsers;" class="mat-expand"
+                     [expanded]="allExpandState"
+                     (opened)="panelOpenState=true"
+                     (closed)="panelOpenState=false" >
 	<mat-expansion-panel-header>
 		<mat-card-header>
-      <mat-card-title class="location-title" >Montreal</mat-card-title>
+      <mat-card-title class="location-title" >{{item.location}}</mat-card-title>
     </mat-card-header>
 	</mat-expansion-panel-header>
 
@@ -18,25 +21,22 @@
 
       <ng-container matColumnDef="Check_Boxes">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Select </th>
-        <td class="cell_check_boxes" mat-cell *matCellDef="let row"> <input type="checkbox">
-
-        </td>
+        <td class="cell_check_boxes" mat-cell *matCellDef="let row"><input type="checkbox"></td>
       </ng-container>
 
-      <ng-container matColumnDef="First_Name">
+      <ng-container matColumnDef="First_Name" >
         <th mat-header-cell *matHeaderCellDef mat-sort-header> First Name </th>
-        <td class="cell_first_name" mat-cell *matCellDef="let row"> {{row.first_name}} </td>
+        <td class="cell_first_name" mat-cell *matCellDef="let row" >{{row.first_name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="Last_Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Name </th>
-        <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
+        <td class="cell_last_name" mat-cell *matCellDef="let row">{{row.last_name}}</td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="item.location !== row.location"></tr>
     </table>
-
 
 </mat-expansion-panel>
 

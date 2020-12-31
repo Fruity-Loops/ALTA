@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { User } from 'src/app/models/user.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { ViewChild, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 
@@ -14,32 +13,17 @@ import { MatExpansionModule } from '@angular/material/expansion';
 })
 export class AssignStockKeepersComponent implements OnInit {
 
-  users: Array<User>;
   dataSource: MatTableDataSource<User>
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name'];
-  roles = [
-    { name: 'System Admin', abbrev: 'SA'},
-    { name: 'Inventory Manager', abbrev: 'IM' },
-    { name: 'Stock Keeper', abbrev: 'SK' },
-  ];
+  locationsAndUsers: Array<any>;
   panelOpenState: boolean = false;
   allExpandState = false;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private manageMembersService: ManageMembersService, private dialog: MatDialog)
   { }
 
-  openDialogWithRef(ref: TemplateRef<any>) {
-    this.dialog.open(ref);
-  }
-
-  closeDialog() {
-    this.dialog.closeAll();
-  }
-
   ngOnInit(): void {
-    this.users = new Array<User>();
+    this.locationsAndUsers = new Array<any>();
     this.manageMembersService.getAllClients()
     .subscribe((user) => {
       const users = user;
@@ -49,13 +33,40 @@ export class AssignStockKeepersComponent implements OnInit {
 
   populateTable(clients): void {
     clients.forEach(element => {
-      const obj = this.roles.find(o => o.abbrev === element.role);
-      if (element.role === 'SK')
-        this.users.push(element);
+      if (element.role === 'SK') {
+        const obj = this.locationsAndUsers.find(item => item.location === element.location);
+        if(obj === undefined) {
+          this.locationsAndUsers.push(
+          {
+            location: element.location,
+            users: new Array<User>(element),
+          });
+        }
+        else {
+          const index = this.locationsAndUsers.findIndex(item => item.location === element.location);
+          this.locationsAndUsers[index].users.push(element);
+        }
+      }
     });
-    this.dataSource = new MatTableDataSource(this.users);
-    this.dataSource.paginator = this.paginator;
+
+    this.dataSource = new MatTableDataSource();
+    this.locationsAndUsers.forEach(item => {
+      item.users.forEach(user => {
+
+        const data = this.dataSource.data;
+        data.push(user);
+        this.dataSource.data = data;
+      });
+
+
+    }); 
   }
 
+  openDialogWithRef(ref: TemplateRef<any>) {
+    this.dialog.open(ref);
+  }
 
+  closeDialog() {
+    this.dialog.closeAll();
+  }
 }
