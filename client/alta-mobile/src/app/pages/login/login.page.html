@@ -1,26 +1,26 @@
 <ion-content class="loginGroup">
   <div class="header">
-    <img id="alta_logo" class="pic" src="assets/img/logo.svg" width="150" height="80">
+    <img id="alta_logo" class="pic" src="assets/img/logo.svg" width="340" height="210">
   </div>
 
-  <form [formGroup]="formGroup" (ngSubmit)="login()">
-    <div>
+  <div class="form-container">
+    <form [formGroup]="formGroup" (ngSubmit)="login()">
 
-      <ion-item>
+      <ion-item >
         <ion-label position="floating" color="primary">Email</ion-label>
-        <ion-input id="emailInput" type="email" formControlName="email" required></ion-input>
+        <ion-input id="emailInput" type="email" formControlName="email" color="light" required></ion-input>
       </ion-item>
       <div *ngIf="email.touched && email.errors " class="errorMessage">
-        <span *ngIf="email.errors?.email">Invalid email</span>
+        <span *ngIf="email.errors?.email">Invalid format</span>
       </div>
 
       <ion-item>
         <ion-label position="floating" color="primary">Password</ion-label>
-        <ion-input id="passwordInput" formControlName="password" type="password" required></ion-input>
+        <ion-input id="passwordInput" formControlName="password" type="password" color="light" required></ion-input>
       </ion-item>
 
-    </div>
 
-    <ion-button id="loginButton" type="submit" [disabled]="!formGroup.valid">Log in</ion-button>
-  </form>
+      <ion-button id="loginButton" type="submit" expand="block" size="large" [disabled]="!formGroup.valid">Sign in</ion-button>
+    </form>
+  </div>
 </ion-content>

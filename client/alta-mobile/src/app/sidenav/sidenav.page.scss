@@ -1,3 +1,28 @@
+ion-toolbar {
+  --background: #283C52;
+}
+
+ion-header {
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-top: 10px;
+  height: 80px;
+  background: #283C52;
+  text-align: center;
+  cursor: pointer;
+}
+
+ion-item {
+  padding: 10px;
+  font-size: 115%;
+}
+
+ion-label {
+  margin: 10px;
+}
+
 .sideNavMenu {
     --width: 240px;
   }
+
