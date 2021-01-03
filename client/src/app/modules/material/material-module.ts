@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [],
@@ -30,7 +31,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
+    MatCheckboxModule,
   ],
   providers: [],
   exports: [
@@ -47,7 +49,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule,
-    MatGridListModule
-  ]
+    MatGridListModule,
+    MatCheckboxModule,
+  ],
 })
-export class MatModule { }
+export class MatModule {}
