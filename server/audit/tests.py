@@ -25,7 +25,8 @@ class AuditTestCase(APITestCase):
 
     def test_audit_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """
-        response = self.client.get("/audit/")
+        response = self.client.post("/audit/",
+                                    {"inventory_items": [self.item_one._id, self.item_two._id]})
         self.assertEqual(response.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
