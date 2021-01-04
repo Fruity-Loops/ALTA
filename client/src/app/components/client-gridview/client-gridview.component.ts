@@ -5,24 +5,25 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
+import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-client-gridview',
   templateUrl: './client-gridview.component.html',
-  styleUrls: ['./client-gridview.component.scss']
+  styleUrls: ['./client-gridview.component.scss'],
 })
-
 export class ClientGridviewComponent implements OnInit {
   view = 'Client Gridview';
   users: Array<User>;
 
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['First_Name', 'Last_Name', 'Status', 'Settings'];
-  roles = [
-      { name: 'System Admin', abbrev: 'SA'},
-      { name: 'Inventory Manager', abbrev: 'IM' },
-      { name: 'Stock Keeper', abbrev: 'SK' },
+  displayedColumns: string[] = [
+    'First_Name',
+    'Last_Name',
+    'Status',
+    'Settings',
   ];
+  roles = roles;
   filterTerm: string;
   selected = 'All';
 
@@ -31,17 +32,16 @@ export class ClientGridviewComponent implements OnInit {
 
   constructor(
     private manageMembersService: ManageMembersService,
-    private changeDetectorRefs: ChangeDetectorRef) {
+    private changeDetectorRefs: ChangeDetectorRef
+  ) {
     this.users = new Array<User>();
-    this.manageMembersService.getAllClients()
-    .subscribe((user) => {
+    this.manageMembersService.getAllClients().subscribe((user) => {
       const users = user;
       this.populateTable(users);
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   applyFilter(filterTerm: string): void {
     this.dataSource.filter = filterTerm;
@@ -49,10 +49,17 @@ export class ClientGridviewComponent implements OnInit {
 
   populateTable(clients): void {
     if (clients[0].role !== 'SA') {
-      this.displayedColumns = ['First_Name', 'Last_Name', 'Role', 'Location', 'Status', 'Settings'];
+      this.displayedColumns = [
+        'First_Name',
+        'Last_Name',
+        'Role',
+        'Location',
+        'Status',
+        'Settings',
+      ];
     }
-    clients.forEach(element => {
-      const obj = this.roles.find(o => o.abbrev === element.role);
+    clients.forEach((element) => {
+      const obj = this.roles.find((o) => o.abbrev === element.role);
       element.role = obj.name;
       this.users.push(element);
     });

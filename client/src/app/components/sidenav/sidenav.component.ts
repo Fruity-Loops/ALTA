@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import {NavigationEnd, NavigationStart, Router} from '@angular/router';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { TokenService } from '../../services/token.service';
+import roles from '../../fixtures/roles.json';
+import { routes } from '../../modules/alta-main-routing/alta-main-routing.module';
 
 @Component({
   selector: 'app-sidenav',
@@ -21,15 +23,11 @@ export class SideNavComponent implements OnInit {
   loggedInUser;
   loggedInUserRole;
 
-  roles = {
-    SA: 'System Administrator',
-    IM: 'Inventory Manager',
-    SK: 'Stock Keeper'
-  };
-
-  constructor(private router: Router,
-              private authService: AuthService,
-              private tokenService: TokenService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private tokenService: TokenService
+    ) { }
 
   ngOnInit(): void {
     this.authSubscription = this.authService.getOrgMode().subscribe(orgMode => {
@@ -42,7 +40,11 @@ export class SideNavComponent implements OnInit {
     this.authSubscription = this.authService.sharedUser
       .subscribe((data) => {
         this.loggedInUser = data.username;
-        this.loggedInUserRole = this.roles[data.role];
+        roles.forEach(role => {
+          if (role.abbrev === data.role) {
+            this.loggedInUserRole = role.name;
+          }
+        });
       });
     this.setSelected(this.router.url);
     this.subscribeSelected();
@@ -83,10 +85,10 @@ export class SideNavComponent implements OnInit {
   setSelected(url): void {
     if (url === '/create-members') {
       if (this.options === SystemNavListings) {
-        url = '/sa-modify-members';
+        url = routes[0].children[4]; // '/sa-modify-members';
       }
-      else if (this.options === OrganizationNavListings){
-        url = '/modify-members';
+      else if (this.options === OrganizationNavListings) {
+        url = routes[0].children[3]; // '/modify-members';
       }
 
     }

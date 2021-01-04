@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ManageMembersService } from '../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../models/user.model';
+import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-employee-settings',
@@ -23,11 +24,7 @@ export class EmployeeSettingsComponent implements OnInit {
   body: any;
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
-  roles = [
-    { name: 'System Admin', abbrev: 'SA' },
-    { name: 'Inventory Manager', abbrev: 'IM' },
-    { name: 'Stock Keeper', abbrev: 'SK' },
-  ];
+  roles = roles;
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -69,10 +66,7 @@ export class EmployeeSettingsComponent implements OnInit {
     if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
-      this.roles = [
-        { name: 'Inventory Manager', abbrev: 'IM' },
-        { name: 'Stock Keeper', abbrev: 'SK' },
-      ];
+      this.roles = this.roles.filter(({ abbrev}) => abbrev !== 'SA');
     }
 
     this.roles.forEach((role) => {
