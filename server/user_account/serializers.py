@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.exceptions import ObjectDoesNotExist
-from .models import CustomUser, Organization
+from .models import CustomUser
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -8,7 +8,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = []
 
-    def save(self):
+    def save(self):  # pylint: disable=arguments-differ
         user = None
         data = dict(self.validated_data)
         try:
@@ -26,7 +26,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             user.save()
         return user
 
-    def save_password(self, user, data):
+    def save_password(self, user, data): # pylint: disable=no-self-use
         if 'password' in data:
             if data['password']:
                 user.set_password(data['password'])

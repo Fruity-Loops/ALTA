@@ -12,5 +12,5 @@ class ItemsConfig(AppConfig):
         #  related article:
         # https://medium.com/@kevin.michael.horan
         # /scheduling-tasks-in-django-with-the-advanced-python-scheduler-663f17e868e6
-        from . import updater
+        from . import updater  # pylint: disable=import-outside-toplevel
         updater.start()

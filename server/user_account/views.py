@@ -1,14 +1,12 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-import json
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import serializers
 from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
 from .serializers import CustomUserSerializer
 from .models import CustomUser
@@ -152,7 +150,13 @@ class CustomUserView(viewsets.ModelViewSet):
         elif self.action == 'create':
             serializer_class.Meta.fields = list(self.request.data.keys())
         else:
-            serializer_class.Meta.fields = ['first_name', 'last_name', 'email', 'role', 'is_active', 'id', 'location']
+            serializer_class.Meta.fields = [
+                'first_name',
+                'last_name',
+                'email', 'role',
+                'is_active',
+                'id',
+                'location']
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -184,7 +188,7 @@ class CustomUserView(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data, partial=partial, context=kwargs['pk'])
@@ -194,7 +198,7 @@ class CustomUserView(viewsets.ModelViewSet):
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
+            instance._prefetched_objects_cache = {} # pylint: disable=protected-access
 
         return Response(serializer.data)
 
