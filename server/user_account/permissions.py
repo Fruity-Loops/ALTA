@@ -106,11 +106,36 @@ class IsHigherInOrganization(BasePermission):
         """
         current_user_org = request.user.organization
         target_user_org = CustomUser.objects.get(id=view.kwargs['pk']).organization
-        current_user_role = self.user_roles.index(request.user.role)
-        target_user_role = self.user_roles.index(CustomUser.objects.get(id=view.kwargs['pk']).role)
+        current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
+        target_user_role = IsHigherInOrganization.user_roles.index(CustomUser.objects.get(id=view.kwargs['pk']).role)
         if current_user_role == 0 and target_user_role > 0:
             return True
+        elif current_user_role == 2:
+            return False
         if current_user_org and target_user_org:
             if current_user_org == target_user_org:
-                return current_user_role < target_user_role
+                return current_user_role <= target_user_role
         return False
+
+
+class CanUpdate(BasePermission):
+    message = "Roles and Emails shouldn't be allowed to be updated"
+
+    def has_permission(self, request, view):
+        """
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is allowed to modify the user
+        """
+        keys = list(request.data.keys())
+        if IsCurrentUserTargetUser.has_permission(self, request, view):
+            return self.check_keys(['role', 'id', 'email'], keys)
+        elif IsHigherInOrganization.has_permission(self, request, view):
+            return self.check_keys(['role', 'id', 'email', 'password'], keys)
+        return False
+
+    def check_keys(self, bad_keys, keys):
+        for bad_key in bad_keys:
+            if bad_key in keys:
+                return False
+        return True

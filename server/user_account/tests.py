@@ -291,7 +291,7 @@ class UpdateProfileTest(APITestCase):
         """ Inventory manager can update Stock Keeper's info"""
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(self.url + str(self.stock_keeper.id) +
-                                     "/", {"email": "1@gmail.com"})
+                                     "/", {"user_name": "aaa"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_own_user_information(self):
@@ -319,19 +319,19 @@ class UpdateProfileTest(APITestCase):
         response = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
             {"role": "IM"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.client.force_authenticate(user=self.manager)
         response = self.client.patch(
             self.url + str(self.manager.id) + "/",
             {"role": "SA"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         self.client.force_authenticate(user=self.stock_keeper)
         response = self.client.patch(
             self.url + str(self.stock_keeper.id) + "/",
             {"role": "SA"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class ChangePasswordTest(APITestCase):
@@ -352,7 +352,7 @@ class ChangePasswordTest(APITestCase):
          an admin or the same user """
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
-            self.url + str(self.sa_id) + "/")
+            self.url + str(self.sa_id) + "/", self.save_fields)
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -360,24 +360,25 @@ class ChangePasswordTest(APITestCase):
         """ Users can update their own password """
         self.client.force_authenticate(user=self.s_a)
         response = self.client.patch(
-            self.url + str(self.sa_id) + "/")
+            self.url + str(self.sa_id) + "/", self.save_fields)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
-            self.url + str(self.i_m.id) + "/")
+            self.url + str(self.i_m.id) + "/", self.save_fields)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.s_k)
         response = self.client.patch(
-            self.url + str(self.s_k.id) + "/")
+            self.url + str(self.s_k.id) + "/", self.save_fields)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_im_update_sk_password(self):
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
-            self.url + str(self.s_k.id) + "/")
+            self.url + str(self.s_k.id) + "/", self.save_fields)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class RetreivePersonalInfoTest(APITestCase):
     fixtures = ["users.json", "organizations"]
