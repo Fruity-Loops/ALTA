@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/token.service';
+import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-signup',
@@ -17,11 +18,8 @@ export class CreateMemberComponent implements OnInit {
   selectedOrganization: any = '';
   signUpButtonLabel = 'Save';
   subscription;
-  roles = [
-    { name: 'Inventory Manager', abbrev: 'IM' },
-    { name: 'Stock Keeper', abbrev: 'SK' },
-  ];
   isEmployee = false;
+  roles = roles;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -76,34 +74,24 @@ export class CreateMemberComponent implements OnInit {
 
     register.subscribe(
       () => {
-        this.signupForm.reset(); // Reset form once create-member
         setTimeout(() => {
           // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           this.router.navigate(['modify-members']);
         }, 1000); // Waiting 1 second before redirecting the user
-        this.resetForm();
-
       },
       (err) => {
         // 2 different types of error messages
         // If email already exist
         if (err.error.email) {
-          this.errorMessage = err.error.email[0];
+          this.errorMessage = 'A member with that email address already exists';
         }
 
         // If username already exist
         if (err.error.user_name) {
-          this.errorMessage = err.error.user_name[0];
+          this.errorMessage = 'A member with that employee ID already exists';
         }
       }
     );
-  }
-
-  resetForm(): void {
-    this.signupForm.reset();
-    Object.keys(this.signupForm.controls).forEach(key => {
-      this.signupForm.controls[key].setErrors(null);
-    });
   }
 
   OnDestroy(): void {
