@@ -74,34 +74,24 @@ export class CreateMemberComponent implements OnInit {
 
     register.subscribe(
       () => {
-        this.signupForm.reset(); // Reset form once create-member
         setTimeout(() => {
           // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
           this.router.navigate(['modify-members']);
         }, 1000); // Waiting 1 second before redirecting the user
-        this.resetForm();
-
       },
       (err) => {
         // 2 different types of error messages
         // If email already exist
         if (err.error.email) {
-          this.errorMessage = err.error.email[0];
+          this.errorMessage = 'A member with that email address already exists';
         }
 
         // If username already exist
         if (err.error.user_name) {
-          this.errorMessage = err.error.user_name[0];
+          this.errorMessage = 'A member with that employee ID already exists';
         }
       }
     );
-  }
-
-  resetForm(): void {
-    this.signupForm.reset();
-    Object.keys(this.signupForm.controls).forEach(key => {
-      this.signupForm.controls[key].setErrors(null);
-    });
   }
 
   OnDestroy(): void {

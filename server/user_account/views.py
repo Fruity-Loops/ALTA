@@ -66,7 +66,7 @@ class LoginView(generics.GenericAPIView):
         password = data.get('password', '')
         org_id = ""
         org_name = ""
-        response = Response({"detail": "Failed to Login"},
+        response = Response({"detail": "Login Failed"},
                                 status=status.HTTP_401_UNAUTHORIZED)
 
         try:
