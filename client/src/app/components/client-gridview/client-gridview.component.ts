@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
+import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-client-gridview',
@@ -18,11 +19,7 @@ export class ClientGridviewComponent implements OnInit {
 
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['First_Name', 'Last_Name', 'Status', 'Settings'];
-  roles = [
-      { name: 'System Admin', abbrev: 'SA'},
-      { name: 'Inventory Manager', abbrev: 'IM' },
-      { name: 'Stock Keeper', abbrev: 'SK' },
-  ];
+  roles = roles;
   filterTerm: string;
   selected = 'All';
 

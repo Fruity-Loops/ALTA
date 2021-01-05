@@ -1,5 +1,14 @@
 [
-    { "name": "System Admin", "abbrev": "SA" },
-    { "name": "Inventory Manager", "abbrev": "IM" },
-    { "name": "Stock Keeper", "abbrev": "SK" }
+    {
+        "name": "System Admin",
+        "abbrev": "SA"
+    },
+    {
+        "name": "Inventory Manager",
+        "abbrev": "IM"
+    },
+    {
+        "name": "Stock Keeper",
+        "abbrev": "SK"
+    }
 ]

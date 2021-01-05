@@ -67,7 +67,7 @@ export class EmployeeSettingsComponent implements OnInit {
     if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
-      this.roles.filter(({ abbrev}) => abbrev !== "SA");
+      this.roles = this.roles.filter(({ abbrev}) => abbrev !== 'SA');
     }
 
     this.roles.forEach((role) => {
