@@ -21,7 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('user_account.urls')),
     path('', include('organization.urls')),
-    path('', include('inventory_item.urls'))
+    path('', include('inventory_item.urls')),
+    path('', include('audit.urls'))
 ]
 
 # Initialize inventory Items collection
