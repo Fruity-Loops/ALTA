@@ -4,12 +4,15 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { PageEvent } from '@angular/material/paginator';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -35,14 +38,18 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
+  inventoryItemToAudit = [];
+
   constructor(
     private itemsService: ManageInventoryItemsService,
-    private fb: FormBuilder,
-    private authService: AuthService
+    private auditService: ManageAuditsService,
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
+  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
   filterTerm: string;
   selected = 'All';
 
@@ -52,6 +59,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   ngOnInit(): void {
     this.getItems();
     this.init();
+    this.inventoryItemToAudit = [];
   }
 
   init(): void {
@@ -73,6 +81,7 @@ export class ManageInventoryItemsComponent implements OnInit {
         }
 
         this.displayedColumns.pop(); // deleting the last column which refers to the organization
+        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -111,6 +120,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
   }
+
   refreshTime(): void {
     this.body = {
       new_job_timing: this.timeForm.value.time,
@@ -120,6 +130,38 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.itemsService.updateRefreshItemsTime(this.body).subscribe(
       (data) => {
         this.timeForm.reset();
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
+  }
+
+  // If an Inventory item checkbox is selected then add the id to the list
+  onChange(value: any): void {
+    if (this.inventoryItemToAudit.includes(value)) {
+      this.inventoryItemToAudit.splice(
+        this.inventoryItemToAudit.indexOf(value),
+        1
+      );
+    } else {
+      this.inventoryItemToAudit.push(value);
+    }
+  }
+
+  submitAudit(): void {
+    let bodyAudit: any;
+    bodyAudit = {
+      inventory_items: this.inventoryItemToAudit,
+      organization: localStorage.getItem('organization_id'),
+    };
+    this.auditService.createAudit(bodyAudit).subscribe(
+      (data) => {
+        this.inventoryItemToAudit = [];
+        setTimeout(() => {
+          // Redirect user to component dashboard
+          this.router.navigate(['dashboard']);
+        }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {
         this.errorMessage = err;
