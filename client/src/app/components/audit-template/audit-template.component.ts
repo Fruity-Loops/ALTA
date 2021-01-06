@@ -12,19 +12,6 @@ export class AuditTemplateComponent implements OnInit {
   auditTemplates: Array<AuditTemplate> = [];
   errorMessage = '';
 
-  // data: Array<AuditTemplate> = [{
-  //   title: 'test1',
-  //   location: 'location1',
-  //   plant: 'plant1',
-  //   zones: ['zone1', 'zone2'],
-  //   aisles: [1, 2],
-  //   bins: [1],
-  //   part_number: '434453',
-  //   serial_number: 'dsfds',
-  //   description: 'big shit'
-  // }
-  // ];
-
   constructor(private auditTemplateService: AuditTemplateService,
               private authService: AuthService,
   ) { }
