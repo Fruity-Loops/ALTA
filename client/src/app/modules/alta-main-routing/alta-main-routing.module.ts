@@ -31,8 +31,14 @@ const routes: Routes = [
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
-      { path: 'template', component: AuditTemplateComponent },
-      { path: 'template/create-template', component: CreateAuditTemplateComponent },
+      { path: 'template', children: [
+          {
+            path: '', component: AuditTemplateComponent
+          },
+          {
+            path: 'create-template', component: CreateAuditTemplateComponent
+          }
+        ]},
     ],
   },
 ];
