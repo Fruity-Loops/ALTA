@@ -14,17 +14,15 @@
           <div class="form-group">
             <mat-label for="power">First Name:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="firstname" type="text" [disabled]=true [value]="employee.first_name"/>
+              <input matInput id="firstname" type="text" [disabled]="!edit" [value]="employee.first_name"/>
             </mat-form-field>
           </div>
-
         </mat-grid-tile>
-        <mat-grid-tile *ngIf="employee">
+        <mat-grid-tile>
           <div class="form-group">
-            <mat-label for="power">E-mail address:</mat-label>
+            <mat-label for="username">Employee ID:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="email" type="email" placeholder="E-mail address"
-                     [(ngModel)]="employee.email" email [disabled]="!edit"/>
+              <input matInput id="user_name" type="text" placeholder="Employee ID" [disabled]=true/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -37,11 +35,12 @@
             </mat-form-field>
           </div>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile *ngIf="!isSystemAdmin">
           <div class="form-group">
-            <mat-label for="username">Employee ID:</mat-label>
+            <mat-label for="location">Employment Location:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="user_name" type="text" placeholder="Employee ID" [disabled]=true/>
+              <input matInput id="location" type="text" [disabled]=true
+                     [(ngModel)]="location"/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
@@ -54,12 +53,12 @@
             </mat-form-field>
           </div>
         </mat-grid-tile>
-        <mat-grid-tile *ngIf="!isSystemAdmin">
+        <mat-grid-tile *ngIf="employee">
           <div class="form-group">
-            <mat-label for="location">Employment Location:</mat-label>
+            <mat-label for="power">E-mail address:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="location" type="text" [disabled]=true
-                     [(ngModel)]="location"/>
+              <input matInput id="email" type="email" placeholder="E-mail address"
+                     [(ngModel)]="employee.email" email [disabled]=true/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
