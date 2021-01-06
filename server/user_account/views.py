@@ -1,6 +1,7 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
+from django.http import QueryDict
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, viewsets, generics
@@ -130,6 +131,7 @@ class LogoutView(generics.GenericAPIView):
 
 class CustomUserView(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch']
+    data = None
 
     def get_permissions(self):
         if self.action in ['create', 'retrieve', 'list']:
@@ -147,7 +149,7 @@ class CustomUserView(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
         if self.action == 'partial_update':
-            serializer_class.Meta.fields = list(self.request.data.keys())
+            serializer_class.Meta.fields = list(self.data.keys())
         elif self.action == 'create':
             serializer_class.Meta.fields = list(self.request.data.keys())
         else:
@@ -192,7 +194,9 @@ class CustomUserView(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(data=request.data, partial=partial, context=kwargs['pk'])
+        self.data = dict(self.request.data)
+        self.data.pop('role', None)  # deleting role key from dictionary to make sure it is not modifiable
+        serializer = self.get_serializer(data=self.data, partial=partial, context=kwargs['pk'])
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
