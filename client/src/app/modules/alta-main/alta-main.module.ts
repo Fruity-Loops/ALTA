@@ -24,7 +24,7 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatDatepickerModule} from '@angular/material';
+import {MAT_DATE_LOCALE, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,8 @@ import {MatDatepickerModule} from '@angular/material';
     MatDialogModule,
     FlexLayoutModule,
     MatDatepickerModule,
+    MatNativeDateModule,
   ],
-  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
+  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
 export class AltaMainModule {}

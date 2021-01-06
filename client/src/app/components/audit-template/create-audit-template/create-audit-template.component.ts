@@ -18,6 +18,7 @@ export class CreateAuditTemplateComponent implements OnInit {
   errorMessage: string;
   body: any;
   templateButtonLabel = 'SAVE';
+  todaysDate = new Date();
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully

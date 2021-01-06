@@ -42,3 +42,8 @@
 .icon-padding {
   padding-top: 25px;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
