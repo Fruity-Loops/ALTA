@@ -1,6 +1,133 @@
-<p>audit-template works!</p>
+<!--
 <mat-grid-list cols="2" rowHeight="100:9">
   <mat-grid-tile *ngFor="let template of auditTemplates">
-      <mat-list-item>title:   {{template.title}}</mat-list-item>
+    <mat-list-item>title:   {{template.title}}</mat-list-item>
   </mat-grid-tile>
 </mat-grid-list>
+-->
+<mat-card>
+  <mat-card-title class="alignsidebyside">Templates</mat-card-title>
+  <button class="alignsidebyside positionright" mat-stroked-button routerLink="/template/create-template">
+    ADD
+  </button>
+
+  <form>
+    <mat-form-field class="search-full-width" floatLabel="never">
+      <span matPrefix class="iconpadding"><mat-icon class="iconcolor">search</mat-icon> &nbsp;</span>
+      <label>
+        <input type="text" matInput placeholder="Search Templates">
+      </label>
+    </mat-form-field>
+  </form>
+
+  <mat-divider></mat-divider>
+  <br>
+  <div>
+
+    <div fxLayout="column">
+
+      <div fxLayout="row">
+
+        <div fxFlex="50" class="flex-padding">
+          <mat-card class="z-depth">
+            <p class="alignsidebyside">By LINDSEY STROUD</p>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="alignsidebyside positionright">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button mat-menu-item>
+                <mat-icon>create</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+            <p class="templatename">Template ABC</p>
+            <mat-card-content>
+              <p>December 12, 2019</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div fxFlex="50" class="flex-padding">
+          <mat-card class="z-depth">
+            <p class="alignsidebyside">By LINDSEY STROUD</p>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="alignsidebyside positionright">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button mat-menu-item>
+                <mat-icon>create</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+            <p class="templatename">Template ABC</p>
+            <mat-card-content>
+              <p>December 12, 2019</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+      </div>
+
+      <div fxLayout="row">
+
+        <div fxFlex="50" class="flex-padding">
+          <mat-card class="z-depth">
+            <p class="alignsidebyside">By LINDSEY STROUD</p>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="alignsidebyside positionright">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button mat-menu-item>
+                <mat-icon>create</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+            <p class="templatename">Template ABC</p>
+            <mat-card-content>
+              <p>December 12, 2019</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div fxFlex="50" class="flex-padding">
+          <mat-card class="z-depth">
+            <p class="alignsidebyside">By LINDSEY STROUD</p>
+            <button mat-icon-button [matMenuTriggerFor]="menu" class="alignsidebyside positionright">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="after">
+              <button mat-menu-item>
+                <mat-icon>create</mat-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+            <p class="templatename">Template ABC</p>
+            <mat-card-content>
+              <p>December 12, 2019</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+      </div>
+
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  </div>
+</mat-card>

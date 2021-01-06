@@ -21,8 +21,10 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
-import { CreateAuditTemplateComponent } from '../../components/create-audit-template/create-audit-template.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatDatepickerModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { AuditTemplateComponent } from '../../components/audit-template/audit-te
     FormsModule,
     MatMenuModule,
     MatDialogModule,
+    FlexLayoutModule,
+    MatDatepickerModule,
   ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
 })

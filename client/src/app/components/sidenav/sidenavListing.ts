@@ -31,7 +31,7 @@ export const OrganizationNavListings: SideNavOption[] = [
   {
     title: 'Template',
     routerLink: 'template',
-    subMenuOptions: [{ title: 'Create Template', routerLink: 'create-template', subMenuOptions: [] }],
+    subMenuOptions: [],
   },
   {
     title: 'Employees',

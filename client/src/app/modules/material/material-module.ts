@@ -30,7 +30,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule,
-    MatGridListModule
+    MatGridListModule,
   ],
   providers: [],
   exports: [

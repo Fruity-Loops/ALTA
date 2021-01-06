@@ -1,0 +1,44 @@
+@import "./src/theme.scss";
+
+.positionright {
+  float:right;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field + .mat-form-field {
+  padding-top: 5%;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+::ng-deep .mat-label {
+  color: #777591 !important;
+}
+
+/* Not working for some reason to be tested */
+::ng-deep .mat-form-field-label {
+  display: none!important;
+}
+
+.icon-color {
+  color: map-get($alta-primary, A100);
+}
+
+.mat-stroked-button {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+  width: 125px;
+}
+
+.save-button-bg {
+  background: map-get($alta-primary, A50) !important;
+}
+
+.icon-padding {
+  padding-top: 25px;
+}
