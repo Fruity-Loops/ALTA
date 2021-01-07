@@ -13,6 +13,7 @@ import { template } from '../Template';
 })
 export class CreateAuditTemplateComponent implements OnInit {
 
+  errorMessage: string;
   templateButtonLabel = 'SAVE';
   todaysDate = new Date();
 
@@ -80,15 +81,27 @@ export class CreateAuditTemplateComponent implements OnInit {
       description: this.description,
     };
 
-    this.auditTemplateService.createTemplate(body).subscribe(
-      () => {
-        setTimeout(() => {
-          // Redirect user back to list of templates
-          this.router.navigate(['template']);
-        }, 1000); // Waiting 1 second before redirecting the user
-        this.initializeForm();
+    if(this.title !== '') {
+      this.auditTemplateService.createTemplate(body).subscribe(
+        () => {
+          setTimeout(() => {
+            // Redirect user back to list of templates
+            this.router.navigate(['template']);
+          }, 1000); // Waiting 1 second before redirecting the user
+          this.initializeForm();
+          this.errorMessage = '';
 
-      }
-    );
+        },
+        (err) => {
+          // if backend returns an error
+          if (err.error) {
+            this.errorMessage = err.error;
+          }
+        }
+      );
+    } else {
+      this.errorMessage = "Please give a title to your template.";
+    }
+
   }
 }
