@@ -90,10 +90,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   submitAssignedSKs(): void {
     let bodyAssignedSK: any;
     bodyAssignedSK = {
-      audit_id: Number(localStorage.getItem('audit_id')),
       assigned_sk: this.skToAssign,
     };
-    this.addAssignedSK.assignSK(bodyAssignedSK).subscribe(
+    this.addAssignedSK.assignSK(bodyAssignedSK, Number(localStorage.getItem('audit_id'))).subscribe(
       (data) => {
         this.skToAssign = [];
         setTimeout(() => {

@@ -1,15 +1,15 @@
 from rest_framework import serializers
 from .models import Audit
-from .models import AssignedSK
+# from .models import AssignedSK
 
 
 class AuditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Audit
-        fields = '__all__'
+        fields = ['audit_id', 'org', 'inventory_items']
 
 
 class AssignedSKSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AssignedSK
-        fields = '__all__'
+        model = Audit
+        fields = ['audit_id', 'assigned_sk']

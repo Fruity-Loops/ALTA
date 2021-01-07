@@ -16,7 +16,7 @@ export class ManageAuditsService {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
-  assignSK(assignedSK): Observable<any> {
-    return this.http.post(`${BASEURL}/assigned-sk/`, assignedSK);
+  assignSK(assignedSK, audit_id): Observable<any> {
+    return this.http.patch(`${BASEURL}/audit/${audit_id}/`, assignedSK);
   }
 }
