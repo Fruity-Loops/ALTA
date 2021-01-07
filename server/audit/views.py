@@ -21,7 +21,7 @@ class AuditViewSet(viewsets.ModelViewSet):
 
 class AssignedSKViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows Audits to be created.
+    API endpoint that allows assigned stock keepers to be linked to created audits.
     """
 
     queryset = AssignedSK.objects.all()

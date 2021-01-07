@@ -153,14 +153,15 @@ export class ManageInventoryItemsComponent implements OnInit {
     let bodyAudit: any;
     bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
-      organization: localStorage.getItem('organization_id'),
+      org: Number(localStorage.getItem('organization_id')),
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
+        localStorage.setItem('audit_id', data.audit_id);
         this.inventoryItemToAudit = [];
         setTimeout(() => {
-          // Redirect user to component dashboard
-          this.router.navigate(['dashboard']);
+          // Redirect user to component assign-stock-keepers
+          this.router.navigate(['assign-sk']);
         }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {

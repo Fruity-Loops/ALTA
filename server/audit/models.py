@@ -9,7 +9,7 @@ class Audit(models.Model):
 
 
 class AssignedSK(models.Model):
-    _id = models.AutoField(primary_key=True)
+    _id_id = models.AutoField(primary_key=True)
     audit_id = models.ForeignKey(Audit, on_delete=models.CASCADE, blank=True, null=True)
-    assigned_sk = models.ForeignKey(CustomUser, on_delete=models.CASCADE, blank=True, null=True)
+    assigned_sk = models.ManyToManyField(CustomUser)
 

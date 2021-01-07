@@ -43,7 +43,7 @@
 <div class="bottom-buttons">
       <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
       <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"
-              routerLink="/create-members">Assign</button> <!-- TODO: update route -->
+              (click)="submitAssignedSKs()">Assign</button> <!-- TODO: update route -->
 </div>
 
 <ng-template #discardDialog>
