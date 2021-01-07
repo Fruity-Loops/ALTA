@@ -2,8 +2,6 @@
   <mat-card-title>Template title</mat-card-title>
   <br>
 
-  <form [formGroup]="templateForm" novalidate (ngSubmit)="createTemplate()">
-
     <div class="form-group">
       <mat-form-field appearance="outline" class="half-width">
         <input class="form-control" id="title" type="text" matInput placeholder="Template title"/>
@@ -23,8 +21,9 @@
           <div class="form-group">
             <mat-label>Location</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="location" type="text" matInput placeholder="Location"/>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
+                     placeholder="Location"/>
+              <button mat-icon-button matSuffix (click)="addItem('location', templateValues.location)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -33,8 +32,9 @@
           <div class="form-group">
             <mat-label>Plant</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="plant" type="text" matInput placeholder="Plant"/>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
+                     placeholder="Plant"/>
+              <button mat-icon-button matSuffix (click)="addItem('plant', templateValues.plant)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -43,15 +43,9 @@
           <div class="form-group">
             <mat-label>Zones</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="zones" type="text" matInput placeholder="Zones"/>
-              <mat-error class="error" *ngIf="
-                  !templateForm.controls['zones'].valid &&
-                  templateForm.controls['zones'].touched
-                ">
-                <!-- Handeling error -->
-                Comma Separated Strings Only (e.g., A,C,Z)
-              </mat-error>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
+                     placeholder="Zones"/>
+              <button mat-icon-button matSuffix (click)="addItem('zones', templateValues.zones)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -60,15 +54,9 @@
           <div class="form-group">
             <mat-label>Aisles</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="aisles" type="text" matInput placeholder="Aisles"/>
-              <mat-error class="error" *ngIf="
-                  !templateForm.controls['aisles'].valid &&
-                  templateForm.controls['aisles'].touched
-                ">
-                <!-- Handeling error -->
-                Comma Separated Integers Only (e.g., 1,4,11)
-              </mat-error>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
+                     placeholder="Aisles"/>
+              <button mat-icon-button matSuffix (click)="addItem('aisles', templateValues.aisles)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -77,15 +65,9 @@
           <div class="form-group">
             <mat-label>Bins</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="bins" type="text" matInput placeholder="Bins"/>
-              <mat-error class="error" *ngIf="
-                  !templateForm.controls['bins'].valid &&
-                  templateForm.controls['bins'].touched
-                ">
-                <!-- Handeling error -->
-                Comma Separated Integers Only (e.g., 1,4,11)
-              </mat-error>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
+                     placeholder="Bins"/>
+              <button mat-icon-button matSuffix (click)="addItem('bins', templateValues.bins)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -94,8 +76,9 @@
           <div class="form-group">
             <mat-label>Part Number</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="part_number" type="text" matInput placeholder="Part Number"/>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
+                     placeholder="Part Number"/>
+              <button mat-icon-button matSuffix (click)="addItem('part_number', templateValues.part_number)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -104,8 +87,10 @@
           <div class="form-group">
             <mat-label>Serial Number</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="serial_number" type="text" matInput placeholder="Serial Number"/>
-              <button mat-icon-button matSuffix>
+              <input class="form-control" id="serial_number" type="text" matInput
+                     [(ngModel)]="templateValues.serial_number" placeholder="Serial Number"/>
+              <button mat-icon-button matSuffix
+                      (click)="addItem('serial_number', templateValues.serial_number)">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -114,86 +99,85 @@
 
         <!-- RIGHT SIDE -->
 
-        <div class="column no-border">
-          <mat-card-title>Selected Field</mat-card-title>
-          <div class="form-group">
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="serial_number_del" type="text" matInput
-                     placeholder="Some Random field"/>
-              <button mat-icon-button matSuffix>
-                <mat-icon>remove_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-        </div>
+<!--        <div class="column no-border">-->
+<!--          <mat-card-title>Selected Field</mat-card-title>-->
+<!--          <div class="form-group">-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input class="form-control" id="serial_number_del" type="text" matInput-->
+<!--                     placeholder="Some Random field"/>-->
+<!--              <button mat-icon-button matSuffix>-->
+<!--                <mat-icon>remove_circle_outline</mat-icon>-->
+<!--              </button>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
 
-      </div>
+<!--      </div>-->
 
-      <div class="form-group">
-        <br>
-        <mat-label>Description</mat-label>
-        <mat-form-field appearance="outline">
-          <textarea rows="5" class="form-control" id="description" matInput placeholder="Description"></textarea>
-        </mat-form-field>
-      </div>
+<!--      <div class="form-group">-->
+<!--        <br>-->
+<!--        <mat-label>Description</mat-label>-->
+<!--        <mat-form-field appearance="outline">-->
+<!--          <textarea rows="5" class="form-control" id="description" matInput placeholder="Description"></textarea>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
 
-      <br>
-      <mat-card-title id="center-title">Scheduling</mat-card-title>
-      <br>
+<!--      <br>-->
+<!--      <mat-card-title id="center-title">Scheduling</mat-card-title>-->
+<!--      <br>-->
 
-      <div class="form-group half-width">
-        <mat-label>Start Date</mat-label>
-        <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="datePick" [min]="todaysDate" disabled class="form-control" id="date"
-                 type="text" placeholder="DD/MM/YYYY">
-          <mat-datepicker-toggle [for]="datePick" matSuffix class="icon-color"></mat-datepicker-toggle>
-          <mat-datepicker #datePick disabled="false"></mat-datepicker>
-        </mat-form-field>
-      </div>
+<!--      <div class="form-group half-width">-->
+<!--        <mat-label>Start Date</mat-label>-->
+<!--        <mat-form-field appearance="outline">-->
+<!--          <input matInput [matDatepicker]="datePick" [min]="todaysDate" disabled class="form-control" id="date"-->
+<!--                 type="text" placeholder="DD/MM/YYYY">-->
+<!--          <mat-datepicker-toggle [for]="datePick" matSuffix class="icon-color"></mat-datepicker-toggle>-->
+<!--          <mat-datepicker #datePick disabled="false"></mat-datepicker>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
 
-      <div class="form-group half-width">
-        <mat-label>Start time</mat-label>
-        <mat-form-field appearance="outline">
-          <mat-icon class="icon-color" matSuffix>schedule</mat-icon>
-          <input class="form-control" id="time" type="time" matInput placeholder="Start time"/>
-        </mat-form-field>
-      </div>
+<!--      <div class="form-group half-width">-->
+<!--        <mat-label>Start time</mat-label>-->
+<!--        <mat-form-field appearance="outline">-->
+<!--          <mat-icon class="icon-color" matSuffix>schedule</mat-icon>-->
+<!--          <input class="form-control" id="time" type="time" matInput placeholder="Start time"/>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
 
 
-      <div class="form-group half-width">
-        <mat-label>Recurrence</mat-label>
-        <mat-form-field floatLabel="never" appearance="outline">
-          <mat-select>
-            <mat-option>None</mat-option>
-            <mat-option value="option1">Option 1</mat-option>
-            <mat-option value="option2">Option 2</mat-option>
-            <mat-option value="option3">Option 3</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+<!--      <div class="form-group half-width">-->
+<!--        <mat-label>Recurrence</mat-label>-->
+<!--        <mat-form-field floatLabel="never" appearance="outline">-->
+<!--          <mat-select>-->
+<!--            <mat-option>None</mat-option>-->
+<!--            <mat-option value="option1">Option 1</mat-option>-->
+<!--            <mat-option value="option2">Option 2</mat-option>-->
+<!--            <mat-option value="option3">Option 3</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
 
-      <div class="form-group half-width">
-        <mat-label>Time zone</mat-label>
-        <mat-form-field floatLabel="never" appearance="outline">
-          <mat-select>
-            <mat-option value="option1">Option 1</mat-option>
-            <mat-option value="option2">Option 2</mat-option>
-            <mat-option value="option3">Option 3</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+<!--      <div class="form-group half-width">-->
+<!--        <mat-label>Time zone</mat-label>-->
+<!--        <mat-form-field floatLabel="never" appearance="outline">-->
+<!--          <mat-select>-->
+<!--            <mat-option value="option1">Option 1</mat-option>-->
+<!--            <mat-option value="option2">Option 2</mat-option>-->
+<!--            <mat-option value="option3">Option 3</mat-option>-->
+<!--          </mat-select>-->
+<!--        </mat-form-field>-->
+<!--      </div>-->
 
-      <div class="center-aligned">
-        <div class="button-side-by-side">
-          <!-- [disabled]="!templateForm.valid" -->
-          <button mat-stroked-button id="create-template-button" class="save-button-bg">
-            {{templateButtonLabel}}</button><!-- if checks throws error then do not send data -->
-        </div>
-        <div class="button-side-by-side">
-          <button mat-stroked-button routerLink="/template">CANCEL</button>
-        </div>
+<!--      <div class="center-aligned">-->
+<!--        <div class="button-side-by-side">-->
+<!--          &lt;!&ndash; [disabled]="!templateForm.valid" &ndash;&gt;-->
+<!--          <button mat-stroked-button id="create-template-button" class="save-button-bg">-->
+<!--            {{templateButtonLabel}}</button>&lt;!&ndash; if checks throws error then do not send data &ndash;&gt;-->
+<!--        </div>-->
+<!--        <div class="button-side-by-side">-->
+<!--          <button mat-stroked-button routerLink="/template">CANCEL</button>-->
+<!--        </div>-->
       </div>
 
     </mat-card-content>
-  </form>
 </mat-card>
