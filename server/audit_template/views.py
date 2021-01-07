@@ -7,7 +7,9 @@ from rest_framework.response import Response
 
 from rest_framework import status
 from rest_framework.response import Response
+from datetime import date
 from rest_framework.settings import api_settings
+
 
 class AuditTemplateViewSet(viewsets.ModelViewSet):
     """
@@ -17,3 +19,18 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
     permission_classes = [IsAuthenticated]
+    http_method_names = ['post', 'get']
+
+    def create(self, request, **kwargs):
+        data = request.data
+        user = request.user
+        name = user.first_name + " " + user.last_name
+        today = date.today()
+        date_today = today.strftime("%B %d, %Y")
+        data['author'] = name
+        data['calendar_date'] = date_today
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(status=status.HTTP_200_OK)
