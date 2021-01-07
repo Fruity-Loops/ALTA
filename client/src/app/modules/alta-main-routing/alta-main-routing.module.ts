@@ -9,6 +9,7 @@ import { ClientGridviewComponent } from '../../components/client-gridview/client
 import { CreateMemberComponent } from '../../components/create-member/create-member.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
+import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,7 @@ const routes: Routes = [
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
       { path: 'assign-sk', component: AssignStockKeepersComponent },
+      { path: 'designate-sk', component: ManageStockKeepersDesignationComponent},
     ],
   },
 ];

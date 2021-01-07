@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [],
@@ -52,7 +53,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatListModule,
     MatGridListModule,
     MatCheckboxModule,
-    MatExpansionModule
+    MatExpansionModule,
+    DragDropModule,
   ]
 })
 export class MatModule {}

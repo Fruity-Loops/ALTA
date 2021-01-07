@@ -1,0 +1,175 @@
+@import "./src/theme.scss";
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-expand {
+  margin-bottom: 20px;
+}
+
+#table-div {
+  margin-bottom:60px;
+}
+
+.mat-card-title {
+  padding: 0.7em;
+}
+
+.mat-column-First_Name {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content:center;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Last_Name {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 15% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Check_Boxes {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 3% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.bottom-buttons {
+  position: absolute;
+  right: 1.5%;
+  margin-top:30px;
+}
+
+#top-div {
+ height: 0px;
+}
+
+.location-title {
+  padding-bottom:2px;
+}
+
+.top-buttons {
+  position: relative;
+  top: -50px;
+  margin-right: 0.8em;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+button.bottom-discard {
+  position: absolute;
+  left: -290px;
+  margin-right: 0.5%;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+button.bottom-assign {
+  position: absolute;
+  right: 0;
+  margin-right: 1.2em;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+.mat-card-header {
+  position: inline;
+  left: 0;
+  margin-left: -11px;
+}
+
+.drag-drop-container {
+    width: 400px;
+    max-width: 100%;
+    margin: 0 25px 25px 0;
+    display: inline-block;
+    vertical-align: top;
+  }
+  
+  .drag-drop-list {
+    border: solid 1px rgb(236, 236, 236);
+    min-height: 60px;
+    background: rgb(236, 236, 236);
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+  }
+  
+  .drag-drop-box {
+    padding: 20px 10px;
+    width: 95%;
+    border: solid 1px #2196F3 !important;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+  
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+  
+  .drag-drop-box:last-child {
+    border: none;
+  }
+  
+  .drag-drop-list.cdk-drop-list-dragging .drag-drop-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
