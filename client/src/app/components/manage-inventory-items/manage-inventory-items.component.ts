@@ -74,7 +74,9 @@ export class ManageInventoryItemsComponent implements OnInit {
       time: ['', Validators.required],
     });
     this.searchForm = this.fb.group({
-      _id: [''],
+      search: [''],
+      _id_from: [''],
+      _id_to: [''],
       Location: [''],
       Zone: [''],
       Aisle: [''],
@@ -83,10 +85,11 @@ export class ManageInventoryItemsComponent implements OnInit {
       Condition: [''],
       Category: [''],
       Owner: [''],
-      Average_Cost: [''],
-      Quantity: [''],
+      Average_Cost_from: [''],
+      Average_Cost_to: [''],
+      Quantity_from: [''],
+      Quantity_to: [''],
       Unit_of_Measure: [''],
-      organization: [''],
     });
   }
 
@@ -94,6 +97,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
+        console.log(data);
         // Getting the field name of the item object returned and populating the column of the table
         const results = 'results';
         for (const key in data[results][0]) {
