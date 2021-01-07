@@ -187,6 +187,7 @@ export class ManageInventoryItemsComponent implements OnInit {
       }
     }
     this.updatePage();
+  }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: any): void {
     if (this.inventoryItemToAudit.includes(value)) {
@@ -219,7 +220,4 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
-  searchItem() : void{
-
-  }
 }
