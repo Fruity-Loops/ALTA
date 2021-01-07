@@ -28,9 +28,9 @@
 
   <div class="wrapper">
 
-    <div class="grid-container shadow-border">
-      <div class="person-name">By: LINDSEY STROUD</div>
-      <div class="template-name">Template HELLOWORLD</div>
+    <div class="grid-container shadow-border" *ngFor="let template of auditTemplates">
+      <div class="person-name">By: {{template.author}}</div>
+      <div class="template-name">{{template.title}}</div>
       <div class="button-icon text-align-right">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
@@ -46,49 +46,7 @@
           <span>Delete</span>
         </button>
       </mat-menu>
-      <div class="date">October 12, 2020</div>
-    </div>
-
-    <div class="grid-container shadow-border">
-      <div class="person-name">By: LINDSEY STROUD</div>
-      <div class="template-name">Template HELLOWORLD</div>
-      <div class="button-icon text-align-right">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-      </div>
-      <mat-menu #menu="matMenu" xPosition="after">
-        <button mat-menu-item>
-          <mat-icon>create</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
-      <div class="date">October 12, 2020</div>
-    </div>
-
-    <div class="grid-container shadow-border">
-      <div class="person-name">By: LINDSEY STROUD</div>
-      <div class="template-name">Template HELLOWORLD</div>
-      <div class="button-icon text-align-right">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-      </div>
-      <mat-menu #menu="matMenu" xPosition="after">
-        <button mat-menu-item>
-          <mat-icon>create</mat-icon>
-          <span>Edit</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
-      <div class="date">October 12, 2020</div>
+      <div class="date">{{template.calendar_date}}</div>
     </div>
 
   </div>

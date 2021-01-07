@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import {AuditTemplateService} from '../../services/audit-template.service';
 import {AuthService} from '../../services/auth.service';
-import {AuditTemplate} from '../../models/audit-template';
+
+interface template {
+  author: string,
+  calendar_date: string,
+  title: string
+}
 
 @Component({
   selector: 'app-audit-template',
@@ -9,7 +14,7 @@ import {AuditTemplate} from '../../models/audit-template';
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
-  auditTemplates: Array<AuditTemplate> = [];
+  auditTemplates: [template];
   errorMessage = '';
 
   constructor(private auditTemplateService: AuditTemplateService,

@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../../services/auth.service';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../../services/audit-template.service';
-import { MatDialog } from '@angular/material';
-import { template } from '../Template';
+
+interface template {
+  location: any,
+  plant: any,
+  zones: any,
+  aisles: any,
+  bins: any,
+  part_number: any,
+  serial_number: any,
+}
 
 @Component({
   selector: 'app-create-audit-template',
