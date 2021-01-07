@@ -13,10 +13,6 @@ import { template } from '../Template';
 })
 export class CreateAuditTemplateComponent implements OnInit {
 
-  // Defining type of our form
-  templateForm: FormGroup;
-  errorMessage: string;
-  body: any;
   templateButtonLabel = 'SAVE';
   todaysDate = new Date();
 
@@ -31,24 +27,11 @@ export class CreateAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   }
-  templateValues: template = {
-    location: '',
-    plant: '',
-    zones: '',
-    aisles: '',
-    bins: '',
-    part_number: '',
-    serial_number: '',
-  }
+  templateValues: template
 
-  // Injecting the authService to be able to send data to the backend through it ,
-  // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
   constructor(
-    private authService: AuthService,
-    private fb: FormBuilder,
     private router: Router,
     private auditTemplateService: AuditTemplateService,
-    public dialog: MatDialog
   ) { }
 
   // We initialize the form and set validators to each one in case user forget to specify a field
@@ -57,91 +40,55 @@ export class CreateAuditTemplateComponent implements OnInit {
   }
 
   initializeForm(): void {
-    // this.templateForm = this.fb.group({
-    //   title: ['', Validators.required],
-    //   location: [''],
-    //   plant: [''],
-    //   // Todo: custom validator https://angular.io/guide/form-validation#built-in-validator-functions
-    //   // The custom validator needs to if all the values are comma separated integers only
-    //   zones: [''],
-    //   aisles: [''],
-    //   bins: [''],
-    //   part_number: [''],
-    //   serial_number: [''],
-    //   description: [''],
-    // });
-  }
-
-  createTemplate(): void {
-    this.body = {
-      title: this.templateForm.value.title,
-      location: this.templateForm.value.location,
-      plant: this.templateForm.value.plant,
-      zones: this.templateForm.value.zones,
-      aisles: this.templateForm.value.aisles,
-      bins: this.templateForm.value.bins,
-      part_number: this.templateForm.value.part_number,
-      serial_number: this.templateForm.value.serial_number,
-      description: this.templateForm.value.description,
-    };
-
-    // Check if the user has provided any template filter (form filed that is not the title)
-    let isBodyEmpty = true;
-    Object.entries(this.body).forEach(([key, value]) => {
-        if ((key !== 'title') && (value !== '')) {
-          isBodyEmpty = false;
-        }
-      }
-    );
-
-    if (isBodyEmpty) {
-      this.errorMessage = 'Please specify at least one filter for the template';
+    this.templateValues= {
+      location: '',
+      plant: '',
+      zones: '',
+      aisles: '',
+      bins: '',
+      part_number: '',
+      serial_number: '',
     }
-
-    // Todo: Convert comma separated values into an array of strings or integers
-    this.body.zones = this.body.zones.replace(/\s/g, '').split(',');
-    this.body.aisles = this.body.aisles.replace(/\s/g, '').split(',').map((value) => parseInt(value, 10));
-    this.body.bins = this.body.bins.replace(/\s/g, '').split(',').map((value) => parseInt(value, 10));
-
-
-    this.auditTemplateService.createTemplate(this.body).subscribe(
-      () => {
-        this.templateForm.reset(); // Reset form once create-member
-        setTimeout(() => {
-          // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-          // this.router.navigate(['modify-members']);
-        }, 1000); // Waiting 1 second before redirecting the user
-        this.resetForm();
-
-      },
-      (err) => {
-        // if backend returns an error
-        if (err.error) {
-          this.errorMessage = err.error;
-        }
-      }
-    );
-
   }
 
   addItem(term, value): void {
-    if (value != ''){
+    // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
+    if (value !== '' && !this.template[term].includes(value)) {
       this.template[term].push(value);
+      this.templateValues[term] = '';
     }
-
-    console.log(this.template);
-    console.log(term);
-    this.templateValues[term] = '';
   }
 
-  resetForm(): void {
-    this.templateForm.reset();
-    // Object.keys(this.templateForm.controls).forEach(key => {
-    //   this.templateForm.controls[key].setErrors(null);
-    // });
+  remove(term, value): void {
+    let index = this.template[term].indexOf(value);
 
-    // initialize the form fields to an empty string rather than Null
-    this.initializeForm();
+    if (index >= 0) {
+      this.template[term].splice(index, 1);
+    }
+  }
 
+  submit(): void {
+    let body = {
+      title: this.title,
+      location: this.template.location,
+      plant: this.template.plant,
+      zones: this.template.zones,
+      aisles: this.template.aisles,
+      bins: this.template.bins,
+      part_number: this.template.part_number,
+      serial_number: this.template.serial_number,
+      description: this.description,
+    };
+
+    this.auditTemplateService.createTemplate(body).subscribe(
+      () => {
+        setTimeout(() => {
+          // Redirect user back to list of templates
+          this.router.navigate(['template']);
+        }, 1000); // Waiting 1 second before redirecting the user
+        this.initializeForm();
+
+      }
+    );
   }
 }

@@ -99,20 +99,19 @@
 
         <!-- RIGHT SIDE -->
 
-<!--        <div class="column no-border">-->
-<!--          <mat-card-title>Selected Field</mat-card-title>-->
-<!--          <div class="form-group">-->
-<!--            <mat-form-field appearance="outline">-->
-<!--              <input class="form-control" id="serial_number_del" type="text" matInput-->
-<!--                     placeholder="Some Random field"/>-->
-<!--              <button mat-icon-button matSuffix>-->
-<!--                <mat-icon>remove_circle_outline</mat-icon>-->
-<!--              </button>-->
-<!--            </mat-form-field>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="column no-border">
+          <mat-card-title>Selected Fields</mat-card-title>
+          <mat-chip-list aria-label="Location">
+            <div *ngFor="let loc of template | keyvalue">
+              <mat-chip *ngFor="let value of loc.value"
+                        [removable]="true" (removed)="remove(loc.key, value)">
+                {{loc.key | titlecase}}: {{value}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+              </mat-chip>
+            </div>
+          </mat-chip-list>
+        </div>
 
-<!--      </div>-->
 
 <!--      <div class="form-group">-->
 <!--        <br>-->
@@ -167,17 +166,18 @@
 <!--          </mat-select>-->
 <!--        </mat-form-field>-->
 <!--      </div>-->
-
-<!--      <div class="center-aligned">-->
-<!--        <div class="button-side-by-side">-->
-<!--          &lt;!&ndash; [disabled]="!templateForm.valid" &ndash;&gt;-->
-<!--          <button mat-stroked-button id="create-template-button" class="save-button-bg">-->
-<!--            {{templateButtonLabel}}</button>&lt;!&ndash; if checks throws error then do not send data &ndash;&gt;-->
-<!--        </div>-->
-<!--        <div class="button-side-by-side">-->
-<!--          <button mat-stroked-button routerLink="/template">CANCEL</button>-->
-<!--        </div>-->
       </div>
 
     </mat-card-content>
+  <mat-card-footer>
+    <div class="center-aligned">
+      <div class="button-side-by-side">
+        <button mat-stroked-button id="create-template-button" class="save-button-bg" (click)="submit()">
+          {{templateButtonLabel}}</button><!-- if checks throws error then do not send data -->
+      </div>
+      <div class="button-side-by-side">
+        <button mat-stroked-button routerLink="/template">CANCEL</button>
+      </div>
+    </div>
+  </mat-card-footer>
 </mat-card>
