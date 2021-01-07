@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../services/auth.service';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../../services/audit-template.service';
 import { MatDialog } from '@angular/material';
+import { template } from '../Template';
 
 
 @Component({
@@ -19,6 +20,27 @@ export class CreateAuditTemplateComponent implements OnInit {
   body: any;
   templateButtonLabel = 'SAVE';
   todaysDate = new Date();
+
+  title: string = '';
+  description: string = '';
+  template: template = {
+    location: [],
+    plant: [],
+    zones: [],
+    aisles: [],
+    bins: [],
+    part_number: [],
+    serial_number: [],
+  }
+  templateValues: template = {
+    location: '',
+    plant: '',
+    zones: '',
+    aisles: '',
+    bins: '',
+    part_number: '',
+    serial_number: '',
+  }
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -101,6 +123,10 @@ export class CreateAuditTemplateComponent implements OnInit {
       }
     );
 
+  }
+
+  addItem(term, value): void {
+    this.template[term].append(value);
   }
 
   resetForm(): void {
