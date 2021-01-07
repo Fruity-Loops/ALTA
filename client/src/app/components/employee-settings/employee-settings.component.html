@@ -58,7 +58,7 @@
             <mat-label for="power">E-mail address:</mat-label>
             <mat-form-field appearance="outline">
               <input matInput id="email" type="email" placeholder="E-mail address"
-                     [(ngModel)]="employee.email" email [disabled]=true/>
+                     [(ngModel)]="employee.email" email [disabled]=true [value]="email"/>
             </mat-form-field>
           </div>
         </mat-grid-tile>
