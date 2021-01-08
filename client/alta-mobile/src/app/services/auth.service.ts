@@ -40,15 +40,16 @@ export class AuthService {
   }
 
   login(body): Observable<any> {
-    return this.http.post(`${BASEURL}/login-mobile/`, body).pipe(
-      map((data: any) => data.token),
-      switchMap(token => {
-        return from(this.setAccessToken(token));
-      }),
-      tap(_ => {
-        this.isAuthenticated.next(true);
-      })
-    );
+    return this.http.post(`${BASEURL}/login-mobile/`, body)
+      .pipe(
+        map((data: any) => data.token),
+        switchMap(token => {
+          return from(this.setAccessToken(token));
+        }),
+        tap(_ => {
+          this.isAuthenticated.next(true);
+        })
+      );
   }
 
   logout(): Promise<void> {

@@ -44,7 +44,7 @@ export class ManageMembersService {
   }
 
   updatePassword(password, id): Observable<any> {
-    return this.http.put(`${this.BASEURL}/user/${id}/`, password);
+    return this.http.patch(`${this.BASEURL}/user/${id}/`, password);
   }
 
   getEmployee(id): Observable<any> {

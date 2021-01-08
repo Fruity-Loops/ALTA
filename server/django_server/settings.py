@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 
 # ALLOW API REQUESTS FROM ANGULAR FRONTEND
 CORS_ORIGIN_WHITELIST = [
-    os.getenv('ANGULAR_URL', 'http://localhost:4200')
+    os.getenv('ANGULAR_URL', 'http://localhost:4200'),
+    os.getenv('IONIC_URL', 'http://localhost:8100'),
 ]
 
 REST_FRAMEWORK = {
@@ -59,6 +60,7 @@ INSTALLED_APPS = [
     'organization',
     'inventory_item.apps.ItemsConfig',
     'audit_template',
+    'audit',
 
     # 3rd party
     'rest_framework',

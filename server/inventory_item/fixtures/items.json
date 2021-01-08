@@ -1,0 +1,45 @@
+[
+    {
+        "model": "inventory_item.item",
+        "pk": 12731369.0,
+        "fields": {
+            "Location": "YYC",
+            "Plant": false,
+            "Zone": "B",
+            "Aisle": 3.0,
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 4",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": null
+        }
+    },
+    {
+        "model": "inventory_item.item",
+        "pk": 12752842.0,
+        "fields": {
+            "Location": "YYC",
+            "Plant": true,
+            "Zone": "B",
+            "Aisle": 1.0,
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 4",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": null
+        }
+    }
+    ]
+    
