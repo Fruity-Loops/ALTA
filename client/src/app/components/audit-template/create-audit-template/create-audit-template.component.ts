@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../../services/audit-template.service';
 
-interface template {
-  location: any,
-  plant: any,
-  zones: any,
-  aisles: any,
-  bins: any,
-  part_number: any,
-  serial_number: any,
+interface Template {
+  location: any;
+  plant: any;
+  zones: any;
+  aisles: any;
+  bins: any;
+  part_number: any;
+  serial_number: any;
 }
 
 @Component({
@@ -23,9 +23,9 @@ export class CreateAuditTemplateComponent implements OnInit {
   templateButtonLabel = 'SAVE';
   todaysDate = new Date();
 
-  title: string = '';
-  description: string = '';
-  template: template = {
+  title = '';
+  description = '';
+  template: Template = {
     location: [],
     plant: [],
     zones: [],
@@ -33,8 +33,8 @@ export class CreateAuditTemplateComponent implements OnInit {
     bins: [],
     part_number: [],
     serial_number: [],
-  }
-  templateValues: template
+  };
+  templateValues: Template;
 
   constructor(
     private router: Router,
@@ -47,7 +47,7 @@ export class CreateAuditTemplateComponent implements OnInit {
   }
 
   initializeForm(): void {
-    this.templateValues= {
+    this.templateValues = {
       location: '',
       plant: '',
       zones: '',
@@ -55,7 +55,7 @@ export class CreateAuditTemplateComponent implements OnInit {
       bins: '',
       part_number: '',
       serial_number: '',
-    }
+    };
   }
 
   addItem(term, value): void {
@@ -67,7 +67,7 @@ export class CreateAuditTemplateComponent implements OnInit {
   }
 
   remove(term, value): void {
-    let index = this.template[term].indexOf(value);
+    const index = this.template[term].indexOf(value);
 
     if (index >= 0) {
       this.template[term].splice(index, 1);
@@ -75,7 +75,7 @@ export class CreateAuditTemplateComponent implements OnInit {
   }
 
   submit(): void {
-    let body = {
+    const body = {
       title: this.title,
       location: this.template.location,
       plant: this.template.plant,
@@ -87,7 +87,7 @@ export class CreateAuditTemplateComponent implements OnInit {
       description: this.description,
     };
 
-    if(this.title !== '') {
+    if (this.title !== '') {
       this.auditTemplateService.createTemplate(body).subscribe(
         () => {
           setTimeout(() => {
@@ -106,7 +106,7 @@ export class CreateAuditTemplateComponent implements OnInit {
         }
       );
     } else {
-      this.errorMessage = "Please give a title to your template.";
+      this.errorMessage = 'Please give a title to your template.';
     }
 
   }

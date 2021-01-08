@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import {AuditTemplateService} from '../../services/audit-template.service';
 import {AuthService} from '../../services/auth.service';
 
-interface template {
-  author: string,
-  calendar_date: string,
-  title: string
+interface Template {
+  author: string;
+  calendar_date: string;
+  title: string;
 }
 
 @Component({
@@ -14,7 +14,7 @@ interface template {
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
-  auditTemplates: [template];
+  auditTemplates: [Template];
   errorMessage = '';
 
   constructor(private auditTemplateService: AuditTemplateService,

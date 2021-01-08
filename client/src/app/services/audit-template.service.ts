@@ -15,12 +15,12 @@ export class AuditTemplateService {
   constructor(private http: HttpClient) {  }
 
   createTemplate(templateBody): Observable<any> {
-      this.orgId = localStorage.getItem("organization_id");
+      this.orgId = localStorage.getItem('organization_id');
       return this.http.post(`${BASEURL}/template/`, { organization: this.orgId, ...templateBody });
   }
 
   getAuditTemplates(): Observable<any> {
-      this.orgId = localStorage.getItem("organization_id");
+      this.orgId = localStorage.getItem('organization_id');
       return this.http.get(`${BASEURL}/template/`, {params: {organization: this.orgId}});
   }
 
