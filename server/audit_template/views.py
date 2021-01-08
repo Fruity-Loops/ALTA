@@ -16,12 +16,25 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
-    http_method_names = ['post', 'get']
+    #permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+    http_method_names = ['post', 'get', 'patch', 'partial_update']
+
+    def get_permissions(self):
+        request = self.request
+        if request.parser_context['kwargs'] is not None and 'pk'\
+                in request.parser_context['kwargs']:
+            # todo: vulnerability here, need to fix
+            perm = [IsAuthenticated]
+        else:
+            perm = [IsAuthenticated, (IsInventoryManager | IsSystemAdmin)]
+        return [permission() for permission in perm]
 
     def get_queryset(self):
-        return AuditTemplate.objects.filter(
-            organization_id=self.request.GET.get("organization", ''))
+        if self.action == 'list':
+            return AuditTemplate.objects.filter(
+                organization_id=self.request.GET.get("organization", ''))
+        elif self.action == 'retrieve' or self.action == 'partial_update':
+            return AuditTemplate.objects.all()
 
     def create(self, request, *args, **kwargs):
         data = request.data

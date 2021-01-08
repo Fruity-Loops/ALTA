@@ -25,4 +25,12 @@ export class AuditTemplateService {
       return this.http.get(`${BASEURL}/template/`, {params: {organization: this.orgId}});
   }
 
+  getATemplate(id): Observable<any> {
+    return this.http.get(`${BASEURL}/template/${id}/`);
+  }
+
+  updateTemplate(id, template): Observable<any> {
+    return this.http.patch(`${BASEURL}/template/${id}/`, template);
+  }
+
 }
