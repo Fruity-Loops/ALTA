@@ -6,7 +6,7 @@ from .models import Audit
 class AuditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Audit
-        fields = ['audit_id', 'org', 'inventory_items']
+        fields = '__all__'
 
 
 class AssignedSKSerializer(serializers.ModelSerializer):

@@ -26,15 +26,3 @@ class AuditViewSet(viewsets.ModelViewSet):
         if self.action == 'partial_update':
             return AssignedSKSerializer
         return AuditSerializer
-
-"""
-class AssignedSKViewSet(viewsets.ModelViewSet):
-    """
-   # API endpoint that allows assigned stock keepers to be linked to created audits.
-"""
-
-    queryset = AssignedSK.objects.all()
-    serializer_class = AssignedSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
-    http_method_names = ['post']
-"""

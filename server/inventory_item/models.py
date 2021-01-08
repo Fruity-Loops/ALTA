@@ -8,6 +8,7 @@ class Item(models.Model):
     Plant = models.BooleanField(default=False)
     Zone = models.CharField(max_length=256)
     Aisle = models.IntegerField()
+    Bin = models.CharField(max_length=256)
     Part_Number = models.CharField(max_length=256)
     Part_Description = models.CharField(max_length=256)
     Serial_Number = models.CharField(max_length=256)
