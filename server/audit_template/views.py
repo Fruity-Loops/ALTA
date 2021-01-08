@@ -1,16 +1,12 @@
+from datetime import date
+
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
+from user_account.permissions import IsSystemAdmin, IsInventoryManager
 from .serializers import AuditTemplateSerializer
 from .models import AuditTemplate
-from rest_framework.response import Response
-
-from rest_framework import status
-from rest_framework.response import Response
-from datetime import date
-from rest_framework.settings import api_settings
-
-from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
 
 
 class AuditTemplateViewSet(viewsets.ModelViewSet):
@@ -24,9 +20,10 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get']
 
     def get_queryset(self):
-        return AuditTemplate.objects.filter(organization_id=self.request.GET.get("organization", ''))
+        return AuditTemplate.objects.filter(
+            organization_id=self.request.GET.get("organization", ''))
 
-    def create(self, request, **kwargs):
+    def create(self, request, *args, **kwargs):
         data = request.data
         user = request.user
         name = user.first_name + " " + user.last_name
