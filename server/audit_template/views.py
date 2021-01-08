@@ -10,6 +10,8 @@ from rest_framework.response import Response
 from datetime import date
 from rest_framework.settings import api_settings
 
+from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
+
 
 class AuditTemplateViewSet(viewsets.ModelViewSet):
     """
@@ -18,8 +20,11 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
     http_method_names = ['post', 'get']
+
+    def get_queryset(self):
+        return AuditTemplate.objects.filter(organization_id=self.request.GET.get("organization", ''))
 
     def create(self, request, **kwargs):
         data = request.data

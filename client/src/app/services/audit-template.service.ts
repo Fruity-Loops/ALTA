@@ -10,15 +10,18 @@ const BASEURL = env.api_root;
   providedIn: 'root'
 })
 export class AuditTemplateService {
+  orgId: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {  }
 
   createTemplate(templateBody): Observable<any> {
-      return this.http.post(`${BASEURL}/template/`, templateBody);
+      this.orgId = localStorage.getItem("organization_id");
+      return this.http.post(`${BASEURL}/template/`, { organization: this.orgId, ...templateBody });
   }
 
   getAuditTemplates(): Observable<any> {
-      return this.http.get(`${BASEURL}/template/`);
+      this.orgId = localStorage.getItem("organization_id");
+      return this.http.get(`${BASEURL}/template/`, {params: {organization: this.orgId}});
   }
 
 }
