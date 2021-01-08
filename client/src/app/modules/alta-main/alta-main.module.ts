@@ -23,6 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 
 @NgModule({
@@ -50,6 +51,7 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     FormsModule,
     MatMenuModule,
     MatDialogModule,
+    FlexLayoutModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatChipsModule,
