@@ -16,7 +16,8 @@ export class AuditTemplateService {
 
   createTemplate(templateBody): Observable<any> {
       this.orgId = localStorage.getItem('organization_id');
-      return this.http.post(`${BASEURL}/template/`, { organization: this.orgId, ...templateBody });
+      // tslint:disable-next-line
+      return this.http.post(`${BASEURL}/template/`, { organization: parseInt(this.orgId), ...templateBody });
   }
 
   getAuditTemplates(): Observable<any> {
