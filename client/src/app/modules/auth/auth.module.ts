@@ -8,6 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { MatModule } from '../material/material-module';
+import {FlexModule} from '@angular/flex-layout';
 @NgModule({
   declarations: [GreetingComponent, LoginComponent, CreateMemberComponent],
     imports: [
@@ -17,6 +18,7 @@ import { MatModule } from '../material/material-module';
         HttpClientModule,
         RouterModule,
         MatModule,
+        FlexModule,
     ],
   exports: [GreetingComponent, LoginComponent, CreateMemberComponent],
   providers: [AuthService],

@@ -11,6 +11,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { MatModule } from './modules/material/material-module';
     AuthRoutingModule,
     HttpClientModule,
     MatModule,
+    FlexLayoutModule,
   ],
   providers: [
     CookieService, // To manage cookie in frontend
