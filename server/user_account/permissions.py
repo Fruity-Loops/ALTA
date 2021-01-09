@@ -95,7 +95,7 @@ class IsCurrentUserTargetUser(BasePermission):
 
 
 class IsHigherInOrganization(BasePermission):
-    message = "You must be of a higher rank then the employee you are trying to modify"
+    message = "You must be of a higher rank than the employee you are trying to modify"
     user_roles = ["SA", "IM", "SK"]
 
     def has_permission(self, request, view):
@@ -107,10 +107,11 @@ class IsHigherInOrganization(BasePermission):
         current_user_org = request.user.organization
         target_user_org = CustomUser.objects.get(id=view.kwargs['pk']).organization
         current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
-        target_user_role = IsHigherInOrganization.user_roles.index(CustomUser.objects.get(id=view.kwargs['pk']).role)
+        target_user_role = IsHigherInOrganization.user_roles.index(
+            CustomUser.objects.get(id=view.kwargs['pk']).role)
         if current_user_role == 0 and target_user_role > 0:
             return True
-        elif current_user_role == 2:
+        if current_user_role == 2:
             return False
         if current_user_org or target_user_org:
             if current_user_org == target_user_org:
@@ -130,13 +131,14 @@ class CanUpdate(BasePermission):
         """
         keys = list(request.data.keys())
         if IsCurrentUserTargetUser.has_permission(self, request, view):
-            return self.check_keys(['id', 'email'], keys)
-        elif IsHigherInOrganization.has_permission(self, request, view):
-            return self.check_keys(['id', 'email', 'password'], keys)
+            return check_keys(['id', 'email'], keys)
+        if IsHigherInOrganization.has_permission(self, request, view):
+            return check_keys(['id', 'email', 'password'], keys)
         return False
 
-    def check_keys(self, bad_keys, keys):
-        for bad_key in bad_keys:
-            if bad_key in keys:
-                return False
-        return True
+
+def check_keys(bad_keys, keys):
+    for bad_key in bad_keys:
+        if bad_key in keys:
+            return False
+    return True

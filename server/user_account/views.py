@@ -1,15 +1,13 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from django.http import QueryDict
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser,\
-IsInventoryManager, IsHigherInOrganization, CanUpdate
+from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdate
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -195,7 +193,8 @@ class CustomUserView(viewsets.ModelViewSet):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         self.data = dict(self.request.data)
-        self.data.pop('role', None)  # deleting role key from dictionary to make sure it is not modifiable
+        # deleting role key from dictionary to make sure it is not modifiable
+        self.data.pop('role', None)
         serializer = self.get_serializer(data=self.data, partial=partial, context=kwargs['pk'])
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

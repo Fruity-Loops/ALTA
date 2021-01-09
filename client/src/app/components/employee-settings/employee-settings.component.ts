@@ -98,7 +98,7 @@ export class EmployeeSettingsComponent implements OnInit {
     console.log(this.employee);
 
     // Create a deep copy of the employee object in order to delete the uneditable
-    // fields (id, email) from the copied object and send only the editable fileds to the server. 
+    // fields (id, email) from the copied object and send only the editable fileds to the server.
     const patchedEmployee = JSON.parse(JSON.stringify(this.employee));
 
     delete patchedEmployee.id;
