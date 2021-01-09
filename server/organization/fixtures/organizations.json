@@ -1,12 +1,22 @@
 [
-{
-    "model": "organization.organization",
-    "pk": 1,
-    "fields": {
-        "org_name": "test",
-        "address": "Florida",
-        "status": true,
-        "inventory_items_refresh_job": 1
+    {
+        "model": "organization.organization",
+        "pk": 1,
+        "fields": {
+            "org_name": "test",
+            "address": "Florida",
+            "status": true,
+            "inventory_items_refresh_job": 1
+        }
+    },
+    {
+        "model": "organization.organization",
+        "pk": 3,
+        "fields": {
+            "org_name": "test2",
+            "address": "Florida2",
+            "status": true,
+            "inventory_items_refresh_job": 1
+        }
     }
-}
 ]
