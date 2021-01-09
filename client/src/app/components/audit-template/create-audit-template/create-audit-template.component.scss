@@ -36,11 +36,18 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 /* Create two equal columns that floats next to each other */
-.column {
+.column-2 {
   float: left;
   width: 50%;
   padding: 10px;
   border-right: 1px solid #E0E0E0;
+}
+
+/* Create three equal columns that floats next to each other */
+.column-3 {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
 }
 
 /* Clear floats after the columns */
@@ -75,4 +82,70 @@ div.column.no-border > mat-card-title {
 mat-label {
   color: map-get($alta-primary, A800);
   font-size: 115%;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.button-padding {
+  margin: 5px;
+}
+
+::ng-deep .mat-checkbox-label {
+  padding-top: 5px;
+}
+
+::ng-deep .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle{
+  border-color: map-get($alta-primary, A100);
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-inner-circle{
+  color: map-get($alta-primary, A100);
+  background-color: map-get($alta-primary, A100);
+}
+
+::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: map-get($alta-primary, A100);
+}
+
+.align-side-by-side {
+  display: inline-block !important;
+}
+
+.position-right {
+  float: right;
+}
+
+::ng-deep .circular-shape {
+  & .mat-checkbox-background, .mat-checkbox-frame {
+    border-radius: 50% !important;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  opacity: 0.03 !important;
+  background-color: map-get($alta-primary, A100);
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: map-get($alta-primary, A100);
+}
+
+.text-padding-left-align {
+  padding-top: 25px;
+  padding-left: 0;
+  text-align: left;
+}
+
+.small-font {
+  font-size: 12px;
+}
+
+.padding-top-row {
+  padding-top: 25px;
 }

@@ -23,7 +23,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
-import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
+import {
+  MAT_DATE_LOCALE,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatExpansionModule,
+  MatNativeDateModule,
+  MatRadioModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -53,6 +60,8 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     MatDatepickerModule,
     MatNativeDateModule,
     MatChipsModule,
+    MatExpansionModule,
+    MatRadioModule,
   ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
