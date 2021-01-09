@@ -19,4 +19,8 @@ export class ManageAuditsService {
   assignSK(assignedSK, audit_id): Observable<any> {
     return this.http.patch(`${BASEURL}/audit/${audit_id}/`, assignedSK);
   }
+
+  getAuditData(audit_id): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/${audit_id}/`);
+  }
 }
