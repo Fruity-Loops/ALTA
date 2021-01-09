@@ -23,7 +23,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { EditAuditTemplateComponent } from '../../components/audit-template/edit-audit-template/edit-audit-template.component';
-import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../components/audit-template/audit-template.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 
@@ -39,6 +39,7 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     OrganizationDialogComponent,
     ManageInventoryItemsComponent,
     CreateAuditTemplateComponent,
+    DeleteTemplateDialogComponent,
     AuditTemplateComponent,
     EditAuditTemplateComponent
   ],

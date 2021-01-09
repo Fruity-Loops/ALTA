@@ -34,7 +34,7 @@
           <mat-icon>create</mat-icon>
           <span>Edit</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="openDialog(template.template_id, template.title)">
           <mat-icon>delete</mat-icon>
           <span>Delete</span>
         </button>
