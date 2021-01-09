@@ -95,8 +95,15 @@ export class EmployeeSettingsComponent implements OnInit {
 
     this.employee.location = this.location;
 
+    console.log(this.employee);
+
+    const patchedEmployee = JSON.parse(JSON.stringify(this.employee));
+
+    delete patchedEmployee.id;
+    delete patchedEmployee.email;
+
     this.manageMembersService
-      .updateClientInfo(this.employee, this.id)
+      .updateClientInfo(patchedEmployee, this.id)
       .subscribe((response) => {
         location.reload();
       });
