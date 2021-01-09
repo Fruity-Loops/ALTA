@@ -156,7 +156,9 @@ class CustomUserView(viewsets.ModelViewSet):
                 'email', 'role',
                 'is_active',
                 'id',
-                'location']
+                'location',
+                'organization',
+                'user_name']
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
