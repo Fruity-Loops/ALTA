@@ -112,10 +112,11 @@ class IsHigherInOrganization(BasePermission):
             return True
         elif current_user_role == 2:
             return False
-        if current_user_org and target_user_org:
+        if current_user_org or target_user_org:
             if current_user_org == target_user_org:
                 return current_user_role <= target_user_role
-        return False
+            return False
+        return True
 
 
 class CanUpdate(BasePermission):
