@@ -33,4 +33,8 @@ export class AuditTemplateService {
     return this.http.patch(`${BASEURL}/template/${id}/`, template);
   }
 
+  deleteTemplate(id): Observable<any> {
+    return this.http.delete(`${BASEURL}/template/${id}/`)
+  }
+
 }

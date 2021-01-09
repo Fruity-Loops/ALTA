@@ -42,7 +42,11 @@ export class AuditTemplateComponent implements OnInit {
   openDialog(template_id: string, title: string): void {
     this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id: template_id, title: title}});
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result) {
+        this.auditTemplateService.deleteTemplate(result.id).subscribe( () => {
+          this.getAuditTemplates();
+        });
+      }
     });
 
   }
