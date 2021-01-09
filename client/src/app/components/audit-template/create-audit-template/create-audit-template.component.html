@@ -103,18 +103,6 @@
 
       <!-- RIGHT SIDE -->
 
-      <div class="column-2 no-border">
-        <mat-card-title>Selected Fields</mat-card-title>
-        <mat-chip-list aria-label="Location">
-          <div *ngFor="let loc of template | keyvalue">
-            <mat-chip *ngFor="let value of loc.value"
-                      [removable]="true" (removed)="remove(loc.key, value)">
-              {{loc.key | titlecase}}: {{value}}
-              <mat-icon matChipRemove>cancel</mat-icon>
-            </mat-chip>
-          </div>
-        </mat-chip-list>
-      </div>
         <div class="column no-border">
           <mat-card-title>Selected Fields</mat-card-title>
           <mat-chip-list aria-label="Location">
