@@ -20,8 +20,8 @@ interface Template {
 export class CreateAuditTemplateComponent implements OnInit {
 
   errorMessage: string;
-  templateButtonLabel = 'SAVE';
   todaysDate = new Date();
+  disabled = false;
 
   title = '';
   description = '';
@@ -109,5 +109,9 @@ export class CreateAuditTemplateComponent implements OnInit {
       this.errorMessage = 'Please give a title to your template.';
     }
 
+  }
+
+  beginEdit(): void {
+    // do nothing
   }
 }

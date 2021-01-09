@@ -21,7 +21,6 @@ interface Template {
 export class EditAuditTemplateComponent implements OnInit {
 
   errorMessage: string;
-  templateButtonLabel = 'SAVE';
   todaysDate = new Date();
 
   title = '';
@@ -37,7 +36,7 @@ export class EditAuditTemplateComponent implements OnInit {
   };
   templateValues: Template;
   id: any;
-  disable: boolean;
+  disabled: boolean;
 
   constructor(
     private router: Router,
@@ -46,6 +45,7 @@ export class EditAuditTemplateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.disabled = false;
     this.templateValues = {
       location: '',
       plant: '',
@@ -80,11 +80,15 @@ export class EditAuditTemplateComponent implements OnInit {
 
   initializeForm(body): void {
     if (body) {
-      this.disable = true;
+      this.disabled = true;
       this.template = body;
     } else {
-      this.disable = false;
+      this.disabled = false;
     }
+  }
+
+  beginEdit(): void {
+    this.disabled = false;
   }
 
   addItem(term, value): void {
