@@ -1,0 +1,91 @@
+@import "./src/theme.scss";
+
+.person-name {
+  grid-area: personname;
+}
+
+.template-name {
+  grid-area: templatename;
+  font-weight: bold;
+}
+
+.button-icon {
+  grid-area: buttonicon;
+}
+
+.date {
+  grid-area: date;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'personname personname personname personname buttonicon'
+    'templatename templatename templatename templatename buttonicon'
+    'date date date date date';
+  grid-gap: 1px;
+  padding: 20px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: left;
+  padding: 5px;
+  font-size: 12px;
+}
+
+.mat-stroked-button {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+  width: 125px;
+}
+
+.shadow-border {
+  border-radius: 5px;
+  box-shadow: 0 0 4px 1px #888888;
+}
+
+.search-full-width {
+  width: 100%;
+  padding-top: 10px;
+  font-size: medium;
+}
+
+.search-icon {
+  padding-left: 10px;
+  padding-right: 5px;
+  color: map-get($alta-primary, 100)
+}
+
+::ng-deep .mat-form-field-flex.ng-tns-c122-2 {
+  background: #F5F5F5 !important;
+}
+
+.align-side-by-side {
+  display: inline-block;
+}
+
+.position-right {
+  float: right;
+}
+
+.text-align-right {
+  text-align: right !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+.grid-container:hover {
+  box-shadow: 0 2px 8px 8px rgba(0, 0, 0, .2), 0 8px 8px 0 rgba(0, 0, 0, .14), 0 8px 8px 0 rgba(0, 0, 0, .12) !important;
+  transform: translate3d(0, 0, 0);
+  transition: background .4s cubic-bezier(.25, .8, .25, 1), box-shadow 280ms cubic-bezier(.4, 0, .2, 1);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+

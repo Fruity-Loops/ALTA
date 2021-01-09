@@ -21,6 +21,10 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,8 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
     EmployeeSettingsComponent,
     OrganizationDialogComponent,
     ManageInventoryItemsComponent,
+    CreateAuditTemplateComponent,
+    AuditTemplateComponent,
   ],
 
   imports: [
@@ -45,7 +51,11 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
     FormsModule,
     MatMenuModule,
     MatDialogModule,
+    FlexLayoutModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule,
   ],
-  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent],
+  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
 export class AltaMainModule {}
