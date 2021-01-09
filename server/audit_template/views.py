@@ -34,7 +34,7 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_201_CREATED)
 
-    def list(self, request, *args, **kwargs):
+    def list(self, request):
         queryset = self.filter_queryset(self.get_queryset()).filter(
                 organization_id=self.request.GET.get("organization", ''))
 
