@@ -67,7 +67,7 @@ export class EditAuditTemplateComponent implements OnInit {
   }
 
   formTemplate(temp): any {
-    let createdTemplate: any = {};
+    const createdTemplate: any = {};
     Object.entries(temp).forEach(([key, value]) => {
       if (typeof key === 'string' && typeof value === 'string'
         // checks to make sure that it is only adding keys from the template interface

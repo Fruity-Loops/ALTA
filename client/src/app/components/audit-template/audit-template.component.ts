@@ -39,8 +39,8 @@ export class AuditTemplateComponent implements OnInit {
     );
   }
 
-  openDialog(template_id: string, title: string): void {
-    this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id: template_id, title: title}});
+  openDialog(id: string, title: string): void {
+    this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id, title}});
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.auditTemplateService.deleteTemplate(result.id).subscribe( () => {
@@ -53,8 +53,8 @@ export class AuditTemplateComponent implements OnInit {
 }
 
 interface DialogData {
-  title: string
-  id: string
+  title: string;
+  id: string;
 }
 
 @Component({
@@ -67,11 +67,11 @@ export class DeleteTemplateDialogComponent {
     public dialogRef: MatDialogRef<DeleteTemplateDialogComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
 
-  closeDialog() {
+  closeDialog(): void {
     this.dialogRef.close(false);
   }
 
-  deleteTemplate() {
+  deleteTemplate(): void {
     this.dialogRef.close(this.data);
   }
 
