@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'user_account',
     'organization',
     'inventory_item.apps.ItemsConfig',
+    'audit_template',
     'audit',
 
     # 3rd party

@@ -8,6 +8,8 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
 import { CreateMemberComponent } from '../../components/create-member/create-member.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +31,14 @@ export const routes: Routes = [
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
+      { path: 'template', children: [
+          {
+            path: '', component: AuditTemplateComponent
+          },
+          {
+            path: 'create-template', component: CreateAuditTemplateComponent
+          }
+        ]},
     ],
   },
 ];
