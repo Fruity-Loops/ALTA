@@ -5,7 +5,8 @@
     "fields": {
         "org_name": "test",
         "address": "Florida",
-        "status": true
+        "status": true,
+        "inventory_items_refresh_job": 1
     }
 }
 ]

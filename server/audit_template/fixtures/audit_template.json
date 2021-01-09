@@ -1,0 +1,56 @@
+[
+    {
+        "model": "audit_template.audittemplate",
+        "pk": 6,
+        "fields": {
+            "author": "fewfew fewqfewq",
+            "title": "dsafdsa",
+            "location": ["fdsafdsa"],
+            "plant": [],
+            "zones": [],
+            "aisles": [],
+            "bins": [],
+            "part_number": [],
+            "serial_number": [],
+            "description": "",
+            "calendar_date": "January 08, 2021",
+            "organization": null
+        }
+    },
+    {
+        "model": "audit_template.audittemplate",
+        "pk": 7,
+        "fields": {
+            "author": "fewfew fewqfewq",
+            "title": "gregwrew",
+            "location": ["grewgre"],
+            "plant": [],
+            "zones": [],
+            "aisles": [],
+            "bins": [],
+            "part_number": [],
+            "serial_number": [],
+            "description": "",
+            "calendar_date": "January 08, 2021",
+            "organization": 3
+        }
+    },
+    {
+        "model": "audit_template.audittemplate",
+        "pk": 8,
+        "fields": {
+            "author": "nick nick",
+            "title": "fewqfwq",
+            "location": ["fewqfewq"],
+            "plant": [],
+            "zones": [],
+            "aisles": [],
+            "bins": [],
+            "part_number": [],
+            "serial_number": [],
+            "description": "",
+            "calendar_date": "January 08, 2021",
+            "organization": 1
+        }
+    }
+]

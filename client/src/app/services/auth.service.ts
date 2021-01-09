@@ -92,6 +92,10 @@ export class AuthService {
     return this.http.post(`${BASEURL}/user/`, body);
   }
 
+  getCurrentUser(id): Observable<any> {
+    return this.http.get(`${BASEURL}/user/${id}/`);
+  }
+
   openRegister(body): Observable<any> {
     return this.http.post(`${BASEURL}/open-registration/`, body);
   }
@@ -102,10 +106,6 @@ export class AuthService {
 
   loginMobile(body): Observable<any> {
     return this.http.post(`${BASEURL}/login-mobile/`, body);
-  }
-
-  getCurrentUser(id): Observable<any> {
-    return this.http.get(`${BASEURL}/user/${id}/`);
   }
 
   setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {

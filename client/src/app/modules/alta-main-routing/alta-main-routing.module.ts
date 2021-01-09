@@ -8,10 +8,12 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
 import { CreateMemberComponent } from '../../components/create-member/create-member.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: HomeComponent,
@@ -33,6 +35,14 @@ const routes: Routes = [
       { path: 'manage-items', component: ManageInventoryItemsComponent },
       { path: 'assign-sk', component: AssignStockKeepersComponent },
       { path: 'designate-sk', component: ManageStockKeepersDesignationComponent},
+      { path: 'template', children: [
+          {
+            path: '', component: AuditTemplateComponent
+          },
+          {
+            path: 'create-template', component: CreateAuditTemplateComponent
+          }
+        ]},
     ],
   },
 ];

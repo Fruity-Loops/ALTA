@@ -1,1 +1,7 @@
 /.idea/
+
+venv/
+
+server/myenv/
+
+db/

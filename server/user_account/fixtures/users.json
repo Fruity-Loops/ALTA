@@ -3,7 +3,7 @@
     "model": "user_account.customuser",
     "pk": 1,
     "fields": {
-        "password": "pbkdf2_sha256$180000$HOGL4nJvIdKq$Rk6ny3k5iC5SfAgmzTsdRD7siOS1tH1mCATsMPHJjr0=",
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
         "user_name": "sa",
         "first_name": "system",
@@ -19,7 +19,7 @@
     "model": "user_account.customuser",
     "pk": 2,
     "fields": {
-        "password": "pbkdf2_sha256$180000$8KQyWSClJDO5$70+zB/7jFzMJfsMzr+uaXeHGAxXuPypmSihBVlC4JxY=",
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
         "user_name": "im",
         "first_name": "inventory",
@@ -35,7 +35,7 @@
     "model": "user_account.customuser",
     "pk": 3,
     "fields": {
-        "password": "pbkdf2_sha256$180000$BU0Q3X5B4BGd$mXwqHq+1+LCI0uoQo5KEYAxBVGJVlgX+AQQLnDrXT1c=",
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
         "user_name": "sk",
         "first_name": "stock",
@@ -51,7 +51,7 @@
     "model": "user_account.customuser",
     "pk": 4,
     "fields": {
-        "password": "pbkdf2_sha256$180000$HOGL4nJvIdKq$Rk6ny3k5iC5SfAgmzTsdRD7siOS1tH1mCATsMPHJjr0=",
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
         "user_name": "sa2",
         "first_name": "system",
