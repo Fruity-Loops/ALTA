@@ -20,13 +20,6 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsInventoryManagerTemplate | IsSystemAdmin]
     http_method_names = ['post', 'get', 'patch', 'delete']
 
-    def get_queryset(self):
-        if self.action == 'list':
-            return AuditTemplate.objects.filter(
-                organization_id=self.request.GET.get("organization", ''))
-        elif self.action == 'retrieve' or self.action == 'partial_update' or self.action == 'destroy':
-            return AuditTemplate.objects.all()
-
     def create(self, request, *args, **kwargs):
         data = request.data
         user = request.user
@@ -40,3 +33,10 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(status=status.HTTP_201_CREATED)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).filter(
+                organization_id=self.request.GET.get("organization", ''))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
