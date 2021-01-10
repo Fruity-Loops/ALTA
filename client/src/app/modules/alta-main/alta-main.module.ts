@@ -25,7 +25,7 @@ import { CreateAuditTemplateComponent } from '../../components/audit-template/cr
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
-import {MatExpansionModule} from "@angular/material/expansion";
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
