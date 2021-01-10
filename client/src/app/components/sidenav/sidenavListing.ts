@@ -1,4 +1,4 @@
-import { SideNavOption } from './sidenavOption';
+import {SideNavOption} from './sidenavOption';
 
 const settings: SideNavOption = {
   title: 'Settings',
@@ -26,8 +26,8 @@ export const SystemNavListings: SideNavOption[] = [
 ];
 
 export const OrganizationNavListings: SideNavOption[] = [
-  { title: 'Dashboard', routerLink: 'dashboard', subMenuOptions: [] },
-  { title: 'Audits', routerLink: 'audits', subMenuOptions: [] },
+  {title: 'Dashboard', routerLink: 'dashboard', subMenuOptions: []},
+  {title: 'Audits', routerLink: 'audits', subMenuOptions: []},
   {
     title: 'Template',
     routerLink: 'template',

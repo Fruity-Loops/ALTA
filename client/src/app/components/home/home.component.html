@@ -1,15 +1,15 @@
 <div class="main-container" [class.is-mobile]="mobileQuery.matches">
 
-    <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0" autosize>
+  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0" autosize>
 
-        <mat-sidenav #sidenav opened="true" [mode]="mobileQuery.matches ? 'over' : 'side'"
-            [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="side-nav">
-            <app-sidenav></app-sidenav>
-        </mat-sidenav>
+    <mat-sidenav #sidenav opened="true" [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" class="side-nav">
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
 
-        <div role="main" class="main-body">
-          <app-toolbar></app-toolbar>
-            <router-outlet></router-outlet>
-        </div>
-    </mat-sidenav-container>
+    <div role="main" class="main-body">
+      <app-toolbar></app-toolbar>
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-container>
 </div>

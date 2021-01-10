@@ -1,5 +1,5 @@
-.edit-container{
-  margin:1%;
+.edit-container {
+  margin: 1%;
 }
 
 @import "./src/theme.scss";
@@ -12,7 +12,7 @@
   max-height: 600px;
   text-align: center;
   background-color: map-get($alta-primary, 500);
-  color: map-get($alta-primary,100);
+  color: map-get($alta-primary, 100);
 }
 
 .centerMe {

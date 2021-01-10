@@ -1,7 +1,7 @@
-import { env } from 'src/environments/environment';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {env} from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -11,7 +11,8 @@ const BASEURL = env.api_root;
 })
 export class ManageOrganizationsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getAllOrganizations(): Observable<any> {
     return this.http.get(`${BASEURL}/organization/`);

@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { SidenavService } from 'src/app/services/sidenav.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { TokenService } from 'src/app/services/token.service';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Router} from '@angular/router';
+import {SidenavService} from 'src/app/services/sidenav.service';
+import {AuthService} from 'src/app/services/auth.service';
+import {TokenService} from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -15,7 +15,8 @@ export class ToolbarComponent implements OnInit {
     private router: Router,
     private sidenav: SidenavService,
     private authService: AuthService
-  ) {}
+  ) {
+  }
 
   isVisible = true;
   @Output() drawerEvent = new EventEmitter<boolean>();
