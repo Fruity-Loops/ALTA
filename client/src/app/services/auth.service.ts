@@ -1,9 +1,9 @@
-import { env } from 'src/environments/environment';
-import { Injectable, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
-import { map, debounceTime } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import {env} from 'src/environments/environment';
+import {Injectable, OnDestroy} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, BehaviorSubject, combineLatest} from 'rxjs';
+import {map, debounceTime} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -25,10 +25,10 @@ export class AuthService {
 
   // Access Observables through mapped data
   sharedUser = combineLatest([this.userId.asObservable(),
-  this.username.asObservable(),
-  this.role.asObservable(),
-  this.organizationId.asObservable(),
-  this.organization.asObservable()])
+    this.username.asObservable(),
+    this.role.asObservable(),
+    this.organizationId.asObservable(),
+    this.organization.asObservable()])
     .pipe(map(([userId, username, role, orgId, org]) => {
       return {
         userId: this.userId.value,
@@ -52,7 +52,7 @@ export class AuthService {
           this.organization.next(localStorage.getItem('organization'));
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({ organization_name: localStorage.getItem('organization'), ...data }, false);
+            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
           }
         });
     }

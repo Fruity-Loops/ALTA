@@ -1,13 +1,13 @@
-import { env } from 'src/environments/environment';
-import { Injectable } from '@angular/core';
+import {env} from 'src/environments/environment';
+import {Injectable} from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { Observable, EMPTY } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { User } from '../models/user.model';
+import {Observable, EMPTY} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {User} from '../models/user.model';
 import {AuthService} from './auth.service';
 
 interface Body {
@@ -22,7 +22,8 @@ export class ManageMembersService {
   BASEURL = env.api_root;
 
   constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
-              private authService: AuthService) {}
+              private authService: AuthService) {
+  }
 
   getAllClients(): Observable<any> {
     if (this.authService.getOrgMode().getValue()) {

@@ -1,16 +1,16 @@
-import { env } from 'src/environments/environment';
+import {env} from 'src/environments/environment';
 // We want to test that an appropriate header configuration
 // Is added to each http request before sending it to server
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import {RouterTestingModule} from '@angular/router/testing';
 
-import { TokenInterceptor } from './token-interceptor';
-import { AuthService } from './auth.service';
-import { TestBed, getTestBed } from '@angular/core/testing';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import {TokenInterceptor} from './token-interceptor';
+import {AuthService} from './auth.service';
+import {TestBed, getTestBed} from '@angular/core/testing';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 describe('TokenInterceptor', () => {
   let authService: AuthService;

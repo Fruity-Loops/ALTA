@@ -1,17 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AuthModule } from './modules/auth/auth.module';
-import { AltaMainModule } from './modules/alta-main/alta-main.module';
-import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-routing.module';
-import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './services/token-interceptor';
-import { CookieService } from 'ngx-cookie-service';
-import { MatModule } from './modules/material/material-module';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AuthModule} from './modules/auth/auth.module';
+import {AltaMainModule} from './modules/alta-main/alta-main.module';
+import {AltaMainRoutingModule} from './modules/alta-main-routing/alta-main-routing.module';
+import {AuthRoutingModule} from './modules/auth-routing/auth-routing.module';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {TokenInterceptor} from './services/token-interceptor';
+import {CookieService} from 'ngx-cookie-service';
+import {MatModule} from './modules/material/material-module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -38,4 +38,5 @@ import { FlexLayoutModule } from '@angular/flex-layout';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

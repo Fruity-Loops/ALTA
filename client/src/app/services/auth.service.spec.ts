@@ -1,12 +1,12 @@
-import { env } from 'src/environments/environment';
+import {env} from 'src/environments/environment';
 // Http testing module and mocking controller
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 
-import { TestBed } from '@angular/core/testing';
-import { AuthService } from './auth.service';
+import {TestBed} from '@angular/core/testing';
+import {AuthService} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AuthService', () => {
