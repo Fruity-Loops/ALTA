@@ -24,20 +24,24 @@ class CustomSearchFilter(filters.SearchFilter):
     """
     def filter_queryset(self, request, queryset, view):
         filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity']
-        filterset_iexact_fields = ['Location', 'Plant', 'Zone', 'Aisle', 'Part_Number', 'Serial_Number',
-                                   'Condition', 'Category', 'Owner', 'Unit_of_Measure']
+        filterset_iexact_fields = ['Location', 'Plant', 'Zone', 'Aisle', 'Part_Number',
+                                   'Serial_Number', 'Condition', 'Category', 'Owner',
+                                   'Unit_of_Measure']
 
         for field in filterset_qty_fields:
             field_from = '{0}_from'.format(field)
             field_to = '{0}_from'.format(field)
             if field_from in request.query_params:
-                queryset = queryset.filter(**{'{0}__{1}'.format(field, 'gte'):request.query_params[field_from]})
+                param = {'{0}__{1}'.format(field, 'gte'): request.query_params[field_from]}
+                queryset = queryset.filter(**param)
             if field_to in request.query_params:
-                queryset = queryset.filter(**{'{0}__{1}'.format(field, 'lte'):request.query_params[field_to]})
+                param = {'{0}__{1}'.format(field, 'lte'): request.query_params[field_to]}
+                queryset = queryset.filter(**param)
 
         for field in filterset_iexact_fields:
             if field in request.query_params:
-                queryset = queryset.filter(**{'{0}__{1}'.format(field, 'iexact'):request.query_params[field]})
+                param = {'{0}__{1}'.format(field, 'iexact'): request.query_params[field]}
+                queryset = queryset.filter(**param)
 
         return queryset
 
@@ -54,6 +58,5 @@ class ItemViewSet(viewsets.ModelViewSet):
     pagination_class = ItemResultsSetPagination
     # search and filter
     filter_backends = [filters.SearchFilter, CustomSearchFilter]
-    search_fields = ['Location', 'Zone', 'Plant', 'Part_Number', 'Part_Description', 'Serial_Number', 'Condition',
-                     'Category', 'Owner', 'Unit_of_Measure']
-
+    search_fields = ['Location', 'Zone', 'Plant', 'Part_Number', 'Part_Description',
+                     'Serial_Number', 'Condition', 'Category', 'Owner', 'Unit_of_Measure']

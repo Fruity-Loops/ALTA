@@ -25,6 +25,7 @@ import { CreateAuditTemplateComponent } from '../../components/audit-template/cr
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
   declarations: [
@@ -41,21 +42,22 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     AuditTemplateComponent,
   ],
 
-  imports: [
-    CommonModule,
-    MatModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    RouterModule,
-    AuthModule,
-    FormsModule,
-    MatMenuModule,
-    MatDialogModule,
-    FlexLayoutModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatChipsModule,
-  ],
+    imports: [
+        CommonModule,
+        MatModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        RouterModule,
+        AuthModule,
+        FormsModule,
+        MatMenuModule,
+        MatDialogModule,
+        FlexLayoutModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatChipsModule,
+        MatExpansionModule,
+    ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
 export class AltaMainModule {

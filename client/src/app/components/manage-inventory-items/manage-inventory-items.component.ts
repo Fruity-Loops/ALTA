@@ -148,7 +148,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     const count = 'count';
     const results = 'results';
     this.length = this.data[count];
-    if(this.pageIndex>0){
+    if (this.pageIndex > 0){
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
