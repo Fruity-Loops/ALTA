@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/services/token.service';
-import roles from 'src/app/fixtures/create_members_roles.json';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from 'src/app/services/auth.service';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {TokenService} from 'src/app/services/token.service';
+import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +19,7 @@ export class CreateMemberComponent implements OnInit {
   signUpButtonLabel = 'Save';
   subscription;
   isEmployee = false;
-  roles = roles;
+  createMembersRoles = createMembersRoles;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully

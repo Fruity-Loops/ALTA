@@ -42,7 +42,6 @@ export class SideNavComponent implements OnInit {
         this.loggedInUser = data.username;
         roles.forEach(role => {
           if (role.abbrev === data.role) {
-            this.loggedInUser = data.username;
             this.loggedInUserRole = role.name;
           }
         });
