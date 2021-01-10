@@ -83,6 +83,11 @@ export class EmployeeSettingsComponent implements OnInit {
     }
   }
 
+  // Will be used to reload (refresh) the page when the cancel button is clicked
+  reloadPage(): void {
+    window.location.reload();
+  }
+
   submit(): void {
     // update user info
     this.employee.is_active = this.isActive === 'active';
