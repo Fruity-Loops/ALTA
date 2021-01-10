@@ -1,21 +1,25 @@
 from rest_framework import serializers
-# from .models import Audit, SelectedItems
-# from inventory_item.serializers import ItemBinSerializer
 from .models import Audit
+from inventory_item.serializers import ItemSerializer
+from user_account.serializers import UserAuditSerializer
 
 
 class AuditSerializer(serializers.ModelSerializer):
-    # inventory_items = ItemBinSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Audit
+        fields = '__all__'
+
+class GetAuditSerializer(serializers.ModelSerializer):
+    inventory_items = ItemSerializer(read_only=True, many=True)
+    assigned_sk = UserAuditSerializer(read_only=True, many=True)
 
     class Meta:
         model = Audit
         fields = '__all__'
 
 """
-    def create(self, validated_data):
-        print("yas queen")
-        return True
-
+# Might need this for posting BinToSk data
 
 class SelectedItemsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,8 +39,3 @@ class SelectedItemsSerializer(serializers.ModelSerializer):
         )
         return selected_item
 """
-
-class AssignedSKSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Audit
-        fields = ['audit_id', 'assigned_sk']

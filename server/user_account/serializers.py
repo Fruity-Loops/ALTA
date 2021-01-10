@@ -31,3 +31,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             if data['password']:
                 user.set_password(data['password'])
             del data['password']
+
+class UserAuditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'first_name', 'last_name', 'user_name']

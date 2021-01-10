@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-import { User } from 'src/app/models/user.model';
+import { PreAudit } from 'src/app/models/pre-audit.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -37,17 +37,19 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
   constructor(private manageMembersService: ManageMembersService,
               private dialog: MatDialog,
-              private addAssignedSK: ManageAuditsService,
+              private manageAuditsService: ManageAuditsService,
               private router: Router)
   { }
 
   ngOnInit(): void {
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
-    this.manageMembersService.getAllClients()
-    .subscribe((user) => {
-      const users = user;
-      this.populateTable(users);
+
+    this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
+    .subscribe((auditData) => {
+      const selected_items = auditData;
+      console.log(selected_items);
+      //this.populateTable(users);
     });
 
     this.designationDrag = [
@@ -55,6 +57,10 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     ];
   }
 
+  populateBins(selected_items): void {
+
+  }
+/*
   populateTable(clients): void {
     clients.forEach(element => {
       if (element.role === 'SK') {
@@ -86,7 +92,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       this.skToAssign.push(value);
     }
   }
-
+/*
   submitAssignedSKs(): void {
     let bodyAssignedSK: any;
     bodyAssignedSK = {
@@ -105,7 +111,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       }
     );
   }
-
+*/
   openDialogWithRef(ref: TemplateRef<any>) {
     this.dialog.open(ref);
   }
