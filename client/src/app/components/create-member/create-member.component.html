@@ -8,12 +8,8 @@
   <mat-divider></mat-divider>
   <form class="col s12" [formGroup]="signupForm" novalidate (ngSubmit)="signupUser()">
     <mat-card-content>
-      <button mat-stroked-button id="signupbtn" [disabled]="!signupForm.valid" class="save">
-        {{signUpButtonLabel}}</button><!-- if checks throws error then do not send data -->
-      <div class="centerMe">
-        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-             alt="Blank Display Pic" width="100" height="100"/>
-      </div>
+
+      <div class="centerMe"></div>
       <mat-grid-list cols="2" rowHeight="38:9">
         <mat-grid-tile>
           <div class="form-group">
@@ -25,11 +21,10 @@
                   signupForm.controls['firstname'].touched
                 ">
                 <!-- Handeling error -->
-                Firstname is required
+                First name is required
               </mat-error>
             </mat-form-field>
           </div>
-
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
@@ -56,7 +51,7 @@
                 signupForm.controls['lastname'].touched
               ">
                 <!-- Handeling error -->
-                lastname is required
+                Last name is required
               </mat-error>
             </mat-form-field>
           </div>
@@ -121,5 +116,11 @@
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-content>
+
+    <mat-card-actions align="center">
+      <button mat-button id="signupbtn" [disabled]="!signupForm.valid" class="save">{{signUpButtonLabel}}</button>
+    </mat-card-actions>
+
   </form>
+
 </mat-card>

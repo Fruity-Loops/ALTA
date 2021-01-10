@@ -7,7 +7,7 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, IsCurrentUserTargetUser, IsInventoryManager
+from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdate
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -129,12 +129,13 @@ class LogoutView(generics.GenericAPIView):
 
 class CustomUserView(viewsets.ModelViewSet):
     http_method_names = ['get', 'post', 'patch']
+    data = None
 
     def get_permissions(self):
         if self.action in ['create', 'retrieve', 'list']:
             permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
         elif self.action in ['partial_update']:
-            permission_classes = [IsAuthenticated, IsCurrentUserTargetUser]
+            permission_classes = [IsAuthenticated, CanUpdate]
         else:
             permission_classes = [IsAuthenticated, IsSystemAdmin]
         return [permission() for permission in permission_classes]
@@ -146,7 +147,7 @@ class CustomUserView(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
         if self.action == 'partial_update':
-            serializer_class.Meta.fields = list(self.request.data.keys())
+            serializer_class.Meta.fields = list(self.data.keys())
         elif self.action == 'create':
             serializer_class.Meta.fields = list(self.request.data.keys())
         else:
@@ -193,7 +194,10 @@ class CustomUserView(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
-        serializer = self.get_serializer(data=request.data, partial=partial, context=kwargs['pk'])
+        self.data = dict(self.request.data)
+        # deleting role key from dictionary to make sure it is not modifiable
+        self.data.pop('role', None)
+        serializer = self.get_serializer(data=self.data, partial=partial, context=kwargs['pk'])
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 

@@ -56,6 +56,7 @@ export class CreateMemberComponent implements OnInit {
   }
 
   signupUser(): void {
+
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
@@ -65,8 +66,10 @@ export class CreateMemberComponent implements OnInit {
       role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.signupForm.value.password,
-      organization: this.selectedOrganization,
+      // parse the organization as an int to be sent to the backend
+      organization: parseInt(this.selectedOrganization, 10),
     };
+
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
     const register = this.tokenService.GetToken()
