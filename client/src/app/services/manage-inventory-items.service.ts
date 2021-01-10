@@ -15,7 +15,7 @@ export class ManageInventoryItemsService {
 
   getPageItems(params): Observable<any> {
     console.log(params);
-    return this.http.get(`${BASEURL}/item/`, {params : params});
+    return this.http.get(`${BASEURL}/item/`, {params});
   }
 
   updateRefreshItemsTime(body): Observable<any> {
