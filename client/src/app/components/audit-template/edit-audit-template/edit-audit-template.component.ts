@@ -2,16 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuditTemplateService } from '../../../services/audit-template.service';
 import { ActivatedRoute } from '@angular/router';
+import { Template } from '../Template';
 
-interface Template {
-  location: any;
-  plant: any;
-  zones: any;
-  aisles: any;
-  bins: any;
-  part_number: any;
-  serial_number: any;
-}
 
 @Component({
   selector: 'app-edit-audit-template',
