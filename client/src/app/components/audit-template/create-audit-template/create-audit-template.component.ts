@@ -110,8 +110,4 @@ export class CreateAuditTemplateComponent implements OnInit {
     }
 
   }
-
-  beginEdit(): void {
-    // do nothing
-  }
 }
