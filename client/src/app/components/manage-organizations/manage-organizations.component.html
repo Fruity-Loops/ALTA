@@ -11,7 +11,7 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Organizations">
     </mat-form-field>
   </div>
-  <mat-label class="moveMeRight">Show: </mat-label>
+  <mat-label class="moveMeRight">Show:</mat-label>
   <div class="dropdown">
     <mat-form-field appearance="standard">
       <mat-select [(value)]="selected" aria-selected="true">
@@ -24,22 +24,22 @@
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="1">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
-        <td mat-cell *matCellDef="let row"> pic </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+        <td mat-cell *matCellDef="let row"> pic</td>
       </ng-container>
 
       <ng-container matColumnDef="Company_name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Company name </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Company name</th>
         <td class="cell_org_name" classmat-cell *matCellDef="let row"> {{row.org_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Activated_On">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Activated On </th>
-        <td mat-cell *matCellDef="let row"> Active </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Activated On</th>
+        <td mat-cell *matCellDef="let row"> Active</td>
       </ng-container>
 
       <ng-container matColumnDef="Status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
         <td class="cell_org_status" mat-cell *matCellDef="let row"> {{row.status}} </td>
       </ng-container>
 
@@ -49,7 +49,7 @@
       </ng-container>
 
       <ng-container matColumnDef="2">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
         <td mat-cell *matCellDef="let row" [matMenuTriggerFor]="menu" (click)="preventPropagation($event)">
           <mat-menu #menu="matMenu">
             <button class="org_mat_menu_item_update" mat-menu-item (click)="openUpdateOrgDialog(row)">
@@ -78,13 +78,13 @@
     <mat-label>Organization Name:</mat-label>
     <mat-form-field appearance="outline">
       <input matInput type="text" placeholder="Organization Name" name="name"
-        ngModel="{{selectedOrganization.org_name}}" required>
+             ngModel="{{selectedOrganization.org_name}}" required>
     </mat-form-field>
 
     <mat-label>Address:</mat-label>
     <mat-form-field appearance="outline">
       <input matInput type="text" placeholder="Address" name="address"
-        ngModel="{{selectedOrganization.address}}" required>
+             ngModel="{{selectedOrganization.address}}" required>
     </mat-form-field>
 
     <mat-label>Status:</mat-label>
@@ -110,13 +110,13 @@
     <mat-label>Organization Name:</mat-label>
     <mat-form-field appearance="outline">
       <input matInput type="text" placeholder="Organization Name" name="name"
-        ngModel required>
+             ngModel required>
     </mat-form-field>
 
     <mat-label>Address:</mat-label>
     <mat-form-field appearance="outline">
       <input matInput type="text" placeholder="Address" name="address"
-        ngModel required>
+             ngModel required>
     </mat-form-field>
 
     <mat-dialog-actions align="end">

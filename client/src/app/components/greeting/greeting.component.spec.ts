@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { GreetingComponent } from './greeting.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {GreetingComponent} from './greeting.component';
 
 describe('AuthTabsComponent', () => {
   let component: GreetingComponent;

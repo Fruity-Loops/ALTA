@@ -16,7 +16,7 @@
           <div class="form-group">
             <mat-label for="power">First Name:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="firstname" type="text" formControlName="firstname"placeholder="First name"/>
+              <input matInput id="firstname" type="text" formControlName="firstname" placeholder="First name"/>
               <mat-error class="error" *ngIf="
                   !signupForm.controls['firstname'].valid &&
                   signupForm.controls['firstname'].touched
@@ -31,90 +31,90 @@
         <mat-grid-tile>
           <div class="form-group">
             <mat-label for="power">E-mail address:</mat-label>
-          <mat-form-field appearance="outline">
-            <input matInput id="email" type="email" formControlName="email" placeholder="E-mail address"/>
-            <mat-error class="error" *ngIf="
+            <mat-form-field appearance="outline">
+              <input matInput id="email" type="email" formControlName="email" placeholder="E-mail address"/>
+              <mat-error class="error" *ngIf="
                 !signupForm.controls['email'].valid &&
                 signupForm.controls['email'].touched
               ">
-              <!-- Handeling error -->
-              Email is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+                <!-- Handeling error -->
+                Email is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
-          <mat-label for="lastname">Last name:</mat-label>
-          <mat-form-field appearance="outline">
-            <input matInput id="lastname" type="text" formControlName="lastname" placeholder="Last name"/>
-            <mat-error class="error" *ngIf="
+            <mat-label for="lastname">Last name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="lastname" type="text" formControlName="lastname" placeholder="Last name"/>
+              <mat-error class="error" *ngIf="
                 !signupForm.controls['lastname'].valid &&
                 signupForm.controls['lastname'].touched
               ">
-              <!-- Handeling error -->
-              lastname is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+                <!-- Handeling error -->
+                lastname is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
             <mat-label for="username">Employee ID:</mat-label>
-          <mat-form-field appearance="outline">
-            <input matInput id="user_name" type="text" formControlName="username" placeholder="Employee ID"/>
-            <mat-error class="error" *ngIf="
+            <mat-form-field appearance="outline">
+              <input matInput id="user_name" type="text" formControlName="username" placeholder="Employee ID"/>
+              <mat-error class="error" *ngIf="
                 !signupForm.controls['username'].valid &&
                 signupForm.controls['username'].touched
               ">
-              <!-- Handeling error -->
-              Username is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+                <!-- Handeling error -->
+                Username is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
             <mat-label for="pass-word">Password:</mat-label>
-          <mat-form-field appearance="outline">
-            <input matInput id="pass-word" type="password" formControlName="password" placeholder="Password"/>
-            <mat-error class="error" *ngIf="
+            <mat-form-field appearance="outline">
+              <input matInput id="pass-word" type="password" formControlName="password" placeholder="Password"/>
+              <mat-error class="error" *ngIf="
                 !signupForm.controls['password'].valid &&
                 signupForm.controls['password'].touched
               ">
-              <!-- Handeling error -->
-              Password is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+                <!-- Handeling error -->
+                Password is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile *ngIf="isEmployee">
           <div class="form-group">
             <mat-label for="power">Employment Location:</mat-label>
-          <mat-form-field appearance="outline">
-            <input matInput id="location" type="text" formControlName="location" placeholder="Employment Location"/>
-            <mat-error class="error" *ngIf="
+            <mat-form-field appearance="outline">
+              <input matInput id="location" type="text" formControlName="location" placeholder="Employment Location"/>
+              <mat-error class="error" *ngIf="
                 !signupForm.controls['location'].valid &&
                 signupForm.controls['location'].touched
               ">
-              <!-- Handeling error -->
-              Location is required
-            </mat-error>
-          </mat-form-field>
-        </div>
+                <!-- Handeling error -->
+                Location is required
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
         <mat-grid-tile *ngIf="isEmployee">
           <div class="form-group">
             <mat-label for="pass-word">Role:</mat-label>
             <mat-form-field appearance="outline">
-          <mat-select class="roleDropDown" formControlName="role">
-            <mat-option value="">Choose a role</mat-option>
-            <mat-option *ngFor="let role of roles" [value]="role">
-              {{ role.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        </div>
+              <mat-select class="roleDropDown" formControlName="role">
+                <mat-option value="">Choose a role</mat-option>
+                <mat-option *ngFor="let role of createMembersRoles" [value]="role">
+                  {{ role.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card-content>
