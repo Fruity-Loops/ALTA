@@ -25,7 +25,7 @@ except:
         exit(1)
 
 
-def execute(back, front, e2e, lint):
+def execute(back, front, e2e, lint, load):
     os.chdir(os.path.dirname(os.getcwd()))
 
     if back:
@@ -61,13 +61,36 @@ def execute(back, front, e2e, lint):
         time.sleep(5)
         kill_port()
         os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
         os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
-        os.system(f'{python_interpreter} manage.py loaddata users.json --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json --settings django_server.test_settings')
         subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                          f'--settings django_server.test_settings', shell=True)
         os.chdir(os.path.dirname(os.getcwd()))
         os.chdir("client")
         p1 = subprocess.Popen("ng e2e", shell=True)
+        p1.wait()
+        kill_port()
+        os.chdir(os.path.dirname(os.getcwd()))
+        time.sleep(5)
+    if load:
+        os.chdir("server")
+        print(
+            "\n\n\n**************************************************\n\n\n"
+            "load tests will now run"
+            "\n\n\n**************************************************\n\n\n")
+        time.sleep(5)
+        kill_port()
+        os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json --settings django_server.test_settings')
+        subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
+                         f'--settings django_server.test_settings', shell=True)
+        os.chdir(os.path.dirname(os.getcwd()))
+        os.chdir("server/performance_test")
+        os.system(f'{python_interpreter} -mwebbrowser 127.0.0.1:8089')
+        p1 = subprocess.Popen("locust", shell=True)
         p1.wait()
         kill_port()
         os.chdir(os.path.dirname(os.getcwd()))
@@ -116,19 +139,23 @@ if len(sys.argv) > 1:
     if argument.lower() == 'alltests':
         print("\n The following will be executed: Backend, Frontend, E2E")
         time.sleep(5)
-        execute(True, True, False, False)
+        execute(True, True, True, False, False)
     elif argument.lower() == 'tests':
         print("\n The following will be executed: Backend, Frontend")
         time.sleep(5)
-        execute(True, True, False, False)
+        execute(True, True, False, False, False)
     elif argument.lower() == 'linters':
         print("\n The following will be executed: Linters")
         time.sleep(5)
-        execute(False, False, False, True)
+        execute(False, False, False, True, False)
     elif argument.lower() == 'e2e':
-        print("\n The following will be executed: Linters")
+        print("\n The following will be executed: e2e")
         time.sleep(5)
-        execute(False, False, False, False)
+        execute(False, False, True, False, False)
+    elif argument.lower() == 'load':
+        print("\n The following will be executed: load")
+        time.sleep(5)
+        execute(False, False, False, False, True)
     else:
         print(
             "\nArgument not recognized.\n\n"
@@ -137,8 +164,9 @@ if len(sys.argv) > 1:
             "python testlint.py alltests\n"
             "python testlint.py tests\n"
             "python testlint.py linters\n"
-            "python testlint.py e2e")
+            "python testlint.py e2e\n"
+            "python testlint.py load")
 else:
     print("\n The following will be executed: Backend, Frontend, E2E, Linters")
     time.sleep(5)
-    execute(True, True, False, True)
+    execute(True, True, True, True)
