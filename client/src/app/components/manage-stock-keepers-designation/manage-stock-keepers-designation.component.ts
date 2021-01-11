@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { SKUser } from 'src/app/models/user.model';
+import { Item } from 'src/app/models/item.model';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
@@ -27,8 +29,10 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     }
   }
 
+  preAuditData: PreAudit;
+
   skToAssign = [];
-  locationsAndUsers: Array<any>;
+  locationsWithBins: Array<any>;
   panelOpenState: boolean = false;
   allExpandState = false;
   errorMessage = '';
@@ -42,14 +46,17 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-    this.locationsAndUsers = new Array<any>();
+    this.locationsWithBins = new Array<any>();
     this.skToAssign = [];
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
     .subscribe((auditData) => {
-      const selected_items = auditData;
-      console.log(selected_items);
-      //this.populateTable(users);
+      const preAuditData = auditData;
+
+      this.populateBins(preAuditData.inventory_items);
+      this.populateSKs(preAuditData.assigned_sk);
+      
+      
     });
 
     this.designationDrag = [
@@ -57,19 +64,40 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     ];
   }
 
-  populateBins(selected_items): void {
+  populateBins(selected_items: Item[]): void {
+    selected_items.forEach(auditItem => {
+      //console.log(auditItem);
+      const obj = this.locationsWithBins.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
+      if(obj === undefined) {
+        this.locationsWithBins.push(
+        {
+          Location: auditItem.Location,
+          item: new Array<Item>(auditItem),
+        })
+      } else {
+        const index = this.locationsWithBins.findIndex(predefinedLoc => predefinedLoc.Location === auditItem.Location);
+        this.locationsWithBins[index].item.push(auditItem);
+      }
+    });
+    console.log(this.locationsWithBins);
 
+  }
+
+  populateSKs(assigned_sks: SKUser[]): void {
+    assigned_sks.forEach(auditSK => {
+      console.log(auditSK);
+    });
   }
 /*
   populateTable(clients): void {
-    clients.forEach(element => {
+    clients.forEach(element => { 
       if (element.role === 'SK') {
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
         if(obj === undefined) {
           this.locationsAndUsers.push(
           {
             location: element.location,
-            users: new Array<User>(element),
+            users: new Array<SKUser>(element),
           });
         }
         else {
@@ -80,7 +108,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     });
 
   }
-
+*/
   //If a stock-keeper checkbox is selected then add the id to the list
   onChange(value: any): void {
     if (this.skToAssign.includes(value)) {

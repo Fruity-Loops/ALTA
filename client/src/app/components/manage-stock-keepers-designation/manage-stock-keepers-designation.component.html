@@ -6,18 +6,18 @@
     </div>
   </mat-card>
   <br>
-
-  <mat-expansion-panel *ngFor="let item of locationsAndUsers;" class="mat-expand"
+  
+  <mat-expansion-panel *ngFor="let bin of locationsWithBins;" class="mat-expand"
                        [expanded]="allExpandState" >
       <mat-expansion-panel-header>
           <mat-card-header>
-        <mat-card-title class="location-title" >{{item.location}}</mat-card-title>
+        <mat-card-title class="location-title" >{{bin.Location}}</mat-card-title>
       </mat-card-header>
       </mat-expansion-panel-header>
-
+      
       <div class="drag-drop-containers">
         <h2>Bins</h2>
-
+      
         <div
           cdkDropList
           #designationDragList="cdkDropList"
@@ -28,10 +28,10 @@
           <div class="drag-drop-box" *ngFor="let item of designationDrag" cdkDrag>{{item}}</div>
         </div>
       </div>
-
+      
       <div class="drag-drop-containers">
         <h2>Stock Keepers</h2>
-
+      
         <div
           cdkDropList
           #skDropList="cdkDropList"
@@ -42,17 +42,17 @@
           <div class="drag-drop-box" *ngFor="let item of skDrop" cdkDrag>{{item}}</div>
         </div>
       </div>
-
-
-
+      
+      
+  
   </mat-expansion-panel>
-
+  
   <div class="bottom-buttons">
         <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
         <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"
-                >Assign</button> <!-- TODO: update route -->
+                (click)="submitAssignedSKs()">Assign</button> <!-- TODO: update route -->
   </div>
-
+  
   <ng-template #discardDialog>
     <h2 matDialogTitle>Discard Audit</h2>
     <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
@@ -61,3 +61,4 @@
       <button mat-button (click)="closeDialog()">Cancel</button>
     </div>
   </ng-template>
+ 
