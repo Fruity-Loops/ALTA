@@ -4,7 +4,8 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from user_account.permissions import IsSystemAdmin, IsInventoryManager
+from user_account.permissions import IsSystemAdmin
+from .permissions import IsInventoryManagerTemplate
 from .serializers import AuditTemplateSerializer
 from .models import AuditTemplate
 
@@ -16,12 +17,8 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
-    http_method_names = ['post', 'get']
-
-    def get_queryset(self):
-        return AuditTemplate.objects.filter(
-            organization_id=self.request.GET.get("organization", ''))
+    permission_classes = [IsAuthenticated, IsInventoryManagerTemplate | IsSystemAdmin]
+    http_method_names = ['post', 'get', 'patch', 'delete']
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -36,3 +33,10 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset()).filter(
+                organization_id=self.request.GET.get("organization", ''))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
