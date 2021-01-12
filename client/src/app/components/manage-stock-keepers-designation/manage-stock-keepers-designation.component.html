@@ -19,13 +19,18 @@
     <div cdkDropListGroup>
       <div class="drag-drop-containers">
         <h2>Bins</h2>
-
         <div
           cdkDropList
           [cdkDropListData]="auditComp.bins"
           class="drag-drop-list"
           (cdkDropListDropped)="drop($event)">
-          <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>{{bin}}</div>
+          <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
+            <p>{{bin}}<br></p>
+            <ul *ngFor="let item of getAssociatedItems(auditComp.Location, auditComp.bins)"
+                class="item-list">
+              <li class="drag-drop-subtext">{{item.Part_Description}}</li>
+            </ul>
+          </div>
         </div>
       </div>
 
@@ -38,12 +43,16 @@
           class="drag-drop-list"
           (cdkDropListDropped)="drop($event)">
           <div class="drag-drop-box" *ngFor="let bin of identifyUser(sk.id)" [hidden]="bin == null"
-               cdkDrag>{{bin}}</div>
+               cdkDrag>
+            <p>{{bin}}<br></p>
+            <ul *ngFor="let item of getAssociatedItems(auditComp.Location, identifyUser(sk.id))"
+                class="item-list">
+              <li class="drag-drop-subtext">{{item.Part_Description}}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-
-
   </mat-expansion-panel>
 
   <div class="bottom-buttons">

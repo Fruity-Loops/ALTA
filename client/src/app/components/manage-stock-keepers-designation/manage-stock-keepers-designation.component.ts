@@ -99,6 +99,13 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     return this.binToSks[index].bins;
   }
 
+  getAssociatedItems(location: string, bin: string): [] {
+    const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
+    return this.locationsWithBinsAndSKs[index].item;
+  }
+
+
+
 /*
   submitAssignedSKs(): void {
     let bodyAssignedSK: any;
