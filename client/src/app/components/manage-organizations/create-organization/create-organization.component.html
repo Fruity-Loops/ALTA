@@ -1,1 +1,56 @@
-<p>create-organization works!</p>
+<mat-card>
+  <mat-card-title class="title-padding">Create Organization</mat-card-title>
+  <mat-divider> </mat-divider>
+
+  <div class="grid-container">
+    <div class="vertical-stack">
+      <mat-label>Name:</mat-label>
+      <mat-form-field appearance="outline" class="text-input">
+        <input matInput placeholder="Organization Name"/>
+      </mat-form-field>
+    </div>
+    <div>
+      <div *ngIf="true" class="vertical-stack"></div>
+      <div *ngIf="false" class="vertical-stack">
+        <mat-label>Status</mat-label>
+        <mat-form-field appearance="outline" class="text-input">
+          <mat-select class="statusDropDown" id="active">
+            <mat-option *ngFor="let active of activeStates" [value]="active">
+              {{active}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="take-two-columns">
+      <div class="vertical-stack">
+        <mat-label>Location:</mat-label>
+        <mat-form-field appearance="outline" class="text-input">
+          <input matInput placeholder="Montreal, QC"/>
+        </mat-form-field>
+      </div>
+      <div class="upload-button-spacer">
+        or
+      </div>
+      <div class="upload-button-spacer">
+        <button mat-stroked-button class="upload-button">
+          Submit (.csv) file
+        </button><!-- if checks throws error then do not send data -->
+      </div>
+
+    </div>
+  </div>
+
+  <mat-card-footer>
+    <div class="center-aligned">
+      <div class="button-side-by-side">
+        <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button">
+          SAVE</button><!-- if checks throws error then do not send data -->
+      </div>
+      <div class="button-side-by-side">
+        <button mat-stroked-button routerLink="/manage-organizations" class="footer-button">CANCEL</button>
+      </div>
+    </div>
+  </mat-card-footer>
+
+</mat-card>

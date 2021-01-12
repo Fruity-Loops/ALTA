@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateOrganizationComponent implements OnInit {
 
+  activeStates = ["active", "disabled"];
+
   constructor() { }
 
   ngOnInit(): void {
