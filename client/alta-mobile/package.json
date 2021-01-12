@@ -4,11 +4,13 @@
   "author": "ALTA",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ionic serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "live-android": "ionic cap run android -l --external",
+    "live-ios": "ionic cap run ios -l --external"
   },
   "private": true,
   "dependencies": {
