@@ -11,6 +11,7 @@ import { ManageInventoryItemsComponent } from 'src/app/components/manage-invento
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import { EditAuditTemplateComponent } from 'src/app/components/audit-template/edit-audit-template/edit-audit-template.component';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,15 @@ export const routes: Routes = [
       { path: 'create-members', component: CreateMemberComponent },
       { path: 'modify-members', component: ClientGridviewComponent },
       { path: 'sa-modify-members', component: ClientGridviewComponent },
-      { path: 'manage-organizations', component: ManageOrganizationsComponent },
+      { path: 'manage-organizations', children: [
+          {
+            path: '', component: ManageOrganizationsComponent
+          },
+          {
+            path: 'create-organization', component: CreateOrganizationComponent
+          }
+        ],
+      },
       { path: 'modify-members/:ID', component: EmployeeSettingsComponent },
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
