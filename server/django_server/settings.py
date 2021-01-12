@@ -27,12 +27,16 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'false')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    os.getenv('HOST_URL', 'alta-mobile.loca.lt')
+    ]
 
 # ALLOW API REQUESTS FROM ANGULAR FRONTEND
 CORS_ORIGIN_WHITELIST = [
     os.getenv('ANGULAR_URL', 'http://localhost:4200'),
     os.getenv('IONIC_URL', 'http://localhost:8100'),
+    os.getenv('ANDROID_URL', 'http://localhost'),
+    os.getenv('IOS_URL', 'capacitor://localhost'),
 ]
 
 REST_FRAMEWORK = {
