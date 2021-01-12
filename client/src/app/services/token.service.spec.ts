@@ -1,5 +1,5 @@
-import { TestBed } from '@angular/core/testing';
-import { TokenService } from './token.service';
+import {TestBed} from '@angular/core/testing';
+import {TokenService} from './token.service';
 
 describe('TokenService', () => {
   let service: TokenService;

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../services/audit-template.service';
 import {AuthService} from '../../services/auth.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 interface Template {
   author: string;
@@ -16,9 +17,10 @@ interface Template {
 export class AuditTemplateComponent implements OnInit {
   auditTemplates: [Template];
   errorMessage = '';
+  dialogRef: any;
 
   constructor(private auditTemplateService: AuditTemplateService,
-              private authService: AuthService,
+              public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +39,40 @@ export class AuditTemplateComponent implements OnInit {
     );
   }
 
+  openDialog(id: string, title: string): void {
+    this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id, title}});
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.auditTemplateService.deleteTemplate(result.id).subscribe( () => {
+          this.getAuditTemplates();
+        });
+      }
+    });
 
+  }
+}
+
+interface DialogData {
+  title: string;
+  id: string;
+}
+
+@Component({
+  selector: 'app-organization-dialog',
+  templateUrl: 'delete-template-dialog.html',
+})
+export class DeleteTemplateDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<DeleteTemplateDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  closeDialog(): void {
+    this.dialogRef.close(false);
+  }
+
+  deleteTemplate(): void {
+    this.dialogRef.close(this.data);
+  }
 
 }

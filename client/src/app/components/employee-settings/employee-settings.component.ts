@@ -32,8 +32,8 @@ export class EmployeeSettingsComponent implements OnInit {
   ) {
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
-        this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
-        this.ngOnInit();
+      this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
+      this.ngOnInit();
     });
   }
 
@@ -84,6 +84,11 @@ export class EmployeeSettingsComponent implements OnInit {
     }
   }
 
+  // Will be used to reload (refresh) the page when the cancel button is clicked
+  reloadPage(): void {
+    window.location.reload();
+  }
+
   submit(): void {
     // update user info
     this.employee.is_active = this.isActive === 'active';
@@ -96,8 +101,15 @@ export class EmployeeSettingsComponent implements OnInit {
 
     this.employee.location = this.location;
 
+    // Create a deep copy of the employee object in order to delete the uneditable
+    // fields (id, email) from the copied object and send only the editable fileds to the server.
+    const patchedEmployee = JSON.parse(JSON.stringify(this.employee));
+
+    delete patchedEmployee.id;
+    delete patchedEmployee.email;
+
     this.manageMembersService
-      .updateClientInfo(this.employee, this.id)
+      .updateClientInfo(patchedEmployee, this.id)
       .subscribe((response) => {
         location.reload();
       });

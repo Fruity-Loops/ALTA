@@ -42,4 +42,5 @@ import { ManageStockKeepersDesignationComponent } from './components/manage-stoc
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}

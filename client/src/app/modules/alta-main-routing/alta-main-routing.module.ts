@@ -10,6 +10,7 @@ import { CreateMemberComponent } from '../../components/create-member/create-mem
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import { EditAuditTemplateComponent } from 'src/app/components/audit-template/edit-audit-template/edit-audit-template.component';
 import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 
@@ -41,6 +42,9 @@ export const routes: Routes = [
           },
           {
             path: 'create-template', component: CreateAuditTemplateComponent
+          },
+          {
+            path: 'edit-template/:ID', component: EditAuditTemplateComponent
           }
         ]},
     ],
@@ -51,4 +55,5 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AltaMainRoutingModule {}
+export class AltaMainRoutingModule {
+}

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/services/token.service';
-import roles from 'src/app/fixtures/roles.json';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from 'src/app/services/auth.service';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {TokenService} from 'src/app/services/token.service';
+import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 
 @Component({
   selector: 'app-signup',
@@ -19,7 +19,7 @@ export class CreateMemberComponent implements OnInit {
   signUpButtonLabel = 'Save';
   subscription;
   isEmployee = false;
-  roles = roles;
+  createMembersRoles = createMembersRoles;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -28,7 +28,8 @@ export class CreateMemberComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private tokenService: TokenService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.subscription = this.authService.getOrgMode()
@@ -55,6 +56,7 @@ export class CreateMemberComponent implements OnInit {
   }
 
   signupUser(): void {
+
     this.body = {
       user_name: this.signupForm.value.username,
       email: this.signupForm.value.email,
@@ -64,8 +66,10 @@ export class CreateMemberComponent implements OnInit {
       role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.signupForm.value.password,
-      organization: this.selectedOrganization,
+      // parse the organization as an int to be sent to the backend
+      organization: parseInt(this.selectedOrganization, 10),
     };
+
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
     const register = this.tokenService.GetToken()

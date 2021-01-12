@@ -92,3 +92,53 @@ class IsCurrentUserTargetUser(BasePermission):
         current_user = request.user
         target_user = CustomUser.objects.get(id=view.kwargs['pk'])
         return current_user == target_user
+
+
+class IsHigherInOrganization(BasePermission):
+    message = "You must be of a higher rank than the employee you are trying to modify"
+    user_roles = ["SA", "IM", "SK"]
+
+    def has_permission(self, request, view):
+        """
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is allowed to modify the user
+        """
+        current_user_org = request.user.organization
+        target_user_org = CustomUser.objects.get(id=view.kwargs['pk']).organization
+        current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
+        target_user_role = IsHigherInOrganization.user_roles.index(
+            CustomUser.objects.get(id=view.kwargs['pk']).role)
+        if current_user_role == 0 and target_user_role > 0:
+            return True
+        if current_user_role == 2:
+            return False
+        if current_user_org or target_user_org:
+            if current_user_org == target_user_org:
+                return current_user_role <= target_user_role
+            return False
+        return True
+
+
+class CanUpdate(BasePermission):
+    message = "Roles and Emails shouldn't be allowed to be updated"
+
+    def has_permission(self, request, view):
+        """
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is allowed to modify the user
+        """
+        keys = list(request.data.keys())
+        if IsCurrentUserTargetUser.has_permission(self, request, view):
+            return check_keys(['id', 'email'], keys)
+        if IsHigherInOrganization.has_permission(self, request, view):
+            return check_keys(['id', 'email', 'password'], keys)
+        return False
+
+
+def check_keys(bad_keys, keys):
+    for bad_key in bad_keys:
+        if bad_key in keys:
+            return False
+    return True

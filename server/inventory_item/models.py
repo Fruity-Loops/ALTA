@@ -5,7 +5,7 @@ from organization.models import Organization
 class Item(models.Model):
     _id = models.AutoField(primary_key=True)
     Location = models.CharField(max_length=256)
-    Plant = models.BooleanField(default=False)
+    Plant = models.CharField(max_length=256)
     Zone = models.CharField(max_length=256)
     Aisle = models.IntegerField()
     Bin = models.CharField(max_length=256)
