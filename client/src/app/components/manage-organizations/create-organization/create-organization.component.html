@@ -6,7 +6,7 @@
     <div class="vertical-stack">
       <mat-label>Name:</mat-label>
       <mat-form-field appearance="outline" class="text-input">
-        <input matInput placeholder="Organization Name"/>
+        <input matInput placeholder="Organization Name" [(ngModel)]="orgName"/>
       </mat-form-field>
     </div>
     <div>
@@ -26,7 +26,7 @@
       <div class="vertical-stack">
         <mat-label>Location:</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <input matInput placeholder="Montreal, QC"/>
+          <input matInput placeholder="Montreal, QC" [(ngModel)]="location"/>
         </mat-form-field>
       </div>
       <div class="upload-button-spacer">
@@ -44,7 +44,8 @@
   <mat-card-footer>
     <div class="center-aligned">
       <div class="button-side-by-side">
-        <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button">
+        <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button"
+                (click)="submitSave()">
           SAVE</button><!-- if checks throws error then do not send data -->
       </div>
       <div class="button-side-by-side">
