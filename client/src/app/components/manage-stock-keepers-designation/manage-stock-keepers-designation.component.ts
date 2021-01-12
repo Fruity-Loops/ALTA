@@ -18,26 +18,13 @@ import { Item } from 'src/app/models/item.model';
 })
 export class ManageStockKeepersDesignationComponent implements OnInit {
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-    }
-  }
-
   preAuditData: PreAudit;
+  locationsWithBinsAndSKs: Array<any>;
+  binToSks: Array<any>;
 
-  skToAssign = [];
-  locationsWithBins: Array<any>;
   panelOpenState: boolean = false;
   allExpandState = false;
   errorMessage = '';
-  designationDrag = [];
-  skDrop = [];
 
   constructor(private manageMembersService: ManageMembersService,
               private dialog: MatDialog,
@@ -46,80 +33,72 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-    this.locationsWithBins = new Array<any>();
-    this.skToAssign = [];
+    this.locationsWithBinsAndSKs = new Array<any>();
+    this.binToSks = new Array<any>();
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
     .subscribe((auditData) => {
       const preAuditData = auditData;
-
-      this.populateBins(preAuditData.inventory_items);
-      this.populateSKs(preAuditData.assigned_sk);
-      
-      
+      this.populateBinsAndSKs(preAuditData.inventory_items, preAuditData.assigned_sk);
     });
-
-    this.designationDrag = [
-      'Bin A'
-    ];
   }
 
-  populateBins(selected_items: Item[]): void {
+  populateBinsAndSKs(selected_items: Item[], assigned_sks: SKUser[]): void {
     selected_items.forEach(auditItem => {
-      //console.log(auditItem);
-      const obj = this.locationsWithBins.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
+      const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
       if(obj === undefined) {
-        this.locationsWithBins.push(
+        this.locationsWithBinsAndSKs.push(
         {
           Location: auditItem.Location,
           item: new Array<Item>(auditItem),
+          bins: new Array<any>(auditItem.Bin),
+          sk: new Array<SKUser>()
         })
       } else {
-        const index = this.locationsWithBins.findIndex(predefinedLoc => predefinedLoc.Location === auditItem.Location);
-        this.locationsWithBins[index].item.push(auditItem);
+        const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === auditItem.Location);
+        this.locationsWithBinsAndSKs[index].item.push(auditItem);
+
+        if(!this.locationsWithBinsAndSKs[index].bins.find(predefinedBin => predefinedBin === auditItem.Bin)){
+          this.locationsWithBinsAndSKs[index].bins.push(auditItem.Bin);
+        }
       }
     });
-    console.log(this.locationsWithBins);
 
-  }
-
-  populateSKs(assigned_sks: SKUser[]): void {
     assigned_sks.forEach(auditSK => {
-      console.log(auditSK);
-    });
-  }
-/*
-  populateTable(clients): void {
-    clients.forEach(element => { 
-      if (element.role === 'SK') {
-        const obj = this.locationsAndUsers.find(item => item.location === element.location);
-        if(obj === undefined) {
-          this.locationsAndUsers.push(
-          {
-            location: element.location,
-            users: new Array<SKUser>(element),
-          });
-        }
-        else {
-          const index = this.locationsAndUsers.findIndex(item => item.location === element.location);
-          this.locationsAndUsers[index].users.push(element);
-        }
+      const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditSK.location);
+      if(obj === undefined) {
+        this.locationsWithBinsAndSKs.push(
+        {
+          Location: auditSK.location,
+          sk: new Array<SKUser>(auditSK)
+        })
+      } else {
+        const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === auditSK.location);
+        this.locationsWithBinsAndSKs[index].sk.push(auditSK);
       }
+      this.binToSks.push(
+      {
+        sk_id: auditSK.id,
+        item_ids: new Array<any>(),
+        bins: new Array<any>()
+      });
     });
+  }
 
-  }
-*/
-  //If a stock-keeper checkbox is selected then add the id to the list
-  onChange(value: any): void {
-    if (this.skToAssign.includes(value)) {
-      this.skToAssign.splice(
-        this.skToAssign.indexOf(value),
-        1
-      );
-    } else {
-      this.skToAssign.push(value);
+  identifyUser(httpId: number): []{
+    const obj = this.binToSks.find(predefinedId => predefinedId.sk_id === httpId);
+    if(obj === undefined) {
+      this.binToSks.push(
+      {
+        sk_id: httpId,
+        item_ids: new Array<any>(),
+        bins: new Array<any>()
+      });
     }
+    const index = this.binToSks.findIndex(predefinedId => predefinedId.sk_id === httpId);
+    return this.binToSks[index].bins;
   }
+
 /*
   submitAssignedSKs(): void {
     let bodyAssignedSK: any;
@@ -140,6 +119,17 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     );
   }
 */
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+  }
+
   openDialogWithRef(ref: TemplateRef<any>) {
     this.dialog.open(ref);
   }
