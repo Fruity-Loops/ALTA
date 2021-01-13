@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-title class="title-padding">Create Organization</mat-card-title>
+  <mat-card-title class="title-padding">{{organizationTitle}}</mat-card-title>
   <mat-divider> </mat-divider>
 
   <div class="grid-container">
@@ -10,11 +10,11 @@
       </mat-form-field>
     </div>
     <div>
-      <div *ngIf="true" class="vertical-stack"></div>
-      <div *ngIf="false" class="vertical-stack">
+      <div *ngIf="isEdit" class="vertical-stack"></div>
+      <div *ngIf="isEdit" class="vertical-stack">
         <mat-label>Status</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <mat-select class="statusDropDown" id="active">
+          <mat-select class="statusDropDown" id="active" [(value)]="isActive">
             <mat-option *ngFor="let active of activeStates" [value]="active">
               {{active}}
             </mat-option>

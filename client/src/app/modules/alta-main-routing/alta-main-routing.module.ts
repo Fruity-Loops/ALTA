@@ -12,6 +12,7 @@ import { CreateAuditTemplateComponent } from '../../components/audit-template/cr
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
 import { EditAuditTemplateComponent } from 'src/app/components/audit-template/edit-audit-template/edit-audit-template.component';
 import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {EditOrganizationComponent} from '../../components/manage-organizations/create-organization/edit-organization.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,9 @@ export const routes: Routes = [
           },
           {
             path: 'create-organization', component: CreateOrganizationComponent
+          },
+          {
+            path: 'edit-organization/:ID', component: EditOrganizationComponent
           }
         ],
       },

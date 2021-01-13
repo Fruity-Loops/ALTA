@@ -4,14 +4,17 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-create-organization',
-  templateUrl: './create-organization.component.html',
-  styleUrls: ['./create-organization.component.scss']
+  templateUrl: './organization.component.html',
+  styleUrls: ['./organization.component.scss']
 })
 export class CreateOrganizationComponent implements OnInit {
 
-  activeStates = ["active", "disabled"];
+  activeStates = ["Active", "Disabled"];
   orgName: string;
   location: string;
+  isEdit = false;
+  organizationTitle = 'Organization Creation';
+  isActive = ""
 
   constructor(
     private organizationService: ManageOrganizationsService,

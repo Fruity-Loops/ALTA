@@ -28,6 +28,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {EditOrganizationComponent} from '../../components/manage-organizations/create-organization/edit-organization.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {CreateOrganizationComponent} from '../../components/manage-organizations
     DeleteTemplateDialogComponent,
     AuditTemplateComponent,
     EditAuditTemplateComponent,
-    CreateOrganizationComponent
+    CreateOrganizationComponent,
+    EditOrganizationComponent
   ],
 
     imports: [
