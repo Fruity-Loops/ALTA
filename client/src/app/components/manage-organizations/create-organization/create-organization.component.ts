@@ -9,12 +9,12 @@ import {Router} from '@angular/router';
 })
 export class CreateOrganizationComponent implements OnInit {
 
-  activeStates = ["Active", "Disabled"];
+  activeStates = ['Active', 'Disabled'];
   orgName: string;
   location: string;
   isEdit = false;
   organizationTitle = 'Organization Creation';
-  isActive = "";
+  isActive = '';
 
   editOn = true; // never changes
 
@@ -28,7 +28,7 @@ export class CreateOrganizationComponent implements OnInit {
     this.location = '';
   }
 
-  submitSave() {
+  submitSave(): void {
     this.organizationService.createOrganization({
       org_name: this.orgName,
       address: this.location,

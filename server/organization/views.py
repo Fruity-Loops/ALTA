@@ -1,9 +1,9 @@
+from datetime import date
 from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from inventory_item.updater import start_new_job
 from user_account.permissions import IsInventoryManager, IsSystemAdmin
-from datetime import date
 
 from .serializers import OrganizationSerializer
 from .models import Organization
@@ -29,6 +29,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         serializer.save()
 
         return Response(status=status.HTTP_201_CREATED)
+
 
 class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     """

@@ -11,7 +11,7 @@ import {ActivatedRoute} from '@angular/router';
 export class EditOrganizationComponent implements OnInit {
 
   isActive = 'Active';
-  activeStates = ["Active", "Disabled"];
+  activeStates = ['Active', 'Disabled'];
   isEdit = true;
   organizationTitle = 'Organization Profile';
   orgName: string;
@@ -25,11 +25,11 @@ export class EditOrganizationComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.activatedRoute.params.subscribe(routeParams => {
       this.orgID = routeParams.ID;
       this.organizationService.getOneOrganization(this.orgID).subscribe(organization => {
-        this.isActive = organization.status? this.activeStates[0]: this.activeStates[1];
+        this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
         this.orgName = organization.org_name;
         this.location = organization.address;
       });
@@ -48,6 +48,6 @@ export class EditOrganizationComponent implements OnInit {
       status: this.isActive === this.activeStates[0]
     }).subscribe(() => {
       location.reload();
-    })
+    });
   }
 }
