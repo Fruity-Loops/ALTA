@@ -1,5 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { Subscription, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-audits',
@@ -9,15 +10,24 @@ import { ToastController } from '@ionic/angular';
 export class AuditsPage implements OnInit {
   barcode: string;
   scannedMessage: string;
+  keypressEvent: Subscription;
+
+
 
   constructor(public toastController: ToastController) {
     this.barcode = '';
   }
 
   ngOnInit() {
+    this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
+      this.handleKeyboardEvent(event as KeyboardEvent);
+    })
   }
 
-  @HostListener('document:keypress', ['$event'])
+  ngOnDestroy() {
+    this.keypressEvent.unsubscribe();
+  }
+
   handleKeyboardEvent(event: KeyboardEvent) {
     let key = event.key;
     if (key == 'Enter') {
@@ -26,8 +36,8 @@ export class AuditsPage implements OnInit {
       this.presentScanSuccessToast();
     }
     else {
-      this.barcode += key;      
-    }   
+      this.barcode += key;
+    }
   }
 
   async presentScanSuccessToast() {
@@ -37,5 +47,4 @@ export class AuditsPage implements OnInit {
     });
     toast.present();
   }
-
 }
