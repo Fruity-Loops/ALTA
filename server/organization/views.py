@@ -24,11 +24,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         today = date.today()
         date_today = today.strftime("%Y/%m/%d")
         data['calendar_date'] = date_today
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return Response(status=status.HTTP_201_CREATED)
+        return super().create(request, *args, **kwargs)
 
 
 class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
