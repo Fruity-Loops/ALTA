@@ -10,6 +10,7 @@ class Organization(models.Model):
     address = models.CharField(max_length=256, default="Montreal")
     status = models.BooleanField(default=False)
     inventory_items_refresh_job = models.IntegerField(default=1)
+    calendar_date = models.CharField(max_length=100)
 
 
 @receiver(post_save, sender=Organization)

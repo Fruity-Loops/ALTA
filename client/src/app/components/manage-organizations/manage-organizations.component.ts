@@ -37,7 +37,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<Organization>;
-  displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
+  displayedColumns: string[] = ['Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
   selected = 'All';
 

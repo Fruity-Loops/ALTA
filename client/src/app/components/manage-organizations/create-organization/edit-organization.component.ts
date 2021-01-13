@@ -29,7 +29,6 @@ export class EditOrganizationComponent implements OnInit {
     this.activatedRoute.params.subscribe(routeParams => {
       this.orgID = routeParams.ID;
       this.organizationService.getOneOrganization(this.orgID).subscribe(organization => {
-        console.log(organization);
         this.isActive = organization.status? this.activeStates[0]: this.activeStates[1];
         this.orgName = organization.org_name;
         this.location = organization.address;
