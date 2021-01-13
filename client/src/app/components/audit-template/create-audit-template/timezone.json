@@ -452,14 +452,6 @@
     ]
   },
   {
-    "value": "Mid-Atlantic Standard Time",
-    "abbr": "MDT",
-    "offset": -1,
-    "isdst": true,
-    "text": "(UTC-02:00) Mid-Atlantic - Old",
-    "utc": []
-  },
-  {
     "value": "Azores Standard Time",
     "abbr": "ADT",
     "offset": 0,
@@ -504,24 +496,11 @@
     ]
   },
   {
-    "value": "GMT Standard Time",
-    "abbr": "GMT",
-    "offset": 0,
-    "isdst": false,
-    "text": "(UTC) Edinburgh, London",
-    "utc": [
-      "Europe/Isle_of_Man",
-      "Europe/Guernsey",
-      "Europe/Jersey",
-      "Europe/London"
-    ]
-  },
-  {
     "value": "British Summer Time",
     "abbr": "BST",
     "offset": 1,
     "isdst": true,
-    "text": "(UTC+01:00) Edinburgh, London",
+    "text": "(UTC) Edinburgh, London",
     "utc": [
       "Europe/Isle_of_Man",
       "Europe/Guernsey",

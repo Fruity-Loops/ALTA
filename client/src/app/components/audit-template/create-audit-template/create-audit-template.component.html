@@ -18,7 +18,7 @@
   <mat-card-content>
 
     <div class="row">
-      <div class="column-2">
+      <div class="column-2 border-right">
 
         <!-- LEFT SIDE -->
 
@@ -103,20 +103,19 @@
 
       <!-- RIGHT SIDE -->
 
-        <div class="column no-border">
-          <mat-card-title>Selected Fields</mat-card-title>
-          <mat-chip-list aria-label="Location">
-            <div *ngFor="let loc of template | keyvalue">
-              <mat-chip *ngFor="let value of loc.value"
-                        [removable]="true" (removed)="remove(loc.key, value)">
-                {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
-                <mat-icon matChipRemove>cancel</mat-icon>
-              </mat-chip>
-            </div>
-          </mat-chip-list>
-        </div>
+      <div class="column-2">
+        <mat-card-title class="text-align-center">Selected Fields</mat-card-title>
+        <mat-chip-list aria-label="Location">
+          <div *ngFor="let loc of template | keyvalue">
+            <mat-chip *ngFor="let value of loc.value"
+                      [removable]="true" (removed)="remove(loc.key, value)">
+              {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </div>
+        </mat-chip-list>
+      </div>
 
-      <br>
       <mat-form-field appearance="outline">
           <textarea rows="5" id="description" matInput [(ngModel)]="description"
                     placeholder="Description"></textarea>
@@ -127,14 +126,17 @@
       <br>
       <mat-card-title id="center-title">Scheduling</mat-card-title>
       <br>
+      <div class="position-right">
+        <button mat-stroked-button (click)="debug()">Debug Console</button>
+      </div>
 
       <div class="form-group half-width">
         <mat-label>Start Date</mat-label>
         <mat-form-field appearance="outline">
-          <input matInput [matDatepicker]="datePick" [min]="todaysDate" disabled class="form-control" id="date"
-                 type="text" placeholder="DD/MM/YYYY">
+          <input matInput [(ngModel)]="startDate" [matDatepicker]="datePick" disabled class="form-control" id="date"
+                 type="text" placeholder="{{dateplaceHolder}}">
           <mat-datepicker-toggle [for]="datePick" matSuffix class="icon-color"></mat-datepicker-toggle>
-          <mat-datepicker #datePick disabled="false"></mat-datepicker>
+          <mat-datepicker #datePick [disabled]="startDateDisabled"></mat-datepicker>
         </mat-form-field>
       </div>
 
@@ -142,95 +144,80 @@
         <mat-label>Start time</mat-label>
         <mat-form-field appearance="outline">
           <mat-icon class="icon-color" matSuffix>schedule</mat-icon>
-          <input class="form-control" id="time" type="time" matInput placeholder="Start time"/>
+          <input class="form-control" id="time" type="time" matInput placeholder="Start time" [(ngModel)]="startTime"/>
         </mat-form-field>
       </div>
 
       <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel class="half-width" [(expanded)]="panelOpenState">
+        <mat-expansion-panel class="half-width" [expanded]="panelOpenState" [disabled]="isRecurrenceChosen" (afterExpand)="recurrenceExpand()" (afterCollapse)="recurrenceCollapsed()"> <!--(click)="recurrencePanelChange()"-->
           <mat-expansion-panel-header>
             <mat-panel-title>Recurrence</mat-panel-title>
           </mat-expansion-panel-header>
 
           <div class="form-group">
             <div class="row">
-              <div class="column-3 text-padding-left-align">
+              <div class="column-2 text-padding-left-align">
                 <mat-label>Repeat every</mat-label>
               </div>
-              <div class="column-3">
-                <mat-form-field appearance="outline" class="small-font">
-                  <input class="form-control" id="repeat" type="number" min="1" max="10000" matInput
-                         [(ngModel)]="repeatNum"/>
-                </mat-form-field>&nbsp;&nbsp;
-              </div>
-              <div class="column-3">
+              <div class="column-2">
                 <mat-form-field floatLabel="never" appearance="outline" class="small-font">
-                  <mat-select [(ngModel)]="repeatDWMY" (selectionChange)="selectionChange($event)">
-                    <mat-option value="option1">day(s)</mat-option>
-                    <mat-option value="option2">week(s)</mat-option>
-                    <mat-option value="option3">month(s)</mat-option>
-                    <mat-option value="option4">year(s)</mat-option>
+                  <mat-select [(ngModel)]="repeatEvery">
+                    <mat-option value="1">1st week of the month</mat-option>
+                    <mat-option value="2">2nd week of the month</mat-option>
+                    <mat-option value="3">3rd week of the month</mat-option>
+                    <mat-option value="last">last week of the month</mat-option>
+                    <mat-option value="all">week</mat-option>
                   </mat-select>
                 </mat-form-field>
               </div>
             </div>
 
-            <ng-container *ngIf="repeatOnSection">
-              <mat-label>Repeat on</mat-label>
-              <br><br><br>
-              <mat-checkbox [(ngModel)]="checkSun" class="button-padding circular-shape">Sun</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkMon" class="button-padding circular-shape">Mon</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkTues" class="button-padding circular-shape">Tues</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkWed" class="button-padding circular-shape">Wed</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkThurs" class="button-padding circular-shape">Thurs</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkFri" class="button-padding circular-shape">Fri</mat-checkbox>
-              <mat-checkbox [(ngModel)]="checkSat" class="button-padding circular-shape">Sat</mat-checkbox>
-            </ng-container>
-            <br><br><br>
-
-            <mat-label>Ends</mat-label>
-            <br><br>
-            <mat-radio-group class="radio-group" [(ngModel)]="radioSelectedVal">
-
-              <mat-radio-button class="button-padding" (change)="radioChange($event)" value="Never">Never
-              </mat-radio-button>
-
-              <div class="row padding-top-row">
-                <div class="column-2 no-border text-padding-left-align">
-                  <mat-radio-button class="button-padding" (change)="radioChange($event)" value="On">On
-                  </mat-radio-button>
-                </div>
-                <div class="column-2 no-border small-font">
-
-                  <mat-form-field appearance="outline">
-                    <input matInput [matDatepicker]="datePickRec" [min]="todaysDate" disabled class="form-control"
-                           id="daterec"
-                           type="text" placeholder="DD/MM/YYYY" [(ngModel)]="OnDate">
-                    <mat-datepicker-toggle [for]="datePickRec" matSuffix class="icon-color"></mat-datepicker-toggle>
-                    <mat-datepicker #datePickRec [disabled]="calendarRepeatOn"></mat-datepicker>
-                  </mat-form-field>
-
-                </div>
-              </div>
-
+            <div class="form-group">
               <div class="row">
-                <div class="column-2 no-border text-padding-left-align">
-                  <mat-radio-button class="button-padding" (change)="radioChange($event)" value="After">After
-                  </mat-radio-button>
+                <div class="column-2 text-padding-left-align">
+                  <mat-label>On</mat-label>
                 </div>
-                <div class="column-2 no-border small-font">
-                  <mat-form-field appearance="outline" class="align-side-by-side">
-                    <input class="form-control" id="repeatrec" type="number" min="1" max="10000" matInput
-                           [disabled]="calendarRepeatAfter" [(ngModel)]="afterOccurent"/>
-                    <span matSuffix>occurence</span>
-                  </mat-form-field>
+                <div class="column-2">
+                  <mat-checkbox class="button-padding" [checked]="allDaysChecked"
+                                [indeterminate]="someCheckbox('dayCheckbox')"
+                                (change)="setAllCheckbox($event.checked, 'dayCheckbox')">
+                    {{recurrenceDay.name}}
+                  </mat-checkbox>
+                  <mat-checkbox class="button-padding" *ngFor="let subDays of recurrenceDay.subCheckBox"
+                                [(ngModel)]="subDays.checked" (ngModelChange)="updateAllCheckbox('dayCheckbox')">
+                    {{subDays.name}}
+                  </mat-checkbox>
                 </div>
               </div>
+              <mat-error class="error">
+                {{errorMessageCheckboxDay}}
+              </mat-error>
+            </div>
 
-            </mat-radio-group>
+            <div class="form-group">
+              <div class="row">
+                <div class="column-2 text-padding-left-align">
+                  <mat-label>For the month of</mat-label>
+                </div>
+                <div class="column-2">
+                  <mat-checkbox class="button-padding" [checked]="allMonthsChecked"
+                                [indeterminate]="someCheckbox('monthCheckbox')"
+                                (change)="setAllCheckbox($event.checked, 'monthCheckbox')">
+                    {{recurrenceDay.name}}
+                  </mat-checkbox>
+                  <mat-checkbox class="button-padding" *ngFor="let subMonths of recurrenceMonth.subCheckBox"
+                                [(ngModel)]="subMonths.checked" (ngModelChange)="updateAllCheckbox('monthCheckbox')">
+                    {{subMonths.name}}
+                  </mat-checkbox>
+                </div>
+              </div>
+              <mat-error class="error">
+                {{errorMessageCheckboxMonth}}
+              </mat-error>
+            </div>
 
             <div class="position-right">
-              <button mat-stroked-button (click)="resetForm()">CANCEL</button>
+              <button mat-stroked-button (click)="recurrenceCollapsed()">CANCEL</button>
             </div>
 
           </div>
@@ -242,8 +229,8 @@
       <div class="form-group half-width">
         <mat-label>Time zone</mat-label>
         <mat-form-field floatLabel="never" appearance="outline">
-          <mat-select [value]="defaultTimeZoneOption">
-            <mat-option *ngFor="let timezone of timeZone" [value]="timezone.text">
+          <mat-select [(ngModel)]="selectedTimeZone" (selectionChange)="timeZoneChange($event)">
+            <mat-option *ngFor="let timezone of timeZone" [value]="timezone">
               {{ timezone.text }}
             </mat-option>
           </mat-select>

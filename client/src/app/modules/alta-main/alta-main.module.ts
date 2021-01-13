@@ -11,10 +11,7 @@ import { MatModule } from '../material/material-module';
 import { ToolbarComponent } from 'src/app/components/toolbar/toolbar.component';
 import { AuthModule } from '../auth/auth.module';
 import { ClientGridviewComponent } from 'src/app/components/client-gridview/client-gridview.component';
-import {
-  ManageOrganizationsComponent,
-  OrganizationDialogComponent,
-} from 'src/app/components/manage-organizations/manage-organizations.component';
+import { ManageOrganizationsComponent, OrganizationDialogComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule } from '@angular/forms';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
