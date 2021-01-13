@@ -6,15 +6,15 @@
     <div class="vertical-stack">
       <mat-label>Name:</mat-label>
       <mat-form-field appearance="outline" class="text-input">
-        <input matInput placeholder="Organization Name" [(ngModel)]="orgName"/>
+        <input matInput placeholder="Organization Name" [(ngModel)]="orgName" [disabled]="isEdit && !editOn"/>
       </mat-form-field>
     </div>
     <div>
-      <div *ngIf="isEdit" class="vertical-stack"></div>
+      <div *ngIf="!isEdit" class="vertical-stack"></div>
       <div *ngIf="isEdit" class="vertical-stack">
         <mat-label>Status</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <mat-select class="statusDropDown" id="active" [(value)]="isActive">
+          <mat-select class="statusDropDown" id="active" [(value)]="isActive" [disabled]="isEdit && !editOn">
             <mat-option *ngFor="let active of activeStates" [value]="active">
               {{active}}
             </mat-option>
@@ -26,14 +26,14 @@
       <div class="vertical-stack">
         <mat-label>Location:</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <input matInput placeholder="Montreal, QC" [(ngModel)]="location"/>
+          <input matInput placeholder="Montreal, QC" [(ngModel)]="location" [disabled]="isEdit && !editOn"/>
         </mat-form-field>
       </div>
       <div class="upload-button-spacer">
         or
       </div>
       <div class="upload-button-spacer">
-        <button mat-stroked-button class="upload-button">
+        <button mat-stroked-button class="upload-button" [disabled]="isEdit && !editOn">
           Submit (.csv) file
         </button><!-- if checks throws error then do not send data -->
       </div>
@@ -43,13 +43,16 @@
 
   <mat-card-footer>
     <div class="center-aligned">
-      <div class="button-side-by-side">
+      <div class="button-side-by-side" *ngIf="editOn">
         <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button"
                 (click)="submitSave()">
           SAVE</button><!-- if checks throws error then do not send data -->
       </div>
-      <div class="button-side-by-side">
+      <div class="button-side-by-side" *ngIf="editOn">
         <button mat-stroked-button routerLink="/manage-organizations" class="footer-button">CANCEL</button>
+      </div>
+      <div class="button-side-by-side" *ngIf="!editOn">
+        <button mat-stroked-button class="footer-button" (click)="turnOnEdit()">EDIT</button>
       </div>
     </div>
   </mat-card-footer>

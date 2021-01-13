@@ -14,7 +14,9 @@ export class CreateOrganizationComponent implements OnInit {
   location: string;
   isEdit = false;
   organizationTitle = 'Organization Creation';
-  isActive = ""
+  isActive = "";
+
+  editOn = false; // never changes
 
   constructor(
     private organizationService: ManageOrganizationsService,
