@@ -3,7 +3,7 @@ import { ToastController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { Audit } from 'src/app/models/audit';
-import { LoadingController } from '@ionic/angular';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 
 @Component({
   selector: 'app-audits',
@@ -20,18 +20,14 @@ export class AuditsPage implements OnInit {
   constructor(
     private auditService: AuditService,
     public toastController: ToastController,
-    private loadingController: LoadingController,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private cameraScanner: BarcodeScanner,
   ) {
     this.barcode = '';
   }
 
   ngOnInit() {
-    this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
-      this.scanStateChanged(true);
-      this.handleKeyboardEvent(event as KeyboardEvent);
-    });
-
+    this.setExternalScanListener();
     this.getAudits();
   }
 
@@ -57,17 +53,41 @@ export class AuditsPage implements OnInit {
     this.keypressEvent.unsubscribe();
   }
 
+  setExternalScanListener() {
+    // A Keyboard Event is triggered from an external scanner
+    this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
+      this.scanStateChanged(true);
+      this.handleKeyboardEvent(event as KeyboardEvent);
+    });
+  }
+
   handleKeyboardEvent(event: KeyboardEvent) {
     let key = event.key;
+    // The last key is always 'Enter'
     if (key == 'Enter') {
-      this.scannedMessage = `Scanned bardcode #${this.barcode}`;
-      this.barcode = '';
-      this.presentScanSuccessToast();
-      this.scanStateChanged(false);
+      this.finishScan();
     }
     else {
       this.barcode += key;
     }
+  }
+
+  handleCameraScan() {
+    this.cameraScanner.scan().then(barcodeData => {
+      if (barcodeData.cancelled == false) {
+        this.barcode = barcodeData.text;
+        this.finishScan();
+      }
+    }).catch(err => {
+      console.log('Error while scanning using camera:', err);
+    });
+  }
+
+  finishScan() {
+    this.scannedMessage = `Scanned bardcode #${this.barcode}`;
+    this.barcode = '';
+    this.presentScanSuccessToast();
+    this.scanStateChanged(false);
   }
 
   scanStateChanged(isScanning: boolean) {
@@ -81,8 +101,8 @@ export class AuditsPage implements OnInit {
     const toast = await this.toastController.create({
       message: this.scannedMessage,
       duration: 2000,
+      position: 'bottom',
     });
     toast.present();
   }
-
 }
