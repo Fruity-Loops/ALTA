@@ -57,7 +57,8 @@
 
   <div class="bottom-buttons">
         <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
-        <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="true">Assign</button> <!-- TODO: update route -->
+        <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="false"
+          (click)="submitPreAuditData()">Assign</button> <!-- TODO: update route -->
   </div>
 
   <ng-template #discardDialog>

@@ -32,7 +32,6 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated | IsSystemAdmin]
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_audit = serializer.save()

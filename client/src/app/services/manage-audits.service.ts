@@ -23,4 +23,8 @@ export class ManageAuditsService {
   getAuditData(audit_id): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${audit_id}/`);
   }
+
+  initiatePreAudit(preAuditData): Observable<any> {
+    return this.http.post(`${BASEURL}/item-to-sk/`, preAuditData);
+  }
 }

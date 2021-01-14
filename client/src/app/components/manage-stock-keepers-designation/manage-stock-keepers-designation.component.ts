@@ -79,6 +79,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       this.binToSks.push(
       {
         sk_id: auditSK.id,
+        sk_location: auditSK.location,
         item_ids: new Array<any>(),
         bins: new Array<any>()
       });
@@ -91,6 +92,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       this.binToSks.push(
       {
         sk_id: httpId,
+        sk_location: "",
         item_ids: new Array<any>(),
         bins: new Array<any>()
       });
@@ -104,29 +106,66 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     return this.locationsWithBinsAndSKs[index].item;
   }
 
+   getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
+    let holdItems = new Array<any>();
+    const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
+    this.locationsWithBinsAndSKs[index].item.forEach(item =>
+      bin.forEach(givenBin => {
+        if(item.Bin === givenBin) {
+          holdItems.push(item)
+        }
+      })
+    );
+    return holdItems;
+  }
 
+  submitPreAuditData(): void {
+    const holdBodyPreAuditData = new Array<any>();
+    let bodyPreAuditData: any;
+    let holdItemsOfBins = new Array<any>();
 
-/*
-  submitAssignedSKs(): void {
-    let bodyAssignedSK: any;
-    bodyAssignedSK = {
-      assigned_sk: this.skToAssign,
-    };
-    this.addAssignedSK.assignSK(bodyAssignedSK, Number(localStorage.getItem('audit_id'))).subscribe(
-      (data) => {
-        this.skToAssign = [];
-        setTimeout(() => {
+    this.locationsWithBinsAndSKs.forEach(obj =>
+      this.binToSks.forEach(auditComp => {
+          auditComp.bins.forEach(bin => {
+              const addedBin = holdItemsOfBins.find(predefinedBin => predefinedBin === bin)
+              if(addedBin === undefined ) {
+                const addedSK = holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)
+                if(addedSK === undefined ) {
+                  holdItemsOfBins = this.getAssociatedItemsGivenBin(obj.Location, auditComp.bins)
+                  if(holdItemsOfBins.length > 0) {
+                    holdBodyPreAuditData.push(
+                    {
+                      init_audit: Number(localStorage.getItem('audit_id')),
+                      customuser: auditComp.sk_id,
+                      bins: auditComp.bins,
+                      item_ids: holdItemsOfBins
+                    }), holdItemsOfBins = new Array<any>()
+                  }
+                }
+              }
+          })
+        //}
+      })
+    );
+
+    holdBodyPreAuditData.forEach(bodyPreAuditData =>
+      this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
+        .subscribe((response) => {
+          (err) => {
+            this.errorMessage = err;
+          }})
+    );
+
+    this.locationsWithBinsAndSKs = [];
+    this.binToSks = [];
+
+    setTimeout(() => {
           // Redirect user to component dashboard
           this.router.navigate(['dashboard']);
-        }, 1000); // Waiting 1 second before redirecting the user
-      },
-      (err) => {
-        this.errorMessage = err;
-      }
-    );
+    }, 1000); // Waiting 1 second before redirecting the user
   }
-*/
-  drop(event: CdkDragDrop<string[]>) {
+
+  drop(event: CdkDragDrop<string[]>, testing: any) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
