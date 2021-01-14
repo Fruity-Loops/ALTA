@@ -5,9 +5,9 @@ from organization.models import Organization
 class Item(models.Model):
     _id = models.AutoField(primary_key=True)
     Location = models.CharField(max_length=256)
-    Plant = models.BooleanField(default=False)
+    Plant = models.CharField(max_length=256)
     Zone = models.CharField(max_length=256)
-    Aisle = models.IntegerField()
+    Aisle = models.CharField(max_length=256)
     Part_Number = models.CharField(max_length=256)
     Part_Description = models.CharField(max_length=256)
     Serial_Number = models.CharField(max_length=256)

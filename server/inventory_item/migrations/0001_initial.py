@@ -5,7 +5,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,9 +17,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('_id', models.AutoField(primary_key=True, serialize=False)),
                 ('Location', models.CharField(max_length=256)),
-                ('Plant', models.BooleanField(default=False)),
+                ('Plant', models.CharField(max_length=256)),
                 ('Zone', models.CharField(max_length=256)),
-                ('Aisle', models.IntegerField()),
+                ('Aisle', models.CharField(max_length=256)),
                 ('Part_Number', models.CharField(max_length=256)),
                 ('Part_Description', models.CharField(max_length=256)),
                 ('Serial_Number', models.CharField(max_length=256)),
@@ -31,7 +30,8 @@ class Migration(migrations.Migration):
                 ('Average_Cost', models.CharField(max_length=256)),
                 ('Quantity', models.IntegerField()),
                 ('Unit_of_Measure', models.CharField(max_length=256)),
-                ('organization', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='organization.Organization')),
+                ('organization', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE,
+                                                   to='organization.Organization')),
             ],
         ),
     ]

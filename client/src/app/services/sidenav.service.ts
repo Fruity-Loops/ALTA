@@ -1,6 +1,6 @@
 // Managing tokens in the frontend using cookies
-import { Injectable } from '@angular/core';
-import { MatDrawerToggleResult, MatSidenav } from '@angular/material/sidenav';
+import {Injectable} from '@angular/core';
+import {MatDrawerToggleResult, MatSidenav} from '@angular/material/sidenav';
 
 @Injectable({
   providedIn: 'root',

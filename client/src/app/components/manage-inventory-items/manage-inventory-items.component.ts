@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
-import { MatPaginator } from '@angular/material/paginator';
-import { PageEvent } from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
+import {PageEvent} from '@angular/material/paginator';
 
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {HttpParams} from '@angular/common/http';
 
 import { Router } from '@angular/router';
 
@@ -26,6 +27,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   pageIndex = 1;
   previousPageIndex = 0;
   timeForm: FormGroup;
+  searchForm: FormGroup;
   body: any;
   subscription: any;
   organization: any;
@@ -37,6 +39,9 @@ export class ManageInventoryItemsComponent implements OnInit {
   data;
   items = [];
   errorMessage = '';
+
+  // Http URL params
+  params = new HttpParams();
 
   inventoryItemToAudit = [];
 
@@ -57,6 +62,8 @@ export class ManageInventoryItemsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   ngOnInit(): void {
+    this.params = this.params.append('page', String(this.pageIndex));
+    this.params = this.params.append('page_size', String(this.pageSize));
     this.getItems();
     this.init();
     this.inventoryItemToAudit = [];
@@ -66,12 +73,31 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
     });
+    this.searchForm = this.fb.group({
+      search: [''],
+      _id_from: [''],
+      _id_to: [''],
+      Location: [''],
+      Zone: [''],
+      Aisle: [''],
+      Part_Number: [''],
+      Serial_Number: [''],
+      Condition: [''],
+      Category: [''],
+      Owner: [''],
+      Average_Cost_from: [''],
+      Average_Cost_to: [''],
+      Quantity_from: [''],
+      Quantity_to: [''],
+      Unit_of_Measure: [''],
+    });
   }
 
   getItems(): void {
-    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
+    this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
+        console.log(data);
         // Getting the field name of the item object returned and populating the column of the table
         const results = 'results';
         for (const key in data[results][0]) {
@@ -98,8 +124,14 @@ export class ManageInventoryItemsComponent implements OnInit {
     const pageSize = 'pageSize';
     this.pageIndex = 1 + event[pageIndex];
     this.pageSize = event[pageSize];
+    this.params = this.params.set('page', String(this.pageIndex));
+    this.params = this.params.set('page_size', String(this.pageSize));
 
-    this.itemsService.getPageItems(this.pageIndex, this.pageSize).subscribe(
+    this.updatePage();
+  }
+
+  updatePage(): void {
+    this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
         this.updatePaginator();
@@ -108,6 +140,7 @@ export class ManageInventoryItemsComponent implements OnInit {
         this.errorMessage = err;
       }
     );
+
   }
 
   // updates data in table
@@ -115,7 +148,11 @@ export class ManageInventoryItemsComponent implements OnInit {
     const count = 'count';
     const results = 'results';
     this.length = this.data[count];
-    this.pageSize = this.data[results].length;
+    if (this.pageIndex > 0){
+      // Angular paginator starts at 0, Django pagination starts at 1
+      this.pageIndex = this.pageIndex - 1;
+    }
+    // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
     this.dataSource = new MatTableDataSource(this.items);
@@ -137,6 +174,20 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
+  searchItem(): void {
+
+    this.pageIndex = 1;
+    this.params = this.params.set('page', String(this.pageIndex));
+
+    for (const value in this.searchForm.value) {
+      if (this.searchForm.value[value] === '') {
+        this.params = this.params.delete(value);
+      } else {
+        this.params = this.params.set(value, this.searchForm.value[value]);
+      }
+    }
+    this.updatePage();
+  }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: any): void {
     if (this.inventoryItemToAudit.includes(value)) {
@@ -168,4 +219,5 @@ export class ManageInventoryItemsComponent implements OnInit {
       }
     );
   }
+
 }

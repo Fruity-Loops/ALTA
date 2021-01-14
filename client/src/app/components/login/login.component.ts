@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
-import { TokenService } from 'src/app/services/token.service';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {AuthService} from 'src/app/services/auth.service';
+import {Router} from '@angular/router';
+import {TokenService} from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.init();

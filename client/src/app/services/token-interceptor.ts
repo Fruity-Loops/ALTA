@@ -5,19 +5,20 @@ responses on their way back to the application. Multiple interceptors form a for
 chain of request/response handlers. Interceptors can perform a variety of implicit tasks,
 from authentication to logging, in a routine, standard way, for every HTTP request/response.*/
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
   HttpEvent,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { TokenService } from './token.service';
+import {Observable} from 'rxjs';
+import {TokenService} from './token.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: TokenService) {
+  }
 
   /* The intercept method transforms a request into an Observable that eventually
   returns the HTTP response. In this sense, each interceptor is fully capable of
@@ -40,7 +41,7 @@ export class TokenInterceptor implements HttpInterceptor {
       // We set the Authorization header: token inside the object for every request
       headersConfig.Authorization = `Token ${token}`;
     }
-    const reqUpdated = req.clone({ setHeaders: headersConfig }); // We clone the request
+    const reqUpdated = req.clone({setHeaders: headersConfig}); // We clone the request
     return next.handle(reqUpdated); // We handle the cloned request
   }
 }

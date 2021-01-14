@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {AuditTemplateService} from '../../../services/audit-template.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuditTemplateService } from '../../../services/audit-template.service';
+import { ActivatedRoute } from '@angular/router';
 import { Template } from '../Template';
-import timeZones from 'src/app/components/audit-template/create-audit-template/timezone.json';
+import timeZones from '../create-audit-template/timezone.json';
 
 interface DaysCheckBox {
   name: string;
@@ -17,23 +18,25 @@ interface MonthsCheckBox {
 }
 
 @Component({
-  selector: 'app-create-audit-template',
-  templateUrl: './create-audit-template.component.html',
-  styleUrls: ['./create-audit-template.component.scss']
+  selector: 'app-edit-audit-template',
+  templateUrl: '../create-audit-template/create-audit-template.component.html',
+  styleUrls: ['../create-audit-template/create-audit-template.component.scss']
 })
 
-export class CreateAuditTemplateComponent implements OnInit {
+export class EditAuditTemplateComponent implements OnInit {
 
   constructor(
     private router: Router,
     private auditTemplateService: AuditTemplateService,
+    private activatedRoute: ActivatedRoute,
   ) {
   }
 
+  id: any;
   errorMessage: string;
   errorMessageCheckboxDay: string;
   errorMessageCheckboxMonth: string;
-  disabled = false;
+  disabled: boolean;
   startDate = new Date();
   startTime = '00:00:00';
   allDaysChecked = false;
@@ -92,12 +95,8 @@ export class CreateAuditTemplateComponent implements OnInit {
     ]
   };
 
-  // We initialize the form and set validators to each one in case user forget to specify a field
   ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  initializeForm(): void {
+    this.disabled = false;
     this.templateValues = {
       location: '',
       plant: '',
@@ -107,6 +106,40 @@ export class CreateAuditTemplateComponent implements OnInit {
       part_number: '',
       serial_number: '',
     };
+    this.activatedRoute.params.subscribe((routeParams) => {
+      this.id = routeParams.ID;
+      this.auditTemplateService.getATemplate(this.id).subscribe((temp) => {
+        this.initializeForm(this.formTemplate(temp));
+        this.title = temp.title;
+        this.description = temp.description;
+        this.id = temp.template_id;
+      });
+    });
+  }
+
+  formTemplate(temp): any {
+    const createdTemplate: any = {};
+    Object.entries(temp).forEach(([key, value]) => {
+      if (typeof key === 'string' && typeof value === 'string'
+        // checks to make sure that it is only adding keys from the template interface
+        && this.templateValues.hasOwnProperty(key)) {
+        createdTemplate[key] = JSON.parse(value.replace(/'/g, '"')); // replace to fix crash on single quote
+      }
+    });
+    return createdTemplate;
+  }
+
+  initializeForm(body): void {
+    if (body) {
+      this.disabled = true;
+      this.template = body;
+    } else {
+      this.disabled = false;
+    }
+  }
+
+  beginEdit(): void {
+    this.disabled = false;
   }
 
   addItem(term, value): void {
@@ -156,8 +189,8 @@ export class CreateAuditTemplateComponent implements OnInit {
         }
       }
     }
-
     const body = {
+      template_id: this.id,
       title: this.title,
       location: this.template.location,
       plant: this.template.plant,
@@ -181,13 +214,13 @@ export class CreateAuditTemplateComponent implements OnInit {
     } else if (this.panelOpenState && !checkedMonth) {
       this.errorMessageCheckboxMonth = 'Please choose at least one month';
     } else {
-      this.auditTemplateService.createTemplate(body).subscribe(
+      this.auditTemplateService.updateTemplate(this.id, body).subscribe(
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['template']);
+            window.location.reload();
           }, 1000); // Waiting 1 second before redirecting the user
-          this.initializeForm();
+          this.initializeForm(false);
           this.errorMessage = '';
 
         },
@@ -263,6 +296,6 @@ export class CreateAuditTemplateComponent implements OnInit {
       }
       this.recurrenceMonth.subCheckBox.forEach(t => t.checked = checked);
     }
-
   }
 }
+

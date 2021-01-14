@@ -10,6 +10,7 @@ import { CreateMemberComponent } from '../../components/create-member/create-mem
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
+import { EditAuditTemplateComponent } from 'src/app/components/audit-template/edit-audit-template/edit-audit-template.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,9 @@ export const routes: Routes = [
           },
           {
             path: 'create-template', component: CreateAuditTemplateComponent
+          },
+          {
+            path: 'edit-template/:ID', component: EditAuditTemplateComponent
           }
         ]},
     ],
@@ -47,4 +51,5 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AltaMainRoutingModule {}
+export class AltaMainRoutingModule {
+}
