@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { IonicModule } from '@ionic/angular';
 import { AuditsPage } from './audits.page';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 describe('AuditsPage', () => {
   let component: AuditsPage;
@@ -13,6 +15,10 @@ describe('AuditsPage', () => {
       imports: [
         IonicModule.forRoot(),
         HttpClientTestingModule,
+      ],
+      providers : [
+        BarcodeScanner,
+        AndroidPermissions,
       ]
     }).compileComponents();
 

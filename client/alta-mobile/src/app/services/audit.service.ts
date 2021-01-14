@@ -1,6 +1,6 @@
 import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient } from '@angular/common/http';
 import { Audit } from 'src/app/models/audit';
 import { Observable } from 'rxjs';
 
@@ -15,6 +15,6 @@ export class AuditService {
 
 
   getAudits(): Observable<any> {
-    return this.http.get<Audit[]>(`${BASEURL}/audits`)
+    return this.http.get<Audit[]>(`${BASEURL}/audits`);
   }
 }
