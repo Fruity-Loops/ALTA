@@ -4,6 +4,7 @@ import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { Audit } from 'src/app/models/audit';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-audits',
@@ -20,6 +21,7 @@ export class AuditsPage implements OnInit {
   constructor(
     private auditService: AuditService,
     public toastController: ToastController,
+    public alertController: AlertController,
     private cd: ChangeDetectorRef,
     private cameraScanner: BarcodeScanner,
   ) {
@@ -55,7 +57,7 @@ export class AuditsPage implements OnInit {
   }
 
   setExternalScanListener() {
-    // A Keyboard Event is triggered from an external scanner
+    // A Keyboard Event is triggered from an external bluetooth scanner
     this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
       this.scanStateChanged(true);
       this.handleKeyboardEvent(event as KeyboardEvent);
@@ -84,6 +86,37 @@ export class AuditsPage implements OnInit {
     });
   }
 
+  async handleManualInput() {
+    const alert = await this.alertController.create({
+      header: 'Input Barcode',
+      inputs: [
+        {
+          name: 'barcode',
+          type: 'text',
+          placeholder: 'Barcode #'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Confirm',
+          handler: input => {
+            if (input && input.barcode) {
+              this.barcode = input.barcode;
+              this.finishScan();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   finishScan() {
     this.validateItem();
     this.barcode = '';
@@ -92,13 +125,13 @@ export class AuditsPage implements OnInit {
   }
 
   validateItem() {
-    this.scannedMessage = `Scanned bardcode #${this.barcode}\nNo item match found.`;
     // Check if the scanned barcode matches an item 
     // TODO: replace with backend request
+    this.scannedMessage = `Scanned bardcode #${this.barcode}\nNo item match found.`;
     this.audits.forEach(audit => {
-      if (audit.id == this.barcode){
+      if (audit.id == this.barcode) {
         this.scannedMessage = `Scanned bardcode #${this.barcode}\nMatch with ${audit.name} !`
-      }    
+      }
     });
   }
 
