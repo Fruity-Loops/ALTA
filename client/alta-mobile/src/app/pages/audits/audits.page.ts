@@ -32,7 +32,8 @@ export class AuditsPage implements OnInit {
   }
 
   getAudits() {
-    // Dummy list simulating fetch
+    // Fetch audits assigned to the stock keeper
+    // TODO: replace with backend request
     this.audits = [
       <Audit>{ id: '711719047308', name: 'item0' },
       <Audit>{ id: '056394400360', name: 'item1' },
@@ -84,10 +85,21 @@ export class AuditsPage implements OnInit {
   }
 
   finishScan() {
-    this.scannedMessage = `Scanned bardcode #${this.barcode}`;
+    this.validateItem();
     this.barcode = '';
     this.presentScanSuccessToast();
     this.scanStateChanged(false);
+  }
+
+  validateItem() {
+    this.scannedMessage = `Scanned bardcode #${this.barcode}\nNo item match found.`;
+    // Check if the scanned barcode matches an item 
+    // TODO: replace with backend request
+    this.audits.forEach(audit => {
+      if (audit.id == this.barcode){
+        this.scannedMessage = `Scanned bardcode #${this.barcode}\nMatch with ${audit.name} !`
+      }    
+    });
   }
 
   scanStateChanged(isScanning: boolean) {
@@ -100,7 +112,7 @@ export class AuditsPage implements OnInit {
   async presentScanSuccessToast() {
     const toast = await this.toastController.create({
       message: this.scannedMessage,
-      duration: 2000,
+      duration: 4000,
       position: 'bottom',
     });
     toast.present();
