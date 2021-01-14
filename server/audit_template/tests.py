@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
 from user_account.models import CustomUser
@@ -30,7 +32,12 @@ class AuditTemplateTestCase(APITestCase):
             "part_number": [],
             "serial_number": [],
             "description": "",
-            "organization": 1
+            "organization": 1,
+            "startDateObj": datetime.now,
+            "repeatEvery": 1,
+            "onDay": [],
+            "forMonth": [],
+            "timeZoneUTC": "America/Detroit"
         }
 
         # Creating a template for the user's own organization

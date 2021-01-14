@@ -161,13 +161,9 @@ export class EditAuditTemplateComponent implements OnInit {
   submit(): void {
     this.dayArray = [];
     this.monthArray = [];
-    const dateObj = new Date(
-      this.startDate.getFullYear(),
-      (this.startDate.getMonth()),
-      this.startDate.getDate(),
-      parseInt(this.startTime.split(':')[0], 10),
-      parseInt(this.startTime.split(':')[1], 10), 0, 0
-    );
+    // Constructing date as Django DateTimeField YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] <-- optional timezone, therefore: YYYY-MM-DD HH:MM
+    const date = this.startDate.getFullYear() + '-' + (this.startDate.getMonth() + 1) + '-' + this.startDate.getDate() + ' ' +
+      parseInt(this.startTime.split(':')[0], 10) + ':' +  parseInt(this.startTime.split(':')[1], 10);
 
     let checkedDay = false;
     let checkedMonth = false;
@@ -200,7 +196,7 @@ export class EditAuditTemplateComponent implements OnInit {
       part_number: this.template.part_number,
       serial_number: this.template.serial_number,
       description: this.description,
-      startDateObj: dateObj,
+      startDateObj: date,
       repeatEvery: this.repeatEvery,
       onDay: this.dayArray,
       forMonth: this.monthArray,
