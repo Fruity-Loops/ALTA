@@ -33,10 +33,10 @@ class AuditTemplateTestCase(APITestCase):
             "serial_number": [],
             "description": "",
             "organization": 1,
-            "startDateObj": datetime.now,
-            "repeatEvery": 1,
-            "onDay": [],
-            "forMonth": [],
+            "startDateObj": datetime.now(),
+            "repeatEvery": '1',
+            "onDay": [True, True, False, False, False, False, False],
+            "forMonth": [True, True, False, False, False, False, False, False, False, False, False, False],
             "timeZoneUTC": "America/Detroit"
         }
 

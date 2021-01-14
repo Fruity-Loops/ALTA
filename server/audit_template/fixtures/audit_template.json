@@ -14,7 +14,16 @@
             "serial_number": [],
             "description": "",
             "calendar_date": "January 08, 2021",
-            "organization": null
+            "organization": null,
+            "startDateObj": "2021-03-05T14:59:00.000+00:00",
+            "repeatEvery": "1",
+            "onDay": [
+                "True", "True", "False", "False", "False", "False", "False"
+            ],
+            "forMonth": [
+                "True", "True", "False", "False", "False", "False", "False", "False", "False", "False", "False", "False"
+            ],
+            "timeZoneUTC": "America/Detroit"
         }
     },
     {
@@ -32,7 +41,12 @@
             "serial_number": [],
             "description": "",
             "calendar_date": "January 08, 2021",
-            "organization": 3
+            "organization": 3,
+            "startDateObj": "2021-01-02T13:22:00.000+00:00",
+            "repeatEvery": null,
+            "onDay": [],
+            "forMonth": [],
+            "timeZoneUTC": "America/Detroit"
         }
     },
     {
@@ -50,7 +64,12 @@
             "serial_number": [],
             "description": "",
             "calendar_date": "January 08, 2021",
-            "organization": 1
+            "organization": 1,
+            "startDateObj": "2022-02-02T22:22:00.000+00:00",
+            "repeatEvery": null,
+            "onDay": [],
+            "forMonth": [],
+            "timeZoneUTC": "America/Detroit"
         }
     }
 ]
