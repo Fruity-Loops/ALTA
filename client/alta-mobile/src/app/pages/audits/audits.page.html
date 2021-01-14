@@ -1,4 +1,14 @@
 <app-toolbar></app-toolbar>
 <ion-content>
-<p>Audits</p>
+    <ion-list>
+        <ion-item-divider>
+            <h1>Audits</h1>
+        </ion-item-divider>
+        <ion-item *ngFor="let audit of audits">
+            <ion-label>
+                <p> {{ audit.name }}</p>
+                <p> #{{ audit.id }}</p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
 </ion-content>
