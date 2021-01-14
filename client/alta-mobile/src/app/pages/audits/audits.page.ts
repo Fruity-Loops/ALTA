@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { Audit } from 'src/app/models/audit';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-audits',
@@ -14,16 +15,20 @@ export class AuditsPage implements OnInit {
   scannedMessage: string;
   keypressEvent: Subscription;
   audits: Array<Audit>;
+  isScanning: boolean;
 
   constructor(
     private auditService: AuditService,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private loadingController: LoadingController,
+    private cd: ChangeDetectorRef
   ) {
     this.barcode = '';
   }
 
   ngOnInit() {
     this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
+      this.scanStateChanged(true);
       this.handleKeyboardEvent(event as KeyboardEvent);
     });
 
@@ -58,17 +63,26 @@ export class AuditsPage implements OnInit {
       this.scannedMessage = `Scanned bardcode #${this.barcode}`;
       this.barcode = '';
       this.presentScanSuccessToast();
+      this.scanStateChanged(false);
     }
     else {
       this.barcode += key;
     }
   }
 
+  scanStateChanged(isScanning: boolean) {
+    if (this.isScanning != isScanning) {
+      this.isScanning = isScanning;
+      this.cd.detectChanges();
+    }
+  }
+
   async presentScanSuccessToast() {
     const toast = await this.toastController.create({
       message: this.scannedMessage,
-      duration: 4000
+      duration: 2000,
     });
     toast.present();
   }
+
 }

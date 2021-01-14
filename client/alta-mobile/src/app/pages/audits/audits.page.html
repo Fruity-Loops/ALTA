@@ -1,9 +1,13 @@
 <app-toolbar></app-toolbar>
+<div *ngIf="isScanning" id="scanInfoHeader">
+    <ion-item color="primary">Scanning...</ion-item>
+    <ion-progress-bar type='indeterminate'></ion-progress-bar>
+</div>
+<ion-item-divider>
+    <h1>Audits</h1>
+</ion-item-divider>
 <ion-content>
     <ion-list>
-        <ion-item-divider>
-            <h1>Audits</h1>
-        </ion-item-divider>
         <ion-item *ngFor="let audit of audits">
             <ion-label>
                 <p> {{ audit.name }}</p>
