@@ -6,18 +6,13 @@ class QuickstartUser(HttpUser):
     unique_email = 'test@email.com'
     unique_username = 'test_case'
     unique_id = 0
-    do_one = True
 
     @task
     def login(self):
-        if QuickstartUser.do_one:
-            response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
-            # print(response)
-            # token = response['token']
-            # headers = {'Authorization': 'Token ' + token}
-            # user = response['user']
-            # self.client.post("logout/", json={"user": response['user_id']})
-            # QuickstartUser.do_one = False
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {"authorization": "Token " + token}
+        self.client.post("logout/", json={"user": response['user_id']}, headers=headers)
 
     @task
     def open_register(self):
@@ -101,4 +96,55 @@ class QuickstartUser(HttpUser):
         headers = {'Authorization': 'Token ' + token}
         data = {'new_job_timing': 50, 'organization': "1"}
         self.client.post('InventoryItemRefreshTime/', json=data, headers=headers)
+
+    @task
+    def access_all_items(self):
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {'Authorization': 'Token ' + token}
+        self.client.get('item/', headers=headers)
+
+    @task
+    def access_specific_items(self):
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {'Authorization': 'Token ' + token}
+        self.client.get('item/?page=1&page_size=25&search=YYC', headers=headers)
+
+    @task
+    def create_delete_template(self):
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {'Authorization': 'Token ' + token}
+        data1 = {
+            "title": "bad title",
+            "location": ['A certain location'],
+            "plant": [],
+            "zones": [],
+            "aisles": [],
+            "bins": [],
+            "part_number": [],
+            "serial_number": [],
+            "description": "",
+            "organization": 1
+        }
+        self.client.post('template/', json=data1, headers=headers)
+        response = self.client.get('template/?organization=1', headers=headers).json()
+        delete_id = -1
+        for template in response:
+            if template['title'] == "bad title":
+                delete_id = template['template_id']
+                print(template)
+        if delete_id > -1:
+            self.client.delete('template/' + str(delete_id) + '/', headers=headers)
+
+    @task
+    def view_modify_template(self):
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {'Authorization': 'Token ' + token}
+        self.client.get('template/8/', headers=headers)
+        data2 = {"title": "title " + str(self.unique_id)}
+        self.unique_id += 1
+        self.client.patch('template/8/', json=data2, headers=headers)
 
