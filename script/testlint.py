@@ -63,7 +63,7 @@ def execute(back, front, e2e, lint, load):
         os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
         os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
         os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
-        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json --settings django_server.test_settings')
         subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                          f'--settings django_server.test_settings', shell=True)
         os.chdir(os.path.dirname(os.getcwd()))
@@ -84,7 +84,7 @@ def execute(back, front, e2e, lint, load):
         os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
         os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
         os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
-        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json --settings django_server.test_settings')
+        os.system(f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json --settings django_server.test_settings')
         subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                          f'--settings django_server.test_settings', shell=True)
         os.chdir(os.path.dirname(os.getcwd()))
