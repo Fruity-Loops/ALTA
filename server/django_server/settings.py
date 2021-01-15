@@ -28,6 +28,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key')
 DEBUG = os.getenv('DEBUG', 'false')
 
 ALLOWED_HOSTS = [
+    'localhost',
     os.getenv('HOST_URL', 'alta-mobile.loca.lt')
     ]
 
