@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
 import { AuthService } from 'src/app/services/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import {NavigationEnd, NavigationStart, Router} from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import roles from '../../fixtures/roles.json';
 import { routes } from '../../modules/alta-main-routing/alta-main-routing.module';
@@ -16,18 +16,26 @@ export class SideNavComponent implements OnInit {
   // contains the listing of all sidenav menu items
   options = SystemNavListings;
   // contains the last option chosen, it defaults to the first
+  // TODO: selectedOption has no initializer in the constructor
+  // @ts-ignore
   selectedOption: SideNavOption;
 
-  authSubscription;
-  routeSubscription;
-  loggedInUser;
-  loggedInUserRole;
+  authSubscription: any;
+  routeSubscription: any;
+  loggedInUser: string;
+  loggedInUserRole: string;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService
-    ) { }
+    ) {
+
+    // TODO: what strings should be assigned by default
+    //  which wouldn't hinder our security
+    this.loggedInUser = ''
+    this.loggedInUserRole = ''
+  }
 
   ngOnInit(): void {
     this.authSubscription = this.authService.getOrgMode().subscribe(orgMode => {
@@ -82,12 +90,18 @@ export class SideNavComponent implements OnInit {
 
   }
 
-  setSelected(url): void {
+  setSelected(url: string): void {
     if (url === '/create-members') {
       if (this.options === SystemNavListings) {
+        // @ts-ignore
+        //TODO: should there be a default url if routes[] is undefined?
+        // NOTICE: url changes types from string to Route
         url = routes[0].children[4]; // '/sa-modify-members';
       }
       else if (this.options === OrganizationNavListings) {
+        // @ts-ignore
+        //TODO: should there be a default url if routes[] is undefined?
+        // NOTICE: url changes types from string to Route
         url = routes[0].children[3]; // '/modify-members';
       }
 
@@ -102,7 +116,7 @@ export class SideNavComponent implements OnInit {
     });
   }
 
-  checkInSelection(url): boolean {
+  checkInSelection(url: string): boolean {
     let found = false;
     this.options.forEach(navOption => {
       if ('/' + navOption.routerLink === url) {
