@@ -101,11 +101,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     return this.binToSks[index].bins;
   }
 
-  getAssociatedItems(location: string): [] {
-    const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
-    return this.locationsWithBinsAndSKs[index].item;
-  }
-
    getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
     let holdItems = new Array<any>();
     const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
@@ -121,7 +116,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
   submitPreAuditData(): void {
     const holdBodyPreAuditData = new Array<any>();
-    let bodyPreAuditData: any;
     let holdItemsOfBins = new Array<any>();
 
     this.binToSks.forEach(auditComp => {
@@ -152,7 +146,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
             this.errorMessage = err;
           }})
     );
-/*
+
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
     localStorage.removeItem('audit_id');
@@ -161,7 +155,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
           // Redirect user to component dashboard
           this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
-    */
   }
 
   drop(event: CdkDragDrop<string[]>, testing: any) {

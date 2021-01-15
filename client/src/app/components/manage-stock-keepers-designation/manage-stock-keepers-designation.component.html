@@ -26,9 +26,9 @@
           (cdkDropListDropped)="drop($event)">
           <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
             <p>{{bin}}<br></p>
-            <ul *ngFor="let item of getAssociatedItems(auditComp.Location)"
+            <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, auditComp.bins)"
                 class="item-list">
-              <li class="drag-drop-subtext">{{item.Part_Description}}</li>
+              <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
             </ul>
           </div>
         </div>
@@ -45,9 +45,9 @@
           <div class="drag-drop-box" *ngFor="let bin of identifyUser(sk.id)" [hidden]="bin == null"
                cdkDrag>
             <p>{{bin}}<br></p>
-            <ul *ngFor="let item of getAssociatedItems(auditComp.Location)"
+            <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, identifyUser(sk.id))"
                 class="item-list">
-              <li class="drag-drop-subtext">{{item.Part_Description}}</li>
+              <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
             </ul>
           </div>
         </div>
