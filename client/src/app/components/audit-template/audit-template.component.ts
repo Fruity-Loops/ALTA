@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../services/audit-template.service';
-import {AuthService} from '../../services/auth.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 interface Template {
@@ -21,7 +20,13 @@ export class AuditTemplateComponent implements OnInit {
 
   constructor(private auditTemplateService: AuditTemplateService,
               public dialog: MatDialog
-  ) { }
+  ) {
+    this.auditTemplates = [{
+      author: '',
+      calendar_date: '',
+      title: ''
+    }]
+  }
 
   ngOnInit(): void {
       this.getAuditTemplates();
@@ -41,7 +46,7 @@ export class AuditTemplateComponent implements OnInit {
 
   openDialog(id: string, title: string): void {
     this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id, title}});
-    this.dialogRef.afterClosed().subscribe(result => {
+    this.dialogRef.afterClosed().subscribe((result : any) => {
       if (result) {
         this.auditTemplateService.deleteTemplate(result.id).subscribe( () => {
           this.getAuditTemplates();
