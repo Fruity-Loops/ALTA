@@ -112,11 +112,12 @@ class QuickstartUser(HttpUser):
         self.client.get('item/?page=1&page_size=25&search=YYC', headers=headers)
 
     @task
-    def create_delete_template(self):
+    def create_template(self):
         response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
         token = response['token']
         headers = {'Authorization': 'Token ' + token}
         data1 = {
+            "template_id": 4,
             "title": "bad title",
             "location": ['A certain location'],
             "plant": [],
@@ -129,17 +130,22 @@ class QuickstartUser(HttpUser):
             "organization": 1
         }
         self.client.post('template/', json=data1, headers=headers)
+
+    @task
+    def delete_template(self):
+        response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = response['token']
+        headers = {'Authorization': 'Token ' + token}
         response = self.client.get('template/?organization=1', headers=headers).json()
         delete_id = -1
         for template in response:
             if template['title'] == "bad title":
                 delete_id = template['template_id']
-                print(template)
         if delete_id > -1:
             self.client.delete('template/' + str(delete_id) + '/', headers=headers)
 
     @task
-    def view_modify_template(self):
+    def modify_template(self):
         response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
         token = response['token']
         headers = {'Authorization': 'Token ' + token}
