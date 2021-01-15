@@ -12,14 +12,10 @@ class AuditTestCase(APITestCase):
 
     def setUp(self):
         self.client = APIClient()
-
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.get(user_name="sa")
-
         self.item_one = Item.objects.get(_id=12731369.0)
-
         self.item_two = Item.objects.get(_id=12752842.0)
-
         self.audit = Audit.objects.create()
         self.audit.inventory_items.add(self.item_one._id, self.item_two._id)
 
@@ -36,6 +32,6 @@ class AuditTestCase(APITestCase):
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id]})
         self.assertEqual(response.status_code,
-                         status.HTTP_201_CREATED)
+                         status.HTTP_400_CREATED)
         self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(response.data['inventory_items'][1], self.item_two._id)

@@ -14,7 +14,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get']
     queryset = Audit.objects.all()
-    permission_classes = [IsAuthenticated | IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -29,7 +29,7 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'patch', 'get']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated | IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
