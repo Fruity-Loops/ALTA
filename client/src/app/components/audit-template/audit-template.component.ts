@@ -14,6 +14,8 @@ interface Template {
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
+  //TODO
+  //@ts-ignore
   auditTemplates: [Template];
   errorMessage = '';
   dialogRef: any;
@@ -21,11 +23,6 @@ export class AuditTemplateComponent implements OnInit {
   constructor(private auditTemplateService: AuditTemplateService,
               public dialog: MatDialog
   ) {
-    this.auditTemplates = [{
-      author: '',
-      calendar_date: '',
-      title: ''
-    }]
   }
 
   ngOnInit(): void {

@@ -26,22 +26,16 @@ export class CreateAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
+  //TODO
+  // @ts-ignore
   templateValues: Template;
 
   constructor(
     private router: Router,
     private auditTemplateService: AuditTemplateService,
   ) {
-    this.errorMessage = 'GENERIC ERROR MESSAGE'
-    this.templateValues = new class implements Template {
-      aisles: any;
-      bins: any;
-      location: any;
-      part_number: any;
-      plant: any;
-      serial_number: any;
-      zones: any;
-    }
+    this.errorMessage = ''
+
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field

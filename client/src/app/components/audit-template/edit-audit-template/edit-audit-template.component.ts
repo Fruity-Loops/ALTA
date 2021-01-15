@@ -25,6 +25,8 @@ export class EditAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
+  //TODO
+  //@ts-ignore
   templateValues: Template;
   id: any;
   disabled: boolean;
@@ -36,16 +38,7 @@ export class EditAuditTemplateComponent implements OnInit {
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.templateValues = new class implements Template {
-      aisles: any;
-      bins: any;
-      location: any;
-      part_number: any;
-      plant: any;
-      serial_number: any;
-      zones: any;
-    }
-    this.errorMessage = 'GENERIC ERROR MESSAGE'
+    this.errorMessage = ''
     this.disabled = false;
   }
 
