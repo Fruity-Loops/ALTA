@@ -1,11 +1,12 @@
 import {SideNavOption} from './sidenavOption';
 
 // TODO: settings is unused, should it be deleted?
-// const settings: SideNavOption = {
-//   title: 'Settings',
-//   routerLink: 'settings',
-//   subMenuOptions: [],
-// };
+// @ts-ignore
+const settings: SideNavOption = {
+  title: 'Settings',
+  routerLink: 'settings',
+  subMenuOptions: [],
+};
 
 // These are the menu options listed that can be chosen from the sidenav menu
 export const SystemNavListings: SideNavOption[] = [
