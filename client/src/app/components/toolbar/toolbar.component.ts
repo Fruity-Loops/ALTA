@@ -1,8 +1,10 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {Router} from '@angular/router';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {AuthService} from 'src/app/services/auth.service';
-import {TokenService} from 'src/app/services/token.service';
+
+//TODO: remove
+// import {Router} from '@angular/router';
+// import {TokenService} from 'src/app/services/token.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,23 +12,33 @@ import {TokenService} from 'src/app/services/token.service';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
-  constructor(
-    private tokenService: TokenService,
-    private router: Router,
-    private sidenav: SidenavService,
-    private authService: AuthService
-  ) {
-  }
 
   isVisible = true;
   @Output() drawerEvent = new EventEmitter<boolean>();
-  organization;
-  loggedInUser;
-  loggedInUserRole;
-  subscription;
-  orgModeSub;
+  organization: string;
+  loggedInUser: string;
+  loggedInUserRole: string;
+  subscription: any;
+  orgModeSub: any;
 
   orgMode: boolean;
+
+  constructor(
+    //TODO: remove
+    // private tokenService: TokenService,
+    // private router: Router,
+
+    private sidenav: SidenavService,
+    private authService: AuthService
+  ) {
+    this.orgMode = false;
+
+    // TODO: what strings should be assigned by default
+    //  which wouldn't hinder our security
+    this.organization = '';
+    this.loggedInUser = '';
+    this.loggedInUserRole = '';
+  }
 
   ngOnInit(): void {
     this.subscription = this.authService.sharedUser.subscribe((data) => {
@@ -37,6 +49,7 @@ export class ToolbarComponent implements OnInit {
     this.orgModeSub = this.authService.getOrgMode().subscribe((value) => {
       this.orgMode = value;
     });
+    console.log(this.orgModeSub);
   }
 
   toggleDrawer(): void {
