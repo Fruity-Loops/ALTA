@@ -29,7 +29,7 @@ export class CreateOrganizationComponent implements OnInit {
   submitSave(): void {
     this.organizationService.createOrganization({
       org_name: this.orgName,
-      address: this.location,
+      address: this.location !== '' ? this.location : undefined,
       status: true
     }).subscribe(() => {
       setTimeout(() => {
