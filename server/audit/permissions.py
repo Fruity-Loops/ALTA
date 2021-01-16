@@ -13,7 +13,7 @@ class IsInventoryManagerAudit(IsInventoryManager):
         if request.parser_context['kwargs'] is not None \
                 and 'pk' in request.parser_context['kwargs']:
             temp = Audit.objects.get(audit_id=request.parser_context['kwargs']['pk'])
-            return temp.org == user.organization and user.role == 'IM'
+            return temp.org_id == user.organization.org_id and user.role == 'IM'
 
         if 'init_audit' in request.data:
             get_audit = Audit.objects.get(audit_id=request.data['init_audit'])
