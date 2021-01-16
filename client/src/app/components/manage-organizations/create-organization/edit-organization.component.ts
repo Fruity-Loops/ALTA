@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {ManageOrganizationsService} from '../../../services/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template.component';
 
 
 @Component({
@@ -22,9 +24,13 @@ export class EditOrganizationComponent implements OnInit {
 
   org_error: string;
 
+  dialogRef: any;
+  originalStatus: boolean;
+
   constructor(
     private organizationService: ManageOrganizationsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +38,7 @@ export class EditOrganizationComponent implements OnInit {
       this.orgID = routeParams.ID;
       this.organizationService.getOneOrganization(this.orgID).subscribe(organization => {
         this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
+        this.originalStatus = organization.status;
         this.orgName = organization.org_name;
         this.location = organization.address;
       });
@@ -43,6 +50,20 @@ export class EditOrganizationComponent implements OnInit {
   }
 
   submitSave(): void {
+
+    if (this.originalStatus && this.isActive === 'Disabled') {
+      this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id: this.orgID, title: this.organizationTitle}});
+      this.dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.updateOrganization();
+        }
+      });
+    } else {
+      this.updateOrganization();
+    }
+  }
+
+  updateOrganization(): void {
     this.organizationService.updateOrganization({
       org_id: this.orgID,
       org_name: this.orgName,
@@ -56,4 +77,29 @@ export class EditOrganizationComponent implements OnInit {
       }
     });
   }
+}
+
+interface DialogData {
+  title: string;
+  id: string;
+}
+
+@Component({
+  selector: 'app-disable-organization-dialog',
+  templateUrl: 'disable-organization-dialog.html',
+})
+export class DisableOrganizationDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<DisableOrganizationDialogComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  closeDialog(): void {
+    this.dialogRef.close(false);
+  }
+
+  disableOrganization(): void {
+    this.dialogRef.close(this.data);
+  }
+
 }
