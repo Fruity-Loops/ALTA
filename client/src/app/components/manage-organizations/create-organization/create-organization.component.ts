@@ -9,12 +9,10 @@ import {Router} from '@angular/router';
 })
 export class CreateOrganizationComponent implements OnInit {
 
-  activeStates = ['Active', 'Disabled'];
   orgName: string;
   location: string;
   isEdit = false;
   organizationTitle = 'Organization Creation';
-  isActive = '';
 
   editOn = true; // never changes
 
