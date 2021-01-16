@@ -63,11 +63,11 @@ class AuditTemplateTestCase(APITestCase):
         Testing get method to make sure permissions work along with the functionality
         """
         self.client.force_authenticate(user=self.user1)
-        req = self.client.get(f'{self.url}8/')
+        req = self.client.get(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/')
         self.assertEqual(req.status_code, status.HTTP_200_OK)
         self.assertEqual(req.data["title"], "fewqfwq")
 
-        failed_req = self.client.get(f'{self.url}7/')
+        failed_req = self.client.get(f'{self.url}90788fdd-9cd8-4a96-8402-6e27c9467720/')
         self.assertEqual(failed_req.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_patch_template(self):
@@ -77,7 +77,7 @@ class AuditTemplateTestCase(APITestCase):
 
         # getting a template to test on from fixture
         self.client.force_authenticate(user=self.user1)
-        req = self.client.get(f'{self.url}8/')
+        req = self.client.get(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/')
         data = req.data
 
         # parsing data into python object because json fields return strings
@@ -86,13 +86,13 @@ class AuditTemplateTestCase(APITestCase):
 
         # creating and testing successful patch
         data['plant'].append("new plant")
-        patch_req = self.client.patch(f'{self.url}8/', data, format='json')
+        patch_req = self.client.patch(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/', data, format='json')
         self.assertEqual(patch_req.status_code, status.HTTP_200_OK)
-        new_template = self.client.get(f'{self.url}8/')
+        new_template = self.client.get(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/')
         self.assertEqual(new_template.data['plant'], "['new plant']")
 
         # ensuring users can't patch templates for which they are not authorized
-        failed_patch = self.client.patch(f'{self.url}7/', data, format='json')
+        failed_patch = self.client.patch(f'{self.url}90788fdd-9cd8-4a96-8402-6e27c9467720/', data, format='json')
         self.assertEqual(failed_patch.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete(self):
@@ -102,9 +102,9 @@ class AuditTemplateTestCase(APITestCase):
 
         # testing deletion successful path
         self.client.force_authenticate(user=self.user1)
-        successful_req = self.client.delete(f'{self.url}8/')
+        successful_req = self.client.delete(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/')
         self.assertEqual(successful_req.status_code, status.HTTP_204_NO_CONTENT)
 
         # ensuring users can't delete templates from other organizations
-        failed_delete = self.client.delete(f'{self.url}7/')
+        failed_delete = self.client.delete(f'{self.url}90788fdd-9cd8-4a96-8402-6e27c9467720/')
         self.assertEqual(failed_delete.status_code, status.HTTP_403_FORBIDDEN)
