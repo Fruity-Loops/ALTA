@@ -20,6 +20,8 @@ export class EditOrganizationComponent implements OnInit {
   orgID: string;
   editOn = false;
 
+  org_error: string;
+
   constructor(
     private organizationService: ManageOrganizationsService,
     private activatedRoute: ActivatedRoute
@@ -48,6 +50,10 @@ export class EditOrganizationComponent implements OnInit {
       status: this.isActive === this.activeStates[0]
     }).subscribe(() => {
       location.reload();
+    }, err => {
+      if (err.error && err.error.org_name) {
+        this.org_error = "An organization with this name already exists";
+      }
     });
   }
 }

@@ -13,6 +13,7 @@ export class CreateOrganizationComponent implements OnInit {
   location: string;
   isEdit = false;
   organizationTitle = 'Organization Creation';
+  org_error: string;
 
   editOn = true; // never changes
 
@@ -36,6 +37,10 @@ export class CreateOrganizationComponent implements OnInit {
         // Redirect user back to list of templates
         this.router.navigate(['/manage-organizations']);
       }, 1000);
+    }, err => {
+      if (err.error && err.error.org_name) {
+        this.org_error = "An organization with this name already exists";
+      }
     });
   }
 
