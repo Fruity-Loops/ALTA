@@ -1,0 +1,133 @@
+[
+    {
+      "model": "audit.audit",
+      "pk": 1,
+      "fields": {
+        "org_id": 1,
+        "inventory_items": [
+          12752842.0,
+          12852846.0
+        ],
+        "assigned_sk": [
+          3
+        ]
+      }
+    },
+    {
+      "model": "audit.audit",
+      "pk": 2,
+      "fields": {
+        "org_id": 3,
+        "inventory_items": [
+          13059579.0,
+          12731369.0
+        ],
+        "assigned_sk": [
+          5
+        ]
+      }
+    },
+    {
+      "model": "audit.itemtosK",
+      "pk": 1,
+      "fields": {
+        "init_audit_id": 1,
+        "customuser_id": 3,
+        "item_ids": [
+          {
+            "_id": 12752842.0,
+            "Location": "YYC",
+            "Plant": "False",
+            "Zone": "B",
+            "Aisle": 3.0,
+            "Bin": "A10",
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 4",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": null
+          },
+          {
+            "_id": 12852846.0,
+            "Location": "YUL",
+            "Plant": "Plant 2",
+            "Zone": "B",
+            "Aisle": 2,
+            "Bin": "A1",
+            "Part_Number": "PART-1",
+            "Part_Description": "Dummy Part 1",
+            "Serial_Number": "SN-1",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $10,000.00 ",
+            "Quantity": 1,
+            "Unit_of_Measure": "EA",
+            "organization": null
+
+          }
+        ],
+        "bins": [
+          "A1"
+        ]
+      }
+    },
+    {
+      "model": "audit.itemtosK",
+      "pk": 2,
+      "fields": {
+        "init_audit_id": 2,
+        "customuser_id": 5,
+        "item_ids": [
+          {
+            "_id": 13059579.0,
+            "Location": "YUL",
+            "Plant": "Plant 1",
+            "Zone": "A",
+            "Aisle": 1,
+            "Bin": "A1",
+            "Part_Number": "PART-1",
+            "Part_Description": "Dummy Part 1",
+            "Serial_Number": "SN-1",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $10,000.00 ",
+            "Quantity": 1,
+            "Unit_of_Measure": "EA",
+            "organization": null
+          },
+          {
+            "_id": 12731369.0,
+            "Location": "YYC",
+            "Plant": "False",
+            "Zone": "B",
+            "Aisle": 3.0,
+            "Bin": "A10",
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 4",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": NaN,
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": null
+          }
+        ],
+        "bins": [
+          "A1", "A10"
+        ]
+      }
+    }
+]

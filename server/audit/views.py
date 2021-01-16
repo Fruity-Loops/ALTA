@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsInventoryManager, IsSystemAdmin
+from .permissions import IsInventoryManagerAudit
 
 from .serializers import AuditSerializer, GetAuditSerializer, ItemToSKSerializer
 from .models import Audit, ItemToSK
@@ -14,7 +15,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get']
     queryset = Audit.objects.all()
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -29,7 +30,7 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'patch', 'get']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
