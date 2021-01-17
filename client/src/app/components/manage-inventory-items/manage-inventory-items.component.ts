@@ -42,7 +42,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   // Http URL params
   params = new HttpParams();
 
-  inventoryItemToAudit : number[];
+  inventoryItemToAudit: number[];
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
