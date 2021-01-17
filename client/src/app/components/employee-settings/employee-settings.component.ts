@@ -10,14 +10,21 @@ import roles from 'src/app/fixtures/roles.json';
   styleUrls: ['./employee-settings.component.scss'],
 })
 export class EmployeeSettingsComponent implements OnInit {
+
+  //@ts-ignore
   @Input() employee: User;
+  //@ts-ignore
   @Input() employeeCopy: User;
+  //@ts-ignore
+  @Input() role: string;
+  //@ts-ignore
+  @Input() isActive: string;
+  //@ts-ignore
+  @Input() location: string;
+
   edit = false;
   defaultPassword = '';
   password: string = this.defaultPassword;
-  @Input() role: string;
-  @Input() isActive: string;
-  @Input() location: string;
   id: string;
   isLoggedInUser = false;
   isSystemAdmin = false;
@@ -30,6 +37,7 @@ export class EmployeeSettingsComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.id = '';
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
