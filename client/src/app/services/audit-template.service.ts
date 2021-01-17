@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {env} from 'src/environments/environment';
+import {Template} from "../components/audit-template/Template";
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -12,28 +13,39 @@ const BASEURL = env.api_root;
 export class AuditTemplateService {
   orgId: string;
 
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient) {
+    this.orgId = '';
+  }
 
-  createTemplate(templateBody): Observable<any> {
-      this.orgId = localStorage.getItem('organization_id');
-      // tslint:disable-next-line
-      return this.http.post(`${BASEURL}/template/`, { organization: parseInt(this.orgId), ...templateBody });
+  getOrgId(): void{
+    let orgId = localStorage.getItem('organization_id');
+    if(orgId){
+      this.orgId = orgId;
+    } else {
+      this.orgId = '';
+    }
+  }
+
+  createTemplate(templateBody: Template): Observable<any> {
+    this.getOrgId();
+    // tslint:disable-next-line
+    return this.http.post(`${BASEURL}/template/`, { organization: parseInt(this.orgId), ...templateBody });
   }
 
   getAuditTemplates(): Observable<any> {
-      this.orgId = localStorage.getItem('organization_id');
-      return this.http.get(`${BASEURL}/template/`, {params: {organization: this.orgId}});
+    this.getOrgId();
+    return this.http.get(`${BASEURL}/template/`, {params: {organization: this.orgId}});
   }
 
-  getATemplate(id): Observable<any> {
+  getATemplate(id: string): Observable<any> {
     return this.http.get(`${BASEURL}/template/${id}/`);
   }
 
-  updateTemplate(id, template): Observable<any> {
+  updateTemplate(id: string, template: Template): Observable<any> {
     return this.http.patch(`${BASEURL}/template/${id}/`, template);
   }
 
-  deleteTemplate(id): Observable<any> {
+  deleteTemplate(id: string): Observable<any> {
     return this.http.delete(`${BASEURL}/template/${id}/`);
   }
 
