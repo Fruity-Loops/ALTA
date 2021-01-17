@@ -126,6 +126,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
               if(addedSK === undefined ) {
                 holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins)
                 if(holdItemsOfBins.length > 0) {
+                  let holdIds = holdItemsOfBins.map(item => item._id)
                   holdBodyPreAuditData.push(
                   {
                     init_audit: Number(localStorage.getItem('audit_id')),
