@@ -15,7 +15,7 @@ interface Template {
 })
 export class AuditTemplateComponent implements OnInit {
   //TODO
-  //@ts-ignore
+  // @ts-ignore
   auditTemplates: [Template];
   errorMessage = '';
   dialogRef: any;

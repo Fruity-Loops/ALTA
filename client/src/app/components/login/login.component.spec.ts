@@ -9,9 +9,9 @@ import {LoginComponent} from './login.component';
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  //@ts-ignore
+  // @ts-ignore
   let authService: AuthService;
-  //@ts-ignore
+  // @ts-ignore
   let tokenService: TokenService;
 
   beforeEach(async () => {

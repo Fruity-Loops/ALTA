@@ -11,15 +11,15 @@ import roles from 'src/app/fixtures/roles.json';
 })
 export class EmployeeSettingsComponent implements OnInit {
 
-  //@ts-ignore
+  // @ts-ignore
   @Input() employee: User;
-  //@ts-ignore
+  // @ts-ignore
   @Input() employeeCopy: User;
-  //@ts-ignore
+  // @ts-ignore
   @Input() role: string;
-  //@ts-ignore
+  // @ts-ignore
   @Input() isActive: string;
-  //@ts-ignore
+  // @ts-ignore
   @Input() location: string;
 
   edit = false;

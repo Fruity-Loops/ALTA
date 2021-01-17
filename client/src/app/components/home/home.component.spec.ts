@@ -11,7 +11,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
-  //@ts-ignore
+  // @ts-ignore
   let tokenService: TokenService;
   let sidenavService: SidenavService;
 

@@ -12,7 +12,7 @@ export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
 
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
   constructor(

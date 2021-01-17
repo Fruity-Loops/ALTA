@@ -27,9 +27,9 @@ export class ClientGridviewComponent implements OnInit {
   filterTerm: string;
   selected: string
 
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(

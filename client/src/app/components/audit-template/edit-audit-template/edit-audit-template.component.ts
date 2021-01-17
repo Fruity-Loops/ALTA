@@ -26,7 +26,7 @@ export class EditAuditTemplateComponent implements OnInit {
     serial_number: [],
   };
   //TODO
-  //@ts-ignore
+  // @ts-ignore
   templateValues: Template;
   id: any;
   disabled: boolean;

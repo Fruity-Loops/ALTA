@@ -12,7 +12,7 @@ import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 })
 export class CreateMemberComponent implements OnInit {
   // Defining type of our form
-  //@ts-ignore
+  // @ts-ignore
   signupForm: FormGroup;
   errorMessage: string;
   body: any;

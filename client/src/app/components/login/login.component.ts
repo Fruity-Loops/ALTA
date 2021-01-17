@@ -10,7 +10,7 @@ import {TokenService} from 'src/app/services/token.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  //@ts-ignore
+  // @ts-ignore
   loginForm: FormGroup;
   errorMessage: string;
   successMessage: string;

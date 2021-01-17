@@ -47,7 +47,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
   filterTerm: string;
@@ -134,9 +134,9 @@ export class ManageInventoryItemsComponent implements OnInit {
     // page index starts at 1
 
     //TODO: set keys as keyof 'event'
-    //@ts-ignore
+    // @ts-ignore
     this.pageIndex = 1 + event['pageIndex'];
-    //@ts-ignore
+    // @ts-ignore
     this.pageSize = event['pageSize'];
 
     this.params = this.params.set('page', String(this.pageIndex));
@@ -172,7 +172,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.errorMessage = '';
 
     //TODO: define proper types
-    //@ts-ignore
+    // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }
 
