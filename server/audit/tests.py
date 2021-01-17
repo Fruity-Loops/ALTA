@@ -5,6 +5,8 @@ from organization.models import Organization
 from user_account.models import CustomUser
 from inventory_item.models import Item
 from .models import Audit
+from django.forms.models import model_to_dict
+import json
 
 
 class AuditTestCase(APITestCase):
@@ -36,17 +38,19 @@ class AuditTestCase(APITestCase):
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_create_audit_as_sa(self):
-        """ Create audit as system admin"""
+        """ Create audit as system admin """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id]})
+                                    {"inventory_items": [self.item_one._id, self.item_two._id],
+                                     "org": 1})
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
         self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
+        self.assertEqual(response.data['org'], 1)
 
     def test_create_audit_as_im_bad_org(self):
-        """ Try to create audit as inventory manager from another organization"""
+        """ Try to create audit as inventory manager from another organization """
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
@@ -55,7 +59,7 @@ class AuditTestCase(APITestCase):
                          status.HTTP_403_FORBIDDEN)
 
     def test_create_audit_as_im(self):
-        """ Create audit as inventory manager from their organization"""
+        """ Create audit as inventory manager from their organization """
         self.client.force_authenticate(user=self.inv_manager)
 
         # create initial audit with inventory items
@@ -99,10 +103,10 @@ class AuditTestCase(APITestCase):
         self.predefined_audit = Audit.objects.get(org_id=1)
 
         response = self.client.post("/item-to-sk/",
-                                    {"init_audit": self.predefined_audit.audit_id,
-                                     "customuser": self.predefined_audit.assigned_sk,
-                                     "item_ids": [self.item_one._id, self.item_two._id],
-                                     "bins": [self.item_one.Bin, self.item_two.Bin]})
+                                    {"init_audit": 1,
+                                     "customuser": 3,
+                                     "item_ids": [12752842],
+                                     "bins": ['A10']}, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
@@ -110,18 +114,16 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.data['success'], "success")
 
     def test_item_to_sk_designation_bad_org(self):
-        """ Try to create ItemToSK designation as inventory manager from another organization"""
+        """ Try to create ItemToSK designation as inventory manager from another organization """
+
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(org_id=3)
 
-        print(self.item_one.Bin)
-        print(self.item_two.Bin)
-
         response = self.client.post("/item-to-sk/",
                                     {"init_audit": self.predefined_audit.audit_id,
-                                     "customuser": self.predefined_audit.assigned_sk,
-                                     "item_ids": [self.item_one._id, self.item_two._id],
-                                     "bins": [self.item_one.Bin, self.item_two.Bin]})
+                                     "customuser": 3,
+                                     "item_ids": [12752842],
+                                     "bins": ['A10']}, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)

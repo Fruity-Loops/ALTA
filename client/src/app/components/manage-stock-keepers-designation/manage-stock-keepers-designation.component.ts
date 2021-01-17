@@ -131,7 +131,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                     init_audit: Number(localStorage.getItem('audit_id')),
                     customuser: auditComp.sk_id,
                     bins: auditComp.bins,
-                    item_ids: holdItemsOfBins
+                    item_ids: holdIds
                   }), holdItemsOfBins = new Array<any>()
                 }
               }
@@ -147,6 +147,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
           }})
     );
 
+    console.log(holdBodyPreAuditData)
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
     localStorage.removeItem('audit_id');

@@ -5,7 +5,7 @@ from .models import Audit, ItemToSK
 
 
 class IsInventoryManagerAudit(IsInventoryManager):
-    message = "You must be an Inventory Manager belonging to this organization to do this operation"
+    message = "You must be an Inventory Manager of this organization to do this operation"
 
     def has_permission(self, request, view):
         user = CustomUser.objects.get(email=request.user)
@@ -19,5 +19,8 @@ class IsInventoryManagerAudit(IsInventoryManager):
             get_audit = Audit.objects.get(audit_id=request.data['init_audit'])
             return get_audit.org_id == user.organization_id and user.role == 'IM'
 
-        user_org = Organization.objects.get(org_id=request.data['org'])
-        return user.role == 'IM' and user_org.org_id == user.organization_id
+        if 'org' in request.data:
+            user_org = Organization.objects.get(org_id=request.data['org'])
+            return user.role == 'IM' and user_org.org_id == user.organization_id
+
+        return user.role == 'IM'

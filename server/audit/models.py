@@ -14,6 +14,6 @@ class Audit(models.Model):
 class ItemToSK(models.Model):
     init_audit = models.ForeignKey(Audit, on_delete=models.CASCADE)
     customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    item_ids = models.JSONField(null=True, blank=True)
-    bins = models.JSONField(null=True, blank=True)
+    item_ids = models.JSONField(blank=True, null=True)
+    bins = models.JSONField(blank=True, null=True)
 
