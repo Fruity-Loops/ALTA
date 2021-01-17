@@ -10,6 +10,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 describe('ManageOrganizationsComponent', () => {
   let component: ManageOrganizationsComponent;
   let fixture: ComponentFixture<ManageOrganizationsComponent>;
+  //@ts-ignore
   let organizationService: ManageOrganizationsService;
 
   beforeEach(async () => {

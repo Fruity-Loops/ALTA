@@ -9,6 +9,7 @@ import { FormBuilder } from '@angular/forms';
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
   let fixture: ComponentFixture<ManageInventoryItemsComponent>;
+  //@ts-ignore
   let service: ManageInventoryItemsService;
 
   beforeEach(() => {

@@ -6,7 +6,7 @@ import {ManageOrganizationsService} from './manage-organizations.service';
 describe('ManageOrganizationsService', () => {
   let service: ManageOrganizationsService;
 
-  //this is never read
+  //@ts-ignore
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {

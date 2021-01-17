@@ -4,6 +4,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('ManageMembersService', () => {
+  //@ts-ignore
   let httpTestingController: HttpTestingController;
   let service: ManageMembersService;
 

@@ -8,6 +8,7 @@ import {ManageInventoryItemsService} from './manage-inventory-items.service';
 
 describe('ManageInventoryItemsService', () => {
   let service: ManageInventoryItemsService;
+  //@ts-ignore
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
