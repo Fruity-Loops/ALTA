@@ -104,7 +104,7 @@ class AuditTestCase(APITestCase):
 
         response = self.client.post("/item-to-sk/",
                                     {"init_audit": 1,
-                                     "customuser": 3,
+                                     "customuser": 5,
                                      "item_ids": [12752842],
                                      "bins": ['A10']}, format="json")
 
@@ -121,7 +121,7 @@ class AuditTestCase(APITestCase):
 
         response = self.client.post("/item-to-sk/",
                                     {"init_audit": self.predefined_audit.audit_id,
-                                     "customuser": 3,
+                                     "customuser": 6,
                                      "item_ids": [12752842],
                                      "bins": ['A10']}, format="json")
 
