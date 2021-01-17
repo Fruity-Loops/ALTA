@@ -3,16 +3,17 @@ import {Injectable} from '@angular/core';
 import {
   HttpClient,
   HttpErrorResponse,
-  HttpParams,
 } from '@angular/common/http';
 import {Observable, EMPTY} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {User} from '../models/user.model';
 import {AuthService} from './auth.service';
 
-interface Body {
-  [key: string]: any;
-}
+
+//TODO: if dead code, remove
+// interface Body {
+//   [key: string]: any;
+// }
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +26,18 @@ export class ManageMembersService {
               private authService: AuthService) {
   }
 
+  getOrgId(){
+    let orgId = localStorage.getItem('organization_id');
+    if(!orgId){
+      orgId = '';
+    }
+    return {organization: orgId}
+  }
+
   getAllClients(): Observable<any> {
     if (this.authService.getOrgMode().getValue()) {
       return this.http.get(`${this.BASEURL}/user/`,
-        {params: {organization: localStorage.getItem('organization_id')}});
+        {params: this.getOrgId()});
     } else {
       return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
         catchError((err: HttpErrorResponse) => {
@@ -40,15 +49,15 @@ export class ManageMembersService {
 
   }
 
-  updateClientInfo(employee, id): Observable<any> {
+  updateClientInfo(employee: object, id: string): Observable<any> {
     return this.http.patch(`${this.BASEURL}/user/${id}/`, employee);
   }
 
-  updatePassword(password, id): Observable<any> {
+  updatePassword(password: object, id: string): Observable<any> {
     return this.http.patch(`${this.BASEURL}/user/${id}/`, password);
   }
 
-  getEmployee(id): Observable<any> {
+  getEmployee(id: string): Observable<any> {
     return this.http.get(`${this.BASEURL}/user/${id}/`);
   }
 }

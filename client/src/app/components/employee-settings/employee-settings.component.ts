@@ -123,6 +123,7 @@ export class EmployeeSettingsComponent implements OnInit {
       });
 
     // update user password
+    // TODO: password is passed as clear text in URL param
     if (this.password.length > 0) {
       this.body = {
         password: this.password,
