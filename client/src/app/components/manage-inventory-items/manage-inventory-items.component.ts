@@ -3,11 +3,9 @@ import {ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 
 import {MatPaginator} from '@angular/material/paginator';
-import {PageEvent} from '@angular/material/paginator';
 
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -22,54 +20,52 @@ import { Router } from '@angular/router';
 })
 export class ManageInventoryItemsComponent implements OnInit {
   // MatPaginator Inputs
-  length = 0;
-  pageSize = 25;
-  pageIndex = 1;
-  previousPageIndex = 0;
+  length: number = 0;
+  pageSize: number  = 25;
+  pageIndex: number  = 1;
+  previousPageIndex: number  = 0;
   timeForm: FormGroup;
   searchForm: FormGroup;
   body: any;
   subscription: any;
-  organization: any;
+  organization: string;
 
   // MatPaginator Output
-  pageEvent: PageEvent;
+  //TODO: dead code?
+  // pageEvent: PageEvent;
 
   // Items data
-  data;
+  data: any;
   items = [];
   errorMessage = '';
 
   // Http URL params
   params = new HttpParams();
 
-  inventoryItemToAudit = [];
+  inventoryItemToAudit : number[] = [];
+
+  // Member variable is automatically initialized after view init is completed
+  // @ts-ignore
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  //@ts-ignore
+  @ViewChild(MatSort) sort: MatSort;
+
+  filterTerm: string;
+  selected: string;
+
+  dataSource: MatTableDataSource<any>;
+  displayedColumns: string[] = [];
+  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   constructor(
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
     private router: Router,
     private fb: FormBuilder
-  ) {}
-
-  dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = [];
-  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
-  filterTerm: string;
-  selected = 'All';
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  ngOnInit(): void {
-    this.params = this.params.append('page', String(this.pageIndex));
-    this.params = this.params.append('page_size', String(this.pageSize));
-    this.getItems();
-    this.init();
-    this.inventoryItemToAudit = [];
-  }
-
-  init(): void {
+  ) {
+    this.organization = ''
+    this.filterTerm = ''
+    this.selected = 'All';
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
     });
@@ -92,6 +88,19 @@ export class ManageInventoryItemsComponent implements OnInit {
       Quantity_to: [''],
       Unit_of_Measure: [''],
     });
+    this.dataSource = new MatTableDataSource<any>();
+  }
+
+  ngOnInit(): void {
+    this.params = this.params.append('page', String(this.pageIndex));
+    this.params = this.params.append('page_size', String(this.pageSize));
+    this.getItems();
+    this.init();
+    this.inventoryItemToAudit = [];
+  }
+
+  init(): void {
+
   }
 
   getItems(): void {
@@ -119,12 +128,17 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
-  paginatorAction(event): void {
+  paginatorAction(event: object): void {
+    console.log(event)
+    console.log(typeof event)
     // page index starts at 1
-    const pageIndex = 'pageIndex';
-    const pageSize = 'pageSize';
-    this.pageIndex = 1 + event[pageIndex];
-    this.pageSize = event[pageSize];
+
+    //TODO: set keys as keyof 'event'
+    //@ts-ignore
+    this.pageIndex = 1 + event['pageIndex'];
+    //@ts-ignore
+    this.pageSize = event['pageSize'];
+
     this.params = this.params.set('page', String(this.pageIndex));
     this.params = this.params.set('page_size', String(this.pageSize));
 
@@ -156,6 +170,9 @@ export class ManageInventoryItemsComponent implements OnInit {
     // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
+
+    //TODO: define proper types
+    //@ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }
 
@@ -190,7 +207,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.updatePage();
   }
   // If an Inventory item checkbox is selected then add the id to the list
-  onChange(value: any): void {
+  onChange(value: number): void {
     if (this.inventoryItemToAudit.includes(value)) {
       this.inventoryItemToAudit.splice(
         this.inventoryItemToAudit.indexOf(value),
