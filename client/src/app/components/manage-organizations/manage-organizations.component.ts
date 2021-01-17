@@ -2,7 +2,7 @@ import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/
 import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
 
 import {AuthService} from '../../services/auth.service';
-import {FormBuilder, NgForm} from '@angular/forms';
+import {NgForm} from '@angular/forms';
 import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -23,17 +23,26 @@ interface DialogData {
   styleUrls: ['./manage-organizations.component.scss'],
 })
 export class ManageOrganizationsComponent implements OnInit {
-  organizations = [];
-  selectedOrganization;
+  organizations = Array<Organization>();
+  selectedOrganization: any;
   errorMessage = '';
-  orgEdit;
+  //TODO: if dead code, remove
+  // orgEdit;
+
+  dataSource: MatTableDataSource<Organization>;
+  displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
+  filterTerm: string;
+  selected: string;
 
   constructor(
     private organizationsService: ManageOrganizationsService,
-    private fb: FormBuilder,
     private authService: AuthService,
     public dialog: MatDialog
   ) {
+    this.selectedOrganization = {org_id: -1, org_name: '', status: ''};
+    this.dataSource = new MatTableDataSource<Organization>();
+    this.filterTerm = '';
+    this.selected = 'All';
   }
 
   dataSource: MatTableDataSource<Organization>;
@@ -41,17 +50,21 @@ export class ManageOrganizationsComponent implements OnInit {
   filterTerm: string;
   selected = 'All';
 
+  //@ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  //@ts-ignore
   @ViewChild(MatSort) sort: MatSort;
+  //@ts-ignore
   @ViewChild('updateOrgDialog') updateOrgDialog: TemplateRef<any>;
+  //@ts-ignore
   @ViewChild('createOrgDialog') createOrgDialog: TemplateRef<any>;
 
+  //@ts-ignore
   @Input() isActive: string;
   activeStates = [{status: 'active'}, {status: 'disabled'}];
 
   ngOnInit(): void {
     this.getAllOrganizations();
-    this.selectedOrganization = {org_id: -1, org_name: '', status: ''};
     this.errorMessage = '';
   }
 
@@ -85,10 +98,11 @@ export class ManageOrganizationsComponent implements OnInit {
     event.stopPropagation();
   }
 
-  openUpdateOrgDialog(organization): void {
+  openUpdateOrgDialog(organization: any): void {
     this.selectedOrganization = organization;
     this.isActive = organization.status ? 'active' : 'disabled';
-    const dialogRef = this.dialog.open(this.updateOrgDialog);
+    //TODO: if dead code, remove
+    // const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
   openCreateDialog(): void {
