@@ -51,7 +51,7 @@ export class ClientGridviewComponent implements OnInit {
     this.dataSource.filter = filterTerm;
   }
 
-  populateTable(clients): void {
+  populateTable(clients: Array<User>): void {
     if (clients[0].role !== 'SA') {
       //TODO: inconsistent with declaration/initialization
       this.displayedColumns = [
@@ -65,8 +65,11 @@ export class ClientGridviewComponent implements OnInit {
     }
     clients.forEach((element) => {
       const obj = this.roles.find((o) => o.abbrev === element.role);
-      //TODO: obj can possibly be undefined
-      element.role = obj.name;
+      if(obj){
+        element.role = obj.name;
+      } else{
+        element.role = '';
+      }
       this.users.push(element);
     });
     this.dataSource = new MatTableDataSource(this.users);
