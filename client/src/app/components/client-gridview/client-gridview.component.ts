@@ -25,20 +25,24 @@ export class ClientGridviewComponent implements OnInit {
   ];
   roles = roles;
   filterTerm: string;
-  selected = 'All';
+  selected: string
 
+  //@ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  //@ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private manageMembersService: ManageMembersService,
     private changeDetectorRefs: ChangeDetectorRef
   ) {
+    this.dataSource = new MatTableDataSource<User>();
     this.users = new Array<User>();
     this.manageMembersService.getAllClients().subscribe((user) => {
-      const users = user;
-      this.populateTable(users);
+      this.populateTable(user);
     });
+    this.filterTerm = '';
+    this.selected = 'All';
   }
 
   ngOnInit(): void {}
@@ -49,6 +53,7 @@ export class ClientGridviewComponent implements OnInit {
 
   populateTable(clients): void {
     if (clients[0].role !== 'SA') {
+      //TODO: inconsistent with declaration/initialization
       this.displayedColumns = [
         'First_Name',
         'Last_Name',
@@ -60,6 +65,7 @@ export class ClientGridviewComponent implements OnInit {
     }
     clients.forEach((element) => {
       const obj = this.roles.find((o) => o.abbrev === element.role);
+      //TODO: obj can possibly be undefined
       element.role = obj.name;
       this.users.push(element);
     });
