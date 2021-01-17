@@ -25,7 +25,7 @@ export class ClientGridviewComponent implements OnInit {
   ];
   roles = roles;
   filterTerm: string;
-  selected: string
+  selected: string;
 
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,7 +53,7 @@ export class ClientGridviewComponent implements OnInit {
 
   populateTable(clients: Array<User>): void {
     if (clients[0].role !== 'SA') {
-      //TODO: inconsistent with declaration/initialization
+      // TODO: inconsistent with declaration/initialization
       this.displayedColumns = [
         'First_Name',
         'Last_Name',

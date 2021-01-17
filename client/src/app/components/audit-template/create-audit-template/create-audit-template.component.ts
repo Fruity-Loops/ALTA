@@ -26,7 +26,7 @@ export class CreateAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
-  //TODO
+  // TODO
   // @ts-ignore
   templateValues: Template;
 
@@ -34,7 +34,7 @@ export class CreateAuditTemplateComponent implements OnInit {
     private router: Router,
     private auditTemplateService: AuditTemplateService,
   ) {
-    this.errorMessage = ''
+    this.errorMessage = '';
 
   }
 

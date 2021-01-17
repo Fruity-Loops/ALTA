@@ -14,7 +14,7 @@ interface Template {
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
-  //TODO
+  // TODO
   // @ts-ignore
   auditTemplates: [Template];
   errorMessage = '';
@@ -43,7 +43,7 @@ export class AuditTemplateComponent implements OnInit {
 
   openDialog(id: string, title: string): void {
     this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id, title}});
-    this.dialogRef.afterClosed().subscribe((result : any) => {
+    this.dialogRef.afterClosed().subscribe((result: any) => {
       if (result) {
         this.auditTemplateService.deleteTemplate(result.id).subscribe( () => {
           this.getAuditTemplates();

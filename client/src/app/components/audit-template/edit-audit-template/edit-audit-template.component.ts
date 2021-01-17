@@ -25,20 +25,20 @@ export class EditAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
-  //TODO
+  // TODO
   // @ts-ignore
   templateValues: Template;
   id: any;
   disabled: boolean;
 
   constructor(
-    //TODO: remove as router is never used
+    // TODO: remove as router is never used
     // private router: Router,
 
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.errorMessage = ''
+    this.errorMessage = '';
     this.disabled = false;
   }
 
@@ -76,7 +76,7 @@ export class EditAuditTemplateComponent implements OnInit {
     return createdTemplate;
   }
 
-  //TODO: this is bug prone code
+  // TODO: this is bug prone code
   // if true passed to method, although the if statements
   // evaluates to true, template will be assigned a boolean
   // the assigning of body to this.template doesnt guarantee

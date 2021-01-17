@@ -2,7 +2,7 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {AuthService} from 'src/app/services/auth.service';
 
-//TODO: remove
+// TODO: remove
 // import {Router} from '@angular/router';
 // import {TokenService} from 'src/app/services/token.service';
 
@@ -24,7 +24,7 @@ export class ToolbarComponent implements OnInit {
   orgMode: boolean;
 
   constructor(
-    //TODO: remove
+    // TODO: remove
     // private tokenService: TokenService,
     // private router: Router,
 

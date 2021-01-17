@@ -10,7 +10,7 @@ import {User} from '../models/user.model';
 import {AuthService} from './auth.service';
 
 
-//TODO: if dead code, remove
+// TODO: if dead code, remove
 // interface Body {
 //   [key: string]: any;
 // }
@@ -26,12 +26,12 @@ export class ManageMembersService {
               private authService: AuthService) {
   }
 
-  getOrgId(){
+  getOrgId(): any{
     let orgId = localStorage.getItem('organization_id');
-    if(!orgId){
+    if (!orgId) {
       orgId = '';
     }
-    return {organization: orgId}
+    return {organization: orgId};
   }
 
   getAllClients(): Observable<any> {

@@ -33,8 +33,8 @@ export class SideNavComponent implements OnInit {
 
     // TODO: what strings should be assigned by default
     //  which wouldn't hinder our security
-    this.loggedInUser = ''
-    this.loggedInUserRole = ''
+    this.loggedInUser = '';
+    this.loggedInUserRole = '';
   }
 
   ngOnInit(): void {
@@ -94,13 +94,13 @@ export class SideNavComponent implements OnInit {
     if (url === '/create-members') {
       if (this.options === SystemNavListings) {
         // @ts-ignore
-        //TODO: should there be a default url if routes[] is undefined?
+        // TODO: should there be a default url if routes[] is undefined?
         // NOTICE: url changes types from string to Route
         url = routes[0].children[4]; // '/sa-modify-members';
       }
       else if (this.options === OrganizationNavListings) {
         // @ts-ignore
-        //TODO: should there be a default url if routes[] is undefined?
+        // TODO: should there be a default url if routes[] is undefined?
         // NOTICE: url changes types from string to Route
         url = routes[0].children[3]; // '/modify-members';
       }

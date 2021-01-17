@@ -20,10 +20,10 @@ import { Router } from '@angular/router';
 })
 export class ManageInventoryItemsComponent implements OnInit {
   // MatPaginator Inputs
-  length: number = 0;
-  pageSize: number  = 25;
-  pageIndex: number  = 1;
-  previousPageIndex: number  = 0;
+  length: number;
+  pageSize: number;
+  pageIndex: number;
+  previousPageIndex: number;
   timeForm: FormGroup;
   searchForm: FormGroup;
   body: any;
@@ -31,7 +31,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   organization: string;
 
   // MatPaginator Output
-  //TODO: dead code?
+  // TODO: dead code?
   // pageEvent: PageEvent;
 
   // Items data
@@ -63,8 +63,12 @@ export class ManageInventoryItemsComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder
   ) {
-    this.organization = ''
-    this.filterTerm = ''
+    this.length = 0;
+    this.pageSize = 25;
+    this.pageIndex = 1;
+    this.previousPageIndex = 0;
+    this.organization = '';
+    this.filterTerm = '';
     this.selected = 'All';
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
@@ -129,15 +133,15 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   paginatorAction(event: object): void {
-    console.log(event)
-    console.log(typeof event)
     // page index starts at 1
 
-    //TODO: set keys as keyof 'event'
+    // TODO: set keys as keyof 'event'
+    const pageIndex = 'pageIndex'
+    const pageSize = 'pageSize'
     // @ts-ignore
-    this.pageIndex = 1 + event['pageIndex'];
+    this.pageIndex = 1 + event[pageIndex];
     // @ts-ignore
-    this.pageSize = event['pageSize'];
+    this.pageSize = event[pageSize];
 
     this.params = this.params.set('page', String(this.pageIndex));
     this.params = this.params.set('page_size', String(this.pageSize));
@@ -171,7 +175,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.items = this.data[results];
     this.errorMessage = '';
 
-    //TODO: define proper types
+    // TODO: define proper types
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }

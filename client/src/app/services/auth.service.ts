@@ -44,13 +44,13 @@ export class AuthService {
     private http: HttpClient, // We inject the http client in the constructor to do our REST operations
     private router: Router) {
     if (localStorage.getItem('id')) {
-      this.subscription = this.getCurrentUser(<string>localStorage.getItem('id'))
+      this.subscription = this.getCurrentUser(localStorage.getItem('id') as string)
         .subscribe((data) => {
           this.userId.next(data.user_id);
           this.username.next(data.user_name);
           this.role.next(data.role);
           this.organizationId.next(data.organization);
-          this.organization.next(<string>localStorage.getItem('organization'));
+          this.organization.next(localStorage.getItem('organization') as string);
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
             this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
@@ -130,7 +130,7 @@ export class AuthService {
   }
 
   OnDestroy(): void {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }

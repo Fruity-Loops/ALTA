@@ -26,7 +26,7 @@ export class ManageOrganizationsComponent implements OnInit {
   organizations = Array<Organization>();
   selectedOrganization: any;
   errorMessage = '';
-  //TODO: if dead code, remove
+  // TODO: if dead code, remove
   // orgEdit;
 
   dataSource: MatTableDataSource<Organization>;
@@ -101,7 +101,7 @@ export class ManageOrganizationsComponent implements OnInit {
   openUpdateOrgDialog(organization: any): void {
     this.selectedOrganization = organization;
     this.isActive = organization.status ? 'active' : 'disabled';
-    //TODO: if dead code, remove
+    // TODO: if dead code, remove
     // const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
