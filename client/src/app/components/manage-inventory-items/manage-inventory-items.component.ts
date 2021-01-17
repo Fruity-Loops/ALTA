@@ -42,7 +42,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   // Http URL params
   params = new HttpParams();
 
-  inventoryItemToAudit : number[] = [];
+  inventoryItemToAudit : number[];
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -93,6 +93,7 @@ export class ManageInventoryItemsComponent implements OnInit {
       Unit_of_Measure: [''],
     });
     this.dataSource = new MatTableDataSource<any>();
+    this.inventoryItemToAudit = [];
   }
 
   ngOnInit(): void {
@@ -136,8 +137,8 @@ export class ManageInventoryItemsComponent implements OnInit {
     // page index starts at 1
 
     // TODO: set keys as keyof 'event'
-    const pageIndex = 'pageIndex'
-    const pageSize = 'pageSize'
+    const pageIndex = 'pageIndex';
+    const pageSize = 'pageSize';
     // @ts-ignore
     this.pageIndex = 1 + event[pageIndex];
     // @ts-ignore

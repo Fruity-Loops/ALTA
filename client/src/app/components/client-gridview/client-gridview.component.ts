@@ -65,9 +65,9 @@ export class ClientGridviewComponent implements OnInit {
     }
     clients.forEach((element) => {
       const obj = this.roles.find((o) => o.abbrev === element.role);
-      if(obj){
+      if (obj) {
         element.role = obj.name;
-      } else{
+      } else {
         element.role = '';
       }
       this.users.push(element);
