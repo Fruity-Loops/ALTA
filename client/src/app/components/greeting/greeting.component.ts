@@ -18,10 +18,14 @@ export class GreetingComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    //TODO: what if its null
+    //@ts-ignore
     document.querySelector('body').classList.add('greeting');
   }
 
   ngOnDestroy(): void {
+    //TODO: what if its null
+    //@ts-ignore
     document.querySelector('body').classList.remove('greeting');
   }
 }
