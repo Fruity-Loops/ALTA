@@ -18,19 +18,19 @@ export class ManageOrganizationsService {
     return this.http.get(`${BASEURL}/organization/`);
   }
 
-  getOneOrganization(id): Observable<any> {
+  getOneOrganization(id: any): Observable<any> {
     return this.http.get(`${BASEURL}/organization/${id}/`);
   }
 
-  updateOrganization(organization): Observable<any> {
+  updateOrganization(organization: any): Observable<any> {
     return this.http.patch(`${BASEURL}/organization/${organization.org_id}/`, organization);
   }
 
-  createOrganization(organization): Observable<any> {
+  createOrganization(organization: any): Observable<any> {
     return this.http.post(`${BASEURL}/organization/`, organization);
   }
 
-  deleteOrganization(id): Observable<any> {
+  deleteOrganization(id: any): Observable<any> {
     return this.http.delete(`${BASEURL}/organization/${id}/`);
   }
 }
