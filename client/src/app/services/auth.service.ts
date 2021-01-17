@@ -43,13 +43,13 @@ export class AuthService {
     private http: HttpClient, // We inject the http client in the constructor to do our REST operations
     private router: Router) {
     if (localStorage.getItem('id')) {
-      this.subscription = this.getCurrentUser(localStorage.getItem('id'))
+      this.subscription = this.getCurrentUser(<string>localStorage.getItem('id'))
         .subscribe((data) => {
           this.userId.next(data.user_id);
           this.username.next(data.user_name);
           this.role.next(data.role);
           this.organizationId.next(data.organization);
-          this.organization.next(localStorage.getItem('organization'));
+          this.organization.next(<string>localStorage.getItem('organization'));
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
             this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
@@ -66,7 +66,7 @@ export class AuthService {
     this.orgMode.next(state);
   }
 
-  turnOnOrgMode(org, doNavigate): void {
+  turnOnOrgMode(org: any, doNavigate: boolean): void {
     localStorage.setItem('organization_id', org.organization);
     localStorage.setItem('organization', org.organization_name);
     this.organization.next(org.organization_name);
@@ -88,23 +88,23 @@ export class AuthService {
 
   }
 
-  register(body): Observable<any> {
+  register(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/user/`, body);
   }
 
-  getCurrentUser(id): Observable<any> {
+  getCurrentUser(id: string): Observable<any> {
     return this.http.get(`${BASEURL}/user/${id}/`);
   }
 
-  openRegister(body): Observable<any> {
+  openRegister(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/open-registration/`, body);
   }
 
-  login(body): Observable<any> {
+  login(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/login/`, body);
   }
 
-  loginMobile(body): Observable<any> {
+  loginMobile(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/login-mobile/`, body);
   }
 
@@ -129,6 +129,8 @@ export class AuthService {
   }
 
   OnDestroy(): void {
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
   }
 }

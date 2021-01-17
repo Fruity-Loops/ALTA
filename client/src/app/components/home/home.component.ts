@@ -1,8 +1,6 @@
 import {MediaMatcher} from '@angular/cdk/layout';
 import {AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material/sidenav';
-import {TokenService} from 'src/app/services/token.service';
-import {Router} from '@angular/router';
 import {SidenavService} from 'src/app/services/sidenav.service';
 
 @Component({
@@ -13,13 +11,13 @@ import {SidenavService} from 'src/app/services/sidenav.service';
 export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
+
+  //@ts-ignore
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    private tokenService: TokenService,
-    private router: Router,
     private sidenavService: SidenavService
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');

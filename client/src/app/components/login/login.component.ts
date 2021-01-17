@@ -10,6 +10,7 @@ import {TokenService} from 'src/app/services/token.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  //@ts-ignore
   loginForm: FormGroup;
   errorMessage: string;
   successMessage: string;
@@ -21,6 +22,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private tokenService: TokenService
   ) {
+    this.errorMessage = '';
+    this.successMessage = '';
   }
 
   ngOnInit(): void {
@@ -57,7 +60,7 @@ export class LoginComponent implements OnInit {
           }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
         }
         this.successMessage = 'Login Successful';
-        this.errorMessage = null;
+        this.errorMessage = '';
         this.resetForm();
       },
       (err) => {

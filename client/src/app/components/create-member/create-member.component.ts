@@ -12,12 +12,13 @@ import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 })
 export class CreateMemberComponent implements OnInit {
   // Defining type of our form
+  //@ts-ignore
   signupForm: FormGroup;
   errorMessage: string;
   body: any;
   selectedOrganization: any = '';
   signUpButtonLabel = 'Save';
-  subscription;
+  subscription: any;
   isEmployee = false;
   createMembersRoles = createMembersRoles;
 
@@ -29,6 +30,8 @@ export class CreateMemberComponent implements OnInit {
     private router: Router,
     private tokenService: TokenService
   ) {
+    this.errorMessage = '';
+
   }
 
   ngOnInit(): void {
