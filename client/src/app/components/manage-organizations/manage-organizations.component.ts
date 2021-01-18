@@ -37,7 +37,7 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<Organization>;
-  displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
+  displayedColumns: string[] = ['Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
   selected = 'All';
 
@@ -68,18 +68,6 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  organizationClicked(organization): void {
-    this.organizationsService.getOneOrganization(organization.org_id).subscribe(
-      (data) => {
-        this.selectedOrganization = data;
-        this.errorMessage = '';
-      },
-      (err) => {
-        this.errorMessage = err;
-      }
-    );
-  }
-
   updateOrganization(organization): void {
     this.organizationsService.updateOrganization(organization).subscribe(
       (data) => {
@@ -103,52 +91,8 @@ export class ManageOrganizationsComponent implements OnInit {
     const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
-  onSubmitUpdateOrg(form: NgForm): void {
-    if (form.status !== 'INVALID') {
-      const orgStatus = form.value.status === 'active' ? true : false;
-      this.updateOrganization({
-        org_id: this.selectedOrganization.org_id,
-        org_name: form.value.name,
-        address: form.value.address,
-        status: orgStatus
-      });
-      this.dialog.closeAll();
-    }
-  }
-
-
-  createOrganization(organization): void {
-    this.organizationsService.createOrganization(organization).subscribe(
-      (data) => {
-        this.organizations.push(data);
-        this.getAllOrganizations();
-        this.errorMessage = '';
-      },
-      (err) => {
-        if (err.error.org_name) {
-          this.errorMessage = err.error.org_name;
-        }
-
-        if (err.error.detail) {
-          this.errorMessage = err.error.detail;
-        }
-      }
-    );
-  }
-
   openCreateDialog(): void {
     this.dialog.open(this.createOrgDialog);
-  }
-
-  onSubmitCreateOrg(form: NgForm): void {
-    if (form.status !== 'INVALID') {
-      this.createOrganization({
-        org_name: form.value.name,
-        address: form.value.address,
-        status: true
-      });
-      this.dialog.closeAll();
-    }
   }
 
   turnOnOrgMode(organization): void {
