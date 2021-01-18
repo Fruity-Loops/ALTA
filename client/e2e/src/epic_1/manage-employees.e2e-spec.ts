@@ -7,7 +7,7 @@ import { SettingsPage } from './settings.po';
 import { Login, Logout } from '../login.po'
 
 /**
- * Supports Acceptance Test AT-1.4: System administrator create organization's employee's accounts
+ * Supports Acceptance Test AT-1.4:
  * https://github.com/fruity-loops/alta/issues/33
  */
 describe('AT-1.4: System administrator create organizations employees accounts', () => {

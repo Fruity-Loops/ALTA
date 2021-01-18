@@ -3,7 +3,7 @@ import { OrganizationPage } from './organization.po';
 import { Login, Logout } from '../login.po'
 
 /**
- * Supports Acceptance Test AT-1.3: System administrator manages organizations
+ * Supports Acceptance Test AT-1.3:
  * https://github.com/fruity-loops/alta/issues/71
  */
 describe('AT-1.3: System administrator manages organizations', () => {

@@ -6,7 +6,7 @@ import { Login, Logout } from '../login.po'
 
 
 /**
- * Supports Acceptance Test AT-1.1: System administrator creates a system administrator account
+ * Supports Acceptance Test AT-1.1:
  * https://github.com/fruity-loops/alta/issues/12
  */
 describe('AT-1.1: System administrator creates a system administrator account', () => {
