@@ -125,17 +125,19 @@ export class CreateAuditTemplateComponent implements OnInit {
   submit(): void {
     this.dayArray = [];
     this.monthArray = [];
-    // Constructing date as Django DateTimeField YYYY-MM-DD HH:MM[:ss[.uuuuuu]][TZ] <-- optional timezone, therefore: YYYY-MM-DD HH:MM
-    const date =
-      this.startDate.getFullYear() +
-      '-' +
-      (this.startDate.getMonth() + 1) +
-      '-' +
-      this.startDate.getDate() +
-      'T' +
-      parseInt(this.startTime.split(':')[0], 10) +
-      ':' +
-      parseInt(this.startTime.split(':')[1], 10);
+    const year = this.startDate.getFullYear();
+    const month = ((this.startDate.getMonth() + 1).toString().length === 1) ?
+      ('0' + (this.startDate.getMonth() + 1)) : ((this.startDate.getMonth() + 1));
+    const day = (this.startDate.getDate().toString().length === 1) ? ('0' + (this.startDate.getDate())) : (this.startDate.getDate());
+    const hour = (parseInt(this.startTime.split(':')[0], 10).toString().length === 1) ?
+      ('0' + (parseInt(this.startTime.split(':')[0], 10))) : (parseInt(this.startTime.split(':')[0], 10));
+    const minute = (parseInt(this.startTime.split(':')[1], 10).toString().length === 1) ?
+      ('0' + (parseInt(this.startTime.split(':')[1], 10))) : (parseInt(this.startTime.split(':')[1], 10));
+
+    // Constructing date and time in ISO 8601 format e.g. 2021-01-18T15:37:42Z
+    const date = year + '-' + month + '-' + day + 'T' + hour + ':' +  minute + ':00Z';
+    console.log(date);
+
     let checkedDay = false;
     let checkedMonth = false;
 
@@ -168,11 +170,11 @@ export class CreateAuditTemplateComponent implements OnInit {
       part_number: this.template.part_number,
       serial_number: this.template.serial_number,
       description: this.description,
-      startDateObj: date,
-      repeatEvery: this.repeatEvery,
-      onDay: this.dayArray,
-      forMonth: this.monthArray,
-      timeZoneUTC: this.timeZoneUTC,
+      start_date: date,
+      repeat_every: this.repeatEvery,
+      on_day: this.dayArray,
+      for_month: this.monthArray,
+      time_zone_utc: this.timeZoneUTC,
     };
     console.log(body);
 
@@ -187,7 +189,7 @@ export class CreateAuditTemplateComponent implements OnInit {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['template']);
+            this.router.navigate(['template']).then(() => {});
           }, 1000); // Waiting 1 second before redirecting the user
           this.initializeForm();
           this.errorMessage = '';

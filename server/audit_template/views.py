@@ -36,8 +36,8 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         data['calendar_date'] = date_today
         months = np.array(['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'])
         week_days = np.array(['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'])
-        data['for_month'] = months[(np.where(data['forMonth']))].tolist()
-        data['on_day'] = week_days[(np.where(data['onDay']))].tolist()
+        data['for_month'] = months[(np.where(data['for_month']))].tolist()
+        data['on_day'] = week_days[(np.where(data['on_day']))].tolist()
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         template_id = serializer.save()
@@ -81,11 +81,11 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         #     audit.inventory_items.add(item)
 
 
-        if data["repeatEvery"] != null:
+        if data["repeat_every"] != null:
             # Schedule the audit by starting a cron job
             start_new_cron_job(template_id)
         else:
-            start_new_job_once_at_specific_date(template_id, data['startDateObj'], data['timeZoneUTC'])
+            start_new_job_once_at_specific_date(template_id, data['start_date'], data['time_zone_utc'])
 
         return Response(status=status.HTTP_201_CREATED)
 

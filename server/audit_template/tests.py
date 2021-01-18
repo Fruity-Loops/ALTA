@@ -33,11 +33,11 @@ class AuditTemplateTestCase(APITestCase):
             "serial_number": [],
             "description": "",
             "organization": 1,
-            "startDateObj": datetime.now(),
-            "repeatEvery": '1',
-            "onDay": [True, True, False, False, False, False, False],
-            "forMonth": [True, True, False, False, False, False, False, False, False, False, False, False],
-            "timeZoneUTC": "America/Detroit"
+            "start_date": '2021-05-05T05:05:00Z',
+            "repeat_every": '1',
+            "on_day": [True, True, False, False, False, False, False],
+            "for_month": [True, True, False, False, False, False, False, False, False, False, False, False],
+            "time_zone_utc": "America/Detroit"
         }
 
         # Creating a template for the user's own organization
