@@ -22,7 +22,7 @@ export class EditOrganizationComponent implements OnInit {
   orgID: string;
   editOn = false;
 
-  org_error: string;
+  orgError: string;
 
   dialogRef: any;
   originalStatus: boolean;
@@ -73,7 +73,7 @@ export class EditOrganizationComponent implements OnInit {
       location.reload();
     }, err => {
       if (err.error && err.error.org_name) {
-        this.org_error = "An organization with this name already exists";
+        this.orgError = 'An organization with this name already exists';
       }
     });
   }
@@ -91,7 +91,7 @@ interface DialogData {
 })
 export class DisableOrganizationDialogComponent {
 
-  textInput: string = '';
+  textInput = '';
 
   constructor(
     public dialogRef: MatDialogRef<DisableOrganizationDialogComponent>,
