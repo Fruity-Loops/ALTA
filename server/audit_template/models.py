@@ -1,5 +1,4 @@
 from djongo import models
-from organization.models import Organization
 
 
 # Create your models here.
@@ -21,4 +20,4 @@ class AuditTemplate(models.Model):
     for_month = models.JSONField(null=True, blank=True)
     timeZoneUTC = models.TextField(blank=False)
     calendar_date = models.CharField(max_length=100)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    organization = models.ForeignKey(to='organization.Organization', on_delete=models.CASCADE, blank=True, null=True)

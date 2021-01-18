@@ -1,5 +1,4 @@
 from django.db import models
-from organization.models import Organization
 
 
 class Item(models.Model):
@@ -19,4 +18,4 @@ class Item(models.Model):
     Average_Cost = models.CharField(max_length=256)
     Quantity = models.IntegerField()
     Unit_of_Measure = models.CharField(max_length=256)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
+    organization = models.ForeignKey(to='organization.Organization', on_delete=models.CASCADE, blank=True, null=True)
