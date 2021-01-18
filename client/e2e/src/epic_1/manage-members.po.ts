@@ -2,7 +2,7 @@ import { browser, by, element, ElementFinder } from 'protractor';
 
 export class ManageMembersPage {
   navigateTo(): Promise<unknown> {
-    const route = `${browser.baseUrl}/modify-members`;
+    const route = `${browser.baseUrl}/#/modify-members`;
     return browser.get(route) as Promise<unknown>;
   }
 
