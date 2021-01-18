@@ -9,6 +9,7 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-stroked-button (click)="disableOrganization()">Confirm</button>
+  <button mat-stroked-button (click)="disableOrganization()"
+          [disabled]="textInput != data.title">Confirm</button>
   <button mat-stroked-button (click)="closeDialog()">Cancel</button>
 </div>
