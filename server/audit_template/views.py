@@ -40,7 +40,7 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         data['on_day'] = week_days[(np.where(data['on_day']))].tolist()
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
-        template_id = serializer.save()
+        template = serializer.save()
 
         # # Query to get inventory items
         # dict = {}
@@ -80,12 +80,11 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         # for item in inventory_items_to_audit:
         #     audit.inventory_items.add(item)
 
-
-        if data["repeat_every"] != null:
+        if data["repeat_every"] is not None:
             # Schedule the audit by starting a cron job
-            start_new_cron_job(template_id)
+            start_new_cron_job(template.template_id)
         else:
-            start_new_job_once_at_specific_date(template_id, data['start_date'], data['time_zone_utc'])
+            start_new_job_once_at_specific_date(template.template_id, data['start_date'], data['time_zone_utc'])
 
         return Response(status=status.HTTP_201_CREATED)
 

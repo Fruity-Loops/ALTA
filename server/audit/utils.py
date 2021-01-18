@@ -1,5 +1,7 @@
 from audit_template.models import AuditTemplate
 from audit.models import Audit
+import itertools as it
+from inventory_item.models import Item
 
 
 def fetch_inventory_items(template):
@@ -38,12 +40,13 @@ def fetch_inventory_items(template):
 
 
 def create_audit(template_id):
+    print("HERE")
     template = AuditTemplate.objects.get(template_id=template_id)
 
     inventory_items = fetch_inventory_items(template)
 
     # Creating the Audit and appending the template ID to it as well as the items
-    audit = Audit(template_id=template_id)
+    audit = Audit(template_id=template)
     audit.save()
 
     # Didnt find another way of adding the list directly in the ManytoManyfield
