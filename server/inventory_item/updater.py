@@ -3,6 +3,7 @@ from apscheduler.jobstores.mongodb import MongoDBJobStore
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 import pymongo as pym
 from django_server.load_csv_to_db import main
+from audit.utils import create_audit
 
 
 class Singleton(type):
@@ -69,8 +70,26 @@ def start():
 
 
 def start_new_job(job_id, time):
+    # Each Job will trigger the function main(job_id) at specific interval
     scheduler.add_job(main, 'interval', minutes=time, id=job_id,
                       args=(job_id,), replace_existing=True)
+    print_all_job()
+    get_specific_job(job_id)
+
+
+def start_new_cron_job(template_id):
+    job_id = "template_" + str(template_id)
+
+    scheduler.add_job(create_audit, 'cron', timezone=time_zone, **kwargs, id=job_id,
+                      args=(template_id,), replace_existing=True)
+    print_all_job()
+    get_specific_job(job_id)
+
+
+def start_new_job_once_at_specific_date(template_id, date, time_zone):
+    job_id = "template_" + str(template_id)
+    scheduler.add_job(create_audit, 'date', run_date=date, timezone=time_zone, id=job_id,
+                      args=(template_id,), replace_existing=True)
     print_all_job()
     get_specific_job(job_id)
 
