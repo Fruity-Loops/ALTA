@@ -52,7 +52,7 @@ export class EditOrganizationComponent implements OnInit {
   submitSave(): void {
 
     if (this.originalStatus && this.isActive === 'Disabled') {
-      this.dialogRef = this.dialog.open(DeleteTemplateDialogComponent, {data: {id: this.orgID, title: this.organizationTitle}});
+      this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});
       this.dialogRef.afterClosed().subscribe(result => {
         if (result) {
           this.updateOrganization();
@@ -87,8 +87,11 @@ interface DialogData {
 @Component({
   selector: 'app-disable-organization-dialog',
   templateUrl: 'disable-organization-dialog.html',
+  styleUrls: ['./organization.component.scss']
 })
 export class DisableOrganizationDialogComponent {
+
+  textInput: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<DisableOrganizationDialogComponent>,

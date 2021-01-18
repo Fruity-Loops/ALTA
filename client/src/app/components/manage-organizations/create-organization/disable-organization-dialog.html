@@ -1,10 +1,14 @@
-<h1 mat-dialog-title>Delete {{data.title}}</h1>
+<h1 mat-dialog-title>Disable {{data.title}}</h1>
 
 <div mat-dialog-content>
-  Are you sure you want to delete this template?
+  <mat-label> Please type the name of the organization to confirm.</mat-label>
+  <div></div>
+    <mat-form-field appearance="outline" class="fill">
+      <input matInput [(ngModel)]="textInput">
+    </mat-form-field>
 </div>
 
 <div mat-dialog-actions>
-  <button mat-stroked-button (click)="disableOrganization()">Yes</button>
+  <button mat-stroked-button (click)="disableOrganization()">Confirm</button>
   <button mat-stroked-button (click)="closeDialog()">Cancel</button>
 </div>
