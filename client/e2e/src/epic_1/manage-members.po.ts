@@ -25,4 +25,8 @@ export class ManageMembersPage {
   getEmplopyeeSettingsButton(): ElementFinder {
     return element(by.className('cell_settings'));
   }
+
+  getEmployeeSettings(name): ElementFinder {
+    return element(by.id('settings ' + name));
+  }
 }
