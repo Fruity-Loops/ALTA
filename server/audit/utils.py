@@ -7,42 +7,41 @@ from inventory_item.models import Item
 def fetch_inventory_items(template):
     dict = {}
     categories = ['Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Serial_Number']
+
+    # Constructing the dict based on what optional criteria were added
     for list, category in zip(
             [template.location, template.plant, template.zones, template.aisles, template.bins, template.part_number,
              template.serial_number], categories):
-        # print(category + ' '+str(len(list)))
+
         if len(list):
             dict[category] = list
 
-    # print(dict)
     sorted_keys = sorted(dict.keys())
-    # print(sorted_keys)
     all_categories = sorted(dict)
+
+    # Finding all the different combinations based on the criteria selected
     combinations = it.product(*(dict[category] for category in all_categories))
     queries = [x for x in combinations]  # converting the itertools object to a list
-    # print(queries)
-    # print(type(queries))
-    # Location = 'YYC', Plant = 'Plant 2', Zone = 'B', Aisle = 3.0, Bin = 'A10', Part_Number = 'PART-4', Serial_Number = 'SN-4'
+
     kwargs = {}
     inventory_items_to_audit = []
     for query in queries:
         for category, value in zip(sorted_keys, query):
             kwargs[category] = value
+
+        # Fetching the inventory items corresponding to the criteria selected for all combinations
         inventory_items = Item.objects.filter(**kwargs)
-        # print(inventory_items)
+
+        # Appending the element of the Queryset object to the list (Didn't find a way to cast it to a list)
         for i in range(len(inventory_items)):
             inventory_items_to_audit.append(inventory_items[i]._id)
-        # inventory_items_to_audit = chain(inventory_items_to_audit, inventory_items)  #concatinating querysets objects
-
-    print(inventory_items_to_audit)
 
     return inventory_items_to_audit
 
 
 def create_audit(template_id):
-    print("HERE")
-    template = AuditTemplate.objects.get(template_id=template_id)
 
+    template = AuditTemplate.objects.get(template_id=template_id)
     inventory_items = fetch_inventory_items(template)
 
     # Creating the Audit and appending the template ID to it as well as the items

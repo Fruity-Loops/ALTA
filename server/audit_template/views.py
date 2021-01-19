@@ -42,47 +42,8 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         template = serializer.save()
 
-        # # Query to get inventory items
-        # dict = {}
-        # categories = ['Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Serial_Number']
-        # for list, category in zip(
-        #         [data['location'], data['plant'], data['zones'], data['aisles'], data['bins'], data['part_number'],
-        #          data['serial_number']], categories):
-        #     # print(category + ' '+str(len(list)))
-        #     if len(list):
-        #         dict[category] = list
-        #
-        # # print(dict)
-        # sorted_keys = sorted(dict.keys())
-        # # print(sorted_keys)
-        # all_categories = sorted(dict)
-        # combinations = it.product(*(dict[category] for category in all_categories))
-        # results = [x for x in combinations]  # converting th3 itertools object to a list
-        # # print(results)
-        # # print(type(results))
-        # # Location = 'YYC', Plant = 'Plant 2', Zone = 'B', Aisle = 3.0, Bin = 'A10', Part_Number = 'PART-4', Serial_Number = 'SN-4'
-        # kwargs = {}
-        # inventory_items_to_audit = []
-        # for query in results:
-        #     for category, value in zip(sorted_keys, query):
-        #         kwargs[category] = value
-        #     inventory_items = Item.objects.filter(**kwargs)
-        #     # print(inventory_items)
-        #     for i in range(len(inventory_items)):
-        #         inventory_items_to_audit.append(inventory_items[i]._id)
-        #     # inventory_items_to_audit = chain(inventory_items_to_audit, inventory_items)  #concatinating querysets objects
-        #
-        # # Creating the Audit and appending the template ID to it as well as the items
-        # audit = Audit(template_id=template_id)
-        # audit.save()
-        #
-        # # Didnt find another way of adding the list directly in the ManytoManyfield
-        # for item in inventory_items_to_audit:
-        #     audit.inventory_items.add(item)
-
         if data["repeat_every"] is not None:
-            # Schedule the audit by starting a cron job
-            start_new_cron_job(template.template_id)
+            start_new_cron_job(template.template_id, data['start_date'], data['time_zone_utc'])
         else:
             start_new_job_once_at_specific_date(template.template_id, data['start_date'], data['time_zone_utc'])
 
