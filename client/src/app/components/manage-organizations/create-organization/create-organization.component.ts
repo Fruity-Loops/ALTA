@@ -9,10 +9,10 @@ import {Router} from '@angular/router';
 })
 export class CreateOrganizationComponent implements OnInit {
 
-  orgName: string;
-  location: string;
+  orgName = '';
+  location = '';
   isEdit = false;
-  orgError: string;
+  orgError = '';
 
   constructor(
     private organizationService: ManageOrganizationsService,
