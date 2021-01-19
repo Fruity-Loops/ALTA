@@ -19,7 +19,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
    */
   beforeAll(function () {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com')
+    loginPage.login_as('sa@test.com', true);
   });
 
   /**
@@ -27,7 +27,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
    */
   afterAll(function () {
     const logoutPage = new Logout();
-    logoutPage.logout()
+    logoutPage.logout();
   });
 
   /**
@@ -62,6 +62,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
     createMembersPage.getEmployeeIdField().sendKeys(systemAdmin.employee_id);
     createMembersPage.getPasswordField().sendKeys(systemAdmin.password);
     createMembersPage.getSaveButton().click();
+    expect(manageMembersPage.getMembersTable().isDisplayed()).toBeTruthy();
     browser.wait(ExpectedConditions.visibilityOf(
       manageMembersPage.getFirstNameColumn(systemAdmin.firstname)), 5000);
   });

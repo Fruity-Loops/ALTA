@@ -5,12 +5,16 @@ import { SideNav } from './side_nav.po';
 export class Login{
     greetingPage: GreetingPage = new GreetingPage();
 
-    login_as(email) {
+    login_as(email, isAdmin) {
         this.greetingPage.navigateTo();
         this.greetingPage.getEmailInputField().sendKeys(email);
         this.greetingPage.getPasswordInputField().sendKeys('password');
         this.greetingPage.getLoginButton().click();
-        const pageAfterLogin = 'manage-organizations';
+        let pageAfterLogin;
+        if (isAdmin)
+            pageAfterLogin = 'manage-organizations';
+        else
+            pageAfterLogin = 'dashboard';
         browser.wait(ExpectedConditions.urlContains(pageAfterLogin), 5000);
     }
 }

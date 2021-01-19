@@ -22,7 +22,7 @@ describe('AT-1.4: System administrator create organizations employees accounts',
    */
   beforeAll(function () {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com')
+    loginPage.login_as('sa@test.com', true);
   });
 
   /**
@@ -30,7 +30,7 @@ describe('AT-1.4: System administrator create organizations employees accounts',
    */
   afterAll(function () {
     const logoutPage = new Logout();
-    logoutPage.logout()
+    logoutPage.logout();
   });
 
   /**
@@ -97,7 +97,7 @@ describe('AT-1.5, 1.6: System administrator modifies an organizations employees 
    */
   beforeAll(function () {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com')
+    loginPage.login_as('sa@test.com', true);
   });
 
   /**
@@ -105,7 +105,7 @@ describe('AT-1.5, 1.6: System administrator modifies an organizations employees 
    */
   afterAll(function () {
     const logoutPage = new Logout();
-    logoutPage.logout()
+    logoutPage.logout();
   });
 
   /**
