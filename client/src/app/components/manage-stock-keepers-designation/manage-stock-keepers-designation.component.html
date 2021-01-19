@@ -9,56 +9,64 @@
 
   <mat-expansion-panel *ngFor="let auditComp of locationsWithBinsAndSKs;" class="mat-expand"
                        [expanded]="allExpandState" >
-      <mat-expansion-panel-header>
-          <mat-card-header>
+    <mat-expansion-panel-header>
+      <mat-card-header>
         <mat-card-title class="location-title" >{{auditComp.Location}}</mat-card-title>
       </mat-card-header>
-      </mat-expansion-panel-header>
-      <mat-divider></mat-divider><br>
+    </mat-expansion-panel-header>
+    <mat-divider></mat-divider><br>
 
-    <div cdkDropListGroup>
-      <div class="drag-drop-containers">
-        <h2>Bins</h2>
-        <div
-          cdkDropList
-          [cdkDropListData]="auditComp.bins"
-          class="drag-drop-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
-            <p>{{bin}}<br></p>
-            <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, auditComp.bins)"
-                class="item-list">
-              <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
-            </ul>
+    <mat-card-content>
+      <div class="row">
+        <div cdkDropListGroup>
+          <div class="column">
+            <div class="drag-drop-containers">
+              <h2>Bins</h2>
+                <div
+                  cdkDropList
+                  [cdkDropListData]="auditComp.bins"
+                  class="drag-drop-list"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
+                    <p>{{bin}}<br></p>
+                    <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, auditComp.bins)"
+                        class="item-list">
+                      <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="column no-border">
+            <div *ngFor="let sk of auditComp.sk;" class="drag-drop-containers">
+              <h2>{{sk.first_name}} {{sk.last_name}}</h2>
+                <div
+                  cdkDropList
+                  [cdkDropListData]="identifyUser(sk.id)"
+                  class="drag-drop-list"
+                  (cdkDropListDropped)="drop($event)">
+                  <div class="drag-drop-box" *ngFor="let bin of identifyUser(sk.id)" [hidden]="bin == null"
+                       cdkDrag>
+                    <p>{{bin}}<br></p>
+                    <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, identifyUser(sk.id))"
+                        class="item-list">
+                      <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div *ngFor="let sk of auditComp.sk;" class="drag-drop-containers">
-        <h2>{{sk.first_name}} {{sk.last_name}}</h2>
-
-        <div
-          cdkDropList
-          [cdkDropListData]="identifyUser(sk.id)"
-          class="drag-drop-list"
-          (cdkDropListDropped)="drop($event)">
-          <div class="drag-drop-box" *ngFor="let bin of identifyUser(sk.id)" [hidden]="bin == null"
-               cdkDrag>
-            <p>{{bin}}<br></p>
-            <ul *ngFor="let item of getAssociatedItemsGivenBin(auditComp.Location, identifyUser(sk.id))"
-                class="item-list">
-              <li class="drag-drop-subtext" *ngIf="item.Bin == bin">{{item.Part_Description}}</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
+    </mat-card-content>
   </mat-expansion-panel>
 
   <div class="bottom-buttons">
-        <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
-        <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="false"
-          (click)="submitPreAuditData()">Assign</button>
+    <button mat-stroked-button  id="discard" class="bottom-discard"
+            (click)="openDialogWithRef(discardDialog)">Discard</button>
+    <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="false"
+            (click)="submitPreAuditData()">Assign</button>
   </div>
 
   <ng-template #discardDialog>

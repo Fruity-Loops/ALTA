@@ -198,3 +198,26 @@ button.bottom-assign {
   margin-right: 35px;
 }
 
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  border-right: 1px solid #E0E0E0;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.no-border {
+  border-style: none;
+}
+
