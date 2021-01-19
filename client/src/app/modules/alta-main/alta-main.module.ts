@@ -29,6 +29,11 @@ import { ManageStockKeepersDesignationComponent } from '../../components/manage-
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {
+  DisableOrganizationDialogComponent,
+  EditOrganizationComponent
+} from '../../components/manage-organizations/create-organization/edit-organization.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +50,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
     DeleteTemplateDialogComponent,
     AuditTemplateComponent,
     EditAuditTemplateComponent,
+    CreateOrganizationComponent,
+    EditOrganizationComponent,
+    DisableOrganizationDialogComponent
     AssignStockKeepersComponent,
     ManageStockKeepersDesignationComponent
   ],
