@@ -1,6 +1,6 @@
+import itertools as it
 from audit_template.models import AuditTemplate
 from audit.models import Audit
-import itertools as it
 from inventory_item.models import Item
 
 
@@ -9,12 +9,13 @@ def fetch_inventory_items(template):
     categories = ['Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Serial_Number']
 
     # Constructing the dict based on what optional criteria were added
-    for list, category in zip(
-            [template.location, template.plant, template.zones, template.aisles, template.bins, template.part_number,
-             template.serial_number], categories):
+    for filters, category in zip(
+            [template.location, template.plant, template.zones, template.aisles,
+             template.bins, template.part_number, template.serial_number],
+            categories):
 
-        if len(list):
-            dict[category] = list
+        if filters:
+            dict[category] = filters
 
     sorted_keys = sorted(dict.keys())
     all_categories = sorted(dict)
@@ -29,10 +30,12 @@ def fetch_inventory_items(template):
         for category, value in zip(sorted_keys, query):
             kwargs[category] = value
 
-        # Fetching the inventory items corresponding to the criteria selected for all combinations
+        # Fetching the inventory items corresponding to the criteria selected
+        # for all combinations
         inventory_items = Item.objects.filter(**kwargs)
 
-        # Appending the element of the Queryset object to the list (Didn't find a way to cast it to a list)
+        # Appending the element of the Queryset object to the list
+        # (Didn't find a way to cast it to a list)
         for i in range(len(inventory_items)):
             inventory_items_to_audit.append(inventory_items[i]._id)
 
@@ -40,7 +43,6 @@ def fetch_inventory_items(template):
 
 
 def create_audit(template_id):
-
     template = AuditTemplate.objects.get(template_id=template_id)
     inventory_items = fetch_inventory_items(template)
 

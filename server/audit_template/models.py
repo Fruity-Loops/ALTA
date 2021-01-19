@@ -20,4 +20,5 @@ class AuditTemplate(models.Model):
     for_month = models.JSONField(null=True, blank=True)
     time_zone_utc = models.TextField(blank=False)
     calendar_date = models.CharField(max_length=100)
-    organization = models.ForeignKey(to='organization.Organization', on_delete=models.CASCADE, blank=True, null=True)
+    organization = models.ForeignKey(to='organization.Organization',
+                                     on_delete=models.CASCADE, blank=True, null=True)
