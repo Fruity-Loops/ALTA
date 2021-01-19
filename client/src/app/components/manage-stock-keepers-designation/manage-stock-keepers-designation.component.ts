@@ -43,6 +43,10 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   populateBinsAndSKs(selected_items: Item[], assigned_sks: SKUser[]): void {
+    /* TODO: look into performance impact of:
+    * 1. returning a large amount of items
+    * 2. returning a large amount of users
+    */
     selected_items.forEach(auditItem => {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
       if(obj === undefined) {

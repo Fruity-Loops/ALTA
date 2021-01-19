@@ -38,6 +38,10 @@ export class AssignStockKeepersComponent implements OnInit {
   }
 
   populateTable(clients): void {
+    /* TODO: look into performance impact of:
+    * 1. sending all an organization's users with a realistic amount of users
+    * 2. how slow this can be to compute on the front-end
+    */
     clients.forEach(element => {
       if (element.role === 'SK') {
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
