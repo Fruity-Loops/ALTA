@@ -54,11 +54,10 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
           sk: new Array<SKUser>()
         })
       } else {
-        const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === auditItem.Location);
-        this.locationsWithBinsAndSKs[index].item.push(auditItem);
+        obj.item.push(auditItem);
 
-        if(!this.locationsWithBinsAndSKs[index].bins.find(predefinedBin => predefinedBin === auditItem.Bin)){
-          this.locationsWithBinsAndSKs[index].bins.push(auditItem.Bin);
+        if(!obj.bins.includes(auditItem.Bin)) {
+          obj.bins.push(auditItem.Bin);
         }
       }
     });
@@ -72,8 +71,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
           sk: new Array<SKUser>(auditSK)
         })
       } else {
-        const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === auditSK.location);
-        this.locationsWithBinsAndSKs[index].sk.push(auditSK);
+        obj.sk.push(auditSK);
       }
       this.binToSks.push(
       {
@@ -119,10 +117,8 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.binToSks.forEach(auditComp => {
         auditComp.bins.forEach(bin => {
-            const addedBin = holdItemsOfBins.find(predefinedBin => predefinedBin === bin)
-            if(addedBin === undefined ) {
-              const addedSK = holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)
-              if(addedSK === undefined ) {
+          if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
+              !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
                 holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins)
                 if(holdItemsOfBins.length > 0) {
                   let holdIds = holdItemsOfBins.map(item => item._id)
@@ -134,8 +130,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                     item_ids: holdIds
                   }), holdItemsOfBins = new Array<any>()
                 }
-              }
-            }
+          }
         })
     });
 

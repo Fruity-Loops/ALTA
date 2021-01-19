@@ -49,8 +49,7 @@ export class AssignStockKeepersComponent implements OnInit {
           });
         }
         else {
-          const index = this.locationsAndUsers.findIndex(item => item.location === element.location);
-          this.locationsAndUsers[index].users.push(element);
+          obj.users.push(element);
         }
       }
     });
