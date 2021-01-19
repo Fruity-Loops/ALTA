@@ -6,7 +6,7 @@ from user_account.models import CustomUser
 
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
-    org = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=False, null=False, default=0)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=False, null=False, default=0)
     inventory_items = models.ManyToManyField(Item)
     assigned_sk = models.ManyToManyField(CustomUser, blank=True, default=0)
 

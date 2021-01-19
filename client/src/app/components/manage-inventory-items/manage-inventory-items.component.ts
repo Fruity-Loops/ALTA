@@ -205,7 +205,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     let bodyAudit: any;
     bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
-      org: Number(localStorage.getItem('organization_id')),
+      organization: Number(localStorage.getItem('organization_id')),
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {

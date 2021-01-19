@@ -3,7 +3,7 @@
       "model": "audit.audit",
       "pk": 1,
       "fields": {
-        "org_id": 1,
+        "organization_id": 1,
         "inventory_items": [
           12752842.0,
           12852846.0
@@ -17,7 +17,7 @@
       "model": "audit.audit",
       "pk": 2,
       "fields": {
-        "org_id": 3,
+        "organization_id": 3,
         "inventory_items": [
           13059579.0,
           12731369.0
