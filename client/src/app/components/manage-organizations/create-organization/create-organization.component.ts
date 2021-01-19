@@ -12,10 +12,7 @@ export class CreateOrganizationComponent implements OnInit {
   orgName: string;
   location: string;
   isEdit = false;
-  organizationTitle = 'Organization Creation';
   orgError: string;
-
-  editOn = true; // never changes
 
   constructor(
     private organizationService: ManageOrganizationsService,

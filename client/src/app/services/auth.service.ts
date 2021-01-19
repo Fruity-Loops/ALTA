@@ -1,6 +1,6 @@
 import {env} from 'src/environments/environment';
 // @ts-ignore
-import {Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, BehaviorSubject, combineLatest} from 'rxjs';
 import {map, debounceTime} from 'rxjs/operators';

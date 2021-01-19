@@ -27,7 +27,7 @@ import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../com
 import { AssignStockKeepersComponent } from '../../components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from '../../components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
+import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatSortModule} from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
 import {
@@ -57,22 +57,23 @@ import {
     ManageStockKeepersDesignationComponent
   ],
 
-    imports: [
-        CommonModule,
-        MatModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        RouterModule,
-        AuthModule,
-        FormsModule,
-        MatMenuModule,
-        MatDialogModule,
-        FlexLayoutModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatChipsModule,
-        MatExpansionModule,
-    ],
+  imports: [
+    CommonModule,
+    MatModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    RouterModule,
+    AuthModule,
+    FormsModule,
+    MatMenuModule,
+    MatDialogModule,
+    FlexLayoutModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatSortModule,
+  ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
 export class AltaMainModule {

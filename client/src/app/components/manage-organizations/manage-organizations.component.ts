@@ -1,8 +1,6 @@
 import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
-
 import {AuthService} from '../../services/auth.service';
-import {NgForm} from '@angular/forms';
 import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
