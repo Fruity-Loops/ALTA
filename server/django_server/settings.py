@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     os.getenv('HOST_URL', 'alta-mobile.loca.lt')
     ]
 
-# ALLOW API REQUESTS FROM ANGULAR FRONTEND
+# ALLOW API REQUESTS FROM
 CORS_ORIGIN_WHITELIST = [
     os.getenv('ANGULAR_URL', 'http://localhost:4200'),
     os.getenv('IONIC_URL', 'http://localhost:8100'),
