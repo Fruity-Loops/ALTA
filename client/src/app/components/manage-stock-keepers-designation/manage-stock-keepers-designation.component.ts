@@ -38,8 +38,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
     .subscribe((auditData) => {
-      const preAuditData = auditData;
-      this.populateBinsAndSKs(preAuditData.inventory_items, preAuditData.assigned_sk);
+      this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
     });
   }
 
@@ -148,7 +147,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
           }})
     );
 
-    console.log(holdBodyPreAuditData)
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
     localStorage.removeItem('audit_id');

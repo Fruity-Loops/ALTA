@@ -52,7 +52,7 @@ import {
     EditAuditTemplateComponent,
     CreateOrganizationComponent,
     EditOrganizationComponent,
-    DisableOrganizationDialogComponent
+    DisableOrganizationDialogComponent,
     AssignStockKeepersComponent,
     ManageStockKeepersDesignationComponent
   ],

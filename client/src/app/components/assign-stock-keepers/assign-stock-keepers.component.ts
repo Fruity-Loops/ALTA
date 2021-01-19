@@ -33,8 +33,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.skToAssign = [];
     this.manageMembersService.getAllClients()
     .subscribe((user) => {
-      const users = user;
-      this.populateTable(users);
+      this.populateTable(user);
     });
   }
 
@@ -59,9 +58,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {
       item.users.forEach(user => {
-        const data = this.dataSource.data;
-        data.push(user);
-        this.dataSource.data = data;
+        this.dataSource.data.push(user);
       });
     });
   }
