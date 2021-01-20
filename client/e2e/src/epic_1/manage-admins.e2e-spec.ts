@@ -32,7 +32,8 @@ describe('AT-1.1: System administrator creates a system administrator account', 
 
   /**
    * i) The user selects the Manage Members side menu option.
-   * ii) The user selects the create button
+   * ii) The employees table is verified to have loaded.
+   * iii) The user selects the create button.
    */
   it('should navigate to create members page', () => {
     nav.home().click();
@@ -44,9 +45,10 @@ describe('AT-1.1: System administrator creates a system administrator account', 
   });
 
   /**
-   * i) The user fills out the form information
-   * ii) The user submits the form
-   * iii) The new SA is displayed in the table
+   * i) The user fills out the form information.
+   * ii) The user submits the form.
+   * iii) The employees table is verified to have loaded.
+   * iv) The new SA is displayed in the table.
    */
   it('should create system admin member account', () => {
     const systemAdmin = {

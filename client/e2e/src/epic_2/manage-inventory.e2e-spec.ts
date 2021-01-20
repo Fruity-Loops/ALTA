@@ -36,7 +36,7 @@ describe('AT-2.3: Inventory Manager can acess their organization\'s inventory', 
     });
   
     /**
-     * i) The table is displayed
+     * i) The table is displayed.
      * ii) The data from the table is checked against the fixtures.
      */
     it('should show inventory items from the organization', () => {
@@ -80,9 +80,9 @@ describe('AT-2.3: Inventory Manager can search through their organization\'s inv
   });
 
   /**
-   * i) The table is displayed
-   * ii) The search data is filled in
-   * iii) The data from the table is changed
+   * i) The table is displayed.
+   * ii) The search data is filled in.
+   * iii) The table displays the changes.
    */
   it('should show inventory items searched for', () => {
       expect(inventoryPage.getInventoryTable().isDisplayed()).toBeTruthy();

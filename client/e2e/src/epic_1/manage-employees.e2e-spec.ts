@@ -10,7 +10,7 @@ import { Login, Logout } from '../login.po'
  * Supports Acceptance Test AT-1.4:
  * https://github.com/fruity-loops/alta/issues/33
  */
-describe('AT-1.4: System administrator create organizations employees accounts', () => {
+describe('AT-1.4: System administrator can create employees accounts within an organization', () => {
   const manageMembersPage: ManageMembersPage = new ManageMembersPage();
   const createMembersPage: CreateMembersPage = new CreateMembersPage();
   const organizationPage: OrganizationPage = new OrganizationPage();
@@ -48,8 +48,10 @@ describe('AT-1.4: System administrator create organizations employees accounts',
   });
 
   /**
-   * After filling the form, the user submits the data by clicking the Save button.
-   * The user is then redirected back to the table to validate the creation of the user.
+   * i) The user fills out the information in the form.
+   * ii) The user hits the save button.
+   * iii) The employee table is verified to have loaded.
+   * iv) The table displays the changes.
    */
   it('should create an employee account', () => {
     const employee = {
@@ -78,15 +80,13 @@ describe('AT-1.4: System administrator create organizations employees accounts',
 
 
 /**
- *
  * Supports Acceptance Tests:
  * AT-1.5: System administrator modifies an organization's employee's account INFORMATION
  * AT-1.6: System administrator modifies an organization's employee's account STATUS
  * https://github.com/fruity-loops/alta/issues/39
  * https://github.com/fruity-loops/alta/issues/44
- *
  */
-describe('AT-1.5, 1.6: System administrator modifies an organizations employees account', () => {
+describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in an organization', () => {
   const manageMembersPage: ManageMembersPage = new ManageMembersPage();
   const settingsPage: SettingsPage = new SettingsPage();
   const organizationPage: OrganizationPage = new OrganizationPage();
@@ -123,24 +123,24 @@ describe('AT-1.5, 1.6: System administrator modifies an organizations employees 
   });
 
   /**
-   * i) The user selects the test organization.
-   * ii) The user selects an employee's settings.
-   * iii) The user is able to alter the employee's status, firstname, lastname and location.
-   * iv) The user selects the Save button to store the updated data.
-   * v) The data in the table displays the changes.
+   * i) The user modifies the data in the form.
+   * ii) The user selects the Save button to store the updated data.
+   * iii) The information is then verified to have changed.
    */
   it('should edit user information including: status, firstname, lastname and location', () => {
     settingsPage.getEditButton().click();
+    settingsPage.getFirstNameField().clear();
     settingsPage.getFirstNameField().sendKeys('a_good_first_name');
-    settingsPage.getFirstNameField().sendKeys('a_good_last_name');
+    settingsPage.getLastNameField().clear();
+    settingsPage.getLastNameField().sendKeys('a_good_last_name');
+    settingsPage.getLocationInputField().clear();
     settingsPage.getLocationInputField().sendKeys('New York');
     settingsPage.getStatusDropDown().click();
     settingsPage.getStatusDisabled().click();
     settingsPage.getSaveButton().click();
-    browser.wait(ExpectedConditions.urlContains('modify-members'), 5000);
-    nav.employeesOption().click();
-    expect(manageMembersPage.getMembersTable().isDisplayed()).toBeTruthy();
-    browser.wait(ExpectedConditions.visibilityOf(
-      manageMembersPage.getFirstNameColumn('a_good_first_name')), 5000);
+    settingsPage.getEditButton().click();
+    expect(settingsPage.getFirstNameField().getAttribute('value')).toBe('a_good_first_name');
+    expect(settingsPage.getLastNameField().getAttribute('value')).toBe('a_good_last_name');
+    expect(settingsPage.getLocationInputField().getAttribute('value')).toBe('New York');
   });
 });

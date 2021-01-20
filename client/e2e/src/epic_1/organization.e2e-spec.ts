@@ -33,7 +33,8 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * i) The user selects the Add button.
    * ii) The user enters the organization's name and location into the popup input fields.
    * iii) The user submits the new organization by selecting the Save button.
-   * iv) The table displays the changes.
+   * iv) The organization table is verified to have loaded.
+   * v) The table displays the changes.
    */
   it('should register a new organization', () => {
     organizationPage.getAddOrganizationButton().click();
@@ -51,7 +52,8 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * ii) The user selects the Edit option.
    * iii) The user enters the organization's name and in the input field.
    * iv) The user submits the updated info by selecting the Save button.
-   * v) The table displays the changes.
+   * v) The organization table is verified to have loaded.
+   * vi) The table displays the changes.
    */
   it('should update the created organization’s name', () => {
     organizationPage.getOrgSettings(newOrganizationName).click();
@@ -72,7 +74,8 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * iii) The user clicks on the status drop down.
    * iv) The user selects the Disabled option.
    * v) The user enters in the name of the organization and confirms.
-   * vi) The table displays the changes.
+   * vi) The organization table is verified to have loaded.
+   * vii) The table displays the changes.
    */
   it('should disable the organization', () => {
     organizationPage.getOrgSettings(updatedOrganizationName).click();

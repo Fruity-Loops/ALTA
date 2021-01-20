@@ -32,7 +32,7 @@ describe('AT-2.1: Inventory Manager creates an inventory manager account', () =>
 
   /**
    * i) The user selects the Employees side menu option.
-   * ii) The user selects the create button
+   * ii) The user selects the create button.
    */
   it('should navigate to create members page', () => {
     nav.employeesOption().click();
@@ -42,9 +42,10 @@ describe('AT-2.1: Inventory Manager creates an inventory manager account', () =>
   });
 
   /**
-   * i) The user fills out the form information
-   * ii) The user submits the form
-   * iii) The new IM is displayed in the table
+   * i) The user fills out the form information.
+   * ii) The user submits the form.
+   * iii) The table is verified to have loaded.
+   * iii) The new IM is displayed in the table.
    */
   it('should create an inventory manager member account', () => {
     const inventoryManager = {

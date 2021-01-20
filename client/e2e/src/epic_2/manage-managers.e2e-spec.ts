@@ -40,9 +40,9 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
     });
   
     /**
-     * i) The user fills in the form with the modified info
+     * i) The user fills in the form with the modified info.
      * ii) The user selects the Save button to store the updated data.
-     * iii) The data in the settings page is verified to be changed
+     * iii) The data in the settings page is verified to be changed.
      */
     it('should edit user information including: status, firstname, lastname and location', () => {
       settingsPage.getEditButton().click();
