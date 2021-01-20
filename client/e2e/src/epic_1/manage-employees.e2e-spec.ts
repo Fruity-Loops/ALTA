@@ -118,7 +118,7 @@ describe('AT-1.5, 1.6: System administrator modifies an organizations employees 
     organizationPage.getOrganizationNameColumn('test').click();
     nav.employeesOption().click();
     expect(manageMembersPage.getMembersTable().isDisplayed()).toBeTruthy();
-    manageMembersPage.getEmplopyeeSettingsButton().click();
+    manageMembersPage.getEmployeeSettings('stock', 'keeper').click();
     browser.wait(ExpectedConditions.urlContains('modify-members'), 5000);
   });
 

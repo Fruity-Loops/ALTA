@@ -26,7 +26,7 @@ export class ManageMembersPage {
     return element(by.className('cell_settings'));
   }
 
-  getEmployeeSettings(name): ElementFinder {
-    return element(by.id('settings ' + name));
+  getEmployeeSettings(fname, lname): ElementFinder {
+    return element(by.id(fname + lname + 'settings'));
   }
 }
