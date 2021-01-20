@@ -1,4 +1,4 @@
-import { Navigation } from '../epic_1/navigation.po';
+import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from '../epic_1/manage-members.po';
 import { CreateMembersPage } from '../epic_1/create-members.po';
 import { browser, ExpectedConditions } from 'protractor';

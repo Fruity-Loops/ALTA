@@ -1,4 +1,4 @@
-import { Navigation } from './navigation.po';
+import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from './manage-members.po';
 import { CreateMembersPage } from './create-members.po';
 import { browser, ExpectedConditions } from 'protractor';

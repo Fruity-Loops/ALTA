@@ -39,4 +39,11 @@ export class Navigation {
             'Employees')
             );
     }
+
+    inventoryOption(): ElementFinder {
+        return element(by.cssContainingText(
+            '.option-tab',
+            'Inventory Items')
+            );
+    }
 }

@@ -1,5 +1,5 @@
 import { browser, ExpectedConditions } from 'protractor';
-import { Navigation } from './navigation.po';
+import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from './manage-members.po';
 import { CreateMembersPage } from './create-members.po';
 import { OrganizationPage } from './organization.po';
