@@ -33,7 +33,7 @@ def get_self_org_query(user, request):
 
 def get_self_org_body(user, request):
     if 'organization' in request.data:
-        return int(user.organization_id) == int(request.data['organization'])
+        return int(float(user.organization_id)) == int(float(request.data['organization']))
     return False
 
 
