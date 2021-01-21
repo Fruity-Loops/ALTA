@@ -80,7 +80,7 @@ export class ManageInventoryItemsComponent implements OnInit {
       Location: [''],
       Zone: [''],
       Aisle: [''],
-      Bin:[''],
+      Bin: [''],
       Part_Number: [''],
       Serial_Number: [''],
       Condition: [''],

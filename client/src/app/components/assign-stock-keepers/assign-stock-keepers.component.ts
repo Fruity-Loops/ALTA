@@ -15,10 +15,10 @@ import { Router } from '@angular/router';
 })
 export class AssignStockKeepersComponent implements OnInit {
   skToAssign = [];
-  dataSource: MatTableDataSource<User>
+  dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name'];
   locationsAndUsers: Array<any>;
-  panelOpenState: boolean = false;
+  panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
 
@@ -45,7 +45,7 @@ export class AssignStockKeepersComponent implements OnInit {
     clients.forEach(element => {
       if (element.role === 'SK') {
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
-        if(obj === undefined) {
+        if (obj === undefined) {
           this.locationsAndUsers.push(
           {
             location: element.location,
@@ -66,7 +66,7 @@ export class AssignStockKeepersComponent implements OnInit {
     });
   }
 
-  //If a stock-keeper checkbox is selected then add the id to the list
+  // If a stock-keeper checkbox is selected then add the id to the list
   onChange(value: any): void {
     if (this.skToAssign.includes(value)) {
       this.skToAssign.splice(
@@ -97,11 +97,11 @@ export class AssignStockKeepersComponent implements OnInit {
     );
   }
 
-  openDialogWithRef(ref: TemplateRef<any>) {
+  openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }
 
-  closeDialog() {
+  closeDialog(): void {
     this.dialog.closeAll();
   }
 }

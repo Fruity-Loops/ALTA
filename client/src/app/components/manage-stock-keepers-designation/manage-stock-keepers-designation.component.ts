@@ -22,7 +22,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
 
-  panelOpenState: boolean = false;
+  panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
 
@@ -42,38 +42,38 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     });
   }
 
-  populateBinsAndSKs(selected_items: Item[], assigned_sks: SKUser[]): void {
+  populateBinsAndSKs(selectedItems: Item[], assignedSks: SKUser[]): void {
     /* TODO: look into performance impact of:
     * 1. returning a large amount of items
     * 2. returning a large amount of users
     */
-    selected_items.forEach(auditItem => {
+    selectedItems.forEach(auditItem => {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
-      if(obj === undefined) {
+      if (obj === undefined) {
         this.locationsWithBinsAndSKs.push(
         {
           Location: auditItem.Location,
           item: new Array<Item>(auditItem),
           bins: new Array<any>(auditItem.Bin),
           sk: new Array<SKUser>()
-        })
+        });
       } else {
         obj.item.push(auditItem);
 
-        if(!obj.bins.includes(auditItem.Bin)) {
+        if (!obj.bins.includes(auditItem.Bin)) {
           obj.bins.push(auditItem.Bin);
         }
       }
     });
 
-    assigned_sks.forEach(auditSK => {
+    assignedSks.forEach(auditSK => {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditSK.location);
-      if(obj === undefined) {
+      if (obj === undefined) {
         this.locationsWithBinsAndSKs.push(
         {
           Location: auditSK.location,
           sk: new Array<SKUser>(auditSK)
-        })
+        });
       } else {
         obj.sk.push(auditSK);
       }
@@ -89,11 +89,11 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
   identifyUser(httpId: number): []{
     const obj = this.binToSks.find(predefinedId => predefinedId.sk_id === httpId);
-    if(obj === undefined) {
+    if (obj === undefined) {
       this.binToSks.push(
       {
         sk_id: httpId,
-        sk_location: "",
+        sk_location: '',
         item_ids: new Array<any>(),
         bins: new Array<any>()
       });
@@ -103,12 +103,12 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
    getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
-    let holdItems = new Array<any>();
+    const holdItems = new Array<any>();
     const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
     this.locationsWithBinsAndSKs[index].item.forEach(item =>
       bin.forEach(givenBin => {
-        if(item.Bin === givenBin) {
-          holdItems.push(item)
+        if (item.Bin === givenBin) {
+          holdItems.push(item);
         }
       })
     );
@@ -123,27 +123,26 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         auditComp.bins.forEach(bin => {
           if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
               !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
-                holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins)
-                if(holdItemsOfBins.length > 0) {
-                  let holdIds = holdItemsOfBins.map(item => item._id)
+                holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
+                if (holdItemsOfBins.length > 0) {
+                  const holdIds = holdItemsOfBins.map(item => item._id);
                   holdBodyPreAuditData.push(
                   {
                     init_audit: Number(localStorage.getItem('audit_id')),
                     customuser: auditComp.sk_id,
                     bins: auditComp.bins,
                     item_ids: holdIds
-                  }), holdItemsOfBins = new Array<any>()
+                  }), holdItemsOfBins = new Array<any>();
                 }
           }
-        })
+        });
     });
 
     holdBodyPreAuditData.forEach(bodyPreAuditData =>
       this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
-        .subscribe((response) => {
-          (err) => {
+        .subscribe((err) => {
             this.errorMessage = err;
-          }})
+          })
     );
 
     this.locationsWithBinsAndSKs = [];
@@ -156,7 +155,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     }, 1000); // Waiting 1 second before redirecting the user
   }
 
-  drop(event: CdkDragDrop<string[]>, testing: any) {
+  drop(event: CdkDragDrop<string[]>, testing: any): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -167,11 +166,15 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     }
   }
 
-  openDialogWithRef(ref: TemplateRef<any>) {
+  openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }
 
-  closeDialog() {
+  closeDialog(): void {
     this.dialog.closeAll();
+  }
+
+  checkDisableButton(binArray: any[]): boolean {
+    return binArray.map(index => index.bins).every(array => array.length <= 0);
   }
 }

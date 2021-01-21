@@ -1,5 +1,5 @@
-import { SKUser } from './user.model'
-import { Item } from './item.model'
+import { SKUser } from './user.model';
+import { Item } from './item.model';
 
 export class PreAudit {
   audit_id: number;
