@@ -1,8 +1,7 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from user_account.permissions import IsInventoryManager, IsSystemAdmin
+from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
 
 from .serializers import AuditSerializer, GetAuditSerializer, ItemToSKSerializer
@@ -41,6 +40,3 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
         if not saved_audit:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
-
-
-

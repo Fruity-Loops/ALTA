@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
 
 from .serializers import ItemSerializer
 from .models import Item
@@ -61,4 +60,3 @@ class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, CustomSearchFilter]
     search_fields = ['Location', 'Zone', 'Plant', 'Part_Number', 'Part_Description',
                      'Serial_Number', 'Condition', 'Category', 'Owner', 'Unit_of_Measure']
-

@@ -19,4 +19,3 @@ class IsInventoryManagerAudit(IsInventoryManager):
             return get_audit.organization_id == user.organization_id and user.role == 'IM'
 
         return super().has_permission(request, view)
-

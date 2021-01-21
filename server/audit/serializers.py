@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from .models import Audit, ItemToSK
-from inventory_item.models import Item
 from inventory_item.serializers import ItemSerializer
 from user_account.serializers import UserAuditSerializer
-# from user_account.models import CustomUser
+from .models import Audit, ItemToSK
 
 
 class AuditSerializer(serializers.ModelSerializer):
@@ -26,4 +24,3 @@ class ItemToSKSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemToSK
         fields = '__all__'
-
