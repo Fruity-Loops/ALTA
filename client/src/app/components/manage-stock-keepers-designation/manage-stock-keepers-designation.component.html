@@ -17,11 +17,11 @@
     <mat-divider></mat-divider><br>
 
     <mat-card-content>
-      <div class="row">
+      <div class="row card-separator">
         <div cdkDropListGroup>
           <div class="column">
-            <div class="drag-drop-containers">
-              <h2>Bins</h2>
+            <h2 class="column-header">Bins</h2>
+              <div class="drag-drop-containers">
                 <div
                   cdkDropList
                   [cdkDropListData]="auditComp.bins"
@@ -35,12 +35,13 @@
                     </ul>
                   </div>
                 </div>
-            </div>
+              </div>
           </div>
 
-          <div class="column no-border">
-            <div *ngFor="let sk of auditComp.sk;" class="drag-drop-containers">
-              <h2>{{sk.first_name}} {{sk.last_name}}</h2>
+          <div class="column">
+            <div *ngFor="let sk of auditComp.sk;">
+              <h2 class="column-header">{{sk.first_name}} {{sk.last_name}}</h2>
+            <div class="drag-drop-containers">
                 <div
                   cdkDropList
                   [cdkDropListData]="identifyUser(sk.id)"
@@ -55,6 +56,7 @@
                     </ul>
                   </div>
                 </div>
+            </div>
             </div>
           </div>
         </div>
