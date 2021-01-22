@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {Router} from '@angular/router';
-import {AuditTemplateService} from '../../../services/audit-template.service';
-import { Template } from '../Template';
+import {AuditTemplateService} from '../../../../services/audit-template.service';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 
 
 @Component({
   selector: 'app-create-audit-template',
-  templateUrl: './create-audit-template.component.html',
-  styleUrls: ['./create-audit-template.component.scss']
+  templateUrl: '../audit-template-view.component.html',
+  styleUrls: ['../audit-template-view.component.scss']
 })
 export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
 
@@ -18,7 +17,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     private router: Router,
     private auditTemplateService: AuditTemplateService,
   ) {
-    super(router, auditTemplateService);
+    super();
   }
 
   initializeForm(): void {

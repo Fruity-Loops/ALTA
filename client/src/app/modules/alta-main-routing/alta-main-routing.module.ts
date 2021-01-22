@@ -8,9 +8,9 @@ import { EmployeeSettingsComponent } from '../../components/employee-settings/em
 import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
 import { CreateMemberComponent } from '../../components/create-member/create-member.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
-import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
-import { AuditTemplateComponent } from '../../components/audit-template/audit-template.component';
-import { EditAuditTemplateComponent } from 'src/app/components/audit-template/edit-audit-template/edit-audit-template.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/audit-template-view/create-audit-template/create-audit-template.component';
+import { AuditTemplateComponent } from '../../components/audit-template/audit-template-list/audit-template.component';
+import { EditAuditTemplateComponent } from 'src/app/components/audit-template/audit-template-view/edit-audit-template/edit-audit-template.component';
 import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
 import {EditOrganizationComponent} from '../../components/manage-organizations/create-organization/edit-organization.component';
 

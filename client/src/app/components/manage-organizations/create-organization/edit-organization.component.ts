@@ -2,7 +2,7 @@ import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {ManageOrganizationsService} from '../../../services/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template.component';
+import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template-list/audit-template.component';
 
 
 @Component({

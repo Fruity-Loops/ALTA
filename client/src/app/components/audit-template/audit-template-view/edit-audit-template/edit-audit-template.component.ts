@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuditTemplateService } from '../../../services/audit-template.service';
+import { AuditTemplateService } from '../../../../services/audit-template.service';
 import { ActivatedRoute } from '@angular/router';
-import { Template } from '../Template';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 
 
 @Component({
   selector: 'app-edit-audit-template',
-  templateUrl: '../create-audit-template/create-audit-template.component.html',
-  styleUrls: ['../create-audit-template/create-audit-template.component.scss']
+  templateUrl: '../audit-template-view.component.html',
+  styleUrls: ['../audit-template-view.component.scss']
 })
-export class EditAuditTemplateComponent extends AuditTemplateViewComponent implements OnInit {
+export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
 
   id: any;
   disabled: boolean;
@@ -21,7 +20,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent imple
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
   ) {
-    super(router, auditTemplateService);
+    super();
   }
 
   initializeForm(): void {

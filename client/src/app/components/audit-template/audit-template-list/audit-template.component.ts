@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
-import {AuditTemplateService} from '../../services/audit-template.service';
-import {AuthService} from '../../services/auth.service';
+import {AuditTemplateService} from '../../../services/audit-template.service';
+import {AuthService} from '../../../services/auth.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 interface Template {

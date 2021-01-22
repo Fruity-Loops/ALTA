@@ -1,8 +1,12 @@
 import {Router} from '@angular/router';
-import {AuditTemplateService} from '../../services/audit-template.service';
-import {OnInit} from '@angular/core';
-import {Template} from './Template';
+import {AuditTemplateService} from '../../../services/audit-template.service';
+import {Component, OnInit} from '@angular/core';
+import {Template} from '../Template';
 
+
+@Component({
+  template: ''
+})
 export abstract class AuditTemplateViewComponent implements OnInit {
 
   errorMessage: string;
@@ -21,10 +25,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   description = '';
 
 
-  protected constructor(
-    router: Router,
-    auditTemplateService: AuditTemplateService,
-  ) {  }
+  protected constructor() { }
 
   ngOnInit(): void {
     this.initializeForm();
