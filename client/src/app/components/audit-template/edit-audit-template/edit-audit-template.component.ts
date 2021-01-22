@@ -75,14 +75,6 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent imple
     this.disabled = false;
   }
 
-  remove(term, value): void {
-    const index = this.template[term].indexOf(value);
-
-    if (index >= 0) {
-      this.template[term].splice(index, 1);
-    }
-  }
-
   submit(): void {
     const body = {
       template_id: this.id,

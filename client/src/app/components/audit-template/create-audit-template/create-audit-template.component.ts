@@ -37,14 +37,6 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
-  remove(term, value): void {
-    const index = this.template[term].indexOf(value);
-
-    if (index >= 0) {
-      this.template[term].splice(index, 1);
-    }
-  }
-
   submit(): void {
     const body = {
       title: this.title,

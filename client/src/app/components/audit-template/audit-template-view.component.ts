@@ -33,6 +33,14 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     }
   }
 
+  remove(term, value): void {
+    const index = this.template[term].indexOf(value);
+
+    if (index >= 0) {
+      this.template[term].splice(index, 1);
+    }
+  }
+
   abstract initializeForm(): void;
 
 }
