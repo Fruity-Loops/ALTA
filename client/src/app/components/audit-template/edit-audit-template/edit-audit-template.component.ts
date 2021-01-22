@@ -13,10 +13,6 @@ import {AuditTemplateViewComponent} from '../audit-template-view.component';
 })
 export class EditAuditTemplateComponent extends AuditTemplateViewComponent implements OnInit {
 
-  errorMessage: string;
-
-  title = '';
-  description = '';
   id: any;
   disabled: boolean;
 

@@ -5,6 +5,8 @@ import {Template} from './Template';
 
 export abstract class AuditTemplateViewComponent implements OnInit {
 
+  errorMessage: string;
+
   template: Template = {
     location: [],
     plant: [],
@@ -15,6 +17,9 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     serial_number: [],
   };
   templateValues: Template;
+  title = '';
+  description = '';
+
 
   protected constructor(
     router: Router,

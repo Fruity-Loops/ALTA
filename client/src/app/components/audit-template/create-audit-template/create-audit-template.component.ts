@@ -12,11 +12,7 @@ import {AuditTemplateViewComponent} from '../audit-template-view.component';
 })
 export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
 
-  errorMessage: string;
   disabled = false;
-
-  title = '';
-  description = '';
 
   constructor(
     private router: Router,
