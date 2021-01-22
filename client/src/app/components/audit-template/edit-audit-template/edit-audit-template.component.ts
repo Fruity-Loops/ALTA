@@ -17,16 +17,6 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent imple
 
   title = '';
   description = '';
-  template: Template = {
-    location: [],
-    plant: [],
-    zones: [],
-    aisles: [],
-    bins: [],
-    part_number: [],
-    serial_number: [],
-  };
-  templateValues: Template;
   id: any;
   disabled: boolean;
 
@@ -83,14 +73,6 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent imple
 
   beginEdit(): void {
     this.disabled = false;
-  }
-
-  addItem(term, value): void {
-    // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
-    if (value !== '' && !this.template[term].includes(value)) {
-      this.template[term].push(value);
-      this.templateValues[term] = '';
-    }
   }
 
   remove(term, value): void {

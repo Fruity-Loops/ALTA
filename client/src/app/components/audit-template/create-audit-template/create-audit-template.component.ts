@@ -17,16 +17,6 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
 
   title = '';
   description = '';
-  template: Template = {
-    location: [],
-    plant: [],
-    zones: [],
-    aisles: [],
-    bins: [],
-    part_number: [],
-    serial_number: [],
-  };
-  templateValues: Template;
 
   constructor(
     private router: Router,
@@ -45,14 +35,6 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
       part_number: '',
       serial_number: '',
     };
-  }
-
-  addItem(term, value): void {
-    // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
-    if (value !== '' && !this.template[term].includes(value)) {
-      this.template[term].push(value);
-      this.templateValues[term] = '';
-    }
   }
 
   remove(term, value): void {
