@@ -71,41 +71,24 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent imple
     this.disabled = false;
   }
 
-  submit(): void {
-    const body = {
-      template_id: this.id,
-      title: this.title,
-      location: this.template.location,
-      plant: this.template.plant,
-      zones: this.template.zones,
-      aisles: this.template.aisles,
-      bins: this.template.bins,
-      part_number: this.template.part_number,
-      serial_number: this.template.serial_number,
-      description: this.description,
-    };
+  submitQuery(body): void {
+    body["template_id"] = this.id;
+    this.auditTemplateService.updateTemplate(this.id, body).subscribe(
+      () => {
+        setTimeout(() => {
+          // Redirect user back to list of templates
+          window.location.reload();
+        }, 1000); // Waiting 1 second before redirecting the user
+        this.setComponentParameters(false);
+        this.errorMessage = '';
 
-    if (this.title !== '') {
-      this.auditTemplateService.updateTemplate(this.id, body).subscribe(
-        () => {
-          setTimeout(() => {
-            // Redirect user back to list of templates
-            window.location.reload();
-          }, 1000); // Waiting 1 second before redirecting the user
-          this.setComponentParameters(false);
-          this.errorMessage = '';
-
-        },
-        (err) => {
-          // if backend returns an error
-          if (err.error) {
-            this.errorMessage = err.error;
-          }
+      },
+      (err) => {
+        // if backend returns an error
+        if (err.error) {
+          this.errorMessage = err.error;
         }
-      );
-    } else {
-      this.errorMessage = 'Please give a title to your template.';
-    }
-
+      }
+    );
   }
 }

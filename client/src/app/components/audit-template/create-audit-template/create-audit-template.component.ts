@@ -33,40 +33,23 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
-  submit(): void {
-    const body = {
-      title: this.title,
-      location: this.template.location,
-      plant: this.template.plant,
-      zones: this.template.zones,
-      aisles: this.template.aisles,
-      bins: this.template.bins,
-      part_number: this.template.part_number,
-      serial_number: this.template.serial_number,
-      description: this.description,
-    };
+  submitQuery(body) {
+    this.auditTemplateService.createTemplate(body).subscribe(
+      () => {
+        setTimeout(() => {
+          // Redirect user back to list of templates
+          this.router.navigate(['template']);
+        }, 1000); // Waiting 1 second before redirecting the user
+        this.initializeForm();
+        this.errorMessage = '';
 
-    if (this.title !== '') {
-      this.auditTemplateService.createTemplate(body).subscribe(
-        () => {
-          setTimeout(() => {
-            // Redirect user back to list of templates
-            this.router.navigate(['template']);
-          }, 1000); // Waiting 1 second before redirecting the user
-          this.initializeForm();
-          this.errorMessage = '';
-
-        },
-        (err) => {
-          // if backend returns an error
-          if (err.error) {
-            this.errorMessage = err.error;
-          }
+      },
+      (err) => {
+        // if backend returns an error
+        if (err.error) {
+          this.errorMessage = err.error;
         }
-      );
-    } else {
-      this.errorMessage = 'Please give a title to your template.';
-    }
-
+      }
+    );
   }
 }
