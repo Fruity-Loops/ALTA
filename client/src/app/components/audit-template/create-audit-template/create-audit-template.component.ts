@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../../services/audit-template.service';
 import { Template } from '../Template';
+import {AuditTemplateViewComponent} from '../audit-template-view.component';
 
 
 @Component({
@@ -9,10 +10,9 @@ import { Template } from '../Template';
   templateUrl: './create-audit-template.component.html',
   styleUrls: ['./create-audit-template.component.scss']
 })
-export class CreateAuditTemplateComponent implements OnInit {
+export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
 
   errorMessage: string;
-  todaysDate = new Date();
   disabled = false;
 
   title = '';
@@ -31,11 +31,8 @@ export class CreateAuditTemplateComponent implements OnInit {
   constructor(
     private router: Router,
     private auditTemplateService: AuditTemplateService,
-  ) { }
-
-  // We initialize the form and set validators to each one in case user forget to specify a field
-  ngOnInit(): void {
-    this.initializeForm();
+  ) {
+    super(router, auditTemplateService);
   }
 
   initializeForm(): void {

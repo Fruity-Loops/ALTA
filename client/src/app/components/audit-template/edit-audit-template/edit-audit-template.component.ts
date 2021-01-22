@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuditTemplateService } from '../../../services/audit-template.service';
 import { ActivatedRoute } from '@angular/router';
 import { Template } from '../Template';
+import {AuditTemplateViewComponent} from '../audit-template-view.component';
 
 
 @Component({
@@ -10,10 +11,9 @@ import { Template } from '../Template';
   templateUrl: '../create-audit-template/create-audit-template.component.html',
   styleUrls: ['../create-audit-template/create-audit-template.component.scss']
 })
-export class EditAuditTemplateComponent implements OnInit {
+export class EditAuditTemplateComponent extends AuditTemplateViewComponent implements OnInit {
 
   errorMessage: string;
-  todaysDate = new Date();
 
   title = '';
   description = '';
@@ -34,9 +34,11 @@ export class EditAuditTemplateComponent implements OnInit {
     private router: Router,
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
-  ) { }
+  ) {
+    super(router, auditTemplateService);
+  }
 
-  ngOnInit(): void {
+  initializeForm(): void {
     this.disabled = false;
     this.templateValues = {
       location: '',
@@ -50,7 +52,7 @@ export class EditAuditTemplateComponent implements OnInit {
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
       this.auditTemplateService.getATemplate(this.id).subscribe((temp) => {
-        this.initializeForm(this.formTemplate(temp));
+        this.setComponentParameters(this.formTemplate(temp));
         this.title = temp.title;
         this.description = temp.description;
         this.id = temp.template_id;
@@ -70,7 +72,7 @@ export class EditAuditTemplateComponent implements OnInit {
     return createdTemplate;
   }
 
-  initializeForm(body): void {
+  setComponentParameters(body): void {
     if (body) {
       this.disabled = true;
       this.template = body;
@@ -120,7 +122,7 @@ export class EditAuditTemplateComponent implements OnInit {
             // Redirect user back to list of templates
             window.location.reload();
           }, 1000); // Waiting 1 second before redirecting the user
-          this.initializeForm(false);
+          this.setComponentParameters(false);
           this.errorMessage = '';
 
         },
