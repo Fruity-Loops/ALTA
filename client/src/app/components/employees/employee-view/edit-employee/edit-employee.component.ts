@@ -5,6 +5,7 @@ import { User } from '../../../../models/user.model';
 import roles from 'src/app/fixtures/roles.json';
 import { EmployeeView } from '../employee-view';
 import { BehaviorSubject } from 'rxjs';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-employee-settings',
@@ -12,8 +13,8 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./edit-employee.component.scss'],
 })
 export class EditEmployeeComponent extends EmployeeView implements OnInit {
-  @Input() employee: User;
-  @Input() employeeCopy: User;
+  @Input() employee: any;
+  @Input() employeeCopy: any;
   edit = false;
   defaultPassword = '';
   password: string = this.defaultPassword;
@@ -25,12 +26,17 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   isSystemAdmin = false;
   body: any;
 
+  always_disabled = ['email', 'id'];
+
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = roles;
+
+  editForm: FormGroup;
 
   constructor(
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
   ) {
     super();
     // If the ID changes in the route param then reload the component
@@ -64,15 +70,20 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   getEmployee(): void {
     this.manageMembersService.getEmployee(this.id).subscribe((employee) => {
       this.employee = {
-        id: employee.id,
-        first_name: employee.first_name,
-        last_name: employee.last_name,
         role: employee.role,
         is_active: employee.is_active,
-        email: employee.email,
-        location: employee.location,
       };
       this.setSelectors();
+      this.editForm = this.fb.group({
+        // Each username,email,password is piped from the HTML using the "formControlName"
+        id: new FormControl({value: employee.id, disabled: !this.edit}, [Validators.required]),
+        email: new FormControl({value: employee.email, disabled: !this.edit}, [Validators.email, Validators.required]),
+        firstname: new FormControl({value: employee.first_name, disabled: !this.edit}, [Validators.required]),
+        lastname: new FormControl({value: employee.last_name, disabled: !this.edit}, [Validators.required]),
+        location: !this.isSystemAdmin ?
+          new FormControl({value: employee.location, disabled: !this.isSystemAdmin}, [Validators.required]) :
+          undefined,
+      });
     });
   }
 
@@ -94,6 +105,9 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
+    Object.keys(this.editForm.controls).forEach(key => {
+      if (this.always_disabled.indexOf(key) < 0) this.editForm.controls[key].enable();
+    });
     if (!turnOn) {
       this.submit();
     }
@@ -116,9 +130,16 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
     this.employee.location = this.location;
 
-    // Create a deep copy of the employee object in order to delete the uneditable
-    // fields (id, email) from the copied object and send only the editable fileds to the server.
-    const patchedEmployee = JSON.parse(JSON.stringify(this.employee));
+    this.body = {
+      user_name: this.editForm.value.username,
+      email: this.editForm.value.email,
+      first_name: this.editForm.value.firstname,
+      last_name: this.editForm.value.lastname,
+      password: this.editForm.value.password,
+    };
+
+    // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input
+    const patchedEmployee = {...this.employee, ...this.body};
 
     delete patchedEmployee.id;
     delete patchedEmployee.email;
