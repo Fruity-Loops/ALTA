@@ -11,15 +11,12 @@ import {OrganizationViewComponent} from './organization-view.component';
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class EditOrganizationComponent extends OrganizationViewComponent implements OnInit {
+export class EditOrganizationComponent extends OrganizationViewComponent {
 
   isActive = 'Active';
   activeStates = ['Active', 'Disabled'];
-  orgName: string;
-  location: string;
 
   orgID: string;
-
   orgError: string;
 
   dialogRef: any;
@@ -31,9 +28,8 @@ export class EditOrganizationComponent extends OrganizationViewComponent impleme
     public dialog: MatDialog
   ) {
     super();
-  }
 
-  ngOnInit(): void {
+    // Called after the super to avoid calling this before setting the organization detail defaults
     this.activatedRoute.params.subscribe(routeParams => {
       this.orgID = routeParams.ID;
       this.organizationService.getOneOrganization(this.orgID).subscribe(organization => {

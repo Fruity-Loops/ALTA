@@ -8,10 +8,8 @@ import {OrganizationViewComponent} from './organization-view.component';
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class CreateOrganizationComponent extends OrganizationViewComponent implements OnInit {
+export class CreateOrganizationComponent extends OrganizationViewComponent {
 
-  orgName: string;
-  location: string;
   orgError: string;
 
   constructor(
@@ -19,11 +17,6 @@ export class CreateOrganizationComponent extends OrganizationViewComponent imple
     private router: Router
   ) {
     super();
-  }
-
-  ngOnInit(): void {
-    this.orgName = '';
-    this.location = '';
   }
 
   getEditInfo(): [boolean, boolean] {

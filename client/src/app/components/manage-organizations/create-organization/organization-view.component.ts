@@ -9,6 +9,14 @@ export abstract class OrganizationViewComponent implements OnInit {
   isEdit: boolean; // determines whether the component is capable of editing
   organizationTitle: string;
 
+  location: string;
+  orgName: string;
+
+  protected constructor() {
+    // Setting defaults, will be changed asynchronously if need be
+    [this.location, this.orgName] = ['', ''];
+  }
+
   ngOnInit() {
     [this.editOn, this.isEdit] = this.getEditInfo();
     this.organizationTitle = this.getComponentTitle();
