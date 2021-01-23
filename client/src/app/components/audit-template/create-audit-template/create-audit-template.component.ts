@@ -135,8 +135,7 @@ export class CreateAuditTemplateComponent implements OnInit {
       ('0' + (parseInt(this.startTime.split(':')[1], 10))) : (parseInt(this.startTime.split(':')[1], 10));
 
     // Constructing date and time in ISO 8601 format e.g. 2021-01-18T15:37:42Z
-    const date = year + '-' + month + '-' + day + 'T' + hour + ':' +  minute + ':00Z';
-    console.log(date);
+    const date = year + '-' + month + '-' + day + 'T' + hour + ':' +  minute + ':00';
 
     let checkedDay = false;
     let checkedMonth = false;
@@ -176,7 +175,6 @@ export class CreateAuditTemplateComponent implements OnInit {
       for_month: this.monthArray,
       time_zone_utc: this.timeZoneUTC,
     };
-    console.log(body);
 
     if (this.title === '') {
       this.errorMessage = 'Please give a title to your template.';

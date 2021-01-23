@@ -1,10 +1,12 @@
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.jobstores.mongodb import MongoDBJobStore
-from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+import datetime
+import pytz
 import pymongo as pym
-from django_server.load_csv_to_db import main
+from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+from apscheduler.jobstores.mongodb import MongoDBJobStore
+from apscheduler.schedulers.background import BackgroundScheduler
 from audit.utils import create_audit
 from audit_template.models import AuditTemplate
+from django_server.load_csv_to_db import main
 
 
 class Singleton(type):
@@ -85,17 +87,15 @@ def start_new_cron_job(template_id, date, time_zone):
                              template.on_day, template.for_month)
 
     # Each Job will trigger the function create_audit(template_id) at specific interval
-    scheduler.add_job(create_audit, 'cron', start_date=date,
-                      timezone=time_zone, **kwargs, hour=7,
-                      id=job_id, args=(template_id,), replace_existing=True)
+    scheduler.add_job(create_audit, 'cron', start_date=datetime_with_offset(date, time_zone),
+                      **kwargs, hour=7, id=job_id, args=(template_id,), replace_existing=True)
     print_all_job()
     get_specific_job(job_id)
 
 
 def start_new_job_once_at_specific_date(template_id, date, time_zone):
     job_id = "template_" + str(template_id)
-    scheduler.add_job(create_audit, 'date', run_date=date,
-                      timezone=time_zone, id=job_id,
+    scheduler.add_job(create_audit, 'date', run_date=datetime_with_offset(date, time_zone), id=job_id,
                       args=(template_id,), replace_existing=True)
     print_all_job()
     get_specific_job(job_id)
@@ -142,3 +142,15 @@ def get_job_queries(repetition, day_of_week, months):
     kwargs['month'] = month_query[:-1]
 
     return kwargs
+
+
+def datetime_with_offset(date, time_zone):
+    # Using current time to grab time zone offset for utc so DST can be taken into consideration
+    time_zone_offset = datetime.datetime.now(pytz.timezone(time_zone)).strftime('%z')
+    date = date + time_zone_offset
+    # adding colon in the offset e.g. +0500 becomes +05:00
+    date = "{0}:{1}".format(
+        date[:-2],
+        date[-2:]
+    )
+    return date
