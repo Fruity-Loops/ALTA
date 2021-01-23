@@ -1,13 +1,13 @@
 import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
 
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../../services/auth.service';
 import {FormBuilder, NgForm} from '@angular/forms';
 import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {Organization} from '../../models/organization';
+import {Organization} from '../../../models/organization';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 interface DialogData {

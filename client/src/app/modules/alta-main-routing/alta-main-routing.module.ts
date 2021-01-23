@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from 'src/app/components/dashboard/dashboard.component';
 import { HomeComponent } from 'src/app/components/home/home.component';
-import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/manage-organizations.component';
+import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { AuthGuard } from '../../guards/auth.guard';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
 import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
@@ -11,8 +11,8 @@ import { ManageInventoryItemsComponent } from 'src/app/components/manage-invento
 import { CreateAuditTemplateComponent } from '../../components/audit-template/audit-template-view/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template-list/audit-template.component';
 import { EditAuditTemplateComponent } from 'src/app/components/audit-template/audit-template-view/edit-audit-template/edit-audit-template.component';
-import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
-import {EditOrganizationComponent} from '../../components/manage-organizations/create-organization/edit-organization.component';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/organization-view/create-organization/create-organization.component';
+import {EditOrganizationComponent} from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 
 export const routes: Routes = [
   {

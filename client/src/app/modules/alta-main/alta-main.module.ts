@@ -14,7 +14,7 @@ import {ClientGridviewComponent} from 'src/app/components/client-gridview/client
 import {
   ManageOrganizationsComponent,
   OrganizationDialogComponent,
-} from 'src/app/components/manage-organizations/manage-organizations.component';
+} from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule } from '@angular/forms';
 import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
@@ -27,11 +27,11 @@ import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../com
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/organization-view/create-organization/create-organization.component';
 import {
   DisableOrganizationDialogComponent,
   EditOrganizationComponent
-} from '../../components/manage-organizations/create-organization/edit-organization.component';
+} from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 
 @NgModule({
   declarations: [

@@ -1,15 +1,15 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
-import {ManageOrganizationsService} from '../../../services/manage-organizations.service';
+import {ManageOrganizationsService} from '../../../../services/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template-list/audit-template.component';
-import {OrganizationViewComponent} from './organization-view.component';
+import {DeleteTemplateDialogComponent} from '../../../audit-template/audit-template-list/audit-template.component';
+import {OrganizationViewComponent} from '../organization-view.component';
 
 
 @Component({
   selector: 'app-edit-organization',
-  templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.scss']
+  templateUrl: '../organization-view.component.html',
+  styleUrls: ['../organization-view.component.scss']
 })
 export class EditOrganizationComponent extends OrganizationViewComponent {
 
@@ -90,7 +90,7 @@ interface DialogData {
 @Component({
   selector: 'app-disable-organization-dialog',
   templateUrl: 'disable-organization-dialog.html',
-  styleUrls: ['./organization.component.scss']
+  styleUrls: ['../organization-view.component.scss']
 })
 export class DisableOrganizationDialogComponent {
 

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {ManageOrganizationsService} from '../../../services/manage-organizations.service';
+import {ManageOrganizationsService} from '../../../../services/manage-organizations.service';
 import {Router} from '@angular/router';
-import {OrganizationViewComponent} from './organization-view.component';
+import {OrganizationViewComponent} from '../organization-view.component';
 
 @Component({
   selector: 'app-create-organization',
-  templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.scss']
+  templateUrl: '../organization-view.component.html',
+  styleUrls: ['../organization-view.component.scss']
 })
 export class CreateOrganizationComponent extends OrganizationViewComponent {
 
