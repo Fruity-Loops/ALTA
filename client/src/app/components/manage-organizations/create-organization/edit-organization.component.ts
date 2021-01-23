@@ -17,7 +17,6 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   activeStates = ['Active', 'Disabled'];
 
   orgID: string;
-  orgError: string;
 
   dialogRef: any;
   originalStatus: boolean;

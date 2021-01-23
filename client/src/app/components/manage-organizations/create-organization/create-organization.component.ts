@@ -10,8 +10,6 @@ import {OrganizationViewComponent} from './organization-view.component';
 })
 export class CreateOrganizationComponent extends OrganizationViewComponent {
 
-  orgError: string;
-
   constructor(
     private organizationService: ManageOrganizationsService,
     private router: Router

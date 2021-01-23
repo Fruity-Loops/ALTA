@@ -12,6 +12,8 @@ export abstract class OrganizationViewComponent implements OnInit {
   location: string;
   orgName: string;
 
+  orgError: string;
+
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be
     [this.location, this.orgName] = ['', ''];
@@ -25,5 +27,8 @@ export abstract class OrganizationViewComponent implements OnInit {
   abstract getEditInfo(): [boolean, boolean];
 
   abstract getComponentTitle(): string;
+
+  // A function called by the HTML to be implemented for submitting the org info to the REST API
+  abstract submitSave(): void;
 
 }
