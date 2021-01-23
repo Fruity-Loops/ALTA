@@ -20,7 +20,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   password: string = this.defaultPassword;
   @Input() role: string;
   @Input() isActive: string;
-  @Input() location: string;
   id: string;
   isLoggedInUser: BehaviorSubject<boolean>;
   isSystemAdmin = false;
@@ -89,7 +88,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
   setSelectors(): void {
     this.isActive = this.employee.is_active ? 'active' : 'disabled';
-    this.location = this.employee.location === undefined ? '' : this.employee.location;
     if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
@@ -128,14 +126,13 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
       }
     });
 
-    this.employee.location = this.location;
-
     this.body = {
       user_name: this.editForm.value.username,
       email: this.editForm.value.email,
       first_name: this.editForm.value.firstname,
       last_name: this.editForm.value.lastname,
       password: this.editForm.value.password,
+      location: this.editForm.value.location
     };
 
     // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input
