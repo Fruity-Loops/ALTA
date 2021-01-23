@@ -3,13 +3,15 @@ import { ManageMembersService } from '../../../../services/manage-members.servic
 import { ActivatedRoute } from '@angular/router';
 import { User } from '../../../../models/user.model';
 import roles from 'src/app/fixtures/roles.json';
+import { EmployeeView } from '../employee-view';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-employee-settings',
   templateUrl: './edit-employee.component.html',
   styleUrls: ['./edit-employee.component.scss'],
 })
-export class EditEmployeeComponent implements OnInit {
+export class EditEmployeeComponent extends EmployeeView implements OnInit {
   @Input() employee: User;
   @Input() employeeCopy: User;
   edit = false;
@@ -19,7 +21,7 @@ export class EditEmployeeComponent implements OnInit {
   @Input() isActive: string;
   @Input() location: string;
   id: string;
-  isLoggedInUser = false;
+  isLoggedInUser: BehaviorSubject<boolean>;
   isSystemAdmin = false;
   body: any;
 
@@ -30,6 +32,7 @@ export class EditEmployeeComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute,
   ) {
+    super();
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
@@ -37,12 +40,24 @@ export class EditEmployeeComponent implements OnInit {
     });
   }
 
+  getTitle(): string {
+    // need to initialize here because the super constructor needs to be the first thing that gets called
+    this.isLoggedInUser = new BehaviorSubject(false);
+    const generateString = () => (this.isLoggedInUser.getValue() ? "Profile" : "Employee") +  " Settings";
+
+    // put a subscription in case of changes for whether the user is logged in or not
+    this.isLoggedInUser.subscribe(_ => {
+      this.title = generateString();
+    });
+    return generateString();
+  }
+
   ngOnInit(): void {
     this.getEmployee();
 
     // Verifying that the logged in user is accessing his informations
     if (this.id === localStorage.getItem('id')) {
-      this.isLoggedInUser = true;
+      this.isLoggedInUser.next(true);
     }
   }
 

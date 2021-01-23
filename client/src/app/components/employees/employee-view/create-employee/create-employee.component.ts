@@ -4,13 +4,14 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {TokenService} from 'src/app/services/token.service';
 import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
+import {EmployeeView} from '../employee-view';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './create-employee.component.html',
   styleUrls: ['./create-employee.component.scss'],
 })
-export class CreateEmployeeComponent implements OnInit {
+export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   // Defining type of our form
   signupForm: FormGroup;
   errorMessage: string;
@@ -29,6 +30,7 @@ export class CreateEmployeeComponent implements OnInit {
     private router: Router,
     private tokenService: TokenService
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -40,6 +42,10 @@ export class CreateEmployeeComponent implements OnInit {
         }
         this.init();
       });
+  }
+
+  getTitle(): string {
+    return 'Profile Creation';
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field
