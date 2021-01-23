@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ManageMembersService } from '../../services/manage-members.service';
+import { ManageMembersService } from '../../../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../models/user.model';
+import { User } from '../../../../models/user.model';
 import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-employee-settings',
-  templateUrl: './employee-settings.component.html',
-  styleUrls: ['./employee-settings.component.scss'],
+  templateUrl: './edit-employee.component.html',
+  styleUrls: ['./edit-employee.component.scss'],
 })
-export class EmployeeSettingsComponent implements OnInit {
+export class EditEmployeeComponent implements OnInit {
   @Input() employee: User;
   @Input() employeeCopy: User;
   edit = false;

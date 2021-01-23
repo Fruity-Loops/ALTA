@@ -10,14 +10,14 @@ import {SideNavComponent} from 'src/app/components/sidenav/sidenav.component';
 import {MatModule} from '../material/material-module';
 import {ToolbarComponent} from 'src/app/components/toolbar/toolbar.component';
 import {AuthModule} from '../auth/auth.module';
-import {ClientGridviewComponent} from 'src/app/components/client-gridview/client-gridview.component';
+import {EmployeeListComponent} from 'src/app/components/employees/employee-list/employee-list.component';
 import {
   ManageOrganizationsComponent,
   OrganizationDialogComponent,
 } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule } from '@angular/forms';
-import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
+import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
@@ -39,9 +39,9 @@ import {
     ToolbarComponent,
     DashboardComponent,
     SideNavComponent,
-    ClientGridviewComponent,
+    EmployeeListComponent,
     ManageOrganizationsComponent,
-    EmployeeSettingsComponent,
+    EditEmployeeComponent,
     OrganizationDialogComponent,
     ManageInventoryItemsComponent,
     CreateAuditTemplateComponent,

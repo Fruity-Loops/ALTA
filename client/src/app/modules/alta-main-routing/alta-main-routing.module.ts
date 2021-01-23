@@ -4,9 +4,9 @@ import { DashboardComponent } from 'src/app/components/dashboard/dashboard.compo
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { AuthGuard } from '../../guards/auth.guard';
-import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
-import { ClientGridviewComponent } from '../../components/client-gridview/client-gridview.component';
-import { CreateMemberComponent } from '../../components/create-member/create-member.component';
+import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
+import { EmployeeListComponent } from '../../components/employees/employee-list/employee-list.component';
+import { CreateEmployeeComponent } from '../../components/employees/employee-view/create-employee/create-employee.component';
 import { ManageInventoryItemsComponent } from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 import { CreateAuditTemplateComponent } from '../../components/audit-template/audit-template-view/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template-list/audit-template.component';
@@ -26,9 +26,9 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'create-members', component: CreateMemberComponent },
-      { path: 'modify-members', component: ClientGridviewComponent },
-      { path: 'sa-modify-members', component: ClientGridviewComponent },
+      { path: 'create-members', component: CreateEmployeeComponent },
+      { path: 'modify-members', component: EmployeeListComponent },
+      { path: 'sa-modify-members', component: EmployeeListComponent },
       { path: 'manage-organizations', children: [
           {
             path: '', component: ManageOrganizationsComponent
@@ -41,9 +41,9 @@ export const routes: Routes = [
           }
         ],
       },
-      { path: 'modify-members/:ID', component: EmployeeSettingsComponent },
-      { path: 'settings', component: EmployeeSettingsComponent },
-      { path: 'sa-settings', component: EmployeeSettingsComponent },
+      { path: 'modify-members/:ID', component: EditEmployeeComponent },
+      { path: 'settings', component: EditEmployeeComponent },
+      { path: 'sa-settings', component: EditEmployeeComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
       { path: 'template', children: [
           {

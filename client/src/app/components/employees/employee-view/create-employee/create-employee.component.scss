@@ -1,8 +1,4 @@
-.edit-container {
-  margin: 1%;
-}
-
-@import "./src/theme.scss";
+@import "../../../../../theme";
 
 
 .signup-card {
@@ -70,21 +66,26 @@ p.blank-colour {
   color: map-get($alta-primary, 500);
 }
 
-.mat-card-actions {
-  color: map-get($alta-primary, 500);
-}
+//button.save {
+//  position: absolute;
+//  padding-left: 4%;
+//  padding-right: 4%;
+//  margin-left: 72%;
+//  margin-top: 9%;
+//  z-index: 2;
+//  border-color: map-get($alta-primary, 500);
+//  color: map-get($alta-primary, 500);
+//}
+
+//.mat-stroked-button:not([disabled]) {
+//  border-color: map-get($alta-primary, 500);
+//}
 
 .mat-button {
   color: map-get($alta-primary, A200);
   border-color: map-get($alta-primary, A200);
   border: 1px solid;
 }
-
-// Add margin to cancel button to create a space between it and the save button
-button.cancel {
-  margin-left: 100px;
-}
-
 
 span.center {
   margin: auto;

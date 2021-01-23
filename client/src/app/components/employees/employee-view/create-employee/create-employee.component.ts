@@ -7,10 +7,10 @@ import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './create-member.component.html',
-  styleUrls: ['./create-member.component.scss'],
+  templateUrl: './create-employee.component.html',
+  styleUrls: ['./create-employee.component.scss'],
 })
-export class CreateMemberComponent implements OnInit {
+export class CreateEmployeeComponent implements OnInit {
   // Defining type of our form
   signupForm: FormGroup;
   errorMessage: string;

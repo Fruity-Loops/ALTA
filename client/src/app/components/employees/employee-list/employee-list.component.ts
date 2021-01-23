@@ -9,10 +9,10 @@ import roles from 'src/app/fixtures/roles.json';
 
 @Component({
   selector: 'app-client-gridview',
-  templateUrl: './client-gridview.component.html',
-  styleUrls: ['./client-gridview.component.scss'],
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.scss'],
 })
-export class ClientGridviewComponent implements OnInit {
+export class EmployeeListComponent implements OnInit {
   view = 'Client Gridview';
   users: Array<User>;
 
