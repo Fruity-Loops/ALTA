@@ -3,6 +3,7 @@ import {ManageOrganizationsService} from '../../../services/manage-organizations
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template-list/audit-template.component';
+import {OrganizationViewComponent} from './organization-view.component';
 
 
 @Component({
@@ -10,17 +11,15 @@ import {DeleteTemplateDialogComponent} from '../../audit-template/audit-template
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class EditOrganizationComponent implements OnInit {
+export class EditOrganizationComponent extends OrganizationViewComponent implements OnInit {
 
   isActive = 'Active';
   activeStates = ['Active', 'Disabled'];
-  isEdit = true;
   organizationTitle = 'Organization Profile';
   orgName: string;
   location: string;
 
   orgID: string;
-  editOn = false;
 
   orgError: string;
 
@@ -31,7 +30,9 @@ export class EditOrganizationComponent implements OnInit {
     private organizationService: ManageOrganizationsService,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(routeParams => {
@@ -43,6 +44,10 @@ export class EditOrganizationComponent implements OnInit {
         this.location = organization.address;
       });
     });
+  }
+
+  getEditInfo(): [boolean, boolean] {
+    return [false, true];
   }
 
   turnOnEdit(): void {

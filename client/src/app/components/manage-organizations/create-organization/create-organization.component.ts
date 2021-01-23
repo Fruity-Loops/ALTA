@@ -1,30 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import {ManageOrganizationsService} from '../../../services/manage-organizations.service';
 import {Router} from '@angular/router';
+import {OrganizationViewComponent} from './organization-view.component';
 
 @Component({
   selector: 'app-create-organization',
   templateUrl: './organization.component.html',
   styleUrls: ['./organization.component.scss']
 })
-export class CreateOrganizationComponent implements OnInit {
+export class CreateOrganizationComponent extends OrganizationViewComponent implements OnInit {
 
   orgName: string;
   location: string;
-  isEdit = false;
   organizationTitle = 'Organization Creation';
   orgError: string;
-
-  editOn = true; // never changes
 
   constructor(
     private organizationService: ManageOrganizationsService,
     private router: Router
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.orgName = '';
     this.location = '';
+  }
+
+  getEditInfo(): [boolean, boolean] {
+    return [true, false]; // never changes
   }
 
   submitSave(): void {
