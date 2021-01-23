@@ -15,7 +15,6 @@ export class EditOrganizationComponent extends OrganizationViewComponent impleme
 
   isActive = 'Active';
   activeStates = ['Active', 'Disabled'];
-  organizationTitle = 'Organization Profile';
   orgName: string;
   location: string;
 
@@ -48,6 +47,10 @@ export class EditOrganizationComponent extends OrganizationViewComponent impleme
 
   getEditInfo(): [boolean, boolean] {
     return [false, true];
+  }
+
+  getComponentTitle(): string {
+    return 'Organization Profile';
   }
 
   turnOnEdit(): void {

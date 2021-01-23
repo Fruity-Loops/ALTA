@@ -12,7 +12,6 @@ export class CreateOrganizationComponent extends OrganizationViewComponent imple
 
   orgName: string;
   location: string;
-  organizationTitle = 'Organization Creation';
   orgError: string;
 
   constructor(
@@ -29,6 +28,10 @@ export class CreateOrganizationComponent extends OrganizationViewComponent imple
 
   getEditInfo(): [boolean, boolean] {
     return [true, false]; // never changes
+  }
+
+  getComponentTitle(): string {
+    return 'Organization Creation';
   }
 
   submitSave(): void {
