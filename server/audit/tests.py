@@ -46,7 +46,7 @@ class AuditTestCase(APITestCase):
                                      "organization": 1}, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
-        print(self.item_one._id)
+
         self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
         self.assertEqual(response.data['organization'], 1)
@@ -79,20 +79,20 @@ class AuditTestCase(APITestCase):
     def test_update_audit_with_sks(self):
         """ Update an audit as inventory manager to assign stock-keepers """
         self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(organization_id=1)
+        self.predefined_audit = Audit.objects.get(pk=1)
 
         response = self.client.patch('/audit/'f'{self.predefined_audit.audit_id}/',
                                      {"assigned_sk": [self.stock_keeper.id]}, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)
 
-        # self.assertEqual(response.data['organization'], self.org_id.org_id)
+        self.assertEqual(response.data['organization'], self.org_id.org_id)
         self.assertEqual(response.data['assigned_sk'][0], self.stock_keeper.id)
 
     def test_update_audit_with_im_bad_org(self):
         """ Try to access an audit as inventory manager from other organization """
         self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(organization_id=3)
+        self.predefined_audit = Audit.objects.get(pk=3)
 
         response = self.client.get('/audit/'f'{self.predefined_audit.audit_id}/')
 
@@ -102,7 +102,7 @@ class AuditTestCase(APITestCase):
     def test_item_to_sk_designation(self):
         """ Create ItemToSK designation as inventory manager """
         self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(organization_id=1)
+        self.predefined_audit = Audit.objects.get(pk=1)
 
         response = self.client.post("/item-to-sk/",
                                     {"init_audit": 1,
@@ -119,7 +119,7 @@ class AuditTestCase(APITestCase):
         """ Try to create ItemToSK designation as inventory manager from another organization """
 
         self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(organization_id=3)
+        self.predefined_audit = Audit.objects.get(pk=3)
 
         response = self.client.post("/item-to-sk/",
                                     {"init_audit": self.predefined_audit.audit_id,

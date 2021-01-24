@@ -26,20 +26,22 @@
             13059579.0,
             13797174.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [
+          5
+        ]
     }
 },
 {
     "model": "audit.audit",
     "pk": 3,
     "fields": {
-        "organization": 1,
+        "organization": 3,
         "status": "Active",
         "inventory_items": [
             14679376.0
         ],
         "assigned_sk": [
-            5
+            6
         ]
     }
 },
@@ -53,7 +55,7 @@
             13797174.0,
             14679376.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [ 3 ]
     }
 },
 {
@@ -65,7 +67,7 @@
         "inventory_items": [
             14679376.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [ 5 ]
     }
 },
 {
@@ -78,7 +80,7 @@
             13059579.0,
             13797174.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [ 5 ]
     }
 },
 {
@@ -91,20 +93,20 @@
             13797174.0,
             14679376.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [ 3 ]
     }
 },
 {
     "model": "audit.audit",
     "pk": 8,
     "fields": {
-        "organization": 1,
+        "organization": 2,
         "status": "Active",
         "inventory_items": [
             13797174.0,
             14679376.0
         ],
-        "assigned_sk": []
+        "assigned_sk": [ 6 ]
     }
 },
 {
