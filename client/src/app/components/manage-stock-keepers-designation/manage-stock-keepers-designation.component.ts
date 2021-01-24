@@ -149,7 +149,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     localStorage.removeItem('audit_id');
 
     setTimeout(() => {
-          // Redirect user to component dashboard
+          // Redirect user to review-audit component
           this.router.navigate(['review-audit']);
     }, 1000); // Waiting 1 second before redirecting the user
   }

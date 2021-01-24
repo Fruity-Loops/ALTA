@@ -14,6 +14,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./review-audit.component.scss']
 })
 export class ReviewAuditComponent implements OnInit {
+  skAssigned = [];
+  dataSource: MatTableDataSource<User>;
+  displayedColumns: string[] = ['Stock_Keeper', 'First_Name', 'Last_Name'];
+  locationsAndUsers: Array<any>;
 
   panelOpenState = false;
   allExpandState = false;
@@ -28,17 +32,19 @@ export class ReviewAuditComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  confirmReviewAuditData(): void{
+
+    setTimeout(() => {
+      // Redirect user to component dashboard
+      this.router.navigate(['dashboard']);
+    }, 1000); // Waiting 1 second before redirecting the user
+  }
+
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }
-
+  
   closeDialog(): void {
     this.dialog.closeAll();
   }
-
-  checkDisableButton(binArray: any[]): boolean {
-    return binArray.map(index => index.bins).every(array => array.length <= 0);
-  }
-
-
 }
