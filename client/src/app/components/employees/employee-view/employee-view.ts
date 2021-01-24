@@ -37,7 +37,7 @@ export abstract class EmployeeView {
       first_name: this.employeeForm.value.first_name,
       last_name: this.employeeForm.value.last_name,
       location: this.employeeForm.value.location,
-    }
+    };
 
     this.submitQuery(body);
 

@@ -19,7 +19,7 @@ export abstract class OrganizationViewComponent implements OnInit {
     [this.location, this.orgName] = ['', ''];
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     [this.editOn, this.isEdit] = this.getEditInfo();
     this.organizationTitle = this.getComponentTitle();
   }

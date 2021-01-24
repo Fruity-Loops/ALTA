@@ -14,14 +14,14 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 export class EditEmployeeComponent extends EmployeeView {
   @Input() employee: any;
   edit = false;
-  password: string = '';
+  password = '';
   @Input() role: string;
   @Input() isActive: string;
   id: string;
   isLoggedInUser: BehaviorSubject<boolean>;
   isSystemAdmin = false;
 
-  always_disabled = ['email', 'id'];
+  alwaysDisabled = ['email', 'id'];
 
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = roles;
@@ -49,7 +49,7 @@ export class EditEmployeeComponent extends EmployeeView {
   getTitle(): string {
     // need to initialize here because the super constructor needs to be the first thing that gets called
     this.isLoggedInUser = new BehaviorSubject(false);
-    const generateString = () => (this.isLoggedInUser.getValue() ? "Profile" : "Employee") +  " Settings";
+    const generateString = () => (this.isLoggedInUser.getValue() ? 'Profile' : 'Employee') +  ' Settings';
 
     // put a subscription in case of changes for whether the user is logged in or not
     this.isLoggedInUser.subscribe(_ => {
@@ -101,7 +101,9 @@ export class EditEmployeeComponent extends EmployeeView {
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
     Object.keys(this.employeeForm.controls).forEach(key => {
-      if (this.always_disabled.indexOf(key) < 0) this.employeeForm.controls[key].enable();
+      if (this.alwaysDisabled.indexOf(key) < 0) {
+        this.employeeForm.controls[key].enable();
+      }
     });
     if (!turnOn) {
       this.submitForm();

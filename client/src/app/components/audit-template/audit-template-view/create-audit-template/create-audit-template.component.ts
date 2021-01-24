@@ -32,7 +32,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
-  submitQuery(body) {
+  submitQuery(body): void {
     this.auditTemplateService.createTemplate(body).subscribe(
       () => {
         setTimeout(() => {

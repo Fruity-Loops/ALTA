@@ -71,7 +71,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
   }
 
   submitQuery(body): void {
-    body["template_id"] = this.id;
+    body.template_id = this.id;
     this.auditTemplateService.updateTemplate(this.id, body).subscribe(
       () => {
         setTimeout(() => {
