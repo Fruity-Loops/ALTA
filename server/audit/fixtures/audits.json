@@ -1,7 +1,3 @@
-######ALL JOBS#######
-Jobstore default:
-    No scheduled jobs
-#####################
 [
 {
     "model": "audit.audit",

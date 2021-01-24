@@ -22,10 +22,10 @@ class AuditViewSet(viewsets.ModelViewSet):
         if self.action in ['list']:
             serializer_class.Meta.fields = ['audit_id', 'organization', 'status', 'assigned_sk']
             setattr(serializer_class, 'assigned_sk', UserAuditSerializer(read_only=True, many=True))
-        if self.action in ['create', 'retrieve']:
+        elif self.action in ['create', 'retrieve']:
             serializer_class.Meta.fields = '__all__'
         else:
-            serializer_class.Meta.fields = list(self.request.data.keys())#'__all__'
+            serializer_class.Meta.fields = list(self.request.data.keys())
             if 'assigned_sk' in serializer_class.Meta.fields:
                 setattr(serializer_class, 'assigned_sk', UserAuditSerializer(read_only=True, many=True))
             if 'inventory_items' in serializer_class.Meta.fields:
