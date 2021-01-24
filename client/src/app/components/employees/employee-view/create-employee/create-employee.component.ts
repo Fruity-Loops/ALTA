@@ -68,7 +68,7 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   submitForm(): void {
 
     this.body = {
-      user_name: this.employeeForm.value.username,
+      user_name: this.employeeForm.value.id,
       email: this.employeeForm.value.email,
       first_name: this.employeeForm.value.first_name,
       last_name: this.employeeForm.value.last_name,

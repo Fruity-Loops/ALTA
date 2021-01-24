@@ -6,7 +6,7 @@
     </div>
   </mat-card-header>
   <mat-divider></mat-divider>
-  <form class="col s12" [formGroup]="employeeForm" novalidate (ngSubmit)="submitForm()" *ngIf="loaded">
+  <form class="col s12" [formGroup]="employeeForm" novalidate *ngIf="loaded">
     <mat-card-content>
 
       <div class="centerMe"></div>
