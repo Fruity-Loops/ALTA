@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
 from inventory_item.serializers import ItemSerializer
-from .serializers import AuditSerializer, ItemToSKSerializer
+from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from user_account.serializers import UserAuditSerializer
 from .models import Audit, ItemToSK
 
@@ -20,16 +20,9 @@ class AuditViewSet(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
         if self.action in ['list']:
-            serializer_class.Meta.fields = ['audit_id', 'organization', 'status', 'assigned_sk']
-            setattr(serializer_class, 'assigned_sk', UserAuditSerializer(read_only=True, many=True))
-        elif self.action in ['create', 'retrieve']:
-            serializer_class.Meta.fields = '__all__'
-        else:
-            serializer_class.Meta.fields = list(self.request.data.keys())
-            if 'assigned_sk' in serializer_class.Meta.fields:
-                setattr(serializer_class, 'assigned_sk', UserAuditSerializer(read_only=True, many=True))
-            if 'inventory_items' in serializer_class.Meta.fields:
-                setattr(serializer_class, 'inventory_items', ItemSerializer(read_only=True, many=True))
+            serializer_class.Meta.fields = ['audit_id', 'status', 'organization', 'assigned_sk']
+        if self.action in ['retrieve']:
+            serializer_class = GetAuditSerializer
         return serializer_class(*args, **kwargs)
 
     def list(self, request):
