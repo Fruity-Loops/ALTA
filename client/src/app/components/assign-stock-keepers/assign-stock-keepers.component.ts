@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { User } from 'src/app/models/user.model';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 
@@ -39,8 +37,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.busySKs = new Array<any>();
 
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
-    this.params = this.params.append('status', "Active");
-
+    this.params = this.params.append('status', 'Active');
 
     this.addAssignedSK.getBusySKs(this.params)
       .subscribe((response) => {
@@ -59,18 +56,13 @@ export class AssignStockKeepersComponent implements OnInit {
     * 2. how slow this can be to compute on the front-end
     */
 
-    console.log(clients);
-    console.log(this.busySKs)
-
     clients.forEach(element => {
       if (element.role === 'SK') {
-
         const isBusy = this.busySKs.find(user => user === element.id);
-        let holdAvailability = "";
         if (isBusy === undefined) {
-          element.availability = "Available";
+          element.availability = 'Available';
         } else {
-          element.availability = "Busy";
+          element.availability = 'Busy';
         }
 
         const obj = this.locationsAndUsers.find(item => item.location === element.location);

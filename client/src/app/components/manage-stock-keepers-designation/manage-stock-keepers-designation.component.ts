@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { PreAudit } from 'src/app/models/pre-audit.model';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
 
@@ -132,7 +129,8 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                     customuser: auditComp.sk_id,
                     bins: auditComp.bins,
                     item_ids: holdIds
-                  }), holdItemsOfBins = new Array<any>();
+                  });
+                  holdItemsOfBins = new Array<any>();
                 }
           }
         });
