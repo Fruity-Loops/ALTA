@@ -21,7 +21,6 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   isEmployee = false;
   createMembersRoles = createMembersRoles;
 
-  loaded = true;
   isEdit = false;
 
   role: string;
@@ -35,6 +34,7 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
     private tokenService: TokenService
   ) {
     super();
+    this.isLoaded();
   }
 
   ngOnInit(): void {

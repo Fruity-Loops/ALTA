@@ -28,8 +28,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   roles = roles;
 
   employeeForm: FormGroup;
-
-  loaded = false;
   isEdit = true;
   errorMessage: string;
 
@@ -84,7 +82,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
           new FormControl({value: employee.location, disabled: !this.isSystemAdmin}, [Validators.required]) :
           undefined,
       });
-      this.loaded = true;
+      this.isLoaded();
     });
   }
 
