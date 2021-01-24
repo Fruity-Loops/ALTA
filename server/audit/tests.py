@@ -130,3 +130,7 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
+    def amanda_list(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        response = self.client.get('/audit/', {'organization': 1, 'status': 'Active'})
+        print(response.data)
