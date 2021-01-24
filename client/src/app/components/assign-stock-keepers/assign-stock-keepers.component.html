@@ -36,7 +36,10 @@
 
       <ng-container matColumnDef="Availability">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-        <td class="cell_availability" mat-cell *matCellDef="let row">{{row.availability}}</td>
+        <td class="cell_availability" mat-cell *matCellDef="let row">
+          <div [ngClass]="row.availability == 'Available' ? 'available-sk': 'busy-sk'">
+            {{row.availability}}
+          </div></td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
