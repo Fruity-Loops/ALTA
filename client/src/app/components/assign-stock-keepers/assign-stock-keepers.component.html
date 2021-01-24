@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title>Select Stock-Keepers</mat-card-title>
-  <div id="top-div" align="end">
+  <div id="top-div">
     <button mat-button class="top-buttons" (click)="allExpandState=true">Expand All</button>
     <button mat-button class="top-buttons" (click)="allExpandState=false">Collapse All</button>
   </div>
@@ -15,7 +15,7 @@
     </mat-card-header>
 	</mat-expansion-panel-header>
 
-	<table mat-table [dataSource]="dataSource" matSort>
+	<table aria-labelledby="select_sks" mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Check_Boxes">
         <th id="select_check_box" mat-header-cell *matHeaderCellDef>Select</th>
@@ -58,7 +58,7 @@
 <ng-template #discardDialog>
   <h2 matDialogTitle>Discard Audit</h2>
   <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
-  <div mat-dialog-actions align="end">
+  <div mat-dialog-actions>
     <button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
     <button mat-button (click)="closeDialog()">Cancel</button>
   </div>

@@ -116,12 +116,17 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     const holdBodyPreAuditData = new Array<any>();
     let holdItemsOfBins = new Array<any>();
 
+    // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
         auditComp.bins.forEach(bin => {
+          // check if the bin has already been assigned to a stock-keeper
           if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
               !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
+                // get the affiliated items of a bin
                 holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
+                // check if the bin has items
                 if (holdItemsOfBins.length > 0) {
+                  // construct array to hold the item ids
                   const holdIds = holdItemsOfBins.map(item => item._id);
                   holdBodyPreAuditData.push(
                   {
@@ -130,6 +135,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                     bins: auditComp.bins,
                     item_ids: holdIds
                   });
+                  // empty array for next bin in loop
                   holdItemsOfBins = new Array<any>();
                 }
           }
