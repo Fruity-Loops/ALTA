@@ -39,12 +39,13 @@ export class AssignStockKeepersComponent implements OnInit {
     this.busySKs = new Array<any>();
 
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
-    this.params = this.params.append('status', "Pending");
+    this.params = this.params.append('status', "Active");
 
 
     this.addAssignedSK.getBusySKs(this.params)
       .subscribe((response) => {
         this.busySKs = response.map(obj => obj.assigned_sk).flat();
+
         this.manageMembersService.getAllClients()
           .subscribe((user) => {
             this.populateTable(user);
@@ -58,34 +59,33 @@ export class AssignStockKeepersComponent implements OnInit {
     * 2. how slow this can be to compute on the front-end
     */
 
+    console.log(clients);
+    console.log(this.busySKs)
+
     clients.forEach(element => {
       if (element.role === 'SK') {
-        const isBusy = this.busySKs.find(user => user === clients.id);
+
+        const isBusy = this.busySKs.find(user => user === element.id);
         let holdAvailability = "";
         if (isBusy === undefined) {
-          holdAvailability = "Available";
+          element.availability = "Available";
         } else {
-          holdAvailability = "Busy";
+          element.availability = "Busy";
         }
-        // TODO: get back to this
+
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
         if (obj === undefined) {
-
-
             this.locationsAndUsers.push(
             {
               location: element.location,
               users: new Array<User>(element)
             });
-
         }
         else {
           obj.users.push(element);
         }
       }
     });
-
-    console.log(this.locationsAndUsers);
 
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {

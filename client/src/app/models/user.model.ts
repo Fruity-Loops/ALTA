@@ -14,5 +14,4 @@ export interface SKUser {
     last_name: string;
     user_name: string;
     location: string;
-    availability: string;
 }
