@@ -9,8 +9,8 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-employee-settings',
-  templateUrl: './edit-employee.component.html',
-  styleUrls: ['./edit-employee.component.scss'],
+  templateUrl: '../employee-view.component.html',
+  styleUrls: ['../employee-view.component.scss'],
 })
 export class EditEmployeeComponent extends EmployeeView implements OnInit {
   @Input() employee: any;
@@ -30,7 +30,11 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = roles;
 
-  editForm: FormGroup;
+  employeeForm: FormGroup;
+
+  loaded = false;
+  isEdit = true;
+  errorMessage: string;
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -73,16 +77,17 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
         is_active: employee.is_active,
       };
       this.setSelectors();
-      this.editForm = this.fb.group({
+      this.employeeForm = this.fb.group({
         // Each username,email,password is piped from the HTML using the "formControlName"
         id: new FormControl({value: employee.id, disabled: !this.edit}, [Validators.required]),
         email: new FormControl({value: employee.email, disabled: !this.edit}, [Validators.email, Validators.required]),
-        firstname: new FormControl({value: employee.first_name, disabled: !this.edit}, [Validators.required]),
-        lastname: new FormControl({value: employee.last_name, disabled: !this.edit}, [Validators.required]),
+        first_name: new FormControl({value: employee.first_name, disabled: !this.edit}, [Validators.required]),
+        last_name: new FormControl({value: employee.last_name, disabled: !this.edit}, [Validators.required]),
         location: !this.isSystemAdmin ?
           new FormControl({value: employee.location, disabled: !this.isSystemAdmin}, [Validators.required]) :
           undefined,
       });
+      this.loaded = true;
     });
   }
 
@@ -103,11 +108,11 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
-    Object.keys(this.editForm.controls).forEach(key => {
-      if (this.always_disabled.indexOf(key) < 0) this.editForm.controls[key].enable();
+    Object.keys(this.employeeForm.controls).forEach(key => {
+      if (this.always_disabled.indexOf(key) < 0) this.employeeForm.controls[key].enable();
     });
     if (!turnOn) {
-      this.submit();
+      this.submitForm();
     }
   }
 
@@ -116,7 +121,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
     window.location.reload();
   }
 
-  submit(): void {
+  submitForm(): void {
     // update user info
     this.employee.is_active = this.isActive === 'active';
 
@@ -127,12 +132,12 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
     });
 
     this.body = {
-      user_name: this.editForm.value.username,
-      email: this.editForm.value.email,
-      first_name: this.editForm.value.firstname,
-      last_name: this.editForm.value.lastname,
-      password: this.editForm.value.password,
-      location: this.editForm.value.location
+      user_name: this.employeeForm.value.username,
+      email: this.employeeForm.value.email,
+      first_name: this.employeeForm.value.firstname,
+      last_name: this.employeeForm.value.lastname,
+      password: this.employeeForm.value.password,
+      location: this.employeeForm.value.location
     };
 
     // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input

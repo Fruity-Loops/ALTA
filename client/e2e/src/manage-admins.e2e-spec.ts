@@ -39,20 +39,20 @@ describe('AT-1.1: System administrator creates a system administrator account', 
    */
   it('should create system admin member account', () => {
     const systemAdmin = {
-      firstname: 'Alex',
-      lastname: 'Jones',
+      first_name: 'Alex',
+      last_name: 'Jones',
       email: 'alex_jones@mail.com',
       employee_id: '12345678',
       password: 'password',
     };
-    createMembersPage.getFirstNameField().sendKeys(systemAdmin.firstname);
-    createMembersPage.getLastNameField().sendKeys(systemAdmin.lastname);
+    createMembersPage.getFirstNameField().sendKeys(systemAdmin.first_name);
+    createMembersPage.getLastNameField().sendKeys(systemAdmin.last_name);
     createMembersPage.getEmailField().sendKeys(systemAdmin.email);
     createMembersPage.getEmployeeIdField().sendKeys(systemAdmin.employee_id);
     createMembersPage.getPasswordField().sendKeys(systemAdmin.password);
     createMembersPage.getSaveButton().click();
 
     browser.wait(ExpectedConditions.visibilityOf(
-      manageMembersPage.getFirstNameColumn(systemAdmin.firstname)), 5000);
+      manageMembersPage.getFirstNameColumn(systemAdmin.first_name)), 5000);
   });
 });

@@ -8,12 +8,12 @@ import {EmployeeView} from '../employee-view';
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './create-employee.component.html',
-  styleUrls: ['./create-employee.component.scss'],
+  templateUrl: '../employee-view.component.html',
+  styleUrls: ['../employee-view.component.scss'],
 })
 export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   // Defining type of our form
-  signupForm: FormGroup;
+  employeeForm: FormGroup;
   errorMessage: string;
   body: any;
   selectedOrganization: any = '';
@@ -21,6 +21,11 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   subscription;
   isEmployee = false;
   createMembersRoles = createMembersRoles;
+
+  loaded = true;
+  isEdit = false;
+
+  role: string;
 
   // Injecting the authService to be able to send data to the backend through it ,
   // fb for the formbuilder validations and Router to redirect to the desired component when registerd successfully
@@ -50,28 +55,28 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
 
   // We initialize the form and set validators to each one in case user forget to specify a field
   init(): void {
-    this.signupForm = this.fb.group({
-      username: ['', Validators.required], // Each username,email,password is piped from the HTML using the "formControlName"
+    this.employeeForm = this.fb.group({
+      id: ['', Validators.required], // Each username,email,password is piped from the HTML using the "formControlName"
       email: ['', [Validators.email, Validators.required]],
       password: ['', Validators.required],
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
+      first_name: ['', Validators.required],
+      last_name: ['', Validators.required],
       role: this.isEmployee ? ['', Validators.required] : undefined,
       location: this.isEmployee ? ['', Validators.required] : undefined,
     });
   }
 
-  signupUser(): void {
+  submitForm(): void {
 
     this.body = {
-      user_name: this.signupForm.value.username,
-      email: this.signupForm.value.email,
-      first_name: this.signupForm.value.firstname,
-      last_name: this.signupForm.value.lastname,
-      location: this.signupForm.value.location === undefined ? null : this.signupForm.value.location,
-      role: this.signupForm.value.role?.abbrev ? this.signupForm.value.role.abbrev : 'SA',
+      user_name: this.employeeForm.value.username,
+      email: this.employeeForm.value.email,
+      first_name: this.employeeForm.value.first_name,
+      last_name: this.employeeForm.value.last_name,
+      location: this.employeeForm.value.location === undefined ? null : this.employeeForm.value.location,
+      role: this.employeeForm.value.role?.abbrev ? this.employeeForm.value.role.abbrev : 'SA',
       is_active: 'true',
-      password: this.signupForm.value.password,
+      password: this.employeeForm.value.password,
       // parse the organization as an int to be sent to the backend
       organization: parseInt(this.selectedOrganization, 10),
     };

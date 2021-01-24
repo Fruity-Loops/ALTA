@@ -57,14 +57,14 @@ describe('AT-1.4: System administrator create organizations employees accounts',
    */
   it('should create an employee account', () => {
     const employee = {
-      firstname: 'Dwayne',
-      lastname: 'Johnson',
+      first_name: 'Dwayne',
+      last_name: 'Johnson',
       email: 'the_rock@email.com',
       employee_id: '422112',
       password: 'password',
     };
-    createMembersPage.getFirstNameField().sendKeys(employee.firstname);
-    createMembersPage.getLastNameField().sendKeys(employee.lastname);
+    createMembersPage.getFirstNameField().sendKeys(employee.first_name);
+    createMembersPage.getLastNameField().sendKeys(employee.last_name);
     createMembersPage.getEmailField().sendKeys(employee.email);
     createMembersPage.getEmployeeIdField().sendKeys(employee.employee_id);
     createMembersPage.getPasswordField().sendKeys(employee.password);
@@ -74,7 +74,7 @@ describe('AT-1.4: System administrator create organizations employees accounts',
 
     browser.wait(ExpectedConditions.urlContains('modify-members'), 5000);
     browser.wait(ExpectedConditions.visibilityOf(
-      manageMembersPage.getFirstNameColumn(employee.firstname)), 5000);
+      manageMembersPage.getFirstNameColumn(employee.first_name)), 5000);
   });
 });
 
