@@ -17,7 +17,6 @@ import { Item } from 'src/app/models/item.model';
   styleUrls: ['./manage-stock-keepers-designation.component.scss']
 })
 export class ManageStockKeepersDesignationComponent implements OnInit {
-
   preAuditData: PreAudit;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;

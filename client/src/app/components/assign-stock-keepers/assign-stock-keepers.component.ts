@@ -18,6 +18,7 @@ export class AssignStockKeepersComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name'];
   locationsAndUsers: Array<any>;
+  
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
