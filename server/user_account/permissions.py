@@ -142,3 +142,18 @@ def check_keys(bad_keys, keys):
         if bad_key in keys:
             return False
     return True
+
+
+class CanCreate(BasePermission):
+    message = "Only System Admins can create other System Admins"
+
+    def has_permission(self, request, view):
+        """
+        :param request: Getting the user that is doing the request
+        :param view: Getting the targeted pk passed in the URL
+        :return: True/False : Whether the user is allowed to create the user
+        """
+        if IsSystemAdmin.has_permission(self, request, view):
+            return True
+        if IsInventoryManager.has_permission(self, request, view):
+            return not request.data['role'] == 'SA'
