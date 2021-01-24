@@ -1,50 +1,126 @@
 [
-    {
-      "model": "audit.audit",
-      "pk": 1,
-      "fields": {
-        "organization_id": 1,
+{
+    "model": "audit.audit",
+    "pk": 1,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
         "inventory_items": [
-          12752842.0,
-          12852846.0
+            12752842.0,
+            12852846.0,
+            13059579.0
         ],
         "assigned_sk": [
-          3
+            3
         ]
-      }
-    },
-    {
-      "model": "audit.audit",
-      "pk": 2,
-      "fields": {
-        "organization_id": 3,
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 2,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
         "inventory_items": [
-          13059579.0,
-          12731369.0
+            12852846.0,
+            13059579.0,
+            13797174.0
         ],
         "assigned_sk": [
           5
         ]
-      }
-    },
-    {
-      "model": "audit.itemtosK",
-      "pk": 1,
-      "fields": {
-        "init_audit_id": 1,
-        "customuser_id": 3,
-        "item_ids": [12752842, 12852846],
-        "bins": ["A1"]
-      }
-    },
-    {
-      "model": "audit.itemtosK",
-      "pk": 2,
-      "fields": {
-        "init_audit_id": 2,
-        "customuser_id": 5,
-        "item_ids": [13059579, 12731369],
-        "bins": ["A1", "A10"]
-      }
     }
+},
+{
+    "model": "audit.audit",
+    "pk": 3,
+    "fields": {
+        "organization": 3,
+        "status": "Active",
+        "inventory_items": [
+            14679376.0
+        ],
+        "assigned_sk": [
+            6
+        ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 4,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
+        "inventory_items": [
+            13797174.0,
+            14679376.0
+        ],
+        "assigned_sk": [ 3 ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 5,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
+        "inventory_items": [
+            14679376.0
+        ],
+        "assigned_sk": [ 5 ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 6,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
+        "inventory_items": [
+            13059579.0,
+            13797174.0
+        ],
+        "assigned_sk": [ 5 ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 7,
+    "fields": {
+        "organization": 1,
+        "status": "Active",
+        "inventory_items": [
+            13797174.0,
+            14679376.0
+        ],
+        "assigned_sk": [ 3 ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 8,
+    "fields": {
+        "organization": 2,
+        "status": "Active",
+        "inventory_items": [
+            13797174.0,
+            14679376.0
+        ],
+        "assigned_sk": [ 6 ]
+    }
+},
+{
+    "model": "audit.audit",
+    "pk": 9,
+    "fields": {
+        "organization": 1,
+        "status": "Pending",
+        "inventory_items": [
+            13797174.0
+        ],
+        "assigned_sk": [
+            5
+        ]
+    }
+}
 ]

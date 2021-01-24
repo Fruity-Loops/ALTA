@@ -10,6 +10,7 @@ const BASEURL = env.api_root;
   providedIn: 'root',
 })
 export class ManageAuditsService {
+
   constructor(private http: HttpClient) {}
 
   createAudit(inventoryItem): Observable<any> {
@@ -22,6 +23,10 @@ export class ManageAuditsService {
 
   getAuditData(auditId): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
+  }
+
+  getBusySKs(params): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/`, {params});
   }
 
   initiatePreAudit(preAuditData): Observable<any> {

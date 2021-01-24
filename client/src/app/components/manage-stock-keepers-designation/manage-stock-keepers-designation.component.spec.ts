@@ -25,7 +25,6 @@ describe('ManageStockKeepersDesignationComponent', () => {
 
     fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
   });
 

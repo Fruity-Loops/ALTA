@@ -3,8 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
-
-from .serializers import AuditSerializer, GetAuditSerializer, ItemToSKSerializer
+from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from .models import Audit, ItemToSK
 
 
@@ -18,9 +17,19 @@ class AuditViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
-        if self.action in ['list', 'retrieve']:
+        if self.action in ['retrieve']:
             serializer_class = GetAuditSerializer
         return serializer_class(*args, **kwargs)
+
+    def list(self, request):
+        if request.GET.get("status", '') != '':
+            queryset = Audit.objects.filter(status=request.GET.get("status", '')) \
+                .filter(organization_id=request.GET.get("organization", ''))
+        else:
+            queryset = Audit.objects.filter(organization_id=request.GET.get("organization", ''))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 class ItemToSKViewSet(viewsets.ModelViewSet):
     """

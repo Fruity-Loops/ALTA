@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { PreAudit } from 'src/app/models/pre-audit.model';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
 
@@ -118,12 +115,17 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     const holdBodyPreAuditData = new Array<any>();
     let holdItemsOfBins = new Array<any>();
 
+    // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
         auditComp.bins.forEach(bin => {
+          // check if the bin has already been assigned to a stock-keeper
           if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
               !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
+                // get the affiliated items of a bin
                 holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
+                // check if the bin has items
                 if (holdItemsOfBins.length > 0) {
+                  // construct array to hold the item ids
                   const holdIds = holdItemsOfBins.map(item => item._id);
                   holdBodyPreAuditData.push(
                   {
@@ -131,7 +133,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                     customuser: auditComp.sk_id,
                     bins: auditComp.bins,
                     item_ids: holdIds
-                  }), holdItemsOfBins = new Array<any>();
+                  });
+                  // empty array for next bin in loop
+                  holdItemsOfBins = new Array<any>();
                 }
           }
         });
