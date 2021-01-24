@@ -4,6 +4,10 @@
   </ion-buttons>
 
   <ion-buttons slot="end" >
+    <ion-button color="secondary" shape="round" (click)="presentNotificationPopover($event)">
+      <ion-icon name="notifications-outline" size="large"></ion-icon>
+      <ion-badge color="danger">0</ion-badge>
+    </ion-button>
     <ion-button color="secondary" shape="round" (click)="presentProfilePopover($event)">
       <ion-icon name="person-circle" size="large"></ion-icon>
     </ion-button>
