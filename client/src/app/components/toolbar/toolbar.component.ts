@@ -49,7 +49,6 @@ export class ToolbarComponent implements OnInit {
     this.orgModeSub = this.authService.getOrgMode().subscribe((value) => {
       this.orgMode = value;
     });
-    console.log(this.orgModeSub);
   }
 
   toggleDrawer(): void {
