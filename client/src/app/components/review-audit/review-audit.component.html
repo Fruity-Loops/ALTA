@@ -1,56 +1,40 @@
 <mat-card>
-    <mat-card-title>Review Audit</mat-card-title>
-    <div id="top-div" align="end">
-      <button mat-button class="top-buttons" (click)="allExpandState=true">Expand All</button>
-      <button mat-button class="top-buttons" (click)="allExpandState=false">Collapse All</button>
-    </div>
-  </mat-card>
-  <br>
-  
-  <mat-expansion-panel *ngFor="let item of locationsAndUsers;" class="mat-expand"
-                       [expanded]="allExpandState" >
-      <mat-expansion-panel-header>
-          <mat-card-header>
-        <mat-card-title class="location-title" >{{item.location}}</mat-card-title>
-      </mat-card-header>
-      </mat-expansion-panel-header>
-  
-      <table mat-table [dataSource]="dataSource" matSort>
-  
-        <ng-container matColumnDef="Check_Boxes">
-          <th mat-header-cell *matHeaderCellDef>Select</th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox (change)='onChange(row.id)'></mat-checkbox>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="First_Name" >
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
-          <td class="cell_first_name" mat-cell *matCellDef="let row" >{{row.first_name}}</td>
-        </ng-container>
-  
-        <ng-container matColumnDef="Last_Name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-          <td class="cell_last_name" mat-cell *matCellDef="let row">{{row.last_name}}</td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="item.location !== row.location"></tr>
-      </table>
-  
-  </mat-expansion-panel>
-  
-  <div class="bottom-buttons">
-        <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
-        <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"
-                (click)="submitAssignedSKs()">Assign</button> <!-- TODO: update route -->
+  <mat-card-title>Review Audit</mat-card-title>
+  <div id="top-div" align="end">
+    <button mat-button class="top-buttons" (click)="allExpandState=true">Expand All </button>
+    <button mat-button class="top-buttons" (click)="allExpandState=false">Collapse All </button>
   </div>
-  
-  <ng-template #discardDialog>
-    <h2 matDialogTitle>Discard Audit</h2>
-    <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
-    <div mat-dialog-actions align="end">
-      <button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
-      <button mat-button (click)="closeDialog()">Cancel</button>
-    </div>
-  </ng-template>  
+</mat-card>
+<br>
+
+<mat-expansion-panel *ngFor="let auditComp of locationsWithBinsAndSKs;" class="mat-expand"
+                       [expanded]="allExpandState" >
+    <mat-expansion-panel-header>
+      <mat-card-header>
+        <mat-card-title class="location-title" >{{auditComp.Location}}</mat-card-title>
+      </mat-card-header>
+    </mat-expansion-panel-header>
+    <mat-divider></mat-divider><br>
+
+
+  </mat-expansion-panel>
+
+<div class="bottom-buttons">
+  <button mat-stroked-button  id="discard" class="bottom-discard" (click)="openDialogWithRef(discardDialog)">Discard</button> <!-- TODO: update route -->
+  <button mat-stroked-button  id="confirm" class="bottom-confirm" (click)="submitAssignedSKs()">Confirm</button>
+</div>
+
+<ng-template #discardDialog>
+<h2 matDialogTitle>Discard Audit</h2>
+<h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
+<div mat-dialog-actions align="end">
+<button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
+<button mat-button (click)="closeDialog()">Cancel</button>
+</div>
+</ng-template>
+
+
+
+
+
+

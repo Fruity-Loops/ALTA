@@ -151,7 +151,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     setTimeout(() => {
           // Redirect user to component dashboard
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['review-audit']);
     }, 1000); // Waiting 1 second before redirecting the user
   }
 
