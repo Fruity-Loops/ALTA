@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -15,12 +16,16 @@ import { Router } from '@angular/router';
 })
 export class AssignStockKeepersComponent implements OnInit {
   skToAssign = [];
+  busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name'];
+  displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
+
+  // Http URL params
+  params = new HttpParams();
 
   constructor(private manageMembersService: ManageMembersService,
               private dialog: MatDialog,
@@ -31,9 +36,19 @@ export class AssignStockKeepersComponent implements OnInit {
   ngOnInit(): void {
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
-    this.manageMembersService.getAllClients()
-    .subscribe((user) => {
-      this.populateTable(user);
+    this.busySKs = new Array<any>();
+
+    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.append('status', "Pending");
+
+
+    this.addAssignedSK.getBusySKs(this.params)
+      .subscribe((response) => {
+        this.busySKs = response.map(obj => obj.assigned_sk).flat();
+        this.manageMembersService.getAllClients()
+          .subscribe((user) => {
+            this.populateTable(user);
+        });
     });
   }
 
@@ -42,21 +57,35 @@ export class AssignStockKeepersComponent implements OnInit {
     * 1. sending all an organization's users with a realistic amount of users
     * 2. how slow this can be to compute on the front-end
     */
+
     clients.forEach(element => {
       if (element.role === 'SK') {
+        const isBusy = this.busySKs.find(user => user === clients.id);
+        let holdAvailability = "";
+        if (isBusy === undefined) {
+          holdAvailability = "Available";
+        } else {
+          holdAvailability = "Busy";
+        }
+        // TODO: get back to this
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
         if (obj === undefined) {
-          this.locationsAndUsers.push(
-          {
-            location: element.location,
-            users: new Array<User>(element),
-          });
+
+
+            this.locationsAndUsers.push(
+            {
+              location: element.location,
+              users: new Array<User>(element)
+            });
+
         }
         else {
           obj.users.push(element);
         }
       }
     });
+
+    console.log(this.locationsAndUsers);
 
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {

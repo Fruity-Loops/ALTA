@@ -4,6 +4,7 @@
       "pk": 1,
       "fields": {
         "organization_id": 1,
+        "status": "Pending",
         "inventory_items": [
           12752842.0,
           12852846.0
@@ -18,6 +19,7 @@
       "pk": 2,
       "fields": {
         "organization_id": 3,
+        "status": "Active",
         "inventory_items": [
           13059579.0,
           12731369.0

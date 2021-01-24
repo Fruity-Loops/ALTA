@@ -69,7 +69,7 @@
     "fields": {
         "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
-        "user_name": "sk1",
+        "user_name": "sk1000",
         "first_name": "stock",
         "last_name": "keeper",
         "role": "SK",
@@ -85,7 +85,7 @@
     "fields": {
         "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
         "last_login": null,
-        "user_name": "sk2",
+        "user_name": "sk9000",
         "first_name": "stock",
         "last_name": "keeper",
         "role": "SK",

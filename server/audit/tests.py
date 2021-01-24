@@ -33,7 +33,8 @@ class AuditTestCase(APITestCase):
     def test_audit_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id]})
+                                    {"inventory_items": [self.item_one._id, self.item_two._id]},
+                                    format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
@@ -42,9 +43,10 @@ class AuditTestCase(APITestCase):
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
-                                     "organization": 1})
+                                     "organization": 1}, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
+        print(self.item_one._id)
         self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
         self.assertEqual(response.data['organization'], 1)
@@ -54,7 +56,7 @@ class AuditTestCase(APITestCase):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
-                                     "organization": 3})
+                                     "organization": 3}, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
@@ -65,7 +67,8 @@ class AuditTestCase(APITestCase):
         # create initial audit with inventory items
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
-                                     "organization": self.inv_manager.organization.org_id})
+                                     "organization": self.inv_manager.organization.org_id},
+                                    format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
@@ -79,7 +82,7 @@ class AuditTestCase(APITestCase):
         self.predefined_audit = Audit.objects.get(organization_id=1)
 
         response = self.client.patch('/audit/'f'{self.predefined_audit.audit_id}/',
-                                     {"assigned_sk": [self.stock_keeper.id]})
+                                     {"assigned_sk": [self.stock_keeper.id]}, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_200_OK)

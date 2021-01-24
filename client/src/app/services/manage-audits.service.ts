@@ -1,6 +1,6 @@
 import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Connection with the backend
@@ -10,6 +10,7 @@ const BASEURL = env.api_root;
   providedIn: 'root',
 })
 export class ManageAuditsService {
+  //orgId: string;
   constructor(private http: HttpClient) {}
 
   createAudit(inventoryItem): Observable<any> {
@@ -22,6 +23,13 @@ export class ManageAuditsService {
 
   getAuditData(auditId): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
+  }
+
+  getBusySKs(params): Observable<any> {
+
+    console.log(params);
+
+    return this.http.get(`${BASEURL}/audit/`, {params} );
   }
 
   initiatePreAudit(preAuditData): Observable<any> {

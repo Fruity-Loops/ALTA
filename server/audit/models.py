@@ -10,7 +10,8 @@ class Audit(models.Model):
                                      blank=False,
                                      null=False,
                                      default=0)
-    inventory_items = models.ManyToManyField(Item)
+    status = models.CharField(max_length=50, default="Pending")
+    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(CustomUser, blank=True, default=0)
 
 

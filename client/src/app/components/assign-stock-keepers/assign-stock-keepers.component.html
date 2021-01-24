@@ -34,6 +34,11 @@
         <td class="cell_last_name" mat-cell *matCellDef="let row">{{row.last_name}}</td>
       </ng-container>
 
+      <ng-container matColumnDef="Availability">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+        <td class="cell_availability" mat-cell *matCellDef="let row">{{row.availability}}</td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="item.location !== row.location"></tr>
     </table>
