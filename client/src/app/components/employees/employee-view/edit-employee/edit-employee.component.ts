@@ -14,16 +14,13 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class EditEmployeeComponent extends EmployeeView implements OnInit {
   @Input() employee: any;
-  @Input() employeeCopy: any;
   edit = false;
-  defaultPassword = '';
-  password: string = this.defaultPassword;
+  password: string = '';
   @Input() role: string;
   @Input() isActive: string;
   id: string;
   isLoggedInUser: BehaviorSubject<boolean>;
   isSystemAdmin = false;
-  body: any;
 
   always_disabled = ['email', 'id'];
 
@@ -131,7 +128,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
       }
     });
 
-    this.body = {
+    let body: any = {
       user_name: this.employeeForm.value.username,
       email: this.employeeForm.value.email,
       first_name: this.employeeForm.value.firstname,
@@ -141,7 +138,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
     };
 
     // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input
-    const patchedEmployee = {...this.employee, ...this.body};
+    const patchedEmployee = {...this.employee, ...body};
 
     delete patchedEmployee.id;
     delete patchedEmployee.email;
@@ -154,10 +151,10 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
     // update user password
     if (this.password.length > 0) {
-      this.body = {
+      body = {
         password: this.password,
       };
-      this.manageMembersService.updatePassword(this.body, this.id).subscribe(
+      this.manageMembersService.updatePassword(body, this.id).subscribe(
         (response) => {
           location.reload();
         },

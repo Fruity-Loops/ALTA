@@ -17,7 +17,6 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   errorMessage: string;
   body: any;
   selectedOrganization: any = '';
-  signUpButtonLabel = 'Save';
   subscription;
   isEmployee = false;
   createMembersRoles = createMembersRoles;
