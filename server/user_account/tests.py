@@ -145,6 +145,13 @@ class RegistrationTestCase(APITestCase):
                                    format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
+    def test_im_creates_sa(self):
+        """ IM can't create a system admin"""
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.post(self.url, self.registered_system_admin,
+                                   format='json')
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+
 
 class OpenRegistrationTestCase(APITestCase):
 
