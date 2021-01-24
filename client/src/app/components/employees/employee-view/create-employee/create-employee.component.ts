@@ -14,7 +14,6 @@ import {EmployeeView} from '../employee-view';
 export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   // Defining type of our form
   employeeForm: FormGroup;
-  errorMessage: string;
   body: any;
   selectedOrganization: any = '';
   subscription;

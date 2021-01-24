@@ -28,7 +28,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   roles = roles;
 
   employeeForm: FormGroup;
-  errorMessage: string;
 
   constructor(
     private manageMembersService: ManageMembersService,

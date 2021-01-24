@@ -4,6 +4,7 @@ export abstract class EmployeeView {
   title: string;
   loaded = false;
   isEdit: boolean;
+  errorMessage: string;
 
   protected constructor() {
     this.title = this.getTitle();
