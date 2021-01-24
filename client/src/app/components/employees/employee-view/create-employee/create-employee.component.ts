@@ -21,8 +21,6 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   isEmployee = false;
   createMembersRoles = createMembersRoles;
 
-  isEdit = false;
-
   role: string;
 
   // Injecting the authService to be able to send data to the backend through it ,
@@ -50,6 +48,10 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
 
   getTitle(): string {
     return 'Profile Creation';
+  }
+
+  getIsEdit(): boolean {
+    return false;
   }
 
   // We initialize the form and set validators to each one in case user forget to specify a field

@@ -28,7 +28,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
   roles = roles;
 
   employeeForm: FormGroup;
-  isEdit = true;
   errorMessage: string;
 
   constructor(
@@ -54,6 +53,10 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
       this.title = generateString();
     });
     return generateString();
+  }
+
+  getIsEdit(): boolean {
+    return true;
   }
 
   ngOnInit(): void {
