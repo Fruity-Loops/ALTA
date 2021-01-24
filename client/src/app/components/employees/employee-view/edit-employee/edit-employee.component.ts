@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ManageMembersService } from '../../../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
-import { User } from '../../../../models/user.model';
 import roles from 'src/app/fixtures/roles.json';
 import { EmployeeView } from '../employee-view';
 import { BehaviorSubject } from 'rxjs';
@@ -12,7 +11,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
   templateUrl: '../employee-view.component.html',
   styleUrls: ['../employee-view.component.scss'],
 })
-export class EditEmployeeComponent extends EmployeeView implements OnInit {
+export class EditEmployeeComponent extends EmployeeView {
   @Input() employee: any;
   edit = false;
   password: string = '';
@@ -38,7 +37,12 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
-      this.ngOnInit();
+
+      // Verifying that the logged in user is accessing their own information
+      if (this.id === localStorage.getItem('id')) {
+        this.isLoggedInUser.next(true);
+      }
+      this.getEmployee();
     });
   }
 
@@ -56,15 +60,6 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
   getIsEdit(): boolean {
     return true;
-  }
-
-  ngOnInit(): void {
-    this.getEmployee();
-
-    // Verifying that the logged in user is accessing his informations
-    if (this.id === localStorage.getItem('id')) {
-      this.isLoggedInUser.next(true);
-    }
   }
 
   getEmployee(): void {
@@ -118,7 +113,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
     window.location.reload();
   }
 
-  submitForm(): void {
+  submitQuery(base): void {
     // update user info
     this.employee.is_active = this.isActive === 'active';
 
@@ -128,17 +123,8 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
       }
     });
 
-    let body: any = {
-      user_name: this.employeeForm.value.username,
-      email: this.employeeForm.value.email,
-      first_name: this.employeeForm.value.firstname,
-      last_name: this.employeeForm.value.lastname,
-      password: this.employeeForm.value.password,
-      location: this.employeeForm.value.location
-    };
-
     // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input
-    const patchedEmployee = {...this.employee, ...body};
+    const patchedEmployee = {...this.employee, ...base};
 
     delete patchedEmployee.id;
     delete patchedEmployee.email;
@@ -151,10 +137,7 @@ export class EditEmployeeComponent extends EmployeeView implements OnInit {
 
     // update user password
     if (this.password.length > 0) {
-      body = {
-        password: this.password,
-      };
-      this.manageMembersService.updatePassword(body, this.id).subscribe(
+      this.manageMembersService.updatePassword({password: this.password}, this.id).subscribe(
         (response) => {
           location.reload();
         },

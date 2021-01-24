@@ -14,7 +14,6 @@ import {EmployeeView} from '../employee-view';
 export class CreateEmployeeComponent extends EmployeeView implements OnInit {
   // Defining type of our form
   employeeForm: FormGroup;
-  body: any;
   selectedOrganization: any = '';
   subscription;
   isEmployee = false;
@@ -66,14 +65,10 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
     });
   }
 
-  submitForm(): void {
+  submitQuery(base): void {
 
-    this.body = {
-      user_name: this.employeeForm.value.id,
-      email: this.employeeForm.value.email,
-      first_name: this.employeeForm.value.first_name,
-      last_name: this.employeeForm.value.last_name,
-      location: this.employeeForm.value.location === undefined ? null : this.employeeForm.value.location,
+    const body = {
+      ...base,
       role: this.employeeForm.value.role?.abbrev ? this.employeeForm.value.role.abbrev : 'SA',
       is_active: 'true',
       password: this.employeeForm.value.password,
@@ -84,8 +79,8 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
     // RegisterUser is the method defined in authService
     // If you are not logged in you can create any account
     const register = this.tokenService.GetToken()
-      ? this.authService.register(this.body)
-      : this.authService.openRegister(this.body);
+      ? this.authService.register(body)
+      : this.authService.openRegister(body);
 
     register.subscribe(
       () => {
