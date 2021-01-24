@@ -36,7 +36,7 @@ class OrganizationTestCase(APITestCase):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
         data = {'org_name': 'test_case'}
-        response = self.client.post("/organization/", data)
+        response = self.client.post("/organization/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_organization_inventory_manager_success(self):
@@ -50,7 +50,7 @@ class OrganizationTestCase(APITestCase):
         """ User can't create organization if missing fields """
         self.client.force_authenticate(user=self.system_admin)
         data = {}
-        response = self.client.post("/organization/", data)
+        response = self.client.post("/organization/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_organization_unauthorized_request(self):

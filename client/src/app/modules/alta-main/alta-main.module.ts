@@ -21,7 +21,9 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { EditAuditTemplateComponent } from '../../components/audit-template/edit-audit-template/edit-audit-template.component';
 import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../components/audit-template/audit-template.component';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CreateOrganizationComponent } from '../../components/manage-organizations/create-organization/create-organization.component';
+import { DisableOrganizationDialogComponent, EditOrganizationComponent } from '../../components/manage-organizations/create-organization/edit-organization.component';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatExpansionModule, MatRadioModule} from '@angular/material';
 
 @NgModule({
@@ -38,7 +40,10 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     CreateAuditTemplateComponent,
     DeleteTemplateDialogComponent,
     AuditTemplateComponent,
-    EditAuditTemplateComponent
+    EditAuditTemplateComponent,
+    CreateOrganizationComponent,
+    EditOrganizationComponent,
+    DisableOrganizationDialogComponent
   ],
 
   imports: [

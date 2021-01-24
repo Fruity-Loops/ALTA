@@ -1,7 +1,7 @@
 [
     {
         "model": "audit_template.audittemplate",
-        "pk": 6,
+        "pk": "2e435999-a772-4794-980d-191fd1f0964b",
         "fields": {
             "author": "fewfew fewqfewq",
             "title": "dsafdsa",
@@ -28,7 +28,7 @@
     },
     {
         "model": "audit_template.audittemplate",
-        "pk": 7,
+        "pk": "90788fdd-9cd8-4a96-8402-6e27c9467720",
         "fields": {
             "author": "fewfew fewqfewq",
             "title": "gregwrew",
@@ -51,7 +51,7 @@
     },
     {
         "model": "audit_template.audittemplate",
-        "pk": 8,
+        "pk": "c8c1a994-1f7d-4224-9091-2cfebafe2899",
         "fields": {
             "author": "nick nick",
             "title": "fewqfwq",

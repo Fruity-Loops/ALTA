@@ -1,0 +1,26 @@
+<app-toolbar></app-toolbar>
+<div *ngIf="isScanning" id="scanInfoHeader">
+    <ion-item color="primary">Scanning...</ion-item>
+    <ion-progress-bar type='indeterminate'></ion-progress-bar>
+</div>
+<ion-item-divider>
+    <h1>Audits</h1>
+</ion-item-divider>
+<ion-content>
+    <ion-list>
+        <ion-item button *ngFor="let audit of audits"> 
+            <ion-label>
+                <p> {{ audit.name }}</p>
+                <p> #{{ audit.id }}</p>
+            </ion-label>
+            <ion-icon name="information-circle" slot="end"></ion-icon>
+        </ion-item>
+    </ion-list>
+</ion-content>
+<ion-button fill="outline" (click)="handleCameraScan()">
+    <ion-icon name="scan"></ion-icon>Scan Barcode With Camera<ion-icon name="scan"></ion-icon>
+</ion-button>
+
+<ion-button fill="outline" color="danger" (click)="handleManualInput()">
+    <ion-icon name="create-outline"></ion-icon>Input Barcode Manually<ion-icon name="create-outline"></ion-icon>
+</ion-button>

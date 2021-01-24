@@ -1,9 +1,10 @@
+import uuid
 from djongo import models
 
 
 # Create your models here.
 class AuditTemplate(models.Model):
-    template_id = models.AutoField(primary_key=True)
+    template_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     author = models.CharField(max_length=512)
     title = models.CharField(max_length=256, blank=True)
     location = models.JSONField(null=True, blank=True)

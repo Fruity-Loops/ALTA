@@ -1,3 +1,4 @@
+from datetime import date
 from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,6 +18,13 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
     permission_classes = [IsAuthenticated, UserOrganizationPermission]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        today = date.today()
+        date_today = today.strftime("%Y/%m/%d")
+        data['calendar_date'] = date_today
+        return super().create(request, *args, **kwargs)
 
 
 class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
