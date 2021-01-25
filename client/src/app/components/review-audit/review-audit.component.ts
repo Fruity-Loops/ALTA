@@ -15,10 +15,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./review-audit.component.scss']
 })
 export class ReviewAuditComponent implements OnInit {
-  skAssigned = [];
-  dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ['Stock_Keeper', 'First_Name', 'Last_Name'];
-  locationsAndUsers: Array<any>;
+  // skAssigned = [];
+   dataSource: MatTableDataSource<User>;
+   displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Aisle', 'Nb_Parts', 
+   'Part_Description', 'Initiator', 'InitiationDate'];
+  // locationsAndUsers: Array<any>;
 
   panelOpenState = false;
   allExpandState = false;
