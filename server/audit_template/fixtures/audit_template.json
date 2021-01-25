@@ -15,7 +15,7 @@
             "description": "",
             "calendar_date": "January 08, 2021",
             "organization": null,
-            "start_date": "2021-10-21T21:36:00Z",
+            "start_date": "2021-10-21T21:36:00",
             "repeat_every": "1",
             "on_day": [
                 "True", "True", "False", "False", "False", "False", "False"
@@ -42,7 +42,7 @@
             "description": "",
             "calendar_date": "January 08, 2021",
             "organization": 3,
-            "start_date": "2025-12-09T10:21:00Z",
+            "start_date": "2025-12-09T10:21:00",
             "repeat_every": null,
             "on_day": [],
             "for_month": [],
@@ -65,7 +65,7 @@
             "description": "",
             "calendar_date": "January 08, 2021",
             "organization": 1,
-            "start_date": "2026-02-14T13:55:00Z",
+            "start_date": "2026-02-14T13:55:00",
             "repeat_every": null,
             "on_day": [],
             "for_month": [],
