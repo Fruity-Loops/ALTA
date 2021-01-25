@@ -18,4 +18,9 @@ class IsInventoryManagerAudit(IsInventoryManager):
             get_audit = Audit.objects.get(audit_id=request.data['init_audit'])
             return get_audit.organization_id == user.organization_id and user.role == 'IM'
 
+        audit_id = request.query_params.get('init_audit_id')
+        audit = Audit.objects.get(audit_id=audit_id)
+        if audit:
+           return audit.organization_id == user.organization.org_id and user.role == 'IM'
+
         return super().has_permission(request, view)

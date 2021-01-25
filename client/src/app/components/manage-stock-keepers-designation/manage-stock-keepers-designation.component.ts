@@ -150,7 +150,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
-    localStorage.removeItem('audit_id');
 
     setTimeout(() => {
           // Redirect user to review-audit component

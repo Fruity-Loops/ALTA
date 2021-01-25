@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-review-audit',
   templateUrl: './review-audit.component.html',
@@ -30,6 +31,17 @@ export class ReviewAuditComponent implements OnInit {
   { }
 
   ngOnInit(): void {
+    this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
+    .subscribe((auditData) => {
+      console.log(auditData.inventory_items)
+      console.log(auditData.assigned_sk)
+    });
+
+    this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
+    .subscribe((auditData) => {
+      console.log(auditData)
+    });
+  
   }
 
   confirmReviewAuditData(): void{
@@ -38,6 +50,10 @@ export class ReviewAuditComponent implements OnInit {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
+
+    localStorage.removeItem('audit_id'); // Removing audit_id from localstorage
+    // Not a good idea to use this if this page is meant to be opned and referenced independently
+    // (anytime after audit creation steps)
   }
 
   openDialogWithRef(ref: TemplateRef<any>): void {
