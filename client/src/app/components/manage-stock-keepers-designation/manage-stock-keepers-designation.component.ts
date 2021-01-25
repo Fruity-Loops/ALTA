@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-import { PreAudit } from 'src/app/models/pre-audit.model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
@@ -15,7 +14,7 @@ import { Item } from 'src/app/models/item.model';
 })
 export class ManageStockKeepersDesignationComponent implements OnInit {
 
-  preAuditData: PreAudit;
+  preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
 
