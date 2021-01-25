@@ -10,7 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('AssignStockKeepersComponent', () => {
   let component: AssignStockKeepersComponent;
   let fixture: ComponentFixture<AssignStockKeepersComponent>;
-  let service: ManageMembersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
