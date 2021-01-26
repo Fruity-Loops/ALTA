@@ -1,9 +1,9 @@
-from datetime import datetime
-
-from rest_framework.test import APITestCase, APIClient
-from rest_framework import status
-from user_account.models import CustomUser
 import json
+
+from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
+
+from user_account.models import CustomUser
 
 
 class AuditTemplateTestCase(APITestCase):
@@ -33,7 +33,7 @@ class AuditTemplateTestCase(APITestCase):
             "serial_number": [],
             "description": "",
             "organization": 1,
-            "start_date": '2021-05-05T05:05:00Z',
+            "start_date": '2021-01-25T13:50:00',
             "repeat_every": '1',
             "on_day": [True, True, False, False, False, False, False],
             "for_month": [True, True, False, False, False, False, False, False, False, False, False, False],

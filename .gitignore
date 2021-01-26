@@ -5,3 +5,5 @@ venv/
 server/myenv/
 
 db/
+
+**/migrations/**
