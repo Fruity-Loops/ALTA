@@ -95,23 +95,17 @@ export class SideNavComponent implements OnInit {
       if (this.options === SystemNavListings) {
         // @ts-ignore
         // TODO: should there be a default url if routes[] is undefined?
-        // NOTICE: url changes types from string to Route
-        url = routes[0].children[4]; // '/sa-modify-members';
+        url = routes[0].children[4].path; // '/sa-modify-members';
       }
       else if (this.options === OrganizationNavListings) {
         // @ts-ignore
-        // TODO: should there be a default url if routes[] is undefined?
-        // NOTICE: url changes types from string to Route
-        url = routes[0].children[3]; // '/modify-members';
+        url = routes[0].children[3].path; // '/modify-members';
       }
-
     }
 
-
     this.options.forEach(navOption => {
-      if ('/' + navOption.routerLink === url) {
+      if (url.includes(navOption.routerLink)) {
         this.selectedOption = navOption;
-        return;
       }
     });
   }
