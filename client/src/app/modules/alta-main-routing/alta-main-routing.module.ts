@@ -47,8 +47,20 @@ export const routes: Routes = [
       { path: 'settings', component: EmployeeSettingsComponent },
       { path: 'sa-settings', component: EmployeeSettingsComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
-      { path: 'assign-sk', component: AssignStockKeepersComponent },
-      { path: 'designate-sk', component: ManageStockKeepersDesignationComponent},
+      { path: 'audits', children: [
+        {
+          path: '', component: ManageInventoryItemsComponent
+        },
+        {
+          path: 'assign-sk', children: [
+            {
+              path: '', component: AssignStockKeepersComponent
+            },
+            {
+              path: 'designate-sk', component: ManageStockKeepersDesignationComponent
+            }
+          ]},
+      ]},
       { path: 'template', children: [
           {
             path: '', component: AuditTemplateComponent

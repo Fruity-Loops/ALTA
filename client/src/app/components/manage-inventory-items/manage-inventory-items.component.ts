@@ -230,7 +230,7 @@ export class ManageInventoryItemsComponent implements OnInit {
         this.inventoryItemToAudit = [];
         setTimeout(() => {
           // Redirect user to component assign-stock-keepers
-          this.router.navigate(['assign-sk']);
+          this.router.navigate(['audits/assign-sk']);
         }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {
