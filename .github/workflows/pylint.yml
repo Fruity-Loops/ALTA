@@ -44,13 +44,11 @@ jobs:
         REPORT=$(pylint --load-plugins pylint_django --django-settings-module=django_server.settings --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
         echo "BRANCH_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
-
     - name: Get Diff
       run: |
         DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT}" "${BRANCH_REPORT}")
         echo $DIFF_REPORT
         echo "DIFF=${DIFF_REPORT//$'\n'/'\n'}" >> $GITHUB_ENV
-
     - name: Comment
       uses: actions/github-script@v3
       env:
