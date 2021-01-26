@@ -1,6 +1,6 @@
 name: Pylint
 
-on: 
+on:
   pull_request:
     branches:
       - master
@@ -9,53 +9,53 @@ jobs:
   pylint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
 
-    - name: Install dependencies
-      working-directory: server
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    
-    - name: Checkout master
-      uses: actions/checkout@v2
-      with:
-        ref: 'master'
+      - name: Install dependencies
+        working-directory: server
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Run Lint Master
-      working-directory: server
-      run: |
-        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
-        echo "$REPORT"
-        echo "MASTER_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
-    
-    - name: Checkout Branch
-      uses: actions/checkout@v2
-      with:
-        ref: ${{github.ref}}
-    
-    - name: Get Branch Report
-      working-directory: server
-      run: |
-        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
-        echo "$REPORT"
-        echo "BRANCH_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: 'master'
 
-    - name: Get Diff
-      run: |
-        DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT}" "${BRANCH_REPORT}")
-        echo $DIFF_REPORT
-        echo "DIFF=${DIFF_REPORT//$'\n'/'\n'}" >> $GITHUB_ENV
+      - name: Run Lint Master
+        working-directory: server
+        run: |
+          REPORT=$(pylint --load-plugins pylint_django --django-settings-module=django_server.settings --exit-zero $(git ls-files '*.py'))
+          echo "$REPORT"
+          echo "MASTER_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
 
-    - name: Comment
-      uses: actions/github-script@v3
-      env:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+        with:
+          ref: ${{github.ref}}
+
+      - name: Get Branch Report
+        working-directory: server
+        run: |
+          REPORT=$(pylint --load-plugins pylint_django --django-settings-module=django_server.settings --exit-zero $(git ls-files '*.py'))
+          echo "$REPORT"
+          echo "BRANCH_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
+
+      - name: Get Diff
+        run: |
+          DIFF_REPORT=$(python3 ./.github/diff.py "${MASTER_REPORT}" "${BRANCH_REPORT}")
+          echo $DIFF_REPORT
+          echo "DIFF=${DIFF_REPORT//$'\n'/'\n'}" >> $GITHUB_ENV
+
+      - name: Comment
+        uses: actions/github-script@v3
+        env:
           URL: ${{ github.event.pull_request.comments_url }}
-      with:
+        with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             github.issues.createComment({
