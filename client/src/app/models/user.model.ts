@@ -7,3 +7,11 @@ export interface User {
   email: string;
   location: string;
 }
+
+export interface SKUser {
+    id: number;
+    first_name: string;
+    last_name: string;
+    user_name: string;
+    location: string;
+}

@@ -1,0 +1,77 @@
+@import "./src/theme.scss";
+
+.title-padding {
+  padding: 1%;
+}
+
+mat-label {
+  color: map-get($alta-primary, A800);
+  font-size: 115%;
+}
+
+.page-padding {
+  padding: 2.5%;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
+  padding: 30px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.vertical-stack {
+  display: grid;
+  grid-template-columns: auto;
+  margin: auto;
+  width: 100%;
+}
+
+.take-two-columns {
+  grid-column: 1 / 3;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  width: 100%;
+  max-width: 600px;
+}
+
+.button-side-by-side {
+  display: inline-block;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.center-aligned {
+  text-align: center;
+  padding-bottom: 50px;
+}
+
+.save-button-bg {
+  background: map-get($alta-primary, A50) !important;
+}
+
+.footer-button {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+  width: 120px;
+}
+
+.upload-button-spacer {
+  margin: auto;
+}
+
+.upload-button {
+  color: #000000;
+  opacity: 0.4;
+  border: 2px solid #000000 !important;
+}
+
+.text-input {
+  width: 300px;
+}
+
+.fill {
+  width: 100%;
+}

@@ -7,9 +7,10 @@ from inventory_item.updater import start_new_job
 class Organization(models.Model):
     org_id = models.AutoField(primary_key=True)
     org_name = models.CharField(max_length=256, unique=True)
-    address = models.CharField(max_length=256, default="Montreal")
+    address = models.CharField(max_length=256, default="None")
     status = models.BooleanField(default=False)
     inventory_items_refresh_job = models.IntegerField(default=1)
+    calendar_date = models.CharField(max_length=100)
 
 
 @receiver(post_save, sender=Organization)

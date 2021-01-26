@@ -62,5 +62,37 @@
         "email": "sa2@test.com",
         "organization": null
     }
+},
+{
+    "model": "user_account.customuser",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
+        "last_login": null,
+        "user_name": "sk1000",
+        "first_name": "stock",
+        "last_name": "keeper",
+        "role": "SK",
+        "is_active": false,
+        "location": "YYZ",
+        "email": "sk1@test.com",
+        "organization": 1
+    }
+},
+{
+    "model": "user_account.customuser",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$180000$YRa1Lx38lUUM$pl2C1K/G0vZZMFBuTBo+ohBn8sqeoVYlTqYtko0muDk=",
+        "last_login": null,
+        "user_name": "sk9000",
+        "first_name": "stock",
+        "last_name": "keeper",
+        "role": "SK",
+        "is_active": false,
+        "location": "YYZ",
+        "email": "sk2@test.com",
+        "organization": 3
+    }
 }
 ]
