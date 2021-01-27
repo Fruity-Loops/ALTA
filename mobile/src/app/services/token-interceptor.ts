@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { Plugins } from '@capacitor/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { from } from 'rxjs';
-
-const { Storage } = Plugins;
-const ACCESS_TOKEN = 'token';
+import { fetchAccessToken } from 'src/app/services/cache';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -15,12 +13,12 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   async handleIntercept(req: HttpRequest<any>, next: HttpHandler) {
-    const token = await Storage.get({ key: ACCESS_TOKEN });
+    const token = await fetchAccessToken();
 
     const headers = {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: token && token.value ? `Token ${token.value}` : '',
+      Authorization: token ? `Token ${token}` : '',
     };
 
     const reqUpdated = req.clone({ setHeaders: headers });
