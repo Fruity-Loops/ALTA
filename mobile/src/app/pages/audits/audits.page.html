@@ -7,11 +7,12 @@
     <h1>Audits</h1>
 </ion-item-divider>
 <ion-content>
+    <ion-spinner *ngIf="!audits" name="crescent" class="center"></ion-spinner>
     <ion-list>
-        <ion-item button *ngFor="let audit of audits"> 
+        <ion-item *ngFor="let audit of audits" [routerLink]="audit.audit_id"> 
             <ion-label>
-                <p> {{ audit.name }}</p>
-                <p> #{{ audit.id }}</p>
+                <p> Audit {{ audit.audit_id }}</p>
+                <p> Status {{ audit.status }}</p>
             </ion-label>
             <ion-icon name="information-circle" slot="end"></ion-icon>
         </ion-item>

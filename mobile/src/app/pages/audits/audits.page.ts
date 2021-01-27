@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Platform, AlertController, ToastController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
-import { Audit } from 'src/app/models/audit';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { fetchLoggedInUser } from 'src/app/services/cache';
 
 @Component({
   selector: 'app-audits',
@@ -15,8 +15,9 @@ export class AuditsPage implements OnInit, OnDestroy {
   barcode: string;
   scannedMessage: string;
   keypressEvent: Subscription;
-  audits: Array<Audit>;
+  audits: Array<any>;
   isScanning: boolean;
+  loggedInUser: any;
 
   constructor(
     private auditService: AuditService,
@@ -32,27 +33,19 @@ export class AuditsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPermissions();
-    this.setExternalScanListener();
     this.getAudits();
+    this.setExternalScanListener();
   }
 
   getAudits() {
-    // Fetch audits assigned to the stock keeper
-    // TODO: replace with backend request
-    this.audits = [
-      { id: '711719047308', name: 'item0' },
-      { id: '056394400360', name: 'item1' },
-      { id: '06240021360', name: 'item2' },
-      { id: 'X002DW4WYJ', name: 'item3' },
-      { id: '71810326785 ', name: 'item4' },
-      { id: '057800056621', name: 'item5' },
-      { id: '068100084245 ', name: 'item6' },
-      { id: '521910642751', name: 'item7' },
-      { id: '831956442012 ', name: 'item8' },
-    ];
-    // this.auditService.getAudits().subscribe(res => {
-    //   this.audits = res;
-    // });
+    fetchLoggedInUser().then(
+      user => {
+        this.loggedInUser = user;
+        this.auditService.getAudits(this.loggedInUser.user_id).subscribe(
+          res => {
+            this.audits = res;
+          });
+      });
   }
 
   ngOnDestroy() {
