@@ -4,7 +4,7 @@ import { ManageMembersPage } from './manage-members.po';
 import { CreateMembersPage } from './create-members.po';
 import { OrganizationPage } from './organization.po';
 import { SettingsPage } from './settings.po';
-import { Login, Logout } from '../login.po'
+import { Login, Logout } from '../login.po';
 
 /**
  * Supports Acceptance Test AT-1.4:
@@ -20,7 +20,7 @@ describe('AT-1.4: System administrator can create employees accounts within an o
   /**
    * Login as a System Admin
    */
-  beforeAll(function () {
+  beforeAll(function init(): void {
     const loginPage = new Login();
     loginPage.login_as('sa@test.com', true);
   });
@@ -28,7 +28,7 @@ describe('AT-1.4: System administrator can create employees accounts within an o
   /**
    * Logout
    */
-  afterAll(function () {
+  afterAll(function endit(): void {
     const logoutPage = new Logout();
     logoutPage.logout();
   });
@@ -95,7 +95,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
   /**
    * Login as a System Admin
    */
-  beforeAll(function () {
+  beforeAll(function init(): void {
     const loginPage = new Login();
     loginPage.login_as('sa@test.com', true);
     browser.sleep(5000);
@@ -104,7 +104,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
   /**
    * Logout
    */
-  afterAll(function () {
+  afterAll(function endit(): void {
     const logoutPage = new Logout();
     logoutPage.logout();
   });

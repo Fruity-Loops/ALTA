@@ -1,6 +1,6 @@
 import { browser, ExpectedConditions } from 'protractor';
 import { OrganizationPage } from './organization.po';
-import { Login, Logout } from '../login.po'
+import { Login, Logout } from '../login.po';
 
 /**
  * Supports Acceptance Test AT-1.3:
@@ -9,13 +9,13 @@ import { Login, Logout } from '../login.po'
 describe('AT-1.3: System administrator manages organizations', () => {
   const newOrganizationName = 'new_org';
   const updatedOrganizationName = 'updated_org';
-  const location = 'Florida'
+  const location = 'Florida';
   const organizationPage: OrganizationPage = new OrganizationPage();
 
   /**
    * Login as a System Admin
    */
-  beforeAll(function () {
+  beforeAll(function init(): void {
     const loginPage = new Login();
     loginPage.login_as('sa@test.com', true);
   });
@@ -23,9 +23,9 @@ describe('AT-1.3: System administrator manages organizations', () => {
   /**
    * Logout
    */
-  afterAll(function () {
+  afterAll(function endit(): void {
     const logoutPage = new Logout();
-    logoutPage.logout()
+    logoutPage.logout();
   });
 
 

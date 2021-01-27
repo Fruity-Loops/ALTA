@@ -2,7 +2,7 @@ import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from '../epic_1/manage-members.po';
 import { CreateMembersPage } from '../epic_1/create-members.po';
 import { browser, ExpectedConditions } from 'protractor';
-import { Login, Logout } from '../login.po'
+import { Login, Logout } from '../login.po';
 
 
 /**
@@ -17,7 +17,7 @@ describe('AT-2.1: Inventory Manager creates an inventory manager account', () =>
   /**
    * Login as an Inventory Manager
    */
-  beforeAll(function () {
+  beforeAll(function init(): void {
     const loginPage = new Login();
     loginPage.login_as('im@test.com', false);
   });
@@ -25,7 +25,7 @@ describe('AT-2.1: Inventory Manager creates an inventory manager account', () =>
   /**
    * Logout
    */
-  afterAll(function () {
+  afterAll(function endit(): void {
     const logoutPage = new Logout();
     logoutPage.logout();
   });

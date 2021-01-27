@@ -2,7 +2,7 @@ import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from './manage-members.po';
 import { CreateMembersPage } from './create-members.po';
 import { browser, ExpectedConditions } from 'protractor';
-import { Login, Logout } from '../login.po'
+import { Login, Logout } from '../login.po';
 
 
 /**
@@ -17,7 +17,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
   /**
    * Login as a System Admin
    */
-  beforeAll(function () {
+  beforeAll(function init(): void {
     const loginPage = new Login();
     loginPage.login_as('sa@test.com', true);
   });
@@ -25,7 +25,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
   /**
    * Logout
    */
-  afterAll(function () {
+  afterAll(function endit(): void {
     const logoutPage = new Logout();
     logoutPage.logout();
   });

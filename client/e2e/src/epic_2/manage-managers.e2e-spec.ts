@@ -3,7 +3,7 @@ import { Navigation } from '../navigation.po';
 import { ManageMembersPage } from '../epic_1/manage-members.po';
 import { OrganizationPage } from '../epic_1/organization.po';
 import { SettingsPage } from '../epic_1/settings.po';
-import { Login, Logout } from '../login.po'
+import { Login, Logout } from '../login.po';
 /**
  * Supports Acceptance Tests:
  * AT-2.2:
@@ -18,7 +18,7 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
     /**
      * Login as an Inventory Manager
      */
-    beforeAll(function () {
+    beforeAll(function init(): void {
       const loginPage = new Login();
       loginPage.login_as('im@test.com', false);
       browser.sleep(5000);
@@ -27,7 +27,7 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
     /**
      * Logout
      */
-    afterAll(function () {
+    afterAll(function endit(): void {
       const logoutPage = new Logout();
       logoutPage.logout();
     });
