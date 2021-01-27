@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
+from .permissions import IsAssignedSKNoCreate
 from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from .models import Audit, ItemToSK
-
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -13,7 +13,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get']
     queryset = Audit.objects.all()
-    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManagerAudit]
+    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -22,13 +22,18 @@ class AuditViewSet(viewsets.ModelViewSet):
         return serializer_class(*args, **kwargs)
 
     def list(self, request):
-        if request.GET.get("status", '') != '':
-            queryset = Audit.objects.filter(status=request.GET.get("status", '')) \
-                .filter(organization_id=request.GET.get("organization", ''))
-        else:
-            queryset = Audit.objects.filter(organization_id=request.GET.get("organization", ''))
+        org_id = request.query_params.get('organization')
+        audit_status = request.query_params.get('status')
+        assigned_sk = request.query_params.get('assigned_sk')
 
-        serializer = self.get_serializer(queryset, many=True)
+        if audit_status:
+            self.queryset = self.queryset.filter(status=audit_status)
+        if org_id:
+            self.queryset = self.queryset.filter(organization_id=org_id)
+        if assigned_sk:
+            self.queryset = self.queryset.filter(assigned_sk__id=assigned_sk)
+
+        serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
 class ItemToSKViewSet(viewsets.ModelViewSet):
@@ -38,7 +43,7 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
+    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin | IsAssignedSKNoCreate]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

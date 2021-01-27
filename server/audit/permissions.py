@@ -19,3 +19,18 @@ class IsInventoryManagerAudit(IsInventoryManager):
             return get_audit.organization_id == user.organization_id and user.role == 'IM'
 
         return super().has_permission(request, view)
+
+
+class IsAssignedSKNoCreate(IsInventoryManager):
+    """
+    Can be a Stock Keeper that is retrieving their own audits
+    """
+
+    def has_permission(self, request, view):
+        if request.method != 'GET':
+            return False
+
+        user = CustomUser.objects.get(email=request.user)
+        assigned_sk = request.query_params.get('assigned_sk')
+
+        return user.role == 'SK' and str(assigned_sk) == str(user.id)
