@@ -6,7 +6,7 @@ import { SettingsPage } from '../epic_1/settings.po';
 import { Login, Logout } from '../login.po'
 /**
  * Supports Acceptance Tests:
- * AT-2.2: 
+ * AT-2.2:
  * https://github.com/fruity-loops/alta/issues/45
  */
 describe('AT-2.2: Inventory Manager can modify their own settings', () => {
@@ -14,15 +14,16 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
     const settingsPage: SettingsPage = new SettingsPage();
     const organizationPage: OrganizationPage = new OrganizationPage();
     const nav: Navigation = new Navigation();
-  
+
     /**
      * Login as an Inventory Manager
      */
     beforeAll(function () {
       const loginPage = new Login();
       loginPage.login_as('im@test.com', false);
+      browser.sleep(5000);
     });
-  
+
     /**
      * Logout
      */
@@ -30,7 +31,7 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
       const logoutPage = new Logout();
       logoutPage.logout();
     });
-  
+
     /**
      * i) The user clicks on their settings.
      */
@@ -38,7 +39,7 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
       nav.settingsOption().click();
       browser.wait(ExpectedConditions.urlContains('settings'), 5000);
     });
-  
+
     /**
      * i) The user fills in the form with the modified info.
      * ii) The user selects the Save button to store the updated data.

@@ -98,6 +98,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
   beforeAll(function () {
     const loginPage = new Login();
     loginPage.login_as('sa@test.com', true);
+    browser.sleep(5000);
   });
 
   /**
