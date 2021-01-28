@@ -30,6 +30,6 @@ export class ManageAuditsService {
   }
 
   initiatePreAudit(preAuditData): Observable<any> {
-    return this.http.post(`${BASEURL}/item-to-sk/`, preAuditData);
+    return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
 }

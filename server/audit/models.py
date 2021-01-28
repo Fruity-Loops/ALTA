@@ -15,8 +15,9 @@ class Audit(models.Model):
     assigned_sk = models.ManyToManyField(CustomUser, blank=True, default=0)
 
 
-class ItemToSK(models.Model):
+class BinToSK(models.Model):
+    bin_id = models.AutoField(primary_key=True)
+    Bin = models.CharField(max_length=256, blank=False, null=False)
     init_audit = models.ForeignKey(Audit, on_delete=models.CASCADE)
     customuser = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     item_ids = models.JSONField(blank=True, null=True)
-    bins = models.JSONField(blank=True, null=True)

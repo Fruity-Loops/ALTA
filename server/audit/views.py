@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
 from .permissions import IsAssignedSKNoCreate
-from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
-from .models import Audit, ItemToSK
+from .serializers import AuditSerializer, BinToSKSerializer, GetAuditSerializer
+from .models import Audit, BinToSK
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -13,7 +13,10 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get']
     queryset = Audit.objects.all()
-    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate]
+    permission_classes = [
+        IsAuthenticated,
+        (IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate)
+    ]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -36,14 +39,18 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
-class ItemToSKViewSet(viewsets.ModelViewSet):
+class BinToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
     http_method_names = ['post', 'get']
-    queryset = ItemToSK.objects.all()
-    serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin | IsAssignedSKNoCreate]
+    queryset = BinToSK.objects.all()
+    serializer_class = BinToSKSerializer
+    permission_classes = [
+        IsAuthenticated,
+        (IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate)
+    ]
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -31,6 +31,7 @@ class IsAssignedSKNoCreate(IsInventoryManager):
             return False
 
         user = CustomUser.objects.get(email=request.user)
-        assigned_sk = request.query_params.get('assigned_sk') or request.query_params.get('customuser_id')
+        assigned_sk = (request.query_params.get('assigned_sk')
+        or request.query_params.get('customuser_id'))
 
         return user.role == 'SK' and str(assigned_sk) == str(user.id)

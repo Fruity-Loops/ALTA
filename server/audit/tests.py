@@ -100,15 +100,17 @@ class AuditTestCase(APITestCase):
                          status.HTTP_403_FORBIDDEN)
 
     def test_item_to_sk_designation(self):
-        """ Create ItemToSK designation as inventory manager """
+        """ Create BinToSK designation as inventory manager """
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
 
-        response = self.client.post("/item-to-sk/",
-                                    {"init_audit": 1,
+        response = self.client.post("/bin-to-sk/",
+                                    {
+                                     "Bin": "A10",
+                                     "init_audit": 1,
                                      "customuser": 5,
                                      "item_ids": [12752842],
-                                     "bins": ['A10']}, format="json")
+                                     }, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
@@ -116,16 +118,18 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.data['success'], "success")
 
     def test_item_to_sk_designation_bad_org(self):
-        """ Try to create ItemToSK designation as inventory manager from another organization """
+        """ Try to create BinToSK designation as inventory manager from another organization """
 
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=3)
 
-        response = self.client.post("/item-to-sk/",
-                                    {"init_audit": self.predefined_audit.audit_id,
+        response = self.client.post("/bin-to-sk/",
+                                    {
+                                     "Bin": "A10",
+                                     "init_audit": self.predefined_audit.audit_id,
                                      "customuser": 6,
                                      "item_ids": [12752842],
-                                     "bins": ['A10']}, format="json")
+                                     }, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
