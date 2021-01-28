@@ -17,6 +17,10 @@ const routes: Routes = [
         loadChildren: () => import('../pages/audits/audits.module').then(m => m.AuditsModule)
       },
       {
+        path: 'audits/:audit_id',
+        loadChildren: () => import('../pages/audits/bins/bins.module').then(m => m.BinsModule)
+      },
+      {
         path: 'settings',
         loadChildren: () => import('../pages/settings/settings.module').then(m => m.SettingsModule)
       },
