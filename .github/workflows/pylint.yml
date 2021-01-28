@@ -8,7 +8,8 @@ on:
 jobs:
   pylint:
     runs-on: ubuntu-latest
-    env: DJANGO_SETTINGS_MODULE: django_server.settings
+    env: 
+      DJANGO_SETTINGS_MODULE: django_server.settings
 
     steps:
     - uses: actions/checkout@v2
