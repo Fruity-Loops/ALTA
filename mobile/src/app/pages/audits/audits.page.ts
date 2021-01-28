@@ -40,11 +40,13 @@ export class AuditsPage implements OnInit, OnDestroy {
   getAudits() {
     fetchLoggedInUser().then(
       user => {
-        this.loggedInUser = user;
-        this.auditService.getAudits(user.user_id).subscribe(
-          res => {
-            this.audits = res;
-          });
+        if (user) {
+          this.loggedInUser = user;
+          this.auditService.getAudits(user.user_id).subscribe(
+            res => {
+              this.audits = res;
+            });
+        }
       });
   }
 

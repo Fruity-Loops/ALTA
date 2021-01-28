@@ -19,8 +19,8 @@ export class BinsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getBins();
     this.getSelectedAudit();
+    this.getBins(); 
   }
 
   getSelectedAudit() {
@@ -30,11 +30,13 @@ export class BinsPage implements OnInit {
   getBins() {
     fetchLoggedInUser().then(
       user => {
-        this.loggedInUser = user;
-        this.auditService.getBins(user.user_id, this.auditID).subscribe(
-          res => {
-            this.bins = res;
-          });
+        if (user) {
+          this.loggedInUser = user;
+          this.auditService.getBins(user.user_id, this.auditID).subscribe(
+            res => {
+              this.bins = res;
+            });
+        }
       });
   }
 }
