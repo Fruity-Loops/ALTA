@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { BinsPage } from './bins.page';
 
 describe('BinsPage', () => {
@@ -14,6 +14,7 @@ describe('BinsPage', () => {
       imports: [
         IonicModule.forRoot(),
         HttpClientTestingModule,
+        RouterTestingModule,
       ]
     }).compileComponents();
 

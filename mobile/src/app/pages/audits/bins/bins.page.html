@@ -1,5 +1,15 @@
 <app-toolbar></app-toolbar>
-    <p>bins</p>
+<ion-item-divider>
+  <h1>Audit {{ auditID }} - Bins </h1>
+</ion-item-divider>
 <ion-content>
-
+  <ion-spinner *ngIf="!bins" name="crescent" class="center"></ion-spinner>
+  <ion-list>
+      <ion-item *ngFor="let bin of bins" [routerLink]="bin"> 
+          <ion-label>
+              <p> Bin {{ bin }}</p>
+          </ion-label>
+          <ion-icon name="information-circle" slot="end"></ion-icon>
+      </ion-item>
+  </ion-list>
 </ion-content>

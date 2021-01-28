@@ -6,7 +6,7 @@ export function errorHandler(error: HttpErrorResponse) {
       console.error('An error occurred:', error.error.message);
     } else {
       // Server error
-      console.error(`Error ${error.status}: ${error.error.detail}`);
+        console.error(`Error ${error.status}: ${error.error.detail}`);
     }
     return throwError('An error occured during the request');
   }
