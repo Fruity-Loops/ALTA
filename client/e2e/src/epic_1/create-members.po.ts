@@ -26,6 +26,10 @@ export class CreateMembersPage {
     return element(by.id('pass-word'));
   }
 
+  getLocationField(): ElementFinder {
+    return element(by.id('location'));
+  }
+
   getSaveButton(): ElementFinder {
     return element(by.id('signupbtn'));
   }
