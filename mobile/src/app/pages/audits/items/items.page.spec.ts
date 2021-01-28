@@ -1,7 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { IonicModule } from '@ionic/angular';
 import { ItemsPage } from './items.page';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 
 describe('ItemsPage', () => {
   let component: ItemsPage;
@@ -9,11 +11,15 @@ describe('ItemsPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ItemsPage ],
+      declarations: [ItemsPage],
       imports: [
         IonicModule.forRoot(),
         HttpClientTestingModule,
-      ]
+      ],
+      providers: [
+        BarcodeScanner,
+        AndroidPermissions,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ItemsPage);

@@ -1,10 +1,18 @@
 <app-toolbar></app-toolbar>
 <div *ngIf="isScanning" id="scanInfoHeader">
-    <ion-item color="primary">Scanning...</ion-item>
-    <ion-progress-bar type='indeterminate'></ion-progress-bar>
+  <ion-item color="primary">Scanning...</ion-item>
+  <ion-progress-bar type='indeterminate'></ion-progress-bar>
 </div>
 <ion-item-divider>
-    <h1>Items</h1>
+  <h1>Items</h1>
 </ion-item-divider>
 <ion-content>
 </ion-content>
+
+<ion-button fill="outline" onclick="this.blur()" (click)="handleCameraScan()">
+  <ion-icon name="scan"></ion-icon>Scan Barcode With Camera<ion-icon name="scan"></ion-icon>
+</ion-button>
+
+<ion-button fill="outline" color="danger" onclick="this.blur()" (click)="handleManualInput()">
+  <ion-icon name="create-outline"></ion-icon>Input Barcode Manually<ion-icon name="create-outline"></ion-icon>
+</ion-button>
