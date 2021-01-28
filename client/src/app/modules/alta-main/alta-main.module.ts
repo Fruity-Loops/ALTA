@@ -21,10 +21,16 @@ import { ManageInventoryItemsComponent } from '../../components/manage-inventory
 import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
 import { EditAuditTemplateComponent } from '../../components/audit-template/edit-audit-template/edit-audit-template.component';
 import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../components/audit-template/audit-template.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { CreateOrganizationComponent } from '../../components/manage-organizations/create-organization/create-organization.component';
-import { DisableOrganizationDialogComponent, EditOrganizationComponent } from '../../components/manage-organizations/create-organization/edit-organization.component';
-import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatExpansionModule, MatRadioModule} from '@angular/material';
+import { AssignStockKeepersComponent } from '../../components/assign-stock-keepers/assign-stock-keepers.component';
+import { ManageStockKeepersDesignationComponent } from '../../components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule} from '@angular/material';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {
+  DisableOrganizationDialogComponent,
+  EditOrganizationComponent
+} from '../../components/manage-organizations/create-organization/edit-organization.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +49,9 @@ import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModul
     EditAuditTemplateComponent,
     CreateOrganizationComponent,
     EditOrganizationComponent,
-    DisableOrganizationDialogComponent
+    DisableOrganizationDialogComponent,
+    AssignStockKeepersComponent,
+    ManageStockKeepersDesignationComponent
   ],
 
   imports: [

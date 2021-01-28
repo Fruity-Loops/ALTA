@@ -6,7 +6,8 @@
             "org_name": "test",
             "address": "Florida",
             "status": true,
-            "inventory_items_refresh_job": 1
+            "inventory_items_refresh_job": 1,
+            "calendar_date": "2021/01/01"
         }
     },
     {
@@ -16,7 +17,8 @@
             "org_name": "test2",
             "address": "Florida2",
             "status": true,
-            "inventory_items_refresh_job": 1
+            "inventory_items_refresh_job": 1,
+            "calendar_date": "2021/01/01"
         }
     }
 ]
