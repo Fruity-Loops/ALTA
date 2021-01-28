@@ -54,3 +54,15 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
         if not saved_audit:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        customuser_id = request.query_params.get('customuser_id')
+        init_audit_id = request.query_params.get('init_audit_id')
+
+        if customuser_id:
+            self.queryset = self.queryset.filter(customuser_id=customuser_id)
+        if init_audit_id:
+            self.queryset = self.queryset.filter(init_audit_id=init_audit_id)
+
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
