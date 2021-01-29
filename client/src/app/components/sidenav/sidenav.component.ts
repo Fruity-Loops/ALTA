@@ -103,6 +103,10 @@ export class SideNavComponent implements OnInit {
       }
     }
 
+    if (url.includes('modify-members') && this.options === SystemNavListings){
+        url = 'sa-modify-members';
+    }
+
     this.options.forEach(navOption => {
       if (url.includes(navOption.routerLink)) {
         this.selectedOption = navOption;
