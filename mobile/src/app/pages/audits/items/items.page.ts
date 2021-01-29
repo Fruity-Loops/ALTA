@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Platform, AlertController, ToastController } from '@ionic/angular';
+import { Platform, AlertController, ToastController} from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -17,6 +17,9 @@ export class ItemsPage implements OnInit, OnDestroy {
   keypressEvent: Subscription;
   isScanning: boolean;
   loggedInUser: any;
+  currentSegment: string = 'items';
+  items: [];
+  completedItems : [];
 
   constructor(
     private auditService: AuditService,
@@ -32,6 +35,7 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPermissions();
+    this.getItems();
     this.setExternalScanListener();
   }
 
@@ -46,6 +50,19 @@ export class ItemsPage implements OnInit, OnDestroy {
         err => this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.CAMERA)
       );
     }
+  }
+
+  getItems() {
+    fetchLoggedInUser().then(
+      user => {
+        if (user) {
+          this.loggedInUser = user;
+          this.auditService.getAudits(user.user_id).subscribe(
+            res => {
+              this.items = res;
+            });
+        }
+      });
   }
 
   setExternalScanListener() {
@@ -143,6 +160,10 @@ export class ItemsPage implements OnInit, OnDestroy {
       position: 'bottom',
     });
     toast.present();
+  }
+
+  segmentChanged(ev: CustomEvent) {
+    this.currentSegment = ev.detail.value;
   }
 
 }

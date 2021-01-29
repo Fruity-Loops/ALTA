@@ -3,9 +3,16 @@
   <ion-item color="primary">Scanning...</ion-item>
   <ion-progress-bar type='indeterminate'></ion-progress-bar>
 </div>
-<ion-item-divider>
-  <h1>Items</h1>
-</ion-item-divider>
+
+<ion-segment (ionChange)="segmentChanged($event)" value="items">
+  <ion-segment-button value="items">
+    <ion-label>Items</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="completedItems">
+    <ion-label>Completed Items</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
 <ion-content>
 </ion-content>
 

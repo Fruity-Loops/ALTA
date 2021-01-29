@@ -25,8 +25,8 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  getItemSKAudit(userID, auditID): Observable<any> {
-    return this.http.get(`${BASEURL}/item-to-sk/`, {
+  getBinSKAudit(userID, auditID): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/`, {
       params: {
         customuser_id: userID,
         init_audit_id: auditID,
@@ -36,12 +36,24 @@ export class AuditService {
   }
 
   getBins(userID, auditID): Observable<any> {
-    return this.getItemSKAudit(userID, auditID)
+    return this.getBinSKAudit(userID, auditID)
       .pipe(
         map(res => {
-          const bins = res[0].bins.split('\'').join('\"');
-          return JSON.parse(bins);
+          const bins = res.map(bin => bin.Bin);
+          return bins;
         }),
       );
+  }
+
+  getItems(auditID, userID, bin): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/`,
+      {
+        params: {
+          audit_id: auditID,
+          assigned_sk: userID,
+          bin: bin,
+        }
+      })
+      .pipe(catchError(errorHandler));
   }
 }
