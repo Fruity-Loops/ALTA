@@ -42,6 +42,7 @@
 
 #top-div {
  height: 0px;
+ text-align: end;
 }
 
 .location-title {
@@ -96,4 +97,125 @@ button.bottom-confirm {
   position: inline;
   left: 0;
   margin-left: -11px;
+  display:flex;
+  justify-content:space-around;
 }
+
+.drag-drop-containers {
+  width: 100%;
+  display:flex;
+  justify-content: space-around;
+  box-sizing: border-box;
+  vertical-align: top;
+  text-align: justify;
+  font-size: 30px;
+  color: black;
+}
+
+.drag-drop-list {
+  flex-direction: row;
+  border: solid 1px rgb(236, 236, 236);
+  min-height: 60px;
+  background: rgb(236, 236, 236);
+  border-radius: 4px;
+  width: 400px;
+}
+
+.drag-drop-box {
+  background-color: white;
+  border: solid 1px #2196F3 !important;
+  cursor: move;
+  box-sizing: border-box;
+  flex-grow: 1;
+  justify-content: center;
+  margin: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  width: 90%;
+  padding: 20px 10px;
+  text-align: center;
+  font-size: 18px;
+  color: rgb(33, 150, 243);
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-drop-box:last-child {
+  border: none;
+}
+
+.drag-drop-list.cdk-drop-list-dragging .drag-drop-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-drop-subtext {
+  font-size: 15px;
+  color: grey;
+  padding-top: 3px;
+  display: inline-block;
+}
+
+.item-list {
+  list-style-position: inside;
+  text-align: center;
+  margin-right: 35px;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  display: inline-block;
+}
+
+.boarder-left {
+  border-left: 1px solid #E0E0E0;
+}
+
+.boarder-right {
+  border-right: 1px solid #E0E0E0;
+}
+
+.column-header {
+  display: flex;
+  justify-content:space-around;
+  align-items: center;
+}
+
+.row {
+  background-image: linear-gradient(#E0E0E0, #E0E0E0);
+  background-size: 1px 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.no-border {
+  border-style: none;
+}
+
