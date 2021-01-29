@@ -47,7 +47,8 @@
       <ng-container matColumnDef="2">
         <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>Settings</th>
         <td mat-cell *matCellDef="let row" (click)="preventPropagation($event)">
-          <button mat-icon-button mat-button [routerLink]="'edit-organization/' + row.org_id" [id]="'settings ' + row.org_name">
+          <button mat-icon-button mat-button [routerLink]="'edit-organization/' + row.org_id"
+                  [id]="'settings ' + row.org_name" class="settings-padding">
             <div class="dot"></div>
           </button>
         </td>
