@@ -51,7 +51,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
     this.editOn = true;
   }
 
-  submitSave(): void {
+  submitQuery(): void {
 
     if (this.originalStatus && this.isActive === 'Disabled') {
       this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});

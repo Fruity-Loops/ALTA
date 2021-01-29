@@ -28,7 +28,15 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   abstract getComponentTitle(): string;
 
+  submitSave(): void {
+    if (this.orgName === '') {
+      this.orgError = 'Please enter a name for the organization';
+    } else {
+      this.submitQuery();
+    }
+  }
+
   // A function called by the HTML to be implemented for submitting the org info to the REST API
-  abstract submitSave(): void;
+  abstract submitQuery(): void;
 
 }

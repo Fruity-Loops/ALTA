@@ -25,7 +25,7 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
     return 'Organization Creation';
   }
 
-  submitSave(): void {
+  submitQuery(): void {
     this.organizationService.createOrganization({
       org_name: this.orgName,
       address: this.location !== '' ? this.location : undefined,
