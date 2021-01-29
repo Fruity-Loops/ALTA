@@ -15,7 +15,7 @@ export class CreateOrganizationComponent implements OnInit {
   organizationTitle: string;
   orgError: string;
 
-  editOn: boolean
+  editOn: boolean;
 
   constructor(
     private organizationService: ManageOrganizationsService,
