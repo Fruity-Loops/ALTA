@@ -55,6 +55,8 @@ export class CreateAuditTemplateComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
+  // TODO
+  // @ts-ignore
   templateValues: Template;
   recurrenceDay: DaysCheckBox = {
     name: 'All',
@@ -88,6 +90,13 @@ export class CreateAuditTemplateComponent implements OnInit {
       { name: 'Dec', checked: false },
     ],
   };
+  constructor(
+    private router: Router,
+    private auditTemplateService: AuditTemplateService,
+  ) {
+    this.errorMessage = '';
+
+  }
 
   // We initialize the form and set validators to each one in case user forget to specify a field
   ngOnInit(): void {
@@ -106,7 +115,7 @@ export class CreateAuditTemplateComponent implements OnInit {
     };
   }
 
-  addItem(term, value): void {
+  addItem(term: keyof Template, value: any): void {
     // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
     if (value !== '' && !this.template[term].includes(value)) {
       this.template[term].push(value);
@@ -114,7 +123,7 @@ export class CreateAuditTemplateComponent implements OnInit {
     }
   }
 
-  remove(term, value): void {
+  remove(term: keyof Template, value: any): void {
     const index = this.template[term].indexOf(value);
 
     if (index >= 0) {

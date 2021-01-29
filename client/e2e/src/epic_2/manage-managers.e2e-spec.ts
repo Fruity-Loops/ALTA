@@ -1,7 +1,7 @@
 import { browser, ExpectedConditions } from 'protractor';
 import { Navigation } from '../navigation.po';
-import { ManageMembersPage } from '../epic_1/manage-members.po';
-import { OrganizationPage } from '../epic_1/organization.po';
+// import { ManageMembersPage } from '../epic_1/manage-members.po';
+// import { OrganizationPage } from '../epic_1/organization.po';
 import { SettingsPage } from '../epic_1/settings.po';
 import { Login, Logout } from '../login.po';
 /**
@@ -10,9 +10,9 @@ import { Login, Logout } from '../login.po';
  * https://github.com/fruity-loops/alta/issues/45
  */
 describe('AT-2.2: Inventory Manager can modify their own settings', () => {
-    const manageMembersPage: ManageMembersPage = new ManageMembersPage();
+    // const manageMembersPage: ManageMembersPage = new ManageMembersPage();
     const settingsPage: SettingsPage = new SettingsPage();
-    const organizationPage: OrganizationPage = new OrganizationPage();
+    // const organizationPage: OrganizationPage = new OrganizationPage();
     const nav: Navigation = new Navigation();
 
     /**

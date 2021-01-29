@@ -37,61 +37,61 @@
           ID
         </p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_id_from" type="string" formControlName="_id_from" placeholder="from"/>
+        <input matInput id="item_id_from" type="text" formControlName="_id_from" placeholder="from"/>
       </mat-form-field>
         -
         <mat-form-field appearance="outline">
-          <input matInput id="item_id_to" type="string" formControlName="_id_to" placeholder="to"/>
+          <input matInput id="item_id_to" type="text" formControlName="_id_to" placeholder="to"/>
         </mat-form-field>
         <p>Localisation</p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_location2" type="string" formControlName="Location" placeholder="Location"/>
+        <input matInput id="item_location2" type="text" formControlName="Location" placeholder="Location"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_zone" type="string" formControlName="Zone" placeholder="Zone"/>
+        <input matInput id="item_zone" type="text" formControlName="Zone" placeholder="Zone"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_aisle" type="string" formControlName="Aisle" placeholder="Aisle"/>
+        <input matInput id="item_aisle" type="text" formControlName="Aisle" placeholder="Aisle"/>
       </mat-form-field>
         <p>Item details</p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_part_number" type="string" formControlName="Part_Number" placeholder="Part Number"/>
+        <input matInput id="item_part_number" type="text" formControlName="Part_Number" placeholder="Part Number"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_sn" type="string" formControlName="Serial_Number" placeholder="Serial Number"/>
+        <input matInput id="item_sn" type="text" formControlName="Serial_Number" placeholder="Serial Number"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_condition" type="string" formControlName="Condition" placeholder="Condition"/>
+        <input matInput id="item_condition" type="text" formControlName="Condition" placeholder="Condition"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_category" type="string" formControlName="Category" placeholder="Category"/>
+        <input matInput id="item_category" type="text" formControlName="Category" placeholder="Category"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_owner" type="string" formControlName="Owner" placeholder="Owner"/>
+        <input matInput id="item_owner" type="text" formControlName="Owner" placeholder="Owner"/>
       </mat-form-field>
         <p>
           Average Cost
         </p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_average_cost_from" type="string" formControlName="Average_Cost_from" placeholder="from"/>
+        <input matInput id="item_average_cost_from" type="text" formControlName="Average_Cost_from" placeholder="from"/>
       </mat-form-field>
         -
         <mat-form-field appearance="outline">
-          <input matInput id="item_average_cost_to" type="string" formControlName="Average_Cost_to" placeholder="to"/>
+          <input matInput id="item_average_cost_to" type="text" formControlName="Average_Cost_to" placeholder="to"/>
         </mat-form-field>
         <p>
           Quantity
         </p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_quantity_from" type="string" formControlName="Quantity_from" placeholder="from"/>
+        <input matInput id="item_quantity_from" type="text" formControlName="Quantity_from" placeholder="from"/>
       </mat-form-field>
         -
         <mat-form-field appearance="outline">
-          <input matInput id="item_quantity_to" type="string" formControlName="Quantity_to" placeholder="to"/>
+          <input matInput id="item_quantity_to" type="text" formControlName="Quantity_to" placeholder="to"/>
         </mat-form-field>
         <br/>
       <mat-form-field appearance="outline">
-        <input matInput id="item_unit_of_measure" type="string" formControlName="Unit_of_Measure"
+        <input matInput id="item_unit_of_measure" type="text" formControlName="Unit_of_Measure"
                placeholder="Unit of Measure"/>
       </mat-form-field>
       </mat-expansion-panel>
@@ -101,21 +101,22 @@
 
   <mat-divider></mat-divider>
   <div>
-    <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+    <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+      <div id="audit">List of Audits.</div>
 
       <ng-container matColumnDef="Select">
-        <th mat-header-cell *matHeaderCellDef>Select</th>
+        <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
         <td mat-cell *matCellDef="let object">
           <mat-checkbox  (change)='onChange(object["_id"])' [id]="'checkBox' + object['_id']"></mat-checkbox>
         </td>
       </ng-container>
 
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
+        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
         <td mat-cell *matCellDef="let object">{{ object[column]}}</td>
       </ng-container>
 
-    
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumnsStatic"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumnsStatic;"></tr>

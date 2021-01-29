@@ -15,7 +15,7 @@ export class ManageMembersPage {
   }
 
 
-  getFirstNameColumn(firstName): ElementFinder {
+  getFirstNameColumn(firstName: string): ElementFinder {
     return element(by.cssContainingText(
       '.cell_first_name',
       firstName)
@@ -26,7 +26,7 @@ export class ManageMembersPage {
     return element(by.className('cell_settings'));
   }
 
-  getEmployeeSettings(fname, lname): ElementFinder {
+  getEmployeeSettings(fname: string, lname: string): ElementFinder {
     return element(by.id(fname + lname + 'settings'));
   }
 }

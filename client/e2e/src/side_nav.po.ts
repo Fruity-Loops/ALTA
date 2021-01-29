@@ -1,4 +1,4 @@
-import { browser, by, element, ElementFinder } from 'protractor';
+import { by, element, ElementFinder } from 'protractor';
 
 export class SideNav {
     getLogoutOption(): ElementFinder {

@@ -8,6 +8,7 @@ import {ToolbarComponent} from './toolbar.component';
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
   let fixture: ComponentFixture<ToolbarComponent>;
+  // @ts-ignore
   let authService: AuthService;
 
   beforeEach(async () => {
