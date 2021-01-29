@@ -35,7 +35,7 @@
       </ng-container>
 
       <ng-container matColumnDef="Status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+        <th mat-header-cell id="status" *matHeaderCellDef mat-sort-header> Status</th>
         <td class="cell_org_status" mat-cell *matCellDef="let row" [id]="row.org_name + ' status'"> {{row.status? 'Active': 'Disabled'}} </td>
       </ng-container>
 
