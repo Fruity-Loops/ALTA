@@ -17,11 +17,11 @@ export class ManageAuditsService {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
-  assignSK(assignedSK: object, auditId: Number): Observable<any> {
+  assignSK(assignedSK: object, auditId: number): Observable<any> {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
 
-  getAuditData(auditId: Number): Observable<any> {
+  getAuditData(auditId: number): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
   }
 

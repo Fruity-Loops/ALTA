@@ -23,7 +23,7 @@ interface DialogData {
 })
 export class ManageOrganizationsComponent implements OnInit {
   organizations = [];
-  selectedOrganization : Organization;
+  selectedOrganization: Organization;
   errorMessage = '';
   // orgEdit;
   dataSource: MatTableDataSource<Organization>;
@@ -31,16 +31,16 @@ export class ManageOrganizationsComponent implements OnInit {
   filterTerm: string;
   selected = 'All';
 
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild('updateOrgDialog') updateOrgDialog: TemplateRef<any>;
-  //@ts-ignore
+  // @ts-ignore
   @ViewChild('createOrgDialog') createOrgDialog: TemplateRef<any>;
 
-  //@ts-ignore
+  // @ts-ignore
   @Input() isActive: string;
 
   activeStates = Array<any>();
@@ -57,9 +57,6 @@ export class ManageOrganizationsComponent implements OnInit {
     this.filterTerm = '';
   }
 
-
-
-
   ngOnInit(): void {
     this.getAllOrganizations();
   }
@@ -69,7 +66,7 @@ export class ManageOrganizationsComponent implements OnInit {
       (data) => {
         this.organizations = data;
         this.errorMessage = '';
-        //@ts-ignore
+        // @ts-ignore
         this.dataSource = new MatTableDataSource(this.organizations);
       },
       (err) => {
@@ -98,7 +95,7 @@ export class ManageOrganizationsComponent implements OnInit {
   openUpdateOrgDialog(organization: Organization): void {
     this.selectedOrganization = organization;
     this.isActive = organization.status ? 'active' : 'disabled';
-    //Never used
+    // Never used
     // const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
