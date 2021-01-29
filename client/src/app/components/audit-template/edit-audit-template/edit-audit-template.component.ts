@@ -25,16 +25,20 @@ interface MonthsCheckBox {
 export class EditAuditTemplateComponent implements OnInit {
 
   constructor(
-    private router: Router,
+    // TODO: remove as router is never used
+    // private router: Router,
+
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.errorMessage = '';
+    this.disabled = false;
   }
 
   id: any;
   errorMessage: string;
-  errorMessageCheckboxDay: string;
-  errorMessageCheckboxMonth: string;
+  errorMessageCheckboxDay: string | undefined;
+  errorMessageCheckboxMonth: string | undefined;
   disabled: boolean;
   startDate = new Date();
   startTime = '00:00:00';
@@ -95,16 +99,6 @@ export class EditAuditTemplateComponent implements OnInit {
       {name: 'Dec', checked: false}
     ]
   };
-  constructor(
-    // TODO: remove as router is never used
-    // private router: Router,
-
-    private auditTemplateService: AuditTemplateService,
-    private activatedRoute: ActivatedRoute,
-  ) {
-    this.errorMessage = '';
-    this.disabled = false;
-  }
 
   ngOnInit(): void {
     this.disabled = false;
@@ -186,17 +180,22 @@ export class EditAuditTemplateComponent implements OnInit {
     let checkedDay = false;
     let checkedMonth = false;
     if (!this.isRecurrenceChosen) {
+      // @ts-ignore
       this.repeatEvery = null;
     } else {
       // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
+      // @ts-ignore
       for (const checkbox of this.recurrenceDay.subCheckBox) {
+        // @ts-ignore
         this.dayArray.push(checkbox.checked);
         if (checkbox.checked) {
           checkedDay = true;
         }
       }
       // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
+      // @ts-ignore
       for (const checkbox of this.recurrenceMonth.subCheckBox) {
+        // @ts-ignore
         this.monthArray.push(checkbox.checked);
         if (checkbox.checked) {
           checkedMonth = true;
@@ -248,7 +247,7 @@ export class EditAuditTemplateComponent implements OnInit {
     }
   }
 
-  timeZoneChange(event): void {
+  timeZoneChange(event: { value: { utc: string[]; }; }): void {
     this.timeZoneUTC = event.value.utc[0];
   }
 
@@ -264,9 +263,11 @@ export class EditAuditTemplateComponent implements OnInit {
     this.allDaysChecked = false;
     this.allMonthsChecked = false;
     this.repeatEvery = '1';
-    this.recurrenceDay.subCheckBox.forEach(t => t.checked = false);
-    this.recurrenceMonth.subCheckBox.forEach(t => t.checked = false);
+    this.recurrenceDay.subCheckBox?.forEach(t => t.checked = false);
+    this.recurrenceMonth.subCheckBox?.forEach(t => t.checked = false);
+    // @ts-ignore
     this.recurrenceDay.subCheckBox[0].checked = true;
+    // @ts-ignore
     this.recurrenceMonth.subCheckBox[0].checked = true;
     this.errorMessageCheckboxDay = ' ';
     this.errorMessageCheckboxMonth = ' ';
@@ -282,6 +283,7 @@ export class EditAuditTemplateComponent implements OnInit {
     }
   }
 
+  // @ts-ignore
   someCheckbox(type: string): boolean {
     if (type === 'dayCheckbox') {
       if (this.recurrenceDay.subCheckBox == null) {
