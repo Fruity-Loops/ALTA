@@ -21,18 +21,18 @@ export class OrganizationPage {
     return element(by.id('EditOrgLocation'));
   }
 
-  getOrganizationNameColumn(organizationName): ElementFinder {
+  getOrganizationNameColumn(organizationName: string): ElementFinder {
     return element(by.cssContainingText(
       '.cell_org_name',
       organizationName)
     );
   }
 
-  getOrganizationStatusColumn(organizationName): ElementFinder {
+  getOrganizationStatusColumn(organizationName: string): ElementFinder {
     return element(by.id(organizationName + ' status'));
   }
 
-  getOrgSettings(name): ElementFinder {
+  getOrgSettings(name: string): ElementFinder {
     return element(by.id('settings ' + name));
   }
 
