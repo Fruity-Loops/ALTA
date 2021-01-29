@@ -8,8 +8,6 @@ on:
 jobs:
   pylint:
     runs-on: ubuntu-latest
-    env: 
-      DJANGO_SETTINGS_MODULE: django_server.settings
 
     steps:
     - uses: actions/checkout@v2
@@ -32,7 +30,7 @@ jobs:
     - name: Run Lint Master
       working-directory: server
       run: |
-        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
+        REPORT=$(DJANGO_SETTINGS_MODULE=django_server.settings pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
         echo "MASTER_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
     
@@ -44,7 +42,7 @@ jobs:
     - name: Get Branch Report
       working-directory: server
       run: |
-        REPORT=$(pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
+        REPORT=$(DJANGO_SETTINGS_MODULE=django_server.settings pylint --load-plugins pylint_django --exit-zero $(git ls-files '*.py'))
         echo "$REPORT"
         echo "BRANCH_REPORT=${REPORT//$'\n'/'%0A'}" >> $GITHUB_ENV
 
