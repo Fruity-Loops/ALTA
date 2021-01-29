@@ -69,7 +69,6 @@ import {
     MatNativeDateModule,
     MatChipsModule,
     MatExpansionModule,
-    MatRadioModule,
   ],
   providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })

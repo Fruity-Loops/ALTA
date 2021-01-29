@@ -51,7 +51,7 @@
       <ng-container matColumnDef="Settings">
         <th mat-header-cell *matHeaderCellDef> Settings</th>
         <td mat-cell *matCellDef="let row">
-          <a class="cell_settings" [routerLink]="['/modify-members', row.id]">
+          <a class="cell_settings" [routerLink]="['/modify-members', row.id]" [id]="row.first_name + row.last_name + 'settings'">
             <span class="dot"></span>
           </a>
         </td>
