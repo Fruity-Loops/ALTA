@@ -9,7 +9,9 @@ import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 describe('AssignStockKeepersComponent', () => {
   let component: ManageStockKeepersDesignationComponent;
   let fixture: ComponentFixture<ManageStockKeepersDesignationComponent>;
+  // @ts-ignore
   let service: ManageMembersService;
+  // @ts-ignore
   let service2: ManageAuditsService;
 
   beforeEach(async () => {

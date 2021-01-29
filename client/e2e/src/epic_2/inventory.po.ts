@@ -6,7 +6,7 @@ export class InventoryItemsPage {
     return element(by.tagName('table'));
   }
 
-  getCheckBoxForID(id): ElementFinder {
+  getCheckBoxForID(id: number): ElementFinder {
     return element(by.id('checkBox' + id + '-input'));
   }
 

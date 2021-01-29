@@ -1,5 +1,4 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -22,15 +21,15 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   allExpandState = false;
   errorMessage = '';
 
-  constructor(private manageMembersService: ManageMembersService,
-              private dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private manageAuditsService: ManageAuditsService,
               private router: Router)
-  { }
-
-  ngOnInit(): void {
+  {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
+  }
+
+  ngOnInit(): void {
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
     .subscribe((auditData) => {
@@ -101,7 +100,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
    getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
     const holdItems = new Array<any>();
     const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
-    this.locationsWithBinsAndSKs[index].item.forEach(item =>
+    this.locationsWithBinsAndSKs[index].item.forEach(( item: any ) =>
       bin.forEach(givenBin => {
         if (item.Bin === givenBin) {
           holdItems.push(item);
@@ -117,7 +116,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
-        auditComp.bins.forEach(bin => {
+        auditComp.bins.forEach(( bin: any ) => {
           // check if the bin has already been assigned to a stock-keeper
           if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
               !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {

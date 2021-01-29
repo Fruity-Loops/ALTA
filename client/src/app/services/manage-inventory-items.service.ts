@@ -13,12 +13,12 @@ export class ManageInventoryItemsService {
   constructor(private http: HttpClient) {
   }
 
-  getPageItems(params): Observable<any> {
+  getPageItems(params: HttpParams): Observable<any> {
     console.log(params);
     return this.http.get(`${BASEURL}/item/`, {params});
   }
 
-  updateRefreshItemsTime(body): Observable<any> {
+  updateRefreshItemsTime(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/InventoryItemRefreshTime/`, body);
   }
 }

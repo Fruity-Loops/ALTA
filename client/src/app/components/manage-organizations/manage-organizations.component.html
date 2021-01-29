@@ -1,8 +1,8 @@
 <mat-card>
   <button mat-stroked-button id="createOrg" class="create" routerLink="create-organization">Add</button>
   <mat-card-title>Organizations</mat-card-title>
-  <div class="example-button-container">
-    <button mat-icon-button disabled aria-label="Example icon button with a home icon">
+  <div class="search-mat-icon">
+    <button mat-icon-button disabled>
       <mat-icon>search</mat-icon>
     </button>
   </div>
@@ -21,15 +21,16 @@
   </div>
   <mat-divider></mat-divider>
   <div>
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table aria-describedby="organizations" mat-table [dataSource]="dataSource" matSort>
+      <div id="organizations">List of organizations.</div>
 
       <ng-container matColumnDef="Company_name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Company name</th>
+        <th scope="col" class="mat-column-alignment-one" mat-header-cell *matHeaderCellDef mat-sort-header> Company name</th>
         <td class="cell_org_name" mat-cell *matCellDef="let row"> {{row.org_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Activated_On">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Activated On</th>
+        <th scope="col" class="mat-column-alignment-two" mat-header-cell *matHeaderCellDef mat-sort-header> Activated On</th>
         <td mat-cell *matCellDef="let row">{{row.calendar_date}}</td>
       </ng-container>
 
@@ -39,12 +40,12 @@
       </ng-container>
 
       <ng-container matColumnDef="Address">
-        <th mat-header-cell *matHeaderCellDef> Address</th>
+        <th scope="col" class="mat-column-alignment-two" mat-header-cell *matHeaderCellDef> Address</th>
         <td class="cell_org_address" mat-cell *matCellDef="let row">{{row.address}}</td>
       </ng-container>
 
       <ng-container matColumnDef="2">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Settings</th>
+        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>Settings</th>
         <td mat-cell *matCellDef="let row" (click)="preventPropagation($event)">
           <button mat-icon-button mat-button [routerLink]="'edit-organization/' + row.org_id" [id]="'settings ' + row.org_name">
             <div class="dot"></div>
