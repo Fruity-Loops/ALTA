@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ManageMembersService } from '../../../../services/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import roles from 'src/app/fixtures/roles.json';
-import { EmployeeView } from '../employee-view';
+import {BaseEmployeeForm, EmployeeView} from '../employee-view';
 import { BehaviorSubject } from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -15,10 +15,10 @@ export class EditEmployeeComponent extends EmployeeView {
   @Input() employee: any;
   edit = false;
   password = '';
-  @Input() role: string;
-  @Input() isActive: string;
-  id: string;
-  isLoggedInUser: BehaviorSubject<boolean>;
+  @Input() role: string | undefined;
+  @Input() isActive: string | undefined;
+  id: string | undefined;
+  isLoggedInUser: BehaviorSubject<boolean> | undefined;
   isSystemAdmin = false;
 
   alwaysDisabled = ['email', 'id'];
@@ -26,7 +26,7 @@ export class EditEmployeeComponent extends EmployeeView {
   activeStates = [{ state: 'active' }, { state: 'disabled' }];
   roles = roles;
 
-  employeeForm: FormGroup;
+  employeeForm: FormGroup | undefined;
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -40,6 +40,8 @@ export class EditEmployeeComponent extends EmployeeView {
 
       // Verifying that the logged in user is accessing their own information
       if (this.id === localStorage.getItem('id')) {
+        // tslint:disable-next-line:no-non-null-assertion
+        // @ts-ignore
         this.isLoggedInUser.next(true);
       }
       this.getEmployee();
@@ -48,8 +50,8 @@ export class EditEmployeeComponent extends EmployeeView {
 
   getTitle(): string {
     // need to initialize here because the super constructor needs to be the first thing that gets called
-    this.isLoggedInUser = new BehaviorSubject(false);
-    const generateString = () => (this.isLoggedInUser.getValue() ? 'Profile' : 'Employee') +  ' Settings';
+    this.isLoggedInUser = new BehaviorSubject<boolean>(false);
+    const generateString = () => (this.isLoggedInUser?.getValue() ? 'Profile' : 'Employee') +  ' Settings';
 
     // put a subscription in case of changes for whether the user is logged in or not
     this.isLoggedInUser.subscribe(_ => {
@@ -63,7 +65,8 @@ export class EditEmployeeComponent extends EmployeeView {
   }
 
   getEmployee(): void {
-    this.manageMembersService.getEmployee(this.id).subscribe((employee) => {
+    // tslint:disable-next-line:no-non-null-assertion
+    this.manageMembersService.getEmployee(this.id!).subscribe((employee) => {
       this.employee = {
         role: employee.role,
         is_active: employee.is_active,
@@ -100,9 +103,10 @@ export class EditEmployeeComponent extends EmployeeView {
 
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
+    // @ts-ignore
     Object.keys(this.employeeForm.controls).forEach(key => {
       if (this.alwaysDisabled.indexOf(key) < 0) {
-        this.employeeForm.controls[key].enable();
+        this.employeeForm?.controls[key].enable();
       }
     });
     if (!turnOn) {
@@ -115,7 +119,7 @@ export class EditEmployeeComponent extends EmployeeView {
     window.location.reload();
   }
 
-  submitQuery(base): void {
+  submitQuery(base: BaseEmployeeForm): void {
     // update user info
     this.employee.is_active = this.isActive === 'active';
 
@@ -132,14 +136,16 @@ export class EditEmployeeComponent extends EmployeeView {
     delete patchedEmployee.email;
 
     this.manageMembersService
-      .updateClientInfo(patchedEmployee, this.id)
+      // tslint:disable-next-line:no-non-null-assertion
+      .updateClientInfo(patchedEmployee, this.id!)
       .subscribe((response) => {
         location.reload();
       });
 
     // update user password
     if (this.password.length > 0) {
-      this.manageMembersService.updatePassword({password: this.password}, this.id).subscribe(
+      // tslint:disable-next-line:no-non-null-assertion
+      this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
         (response) => {
           location.reload();
         },

@@ -14,6 +14,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [],
@@ -31,8 +33,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatPaginatorModule,
     MatDividerModule,
     MatListModule,
-    MatGridListModule,
     MatCheckboxModule,
+    MatGridListModule
   ],
   providers: [],
   exports: [
@@ -51,6 +53,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatListModule,
     MatGridListModule,
     MatCheckboxModule,
-  ],
+    MatExpansionModule,
+    DragDropModule,
+  ]
 })
 export class MatModule {}

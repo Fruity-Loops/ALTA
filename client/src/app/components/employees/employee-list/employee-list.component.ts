@@ -25,20 +25,24 @@ export class EmployeeListComponent implements OnInit {
   ];
   roles = roles;
   filterTerm: string;
-  selected = 'All';
+  selected: string;
 
+  // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private manageMembersService: ManageMembersService,
     private changeDetectorRefs: ChangeDetectorRef
   ) {
+    this.dataSource = new MatTableDataSource<User>();
     this.users = new Array<User>();
     this.manageMembersService.getAllClients().subscribe((user) => {
-      const users = user;
-      this.populateTable(users);
+      this.populateTable(user);
     });
+    this.filterTerm = '';
+    this.selected = 'All';
   }
 
   ngOnInit(): void {}
@@ -47,8 +51,9 @@ export class EmployeeListComponent implements OnInit {
     this.dataSource.filter = filterTerm;
   }
 
-  populateTable(clients): void {
+  populateTable(clients: Array<User>): void {
     if (clients[0].role !== 'SA') {
+      // TODO: inconsistent with declaration/initialization
       this.displayedColumns = [
         'First_Name',
         'Last_Name',
@@ -60,7 +65,11 @@ export class EmployeeListComponent implements OnInit {
     }
     clients.forEach((element) => {
       const obj = this.roles.find((o) => o.abbrev === element.role);
-      element.role = obj.name;
+      if (obj) {
+        element.role = obj.name;
+      } else {
+        element.role = '';
+      }
       this.users.push(element);
     });
     this.dataSource = new MatTableDataSource(this.users);

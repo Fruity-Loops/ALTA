@@ -18,11 +18,11 @@
     <mat-card-content>
 
       <div class="row">
-        <div class="column">
+        <div class="column" *ngIf="templateValues">
 
           <!-- LEFT SIDE -->
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.location || templateValues.location === ''">
             <mat-label>Location</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
@@ -33,7 +33,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.plant  || templateValues.plant === ''">
             <mat-label>Plant</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
@@ -44,7 +44,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.zones  || templateValues.zones === ''">
             <mat-label>Zones</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
@@ -55,7 +55,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.aisles  || templateValues.aisles === ''">
             <mat-label>Aisles</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
@@ -66,7 +66,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.bins  || templateValues.bins === ''">
             <mat-label>Bins</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
@@ -77,7 +77,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.part_number  || templateValues.part_number === ''">
             <mat-label>Part Number</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
@@ -88,7 +88,7 @@
             </mat-form-field>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" *ngIf="templateValues.serial_number  || templateValues.serial_number === ''">
             <mat-label>Serial Number</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"

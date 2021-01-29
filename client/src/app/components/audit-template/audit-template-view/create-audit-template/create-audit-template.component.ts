@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from '@angular/router';
 import {AuditTemplateService} from '../../../../services/audit-template.service';
+import { Template } from '../../Template';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 
 
@@ -32,7 +33,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
-  submitQuery(body): void {
+  submitQuery(body: Template): void {
     this.auditTemplateService.createTemplate(body).subscribe(
       () => {
         setTimeout(() => {

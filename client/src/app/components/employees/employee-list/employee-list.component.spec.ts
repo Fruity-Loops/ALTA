@@ -7,6 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 describe('ClientGridViewComponent', () => {
   let component: EmployeeListComponent;
   let fixture: ComponentFixture<EmployeeListComponent>;
+  // @ts-ignore
   let service: ManageMembersService;
 
   beforeEach(() => {

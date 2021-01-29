@@ -5,14 +5,14 @@ import {Component, OnInit} from '@angular/core';
 })
 export abstract class OrganizationViewComponent implements OnInit {
 
-  editOn: boolean; // determines whether editing is on/enabled for the component
-  isEdit: boolean; // determines whether the component is capable of editing
-  organizationTitle: string;
+  editOn: boolean | undefined; // determines whether editing is on/enabled for the component
+  isEdit: boolean | undefined; // determines whether the component is capable of editing
+  organizationTitle: string | undefined;
 
   location: string;
   orgName: string;
 
-  orgError: string;
+  orgError: string | undefined;
 
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be

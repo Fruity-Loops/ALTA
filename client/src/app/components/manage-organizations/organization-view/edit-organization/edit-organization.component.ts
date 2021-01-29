@@ -1,8 +1,7 @@
-import {Component, Inject, OnInit, Optional} from '@angular/core';
+import {Component, Inject, Optional} from '@angular/core';
 import {ManageOrganizationsService} from '../../../../services/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {DeleteTemplateDialogComponent} from '../../../audit-template/audit-template-list/audit-template.component';
 import {OrganizationViewComponent} from '../organization-view.component';
 
 
@@ -16,10 +15,10 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   isActive = 'Active';
   activeStates = ['Active', 'Disabled'];
 
-  orgID: string;
+  orgID: string | undefined;
 
   dialogRef: any;
-  originalStatus: boolean;
+  originalStatus: boolean | undefined;
 
   constructor(
     private organizationService: ManageOrganizationsService,
@@ -56,7 +55,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
 
     if (this.originalStatus && this.isActive === 'Disabled') {
       this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});
-      this.dialogRef.afterClosed().subscribe(result => {
+      this.dialogRef.afterClosed().subscribe((result: any) => {
         if (result) {
           this.updateOrganization();
         }

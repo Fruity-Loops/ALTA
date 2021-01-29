@@ -10,8 +10,11 @@ import {ManageOrganizationsService} from 'src/app/services/manage-organizations.
 describe('SignupComponent', () => {
   let component: CreateEmployeeComponent;
   let fixture: ComponentFixture<CreateEmployeeComponent>;
+  // @ts-ignore
   let authService: AuthService;
+  // @ts-ignore
   let tokenService: TokenService;
+  // @ts-ignore
   let manageOrganizationsService: ManageOrganizationsService;
 
   beforeEach(async () => {

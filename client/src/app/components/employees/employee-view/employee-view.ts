@@ -1,6 +1,6 @@
 import {FormGroup} from '@angular/forms';
 
-interface BaseEmployeeForm {
+export interface BaseEmployeeForm {
   user_name: string;
   email: string;
   first_name: string;
@@ -13,9 +13,9 @@ export abstract class EmployeeView {
   title: string;
   loaded = false;
   isEdit: boolean;
-  errorMessage: string;
+  errorMessage: string | undefined;
 
-  employeeForm: FormGroup;
+  employeeForm: FormGroup | undefined;
 
   protected constructor() {
     this.title = this.getTitle();
@@ -32,11 +32,11 @@ export abstract class EmployeeView {
 
   submitForm(): void {
     const body: any = {
-      user_name: this.employeeForm.value.id,
-      email: this.employeeForm.value.email,
-      first_name: this.employeeForm.value.first_name,
-      last_name: this.employeeForm.value.last_name,
-      location: this.employeeForm.value.location,
+      user_name: this.employeeForm?.value.id,
+      email: this.employeeForm?.value.email,
+      first_name: this.employeeForm?.value.first_name,
+      last_name: this.employeeForm?.value.last_name,
+      location: this.employeeForm?.value.location,
     };
 
     this.submitQuery(body);

@@ -1,0 +1,150 @@
+@import "./src/theme.scss";
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-expand {
+  margin-bottom: 20px;
+}
+
+#table-div {
+  margin-bottom:60px;
+}
+
+.mat-card-title {
+  padding: 0.7em;
+}
+
+.mat-column-First_Name {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content:center;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Last_Name {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Availability {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 15% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.busy-sk {
+  background-color: #fce7e7;
+  color: #e8504c;
+  display: inline-block;
+  border-radius: 20%/50%;
+  -moz-border-radius: 20%/50%;
+  padding: 10px;
+  width: 50px;
+  text-align: center;
+}
+
+.available-sk {
+  background-color: #ecf9f3;
+  color: #2cd171;
+  display: inline-block;
+  border-radius: 20%/50%;
+  -moz-border-radius: 20%/50%;
+  padding: 10px;
+  width: 70px;
+  text-align: center;
+}
+
+.mat-column-Check_Boxes {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 3% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.bottom-buttons {
+  position: absolute;
+  right: 1.5%;
+  margin-top:30px;
+}
+
+#top-div {
+ height: 0px;
+ text-align: end;
+}
+
+.location-title {
+  padding-bottom:2px;
+}
+
+.top-buttons {
+  position: relative;
+  top: -50px;
+  margin-right: 0.8em;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+button.bottom-discard {
+  position: absolute;
+  left: -290px;
+  margin-right: 0.5%;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+button.bottom-assign {
+  position: absolute;
+  right: 0;
+  margin-right: 1.2em;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
+.mat-card-header {
+  position: inline;
+  left: 0;
+  margin-left: -11px;
+}

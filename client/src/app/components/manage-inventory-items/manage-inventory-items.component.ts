@@ -1,18 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-
 import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-
 import {MatPaginator} from '@angular/material/paginator';
-import {PageEvent} from '@angular/material/paginator';
-
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {HttpParams} from '@angular/common/http';
-
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,54 +16,56 @@ import { Router } from '@angular/router';
 })
 export class ManageInventoryItemsComponent implements OnInit {
   // MatPaginator Inputs
-  length = 0;
-  pageSize = 25;
-  pageIndex = 1;
-  previousPageIndex = 0;
+  length: number;
+  pageSize: number;
+  pageIndex: number;
+  previousPageIndex: number;
   timeForm: FormGroup;
   searchForm: FormGroup;
   body: any;
   subscription: any;
-  organization: any;
+  organization: string;
 
   // MatPaginator Output
-  pageEvent: PageEvent;
+  // TODO: dead code?
+  // pageEvent: PageEvent;
 
   // Items data
-  data;
+  data: any;
   items = [];
   errorMessage = '';
 
   // Http URL params
   params = new HttpParams();
 
-  inventoryItemToAudit = [];
+  inventoryItemToAudit: number[];
+
+  // Member variable is automatically initialized after view init is completed
+  // @ts-ignore
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ts-ignore
+  @ViewChild(MatSort) sort: MatSort;
+
+  filterTerm: string;
+  selected: string;
+
+  dataSource: MatTableDataSource<any>;
+  displayedColumns: string[] = [];
+  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   constructor(
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
     private router: Router,
     private fb: FormBuilder
-  ) {}
-
-  dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = [];
-  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
-  filterTerm: string;
-  selected = 'All';
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-
-  ngOnInit(): void {
-    this.params = this.params.append('page', String(this.pageIndex));
-    this.params = this.params.append('page_size', String(this.pageSize));
-    this.getItems();
-    this.init();
-    this.inventoryItemToAudit = [];
-  }
-
-  init(): void {
+  ) {
+    this.length = 0;
+    this.pageSize = 25;
+    this.pageIndex = 1;
+    this.previousPageIndex = 0;
+    this.organization = '';
+    this.filterTerm = '';
+    this.selected = 'All';
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
     });
@@ -80,6 +76,7 @@ export class ManageInventoryItemsComponent implements OnInit {
       Location: [''],
       Zone: [''],
       Aisle: [''],
+      Bin: [''],
       Part_Number: [''],
       Serial_Number: [''],
       Condition: [''],
@@ -91,13 +88,26 @@ export class ManageInventoryItemsComponent implements OnInit {
       Quantity_to: [''],
       Unit_of_Measure: [''],
     });
+    this.dataSource = new MatTableDataSource<any>();
+    this.inventoryItemToAudit = [];
+  }
+
+  ngOnInit(): void {
+    this.params = this.params.append('page', String(this.pageIndex));
+    this.params = this.params.append('page_size', String(this.pageSize));
+    this.getItems();
+    this.init();
+    this.inventoryItemToAudit = [];
+  }
+
+  init(): void {
+
   }
 
   getItems(): void {
     this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
-        console.log(data);
         // Getting the field name of the item object returned and populating the column of the table
         const results = 'results';
         for (const key in data[results][0]) {
@@ -118,12 +128,17 @@ export class ManageInventoryItemsComponent implements OnInit {
     );
   }
 
-  paginatorAction(event): void {
+  paginatorAction(event: object): void {
     // page index starts at 1
+
+    // TODO: set keys as keyof 'event'
     const pageIndex = 'pageIndex';
     const pageSize = 'pageSize';
+    // @ts-ignore
     this.pageIndex = 1 + event[pageIndex];
+    // @ts-ignore
     this.pageSize = event[pageSize];
+
     this.params = this.params.set('page', String(this.pageIndex));
     this.params = this.params.set('page_size', String(this.pageSize));
 
@@ -155,6 +170,9 @@ export class ManageInventoryItemsComponent implements OnInit {
     // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
+
+    // TODO: define proper types
+    // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }
 
@@ -189,7 +207,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.updatePage();
   }
   // If an Inventory item checkbox is selected then add the id to the list
-  onChange(value: any): void {
+  onChange(value: number): void {
     if (this.inventoryItemToAudit.includes(value)) {
       this.inventoryItemToAudit.splice(
         this.inventoryItemToAudit.indexOf(value),
@@ -201,17 +219,18 @@ export class ManageInventoryItemsComponent implements OnInit {
   }
 
   submitAudit(): void {
-    let bodyAudit: any;
+    let bodyAudit: object;
     bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
-      organization: localStorage.getItem('organization_id'),
+      organization: Number(localStorage.getItem('organization_id')),
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
+        localStorage.setItem('audit_id', data.audit_id);
         this.inventoryItemToAudit = [];
         setTimeout(() => {
-          // Redirect user to component dashboard
-          this.router.navigate(['dashboard']);
+          // Redirect user to component assign-stock-keepers
+          this.router.navigate(['assign-sk']);
         }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {

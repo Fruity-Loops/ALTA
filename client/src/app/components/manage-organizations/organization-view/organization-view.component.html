@@ -9,7 +9,7 @@
       </mat-error>
       <mat-label>Name:</mat-label>
       <mat-form-field appearance="outline" class="text-input">
-        <input matInput placeholder="Organization Name" [(ngModel)]="orgName" [disabled]="isEdit && !editOn"/>
+        <input matInput placeholder="Organization Name" [(ngModel)]="orgName" [disabled]="isEdit && !editOn" id="EditOrgName"/>
       </mat-form-field>
     </div>
     <div>
@@ -17,8 +17,8 @@
       <div *ngIf="isEdit" class="vertical-stack">
         <mat-label>Status</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <mat-select class="statusDropDown" id="active" [(value)]="isActive" [disabled]="isEdit && !editOn">
-            <mat-option *ngFor="let active of activeStates" [value]="active">
+          <mat-select class="statusDropDown" id="active" [(value)]="isActive" [disabled]="isEdit && !editOn" id="orgStatusDropDown">
+            <mat-option *ngFor="let active of activeStates" [value]="active" [id]="active">
               {{active}}
             </mat-option>
           </mat-select>
@@ -30,7 +30,7 @@
       <div class="vertical-stack">
         <mat-label>Location:</mat-label>
         <mat-form-field appearance="outline" class="text-input" *ngIf="!isEdit">
-          <input matInput placeholder="Montreal, QC" [(ngModel)]="location" [disabled]="isEdit && !editOn"/>
+          <input matInput placeholder="Montreal, QC" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
         </mat-form-field>
       </div>
       <div class="upload-button-spacer" *ngIf="!isEdit">
@@ -49,14 +49,14 @@
     <div class="center-aligned">
       <div class="button-side-by-side" *ngIf="editOn">
         <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button"
-                (click)="submitSave()">
+                (click)="submitSave()" id="saveEditOrganizationButton">
           SAVE</button><!-- if checks throws error then do not send data -->
       </div>
       <div class="button-side-by-side" *ngIf="editOn">
-        <button mat-stroked-button routerLink="/manage-organizations" class="footer-button">CANCEL</button>
+        <button mat-stroked-button routerLink="/manage-organizations" class="footer-button" id="cancelEditOrganizationButton">CANCEL</button>
       </div>
       <div class="button-side-by-side" *ngIf="!editOn">
-        <button mat-stroked-button class="footer-button" (click)="turnOnEdit()">EDIT</button>
+        <button mat-stroked-button class="footer-button" (click)="turnOnEdit()" id="editOrganizationButton">EDIT</button>
       </div>
     </div>
   </mat-card-footer>

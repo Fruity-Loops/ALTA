@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { AuditTemplateService } from '../../../../services/audit-template.service';
 import { ActivatedRoute } from '@angular/router';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
+import { Template } from '../../Template';
 
 
 @Component({
@@ -13,10 +13,9 @@ import {AuditTemplateViewComponent} from '../audit-template-view.component';
 export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
 
   id: any;
-  disabled: boolean;
+  disabled: boolean | undefined;
 
   constructor(
-    private router: Router,
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -45,11 +44,12 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     });
   }
 
-  formTemplate(temp): any {
+  formTemplate(temp: { [s: string]: unknown; } | ArrayLike<unknown>): any {
     const createdTemplate: any = {};
     Object.entries(temp).forEach(([key, value]) => {
-      if (typeof key === 'string' && typeof value === 'string'
+      if (typeof value === 'string'
         // checks to make sure that it is only adding keys from the template interface
+        // @ts-ignore
         && this.templateValues.hasOwnProperty(key)) {
         createdTemplate[key] = JSON.parse(value.replace(/'/g, '"')); // replace to fix crash on single quote
       }
@@ -57,7 +57,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     return createdTemplate;
   }
 
-  setComponentParameters(body): void {
+  setComponentParameters(body: false | Template): void {
     if (body) {
       this.disabled = true;
       this.template = body;
@@ -70,7 +70,8 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     this.disabled = false;
   }
 
-  submitQuery(body): void {
+  submitQuery(body: Template): void {
+    // @ts-ignore
     body.template_id = this.id;
     this.auditTemplateService.updateTemplate(this.id, body).subscribe(
       () => {

@@ -4,9 +4,10 @@
         "pk": 12731369.0,
         "fields": {
             "Location": "YYC",
-            "Plant": false,
+            "Plant": "False",
             "Zone": "B",
             "Aisle": 3.0,
+            "Bin": "A10",
             "Part_Number": "PART-4",
             "Part_Description": "Dummy Part 4",
             "Serial_Number": "SN-4",
@@ -25,9 +26,10 @@
         "pk": 12752842.0,
         "fields": {
             "Location": "YYC",
-            "Plant": true,
+            "Plant": "True",
             "Zone": "B",
             "Aisle": 1.0,
+            "Bin": "B2",
             "Part_Number": "PART-4",
             "Part_Description": "Dummy Part 4",
             "Serial_Number": "SN-4",
@@ -41,5 +43,5 @@
             "organization": null
         }
     }
-    ]
+]
     

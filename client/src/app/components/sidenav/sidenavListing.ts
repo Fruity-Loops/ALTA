@@ -1,5 +1,7 @@
 import {SideNavOption} from './sidenavOption';
 
+// TODO: settings is unused, should it be deleted?
+// @ts-ignore
 const settings: SideNavOption = {
   title: 'Settings',
   routerLink: 'settings',

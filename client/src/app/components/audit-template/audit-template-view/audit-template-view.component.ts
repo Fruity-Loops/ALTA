@@ -1,5 +1,3 @@
-import {Router} from '@angular/router';
-import {AuditTemplateService} from '../../../services/audit-template.service';
 import {Component, OnInit} from '@angular/core';
 import {Template} from '../Template';
 
@@ -9,7 +7,7 @@ import {Template} from '../Template';
 })
 export abstract class AuditTemplateViewComponent implements OnInit {
 
-  errorMessage: string;
+  errorMessage: string | undefined;
 
   template: Template = {
     location: [],
@@ -20,7 +18,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     part_number: [],
     serial_number: [],
   };
-  templateValues: Template;
+  templateValues: Template | undefined;
   title = '';
   description = '';
 
@@ -33,18 +31,27 @@ export abstract class AuditTemplateViewComponent implements OnInit {
 
   abstract initializeForm(): void;
 
-  addItem(term, value): void {
+  addItem(term: string | number, value: string): void {
+    console.log("hello");
+    console.log(term);
+    console.log(value);
+
     // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
+    // @ts-ignore
     if (value !== '' && !this.template[term].includes(value)) {
+      // @ts-ignore
       this.template[term].push(value);
+      // @ts-ignore
       this.templateValues[term] = '';
     }
   }
 
-  remove(term, value): void {
+  remove(term: string | number, value: any): void {
+    // @ts-ignore
     const index = this.template[term].indexOf(value);
 
     if (index >= 0) {
+      // @ts-ignore
       this.template[term].splice(index, 1);
     }
   }
@@ -63,6 +70,6 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     }
   }
 
-  abstract submitQuery(body): void;
+  abstract submitQuery(body: any): void;
 
 }
