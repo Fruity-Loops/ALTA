@@ -13,7 +13,7 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 export class AssignStockKeepersComponent implements OnInit {
-  skToAssign = [];
+  skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
@@ -29,19 +29,23 @@ export class AssignStockKeepersComponent implements OnInit {
               private dialog: MatDialog,
               private addAssignedSK: ManageAuditsService,
               private router: Router)
-  { }
+  {
 
-  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.busySKs = new Array<any>();
+
+  }
+
+  ngOnInit(): void {
 
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.params = this.params.append('status', 'Active');
 
     this.addAssignedSK.getBusySKs(this.params)
       .subscribe((response) => {
-        this.busySKs = response.map(obj => obj.assigned_sk).flat();
+        this.busySKs = response.map(( obj: any) => obj.assigned_sk).flat();
 
         this.manageMembersService.getAllClients()
           .subscribe((user) => {
@@ -50,13 +54,13 @@ export class AssignStockKeepersComponent implements OnInit {
     });
   }
 
-  populateTable(clients): void {
+  populateTable(clients: any): void {
     /* TODO: look into performance impact of:
     * 1. sending all an organization's users with a realistic amount of users
     * 2. how slow this can be to compute on the front-end
     */
 
-    clients.forEach(element => {
+    clients.forEach((element: any) => {
       if (element.role === 'SK') {
         const isBusy = this.busySKs.find(user => user === element.id);
         if (isBusy === undefined) {
@@ -81,7 +85,7 @@ export class AssignStockKeepersComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {
-      item.users.forEach(user => {
+      item.users.forEach( (user: User) => {
         this.dataSource.data.push(user);
       });
     });

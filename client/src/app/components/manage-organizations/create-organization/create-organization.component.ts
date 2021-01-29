@@ -9,19 +9,27 @@ import {Router} from '@angular/router';
 })
 export class CreateOrganizationComponent implements OnInit {
 
-  orgName = '';
-  location = '';
-  isEdit = false;
-  orgError = '';
+  orgName: string;
+  location: string;
+  isEdit: boolean;
+  organizationTitle: string;
+  orgError: string;
+
+  editOn: boolean
 
   constructor(
     private organizationService: ManageOrganizationsService,
     private router: Router
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.orgName = '';
     this.location = '';
+    this.orgError = '';
+    this.organizationTitle = 'Organization Creation';
+    this.isEdit = false;
+    this.editOn = true; // never changes
+  }
+
+  ngOnInit(): void {
   }
 
   submitSave(): void {

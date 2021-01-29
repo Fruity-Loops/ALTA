@@ -1,5 +1,6 @@
 import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
+
 import {AuthService} from '../../services/auth.service';
 import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
@@ -21,28 +22,10 @@ interface DialogData {
   styleUrls: ['./manage-organizations.component.scss'],
 })
 export class ManageOrganizationsComponent implements OnInit {
-  organizations = Array<Organization>();
-  selectedOrganization: any;
+  organizations = [];
+  selectedOrganization : Organization;
   errorMessage = '';
-  // TODO: if dead code, remove
   // orgEdit;
-
-  dataSource: MatTableDataSource<Organization>;
-  displayedColumns: string[] = ['1', 'Company_name', 'Activated_On', 'Status', 'Address', '2'];
-  filterTerm: string;
-  selected: string;
-
-  constructor(
-    private organizationsService: ManageOrganizationsService,
-    private authService: AuthService,
-    public dialog: MatDialog
-  ) {
-    this.selectedOrganization = {org_id: -1, org_name: '', status: ''};
-    this.dataSource = new MatTableDataSource<Organization>();
-    this.filterTerm = '';
-    this.selected = 'All';
-  }
-
   dataSource: MatTableDataSource<Organization>;
   displayedColumns: string[] = ['Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
@@ -50,20 +33,35 @@ export class ManageOrganizationsComponent implements OnInit {
 
   //@ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ts-ignore
+  //@ts-ignore
   @ViewChild(MatSort) sort: MatSort;
-  // @ts-ignore
+  //@ts-ignore
   @ViewChild('updateOrgDialog') updateOrgDialog: TemplateRef<any>;
-  // @ts-ignore
+  //@ts-ignore
   @ViewChild('createOrgDialog') createOrgDialog: TemplateRef<any>;
 
-  // @ts-ignore
+  //@ts-ignore
   @Input() isActive: string;
-  activeStates = [{status: 'active'}, {status: 'disabled'}];
+
+  activeStates = Array<any>();
+
+  constructor(
+    private organizationsService: ManageOrganizationsService,
+    private authService: AuthService,
+    public dialog: MatDialog
+  ) {
+    this.selectedOrganization = {org_id: -1, org_name: '', status: '', address: ''};
+    this.errorMessage = '';
+    this.activeStates = [{status: 'active'}, {status: 'disabled'}];
+    this.dataSource = new MatTableDataSource();
+    this.filterTerm = '';
+  }
+
+
+
 
   ngOnInit(): void {
     this.getAllOrganizations();
-    this.errorMessage = '';
   }
 
   getAllOrganizations(): void {
@@ -71,6 +69,7 @@ export class ManageOrganizationsComponent implements OnInit {
       (data) => {
         this.organizations = data;
         this.errorMessage = '';
+        //@ts-ignore
         this.dataSource = new MatTableDataSource(this.organizations);
       },
       (err) => {
@@ -79,7 +78,7 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  updateOrganization(organization): void {
+  updateOrganization(organization: Organization): void {
     this.organizationsService.updateOrganization(organization).subscribe(
       (data) => {
         this.getAllOrganizations();
@@ -96,10 +95,10 @@ export class ManageOrganizationsComponent implements OnInit {
     event.stopPropagation();
   }
 
-  openUpdateOrgDialog(organization: any): void {
+  openUpdateOrgDialog(organization: Organization): void {
     this.selectedOrganization = organization;
     this.isActive = organization.status ? 'active' : 'disabled';
-    // TODO: if dead code, remove
+    //Never used
     // const dialogRef = this.dialog.open(this.updateOrgDialog);
   }
 
@@ -107,7 +106,7 @@ export class ManageOrganizationsComponent implements OnInit {
     this.dialog.open(this.createOrgDialog);
   }
 
-  turnOnOrgMode(organization): void {
+  turnOnOrgMode(organization: Organization): void {
     this.authService.turnOnOrgMode({organization: organization.org_id, organization_name: organization.org_name}, true);
   }
 

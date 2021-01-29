@@ -1,6 +1,6 @@
 import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Connection with the backend
@@ -17,19 +17,19 @@ export class ManageAuditsService {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
-  assignSK(assignedSK, auditId): Observable<any> {
+  assignSK(assignedSK: object, auditId: Number): Observable<any> {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
 
-  getAuditData(auditId): Observable<any> {
+  getAuditData(auditId: Number): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
   }
 
-  getBusySKs(params): Observable<any> {
+  getBusySKs(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/`, {params});
   }
 
-  initiatePreAudit(preAuditData): Observable<any> {
+  initiatePreAudit(preAuditData: object): Observable<any> {
     return this.http.post(`${BASEURL}/item-to-sk/`, preAuditData);
   }
 }

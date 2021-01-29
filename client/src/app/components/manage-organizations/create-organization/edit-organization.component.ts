@@ -29,7 +29,13 @@ export class EditOrganizationComponent implements OnInit {
     private organizationService: ManageOrganizationsService,
     private activatedRoute: ActivatedRoute,
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.orgName = '';
+    this.location = '';
+    this.orgID = '';
+    this.orgError = '';
+    this.originalStatus = false;
+  }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(routeParams => {
@@ -51,7 +57,7 @@ export class EditOrganizationComponent implements OnInit {
 
     if (this.originalStatus && this.isActive === 'Disabled') {
       this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});
-      this.dialogRef.afterClosed().subscribe(result => {
+      this.dialogRef.afterClosed().subscribe((result: any) => {
         if (result) {
           this.updateOrganization();
         }
