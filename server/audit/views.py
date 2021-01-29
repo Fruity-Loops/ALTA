@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import IsSystemAdmin
 from .permissions import IsInventoryManagerAudit
@@ -72,4 +73,28 @@ class BinToSKViewSet(viewsets.ModelViewSet):
             self.queryset = self.queryset.filter(init_audit_id=init_audit_id)
 
         serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+
+    def get_audit_serializer(self, *args, **kwargs):
+        serializer_class = GetAuditSerializer
+        return serializer_class(*args, **kwargs)
+
+
+    @action(detail=False, methods=['GET'], name='Get Items In Bin')
+    def items(self, request):
+        bin_id = request.query_params.get('bin_id')
+        audit_id = request.query_params.get('audit_id')
+        bins = BinToSK.objects.filter(bin_id=bin_id)
+        ids = bins[0].item_ids
+        print(type(ids))
+        queryset = Audit.objects.filter(audit_id=audit_id)
+        #queryset = queryset.filter(inventory_items__in=ids)
+
+        # page = self.paginate_queryset(recent_users)
+        # if page is not None:
+        #     serializer = self.get_serializer(page, many=True)
+        #     return self.get_paginated_response(serializer.data)
+        print(queryset[0].inventory_items)
+        serializer = self.get_audit_serializer(queryset, many=True)
         return Response(serializer.data)

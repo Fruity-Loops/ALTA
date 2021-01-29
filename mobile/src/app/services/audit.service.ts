@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { errorHandler } from 'src/app/services/error-handler';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 const BASEURL = env.api_root;
 
@@ -39,21 +39,46 @@ export class AuditService {
     return this.getBinSKAudit(userID, auditID)
       .pipe(
         map(res => {
-          const bins = res.map(bin => bin.Bin);
-          return bins;
+          res.map(bin => bin.item_ids = JSON.parse(bin.item_ids));
+          return res;
         }),
       );
   }
 
-  getItems(auditID, userID, bin): Observable<any> {
-    return this.http.get(`${BASEURL}/audit/`,
-      {
-        params: {
-          audit_id: auditID,
-          assigned_sk: userID,
-          bin: bin,
-        }
-      })
+  getBin(userID, auditID, binID): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/`, {
+      params: {
+        customuser_id: userID,
+        init_audit_id: auditID,
+        bin_id: binID,
+      }
+    })
+      .pipe(catchError(errorHandler));
+  }
+
+  // getItems(userID, auditID, binID): Observable<any> {
+  //   return this.getBin(userID, auditID, binID)
+  //     .pipe(
+  //       mergeMap(bin =>
+  //         this.http.get(`${BASEURL}/bin-to-sk/`, {
+  //           params: {
+  //             customuser_id: userID,
+  //             bin_id: binID,
+  //             item_ids: bin.item_ids,
+  //           }
+  //         }).pipe(catchError(errorHandler))
+  //       )
+  //     )
+  // }
+
+  getItems(userID, auditID, binID){
+    return this.http.get(`${BASEURL}/bin-to-sk/items/`, {
+      params: {
+        customuser_id: userID,
+        audit_id: auditID,
+        bin_id: binID,
+      }
+    })
       .pipe(catchError(errorHandler));
   }
 }

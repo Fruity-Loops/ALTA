@@ -7,5 +7,6 @@ router.register(r'audit', views.AuditViewSet, basename='audit')
 router.register(r'bin-to-sk', views.BinToSKViewSet, basename='bin-to-sk')
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('bin-to-sk/', include(router.urls)),
 ]

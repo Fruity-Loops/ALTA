@@ -5,6 +5,7 @@ import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { fetchLoggedInUser } from 'src/app/services/cache';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-items',
@@ -18,8 +19,10 @@ export class ItemsPage implements OnInit, OnDestroy {
   isScanning: boolean;
   loggedInUser: any;
   currentSegment: string = 'items';
-  items: [];
+  items: any;
   completedItems : [];
+  auditID: string;
+  binID: string;
 
   constructor(
     private auditService: AuditService,
@@ -29,12 +32,14 @@ export class ItemsPage implements OnInit, OnDestroy {
     private cameraScanner: BarcodeScanner,
     private androidPermissions: AndroidPermissions,
     public platform: Platform,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.barcode = '';
   }
 
   ngOnInit() {
     this.setPermissions();
+    this.getSelectedBin()
     this.getItems();
     this.setExternalScanListener();
   }
@@ -52,14 +57,22 @@ export class ItemsPage implements OnInit, OnDestroy {
     }
   }
 
+  getSelectedBin() {
+    this.auditID = this.activatedRoute.snapshot.paramMap.get('audit_id');
+    this.binID = this.activatedRoute.snapshot.paramMap.get('bin_id');
+  }
+
   getItems() {
     fetchLoggedInUser().then(
       user => {
         if (user) {
           this.loggedInUser = user;
-          this.auditService.getAudits(user.user_id).subscribe(
+          this.auditService.getItems(user.user_id, this.auditID, this.binID).subscribe(
             res => {
               this.items = res;
+              console.log("DOG MEEt")
+              console.log(typeof this.items[0].inventory_items[0]);
+              console.log(JSON.stringify(res));
             });
         }
       });

@@ -21,7 +21,7 @@ const routes: Routes = [
         loadChildren: () => import('../pages/audits/bins/bins.module').then(m => m.BinsModule)
       },
       {
-        path: 'audits/:audit_id/:bin',
+        path: 'audits/:audit_id/:bin_id',
         loadChildren: () => import('../pages/audits/items/items.module').then(m => m.ItemsModule)
       },
       {
