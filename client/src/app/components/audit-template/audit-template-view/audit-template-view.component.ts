@@ -32,9 +32,6 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   abstract initializeForm(): void;
 
   addItem(term: string | number, value: string): void {
-    console.log("hello");
-    console.log(term);
-    console.log(value);
 
     // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
     // @ts-ignore
