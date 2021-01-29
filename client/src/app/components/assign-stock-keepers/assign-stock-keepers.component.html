@@ -49,6 +49,8 @@
 </mat-expansion-panel>
 
 <div class="bottom-buttons">
+      <button mat-stroked-button  id="goback" class="bottom-goback"
+              (click)="goBackIventory()">Go Back</button>
       <button mat-stroked-button  id="discard" class="bottom-discard"
               (click)="openDialogWithRef(discardDialog)">Discard</button>
       <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"

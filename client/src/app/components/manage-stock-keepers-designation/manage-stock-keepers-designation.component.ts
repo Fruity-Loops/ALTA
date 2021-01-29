@@ -157,6 +157,14 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     }, 1000); // Waiting 1 second before redirecting the user
   }
 
+  goBackAssignSK(): void {
+        //TODO: save data so when user goes back to previous page, previously selected info is kept
+        setTimeout(() => {
+          // Redirect user to component dashboard
+          this.router.navigate(['assign-sk']);
+        }, 1000); // Waiting 1 second before redirecting the user
+  }
+
   drop(event: CdkDragDrop<string[]>, testing: any): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

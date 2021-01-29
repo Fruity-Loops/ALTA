@@ -119,6 +119,14 @@ export class AssignStockKeepersComponent implements OnInit {
     );
   }
 
+  goBackIventory(): void {
+        //TODO: save data so when user goes back to previous page, previously selected info is kept
+        setTimeout(() => {
+          // Redirect user to component dashboard
+          this.router.navigate(['manage-items']);
+        }, 1000); // Waiting 1 second before redirecting the user
+  }
+
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }

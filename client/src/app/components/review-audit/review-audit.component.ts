@@ -45,8 +45,15 @@ export class ReviewAuditComponent implements OnInit {
   
   }
 
-  confirmReviewAuditData(): void{
+  goBackManageSK(): void {
+    //TODO: save data so when user goes back to previous page, previously selected info is kept
+    setTimeout(() => {
+      // Redirect user to component dashboard
+      this.router.navigate(['designate-sk']);
+    }, 1000); // Waiting 1 second before redirecting the user
+}
 
+  confirmReviewAuditData(): void{
     setTimeout(() => {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
@@ -56,6 +63,8 @@ export class ReviewAuditComponent implements OnInit {
     // Not a good idea to use this if this page is meant to be opned and referenced independently
     // (anytime after audit creation steps)
   }
+
+
 
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
