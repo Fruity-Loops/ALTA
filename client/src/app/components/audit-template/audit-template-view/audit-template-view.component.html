@@ -27,7 +27,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
                      placeholder="Location" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('location', templateValues.location)">
+              <button mat-icon-button matSuffix (click)="addItem('location', templateValues.location)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -38,7 +39,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
                      placeholder="Plant" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('plant', templateValues.plant)">
+              <button mat-icon-button matSuffix (click)="addItem('plant', templateValues.plant)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -49,7 +51,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
                      placeholder="Zones" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('zones', templateValues.zones)">
+              <button mat-icon-button matSuffix (click)="addItem('zones', templateValues.zones)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -60,7 +63,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
                      placeholder="Aisles" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('aisles', templateValues.aisles)">
+              <button mat-icon-button matSuffix (click)="addItem('aisles', templateValues.aisles)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -71,7 +75,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
                      placeholder="Bins" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('bins', templateValues.bins)">
+              <button mat-icon-button matSuffix (click)="addItem('bins', templateValues.bins)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -82,7 +87,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
                      placeholder="Part Number" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('part_number', templateValues.part_number)">
+              <button mat-icon-button matSuffix (click)="addItem('part_number', templateValues.part_number)"
+                      [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -94,7 +100,7 @@
               <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"
                      [(ngModel)]="templateValues.serial_number" placeholder="Serial Number" />
               <button mat-icon-button matSuffix
-                      (click)="addItem('serial_number', templateValues.serial_number)">
+                      (click)="addItem('serial_number', templateValues.serial_number)" [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
