@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnInit, Optional, TemplateRef} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/manage-organizations.service';
 
 import {AuthService} from '../../../services/auth.service';
@@ -7,15 +7,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {Organization} from '../../../models/organization';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-
-interface DialogData {
-  textInput: string;
-  placeholder: string;
-  title: string;
-  buttonDesc: string;
-}
-
+import {MatDialog} from '@angular/material/dialog';
 @Component({
   selector: 'app-manage-organizations',
   templateUrl: './manage-organizations.component.html',
@@ -109,18 +101,4 @@ export class ManageOrganizationsComponent implements OnInit {
   applyFilter(filterTerm: string): void {
     this.dataSource.filter = filterTerm;
   }
-}
-
-
-@Component({
-  selector: 'app-organization-dialog',
-  templateUrl: 'organization-dialog.html',
-})
-export class OrganizationDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<OrganizationDialogComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: DialogData) {
-  }
-
 }

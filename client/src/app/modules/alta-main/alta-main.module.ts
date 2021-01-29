@@ -13,7 +13,6 @@ import {AuthModule} from '../auth/auth.module';
 import {EmployeeListComponent} from 'src/app/components/employees/employee-list/employee-list.component';
 import {
   ManageOrganizationsComponent,
-  OrganizationDialogComponent,
 } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule } from '@angular/forms';
@@ -44,7 +43,6 @@ import {
     EmployeeListComponent,
     ManageOrganizationsComponent,
     EditEmployeeComponent,
-    OrganizationDialogComponent,
     ManageInventoryItemsComponent,
     CreateAuditTemplateComponent,
     DeleteTemplateDialogComponent,
