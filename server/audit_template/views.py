@@ -4,7 +4,8 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from user_account.permissions import IsSystemAdmin, HasSameOrgInQuery, HasSameOrgInBody, IsInventoryManager
+from user_account.permissions import IsSystemAdmin, HasSameOrgInQuery, HasSameOrgInBody, IsInventoryManager, \
+    get_general_permissions
 from .permissions import CheckTemplateOrganizationById
 from .serializers import AuditTemplateSerializer
 from .models import AuditTemplate
@@ -21,12 +22,7 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch', 'delete']
 
     def get_permissions(self):
-        if IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) \
-                and IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None):
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
-        else:
-            permission_classes = [IsAuthenticated, CheckTemplateOrganizationById,
-                                  HasSameOrgInQuery, HasSameOrgInBody, IsInventoryManager]
+        permission_classes = get_general_permissions(self.request, [CheckTemplateOrganizationById, HasSameOrgInQuery])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
