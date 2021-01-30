@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, \
-    UserHasSameOrg, HasSameOrgInQuery, get_general_permissions
+    UserHasSameOrg, HasSameOrgInQuery, PermissionFactory
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -134,14 +134,15 @@ class CustomUserView(viewsets.ModelViewSet):
     data = None
 
     def get_permissions(self):
+        factory = PermissionFactory(self.request)
         if self.action in ['create', 'retrieve', 'list']:
-            permission_classes = get_general_permissions(self.request, [
+            permission_classes = factory.get_general_permissions([
                 UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
         elif self.action in ['partial_update']:
-            permission_classes = get_general_permissions(self.request, [
+            permission_classes = factory.get_general_permissions([
                 IsHigherInOrganization, CanUpdateKeys])
         else:
-            permission_classes = get_general_permissions(self.request, [])
+            permission_classes = factory.get_general_permissions([])
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):

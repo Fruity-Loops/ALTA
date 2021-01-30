@@ -2,14 +2,23 @@ from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
 
 
-def get_general_permissions(request, get_im_perms):
-    if IsAuthenticated.has_permission(IsAuthenticated(), request, None) and \
-            IsSystemAdmin.has_permission(IsSystemAdmin(), request, None):
-        permission_classes = [IsAuthenticated, IsSystemAdmin]
-    else:
-        # concatenate lists
-        permission_classes = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody] + get_im_perms
-    return permission_classes
+class PermissionFactory:
+    def __init__(self, request):
+        self.baseIMPermissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
+        self.baseSAPermissions = [IsAuthenticated, IsSystemAdmin]
+        self.request = request
+
+    def validate_is_sa(self):
+        return IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
+                IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
+
+    def get_general_permissions(self, get_im_perms):
+        if self.validate_is_sa():
+            permission_classes = self.baseSAPermissions
+        else:
+            # concatenate lists
+            permission_classes = self.baseIMPermissions + get_im_perms
+        return permission_classes
 
 
 class IsSystemAdmin(BasePermission):

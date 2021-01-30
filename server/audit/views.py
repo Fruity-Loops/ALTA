@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from user_account.permissions import HasSameOrgInQuery, \
-    get_general_permissions
+    PermissionFactory
 from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
 from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from .models import Audit, ItemToSK
@@ -15,8 +15,9 @@ class AuditViewSet(viewsets.ModelViewSet):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
-        permission_classes = get_general_permissions(self.request, [CheckAuditOrganizationById,
-                                                                    HasSameOrgInQuery])
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckAuditOrganizationById, HasSameOrgInQuery])
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -45,7 +46,8 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     serializer_class = ItemToSKSerializer
 
     def get_permissions(self):
-        permission_classes = get_general_permissions(self.request, [
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
             CheckInitAuditData, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 

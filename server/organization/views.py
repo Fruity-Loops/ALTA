@@ -3,8 +3,7 @@ from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from inventory_item.updater import start_new_job
-from user_account.permissions import IsInventoryManager, IsSystemAdmin, HasSameOrgInBody, \
-    get_general_permissions
+from user_account.permissions import IsInventoryManager, IsSystemAdmin, HasSameOrgInBody, PermissionFactory
 
 from .serializers import OrganizationSerializer
 from .models import Organization
@@ -20,10 +19,11 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizationSerializer
 
     def get_permissions(self):
+        factory = PermissionFactory(self.request)
         if self.action in ['retrieve', 'update', 'partial_update']:
-            permission_classes = get_general_permissions(self.request, [ValidateOrgMatchesUser])
+            permission_classes = factory.get_general_permissions([ValidateOrgMatchesUser])
         else:
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
+            permission_classes = factory.baseSAPermissions
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
