@@ -65,12 +65,16 @@ def run_django_server(python_interpreter):
     time.sleep(5)
     kill_port()
     os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
-    os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
     os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
     os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
     os.system(
-        f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json '
+        f'{python_interpreter} manage.py loaddata ../script/performance_test/fixtures/organizations.json '
+        f'../script/performance_test/fixtures/users.json '
+        f'../script/performance_test/fixtures/items.json '
+        f'../script/performance_test/fixtures/audits.json '
+        f'../script/performance_test/fixtures/audit_templates.json '
         f'--settings django_server.test_settings')
+    print('fixtures are loaded')
     subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                      f'--settings django_server.test_settings', shell=True)
 
