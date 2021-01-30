@@ -113,7 +113,7 @@ export class AssignStockKeepersComponent implements OnInit {
         this.skToAssign = [];
         setTimeout(() => {
           // Redirect user to component dashboard
-          this.router.navigate(['designate-sk']);
+          this.router.navigate(['audits/assign-sk/designate-sk']);
         }, 1000); // Waiting 1 second before redirecting the user
       },
       (err) => {
