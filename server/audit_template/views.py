@@ -21,7 +21,8 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch', 'delete']
 
     def get_permissions(self):
-        permission_classes = get_general_permissions(self.request, [CheckTemplateOrganizationById, HasSameOrgInQuery])
+        permission_classes = get_general_permissions(self.request, [
+            CheckTemplateOrganizationById, HasSameOrgInQuery])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):

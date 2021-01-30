@@ -7,8 +7,8 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, UserHasSameOrg, \
-    HasSameOrgInQuery, get_general_permissions
+from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, \
+    UserHasSameOrg, HasSameOrgInQuery, get_general_permissions
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -135,10 +135,11 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'retrieve', 'list']:
-            permission_classes = get_general_permissions(self.request,
-                                                         [UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
+            permission_classes = get_general_permissions(self.request, [
+                UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
         elif self.action in ['partial_update']:
-            permission_classes = get_general_permissions(self.request, [IsHigherInOrganization, CanUpdateKeys])
+            permission_classes = get_general_permissions(self.request, [
+                IsHigherInOrganization, CanUpdateKeys])
         else:
             permission_classes = get_general_permissions(self.request, [])
         return [permission() for permission in permission_classes]
@@ -190,8 +191,9 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def list(self, request):
         """
-        It's important to be careful if this queryset is modified, as there are plenty of possibilities to list out
-        employees, and there may be a way to make it vulnerable if this is changed (although it shouldn't)
+        It's important to be careful if this queryset is modified, as there are plenty of
+        possibilities to list out employees, and there may be a way to make it vulnerable
+        if this is changed (although it shouldn't)
         """
         queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')) \
             .exclude(role='SA').exclude(id=request.user.id)

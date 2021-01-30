@@ -126,8 +126,7 @@ class CanUpdateKeys(BasePermission):
         keys = list(request.data.keys())
         if IsCurrentUserTargetUser.has_permission(self, request, view):
             return check_keys(['id', 'email'], keys)
-        else:
-            return check_keys(['id', 'email', 'password'], keys)
+        return check_keys(['id', 'email', 'password'], keys)
 
 
 def check_keys(bad_keys, keys):

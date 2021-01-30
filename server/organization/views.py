@@ -3,7 +3,8 @@ from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from inventory_item.updater import start_new_job
-from user_account.permissions import IsInventoryManager, IsSystemAdmin, HasSameOrgInBody, get_general_permissions
+from user_account.permissions import IsInventoryManager, IsSystemAdmin, HasSameOrgInBody, \
+    get_general_permissions
 
 from .serializers import OrganizationSerializer
 from .models import Organization
@@ -39,7 +40,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     the Inventory Data is refreshed
     """
 
-    # Note: if ever other methods are added here, keep in mind that the permissions will need to change
+    # Note: if other methods are added here, keep in mind that the permissions will need to change
     permission_classes = [IsAuthenticated, IsSystemAdmin | (IsInventoryManager, HasSameOrgInBody)]
 
     def post(self, request):

@@ -15,7 +15,8 @@ class AuditViewSet(viewsets.ModelViewSet):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
-        permission_classes = get_general_permissions(self.request, [CheckAuditOrganizationById, HasSameOrgInQuery])
+        permission_classes = get_general_permissions(self.request, [CheckAuditOrganizationById,
+                                                                    HasSameOrgInQuery])
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -44,8 +45,8 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     serializer_class = ItemToSKSerializer
 
     def get_permissions(self):
-        permission_classes = get_general_permissions(self.request, [CheckInitAuditData, HasSameOrgInQuery,
-                                                     ValidateSKOfSameOrg])
+        permission_classes = get_general_permissions(self.request, [
+            CheckInitAuditData, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):

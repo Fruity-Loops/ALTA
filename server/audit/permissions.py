@@ -34,3 +34,4 @@ class ValidateSKOfSameOrg(BasePermission):
         if 'customuser' in request.data:
             user = CustomUser.objects.get(id=request.data['customuser'])
             return user.organization_id == request.user.organization_id
+        return True
