@@ -10,30 +10,29 @@ import {SideNavComponent} from 'src/app/components/sidenav/sidenav.component';
 import {MatModule} from '../material/material-module';
 import {ToolbarComponent} from 'src/app/components/toolbar/toolbar.component';
 import {AuthModule} from '../auth/auth.module';
-import {ClientGridviewComponent} from 'src/app/components/client-gridview/client-gridview.component';
+import {EmployeeListComponent} from 'src/app/components/employees/employee-list/employee-list.component';
 import {
   ManageOrganizationsComponent,
-  OrganizationDialogComponent,
-} from 'src/app/components/manage-organizations/manage-organizations.component';
+} from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { FormsModule } from '@angular/forms';
-import { EmployeeSettingsComponent } from '../../components/employee-settings/employee-settings.component';
+import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
-import { CreateAuditTemplateComponent } from '../../components/audit-template/create-audit-template/create-audit-template.component';
-import { EditAuditTemplateComponent } from '../../components/audit-template/edit-audit-template/edit-audit-template.component';
-import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../components/audit-template/audit-template.component';
+import { CreateAuditTemplateComponent } from '../../components/audit-template/audit-template-view/create-audit-template/create-audit-template.component';
+import { EditAuditTemplateComponent } from '../../components/audit-template/audit-template-view/edit-audit-template/edit-audit-template.component';
+import { AuditTemplateComponent, DeleteTemplateDialogComponent } from '../../components/audit-template/audit-template-list/audit-template.component';
 import { AssignStockKeepersComponent } from '../../components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from '../../components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MAT_DATE_LOCALE, MatChipsModule, MatDatepickerModule, MatNativeDateModule, MatSortModule} from '@angular/material';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {CreateOrganizationComponent} from '../../components/manage-organizations/create-organization/create-organization.component';
+import {CreateOrganizationComponent} from '../../components/manage-organizations/organization-view/create-organization/create-organization.component';
 import {
   DisableOrganizationDialogComponent,
   EditOrganizationComponent
-} from '../../components/manage-organizations/create-organization/edit-organization.component';
+} from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 
 @NgModule({
   declarations: [
@@ -41,10 +40,9 @@ import {
     ToolbarComponent,
     DashboardComponent,
     SideNavComponent,
-    ClientGridviewComponent,
+    EmployeeListComponent,
     ManageOrganizationsComponent,
-    EmployeeSettingsComponent,
-    OrganizationDialogComponent,
+    EditEmployeeComponent,
     ManageInventoryItemsComponent,
     CreateAuditTemplateComponent,
     DeleteTemplateDialogComponent,
