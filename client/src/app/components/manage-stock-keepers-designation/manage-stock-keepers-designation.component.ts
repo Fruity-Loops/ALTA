@@ -17,6 +17,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
+  auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
@@ -31,8 +32,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   ngOnInit(): void {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
+    this.auditID = Number(localStorage.getItem('audit_id'));
 
-    this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
+    this.manageAuditsService.getAuditData(this.auditID)
     .subscribe((auditData) => {
       this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
     });
@@ -129,7 +131,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
                   const holdIds = holdItemsOfBins.map(item => item._id);
                   holdBodyPreAuditData.push(
                   {
-                    init_audit: Number(localStorage.getItem('audit_id')),
+                    init_audit: this.auditID,
                     customuser: auditComp.sk_id,
                     bins: auditComp.bins,
                     item_ids: holdIds

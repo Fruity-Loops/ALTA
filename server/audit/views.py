@@ -35,7 +35,7 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'get']
+    http_method_names = ['post', 'get', 'patch']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
     permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]

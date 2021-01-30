@@ -1,13 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-import { User } from 'src/app/models/user.model';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-review-audit',
@@ -16,33 +10,78 @@ import { Router } from '@angular/router';
 })
 export class ReviewAuditComponent implements OnInit {
   // skAssigned = [];
-   dataSource: MatTableDataSource<User>;
-   displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Aisle', 'Nb_Parts', 
-   'Part_Description', 'Initiator', 'InitiationDate'];
-  // locationsAndUsers: Array<any>;
+  dataSource;
+  displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Nb_Parts', 'Initiator', 'InitiationDate'];
+  locationsAndUsers: Array<any>;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
 
- constructor(private manageMembersService: ManageMembersService,
-              private dialog: MatDialog,
-              private manageAuditsService: ManageAuditsService,
-              private router: Router)
-  { }
+  constructor(
+    private dialog: MatDialog,
+    private manageAuditsService: ManageAuditsService,
+    private router: Router) { }
 
   ngOnInit(): void {
+    console.log(this.dataSource)
+    this.getTableData();
+  }
+
+  getTableData() {
+    let assigned_sks;
+
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
-    .subscribe((auditData) => {
-      console.log(auditData.inventory_items)
-      console.log(auditData.assigned_sk)
+      .subscribe((auditData) => {
+        assigned_sks = auditData.assigned_sk;
+
+        this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
+          .subscribe((itemSKData) => {
+            assigned_sks.forEach(sk => {
+              itemSKData.forEach(itemSK => {
+                if (sk.id == itemSK.customuser) {
+                  itemSK.location = sk.location
+                }
+              });
+            });
+            this.buildTable(itemSKData, assigned_sks);
+          });
+      });
+  }
+
+  buildTable(itemSKData, sks) {
+    const table = [];
+    const locations = []
+
+    sks.forEach(item => {
+      locations.push({ location: item.location });
     });
 
-    this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
-    .subscribe((auditData) => {
-      console.log(auditData)
+    this.locationsAndUsers = locations;
+
+    itemSKData.forEach(sk => {
+      table.push(
+        {
+          name: this.getSKName(sks, sk.customuser),
+          bins: sk.bins,
+          numberOfParts: JSON.parse(sk.item_ids).length,
+          initiatedBy: 'N/A',
+          date: 'N/A',
+          location: sk.location,
+        }
+      );
     });
-  
+    this.dataSource = table;
+  }
+
+  getSKName(sks, id) {
+    let name;
+    sks.forEach(sk => {
+      if (sk.id == id) {
+        name = sk.first_name + " " + sk.last_name;
+      }
+    });
+    return name;
   }
 
   goBackManageSK(): void {
@@ -51,17 +90,15 @@ export class ReviewAuditComponent implements OnInit {
       // Redirect user to component dashboard
       this.router.navigate(['designate-sk']);
     }, 1000); // Waiting 1 second before redirecting the user
-}
+  }
 
-  confirmReviewAuditData(): void{
+  confirmReviewAuditData(): void {
     setTimeout(() => {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
 
-    localStorage.removeItem('audit_id'); // Removing audit_id from localstorage
-    // Not a good idea to use this if this page is meant to be opned and referenced independently
-    // (anytime after audit creation steps)
+    localStorage.removeItem('audit_id'); 
   }
 
 
@@ -69,7 +106,7 @@ export class ReviewAuditComponent implements OnInit {
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }
-  
+
   closeDialog(): void {
     this.dialog.closeAll();
   }

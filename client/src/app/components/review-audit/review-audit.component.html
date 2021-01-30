@@ -7,65 +7,52 @@
 </mat-card>
 <br>
 
-<mat-expansion-panel class="mat-expand"
-                     [expanded]="allExpandState" >
+<mat-expansion-panel *ngFor="let item of locationsAndUsers;" class="mat-expand" [expanded]="allExpandState">
   <mat-expansion-panel-header>
     <mat-card-header>
-      <mat-card-title class="location-title" >Location 1</mat-card-title>
+      <mat-card-title class="location-title">{{item.location}}</mat-card-title>
     </mat-card-header>
   </mat-expansion-panel-header>
-  <mat-divider></mat-divider><br>
 
-	<table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="Stock_Keeper">
-        <th mat-header-cell *matHeaderCellDef>Stock Keeper</th>
-        <td mat-cell *matCellDef="let row">Stock Keeper's name</td>
-      </ng-container>
+    <ng-container matColumnDef="Stock_Keeper">
+      <th mat-header-cell *matHeaderCellDef>Stock Keeper</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="Bins">
-        <th mat-header-cell *matHeaderCellDef>Bins</th>
-        <td mat-cell *matCellDef="let row">Bin</td>
-      </ng-container>
+    <ng-container matColumnDef="Bins">
+      <th mat-header-cell *matHeaderCellDef>Bins</th>
+      <td mat-cell *matCellDef="let row">{{ row.bins }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="Aisle">
-        <th mat-header-cell *matHeaderCellDef>Aisles</th>
-        <td mat-cell *matCellDef="let row">Aisle</td>
-      </ng-container>
 
-      <ng-container matColumnDef="Nb_Parts">
-        <th mat-header-cell *matHeaderCellDef>Number of Parts</th>
-        <td mat-cell *matCellDef="let row">Number</td>
-      </ng-container>
+    <ng-container matColumnDef="Nb_Parts">
+      <th mat-header-cell *matHeaderCellDef>Number of Parts</th>
+      <td mat-cell *matCellDef="let row">{{ row.numberOfParts }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="Part_Description">
-        <th mat-header-cell *matHeaderCellDef>Part Description</th>
-        <td mat-cell *matCellDef="let row">Description</td>
-      </ng-container>
+    <ng-container matColumnDef="Initiator">
+      <th mat-header-cell *matHeaderCellDef>Initiated by</th>
+      <td mat-cell *matCellDef="let row">{{ row.initiatedBy }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="Initiator">
-        <th mat-header-cell *matHeaderCellDef>Initiated by</th>
-        <td mat-cell *matCellDef="let row">Name of initiator</td>
-      </ng-container>
+    <ng-container matColumnDef="InitiationDate">
+      <th mat-header-cell *matHeaderCellDef>Initiated on</th>
+      <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+    </ng-container>
 
-      <ng-container matColumnDef="InitiationDate">
-        <th mat-header-cell *matHeaderCellDef>Initiated on</th>
-        <td mat-cell *matCellDef="let row">Date</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="item.location !== row.location"></tr>
-    </table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [hidden]="item.location !== row.location"></tr>
+  </table>
 
 </mat-expansion-panel>
 
 <div class="bottom-buttons">
-    <button mat-stroked-button  id="goback" class="bottom-goback"
-      (click)="goBackManageSK()">Go Back</button>
+  <button mat-stroked-button id="goback" class="bottom-goback" (click)="goBackManageSK()">Go Back</button>
   <button mat-stroked-button id="discard" class="bottom-discard"
     (click)="openDialogWithRef(discardDialog)">Discard</button>
-  <button mat-stroked-button id="confirm" class="bottom-confirm" 
-    (click)="confirmReviewAuditData()">Confirm</button>
+  <button mat-stroked-button id="confirm" class="bottom-confirm" (click)="confirmReviewAuditData()">Confirm</button>
 </div>
 
 <ng-template #discardDialog>
