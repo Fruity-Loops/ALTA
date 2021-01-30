@@ -28,7 +28,7 @@ export class ReviewAuditComponent implements OnInit {
     this.getTableData();
   }
 
-  getTableData(): void  {
+  getTableData(): void {
     let assignedSks;
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
@@ -49,7 +49,7 @@ export class ReviewAuditComponent implements OnInit {
       });
   }
 
-  buildTable(itemSKData, sks): void  {
+  buildTable(itemSKData, sks): void {
     const table = [];
     const locations = [];
 
@@ -74,7 +74,7 @@ export class ReviewAuditComponent implements OnInit {
     this.dataSource = table;
   }
 
-  getSKName(sks, id): void  {
+  getSKName(sks, id): void {
     let name;
     sks.forEach(sk => {
       if (sk.id === id) {
@@ -97,10 +97,8 @@ export class ReviewAuditComponent implements OnInit {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
-    localStorage.removeItem('audit_id'); 
+    localStorage.removeItem('audit_id');
   }
-
-
 
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
