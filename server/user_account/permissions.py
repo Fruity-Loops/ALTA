@@ -112,10 +112,14 @@ class IsHigherInOrganization(BasePermission):
         """
         current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
         if request.method == 'POST':  # On create of a user
-            target_user_role = request.data['role']
-        else:
+            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
+        elif 'pk' in view.kwargs:
             target_user_role = IsHigherInOrganization.user_roles.index(
                 CustomUser.objects.get(id=view.kwargs['pk']).role)
+        elif 'role' in request.data:
+            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
+        else:
+            return True
         return current_user_role <= target_user_role
 
 
