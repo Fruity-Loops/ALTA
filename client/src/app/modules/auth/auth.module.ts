@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {GreetingComponent} from '../../components/greeting/greeting.component';
 import {LoginComponent} from 'src/app/components/login/login.component';
-import {CreateMemberComponent} from 'src/app/components/create-member/create-member.component';
+import {CreateEmployeeComponent} from 'src/app/components/employees/employee-view/create-employee/create-employee.component';
 import {AuthService} from 'src/app/services/auth.service';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
@@ -11,7 +11,7 @@ import {MatModule} from '../material/material-module';
 import {FlexModule} from '@angular/flex-layout';
 
 @NgModule({
-  declarations: [GreetingComponent, LoginComponent, CreateMemberComponent],
+  declarations: [GreetingComponent, LoginComponent, CreateEmployeeComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -21,7 +21,7 @@ import {FlexModule} from '@angular/flex-layout';
     MatModule,
     FlexModule,
   ],
-  exports: [GreetingComponent, LoginComponent, CreateMemberComponent],
+  exports: [GreetingComponent, LoginComponent, CreateEmployeeComponent],
   providers: [AuthService],
 })
 export class AuthModule {
