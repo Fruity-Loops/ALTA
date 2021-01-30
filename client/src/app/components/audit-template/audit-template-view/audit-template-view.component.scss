@@ -1,0 +1,78 @@
+@import "../../../../theme";
+
+.mat-form-field {
+  width: 100%;
+}
+
+.icon-color {
+  color: map-get($alta-primary, A100);
+}
+
+.mat-stroked-button {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+  width: 120px;
+}
+
+.save-button-bg {
+  background: map-get($alta-primary, A50) !important;
+}
+
+.icon-padding-add {
+  padding-top: 30px;
+}
+
+.icon-padding-remove {
+  padding-top: 10px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  border-right: 1px solid #E0E0E0;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.no-border {
+  border-style: none;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.button-side-by-side {
+  display: inline-block;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.center-aligned {
+  text-align: center;
+}
+
+div.column.no-border > mat-card-title {
+  text-align: center !important;
+}
+
+mat-label {
+  color: map-get($alta-primary, A800);
+  font-size: 115%;
+}
