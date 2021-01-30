@@ -7,8 +7,8 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdateKeys, IsHigherInOrganization, \
-    HasSameOrgInBody, UserHasSameOrg, HasSameOrgInQuery, get_general_permissions
+from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, UserHasSameOrg, \
+    HasSameOrgInQuery, get_general_permissions
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 

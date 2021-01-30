@@ -4,8 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from user_account.permissions import IsSystemAdmin, HasSameOrgInQuery, HasSameOrgInBody, IsInventoryManager, \
-    get_general_permissions
+from user_account.permissions import IsSystemAdmin, HasSameOrgInQuery, get_general_permissions
 from .permissions import CheckTemplateOrganizationById
 from .serializers import AuditTemplateSerializer
 from .models import AuditTemplate
