@@ -5,12 +5,9 @@ from organization.models import Organization
 from user_account.models import CustomUser
 from inventory_item.models import Item
 from .models import Audit
-from django.forms.models import model_to_dict
-import json
 
 
 class AuditTestCase(APITestCase):
-
     fixtures = ["items.json", "users.json", "organizations.json", "audits.json"]
 
     def setUp(self):
@@ -28,7 +25,7 @@ class AuditTestCase(APITestCase):
         self.item_one = Item.objects.get(_id=12731369.0)
         self.item_two = Item.objects.get(_id=12752842.0)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one._id, self.item_two._id) #check if this was there before
+        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
 
     def test_audit_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """

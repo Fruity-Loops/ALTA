@@ -47,6 +47,7 @@ class LoginView(generics.GenericAPIView):
     """
     Authenticate a System Admin.
     """
+
     # serializer_class = CustomUserSerializer
 
     def get_serializer(self, *args, **kwargs):
@@ -66,7 +67,7 @@ class LoginView(generics.GenericAPIView):
         org_id = ""
         org_name = ""
         response = Response({"detail": "Login Failed"},
-                                status=status.HTTP_401_UNAUTHORIZED)
+                            status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             user = CustomUser.objects.get(email=email)
@@ -101,8 +102,8 @@ class LoginMobileView(generics.GenericAPIView):
     serializer_class = CustomUserSerializer
 
     def post(self, request):
-        pass # TODO: Implement mobile specific endpoint
-             # Should be implemented when different options to password auth are determined
+        pass  # TODO: Implement mobile specific endpoint
+        # Should be implemented when different options to password auth are determined
 
 
 class LogoutView(generics.GenericAPIView):
@@ -184,20 +185,24 @@ class CustomUserView(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
         if user.organization is None:
             data = {'user': user.user_name, 'organization': '',
-                            'token': auth_content['auth']}
+                    'token': auth_content['auth']}
         else:
             data = {'user': user.user_name, 'organization': user.organization.org_id,
-                        'token': auth_content['auth']}
+                    'token': auth_content['auth']}
 
         return Response(data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
+        """
+        It's important to be careful if this queryset is modified, as there are plenty of possibilities to list out
+        employees, and there may be a way to make it vulnerable if this is changed (although it shouldn't)
+        """
         queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')) \
             .exclude(role='SA').exclude(id=request.user.id)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
+    def update(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         self.data = dict(self.request.data)
@@ -210,7 +215,7 @@ class CustomUserView(viewsets.ModelViewSet):
         if getattr(instance, '_prefetched_objects_cache', None):
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {} # pylint: disable=protected-access
+            instance._prefetched_objects_cache = {}  # pylint: disable=protected-access
 
         return Response(serializer.data)
 
@@ -225,7 +230,7 @@ class AccessMembers(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
         serializer_class.Meta.fields = ['user_name', 'first_name', 'last_name', 'email',
-                  'role', 'location', 'is_active', 'id']
+                                        'role', 'location', 'is_active', 'id']
         return serializer_class(*args, **kwargs)
 
     def get_queryset(self):
