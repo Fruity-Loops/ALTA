@@ -103,17 +103,22 @@ class AuditTestCase(APITestCase):
         """ Create ItemToSK designation as inventory manager """
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
+        request_body = {"init_audit": 1,
+                        "customuser": 5,
+                        "item_ids": [12752842],
+                        "bins": ['A10']}
 
-        response = self.client.post("/item-to-sk/",
-                                    {"init_audit": 1,
-                                     "customuser": 5,
-                                     "item_ids": [12752842],
-                                     "bins": ['A10']}, format="json")
+        response = self.client.post("/item-to-sk/", request_body, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
         self.assertEqual(response.data['success'], "success")
+
+        # Now testing with a user from a different organization
+        request_body['customuser'] = 6
+        new_response = self.client.post("/item-to-sk/", request_body, format='json')
+        self.assertEqual(new_response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_item_to_sk_designation_bad_org(self):
         """ Try to create ItemToSK designation as inventory manager from another organization """
