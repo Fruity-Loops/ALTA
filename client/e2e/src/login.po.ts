@@ -1,11 +1,11 @@
-import { browser, ElementFinder, by, element, ExpectedConditions } from 'protractor';
+import { browser, ExpectedConditions } from 'protractor';
 import { GreetingPage } from './greeting.po';
 import { SideNav } from './side_nav.po';
 
 export class Login{
     greetingPage: GreetingPage = new GreetingPage();
 
-    login_as(email, isAdmin): void {
+    login_as(email: string, isAdmin: boolean): void {
         this.greetingPage.navigateTo();
         this.greetingPage.getEmailInputField().sendKeys(email);
         this.greetingPage.getPasswordInputField().sendKeys('password');

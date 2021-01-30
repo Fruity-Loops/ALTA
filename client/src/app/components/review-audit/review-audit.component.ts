@@ -1,5 +1,6 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
@@ -9,8 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./review-audit.component.scss']
 })
 export class ReviewAuditComponent implements OnInit {
-  // skAssigned = [];
-  dataSource;
+  dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Nb_Parts', 'Initiator', 'InitiationDate'];
   locationsAndUsers: Array<any>;
 
@@ -21,24 +21,26 @@ export class ReviewAuditComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
-    private router: Router) { }
+    private router: Router) {
+    this.dataSource = new MatTableDataSource<any>();
+    this.locationsAndUsers = [];
+  }
 
   ngOnInit(): void {
-    console.log(this.dataSource);
+
     this.getTableData();
   }
 
   getTableData(): void {
-    let assignedSks;
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
       .subscribe((auditData) => {
-        assignedSks = auditData.assigned_sk;
+        const assignedSks = auditData.assigned_sk;
 
         this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
           .subscribe((itemSKData) => {
-            assignedSks.forEach(sk => {
-              itemSKData.forEach(itemSK => {
+            assignedSks.forEach((sk: any) => {
+              itemSKData.forEach((itemSK: any) => {
                 if (sk.id === itemSK.customuser) {
                   itemSK.location = sk.location;
                 }
@@ -49,17 +51,17 @@ export class ReviewAuditComponent implements OnInit {
       });
   }
 
-  buildTable(itemSKData, sks): void {
-    const table = [];
-    const locations = [];
+  buildTable(itemSKData: any, sks: any): void{
+    const table: any[] = [];
+    const locations: any[] = [];
 
-    sks.forEach(item => {
+    sks.forEach((item: any) => {
       locations.push({ location: item.location });
     });
 
     this.locationsAndUsers = locations;
 
-    itemSKData.forEach(sk => {
+    itemSKData.forEach((sk: any) => {
       table.push(
         {
           name: this.getSKName(sks, sk.customuser),
@@ -71,17 +73,16 @@ export class ReviewAuditComponent implements OnInit {
         }
       );
     });
-    this.dataSource = table;
+    this.dataSource = new MatTableDataSource(table);
   }
 
-  getSKName(sks, id): void {
-    let name;
-    sks.forEach(sk => {
+  getSKName(sks: any, id: any): string {
+    for (const sk of sks) {
       if (sk.id === id) {
-        name = sk.first_name + ' ' + sk.last_name;
+        return sk.first_name + ' ' + sk.last_name;
       }
-    });
-    return name;
+    }
+    return 'N/A';
   }
 
   goBackManageSK(): void {
@@ -97,6 +98,7 @@ export class ReviewAuditComponent implements OnInit {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
+
     localStorage.removeItem('audit_id');
   }
 

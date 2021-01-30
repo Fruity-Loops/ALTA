@@ -15,7 +15,7 @@ describe('AT-1.4: System administrator can create employees accounts within an o
   const createMembersPage: CreateMembersPage = new CreateMembersPage();
   const organizationPage: OrganizationPage = new OrganizationPage();
   const nav: Navigation = new Navigation();
-  const useableOrganization = 'test';
+  // const useableOrganization = 'test';
 
   /**
    * Login as a System Admin

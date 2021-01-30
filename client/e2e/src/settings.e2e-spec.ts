@@ -1,5 +1,8 @@
 import { Navigation } from './navigation.po';
 import { browser, ExpectedConditions } from 'protractor';
+
+// File doesn't exist? Consider removing this import
+// @ts-ignore
 import { SettingsPage } from './settings.po';
 
 

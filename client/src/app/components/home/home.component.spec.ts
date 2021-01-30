@@ -1,9 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {By} from '@angular/platform-browser';
 import {TokenService} from 'src/app/services/token.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
-
 import {HomeComponent} from './home.component';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -12,6 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
+  // @ts-ignore
   let tokenService: TokenService;
   let sidenavService: SidenavService;
 

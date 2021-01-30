@@ -10,7 +10,7 @@ export class TokenService {
   }
 
   // We set the token when we signup or login
-  SetToken(token): void {
+  SetToken(token: string): void {
     this.cookieService.set('token', token);
   }
 

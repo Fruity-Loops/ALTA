@@ -7,6 +7,7 @@ import { ManageAuditsService } from './manage-audits.service';
 
 describe('ManageAuditsService', () => {
   let service: ManageAuditsService;
+  // @ts-ignore
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
