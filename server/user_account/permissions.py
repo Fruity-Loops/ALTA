@@ -50,31 +50,37 @@ class IsInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(email=request.user)
-        correct_organization = [None, None, None]
-        if request.GET.get("organization", None) is not None:
-            correct_organization[0] = get_self_org_query(user, request)
-        if request.data.get("organization", None) is not None:
-            correct_organization[1] = get_self_org_body(user, request)
-        if request.parser_context['kwargs'] is not None and 'pk'\
-                in request.parser_context['kwargs']:
-            correct_organization[2] = get_self_org(user, request)
+        return user.role in ['IM']
 
-        for found_false in correct_organization:
-            if found_false is not None and not found_false:
-                return False
 
-        # Used to ensure only the requests accounted for are being made
-        sent_proper_organization = False
-        for found_true in correct_organization:
-            if found_true:
-                sent_proper_organization = True
+class HasSameOrgInQuery(BasePermission):
+    message = "You must query the same organization as yours"
 
-        if not sent_proper_organization:
-            return False
+    def has_permission(self, request, view):
+        org_id = request.GET.get("organization", None)
+        user = request.user
+        if org_id is not None:
+            return str(user.organization_id) == request.GET.get("organization", '')
+        return True
 
-        if user.role in ['IM']:
-            return True
-        return False
+
+class HasSameOrgInBody(BasePermission):
+    message = "You organization that you are referring in the body of your request must match yours"
+
+    def has_permission(self, request, view):
+        if 'organization' in request.data:
+            return request.user.organization_id == request.data['organization']
+        return True
+
+
+class UserHasSameOrg(BasePermission):
+    message = "The user you are trying to access must be of the same organization as you"
+
+    def has_permission(self, request, view):
+        if 'pk' in request.parser_context['kwargs']:
+            other_user = CustomUser.objects.get(id=request.parser_context['kwargs']['pk'])
+            return request.user.organization_id == other_user.organization_id
+        return True
 
 
 class IsCurrentUserTargetUser(BasePermission):

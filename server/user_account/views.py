@@ -7,7 +7,8 @@ from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdateKeys, IsHigherInOrganization
+from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdateKeys, IsHigherInOrganization, \
+    HasSameOrgInBody, UserHasSameOrg, HasSameOrgInQuery
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -133,7 +134,12 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'retrieve', 'list']:
-            permission_classes = [IsAuthenticated, (IsSystemAdmin | IsInventoryManager)]
+            if IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
+                    IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None):
+                permission_classes = [IsAuthenticated, IsSystemAdmin]
+            else:
+                permission_classes = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody,
+                                      UserHasSameOrg, HasSameOrgInQuery, IsHigherInOrganization]
         elif self.action in ['partial_update']:
             permission_classes = [IsAuthenticated, IsHigherInOrganization, CanUpdateKeys]
         else:
