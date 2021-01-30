@@ -104,6 +104,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
         this.title = temp.title;
         this.description = temp.description;
         this.id = temp.template_id;
+        // TODO take scheduling into consideration when editing.
       });
     });
   }
@@ -183,20 +184,6 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     this.recurrenceMonth.subCheckBox[0].checked = true;
     this.errorMessageCheckboxDay = ' ';
     this.errorMessageCheckboxMonth = ' ';
-  }
-
-  updateAllCheckbox(type: string): void {
-    if (type === 'dayCheckbox') {
-      this.allDaysChecked =
-        this.recurrenceDay.subCheckBox != null &&
-        this.recurrenceDay.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxDay = ' ';
-    } else if (type === 'monthCheckbox') {
-      this.allMonthsChecked =
-        this.recurrenceMonth.subCheckBox != null &&
-        this.recurrenceMonth.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxMonth = ' ';
-    }
   }
 
   // @ts-ignore
