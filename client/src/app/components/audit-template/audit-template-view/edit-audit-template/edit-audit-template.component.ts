@@ -3,7 +3,19 @@ import { AuditTemplateService } from '../../../../services/audit-template.servic
 import { ActivatedRoute } from '@angular/router';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 import { Template } from '../../Template';
+import timeZones from '../create-audit-template/timezone.json';
 
+interface DaysCheckBox {
+  name: string;
+  checked: boolean;
+  subCheckBox?: DaysCheckBox[];
+}
+
+interface MonthsCheckBox {
+  name: string;
+  checked: boolean;
+  subCheckBox?: MonthsCheckBox[];
+}
 
 @Component({
   selector: 'app-edit-audit-template',
@@ -22,6 +34,53 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     super();
   }
 
+  errorMessage: string | undefined;
+  errorMessageCheckboxDay: string | undefined;
+  errorMessageCheckboxMonth: string | undefined;
+  startDate = new Date();
+  startTime = '00:00:00';
+  allDaysChecked = false;
+  allMonthsChecked = false;
+  panelOpenState = false;
+  isRecurrenceChosen = false;
+  repeatEvery = '1';
+  timeZone = timeZones;
+  timeZoneUTC = timeZones[15].utc[0];
+  selectedTimeZone = timeZones[15];
+  dayArray = [];
+  monthArray = [];
+  recurrenceDay: DaysCheckBox = {
+    name: 'All',
+    checked: false,
+    subCheckBox: [
+      { name: 'Sun', checked: true },
+      { name: 'Mon', checked: false },
+      { name: 'Tue', checked: false },
+      { name: 'Wed', checked: false },
+      { name: 'Thu', checked: false },
+      { name: 'Fri', checked: false },
+      { name: 'Sat', checked: false },
+    ],
+  };
+  recurrenceMonth: MonthsCheckBox = {
+    name: 'All',
+    checked: false,
+    subCheckBox: [
+      { name: 'Jan', checked: true },
+      { name: 'Feb', checked: false },
+      { name: 'Mar', checked: false },
+      { name: 'Apr', checked: false },
+      { name: 'May', checked: false },
+      { name: 'Jun', checked: false },
+      { name: 'Jul', checked: false },
+      { name: 'Aug', checked: false },
+      { name: 'Sep', checked: false },
+      { name: 'Oct', checked: false },
+      { name: 'Nov', checked: false },
+      { name: 'Dec', checked: false },
+    ],
+  };
+
   initializeForm(): void {
     this.disabled = false;
     this.templateValues = {
@@ -32,6 +91,11 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
       bins: '',
       part_number: '',
       serial_number: '',
+      start_date: '',
+      repeat_every: '',
+      on_day: '',
+      for_month: '',
+      time_zone_utc: '',
     };
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
@@ -47,10 +111,13 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
   formTemplate(temp: { [s: string]: unknown; } | ArrayLike<unknown>): any {
     const createdTemplate: any = {};
     Object.entries(temp).forEach(([key, value]) => {
+      console.log(key);
       if (typeof value === 'string'
         // checks to make sure that it is only adding keys from the template interface
         // @ts-ignore
-        && this.templateValues.hasOwnProperty(key)) {
+        && this.templateValues.hasOwnProperty(key)
+        && (key !== 'start_date' && key !== 'repeat_every' && key !== 'on_day'
+          && key !== 'for_month' && key !== 'time_zone_utc')) {
         createdTemplate[key] = JSON.parse(value.replace(/'/g, '"')); // replace to fix crash on single quote
       }
     });
@@ -90,5 +157,82 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
         }
       }
     );
+  }
+
+  timeZoneChange(event: { value: { utc: string[]; }; }): void {
+    this.timeZoneUTC = event.value.utc[0];
+  }
+
+  recurrenceExpand(): void {
+    this.repeatEvery = '1';
+    this.isRecurrenceChosen = true;
+    this.panelOpenState = true;
+  }
+
+  recurrenceCollapsed(): void {
+    this.isRecurrenceChosen = false;
+    this.panelOpenState = false;
+    this.allDaysChecked = false;
+    this.allMonthsChecked = false;
+    this.repeatEvery = '1';
+    this.recurrenceDay.subCheckBox?.forEach((t) => (t.checked = false));
+    this.recurrenceMonth.subCheckBox?.forEach((t) => (t.checked = false));
+    // @ts-ignore
+    this.recurrenceDay.subCheckBox[0].checked = true;
+    // @ts-ignore
+    this.recurrenceMonth.subCheckBox[0].checked = true;
+    this.errorMessageCheckboxDay = ' ';
+    this.errorMessageCheckboxMonth = ' ';
+  }
+
+  updateAllCheckbox(type: string): void {
+    if (type === 'dayCheckbox') {
+      this.allDaysChecked =
+        this.recurrenceDay.subCheckBox != null &&
+        this.recurrenceDay.subCheckBox.every((t) => t.checked);
+      this.errorMessageCheckboxDay = ' ';
+    } else if (type === 'monthCheckbox') {
+      this.allMonthsChecked =
+        this.recurrenceMonth.subCheckBox != null &&
+        this.recurrenceMonth.subCheckBox.every((t) => t.checked);
+      this.errorMessageCheckboxMonth = ' ';
+    }
+  }
+
+  // @ts-ignore
+  someCheckbox(type: string): boolean {
+    if (type === 'dayCheckbox') {
+      if (this.recurrenceDay.subCheckBox == null) {
+        return false;
+      }
+      return (
+        this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
+        !this.allDaysChecked
+      );
+    } else if (type === 'monthCheckbox') {
+      if (this.recurrenceMonth.subCheckBox == null) {
+        return false;
+      }
+      return (
+        this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
+        !this.allMonthsChecked
+      );
+    }
+  }
+
+  setAllCheckbox(checked: boolean, type: string): void {
+    if (type === 'dayCheckbox') {
+      this.allDaysChecked = checked;
+      if (this.recurrenceDay.subCheckBox == null) {
+        return;
+      }
+      this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
+    } else if (type === 'monthCheckbox') {
+      this.allMonthsChecked = checked;
+      if (this.recurrenceMonth.subCheckBox == null) {
+        return;
+      }
+      this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
+    }
   }
 }

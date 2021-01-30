@@ -17,6 +17,11 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     bins: [],
     part_number: [],
     serial_number: [],
+    start_date: '',
+    repeat_every: '',
+    on_day: [],
+    for_month: [],
+    time_zone_utc: ''
   };
   templateValues: Template | undefined;
   title = '';
