@@ -1,5 +1,15 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
+
+
+def get_general_permissions(request, get_im_perms):
+    if IsAuthenticated.has_permission(IsAuthenticated(), request, None) and \
+            IsSystemAdmin.has_permission(IsSystemAdmin(), request, None):
+        permission_classes = [IsAuthenticated, IsSystemAdmin]
+    else:
+        # concatenate lists
+        permission_classes = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody] + get_im_perms
+    return permission_classes
 
 
 class IsSystemAdmin(BasePermission):
@@ -94,11 +104,11 @@ class IsHigherInOrganization(BasePermission):
         current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
         if request.method == 'POST':  # On create of a user
             target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
+        elif 'role' in request.data:
+            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
         elif 'pk' in view.kwargs:
             target_user_role = IsHigherInOrganization.user_roles.index(
                 CustomUser.objects.get(id=view.kwargs['pk']).role)
-        elif 'role' in request.data:
-            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
         else:
             return True
         return current_user_role <= target_user_role

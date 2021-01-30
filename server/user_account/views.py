@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from user_account.permissions import IsSystemAdmin, IsInventoryManager, CanUpdateKeys, IsHigherInOrganization, \
-    HasSameOrgInBody, UserHasSameOrg, HasSameOrgInQuery
+    HasSameOrgInBody, UserHasSameOrg, HasSameOrgInQuery, get_general_permissions
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -135,16 +135,12 @@ class CustomUserView(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'retrieve', 'list']:
-            if IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
-                    IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None):
-                permission_classes = [IsAuthenticated, IsSystemAdmin]
-            else:
-                permission_classes = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody,
-                                      UserHasSameOrg, HasSameOrgInQuery, IsHigherInOrganization]
+            permission_classes = get_general_permissions(self.request,
+                                                         [UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
         elif self.action in ['partial_update']:
-            permission_classes = [IsAuthenticated, IsHigherInOrganization, CanUpdateKeys]
+            permission_classes = get_general_permissions(self.request, [IsHigherInOrganization, CanUpdateKeys])
         else:
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
+            permission_classes = get_general_permissions(self.request, [])
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
