@@ -53,7 +53,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
             organization = Organization.objects.get(org_id=org_id)
             organization.inventory_items_refresh_job = new_job_timing
             organization.save()
-            start_new_job(org_id, new_job_timing)
+            start_new_job(str(org_id), new_job_timing)
             return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
 
         except Organization.DoesNotExist:
