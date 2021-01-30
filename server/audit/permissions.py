@@ -19,6 +19,7 @@ class CheckAuditOrganizationById(BasePermission):
 
 
 class CheckInitAuditData(BasePermission):
+    message = "The requested audit must be for the same organization as the requesting user"
 
     def has_permission(self, request, view):
         user = CustomUser.objects.get(email=request.user)
@@ -29,6 +30,7 @@ class CheckInitAuditData(BasePermission):
 
 
 class ValidateSKOfSameOrg(BasePermission):
+    message = "The requested user must be part of the same organization"
 
     def has_permission(self, request, view):
         if 'customuser' in request.data:

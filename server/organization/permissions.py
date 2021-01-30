@@ -2,6 +2,7 @@ from rest_framework.permissions import BasePermission
 
 
 class ValidateOrgMatchesUser(BasePermission):
+    message = "The organization requested must match the user's"
 
     def has_permission(self, request, view):
         user = request.user

@@ -4,6 +4,7 @@ from .models import AuditTemplate
 
 
 class CheckTemplateOrganizationById(BasePermission):
+    message = "The requested template must be of the same organization"
 
     def has_permission(self, request, view):
         if request.parser_context['kwargs'] is not None \
