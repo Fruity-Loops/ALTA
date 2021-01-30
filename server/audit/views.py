@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from user_account.permissions import IsSystemAdmin, HasSameOrgInBody, IsInventoryManager, HasSameOrgInQuery
+from user_account.permissions import HasSameOrgInQuery, \
+    get_general_permissions
 from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
 from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from .models import Audit, ItemToSK
@@ -15,12 +15,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
-        if IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
-                IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None):
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
-        else:
-            permission_classes = [IsAuthenticated, CheckAuditOrganizationById, IsInventoryManager, HasSameOrgInBody,
-                                  HasSameOrgInQuery]
+        permission_classes = get_general_permissions(self.request, [CheckAuditOrganizationById, HasSameOrgInQuery])
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -49,12 +44,8 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     serializer_class = ItemToSKSerializer
 
     def get_permissions(self):
-        if IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
-                IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None):
-            permission_classes = [IsAuthenticated, IsSystemAdmin]
-        else:
-            permission_classes = [IsAuthenticated, IsInventoryManager, CheckInitAuditData, HasSameOrgInBody,
-                                  HasSameOrgInQuery, ValidateSKOfSameOrg]
+        permission_classes = get_general_permissions(self.request, [CheckInitAuditData, HasSameOrgInQuery,
+                                                     ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
