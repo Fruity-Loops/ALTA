@@ -70,7 +70,7 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
 
     const body = {
       ...base,
-      role: this.employeeForm.value.role?.abbrev ? this.employeeForm.value.role.abbrev : 'SA',
+      role: this.employeeForm.value.role?.abbrev ? this.employeeForm.value.role.abbrev : 'SK',
       is_active: 'true',
       password: this.employeeForm.value.password,
       // parse the organization as an int to be sent to the backend
