@@ -160,7 +160,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   goBackAssignSK(): void {
-        //TODO: save data so when user goes back to previous page, previously selected info is kept
+        // TODO: save data so when user goes back to previous page, previously selected info is kept
         setTimeout(() => {
           // Redirect user to component dashboard
           this.router.navigate(['assign-sk']);

@@ -24,34 +24,34 @@ export class ReviewAuditComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    console.log(this.dataSource)
+    console.log(this.dataSource);
     this.getTableData();
   }
 
-  getTableData() {
-    let assigned_sks;
+  getTableData(): void  {
+    let assignedSks;
 
     this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
       .subscribe((auditData) => {
-        assigned_sks = auditData.assigned_sk;
+        assignedSks = auditData.assigned_sk;
 
         this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
           .subscribe((itemSKData) => {
-            assigned_sks.forEach(sk => {
+            assignedSks.forEach(sk => {
               itemSKData.forEach(itemSK => {
-                if (sk.id == itemSK.customuser) {
-                  itemSK.location = sk.location
+                if (sk.id === itemSK.customuser) {
+                  itemSK.location = sk.location;
                 }
               });
             });
-            this.buildTable(itemSKData, assigned_sks);
+            this.buildTable(itemSKData, assignedSks);
           });
       });
   }
 
-  buildTable(itemSKData, sks) {
+  buildTable(itemSKData, sks): void  {
     const table = [];
-    const locations = []
+    const locations = [];
 
     sks.forEach(item => {
       locations.push({ location: item.location });
@@ -74,18 +74,18 @@ export class ReviewAuditComponent implements OnInit {
     this.dataSource = table;
   }
 
-  getSKName(sks, id) {
+  getSKName(sks, id): void  {
     let name;
     sks.forEach(sk => {
-      if (sk.id == id) {
-        name = sk.first_name + " " + sk.last_name;
+      if (sk.id === id) {
+        name = sk.first_name + ' ' + sk.last_name;
       }
     });
     return name;
   }
 
   goBackManageSK(): void {
-    //TODO: save data so when user goes back to previous page, previously selected info is kept
+    // TODO: save data so when user goes back to previous page, previously selected info is kept
     setTimeout(() => {
       // Redirect user to component dashboard
       this.router.navigate(['designate-sk']);
@@ -97,7 +97,6 @@ export class ReviewAuditComponent implements OnInit {
       // Redirect user to component dashboard
       this.router.navigate(['dashboard']);
     }, 1000); // Waiting 1 second before redirecting the user
-
     localStorage.removeItem('audit_id'); 
   }
 

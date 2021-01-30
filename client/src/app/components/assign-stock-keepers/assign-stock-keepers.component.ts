@@ -18,7 +18,7 @@ export class AssignStockKeepersComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
-  
+
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
@@ -120,7 +120,7 @@ export class AssignStockKeepersComponent implements OnInit {
   }
 
   goBackIventory(): void {
-        //TODO: save data so when user goes back to previous page, previously selected info is kept
+        // TODO: save data so when user goes back to previous page, previously selected info is kept
         setTimeout(() => {
           // Redirect user to component dashboard
           this.router.navigate(['manage-items']);
