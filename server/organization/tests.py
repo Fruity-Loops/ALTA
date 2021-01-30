@@ -75,36 +75,36 @@ class OrganizationTestCase(APITestCase):
 
 
 class InventoryItemRefreshTestCase(APITestCase):
+    fixtures = ["users.json", "organizations.json"]
 
     @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def setUp(self):
         self.client = APIClient()
 
-        self.organization = Organization.objects.create(org_name="Test")
+        self.organization = Organization.objects.get(pk=1).org_id
+        self.system_admin = CustomUser.objects.get(pk=1)
+        self.im = CustomUser.objects.get(pk=2)
 
-        self.system_admin = CustomUser.objects.create(
-            user_name='system_admin1',
-            email='system_admin1@email.com',
-            password='password1',
-            first_name='system1',
-            last_name='admin1',
-            role='SA',
-            is_active=True,
-            organization=self.organization.org_id)
-
-    def update_organization_inventory_item_refresh_time_success(self):
+    def test_org_item_refresh_time_sa(self):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.system_admin)
-        data = {"org_id": self.organization.org_id, "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data)
+        data = {"organization": self.organization, "new_job_timing": "14"}
+        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def update_organization_inventory_item_refresh_time_fail(self):
+    def test_org_inventory_item_refresh_time_im(self):
+        """ Timing has been updated correctly """
+        self.client.force_authenticate(user=self.im)
+        data = {"organization": self.organization, "new_job_timing": "14"}
+        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_org_item_refresh_time_fail(self):
         """
         Timing can't be updated correctly for an
         organization that doesnt exist
         """
         self.client.force_authenticate(user=self.system_admin)
-        data = {"org_id": "1234", "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data)
+        data = {"organization": "1234", "new_job_timing": "14"}
+        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
