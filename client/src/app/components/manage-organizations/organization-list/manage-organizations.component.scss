@@ -1,0 +1,139 @@
+@import "../../../../theme";
+
+.search-header {
+  min-height: 64px;
+  padding: 8px 24px 0 10px;
+  display: inline-block;
+  width: 70%;
+  margin-left: -50px;
+}
+
+.mat-row:hover {
+  cursor: pointer;
+  background: #F2F2F2;
+}
+
+input.mat-input-element {
+  padding-left: 35px;
+  position: relative;
+}
+
+button.create {
+  position: absolute;
+  display: inline;
+  margin-top: 0.7em;
+  right: 0;
+  margin-right: 10%;
+  padding-left: 3em;
+  padding-right: 3em;
+  border-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary, 500);
+}
+
+.mat-stroked-button:not([disabled]) {
+  border-color: map-get($alta-primary, 500);
+}
+
+.moveMeRight {
+  padding-left: 60px;
+}
+
+.mat-select-value {
+  color: map-get($alta-primary, 500);
+}
+
+div.search-mat-icon {
+  display: inline-block;
+  padding-left: 10px;
+}
+
+div.dropdown {
+  display: inline-block;
+  width: 10%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-column-Settings {
+  text-align: center;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.mat-card-title {
+  color: map-get($alta-primary, 500);
+  padding: 0.7em;
+}
+
+.settings-padding {
+  padding: 0 40px;
+}
+
+.mat-column-1 {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content: center;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-alignment-one {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content: center;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-alignment-two {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content: center;
+  width: 15% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-2 {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  justify-content: center;
+  width: 1% !important;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}

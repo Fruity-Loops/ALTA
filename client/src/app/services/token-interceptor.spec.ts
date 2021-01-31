@@ -9,7 +9,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 import {TokenInterceptor} from './token-interceptor';
 import {AuthService} from './auth.service';
-import {TestBed, getTestBed} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 describe('TokenInterceptor', () => {

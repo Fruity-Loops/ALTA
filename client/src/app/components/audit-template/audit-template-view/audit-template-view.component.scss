@@ -1,0 +1,103 @@
+@import "../../../../theme";
+
+.mat-form-field {
+  width: 100%;
+}
+
+.icon-color {
+  color: map-get($alta-primary, A100);
+}
+
+.mat-stroked-button {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+  width: 120px;
+}
+
+.save-button-bg {
+  background: map-get($alta-primary, A50) !important;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column-2 {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Create three equal columns that floats next to each other */
+.column-3 {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.border-right {
+  border-right: 1px solid #E0E0E0;
+}
+
+.half-width {
+  width: 50%;
+}
+
+.button-side-by-side {
+  display: inline-block;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.center-aligned {
+  text-align: center;
+}
+
+mat-label {
+  color: map-get($alta-primary, A800);
+  font-size: 115%;
+}
+
+.position-right {
+  float: right;
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+  opacity: 0.03 !important;
+  background-color: map-get($alta-primary, A100);
+}
+
+::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background, .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
+  background-color: map-get($alta-primary, A100);
+}
+
+.button-padding {
+  margin: 5px;
+}
+
+::ng-deep .mat-checkbox-label {
+  padding-top: 2px;
+}
+
+.text-padding-left-align {
+  padding-top: 25px;
+  padding-left: 0;
+  text-align: left;
+}
+
+.text-align-center {
+  text-align: center !important;
+}

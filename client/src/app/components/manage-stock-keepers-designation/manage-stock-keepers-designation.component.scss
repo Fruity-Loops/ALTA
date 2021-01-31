@@ -42,6 +42,17 @@
   border: 1px solid #2196F3 !important;
 }
 
+button.bottom-goback {
+  position: absolute;
+  left: -438px;
+  margin-right: 0.5%;
+  padding-left: 3em;
+  padding-right: 3em;
+  background: white;
+  color: #2196F3;
+  border: 1px solid #2196F3 !important;
+}
+
 button.bottom-discard {
   position: absolute;
   left: -290px;
@@ -49,8 +60,8 @@ button.bottom-discard {
   padding-left: 3em;
   padding-right: 3em;
   background: white;
-  color: #2196F3;
-  border: 1px solid #2196F3 !important;
+  color: #f32121;
+  border: 1px solid #f32121 !important;
 }
 
 button.bottom-assign {
@@ -151,7 +162,6 @@ button.bottom-assign {
   float: left;
   width: 50%;
   padding: 10px;
-  display: inline-block;
 }
 
 .boarder-left {

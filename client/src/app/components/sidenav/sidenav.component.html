@@ -1,5 +1,5 @@
 <div class="header" (click)="exitOrg()">
-  <img id="alta_logo" class="pic" src="assets/img/logo.svg" width="150" height="80">
+  <img id="alta_logo" class="pic" src="assets/img/logo.svg" width="150" height="80" alt="Alta Logo">
 </div>
 <div class="sidenav">
   <div class="options">
@@ -22,7 +22,7 @@
           </mat-list-item>
         </mat-list>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="logout()">
+          <button mat-menu-item id="logoutbtn" (click)="logout()">
             <span>Logout</span>
           </button>
         </mat-menu>
@@ -30,7 +30,7 @@
     </div>
     <div class="footer">
       <mat-list>
-        <mat-list-item [matMenuTriggerFor]="menu">
+        <mat-list-item [matMenuTriggerFor]="menu" id="expandSideNav">
           <img matListAvatar
                src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                alt="Blank Display Pic" width="20" height="20"/>

@@ -2,9 +2,10 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from user_account.permissions import IsSystemAdmin
-from .permissions import IsInventoryManagerAudit
-from .permissions import IsAssignedSKNoCreate
+from user_account.permissions import HasSameOrgInQuery, \
+    PermissionFactory
+from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg, \
+    IsAssignedSKNoCreate
 from .serializers import AuditSerializer, BinToSKSerializer, GetAuditSerializer
 from .models import Audit, BinToSK
 
@@ -12,12 +13,19 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'patch', 'get']
+    http_method_names = ['post', 'patch', 'get', 'delete']
     queryset = Audit.objects.all()
-    permission_classes = [
-        IsAuthenticated,
-        (IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate)
-    ]
+
+    def get_permissions(self):
+        permission_classes = None
+        if self.action in ['retrieve', 'list']:
+            if IsAssignedSKNoCreate.has_permission(self, self.request, AuditViewSet):
+                permission_classes = [IsAuthenticated]
+        if permission_classes is None:
+            factory = PermissionFactory(self.request)
+            permission_classes = factory.get_general_permissions([
+                CheckAuditOrganizationById, HasSameOrgInQuery])
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -40,18 +48,20 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'get']
+    http_method_names = ['post', 'get', 'delete']
     queryset = BinToSK.objects.all()
     serializer_class = BinToSKSerializer
-    permission_classes = [
-        IsAuthenticated,
-        (IsSystemAdmin | IsInventoryManagerAudit | IsAssignedSKNoCreate)
-    ]
 
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckInitAuditData, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -76,7 +86,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-    def get_audit_serializer(self, *args, **kwargs):
+    def get_audit_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
         serializer_class = GetAuditSerializer
         return serializer_class(*args, **kwargs)
 
@@ -87,7 +97,6 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         audit_id = request.query_params.get('audit_id')
         bins = BinToSK.objects.filter(bin_id=bin_id)
         ids = bins[0].item_ids
-        print(type(ids))
         queryset = Audit.objects.filter(audit_id=audit_id)
         #queryset = queryset.filter(inventory_items__in=ids)
 

@@ -1,5 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -24,17 +23,15 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   errorMessage = '';
 
   constructor(
-    private manageMembersService: ManageMembersService,
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
-    private router: Router
-    ) { }
-
-  ngOnInit(): void {
+    private router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
     this.auditID = Number(localStorage.getItem('audit_id'));
+  }
 
+  ngOnInit(): void {
     this.manageAuditsService.getAuditData(this.auditID)
       .subscribe((auditData) => {
         this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
@@ -104,7 +101,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
     const holdItems = new Array<any>();
     const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
-    this.locationsWithBinsAndSKs[index].item.forEach(item =>
+    this.locationsWithBinsAndSKs[index].item.forEach((item: any) =>
       bin.forEach(givenBin => {
         if (item.Bin === givenBin) {
           holdItems.push(item);
@@ -120,7 +117,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
-      auditComp.bins.forEach(bin => {
+      auditComp.bins.forEach((bin: any) => {
         holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
 
         if (holdItemsOfBins.length > 0) {
@@ -148,12 +145,32 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
-    localStorage.removeItem('audit_id');
 
     setTimeout(() => {
-      // Redirect user to component dashboard
-      this.router.navigate(['dashboard']);
+      // Redirect user to review-audit component
+      this.router.navigate(['audits/assign-sk/designate-sk/review-audit']);
     }, 1000); // Waiting 1 second before redirecting the user
+  }
+
+  deleteAudit(): void {
+    this.manageAuditsService.deleteAudit(this.auditID).subscribe((
+      (err) => {
+        this.errorMessage = err;
+      }));
+    localStorage.removeItem('audit_id');
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBack(event: Event): void {
+    // Overrides browser back button
+    event.preventDefault();
+    this.goBackAssignSK();
+  }
+
+  goBackAssignSK(): void {
+    setTimeout(() => {
+      this.router.navigate(['audits/assign-sk'], { replaceUrl: true });
+    }, 1000);
   }
 
   drop(event: CdkDragDrop<string[]>, testing: any): void {
@@ -171,7 +188,12 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     this.dialog.open(ref);
   }
 
-  closeDialog(): void {
+  cancelDialog(): void {
+    this.dialog.closeAll();
+  }
+
+  discardAudit(): void {
+    this.deleteAudit();
     this.dialog.closeAll();
   }
 

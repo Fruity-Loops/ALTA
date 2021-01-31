@@ -1,0 +1,163 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{title}}</mat-card-title>
+    <div id="errorMsg" *ngIf="errorMessage">
+      <mat-card-subtitle>{{ errorMessage }}</mat-card-subtitle>
+    </div>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <form class="col s12" [formGroup]="employeeForm" novalidate *ngIf="loaded">
+    <mat-card-content>
+
+      <div class="centerMe"></div>
+      <mat-grid-list cols="2" rowHeight="38:9">
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">First Name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="firstname" type="text" formControlName="first_name" placeholder="First name"/>
+              <mat-error class="error" *ngIf="
+                  !employeeForm.controls['first_name'].valid &&
+                  employeeForm.controls['first_name'].touched
+                ">
+                <!-- Handeling error -->
+                First name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="power">E-mail address:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="email" type="email" formControlName="email" placeholder="E-mail address"/>
+              <mat-error class="error" *ngIf="
+                !employeeForm.controls['email'].valid &&
+                employeeForm.controls['email'].touched
+              ">
+                <!-- Handeling error -->
+                Email is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="lastname">Last name:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="lastname" type="text" formControlName="last_name" placeholder="Last name"/>
+              <mat-error class="error" *ngIf="
+                !employeeForm.controls['last_name'].valid &&
+                employeeForm.controls['last_name'].touched
+              ">
+                <!-- Handeling error -->
+                Last name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile>
+          <div class="form-group">
+            <mat-label for="username">Employee ID:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="user_name" type="text" formControlName="id" placeholder="Employee ID"/>
+              <mat-error class="error" *ngIf="
+                !employeeForm.controls['id'].valid &&
+                employeeForm.controls['id'].touched
+              ">
+                <!-- Handeling error -->
+                Employee ID is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="!isEdit || (isEdit && isLoggedInUser.value)">
+          <div class="form-group">
+            <mat-label for="pass-word">Password:</mat-label>
+            <mat-form-field appearance="outline" *ngIf="!isEdit">
+              <input matInput id="passwordCreate" type="password" formControlName="password" placeholder="Password"/>
+              <mat-error class="error" *ngIf="
+                !employeeForm.controls['password'].valid &&
+                employeeForm.controls['password'].touched
+              ">
+                <!-- Handeling error -->
+                Password is required
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="isEdit">
+              <input matInput id="passwordEdit" type="password" placeholder="Password"
+                     [(ngModel)]="password" minlength="5" [disabled]="!edit" [ngModelOptions]="{standalone: true}"/>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="(!isEdit && isEmployee) || (isEdit && !isSystemAdmin)">
+          <div class="form-group">
+            <mat-label for="power">Employment Location:</mat-label>
+            <mat-form-field appearance="outline">
+              <input matInput id="location" type="text" formControlName="location" placeholder="Employment Location"/>
+              <mat-error class="error" *ngIf="
+                !employeeForm.controls['location'].valid &&
+                employeeForm.controls['location'].touched
+              ">
+                <!-- Handeling error -->
+                Location is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="(!isEdit && isEmployee)">
+          <div class="form-group">
+            <mat-label for="pass-word">Role:</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select class="roleDropDown" formControlName="role">
+                <mat-option value="">Choose a role</mat-option>
+                <mat-option *ngFor="let role of createMembersRoles" [value]="role">
+                  {{ role.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="isEdit && !isLoggedInUser.value">
+          <div class="form-group">
+            <mat-label for="pass-word">Role:</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select class="roleDropDown" [(ngModel)]="role" [disabled]=true
+                          [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let role of roles" [value]="role.name">
+                  {{ role.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile *ngIf="isEdit && !isLoggedInUser.value">
+          <div class="form-group">
+            <mat-label for="is-active">Is Active</mat-label>
+            <mat-form-field appearance="outline">
+              <mat-select class="statusDropDown" id="active" [(ngModel)]="isActive" [disabled]="!edit"
+                          [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let active of activeStates" [value]="active.state">
+                  {{active.state}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-card-content>
+
+    <mat-card-actions align="center">
+
+      <!-- Show edit button if not in edit mode -->
+      <button *ngIf="isEdit && !edit" mat-button class="edit" (click)="this.editMode(true)">Edit</button>
+
+      <!-- Show Save and Cancel buttons if in edit mode -->
+      <button *ngIf="!isEdit || edit" mat-button class="save" (click)="this.edit=false; this.submitForm()"
+              [disabled]="employeeForm.invalid">Save</button>
+      <button *ngIf="isEdit && edit" mat-button class="cancel" (click)="this.edit=false; reloadPage();">Cancel</button>
+    </mat-card-actions>
+
+  </form>
+
+</mat-card>

@@ -1,5 +1,24 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
+
+
+class PermissionFactory:
+    def __init__(self, request):
+        self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
+        self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
+        self.request = request
+
+    def validate_is_sa(self):
+        return IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
+                IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
+
+    def get_general_permissions(self, get_im_perms):
+        if self.validate_is_sa():
+            permission_classes = self.base_sa_permissions
+        else:
+            # concatenate lists
+            permission_classes = self.base_im_permissions + get_im_perms
+        return permission_classes
 
 
 class IsSystemAdmin(BasePermission):
@@ -18,25 +37,6 @@ class IsSystemAdmin(BasePermission):
         return user.role == 'SA'
 
 
-def get_self_org(user, request):
-    if request.path[0:5] == "/user":
-        other_user = CustomUser.objects.get(id=request.parser_context['kwargs']['pk'])
-        return user.organization_id == other_user.organization_id and other_user.role != 'SA'
-
-    return str(user.organization_id) == request.parser_context['kwargs']['pk'] and request.path.\
-        startswith('/organization')
-
-
-def get_self_org_query(user, request):
-    return str(user.organization_id) == request.GET.get("organization", '')
-
-
-def get_self_org_body(user, request):
-    if 'organization' in request.data:
-        return user.organization_id == request.data['organization']
-    return False
-
-
 class IsInventoryManager(BasePermission):
     message = "You must be an Inventory Manager to do this operation"
 
@@ -50,31 +50,37 @@ class IsInventoryManager(BasePermission):
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
         user = CustomUser.objects.get(email=request.user)
-        correct_organization = [None, None, None]
-        if request.GET.get("organization", None) is not None:
-            correct_organization[0] = get_self_org_query(user, request)
-        if request.data.get("organization", None) is not None:
-            correct_organization[1] = get_self_org_body(user, request)
-        if request.parser_context['kwargs'] is not None and 'pk'\
-                in request.parser_context['kwargs']:
-            correct_organization[2] = get_self_org(user, request)
+        return user.role in ['IM']
 
-        for found_false in correct_organization:
-            if found_false is not None and not found_false:
-                return False
 
-        # Used to ensure only the requests accounted for are being made
-        sent_proper_organization = False
-        for found_true in correct_organization:
-            if found_true:
-                sent_proper_organization = True
+class HasSameOrgInQuery(BasePermission):
+    message = "You must query the same organization as yours"
 
-        if not sent_proper_organization:
-            return False
+    def has_permission(self, request, view):
+        org_id = request.GET.get("organization", None)
+        user = request.user
+        if org_id is not None:
+            return str(user.organization_id) == request.GET.get("organization", '')
+        return True
 
-        if user.role in ['IM']:
-            return True
-        return False
+
+class HasSameOrgInBody(BasePermission):
+    message = "You organization that you are referring in the body of your request must match yours"
+
+    def has_permission(self, request, view):
+        if 'organization' in request.data:
+            return request.user.organization_id == request.data['organization']
+        return True
+
+
+class UserHasSameOrg(BasePermission):
+    message = "The user you are trying to access must be of the same organization as you"
+
+    def has_permission(self, request, view):
+        if 'pk' in request.parser_context['kwargs']:
+            other_user = CustomUser.objects.get(id=request.parser_context['kwargs']['pk'])
+            return request.user.organization_id == other_user.organization_id
+        return True
 
 
 class IsCurrentUserTargetUser(BasePermission):
@@ -104,23 +110,20 @@ class IsHigherInOrganization(BasePermission):
         :param view: Getting the targeted pk passed in the URL
         :return: True/False : Whether the user is allowed to modify the user
         """
-        current_user_org = request.user.organization
-        target_user_org = CustomUser.objects.get(id=view.kwargs['pk']).organization
         current_user_role = IsHigherInOrganization.user_roles.index(request.user.role)
-        target_user_role = IsHigherInOrganization.user_roles.index(
-            CustomUser.objects.get(id=view.kwargs['pk']).role)
-        if current_user_role == 0 and target_user_role > 0:
+        if request.method == 'POST':  # On create of a user
+            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
+        elif 'role' in request.data:
+            target_user_role = IsHigherInOrganization.user_roles.index(request.data['role'])
+        elif 'pk' in view.kwargs:
+            target_user_role = IsHigherInOrganization.user_roles.index(
+                CustomUser.objects.get(id=view.kwargs['pk']).role)
+        else:
             return True
-        if current_user_role == 2:
-            return False
-        if current_user_org or target_user_org:
-            if current_user_org == target_user_org:
-                return current_user_role <= target_user_role
-            return False
-        return True
+        return current_user_role <= target_user_role
 
 
-class CanUpdate(BasePermission):
+class CanUpdateKeys(BasePermission):
     message = "Roles and Emails shouldn't be allowed to be updated"
 
     def has_permission(self, request, view):
@@ -132,9 +135,7 @@ class CanUpdate(BasePermission):
         keys = list(request.data.keys())
         if IsCurrentUserTargetUser.has_permission(self, request, view):
             return check_keys(['id', 'email'], keys)
-        if IsHigherInOrganization.has_permission(self, request, view):
-            return check_keys(['id', 'email', 'password'], keys)
-        return False
+        return check_keys(['id', 'email', 'password'], keys)
 
 
 def check_keys(bad_keys, keys):

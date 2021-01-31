@@ -1,6 +1,6 @@
 import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Connection with the backend
@@ -13,23 +13,36 @@ export class ManageAuditsService {
 
   constructor(private http: HttpClient) {}
 
-  createAudit(inventoryItem): Observable<any> {
+  createAudit(inventoryItem: object): Observable<any> {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
-  assignSK(assignedSK, auditId): Observable<any> {
+  deleteAudit(auditId: number): Observable<any> {
+    return this.http.delete(`${BASEURL}/audit/${auditId}/`);
+  }
+
+  assignSK(assignedSK: object, auditId: number): Observable<any> {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
 
-  getAuditData(auditId): Observable<any> {
+  getAuditData(auditId: number): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
   }
 
-  getBusySKs(params): Observable<any> {
+  getBusySKs(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/`, {params});
   }
 
-  initiatePreAudit(preAuditData): Observable<any> {
+  initiatePreAudit(preAuditData: any): Observable<any> {
     return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
+
+  getItemSKAudit(auditId: any): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
+  }
+
+  deletePreAudit(id: any): Observable<any> {
+    return this.http.delete(`${BASEURL}/bin-to-sk/${id}/`);
+  }
+
 }

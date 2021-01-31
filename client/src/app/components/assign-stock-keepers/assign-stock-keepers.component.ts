@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/manage-members.service';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { User } from 'src/app/models/user.model';
@@ -13,50 +13,56 @@ import { HttpParams } from '@angular/common/http';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 export class AssignStockKeepersComponent implements OnInit {
-  skToAssign = [];
+  skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
+  auditID: number;
+
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
 
-  // Http URL params
   params = new HttpParams();
 
-  constructor(private manageMembersService: ManageMembersService,
-              private dialog: MatDialog,
-              private addAssignedSK: ManageAuditsService,
-              private router: Router)
-  { }
+  constructor(
+    private manageMembersService: ManageMembersService,
+    private dialog: MatDialog,
+    private manageAuditsService: ManageAuditsService,
+    private router: Router
+  ) {
 
-  ngOnInit(): void {
+    this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.busySKs = new Array<any>();
+    this.auditID = Number(localStorage.getItem('audit_id'));
+  }
+
+  ngOnInit(): void {
 
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.params = this.params.append('status', 'Active');
 
-    this.addAssignedSK.getBusySKs(this.params)
+    this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
-        this.busySKs = response.map(obj => obj.assigned_sk).flat();
+        this.busySKs = response.map((obj: any) => obj.assigned_sk).flat();
 
         this.manageMembersService.getAllClients()
           .subscribe((user) => {
             this.populateTable(user);
-        });
-    });
+          });
+      });
   }
 
-  populateTable(clients): void {
+  populateTable(clients: any): void {
     /* TODO: look into performance impact of:
     * 1. sending all an organization's users with a realistic amount of users
     * 2. how slow this can be to compute on the front-end
     */
 
-    clients.forEach(element => {
+    clients.forEach((element: any) => {
       if (element.role === 'SK') {
         const isBusy = this.busySKs.find(user => user === element.id);
         if (isBusy === undefined) {
@@ -67,7 +73,7 @@ export class AssignStockKeepersComponent implements OnInit {
 
         const obj = this.locationsAndUsers.find(item => item.location === element.location);
         if (obj === undefined) {
-            this.locationsAndUsers.push(
+          this.locationsAndUsers.push(
             {
               location: element.location,
               users: new Array<User>(element)
@@ -81,7 +87,7 @@ export class AssignStockKeepersComponent implements OnInit {
 
     this.dataSource = new MatTableDataSource();
     this.locationsAndUsers.forEach(item => {
-      item.users.forEach(user => {
+      item.users.forEach((user: User) => {
         this.dataSource.data.push(user);
       });
     });
@@ -104,13 +110,12 @@ export class AssignStockKeepersComponent implements OnInit {
     bodyAssignedSK = {
       assigned_sk: this.skToAssign,
     };
-    this.addAssignedSK.assignSK(bodyAssignedSK, Number(localStorage.getItem('audit_id'))).subscribe(
+    this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
         setTimeout(() => {
-          // Redirect user to component dashboard
-          this.router.navigate(['designate-sk']);
-        }, 1000); // Waiting 1 second before redirecting the user
+          this.router.navigate(['audits/assign-sk/designate-sk']);
+        }, 1000);
       },
       (err) => {
         this.errorMessage = err;
@@ -118,11 +123,38 @@ export class AssignStockKeepersComponent implements OnInit {
     );
   }
 
+  deleteAudit(): void {
+    this.manageAuditsService.deleteAudit(this.auditID).subscribe((
+      (err) => {
+        this.errorMessage = err;
+      }));
+    localStorage.removeItem('audit_id');
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBack(event: Event): void {
+    // Overrides browser back button
+    event.preventDefault();
+    this.goBackIventory();
+  }
+
+  goBackIventory(): void {
+    // TODO: Show previously selected info is kept data so when user goes back to previous page
+    setTimeout(() => {
+      this.router.navigate(['manage-items'], { replaceUrl: true });
+    }, 1000);
+  }
+
   openDialogWithRef(ref: TemplateRef<any>): void {
     this.dialog.open(ref);
   }
 
-  closeDialog(): void {
+  cancelDialog(): void {
+    this.dialog.closeAll();
+  }
+
+  discardAudit(): void {
+    this.deleteAudit();
     this.dialog.closeAll();
   }
 }
