@@ -69,7 +69,7 @@ class HasSameOrgInBody(BasePermission):
 
     def has_permission(self, request, view):
         if 'organization' in request.data:
-            return request.user.organization_id == request.data['organization']
+            return str(request.user.organization_id) == str(request.data['organization'])
         return True
 
 

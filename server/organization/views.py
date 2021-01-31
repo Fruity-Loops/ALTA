@@ -42,7 +42,9 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     """
 
     # Note: if other methods are added here, keep in mind that the permissions will need to change
-    permission_classes = [IsAuthenticated, IsSystemAdmin | (IsInventoryManager, HasSameOrgInBody)]
+    def get_permissions(self):
+        permission_classes = PermissionFactory(self.request).get_general_permissions([])
+        return [permission() for permission in permission_classes]
 
     def post(self, request):
         data = request.data
@@ -53,7 +55,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
             organization = Organization.objects.get(org_id=org_id)
             organization.inventory_items_refresh_job = new_job_timing
             organization.save()
-            start_new_job(org_id, new_job_timing)
+            start_new_job(str(org_id), new_job_timing)
             return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
 
         except Organization.DoesNotExist:
