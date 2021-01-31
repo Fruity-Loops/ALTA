@@ -3,11 +3,12 @@ from rest_framework import viewsets, generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from inventory_item.updater import start_new_job
-from user_account.permissions import IsInventoryManager, IsSystemAdmin
+from user_account.permissions import IsInventoryManager, IsSystemAdmin, HasSameOrgInBody, \
+    PermissionFactory
 
 from .serializers import OrganizationSerializer
 from .models import Organization
-from .permissions import UserOrganizationPermission
+from .permissions import ValidateOrgMatchesUser
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
@@ -17,7 +18,14 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-    permission_classes = [IsAuthenticated, UserOrganizationPermission]
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        if self.action in ['retrieve', 'update', 'partial_update']:
+            permission_classes = factory.get_general_permissions([ValidateOrgMatchesUser])
+        else:
+            permission_classes = factory.base_sa_permissions
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         data = request.data
@@ -32,7 +40,9 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     API endpoint that allow a user to update the timing at which
     the Inventory Data is refreshed
     """
-    permission_classes = [IsAuthenticated, IsInventoryManager | IsSystemAdmin]
+
+    # Note: if other methods are added here, keep in mind that the permissions will need to change
+    permission_classes = [IsAuthenticated, IsSystemAdmin | (IsInventoryManager, HasSameOrgInBody)]
 
     def post(self, request):
         data = request.data
