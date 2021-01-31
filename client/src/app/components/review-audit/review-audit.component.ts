@@ -60,7 +60,9 @@ export class ReviewAuditComponent implements OnInit {
     const locations: any[] = [];
 
     sks.forEach((item: any) => {
-      locations.push({ location: item.location });
+      if (!locations.some(loc => loc.location === item.location)) {
+        locations.push({ location: item.location });
+      }
     });
 
     this.locationsAndUsers = locations;
