@@ -11,7 +11,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'patch', 'get']
+    http_method_names = ['post', 'patch', 'get', 'delete']
     queryset = Audit.objects.all()
 
     def get_permissions(self):
@@ -41,7 +41,7 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post']
+    http_method_names = ['post', 'get', 'delete']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
 
@@ -60,3 +60,10 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
         if not saved_audit:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
+
+    def list(self, request):
+        queryset = self.filter_queryset(self.get_queryset()).filter(
+                init_audit_id=request.query_params.get('init_audit_id'))
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

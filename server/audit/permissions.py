@@ -23,11 +23,18 @@ class CheckInitAuditData(BasePermission):
 
     def has_permission(self, request, view):
         user = CustomUser.objects.get(email=request.user)
+
         if 'init_audit' in request.data:
             get_audit = Audit.objects.get(audit_id=request.data['init_audit'])
             return get_audit.organization_id == user.organization_id
-        return True
 
+        if view.action in ['retrieve', 'list']:
+            audit_id = request.query_params.get('init_audit_id')
+            if audit_id:
+                audit = Audit.objects.get(audit_id=audit_id) or None
+            if audit:
+                return audit.organization_id == user.organization.org_id
+        return True
 
 class ValidateSKOfSameOrg(BasePermission):
     message = "The requested user must be part of the same organization"

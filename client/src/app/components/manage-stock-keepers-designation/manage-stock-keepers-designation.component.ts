@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -16,25 +16,27 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
+  auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
 
-  constructor(private dialog: MatDialog,
-              private manageAuditsService: ManageAuditsService,
-              private router: Router)
-  {
+  constructor(
+    private dialog: MatDialog,
+    private manageAuditsService: ManageAuditsService,
+    private router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
+    this.auditID = Number(localStorage.getItem('audit_id'));
   }
 
   ngOnInit(): void {
 
-    this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
-    .subscribe((auditData) => {
-      this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
-    });
+    this.manageAuditsService.getAuditData(this.auditID)
+      .subscribe((auditData) => {
+        this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
+      });
   }
 
   populateBinsAndSKs(selectedItems: Item[], assignedSks: SKUser[]): void {
@@ -46,12 +48,12 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
       if (obj === undefined) {
         this.locationsWithBinsAndSKs.push(
-        {
-          Location: auditItem.Location,
-          item: new Array<Item>(auditItem),
-          bins: new Array<any>(auditItem.Bin),
-          sk: new Array<SKUser>()
-        });
+          {
+            Location: auditItem.Location,
+            item: new Array<Item>(auditItem),
+            bins: new Array<any>(auditItem.Bin),
+            sk: new Array<SKUser>()
+          });
       } else {
         obj.item.push(auditItem);
 
@@ -65,42 +67,42 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditSK.location);
       if (obj === undefined) {
         this.locationsWithBinsAndSKs.push(
-        {
-          Location: auditSK.location,
-          sk: new Array<SKUser>(auditSK)
-        });
+          {
+            Location: auditSK.location,
+            sk: new Array<SKUser>(auditSK)
+          });
       } else {
         obj.sk.push(auditSK);
       }
       this.binToSks.push(
-      {
-        sk_id: auditSK.id,
-        sk_location: auditSK.location,
-        item_ids: new Array<any>(),
-        bins: new Array<any>()
-      });
+        {
+          sk_id: auditSK.id,
+          sk_location: auditSK.location,
+          item_ids: new Array<any>(),
+          bins: new Array<any>()
+        });
     });
   }
 
-  identifyUser(httpId: number): []{
+  identifyUser(httpId: number): [] {
     const obj = this.binToSks.find(predefinedId => predefinedId.sk_id === httpId);
     if (obj === undefined) {
       this.binToSks.push(
-      {
-        sk_id: httpId,
-        sk_location: '',
-        item_ids: new Array<any>(),
-        bins: new Array<any>()
-      });
+        {
+          sk_id: httpId,
+          sk_location: '',
+          item_ids: new Array<any>(),
+          bins: new Array<any>()
+        });
     }
     const index = this.binToSks.findIndex(predefinedId => predefinedId.sk_id === httpId);
     return this.binToSks[index].bins;
   }
 
-   getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
+  getAssociatedItemsGivenBin(location: string, bin: any[]): any[] {
     const holdItems = new Array<any>();
     const index = this.locationsWithBinsAndSKs.findIndex(predefinedLoc => predefinedLoc.Location === location);
-    this.locationsWithBinsAndSKs[index].item.forEach(( item: any ) =>
+    this.locationsWithBinsAndSKs[index].item.forEach((item: any) =>
       bin.forEach(givenBin => {
         if (item.Bin === givenBin) {
           holdItems.push(item);
@@ -116,45 +118,65 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
-        auditComp.bins.forEach(( bin: any ) => {
-          // check if the bin has already been assigned to a stock-keeper
-          if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
-              !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
-                // get the affiliated items of a bin
-                holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
-                // check if the bin has items
-                if (holdItemsOfBins.length > 0) {
-                  // construct array to hold the item ids
-                  const holdIds = holdItemsOfBins.map(item => item._id);
-                  holdBodyPreAuditData.push(
-                  {
-                    init_audit: Number(localStorage.getItem('audit_id')),
-                    customuser: auditComp.sk_id,
-                    bins: auditComp.bins,
-                    item_ids: holdIds
-                  });
-                  // empty array for next bin in loop
-                  holdItemsOfBins = new Array<any>();
-                }
+      auditComp.bins.forEach((bin: any) => {
+        // check if the bin has already been assigned to a stock-keeper
+        if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
+          !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
+          // get the affiliated items of a bin
+          holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
+          // check if the bin has items
+          if (holdItemsOfBins.length > 0) {
+            // construct array to hold the item ids
+            const holdIds = holdItemsOfBins.map(item => item._id);
+            holdBodyPreAuditData.push(
+              {
+                init_audit: this.auditID,
+                customuser: auditComp.sk_id,
+                bins: auditComp.bins,
+                item_ids: holdIds
+              });
+            // empty array for next bin in loop
+            holdItemsOfBins = new Array<any>();
           }
-        });
+        }
+      });
     });
 
     holdBodyPreAuditData.forEach(bodyPreAuditData =>
       this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
         .subscribe((err) => {
-            this.errorMessage = err;
-          })
+          this.errorMessage = err;
+        })
     );
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
-    localStorage.removeItem('audit_id');
 
     setTimeout(() => {
-          // Redirect user to component dashboard
-          this.router.navigate(['dashboard']);
+      // Redirect user to review-audit component
+      this.router.navigate(['audits/assign-sk/designate-sk/review-audit']);
     }, 1000); // Waiting 1 second before redirecting the user
+  }
+
+  deleteAudit(): void {
+    this.manageAuditsService.deleteAudit(this.auditID).subscribe((
+      (err) => {
+        this.errorMessage = err;
+      }));
+    localStorage.removeItem('audit_id');
+  }
+
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBack(event: Event): void {
+    // Overrides browser back button
+    event.preventDefault();
+    this.goBackAssignSK();
+  }
+
+  goBackAssignSK(): void {
+    setTimeout(() => {
+      this.router.navigate(['audits/assign-sk'], { replaceUrl: true });
+    }, 1000);
   }
 
   drop(event: CdkDragDrop<string[]>, testing: any): void {
@@ -162,9 +184,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
   }
 
@@ -172,7 +194,12 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     this.dialog.open(ref);
   }
 
-  closeDialog(): void {
+  cancelDialog(): void {
+    this.dialog.closeAll();
+  }
+
+  discardAudit(): void {
+    this.deleteAudit();
     this.dialog.closeAll();
   }
 

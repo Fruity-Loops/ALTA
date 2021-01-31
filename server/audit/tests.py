@@ -132,7 +132,12 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
-    def amanda_list(self):
+    def test_get_audit(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get('/audit/', {'organization': 1, 'status': 'Active'})
-        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]['audit_id'], 1)
+        self.assertEqual(response.data[0]['status'], 'Active')
+        self.assertEqual(response.data[0]['organization'], 1)
+        self.assertEqual(response.data[0]['inventory_items'], [])
+        self.assertEqual(response.data[0]['assigned_sk'], [])

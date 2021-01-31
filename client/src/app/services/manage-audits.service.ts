@@ -17,6 +17,10 @@ export class ManageAuditsService {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
+  deleteAudit(auditId: number): Observable<any> {
+    return this.http.delete(`${BASEURL}/audit/${auditId}/`);
+  }
+
   assignSK(assignedSK: object, auditId: number): Observable<any> {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
@@ -32,4 +36,13 @@ export class ManageAuditsService {
   initiatePreAudit(preAuditData: object): Observable<any> {
     return this.http.post(`${BASEURL}/item-to-sk/`, preAuditData);
   }
+
+  getItemSKAudit(auditId: any): Observable<any> {
+    return this.http.get(`${BASEURL}/item-to-sk/`, {params: {init_audit_id: auditId}});
+  }
+
+  deletePreAudit(id: any): Observable<any> {
+    return this.http.delete(`${BASEURL}/item-to-sk/${id}/`);
+  }
+
 }

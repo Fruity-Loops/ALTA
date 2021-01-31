@@ -17,6 +17,7 @@ class Audit(models.Model):
 
 
 class ItemToSK(models.Model):
+    itemtoSk_id = models.AutoField(primary_key=True)
     init_audit = models.ForeignKey(Audit, on_delete=models.CASCADE)
     customuser = models.ForeignKey(to='user_account.CustomUser', on_delete=models.CASCADE)
     item_ids = models.JSONField(blank=True, null=True)

@@ -15,6 +15,7 @@ import {CreateOrganizationComponent} from '../../components/manage-organizations
 import {EditOrganizationComponent} from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
+import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 
 export const routes: Routes = [
   {
@@ -47,9 +48,12 @@ export const routes: Routes = [
       { path: 'settings', component: EditEmployeeComponent },
       { path: 'sa-settings', component: EditEmployeeComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
+      { path: 'assign-sk', component: AssignStockKeepersComponent },
+      { path: 'designate-sk', component: ManageStockKeepersDesignationComponent },
+      { path: 'review-audit', component: ReviewAuditComponent },
       { path: 'audits', children: [
         {
-          path: '', component: ManageInventoryItemsComponent
+          path: '', component: ManageInventoryItemsComponent // TODO: Create Audit Component
         },
         {
           path: 'assign-sk', children: [
@@ -57,7 +61,14 @@ export const routes: Routes = [
               path: '', component: AssignStockKeepersComponent
             },
             {
-              path: 'designate-sk', component: ManageStockKeepersDesignationComponent
+              path: 'designate-sk', children: [
+                {
+                  path: '', component: ManageStockKeepersDesignationComponent
+                },
+                {
+                  path: 'review-audit', component: ReviewAuditComponent
+                }
+              ]
             }
           ]},
       ]},
