@@ -51,7 +51,7 @@ describe('AT-2.3: Inventory Manager can acess their organization\'s inventory', 
    * AT-2.5:
    * https://github.com/fruity-loops/alta/issues/48
    */
-describe('AT-2.3: Inventory Manager can search through their organization\'s inventory', () => {
+describe('AT-2.5: Inventory Manager can search through their organization\'s inventory', () => {
   const inventoryPage: InventoryItemsPage = new InventoryItemsPage();
   const nav: Navigation = new Navigation();
 
