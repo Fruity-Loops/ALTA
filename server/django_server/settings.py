@@ -29,6 +29,7 @@ DEBUG = os.getenv('DEBUG', 'false')
 
 ALLOWED_HOSTS = [
     'localhost',
+    '127.0.0.1',
     os.getenv('HOST_URL', 'alta-mobile.loca.lt')
     ]
 
