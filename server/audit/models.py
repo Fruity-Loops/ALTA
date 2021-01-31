@@ -2,6 +2,7 @@ from djongo import models
 from inventory_item.models import Item
 from audit_template.models import AuditTemplate
 
+
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
     organization = models.ForeignKey(to='organization.Organization',

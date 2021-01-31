@@ -37,7 +37,6 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
-  // Check if the argument value length is 1. If it is then add 0 as prefix for leading zero.
   checkLeadingZero(toCheck: string): string {
     return (toCheck.length === 1) ? ('0' + toCheck) : toCheck;
   }

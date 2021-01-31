@@ -307,12 +307,6 @@ class UpdateProfileTest(APITestCase):
             {"user_name": "random1"}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.client.force_authenticate(user=self.stock_keeper)
-        response = self.client.patch(
-            self.url + str(self.stock_keeper.id) + "/",
-            {"user_name": "random2"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
     def test_update_own_user_role(self):
         """ Users shouldn't be able to update their own roles """
         self.client.force_authenticate(user=self.system_admin)
@@ -328,16 +322,10 @@ class UpdateProfileTest(APITestCase):
         response = self.client.patch(
             self.url + str(self.manager.id) + "/",
             {"role": "SA"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         response = self.client.get(self.url + str(self.manager.id) + "/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['role'], 'IM')
-
-        self.client.force_authenticate(user=self.stock_keeper)
-        response = self.client.patch(
-            self.url + str(self.stock_keeper.id) + "/",
-            {"role": "SA"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class ChangePasswordTest(APITestCase):
@@ -372,11 +360,6 @@ class ChangePasswordTest(APITestCase):
         self.client.force_authenticate(user=self.i_m)
         response = self.client.patch(
             self.url + str(self.i_m.id) + "/", self.save_fields, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        self.client.force_authenticate(user=self.s_k)
-        response = self.client.patch(
-            self.url + str(self.s_k.id) + "/", self.save_fields, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_im_update_sk_password(self):

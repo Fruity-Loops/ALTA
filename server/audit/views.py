@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from user_account.permissions import IsSystemAdmin
-from .permissions import IsInventoryManagerAudit
+from user_account.permissions import HasSameOrgInQuery, \
+    PermissionFactory
+from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
 from .serializers import AuditSerializer, ItemToSKSerializer, GetAuditSerializer
 from .models import Audit, ItemToSK
 
@@ -13,7 +13,12 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get']
     queryset = Audit.objects.all()
-    permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManagerAudit]
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckAuditOrganizationById, HasSameOrgInQuery])
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
@@ -31,14 +36,20 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+
 class ItemToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'get']
+    http_method_names = ['post']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckInitAuditData, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
