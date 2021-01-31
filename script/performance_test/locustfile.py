@@ -1,60 +1,25 @@
 import time
 from locust import HttpUser, task
 import random
+import requests
 
 
 class QuickstartUser(HttpUser):
     unique_email = 'test@email.com'
     unique_username = 'test_case'
-    unique_id = 0
+    unique_id = 10000
     template_id = 0
 
-
-    @task
-    def login(self):
+    def on_start(self):
         response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
         token = response['token']
-        headers = {"authorization": "Token " + token}
-        self.client.post("logout/", json={"user": response['user_id']}, headers=headers)
-
-    # @task
-    # def open_register(self):
-    #     email = QuickstartUser.unique_email + str(QuickstartUser.unique_id)
-    #     username = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-    #     QuickstartUser.unique_id += 1000000000000
-    #     data = {'user_name': username,
-    #             'email': email,
-    #             "password": "password",
-    #             "first_name": "test",
-    #             "last_name": "user",
-    #             "role": "SA",
-    #             "is_active": "True",
-    #             "location": "",
-    #             "organization": 1}
-    #     self.client.post("open-registration/", json=data)
-
-    # @task
-    # def access_system_admins(self):
-    #     response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
-    #     token = response['token']
-    #     headers = {'Authorization': 'Token ' + token}
-    #     self.client.get('accessClients/', headers=headers)
+        self.headers = {"authorization": "Token " + token}
 
     @task
-    def access_employees_in_org(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
-        self.client.get('user/?organization=1', headers=headers)
-
-    @task
-    def create_employee(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
+    def open_register(self):
         email = QuickstartUser.unique_email + str(QuickstartUser.unique_id)
         username = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-        QuickstartUser.unique_id += 1000000000000
+        QuickstartUser.unique_id += 1
         data = {'user_name': username,
                 'email': email,
                 "password": "password",
@@ -64,64 +29,62 @@ class QuickstartUser(HttpUser):
                 "is_active": "True",
                 "location": "",
                 "organization": 1}
-        self.client.post('user/', json=data, headers=headers)
+        self.client.post("open-registration/", json=data)
+
+    @task
+    def access_system_admins(self):
+        self.client.get('accessClients/', headers=self.headers)
+
+    @task
+    def access_employees_in_org(self):
+        self.client.get('user/?organization=1', headers=self.headers)
+
+    @task
+    def create_employee(self):
+        email = QuickstartUser.unique_email + str(QuickstartUser.unique_id)
+        username = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
+        QuickstartUser.unique_id += 1
+        data = {'user_name': username,
+                'email': email,
+                "password": "password",
+                "first_name": "test",
+                "last_name": "user",
+                "role": "SA",
+                "is_active": "True",
+                "location": "",
+                "organization": 1}
+        self.client.post('user/', json=data, headers=self.headers)
 
     @task
     def modify_employee(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
         data = {'first_name': 'name', 'role': 'IM', 'organization': 1}
         id = str(response['user_id'])
-        self.client.patch('user/' + id + "/", json=data, headers=headers)
+        self.client.patch('user/' + id + "/", json=data, headers=self.headers)
 
-    # @task
-    # def access_organizations(self):
-    #     response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
-    #     token = response['token']
-    #     headers = {'Authorization': 'Token ' + token}
-    #     self.client.get('organization/', headers=headers)
-    #
-    # @task
-    # def create_organization(self):
-    #     response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
-    #     token = response['token']
-    #     headers = {'Authorization': 'Token ' + token}
-    #     name = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-    #     QuickstartUser.unique_id += 10000
-    #     data = {'org_name': name}
-    #     self.client.post('organization/', json=data, headers=headers)
+    @task
+    def access_organizations(self):
+        self.client.get('organization/', headers=self.headers)
+
+    @task
+    def create_organization(self):
+        name = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
+        QuickstartUser.unique_id += 1
+        data = {'org_name': name}
+        self.client.post('organization/', json=data, headers=self.headers)
 
     @task
     def modify_org_job_time(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
         data = {'new_job_timing': 50, 'organization': "1"}
-        self.client.post('InventoryItemRefreshTime/', json=data, headers=headers)
-
-    # @task
-    # def access_all_items(self):
-    #     response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-    #     token = response['token']
-    #     headers = {'Authorization': 'Token ' + token}
-    #     self.client.get('item/', headers=headers)
+        self.client.post('InventoryItemRefreshTime/', json=data, headers=self.headers)
 
     @task
     def access_specific_items(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
-        self.client.get(f'item/?page=1&page_size=25', headers=headers)
+        self.client.get(f'item/?page=1&page_size=25', headers=self.headers)
 
     @task
     def create_template(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
         QuickstartUser.template_id += 1
         data1 = {
-            "template_id": QuickstartUser.template_id,
             "title": "bad title",
             "location": ['A certain location'],
             "plant": [],
@@ -133,27 +96,21 @@ class QuickstartUser(HttpUser):
             "description": "",
             "organization": 1
         }
-        self.client.post('template/', json=data1, headers=headers)
+        self.client.post('template/', json=data1, headers=self.headers)
 
     @task
     def delete_template(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
-        response = self.client.get('template/?organization=1', headers=headers).json()
+        response = self.client.get('template/?organization=1', headers=self.headers, name="/template/?organization/").json()
         delete_id = None
         for template in response:
             if template['title'] == "bad title":
                 delete_id = template['template_id']
         if delete_id is not None:
-            self.client.delete('template/' + delete_id + '/', headers=headers)
+            self.client.delete('template/' + delete_id + '/', headers=self.headers, name="/template/?id/")
 
     @task
     def modify_template(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
-        headers = {'Authorization': 'Token ' + token}
-        self.client.get('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', headers=headers)
+        self.client.get('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', headers=self.headers, name="/template/?id/")
         data2 = {"title": "title " + str(self.unique_id)}
         self.unique_id += 1
-        self.client.patch('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', json=data2, headers=headers)
+        self.client.patch('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', json=data2, headers=self.headers, name="/template/?id/")
