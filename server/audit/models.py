@@ -3,6 +3,7 @@ from organization.models import Organization
 from inventory_item.models import Item
 from user_account.models import CustomUser
 
+
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
     organization = models.ForeignKey(Organization,

@@ -5,12 +5,9 @@ from organization.models import Organization
 from user_account.models import CustomUser
 from inventory_item.models import Item
 from .models import Audit
-from django.forms.models import model_to_dict
-import json
 
 
 class AuditTestCase(APITestCase):
-
     fixtures = ["items.json", "users.json", "organizations.json", "audits.json"]
 
     def setUp(self):
@@ -28,7 +25,7 @@ class AuditTestCase(APITestCase):
         self.item_one = Item.objects.get(_id=12731369.0)
         self.item_two = Item.objects.get(_id=12752842.0)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one._id, self.item_two._id) #check if this was there before
+        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
 
     def test_audit_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """
@@ -103,17 +100,22 @@ class AuditTestCase(APITestCase):
         """ Create ItemToSK designation as inventory manager """
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
+        request_body = {"init_audit": 1,
+                        "customuser": 5,
+                        "item_ids": [12752842],
+                        "bins": ['A10']}
 
-        response = self.client.post("/item-to-sk/",
-                                    {"init_audit": 1,
-                                     "customuser": 5,
-                                     "item_ids": [12752842],
-                                     "bins": ['A10']}, format="json")
+        response = self.client.post("/item-to-sk/", request_body, format="json")
 
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
         self.assertEqual(response.data['success'], "success")
+
+        # Now testing with a user from a different organization
+        request_body['customuser'] = 6
+        new_response = self.client.post("/item-to-sk/", request_body, format='json')
+        self.assertEqual(new_response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_item_to_sk_designation_bad_org(self):
         """ Try to create ItemToSK designation as inventory manager from another organization """
