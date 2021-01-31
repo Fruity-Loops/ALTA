@@ -16,13 +16,29 @@
   padding: 0.7em;
 }
 
-.mat-column {
+// .mat-column {
+//   word-wrap: break-word !important;
+//   white-space: unset !important;
+//   flex: 0 0 10% !important;
+//   justify-content:center;
+//   width: 5% !important;
+//   overflow-wrap: break-word;
+//   word-break: break-word;
+
+//   -ms-hyphens: auto;
+//   -moz-hyphens: auto;
+//   -webkit-hyphens: auto;
+//   hyphens: auto;
+// }
+
+.mat-column-Stock_Keeper {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 10% !important;
-  justify-content:center;
-  width: 5% !important;
+  flex: 0 0 8% !important;
+  width: 8% !important;
   overflow-wrap: break-word;
+  word-wrap: break-word;
+
   word-break: break-word;
 
   -ms-hyphens: auto;
@@ -30,6 +46,71 @@
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+.mat-column-Bins {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Nb_Parts {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-Initiator {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.mat-column-InitiationDate {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 
 
 .bottom-buttons {
