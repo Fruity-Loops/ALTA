@@ -4,8 +4,8 @@ from user_account.models import CustomUser
 
 class PermissionFactory:
     def __init__(self, request):
-        self.baseIMPermissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
-        self.baseSAPermissions = [IsAuthenticated, IsSystemAdmin]
+        self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
+        self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
         self.request = request
 
     def validate_is_sa(self):
@@ -14,10 +14,10 @@ class PermissionFactory:
 
     def get_general_permissions(self, get_im_perms):
         if self.validate_is_sa():
-            permission_classes = self.baseSAPermissions
+            permission_classes = self.base_sa_permissions
         else:
             # concatenate lists
-            permission_classes = self.baseIMPermissions + get_im_perms
+            permission_classes = self.base_im_permissions + get_im_perms
         return permission_classes
 
 
