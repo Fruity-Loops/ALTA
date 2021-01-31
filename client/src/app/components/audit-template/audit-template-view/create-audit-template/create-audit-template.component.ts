@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuditTemplateService } from '../../../../services/audit-template.service';
 import { Template } from '../../Template';
-import {AuditTemplateViewComponent} from '../audit-template-view.component';
+import { AuditTemplateViewComponent } from '../audit-template-view.component';
 
 @Component({
   selector: 'app-create-audit-template',
@@ -37,42 +37,19 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     };
   }
 
+  // Check if the argument value length is 1. If it is then add 0 as prefix for leading zero.
+  checkLeadingZero(toCheck: string): string {
+    return (toCheck.length === 1) ? ('0' + toCheck) : toCheck;
+  }
+
   submitQuery(body: Template): void {
     this.dayArray = [];
     this.monthArray = [];
     const year = this.startDate.getFullYear();
-
-    let month: string;
-    // Check if month value is in 1 digit then add 0 as a prefix.
-    if ((this.startDate.getMonth() + 1).toString().length === 1) {
-      month = ('0' + (this.startDate.getMonth() + 1));
-    } else {
-      month = String((this.startDate.getMonth() + 1));
-    }
-
-    let day: string;
-    // Check if day value is in 1 digit then add 0 as a prefix.
-    if (this.startDate.getDate().toString().length === 1) {
-      day = ('0' + (this.startDate.getDate()));
-    } else {
-      day = String((this.startDate.getDate()));
-    }
-
-    let hour: string;
-    // Check if hour value is in 1 digit then add 0 as a prefix.
-    if (parseInt(this.startTime.split(':')[0], 10).toString().length === 1) {
-      hour = ('0' + (parseInt(this.startTime.split(':')[0], 10)));
-    } else {
-      hour = String((parseInt(this.startTime.split(':')[0], 10)));
-    }
-
-    let minute: string;
-    // Check if hour value is in 1 digit then add 0 as a prefix.
-    if (parseInt(this.startTime.split(':')[1], 10).toString().length === 1) {
-      minute = ('0' + (parseInt(this.startTime.split(':')[1], 10)));
-    } else {
-      minute = String((parseInt(this.startTime.split(':')[1], 10)));
-    }
+    const month = this.checkLeadingZero((this.startDate.getMonth() + 1).toString());
+    const day = this.checkLeadingZero(this.startDate.getDate().toString());
+    const hour = this.checkLeadingZero(this.startTime.split(':')[0].toString());
+    const minute = this.checkLeadingZero(this.startTime.split(':')[1].toString());
 
     // Constructing date and time in ISO 8601 format e.g. 2021-01-18T15:37:42
     const date = year + '-' + month + '-' + day + 'T' + hour + ':' + minute + ':00';
@@ -119,7 +96,8 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['template']).then(() => {});
+            this.router.navigate(['template']).then(() => {
+            });
           }, 1000); // Waiting 1 second before redirecting the user
           this.initializeForm();
           this.errorMessage = '';
@@ -133,4 +111,5 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
       );
     }
   }
+
 }

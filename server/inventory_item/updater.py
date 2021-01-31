@@ -95,8 +95,8 @@ def start_new_cron_job(template_id, date, time_zone):
 
 def start_new_job_once_at_specific_date(template_id, date, time_zone):
     job_id = "template_" + str(template_id)
-    scheduler.add_job(create_audit, 'date', run_date=datetime_with_offset(date, time_zone), id=job_id,
-                      args=(template_id,), replace_existing=True)
+    scheduler.add_job(create_audit, 'date', run_date=datetime_with_offset(date, time_zone),
+                      id=job_id, args=(template_id,), replace_existing=True)
     print_all_job()
     get_specific_job(job_id)
 
