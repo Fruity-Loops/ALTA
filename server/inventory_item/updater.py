@@ -9,7 +9,7 @@ from audit_template.models import AuditTemplate
 from django_server.load_csv_to_db import main
 
 
-class Singleton(type):
+class Singleton(type):  # pylint: disable=too-few-public-methods
     """
     A metaclass that ensures the singleton restriction
     """
@@ -19,6 +19,21 @@ class Singleton(type):
         if cls not in cls._instances:
             cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
         return cls._instances[cls]
+
+
+def scheduler_listener(event):
+    """
+    :paramScheduler events
+    are fired on certain occasions, and may carry additional information
+    in them concerning the details of that particular event. It is possible
+    to listen to only particular types of events by giving the appropriate mask argument
+    to add_listener(), OR’ing the different constants together. The listener callable is
+    called with one argument, the event object.
+    """
+    if event.exception:
+        print('The job crashed :(')
+    else:
+        print('The job worked :)')
 
 
 class Scheduler(metaclass=Singleton):
@@ -42,21 +57,7 @@ class Scheduler(metaclass=Singleton):
         # named “default” to replace the default one  and a ThreadPoolExecutor
         # named “default” with a default maximum thread count of 10.
         self.scheduler = BackgroundScheduler(jobstores=job_stores)
-        self.scheduler.add_listener(self.scheduler_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
-
-    def scheduler_listener(self, event):
-        """
-        :paramScheduler events
-        are fired on certain occasions, and may carry additional information
-        in them concerning the details of that particular event. It is possible
-        to listen to only particular types of events by giving the appropriate mask argument
-        to add_listener(), OR’ing the different constants together. The listener callable is
-        called with one argument, the event object.
-        """
-        if event.exception:
-            print('The job crashed :(')
-        else:
-            print('The job worked :)')
+        self.scheduler.add_listener(scheduler_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
 
 
 scheduler = Scheduler().scheduler
@@ -130,8 +131,8 @@ def get_job_queries(repetition, day_of_week, months):
                 week_query += '4th ' + day + ','
 
     month_query = ''
-    for m in months:
-        month_query += m + ','
+    for month in months:
+        month_query += month + ','
 
     kwargs = {}
     if repetition == 'all':

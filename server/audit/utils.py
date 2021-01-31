@@ -5,7 +5,7 @@ from inventory_item.models import Item
 
 
 def fetch_inventory_items(template):
-    dict = {}
+    dicts = {}
     categories = ['Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Serial_Number']
 
     # Constructing the dict based on what optional criteria were added
@@ -15,14 +15,14 @@ def fetch_inventory_items(template):
             categories):
 
         if filters:
-            dict[category] = filters
+            dicts[category] = filters
 
-    sorted_keys = sorted(dict.keys())
-    all_categories = sorted(dict)
+    sorted_keys = sorted(dicts.keys())
+    all_categories = sorted(dicts)
 
     # Finding all the different combinations based on the criteria selected
-    combinations = it.product(*(dict[category] for category in all_categories))
-    queries = [x for x in combinations]  # converting the itertools object to a list
+    combinations = it.product(*(dicts[category] for category in all_categories))
+    queries = list(combinations)  # converting the itertools object to a list
 
     kwargs = {}
     inventory_items_to_audit = []
@@ -37,8 +37,8 @@ def fetch_inventory_items(template):
 
         # Appending the element of the Queryset object to the list
         # (Didn't find a way to cast it to a list)
-        for i in range(len(inventory_items)):
-            inventory_items_to_audit.append(inventory_items[i]._id)
+        for i in enumerate(inventory_items):
+            inventory_items_to_audit.append(inventory_items[i]._id)  # pylint: disable=W0212
 
     return inventory_items_to_audit
 
