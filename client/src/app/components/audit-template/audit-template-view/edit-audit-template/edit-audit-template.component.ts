@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 import { Template } from '../../Template';
 
-
 @Component({
   selector: 'app-edit-audit-template',
   templateUrl: '../audit-template-view.component.html',
@@ -32,6 +31,11 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
       bins: '',
       part_number: '',
       serial_number: '',
+      start_date: '',
+      repeat_every: '',
+      on_day: '',
+      for_month: '',
+      time_zone_utc: '',
     };
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
@@ -40,6 +44,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
         this.title = temp.title;
         this.description = temp.description;
         this.id = temp.template_id;
+        // TODO take scheduling into consideration when editing.
       });
     });
   }
@@ -50,7 +55,9 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
       if (typeof value === 'string'
         // checks to make sure that it is only adding keys from the template interface
         // @ts-ignore
-        && this.templateValues.hasOwnProperty(key)) {
+        && this.templateValues.hasOwnProperty(key)
+        && (key !== 'start_date' && key !== 'repeat_every' && key !== 'on_day'
+          && key !== 'for_month' && key !== 'time_zone_utc')) {
         createdTemplate[key] = JSON.parse(value.replace(/'/g, '"')); // replace to fix crash on single quote
       }
     });

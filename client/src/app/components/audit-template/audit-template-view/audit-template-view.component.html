@@ -2,147 +2,256 @@
   <mat-card-title>Template title</mat-card-title>
   <br>
 
-    <div class="form-group">
-      <mat-form-field appearance="outline" class="half-width">
-        <input class="form-control" id="title" type="text" matInput [(ngModel)]="title" placeholder="Template title"/>
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="half-width">
+      <input class="form-control" id="title" type="text" matInput [(ngModel)]="title" placeholder="Template title"/>
 
-      </mat-form-field>
-      <mat-error class="error">
-        {{errorMessage}}
-      </mat-error>
-    </div>
+    </mat-form-field>
+    <mat-error class="error">
+      {{errorMessage}}
+    </mat-error>
+  </div>
 
-    <mat-divider></mat-divider>
+  <mat-divider></mat-divider>
 
-    <br>
-    <mat-card-content>
+  <br>
+  <mat-card-content>
 
-      <div class="row">
-        <div class="column" *ngIf="templateValues">
+    <div class="row">
+      <div class="column-2 border-right" *ngIf="templateValues">
 
-          <!-- LEFT SIDE -->
+        <!-- LEFT SIDE -->
 
-          <div class="form-group" *ngIf="templateValues.location || templateValues.location === ''">
-            <mat-label>Location</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
-                     placeholder="Location" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('location', templateValues.location)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.plant  || templateValues.plant === ''">
-            <mat-label>Plant</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
-                     placeholder="Plant" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('plant', templateValues.plant)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.zones  || templateValues.zones === ''">
-            <mat-label>Zones</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
-                     placeholder="Zones" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('zones', templateValues.zones)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.aisles  || templateValues.aisles === ''">
-            <mat-label>Aisles</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
-                     placeholder="Aisles" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('aisles', templateValues.aisles)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.bins  || templateValues.bins === ''">
-            <mat-label>Bins</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
-                     placeholder="Bins" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('bins', templateValues.bins)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.part_number  || templateValues.part_number === ''">
-            <mat-label>Part Number</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
-                     placeholder="Part Number" [disabled]="disabled"/>
-              <button mat-icon-button matSuffix (click)="addItem('part_number', templateValues.part_number)"
-                      [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
-
-          <div class="form-group" *ngIf="templateValues.serial_number  || templateValues.serial_number === ''">
-            <mat-label>Serial Number</mat-label>
-            <mat-form-field appearance="outline">
-              <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"
-                     [(ngModel)]="templateValues.serial_number" placeholder="Serial Number" />
-              <button mat-icon-button matSuffix
-                      (click)="addItem('serial_number', templateValues.serial_number)" [disabled]="disabled">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
-            </mat-form-field>
-          </div>
+        <div class="form-group" *ngIf="templateValues.location || templateValues.location === ''">
+          <mat-label>Location</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
+                   placeholder="Location" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('location', templateValues.location)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
         </div>
 
-        <!-- RIGHT SIDE -->
-
-        <div class="column no-border">
-          <mat-card-title>Selected Fields</mat-card-title>
-          <mat-chip-list aria-label="Location">
-            <div *ngFor="let loc of template | keyvalue">
-              <mat-chip *ngFor="let value of loc.value"
-                        [removable]="true" (removed)="remove(loc.key, value)">
-                {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
-                <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
-              </mat-chip>
-            </div>
-          </mat-chip-list>
+        <div class="form-group" *ngIf="templateValues.plant  || templateValues.plant === ''">
+          <mat-label>Plant</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
+                   placeholder="Plant" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('plant', templateValues.plant)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
         </div>
 
-        <br>
-        <mat-form-field appearance="outline">
+        <div class="form-group" *ngIf="templateValues.zones  || templateValues.zones === ''">
+          <mat-label>Zones</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
+                   placeholder="Zones" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('zones', templateValues.zones)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group" *ngIf="templateValues.aisles  || templateValues.aisles === ''">
+          <mat-label>Aisles</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
+                   placeholder="Aisles" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('aisles', templateValues.aisles)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group" *ngIf="templateValues.bins  || templateValues.bins === ''">
+          <mat-label>Bins</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
+                   placeholder="Bins" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('bins', templateValues.bins)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group" *ngIf="templateValues.part_number  || templateValues.part_number === ''">
+          <mat-label>Part Number</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
+                   placeholder="Part Number" [disabled]="disabled"/>
+            <button mat-icon-button matSuffix (click)="addItem('part_number', templateValues.part_number)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group" *ngIf="templateValues.serial_number  || templateValues.serial_number === ''">
+          <mat-label>Serial Number</mat-label>
+          <mat-form-field appearance="outline">
+            <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"
+                   [(ngModel)]="templateValues.serial_number" placeholder="Serial Number"/>
+            <button mat-icon-button matSuffix
+                    (click)="addItem('serial_number', templateValues.serial_number)" [disabled]="disabled">
+              <mat-icon>add_circle_outline</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE -->
+
+      <div class="column-2">
+        <mat-card-title class="text-align-center">Selected Fields</mat-card-title>
+        <mat-chip-list aria-label="Location">
+          <div *ngFor="let loc of template | keyvalue">
+            <mat-chip *ngFor="let value of loc.value"
+                      [removable]="true" (removed)="remove(loc.key, value)">
+              {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
+              <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
+            </mat-chip>
+          </div>
+        </mat-chip-list>
+      </div>
+
+      <mat-form-field appearance="outline">
           <textarea rows="5" id="description" matInput [(ngModel)]="description"
                     placeholder="Description"></textarea>
+      </mat-form-field>
+
+      <!-- SCHEDULING -->
+
+      <br>
+      <mat-card-title id="center-title">Scheduling</mat-card-title>
+      <br>
+
+      <div class="form-group half-width">
+        <mat-label>Start Date</mat-label>
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="startDate" [matDatepicker]="datePick" disabled class="form-control" id="date"
+                 type="text" placeholder="DD/MM/YYYY">
+          <mat-datepicker-toggle [for]="datePick" matSuffix class="icon-color"></mat-datepicker-toggle>
+          <mat-datepicker #datePick [disabled]="false"></mat-datepicker>
         </mat-form-field>
       </div>
 
-    </mat-card-content>
-  <mat-card-footer>
-    <div class="center-aligned">
-      <div class="button-side-by-side" *ngIf="disabled">
-        <button mat-stroked-button id="edit-template-button" class="save-button-bg" (click)="beginEdit()">
-          EDIT</button><!-- if checks throws error then do not send data -->
+      <div class="form-group half-width">
+        <mat-label>Start time</mat-label>
+        <mat-form-field appearance="outline">
+          <mat-icon class="icon-color" matSuffix>schedule</mat-icon>
+          <input class="form-control" id="time" type="time" matInput placeholder="Start time" [(ngModel)]="startTime"/>
+        </mat-form-field>
       </div>
-      <div class="button-side-by-side" *ngIf="!disabled">
-        <button mat-stroked-button id="create-template-button" class="save-button-bg" (click)="submit()">
-          SAVE</button><!-- if checks throws error then do not send data -->
-      </div>
-      <div class="button-side-by-side">
-        <button mat-stroked-button routerLink="/template">CANCEL</button>
+
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel class="half-width" [expanded]="panelOpenState" [disabled]="isRecurrenceChosen"
+                             (afterExpand)="recurrenceExpand()" (afterCollapse)="recurrenceCollapsed()">
+          <mat-expansion-panel-header>
+            <mat-panel-title>Recurrence</mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="column-2 text-padding-left-align">
+                <mat-label>Repeat every</mat-label>
+              </div>
+              <div class="column-2">
+                <mat-form-field floatLabel="never" appearance="outline" class="small-font">
+                  <mat-select [(ngModel)]="repeatEvery">
+                    <mat-option value="1">1st week of the month</mat-option>
+                    <mat-option value="2">2nd week of the month</mat-option>
+                    <mat-option value="3">3rd week of the month</mat-option>
+                    <mat-option value="last">last week of the month</mat-option>
+                    <mat-option value="all">week</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="column-2 text-padding-left-align">
+                  <mat-label>On</mat-label>
+                </div>
+                <div class="column-2">
+                  <mat-checkbox class="button-padding" [checked]="allDaysChecked"
+                                [indeterminate]="someCheckboxDay()"
+                                (change)="setAllCheckboxDay($event.checked)">
+                    {{recurrenceDay.name}}
+                  </mat-checkbox>
+                  <mat-checkbox class="button-padding" *ngFor="let subDays of recurrenceDay.subCheckBox"
+                                [(ngModel)]="subDays.checked" (ngModelChange)="updateCheckboxDay()">
+                    {{subDays.name}}
+                  </mat-checkbox>
+                </div>
+              </div>
+              <mat-error class="error">
+                {{errorMessageCheckboxDay}}
+              </mat-error>
+            </div>
+
+            <div class="form-group">
+              <div class="row">
+                <div class="column-2 text-padding-left-align">
+                  <mat-label>For the month of</mat-label>
+                </div>
+                <div class="column-2">
+                  <mat-checkbox class="button-padding" [checked]="allMonthsChecked"
+                                [indeterminate]="someCheckboxMonth()"
+                                (change)="setAllCheckboxMonth($event.checked)">
+                    {{recurrenceDay.name}}
+                  </mat-checkbox>
+                  <mat-checkbox class="button-padding" *ngFor="let subMonths of recurrenceMonth.subCheckBox"
+                                [(ngModel)]="subMonths.checked" (ngModelChange)="updateCheckboxMonth()">
+                    {{subMonths.name}}
+                  </mat-checkbox>
+                </div>
+              </div>
+              <mat-error class="error">
+                {{errorMessageCheckboxMonth}}
+              </mat-error>
+            </div>
+
+            <div class="position-right">
+              <button mat-stroked-button (click)="recurrenceCollapsed()">CANCEL</button>
+            </div>
+
+          </div>
+
+        </mat-expansion-panel>
+      </mat-accordion>
+      <br>
+
+      <div class="form-group half-width">
+        <mat-label>Time zone</mat-label>
+        <mat-form-field floatLabel="never" appearance="outline">
+          <mat-select [(ngModel)]="selectedTimeZone" (selectionChange)="timeZoneChange($event)">
+            <mat-option *ngFor="let timezone of timeZone" [value]="timezone">
+              {{ timezone.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
     </div>
-  </mat-card-footer>
+
+    <mat-card-footer>
+      <div class="center-aligned">
+        <div class="button-side-by-side" *ngIf="disabled">
+          <button mat-stroked-button id="edit-template-button" class="save-button-bg" (click)="beginEdit()">
+            EDIT
+          </button><!-- if checks throws error then do not send data -->
+        </div>
+        <div class="button-side-by-side" *ngIf="!disabled">
+          <button mat-stroked-button id="create-template-button" class="save-button-bg" (click)="submit()">SAVE</button>
+          <!-- if checks throws error then do not send data -->
+        </div>
+        <div class="button-side-by-side">
+          <button mat-stroked-button routerLink="/template">CANCEL</button>
+        </div>
+      </div>
+    </mat-card-footer>
+    <br>
+  </mat-card-content>
 </mat-card>
