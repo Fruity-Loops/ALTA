@@ -26,6 +26,7 @@ def fetch_inventory_items(template):
 
     kwargs = {}
     inventory_items_to_audit = []
+    # TODO To be further looked into for a more efficient solution
     for query in queries:
         for category, value in zip(sorted_keys, query):
             kwargs[category] = value
