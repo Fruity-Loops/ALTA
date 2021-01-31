@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class ReviewAuditComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Nb_Parts', 'Initiator', 'InitiationDate'];
+  displayedColumns: string[] = ['stockkeeper', 'bins', 'numberparts', 'initiator', 'initiationdate'];
   locationsAndUsers: Array<any>;
   auditID: number;
   itemData: Array<any>;
