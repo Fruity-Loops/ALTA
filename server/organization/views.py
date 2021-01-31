@@ -42,7 +42,14 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     """
 
     # Note: if other methods are added here, keep in mind that the permissions will need to change
-    permission_classes = [IsAuthenticated, IsSystemAdmin | (IsInventoryManager, HasSameOrgInBody)]
+    def get_permissions(self):
+        permission_classes = []
+        if IsInventoryManager.has_permission(self, self.request, ModifyOrganizationInventoryItemsDataUpdate) and \
+                HasSameOrgInBody.has_permission(self, self.request, ModifyOrganizationInventoryItemsDataUpdate):
+            permission_class = [IsAuthenticated]
+        else:
+            permission_classes = [IsAuthenticated, IsSystemAdmin]
+        return [permission() for permission in permission_classes]
 
     def post(self, request):
         data = request.data
