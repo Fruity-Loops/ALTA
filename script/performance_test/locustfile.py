@@ -8,7 +8,8 @@ class IMUser(HttpUser):
     weight = 9
 
     def on_start(self):
-        self.response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
+        self.response = self.client.post("login/", json={"email": "im@test.com", "password": "password"},
+                                         name='/IM-login/').json()
         self.org = 1
         token = self.response['token']
         self.headers = {"authorization": "Token " + token}
@@ -17,11 +18,11 @@ class IMUser(HttpUser):
     def modify_employee(self):
         data = {'first_name': 'name', 'role': 'IM', 'organization': self.org}
         id = str(self.response['user_id'])
-        self.client.patch('user/' + id + "/", json=data, headers=self.headers)
+        self.client.patch('user/' + id + "/", json=data, headers=self.headers, name='/user/?id')
 
     @task
     def access_specific_items(self):
-        self.client.get(f'item/?page=1&page_size=25', headers=self.headers, name='item/?page&?page_size')
+        self.client.get(f'item/?page=1&page_size=25', headers=self.headers, name='/item/?page&?page_size')
 
     @task
     def create_template(self):
@@ -62,7 +63,8 @@ class SAUser(HttpUser):
     weight = 1
 
     def on_start(self):
-        self.response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        self.response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"},
+                                         name='/SA-login/').json()
         token = self.response['token']
         self.headers = {"authorization": "Token " + token}
 
@@ -73,7 +75,7 @@ class SAUser(HttpUser):
     @task
     def access_employees_in_org(self):
         org_id = random.choice([1, 2, 3])
-        self.client.get(f'user/?organization={org_id}', headers=self.headers)
+        self.client.get(f'user/?organization={org_id}', headers=self.headers, name='/user/?organization')
 
     @task
     def access_organizations(self):
