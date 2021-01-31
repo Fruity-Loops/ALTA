@@ -23,7 +23,7 @@ export class CreateMembersPage {
   }
 
   getPasswordField(): ElementFinder {
-    return element(by.id('pass-word'));
+    return element(by.id('passwordCreate'));
   }
 
   getLocationField(): ElementFinder {
@@ -31,7 +31,7 @@ export class CreateMembersPage {
   }
 
   getSaveButton(): ElementFinder {
-    return element(by.id('signupbtn'));
+    return element(by.id('saveButton'));
   }
 
   getRoleDropDown(): ElementFinder {

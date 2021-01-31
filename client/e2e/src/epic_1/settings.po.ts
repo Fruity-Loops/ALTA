@@ -15,11 +15,11 @@ export class SettingsPage {
   }
 
   getEditButton(): ElementFinder {
-    return element(by.id('editbtn'));
+    return element(by.id('editButton'));
   }
 
   getSaveButton(): ElementFinder {
-    return element(by.id('signupbtn'));
+    return element(by.id('saveButton'));
   }
 
   getEmailInputField(): ElementFinder {
@@ -27,7 +27,7 @@ export class SettingsPage {
   }
 
   getPasswordInputField(): ElementFinder {
-    return element(by.id('pass-word'));
+    return element(by.id('passwordCreate'));
   }
 
   getLocationInputField(): ElementFinder {
