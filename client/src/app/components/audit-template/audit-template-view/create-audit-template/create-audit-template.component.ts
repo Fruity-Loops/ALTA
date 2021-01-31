@@ -41,15 +41,40 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     this.dayArray = [];
     this.monthArray = [];
     const year = this.startDate.getFullYear();
-    const month = ((this.startDate.getMonth() + 1).toString().length === 1) ?
-      ('0' + (this.startDate.getMonth() + 1)) : ((this.startDate.getMonth() + 1));
-    const day = (this.startDate.getDate().toString().length === 1) ? ('0' + (this.startDate.getDate())) : (this.startDate.getDate());
-    const hour = (parseInt(this.startTime.split(':')[0], 10).toString().length === 1) ?
-      ('0' + (parseInt(this.startTime.split(':')[0], 10))) : (parseInt(this.startTime.split(':')[0], 10));
-    const minute = (parseInt(this.startTime.split(':')[1], 10).toString().length === 1) ?
-      ('0' + (parseInt(this.startTime.split(':')[1], 10))) : (parseInt(this.startTime.split(':')[1], 10));
 
-    // Constructing date and time in ISO 8601 format e.g. 2021-01-18T15:37:42Z
+    let month: string;
+    // Check if month value is in 1 digit then add 0 as a prefix.
+    if ((this.startDate.getMonth() + 1).toString().length === 1) {
+      month = ('0' + (this.startDate.getMonth() + 1));
+    } else {
+      month = String((this.startDate.getMonth() + 1));
+    }
+
+    let day: string;
+    // Check if day value is in 1 digit then add 0 as a prefix.
+    if (this.startDate.getDate().toString().length === 1) {
+      day = ('0' + (this.startDate.getDate()));
+    } else {
+      day = String((this.startDate.getDate()));
+    }
+
+    let hour: string;
+    // Check if hour value is in 1 digit then add 0 as a prefix.
+    if (parseInt(this.startTime.split(':')[0], 10).toString().length === 1) {
+      hour = ('0' + (parseInt(this.startTime.split(':')[0], 10)));
+    } else {
+      hour = String((parseInt(this.startTime.split(':')[0], 10)));
+    }
+
+    let minute: string;
+    // Check if hour value is in 1 digit then add 0 as a prefix.
+    if (parseInt(this.startTime.split(':')[1], 10).toString().length === 1) {
+      minute = ('0' + (parseInt(this.startTime.split(':')[1], 10)));
+    } else {
+      minute = String((parseInt(this.startTime.split(':')[1], 10)));
+    }
+
+    // Constructing date and time in ISO 8601 format e.g. 2021-01-18T15:37:42
     const date = year + '-' + month + '-' + day + 'T' + hour + ':' + minute + ':00';
 
     let checkedDay = false;

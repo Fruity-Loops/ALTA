@@ -177,12 +177,12 @@
                 </div>
                 <div class="column-2">
                   <mat-checkbox class="button-padding" [checked]="allDaysChecked"
-                                [indeterminate]="someCheckbox('dayCheckbox')"
-                                (change)="setAllCheckbox($event.checked, 'dayCheckbox')">
+                                [indeterminate]="someCheckboxDay()"
+                                (change)="setAllCheckboxDay($event.checked)">
                     {{recurrenceDay.name}}
                   </mat-checkbox>
                   <mat-checkbox class="button-padding" *ngFor="let subDays of recurrenceDay.subCheckBox"
-                                [(ngModel)]="subDays.checked" (ngModelChange)="updateAllCheckbox('dayCheckbox')">
+                                [(ngModel)]="subDays.checked" (ngModelChange)="updateCheckboxDay()">
                     {{subDays.name}}
                   </mat-checkbox>
                 </div>
@@ -199,12 +199,12 @@
                 </div>
                 <div class="column-2">
                   <mat-checkbox class="button-padding" [checked]="allMonthsChecked"
-                                [indeterminate]="someCheckbox('monthCheckbox')"
-                                (change)="setAllCheckbox($event.checked, 'monthCheckbox')">
+                                [indeterminate]="someCheckboxMonth()"
+                                (change)="setAllCheckboxMonth($event.checked)">
                     {{recurrenceDay.name}}
                   </mat-checkbox>
                   <mat-checkbox class="button-padding" *ngFor="let subMonths of recurrenceMonth.subCheckBox"
-                                [(ngModel)]="subMonths.checked" (ngModelChange)="updateAllCheckbox('monthCheckbox')">
+                                [(ngModel)]="subMonths.checked" (ngModelChange)="updateCheckboxMonth()">
                     {{subMonths.name}}
                   </mat-checkbox>
                 </div>

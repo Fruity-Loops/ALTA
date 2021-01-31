@@ -52,7 +52,6 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
   formTemplate(temp: { [s: string]: unknown; } | ArrayLike<unknown>): any {
     const createdTemplate: any = {};
     Object.entries(temp).forEach(([key, value]) => {
-      console.log(key);
       if (typeof value === 'string'
         // checks to make sure that it is only adding keys from the template interface
         // @ts-ignore

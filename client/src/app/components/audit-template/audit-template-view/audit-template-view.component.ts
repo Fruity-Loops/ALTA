@@ -155,23 +155,22 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     this.errorMessageCheckboxMonth = ' ';
   }
 
-  updateAllCheckbox(type: string): void {
-    if (type === 'dayCheckbox') {
+  updateCheckboxDay(): void {
       this.allDaysChecked =
         this.recurrenceDay.subCheckBox != null &&
         this.recurrenceDay.subCheckBox.every((t) => t.checked);
       this.errorMessageCheckboxDay = ' ';
-    } else if (type === 'monthCheckbox') {
+  }
+
+  updateCheckboxMonth(): void {
       this.allMonthsChecked =
         this.recurrenceMonth.subCheckBox != null &&
         this.recurrenceMonth.subCheckBox.every((t) => t.checked);
       this.errorMessageCheckboxMonth = ' ';
-    }
   }
 
   // @ts-ignore
-  someCheckbox(type: string): boolean {
-    if (type === 'dayCheckbox') {
+  someCheckboxDay(): boolean {
       if (this.recurrenceDay.subCheckBox == null) {
         return false;
       }
@@ -179,7 +178,10 @@ export abstract class AuditTemplateViewComponent implements OnInit {
         this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
         !this.allDaysChecked
       );
-    } else if (type === 'monthCheckbox') {
+  }
+
+  // @ts-ignore
+  someCheckboxMonth(): boolean {
       if (this.recurrenceMonth.subCheckBox == null) {
         return false;
       }
@@ -187,23 +189,22 @@ export abstract class AuditTemplateViewComponent implements OnInit {
         this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
         !this.allMonthsChecked
       );
-    }
   }
 
-  setAllCheckbox(checked: boolean, type: string): void {
-    if (type === 'dayCheckbox') {
+  setAllCheckboxDay(checked: boolean): void {
       this.allDaysChecked = checked;
       if (this.recurrenceDay.subCheckBox == null) {
         return;
       }
       this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
-    } else if (type === 'monthCheckbox') {
+  }
+
+  setAllCheckboxMonth(checked: boolean): void {
       this.allMonthsChecked = checked;
       if (this.recurrenceMonth.subCheckBox == null) {
         return;
       }
       this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
-    }
   }
 
   abstract submitQuery(body: any): void;
