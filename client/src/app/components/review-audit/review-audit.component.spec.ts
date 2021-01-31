@@ -10,7 +10,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 describe('AssignStockKeepersComponent', () => {
   let component: ReviewAuditComponent;
   let fixture: ComponentFixture<ReviewAuditComponent>;
-  let service: ManageMembersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,7 +24,6 @@ describe('AssignStockKeepersComponent', () => {
 
     fixture = TestBed.createComponent(ReviewAuditComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
   });
 

@@ -14,31 +14,31 @@
     </mat-card-header>
   </mat-expansion-panel-header>
 
-  <table mat-table [dataSource]="dataSource" matSort>
+  <table mat-table aria-labelledby="review_sks" [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="Stock_Keeper">
-      <th mat-header-cell *matHeaderCellDef>Stock Keeper</th>
+      <th id="header_sk_name" mat-header-cell *matHeaderCellDef>Stock Keeper</th>
       <td mat-cell *matCellDef="let row">{{ row.name }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Bins">
-      <th mat-header-cell *matHeaderCellDef>Bins</th>
+      <th id="header_bin" mat-header-cell *matHeaderCellDef>Bins</th>
       <td mat-cell *matCellDef="let row">{{ row.bins }}</td>
     </ng-container>
 
 
     <ng-container matColumnDef="Nb_Parts">
-      <th mat-header-cell *matHeaderCellDef>Number of Parts</th>
+      <th id="header_number_of_parts" mat-header-cell *matHeaderCellDef>Number of Parts</th>
       <td mat-cell *matCellDef="let row">{{ row.numberOfParts }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Initiator">
-      <th mat-header-cell *matHeaderCellDef>Initiated by</th>
+      <th id="header_initiated_by" mat-header-cell *matHeaderCellDef>Initiated by</th>
       <td mat-cell *matCellDef="let row">{{ row.initiatedBy }}</td>
     </ng-container>
 
     <ng-container matColumnDef="InitiationDate">
-      <th mat-header-cell *matHeaderCellDef>Initiated on</th>
+      <th id="header_initiated_on" mat-header-cell *matHeaderCellDef>Initiated on</th>
       <td mat-cell *matCellDef="let row">{{ row.date }}</td>
     </ng-container>
 
@@ -59,7 +59,7 @@
   <h2 matDialogTitle>Discard Audit</h2>
   <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
   <div mat-dialog-actions align="end">
-    <button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
-    <button mat-button (click)="closeDialog()">Cancel</button>
+    <button mat-button routerLink="/audits" (click)="discardAudit()">Discard</button>
+    <button mat-button (click)="cancelDialog()">Cancel</button>
   </div>
 </ng-template>

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,8 @@ export class ReviewAuditComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['Stock_Keeper', 'Bins', 'Nb_Parts', 'Initiator', 'InitiationDate'];
   locationsAndUsers: Array<any>;
+  auditID: number;
+  itemData: Array<any>;
 
   panelOpenState = false;
   allExpandState = false;
@@ -24,21 +26,23 @@ export class ReviewAuditComponent implements OnInit {
     private router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
+    this.itemData = [];
+    this.auditID = Number(localStorage.getItem('audit_id'));
   }
 
   ngOnInit(): void {
-
     this.getTableData();
   }
 
   getTableData(): void {
 
-    this.manageAuditsService.getAuditData(Number(localStorage.getItem('audit_id')))
+    this.manageAuditsService.getAuditData(this.auditID)
       .subscribe((auditData) => {
         const assignedSks = auditData.assigned_sk;
 
-        this.manageAuditsService.getItemSKAudit(Number(localStorage.getItem('audit_id')))
+        this.manageAuditsService.getItemSKAudit(this.auditID)
           .subscribe((itemSKData) => {
+            this.itemData = itemSKData;
             assignedSks.forEach((sk: any) => {
               itemSKData.forEach((itemSK: any) => {
                 if (sk.id === itemSK.customuser) {
@@ -51,7 +55,7 @@ export class ReviewAuditComponent implements OnInit {
       });
   }
 
-  buildTable(itemSKData: any, sks: any): void{
+  buildTable(itemSKData: any, sks: any): void {
     const table: any[] = [];
     const locations: any[] = [];
 
@@ -85,19 +89,38 @@ export class ReviewAuditComponent implements OnInit {
     return 'N/A';
   }
 
+  @HostListener('window:popstate', ['$event'])
+  onBrowserBack(event: Event): void {
+    event.preventDefault();
+    this.goBackManageSK();
+  }
+
   goBackManageSK(): void {
-    // TODO: save data so when user goes back to previous page, previously selected info is kept
-    setTimeout(() => {
-      // Redirect user to component dashboard
-      this.router.navigate(['designate-sk']);
-    }, 1000); // Waiting 1 second before redirecting the user
+    this.deleteItemToSKData();
+    this.router.navigate(['audits/assign-sk/designate-sk'], { replaceUrl: true });
+  }
+
+  deleteItemToSKData(): void {
+    this.itemData.forEach(async item => {
+      await this.manageAuditsService.deletePreAudit(item.itemtoSk_id).subscribe((
+        (err) => {
+          this.errorMessage = err;
+        }));
+    });
+  }
+
+  deleteAudit(): void {
+    this.manageAuditsService.deleteAudit(this.auditID).subscribe((
+      (err) => {
+        this.errorMessage = err;
+      }));
+    localStorage.removeItem('audit_id');
   }
 
   confirmReviewAuditData(): void {
     setTimeout(() => {
-      // Redirect user to component dashboard
-      this.router.navigate(['dashboard']);
-    }, 1000); // Waiting 1 second before redirecting the user
+      this.router.navigate(['audits'], { replaceUrl: true });
+    }, 1000);
 
     localStorage.removeItem('audit_id');
   }
@@ -106,7 +129,12 @@ export class ReviewAuditComponent implements OnInit {
     this.dialog.open(ref);
   }
 
-  closeDialog(): void {
+  cancelDialog(): void {
+    this.dialog.closeAll();
+  }
+
+  discardAudit(): void {
+    this.deleteAudit();
     this.dialog.closeAll();
   }
 }

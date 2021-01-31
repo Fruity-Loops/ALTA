@@ -67,7 +67,7 @@
   <div class="bottom-buttons">
       <button mat-stroked-button  id="goback" class="bottom-goback"
             (click)="goBackAssignSK()">Go Back</button>
-    <button mat-stroked-button  id="discard" class="bottom-discard"
+    <button mat-stroked-button  id="discard" class="bottom-discard" 
             (click)="openDialogWithRef(discardDialog)">Discard</button>
     <button mat-stroked-button  id="assign" class="bottom-assign"
             [disabled]="checkDisableButton(binToSks)"
@@ -78,8 +78,8 @@
     <h2 matDialogTitle>Discard Audit</h2>
     <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
     <div mat-dialog-actions>
-      <button mat-button routerLink="/dashboard" (click)="closeDialog()">Discard</button>
-      <button mat-button (click)="closeDialog()">Cancel</button>
+      <button mat-button routerLink="/audits" (click)="discardAudit()">Discard</button>
+      <button mat-button (click)="cancelDialog()">Cancel</button>
     </div>
   </ng-template>
 

@@ -11,7 +11,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'patch', 'get']
+    http_method_names = ['post', 'patch', 'get', 'delete']
     queryset = Audit.objects.all()
     permission_classes = [IsAuthenticated, IsSystemAdmin | IsInventoryManagerAudit]
 
@@ -35,10 +35,10 @@ class ItemToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'get', 'patch']
+    http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = ItemToSK.objects.all()
     serializer_class = ItemToSKSerializer
-    permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
+    # permission_classes = [IsAuthenticated, IsInventoryManagerAudit | IsSystemAdmin]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
