@@ -1,91 +1,36 @@
 import time
-from locust import HttpUser, task
+from locust import HttpUser, task, between
 import random
-import requests
+import string
 
 
-class QuickstartUser(HttpUser):
-    unique_email = 'test@email.com'
-    unique_username = 'test_case'
-    unique_id = 10000
-    template_id = 0
+class IMUser(HttpUser):
+    weight = 9
 
     def on_start(self):
-        response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
-        token = response['token']
+        self.response = self.client.post("login/", json={"email": "im@test.com", "password": "password"}).json()
+        self.org = 1
+        token = self.response['token']
         self.headers = {"authorization": "Token " + token}
 
     @task
-    def open_register(self):
-        email = QuickstartUser.unique_email + str(QuickstartUser.unique_id)
-        username = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-        QuickstartUser.unique_id += 1
-        data = {'user_name': username,
-                'email': email,
-                "password": "password",
-                "first_name": "test",
-                "last_name": "user",
-                "role": "SA",
-                "is_active": "True",
-                "location": "",
-                "organization": 1}
-        self.client.post("open-registration/", json=data)
-
-    @task
-    def access_system_admins(self):
-        self.client.get('accessClients/', headers=self.headers)
-
-    @task
-    def access_employees_in_org(self):
-        self.client.get('user/?organization=1', headers=self.headers)
-
-    @task
-    def create_employee(self):
-        email = QuickstartUser.unique_email + str(QuickstartUser.unique_id)
-        username = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-        QuickstartUser.unique_id += 1
-        data = {'user_name': username,
-                'email': email,
-                "password": "password",
-                "first_name": "test",
-                "last_name": "user",
-                "role": "SA",
-                "is_active": "True",
-                "location": "",
-                "organization": 1}
-        self.client.post('user/', json=data, headers=self.headers)
-
-    @task
     def modify_employee(self):
-        data = {'first_name': 'name', 'role': 'IM', 'organization': 1}
-        id = str(response['user_id'])
+        data = {'first_name': 'name', 'role': 'IM', 'organization': self.org}
+        id = str(self.response['user_id'])
         self.client.patch('user/' + id + "/", json=data, headers=self.headers)
 
     @task
-    def access_organizations(self):
-        self.client.get('organization/', headers=self.headers)
-
-    @task
-    def create_organization(self):
-        name = QuickstartUser.unique_username + str(QuickstartUser.unique_id)
-        QuickstartUser.unique_id += 1
-        data = {'org_name': name}
-        self.client.post('organization/', json=data, headers=self.headers)
-
-    @task
-    def modify_org_job_time(self):
-        data = {'new_job_timing': 50, 'organization': "1"}
-        self.client.post('InventoryItemRefreshTime/', json=data, headers=self.headers)
-
-    @task
     def access_specific_items(self):
-        self.client.get(f'item/?page=1&page_size=25', headers=self.headers)
+        self.client.get(f'item/?page=1&page_size=25', headers=self.headers, name='item/?page&?page_size')
 
     @task
     def create_template(self):
-        QuickstartUser.template_id += 1
+        # generate random title for the template
+        letters = string.ascii_lowercase
+        title = ''.join(random.choice(letters) for i in range(15))
+
         data1 = {
-            "title": "bad title",
+            "title": title,
             "location": ['A certain location'],
             "plant": [],
             "zones": [],
@@ -94,23 +39,91 @@ class QuickstartUser(HttpUser):
             "part_number": [],
             "serial_number": [],
             "description": "",
-            "organization": 1
+            "organization": self.org
         }
         self.client.post('template/', json=data1, headers=self.headers)
 
-    @task
-    def delete_template(self):
-        response = self.client.get('template/?organization=1', headers=self.headers, name="/template/?organization/").json()
-        delete_id = None
+        response = self.client.get(f'template/?organization={self.org}', headers=self.headers,
+                                   name="/template/?organization/").json()
+        new_temp_id = None
         for template in response:
-            if template['title'] == "bad title":
-                delete_id = template['template_id']
-        if delete_id is not None:
-            self.client.delete('template/' + delete_id + '/', headers=self.headers, name="/template/?id/")
+            if template['title'] == title:
+                new_temp_id = template['template_id']
+                break
+
+        if new_temp_id is not None:
+            new_title = f'new {title}'
+            new_data = {"title": new_title}
+            self.client.patch(f'template/{new_temp_id}/', json=new_data, headers=self.headers, name="/template/?id/")
+            self.client.delete(f'template/{new_temp_id}/', headers=self.headers, name="/template/?id/")
+
+
+class SAUser(HttpUser):
+    weight = 1
+
+    def on_start(self):
+        self.response = self.client.post("login/", json={"email": "sa@test.com", "password": "password"}).json()
+        token = self.response['token']
+        self.headers = {"authorization": "Token " + token}
 
     @task
-    def modify_template(self):
-        self.client.get('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', headers=self.headers, name="/template/?id/")
-        data2 = {"title": "title " + str(self.unique_id)}
-        self.unique_id += 1
-        self.client.patch('template/c8c1a994-1f7d-4224-9091-2cfebafe2899/', json=data2, headers=self.headers, name="/template/?id/")
+    def access_system_admins(self):
+        self.client.get('accessClients/', headers=self.headers)
+
+    @task
+    def access_employees_in_org(self):
+        org_id = random.choice([1, 2, 3])
+        self.client.get(f'user/?organization={org_id}', headers=self.headers)
+
+    @task
+    def access_organizations(self):
+        self.client.get('organization/', headers=self.headers)
+
+    @task
+    def create_organization(self):
+        # generate random organization name
+        letters = string.ascii_lowercase
+        org_name = ''.join(random.choice(letters) for i in range(15))
+        data = {'org_name': org_name}
+        self.client.post('organization/', json=data, headers=self.headers)
+
+    @task
+    def modify_org_job_time(self):
+        data = {'new_job_timing': 50, 'organization': "1"}
+        self.client.post('InventoryItemRefreshTime/', json=data, headers=self.headers)
+
+    @task
+    def create_employee(self):
+        # generate random user_name and email
+        letters = string.ascii_lowercase
+        user_name = ''.join(random.choice(letters) for i in range(15))
+        email = f'{user_name}@test.com'
+
+        data = {'user_name': user_name,
+                'email': email,
+                "password": "password",
+                "first_name": "test",
+                "last_name": "user",
+                "role": "SA",
+                "is_active": "True",
+                "location": ""
+                }
+        self.client.post('user/', json=data, headers=self.headers)
+
+    @task
+    def open_register(self):
+        # generate random user_name and email
+        letters = string.ascii_lowercase
+        user_name = ''.join(random.choice(letters) for i in range(15))
+        email = f'{user_name}@test.com'
+
+        data = {'user_name': user_name,
+                'email': email,
+                "password": "password",
+                "first_name": "test",
+                "last_name": "user",
+                "role": "SA",
+                "is_active": "True",
+                "location": ""
+                }
+        self.client.post("open-registration/", json=data)
