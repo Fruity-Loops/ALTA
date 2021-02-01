@@ -1,14 +1,12 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
-from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
-from .serializers import AuditSerializer, GetBinToSKSerializer, PostBinToSKSerializer, GetAuditSerializer
+from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
+from .serializers import AuditSerializer, GetBinToSKSerializer, PostBinToSKSerializer, \
+    GetAuditSerializer, BinItemSerializer
 from .models import Audit, BinToSK
-import json
-
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -88,30 +86,21 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
-    def get_audit_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
-        serializer_class = GetAuditSerializer
+    def get_bin_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
+        serializer_class = BinItemSerializer
         return serializer_class(*args, **kwargs)
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
     def items(self, request):
         bin_id = request.query_params.get('bin_id')
         audit_id = request.query_params.get('audit_id')
-        bins = BinToSK.objects.filter(bin_id=bin_id)
-        queryset = Audit.objects.filter(audit_id=audit_id)
-        # json_res = []
-        # for item in queryset[0].inventory_items.all():
-        #     json_obj = dict(
-        #         myproperty = item._id, 
-        #     )
-        #     json_res.append(json_obj)
+        bins = BinToSK.objects.get(bin_id=bin_id)
+        queryset = Audit.objects.get(audit_id=audit_id)
+        bin_items = []
+        for item in queryset.inventory_items.all():
+            if int(item._id) in bins.item_ids:
+                bin_items.append(item)
+        queryset.inventory_items.set(bin_items)
 
-
-
-        # page = self.paginate_queryset(recent_users)
-        # if page is not None:
-        #     serializer = self.get_serializer(page, many=True)
-        #     return self.get_paginated_response(serializer.data)
-        print(queryset[0].inventory_items)
-        serializer = self.get_audit_serializer(queryset, many=True)
-        print(json.dumps(serializer.data))
+        serializer = self.get_bin_item_serializer(queryset, many=False)
         return Response(serializer.data)

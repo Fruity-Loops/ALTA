@@ -20,7 +20,7 @@ export class BinsPage implements OnInit {
 
   ngOnInit() {
     this.getSelectedAudit();
-    this.getBins(); 
+    this.getBins();
   }
 
   getSelectedAudit() {

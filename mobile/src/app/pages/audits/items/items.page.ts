@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Platform, AlertController, ToastController} from '@ionic/angular';
+import { Platform, AlertController, ToastController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -18,9 +18,9 @@ export class ItemsPage implements OnInit, OnDestroy {
   keypressEvent: Subscription;
   isScanning: boolean;
   loggedInUser: any;
-  currentSegment: string = 'items';
+  currentSegment = 'items';
   items: any;
-  completedItems : [];
+  completedItems: [];
   auditID: string;
   binID: string;
 
@@ -39,7 +39,7 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setPermissions();
-    this.getSelectedBin()
+    this.getSelectedBin();
     this.getItems();
     this.setExternalScanListener();
   }
@@ -68,11 +68,8 @@ export class ItemsPage implements OnInit, OnDestroy {
         if (user) {
           this.loggedInUser = user;
           this.auditService.getItems(user.user_id, this.auditID, this.binID).subscribe(
-            res => {
-              this.items = res;
-              console.log("DOG MEEt")
-              console.log(typeof this.items[0].inventory_items[0]);
-              console.log(JSON.stringify(res));
+            (res: any) => {
+              this.items = res.inventory_items;
             });
         }
       });

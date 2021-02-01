@@ -14,6 +14,16 @@
 </ion-segment>
 
 <ion-content>
+  <ion-spinner *ngIf="!items" name="crescent" class="center"></ion-spinner>
+  <ion-list>
+      <ion-item *ngFor="let item of items" [routerLink]="item._id"> 
+          <ion-label>
+              <p> Item: {{ item._id }}</p>
+              <p> Description: {{ item.Part_Description }}</p>
+          </ion-label>
+          <ion-icon name="information-circle" slot="end"></ion-icon>
+      </ion-item>
+  </ion-list>
 </ion-content>
 
 <ion-button fill="outline" onclick="this.blur()" (click)="handleCameraScan()">

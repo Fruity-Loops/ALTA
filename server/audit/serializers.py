@@ -32,3 +32,11 @@ class PostBinToSKSerializer(serializers.ModelSerializer):
     class Meta:
         model = BinToSK
         fields = '__all__'
+
+
+class BinItemSerializer(serializers.ModelSerializer):
+    inventory_items = ItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Audit
+        fields = ['inventory_items']
