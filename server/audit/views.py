@@ -4,10 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
-from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg, \
-    IsAssignedSKNoCreate
+from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
 from .serializers import AuditSerializer, BinToSKSerializer, GetAuditSerializer
 from .models import Audit, BinToSK
+
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -15,16 +15,12 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get', 'delete']
     queryset = Audit.objects.all()
+    permission_classes = []
 
     def get_permissions(self):
-        permission_classes = None
-        if self.action in ['retrieve', 'list']:
-            if IsAssignedSKNoCreate.has_permission(self, self.request, AuditViewSet):
-                permission_classes = [IsAuthenticated]
-        if permission_classes is None:  
-            factory = PermissionFactory(self.request)
-            permission_classes = factory.get_general_permissions([
-                CheckAuditOrganizationById, HasSameOrgInQuery])
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -56,16 +52,12 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'delete']
     queryset = BinToSK.objects.all()
     serializer_class = BinToSKSerializer
+    permission_classes = []
 
     def get_permissions(self):
-        permission_classes = None
-        if self.action in ['retrieve', 'list']:
-            if IsAssignedSKNoCreate.has_permission(self, self.request, AuditViewSet):
-                permission_classes = [IsAuthenticated]
-        if permission_classes is None:  
-            factory = PermissionFactory(self.request)
-            permission_classes = factory.get_general_permissions([
-                CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):
@@ -90,11 +82,9 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
-
     def get_audit_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
         serializer_class = GetAuditSerializer
         return serializer_class(*args, **kwargs)
-
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
     def items(self, request):

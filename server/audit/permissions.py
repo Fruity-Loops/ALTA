@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-
+from django.core.exceptions import ObjectDoesNotExist
 from user_account.models import CustomUser
 from .models import Audit
 
@@ -36,6 +36,7 @@ class CheckInitAuditData(BasePermission):
                 return audit.organization_id == user.organization.org_id
         return True
 
+
 class ValidateSKOfSameOrg(BasePermission):
     message = "The requested user must be part of the same organization"
 
@@ -45,12 +46,15 @@ class ValidateSKOfSameOrg(BasePermission):
             return user.organization_id == request.user.organization_id
         return True
 
-class IsAssignedSKNoCreate(BasePermission):
+
+class IsAssignedSK(BasePermission):
     message = "Must be a Stock Keeper that is retrieving their own audits"
 
     def has_permission(self, request, view):
-        user = CustomUser.objects.get(email=request.user)
-        assigned_sk = (request.query_params.get('assigned_sk')
-        or request.query_params.get('customuser_id'))
-        
-        return user.role == 'SK' and str(assigned_sk) == str(user.id)
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            assigned_sk = (request.query_params.get('assigned_sk')
+            or request.query_params.get('customuser_id'))
+            return user.role == 'SK' and str(assigned_sk) == str(user.id)
+        except ObjectDoesNotExist:
+            return False
