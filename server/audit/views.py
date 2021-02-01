@@ -21,7 +21,7 @@ class AuditViewSet(viewsets.ModelViewSet):
         if self.action in ['retrieve', 'list']:
             if IsAssignedSKNoCreate.has_permission(self, self.request, AuditViewSet):
                 permission_classes = [IsAuthenticated]
-        if permission_classes is None:
+        if permission_classes is None:  
             factory = PermissionFactory(self.request)
             permission_classes = factory.get_general_permissions([
                 CheckAuditOrganizationById, HasSameOrgInQuery])
@@ -58,9 +58,14 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     serializer_class = BinToSKSerializer
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
-        permission_classes = factory.get_general_permissions([
-            CheckInitAuditData, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        permission_classes = None
+        if self.action in ['retrieve', 'list']:
+            if IsAssignedSKNoCreate.has_permission(self, self.request, AuditViewSet):
+                permission_classes = [IsAuthenticated]
+        if permission_classes is None:  
+            factory = PermissionFactory(self.request)
+            permission_classes = factory.get_general_permissions([
+                CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):

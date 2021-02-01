@@ -221,6 +221,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   submitAudit(): void {
     let bodyAudit: object;
     bodyAudit = {
+      initiated_by: Number(localStorage.getItem('id')),
       inventory_items: this.inventoryItemToAudit,
       organization: Number(localStorage.getItem('organization_id')),
     };

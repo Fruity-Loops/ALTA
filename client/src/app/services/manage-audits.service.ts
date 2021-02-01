@@ -13,8 +13,8 @@ export class ManageAuditsService {
 
   constructor(private http: HttpClient) {}
 
-  createAudit(inventoryItem: object): Observable<any> {
-    return this.http.post(`${BASEURL}/audit/`, inventoryItem);
+  createAudit(audit: object): Observable<any> {
+    return this.http.post(`${BASEURL}/audit/`, audit);
   }
 
   deleteAudit(auditId: number): Observable<any> {
@@ -37,7 +37,7 @@ export class ManageAuditsService {
     return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
 
-  getItemSKAudit(auditId: any): Observable<any> {
+  getAssignedBins(auditId: any): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
   }
 

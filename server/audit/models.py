@@ -10,6 +10,9 @@ class Audit(models.Model):
                                      blank=False,
                                      null=False,
                                      default=0)
+    initiated_by = models.ForeignKey(to='user_account.CustomUser', on_delete=models.CASCADE, related_name='initiated_by')
+    initiated_on = models.DateTimeField(auto_now_add=True) # Automatically set when the object is first created
+    last_modified_on = models.DateTimeField(auto_now=True) # Automatically set every time the object is saved
     status = models.CharField(max_length=50, default="Pending")
     inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)

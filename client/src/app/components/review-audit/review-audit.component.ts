@@ -40,17 +40,10 @@ export class ReviewAuditComponent implements OnInit {
       .subscribe((auditData) => {
         const assignedSks = auditData.assigned_sk;
 
-        this.manageAuditsService.getItemSKAudit(this.auditID)
-          .subscribe((itemSKData) => {
-            this.itemData = itemSKData;
-            assignedSks.forEach((sk: any) => {
-              itemSKData.forEach((itemSK: any) => {
-                if (sk.id === itemSK.customuser) {
-                  itemSK.location = sk.location;
-                }
-              });
-            });
-            this.buildTable(itemSKData, assignedSks);
+        this.manageAuditsService.getAssignedBins(this.auditID)
+          .subscribe((assignedBins) => {
+            this.itemData = assignedBins;
+            this.buildTable(assignedBins, assignedSks);
           });
       });
   }

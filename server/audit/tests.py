@@ -40,7 +40,9 @@ class AuditTestCase(APITestCase):
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
-                                     "organization": 1}, format="json")
+                                     "organization": 1,
+                                     "initiated_by": self.system_admin.id
+                                     }, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
@@ -64,7 +66,8 @@ class AuditTestCase(APITestCase):
         # create initial audit with inventory items
         response = self.client.post("/audit/",
                                     {"inventory_items": [self.item_one._id, self.item_two._id],
-                                     "organization": self.inv_manager.organization.org_id},
+                                     "organization": self.inv_manager.organization.org_id,
+                                     "initiated_by": self.inv_manager.id},
                                     format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
@@ -102,12 +105,11 @@ class AuditTestCase(APITestCase):
         self.predefined_audit = Audit.objects.get(pk=1)
         request_body = {
             "bin_id": 1,
-            "Bin": "A10",
+            "Bin" : "A10",
             "init_audit": 1,
             "customuser": 5,
             "item_ids": [12752842],
-            }
-
+        }
         response = self.client.post("/bin-to-sk/", request_body, format="json")
 
         self.assertEqual(response.status_code,
@@ -128,7 +130,7 @@ class AuditTestCase(APITestCase):
 
         response = self.client.post("/bin-to-sk/",
                                     {
-                                     "bin_id": 2,
+                                     "bin_id": 1,
                                      "Bin": "A10",
                                      "init_audit": self.predefined_audit.audit_id,
                                      "customuser": 6,
