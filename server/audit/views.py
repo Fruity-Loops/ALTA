@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
 from .permissions import CheckAuditOrganizationById, CheckInitAuditData, ValidateSKOfSameOrg
-from .serializers import AuditSerializer, BinToSKSerializer, GetAuditSerializer
+from .serializers import AuditSerializer, GetBinToSKSerializer, PostBinToSKSerializer, GetAuditSerializer
 from .models import Audit, BinToSK
+import json
 
 
 class AuditViewSet(viewsets.ModelViewSet):
@@ -51,7 +52,6 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'get', 'delete']
     queryset = BinToSK.objects.all()
-    serializer_class = BinToSKSerializer
     permission_classes = []
 
     def get_permissions(self):
@@ -59,6 +59,12 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         permission_classes = factory.get_general_permissions([
             CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = GetBinToSKSerializer
+        if self.request.method != 'GET':
+            serializer_class = PostBinToSKSerializer
+        return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -91,9 +97,15 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         bin_id = request.query_params.get('bin_id')
         audit_id = request.query_params.get('audit_id')
         bins = BinToSK.objects.filter(bin_id=bin_id)
-        ids = bins[0].item_ids
         queryset = Audit.objects.filter(audit_id=audit_id)
-        #queryset = queryset.filter(inventory_items__in=ids)
+        # json_res = []
+        # for item in queryset[0].inventory_items.all():
+        #     json_obj = dict(
+        #         myproperty = item._id, 
+        #     )
+        #     json_res.append(json_obj)
+
+
 
         # page = self.paginate_queryset(recent_users)
         # if page is not None:
@@ -101,4 +113,5 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         #     return self.get_paginated_response(serializer.data)
         print(queryset[0].inventory_items)
         serializer = self.get_audit_serializer(queryset, many=True)
+        print(json.dumps(serializer.data))
         return Response(serializer.data)

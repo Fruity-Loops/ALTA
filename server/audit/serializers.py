@@ -20,10 +20,15 @@ class GetAuditSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BinToSKSerializer(serializers.ModelSerializer):
-    audit = AuditSerializer(read_only=True, many=True)
+class GetBinToSKSerializer(serializers.ModelSerializer):
+    customuser = UserAuditSerializer(read_only=True, many=False)
 
     class Meta:
         model = BinToSK
         fields = '__all__'
-        depth = 1
+
+class PostBinToSKSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BinToSK
+        fields = '__all__'
