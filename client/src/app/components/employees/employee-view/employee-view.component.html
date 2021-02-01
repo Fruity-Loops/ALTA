@@ -150,12 +150,12 @@
     <mat-card-actions align="center">
 
       <!-- Show edit button if not in edit mode -->
-      <button *ngIf="isEdit && !edit" mat-button class="edit" (click)="this.editMode(true)">Edit</button>
+      <button id="editButton" *ngIf="isEdit && !edit" mat-button class="edit" (click)="this.editMode(true)">Edit</button>
 
       <!-- Show Save and Cancel buttons if in edit mode -->
-      <button *ngIf="!isEdit || edit" mat-button class="save" (click)="this.edit=false; this.submitForm()"
+      <button id="saveButton" *ngIf="!isEdit || edit" mat-button class="save" (click)="this.edit=false; this.submitForm()"
               [disabled]="employeeForm.invalid">Save</button>
-      <button *ngIf="isEdit && edit" mat-button class="cancel" (click)="this.edit=false; reloadPage();">Cancel</button>
+      <button id="cancelButton" *ngIf="isEdit && edit" mat-button class="cancel" (click)="this.edit=false; reloadPage();">Cancel</button>
     </mat-card-actions>
 
   </form>
