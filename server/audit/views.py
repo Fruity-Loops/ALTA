@@ -72,7 +72,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
             data = {'success': 'success'}
         if not saved_audit:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         customuser_id = request.query_params.get('customuser_id')

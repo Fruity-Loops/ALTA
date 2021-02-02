@@ -22,8 +22,8 @@ class AuditTestCase(APITestCase):
         self.org_id = Organization.objects.get(org_id="1")
 
         # Create audit components
-        self.item_one = Item.objects.get(_id=12731369.0)
-        self.item_two = Item.objects.get(_id=12752842.0)
+        self.item_one = Item.objects.get(_id=12731369)
+        self.item_two = Item.objects.get(_id=12752842)
         self.audit = Audit.objects.create()
         self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
 
@@ -99,47 +99,6 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
-    def test_item_to_sk_designation(self):
-        """ Create BinToSK designation as inventory manager """
-        self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(pk=1)
-        request_body = {
-            "bin_id": 1,
-            "Bin" : "A10",
-            "init_audit": 1,
-            "customuser": 5,
-            "item_ids": [12752842],
-        }
-        response = self.client.post("/bin-to-sk/", request_body, format="json")
-
-        self.assertEqual(response.status_code,
-                         status.HTTP_201_CREATED)
-
-        self.assertEqual(response.data['success'], "success")
-
-        # Now testing with a user from a different organization
-        request_body['customuser'] = 6
-        new_response = self.client.post("/bin-to-sk/", request_body, format='json')
-        self.assertEqual(new_response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_item_to_sk_designation_bad_org(self):
-        """ Try to create BinToSK designation as inventory manager from another organization """
-
-        self.client.force_authenticate(user=self.inv_manager)
-        self.predefined_audit = Audit.objects.get(pk=3)
-
-        response = self.client.post("/bin-to-sk/",
-                                    {
-                                     "bin_id": 1,
-                                     "Bin": "A10",
-                                     "init_audit": self.predefined_audit.audit_id,
-                                     "customuser": 6,
-                                     "item_ids": [12752842],
-                                     }, format="json")
-
-        self.assertEqual(response.status_code,
-                         status.HTTP_403_FORBIDDEN)
-
     def test_get_audit(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get('/audit/', {'organization': 1, 'status': 'Active'})
@@ -149,3 +108,91 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.data[0]['organization'], 1)
         self.assertEqual(response.data[0]['inventory_items'], [])
         self.assertEqual(response.data[0]['assigned_sk'], [])
+
+
+class BinTestCase(APITestCase):
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json"]
+
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create each type of user that could be making the registration request
+        self.system_admin = CustomUser.objects.get(user_name="sa")
+        self.inv_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
+
+        # Create the affiliated organization
+        self.org_id = Organization.objects.get(org_id="1")
+
+        # Create audit components
+        self.item_one = Item.objects.get(_id=12731370)
+        self.item_two = Item.objects.get(_id=12752843)
+        self.audit = Audit.objects.create()
+        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
+
+    def test_item_to_sk_create(self):
+        """ Create BinToSK designation as inventory manager """
+        self.client.force_authenticate(user=self.inv_manager)
+        self.predefined_audit = Audit.objects.get(pk=1)
+        request_body = {
+            "Bin": "A10",
+            "init_audit": self.predefined_audit.audit_id,
+            "customuser": self.stock_keeper.id,
+            "item_ids": [self.item_one._id, self.item_two._id],
+        }
+        response = self.client.post("/bin-to-sk/", request_body, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['Bin'], "A10")
+        self.assertEqual(response.data['init_audit'], self.predefined_audit.audit_id)
+        self.assertEqual(response.data['customuser'], self.stock_keeper.id)
+        self.assertEqual(response.data['item_ids'], str([self.item_one._id, self.item_two._id]))
+
+    def test_item_to_sk_diff_org_create(self):
+        """ Create BinToSK designation as inventory manager to SK in a different organization"""
+        self.client.force_authenticate(user=self.inv_manager)
+        self.predefined_audit = Audit.objects.get(pk=1)
+        request_body = {"bin_id": 1, "Bin": "A10", "init_audit": self.predefined_audit.audit_id,
+                        "customuser": 5, "item_ids": [12731370], 'customuser': 6}
+        new_response = self.client.post("/bin-to-sk/", request_body, format='json')
+        self.assertEqual(new_response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_item_to_sk_bad_org_create(self):
+        """ Try to create BinToSK designation as inventory manager from another organization """
+        self.client.force_authenticate(user=self.inv_manager)
+        self.predefined_audit = Audit.objects.get(pk=3)
+        response = self.client.post("/bin-to-sk/",
+                                    {
+                                        "bin_id": 1,
+                                        "Bin": "A10",
+                                        "init_audit": self.predefined_audit.audit_id,
+                                        "customuser": 6,
+                                        "item_ids": [12731370],
+                                    }, format="json")
+        self.assertEqual(response.status_code,
+                         status.HTTP_403_FORBIDDEN)
+
+    def test_item_to_sk_list(self):
+        """ Verifying all the correct data is returned """
+        self.client.force_authenticate(user=self.inv_manager)
+        response = self.client.get("/bin-to-sk/", {"customuser_id": 3, "init_audit_id": 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]['bin_id'], 2)
+        self.assertEqual(response.data[0]['Bin'], 'C20')
+        self.assertEqual(response.data[0]['customuser']['user_name'], 'sk')
+        self.assertEqual(response.data[0]['item_ids'], str([self.item_one._id, self.item_two._id]))
+
+    def test_item_to_sk_retrieve(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        response = self.client.get("/bin-to-sk/2/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['bin_id'], 2)
+        self.assertEqual(response.data['Bin'], 'C20')
+        self.assertEqual(response.data['customuser']['user_name'], 'sk')
+        self.assertEqual(response.data['item_ids'], str([self.item_one._id, self.item_two._id]))
+
+    def test_bins_get_items(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        self.predefined_audit = Audit.objects.get(pk=1)
+        response = self.client.get("/bin-to-sk/items/", {'bin_id': 3, 'audit_id': 2})
+        print(response.data)
