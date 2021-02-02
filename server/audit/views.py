@@ -4,8 +4,8 @@ from rest_framework.decorators import action
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
 from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
-from .serializers import AuditSerializer, BinItemSerializer
-from .models import Audit, BinToSK
+from .serializers import AuditSerializer, BinItemSerializer, RecordSerializer
+from .models import Audit, BinToSK, Record
 
 
 class AuditViewSet(viewsets.ModelViewSet):
@@ -69,8 +69,6 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         saved_audit = serializer.save()
-        if saved_audit:
-            data = {'success': 'success'}
         if not saved_audit:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -107,3 +105,12 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_bin_item_serializer(queryset, many=False)
         return Response(serializer.data)
+
+
+class RecordViewSet(viewsets.ModelViewSet):
+    http_method_names = ['post', 'get', 'patch']
+    queryset = Record.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = RecordSerializer
+        return serializer_class(*args, **kwargs)

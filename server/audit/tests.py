@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 from organization.models import Organization
 from user_account.models import CustomUser
 from inventory_item.models import Item
-from .models import Audit
+from .models import Audit, BinToSK
 
 
 class AuditTestCase(APITestCase):
@@ -130,7 +130,7 @@ class BinTestCase(APITestCase):
         self.audit = Audit.objects.create()
         self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
 
-    def test_item_to_sk_create(self):
+    def test_bin_to_sk_create(self):
         """ Create BinToSK designation as inventory manager """
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
@@ -148,7 +148,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data['customuser'], self.stock_keeper.id)
         self.assertEqual(response.data['item_ids'], str([self.item_one._id, self.item_two._id]))
 
-    def test_item_to_sk_diff_org_create(self):
+    def test_bin_to_sk_diff_org_create(self):
         """ Create BinToSK designation as inventory manager to SK in a different organization"""
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
@@ -157,7 +157,7 @@ class BinTestCase(APITestCase):
         new_response = self.client.post("/bin-to-sk/", request_body, format='json')
         self.assertEqual(new_response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_item_to_sk_bad_org_create(self):
+    def test_bin_to_sk_bad_org_create(self):
         """ Try to create BinToSK designation as inventory manager from another organization """
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=3)
@@ -172,7 +172,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
 
-    def test_item_to_sk_list(self):
+    def test_bin_to_sk_list(self):
         """ Verifying all the correct data is returned """
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get("/bin-to-sk/", {"customuser_id": 3, "init_audit_id": 1})
@@ -182,7 +182,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data[0]['customuser']['user_name'], 'sk')
         self.assertEqual(response.data[0]['item_ids'], str([self.item_one._id, self.item_two._id]))
 
-    def test_item_to_sk_retrieve(self):
+    def test_bin_to_sk_retrieve(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get("/bin-to-sk/2/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -195,4 +195,41 @@ class BinTestCase(APITestCase):
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
         response = self.client.get("/bin-to-sk/items/", {'bin_id': 3, 'audit_id': 2})
-        print(response.data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+class RecordTestCase(APITestCase):
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json"]
+
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create each type of user that could be making the registration request
+        self.system_admin = CustomUser.objects.get(user_name="sa")
+        self.inv_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
+
+        # Create the affiliated organization
+        self.org_id = Organization.objects.get(org_id="1")
+
+        # Create audit components
+        self.item_one = Item.objects.get(_id=12731370)
+        self.item_two = Item.objects.get(_id=12752843)
+        self.audit = Audit.objects.create()
+        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
+
+
+    def test_create_record(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        self.audit = Audit.objects.get(pk=1)
+        self.bin = BinToSK.objects.get(pk=1)
+        response = self.client.post(
+            "/record/",
+            {
+                "status": "Pending",
+                "audit": self.audit.audit_id,
+                "bin_to_sk": self.bin.bin_id,
+                "location": "YUL",
+                
+            }, format="json")
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED)
