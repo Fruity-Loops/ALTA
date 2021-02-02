@@ -4,9 +4,9 @@ from rest_framework.decorators import action
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
 from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
-from .serializers import AuditSerializer, GetBinToSKSerializer, PostBinToSKSerializer, \
-    GetAuditSerializer, BinItemSerializer
+from .serializers import AuditSerializer, BinItemSerializer
 from .models import Audit, BinToSK
+
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -24,8 +24,8 @@ class AuditViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
-        if self.action in ['retrieve']:
-            serializer_class = GetAuditSerializer
+        if self.action not in ['retrieve']:
+            serializer_class.Meta.remove_fields = ['assigned_sk', 'inventory_items']
         return serializer_class(*args, **kwargs)
 
     def list(self, request):
@@ -59,9 +59,10 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
-        serializer_class = GetBinToSKSerializer
+        serializer_class = BinItemSerializer
+        serializer_class.Meta.remove_fields = ['inventory_item']
         if self.request.method != 'GET':
-            serializer_class = PostBinToSKSerializer
+            serializer_class.Meta.remove_fields.append('customuser')
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -87,7 +88,9 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_bin_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
-        serializer_class = BinItemSerializer
+        serializer_class = AuditSerializer
+        serializer_class.Meta.fields = ['inventory_items']
+        serializer_class.Meta.remove_fields = ['assigned_sk']
         return serializer_class(*args, **kwargs)
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
