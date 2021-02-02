@@ -35,53 +35,27 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   getTableData(): void {
-
-    this.manageAuditsService.getAuditData(this.auditID)
-      .subscribe((auditData) => {
-        const assignedSks = auditData.assigned_sk;
-
-        this.manageAuditsService.getAssignedBins(this.auditID)
-          .subscribe((assignedBins) => {
-            this.itemData = assignedBins;
-            this.buildTable(assignedBins, assignedSks);
-          });
-      });
+    this.manageAuditsService.getPreAudit().subscribe((auditData) => {
+      this.buildTable(auditData);
+    });
   }
 
-  buildTable(itemSKData: any, sks: any): void {
+  buildTable(itemSKData: any): void {
     const table: any[] = [];
-    const locations: any[] = [];
+    this.locationsAndUsers = [{location: undefined}];
 
-    sks.forEach((item: any) => {
-      if (!locations.some(loc => loc.location === item.location)) {
-        locations.push({ location: item.location });
-      }
-    });
-
-    this.locationsAndUsers = locations;
-
-    itemSKData.forEach((sk: any) => {
+    itemSKData.forEach((bin: any) => {
       table.push(
         {
-          name: this.getSKName(sks, sk.customuser),
-          bins: sk.bins,
-          numberOfParts: JSON.parse(sk.item_ids).length,
+          name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
+          bins: bin.Bin,
+          numberOfParts: JSON.parse(bin.item_ids).length,
           initiatedBy: 'N/A',
-          date: 'N/A',
-          location: sk.location,
+          date: 'N/A'
         }
       );
     });
     this.dataSource = new MatTableDataSource(table);
-  }
-
-  getSKName(sks: any, id: any): string {
-    for (const sk of sks) {
-      if (sk.id === id) {
-        return sk.first_name + ' ' + sk.last_name;
-      }
-    }
-    return 'N/A';
   }
 
   @HostListener('window:popstate', ['$event'])

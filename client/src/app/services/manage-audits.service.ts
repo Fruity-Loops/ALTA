@@ -41,6 +41,10 @@ export class ManageAuditsService {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
   }
 
+  getPreAudit(): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/`);
+  }
+
   deletePreAudit(id: any): Observable<any> {
     return this.http.delete(`${BASEURL}/bin-to-sk/${id}/`);
   }
