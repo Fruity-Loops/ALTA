@@ -24,7 +24,10 @@ class AuditViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
-        if self.action not in ['retrieve']:
+        serializer_class.Meta.fields = "__all__"
+        if self.action in ['list']:
+            serializer_class.Meta.remove_fields = ['assigned_sk']
+        if self.action in ['create']:
             serializer_class.Meta.remove_fields = ['assigned_sk', 'inventory_items']
         return serializer_class(*args, **kwargs)
 
