@@ -35,7 +35,7 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   getTableData(): void {
-    this.manageAuditsService.getPreAudit().subscribe((auditData) => {
+    this.manageAuditsService.getAssignedBins(this.auditID).subscribe((auditData) => {
       this.buildTable(auditData);
     });
   }
@@ -50,8 +50,8 @@ export class ReviewAuditComponent implements OnInit {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
           bins: bin.Bin,
           numberOfParts: JSON.parse(bin.item_ids).length,
-          initiatedBy: 'N/A',
-          date: 'N/A'
+          initiatedBy: bin.init_audit.initiated_by.first_name + ' ' + bin.init_audit.initiated_by.last_name,
+          date: bin.initiated_on ? bin.initiated_on : 'N/A'
         }
       );
     });
