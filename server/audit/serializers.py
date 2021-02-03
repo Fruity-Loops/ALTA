@@ -7,56 +7,49 @@ from .models import Audit, BinToSK, Record
 
 
 class AuditSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Audit
+        fields = '__all__'
+
+
+class GetAuditSerializer(serializers.ModelSerializer):
     inventory_items = ItemSerializer(read_only=True, many=True)
     assigned_sk = UserAuditSerializer(read_only=True, many=True)
 
     class Meta:
         model = Audit
-        fields = "__all__"
-        remove_fields = []
-        restore_fields = []
-
-    def __init__(self, instance=None, data=empty, **kwargs):
-        for dictionary in self.Meta.restore_fields:
-            AuditSerializer._declared_fields.update(dictionary)
-        self.Meta.restore_fields = []
-        for field in self.Meta.remove_fields:
-            self.Meta.restore_fields.append({field: self._declared_fields.pop(field)})
-        super().__init__(instance, data, **kwargs)
+        fields = '__all__'
 
 
-class BinItemSerializer(serializers.ModelSerializer):
-    inventory_item = ItemSerializer(read_only=True, many=True)
+class GetBinToSKSerializer(serializers.ModelSerializer):
     customuser = UserAuditSerializer(read_only=True, many=False)
+    init_audit = AuditSerializer(read_only=True, many=False)
 
     class Meta:
         model = BinToSK
-        fields = "__all__"
-        remove_fields = []
-        restore_fields = []
+        fields = '__all__'
 
-    def __init__(self, instance=None, data=empty, **kwargs):
-        for dictionary in self.Meta.restore_fields:
-            BinItemSerializer._declared_fields.update(dictionary)
-        self.Meta.restore_fields = []
-        for field in self.Meta.remove_fields:
-            self.Meta.restore_fields.append({field: self._declared_fields.pop(field)})
-        super().__init__(instance, data, **kwargs)
+
+class PostBinToSKSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BinToSK
+        fields = '__all__'
+
+
+class BinItemSerializer(serializers.ModelSerializer):
+    inventory_items = ItemSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Audit
+        fields = ['inventory_items']
 
 
 class RecordSerializer(serializers.ModelSerializer):
-    bin_to_sk = BinItemSerializer(read_only=True, many=True)
+    bin_to_sk = BinItemSerializer(read_only=True, many=False)
+    audit = AuditSerializer(read_only=True, many=False)
 
     class Meta:
         model = Record
         fields = "__all__"
-        remove_fields = []
-        restore_fields = []
-
-    def __init__(self, instance=None, data=empty, **kwargs):
-        for dictionary in self.Meta.restore_fields:
-            RecordSerializer._declared_fields.update(dictionary)
-        self.Meta.restore_fields = []
-        for field in self.Meta.remove_fields:
-            self.Meta.restore_fields.append({field: self._declared_fields.pop(field)})
-        super().__init__(instance, data, **kwargs)

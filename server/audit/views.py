@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
 from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
-from .serializers import AuditSerializer, BinItemSerializer, RecordSerializer
+from .serializers import *
 from .models import Audit, BinToSK, Record
 
 
@@ -24,11 +24,8 @@ class AuditViewSet(viewsets.ModelViewSet):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AuditSerializer
-        serializer_class.Meta.fields = "__all__"
-        if self.action in ['list']:
-            serializer_class.Meta.remove_fields = ['assigned_sk']
-        if self.action in ['create']:
-            serializer_class.Meta.remove_fields = ['assigned_sk', 'inventory_items']
+        if self.action in ['list', 'retrieve']:
+            serializer_class = GetAuditSerializer
         return serializer_class(*args, **kwargs)
 
     def list(self, request):
@@ -62,10 +59,9 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
-        serializer_class = BinItemSerializer
-        serializer_class.Meta.remove_fields = ['inventory_item']
+        serializer_class = GetBinToSKSerializer
         if self.request.method != 'GET':
-            serializer_class.Meta.remove_fields.append('customuser')
+            serializer_class = PostBinToSKSerializer
         return serializer_class(*args, **kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -89,9 +85,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_bin_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
-        serializer_class = AuditSerializer
-        serializer_class.Meta.fields = ['inventory_items']
-        serializer_class.Meta.remove_fields = ['assigned_sk']
+        serializer_class = BinItemSerializer
         return serializer_class(*args, **kwargs)
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
