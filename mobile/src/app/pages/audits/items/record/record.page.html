@@ -1,0 +1,90 @@
+<ion-content>
+  <div class="form-container">
+    <form [formGroup]="formGroup" (ngSubmit)="validate()">
+
+      <ion-item>
+        <ion-label position="floating" color="primary">id</ion-label>
+        <ion-input id="idInput" formControlName="id" required value={{scannedItem._id}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Location</ion-label>
+        <ion-input id="locationInput" formControlName="Location" required value={{scannedItem.Location}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Plant</ion-label>
+        <ion-input id="idInput" formControlName="Plant" required value={{scannedItem.Plant}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Zone</ion-label>
+        <ion-input id="locationInput" formControlName="Zone" required value={{scannedItem.Zone}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Aisle</ion-label>
+        <ion-input id="idInput" formControlName="id" required value={{scannedItem.Aisle}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Bin</ion-label>
+        <ion-input id="locationInput" formControlName="Bin" required value={{scannedItem.Bin}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">PartNumber</ion-label>
+        <ion-input id="idInput" formControlName="PartNumber" required value={{scannedItem.Part_Number}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">PartDescription</ion-label>
+        <ion-input id="locationInput" formControlName="PartDescription" required value={{scannedItem.Part_Description}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">SerialNumber</ion-label>
+        <ion-input id="idInput" formControlName="SerialNumber" required value={{scannedItem.Serial_Number}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Condition</ion-label>
+        <ion-input id="locationInput" formControlName="Condition" required value={{scannedItem.Condition}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Category</ion-label>
+        <ion-input id="idInput" formControlName="Category" required value={{scannedItem.Category}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Owner</ion-label>
+        <ion-input id="locationInput" formControlName="Owner" required value={{scannedItem.Owner}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Criticality</ion-label>
+        <ion-input id="idInput" formControlName="Criticality" required value={{scannedItem.Criticality}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">AverageCost</ion-label>
+        <ion-input id="locationInput" formControlName="AverageCost" required value={{scannedItem.Average_Cost}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">Quantity</ion-label>
+        <ion-input id="idInput" formControlName="Quantity" required value={{scannedItem.Quantity}}></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating" color="primary">UnitOfMeasure</ion-label>
+        <ion-input id="locationInput" formControlName="Unit_of_Measure" required value={{scannedItem.Unit_of_Measure}}></ion-input>
+      </ion-item>
+
+
+
+      <ion-button id="validateButton" type="submit" expand="block" size="large" [disabled]="!formGroup.valid">Validate</ion-button>
+    </form>
+  </div>
+</ion-content>

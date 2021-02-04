@@ -56,20 +56,17 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  // getItems(userID, auditID, binID): Observable<any> {
-  //   return this.getBin(userID, auditID, binID)
-  //     .pipe(
-  //       mergeMap(bin =>
-  //         this.http.get(`${BASEURL}/bin-to-sk/`, {
-  //           params: {
-  //             customuser_id: userID,
-  //             bin_id: binID,
-  //             item_ids: bin.item_ids,
-  //           }
-  //         }).pipe(catchError(errorHandler))
-  //       )
-  //     )
-  // }
+  checkItem(userID, auditID, binID, itemID){
+    return this.http.get(`${BASEURL}/audit/check_item/`, {
+      params: {
+        customuser_id: userID,
+        audit_id: auditID,
+        bin_id: binID,
+        item_id: itemID
+      }
+    })
+      .pipe(catchError(errorHandler));
+  }
 
   getItems(userID, auditID, binID){
     return this.http.get(`${BASEURL}/bin-to-sk/items/`, {

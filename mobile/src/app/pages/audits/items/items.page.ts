@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Platform, AlertController, ToastController } from '@ionic/angular';
+import { Platform, AlertController, ToastController, ModalController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { fetchLoggedInUser } from 'src/app/services/cache';
 import { ActivatedRoute } from '@angular/router';
+import { RecordPage } from 'src/app/pages/audits/items/record/record.page';
 
 @Component({
   selector: 'app-items',
@@ -33,6 +34,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     private androidPermissions: AndroidPermissions,
     public platform: Platform,
     private activatedRoute: ActivatedRoute,
+    public modalController: ModalController,
   ) {
     this.barcode = '';
   }
@@ -146,14 +148,18 @@ export class ItemsPage implements OnInit, OnDestroy {
   finishScan() {
     this.validateItem();
     this.barcode = '';
-    this.presentScanSuccessToast();
-    this.scanStateChanged(false);
   }
 
   validateItem() {
-    // Check if the scanned barcode matches an item
-    // TODO: replace with backend request
-    this.scannedMessage = `Scanned bardcode #${this.barcode}\nNo item match found.`;
+    this.auditService.checkItem(
+      this.loggedInUser.user_id,
+      this.auditID,
+      this.binID,
+      this.barcode).subscribe(
+        (item: any) => {
+          this.presentRecordModal(item);
+          this.scanStateChanged(false);
+        });
   }
 
   scanStateChanged(isScanning: boolean) {
@@ -163,17 +169,20 @@ export class ItemsPage implements OnInit, OnDestroy {
     }
   }
 
-  async presentScanSuccessToast() {
-    const toast = await this.toastController.create({
-      message: this.scannedMessage,
-      duration: 4000,
-      position: 'bottom',
-    });
-    toast.present();
-  }
-
   segmentChanged(ev: CustomEvent) {
     this.currentSegment = ev.detail.value;
+  }
+
+  async presentRecordModal(item) {
+    const modal = await this.modalController.create({
+      component: RecordPage,
+      cssClass: 'record-modal',
+      showBackdrop: true,
+      componentProps: {
+        scannedItem: item,
+      }
+    });
+    return await modal.present();
   }
 
 }
