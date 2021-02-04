@@ -1,7 +1,10 @@
 import os
+import logging
 import pymongo as pym
 import pandas as pd
 
+
+logger = logging.getLogger(__name__)
 
 def get_collection(collection_name):
     # Making connection to mongoclient
@@ -37,13 +40,13 @@ def populate_items(csv_file, collection_name, org_id):
 
     try:
         collection.insert_many(dict_of_records)
-        print("Data inserted successfully")
+        logger.debug('Data inserted successfully')
     except pym.errors.BulkWriteError as error:
         for i in range(len(error.details["writeErrors"])):
 
             # If the error is different to duplicate key entry
             if error.details["writeErrors"][i]["code"] != 11000:
-                print("An error occured")
+                logger.error("An error occured")
 
 
 def update_items(csv_file, collection_name, org_id):
@@ -53,9 +56,9 @@ def update_items(csv_file, collection_name, org_id):
     try:
         for document in dict_of_records:
             collection.update({'_id': document["_id"]}, document, upsert=True)
-        print("Data Refreshed for organization ID: " + str(org_id))
+        logger.debug("Data Refreshed for organization ID: " + str(org_id))
     except pym.errors.BulkWriteError as error:
-        print(error)
+        logger.error(error)
 
 
 def main(org_id, is_initializing=False):
