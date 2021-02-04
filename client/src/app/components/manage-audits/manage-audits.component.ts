@@ -92,6 +92,7 @@ export class ManageAuditsComponent implements OnInit {
     this.params = this.params.append('page', String(this.pageIndex));
     this.params = this.params.append('page_size', String(this.pageSize));
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.append('status', 'Active');
     this.init();
     this.getItems();
     this.inventoryItemToAudit = [];
@@ -102,7 +103,7 @@ export class ManageAuditsComponent implements OnInit {
   }
 
   getItems(): void {
-    this.auditService.getBusySKs(this.params).subscribe(
+    this.auditService.getProperAudits(this.params).subscribe(
       (data) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
@@ -139,7 +140,7 @@ export class ManageAuditsComponent implements OnInit {
   }
 
   updatePage(): void {
-    this.auditService.getBusySKs(this.params).subscribe(
+    this.auditService.getProperAudits(this.params).subscribe(
       (data) => {
         this.data = data;
         this.updatePaginator();

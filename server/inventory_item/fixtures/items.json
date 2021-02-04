@@ -6,7 +6,7 @@
             "Location": "YYC",
             "Plant": "False",
             "Zone": "B",
-            "Aisle": 3.0,
+            "Aisle": 3,
             "Bin": "A10",
             "Part_Number": "PART-4",
             "Part_Description": "Dummy Part 4",
@@ -16,7 +16,7 @@
             "Owner": "FG",
             "Criticality": "Medium",
             "Average_Cost": " $9,000.00 ",
-            "Quantity": 1.0,
+            "Quantity": 1,
             "Unit_of_Measure": "EA",
             "organization": 3
         }
@@ -28,7 +28,7 @@
             "Location": "YYC",
             "Plant": "True",
             "Zone": "B",
-            "Aisle": 1.0,
+            "Aisle": 1,
             "Bin": "B2",
             "Part_Number": "PART-4",
             "Part_Description": "Dummy Part 4",
@@ -38,7 +38,7 @@
             "Owner": "FG",
             "Criticality": "Low",
             "Average_Cost": " $9,000.00 ",
-            "Quantity": 1.0,
+            "Quantity": 1,
             "Unit_of_Measure": "EA",
             "organization": 3
         }
@@ -51,8 +51,8 @@
             "Location": "Florida",
             "Plant": "False",
             "Zone": "B",
-            "Aisle": 3.0,
-            "Bin": "C20",
+            "Aisle": 3,
+            "Bin": "C69",
             "Part_Number": "PART-4",
             "Part_Description": "Dummy Part 1",
             "Serial_Number": "SN-4",
@@ -61,7 +61,7 @@
             "Owner": "FG",
             "Criticality": "High",
             "Average_Cost": " $9,000.00 ",
-            "Quantity": 1.0,
+            "Quantity": 1,
             "Unit_of_Measure": "EA",
             "organization": 1
         }
@@ -73,7 +73,7 @@
             "Location": "Florida",
             "Plant": "True",
             "Zone": "B",
-            "Aisle": 1.0,
+            "Aisle": 1,
             "Bin": "C20",
             "Part_Number": "PART-3",
             "Part_Description": "Dummy Part 2",
@@ -83,7 +83,7 @@
             "Owner": "FG",
             "Criticality": "High",
             "Average_Cost": " $9,000.00 ",
-            "Quantity": 1.0,
+            "Quantity": 1,
             "Unit_of_Measure": "EA",
             "organization": 1
         }

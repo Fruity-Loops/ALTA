@@ -1,3 +1,6 @@
+import copy
+from datetime import datetime
+
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -6,7 +9,7 @@ from user_account.permissions import HasSameOrgInQuery, \
 from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
 from .serializers import *
 from inventory_item.serializers import ItemSerializer
-from .models import Audit, BinToSK, Record
+from .models import *
 
 
 class AuditViewSet(viewsets.ModelViewSet):
@@ -43,6 +46,42 @@ class AuditViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
+
+    def get_proper_serializer(self, *args, **kwargs):
+        serializer_class = ProperAuditSerializer
+        return serializer_class(*args, **kwargs)
+
+    @action(detail=False, methods=['GET'], name='Return Proper Audit')
+    def proper_audits(self, request, *args, **kwargs):
+        params = list(request.GET.keys())
+        for bad_key in ['page', 'page_size']:
+            if bad_key in params:
+                params.remove(bad_key)
+        for key in params:
+            self.queryset = self.queryset.filter(**{key: request.GET.get(key)})
+        serializer = self.get_proper_serializer(self.queryset, many=True)
+        data = copy.deepcopy(serializer.data)
+        for dictionary in data:
+            dictionary = self.fix_audit(dictionary)
+        return Response(data)
+
+    def fix_audit(self, dictionary):
+        person = dictionary.pop('initiated_by')
+        dictionary['initiated_by'] = person['first_name'] + ' ' + person['last_name']
+        dictionary['location'] = person['location']
+        time = datetime.strftime(datetime.strptime(dictionary['initiated_on'], '%Y-%m-%dT%H:%M:%S.%fZ'), '%d/%m/%Y')
+        dictionary['initiated_on'] = time
+        items = dictionary.pop('inventory_items')
+        dictionary['bin'] = None
+        for item in items:
+            bin = item.pop('Bin')
+            if not dictionary['bin']:
+                dictionary['bin'] = bin
+            else:
+                if bin != dictionary['bin']:
+                    dictionary['bin'] = 'Multiple'
+                    break
+        return dictionary
 
     def get_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
         serializer_class = ItemSerializer
@@ -124,7 +163,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch']
-    queryset = Record.objects.all()
+    # queryset = Record.objects.all()
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = RecordSerializer

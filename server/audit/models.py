@@ -10,16 +10,17 @@ class Audit(models.Model):
                                      blank=False,
                                      null=False,
                                      default=0)
+    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
+    assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)
     initiated_by = models.ForeignKey(
         to='user_account.CustomUser',
         on_delete=models.CASCADE,
         related_name='initiated_by')
-    initiated_on = models.DateTimeField(auto_now_add=True) # Auto set when object is first created
-    last_modified_on = models.DateTimeField(auto_now=True) # Auto set every time object is saved
+    initiated_on = models.DateTimeField(auto_now_add=True)  # Auto set when object is first created
+    last_modified_on = models.DateTimeField(auto_now=True)  # Auto set every time object is saved
     status = models.CharField(max_length=50, default="Pending")
-    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
-    assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
+    accuracy = models.CharField(max_length=3, default="0")
 
 
 class BinToSK(models.Model):
@@ -28,6 +29,7 @@ class BinToSK(models.Model):
     init_audit = models.ForeignKey(Audit, on_delete=models.CASCADE)
     customuser = models.ForeignKey(to='user_account.CustomUser', on_delete=models.CASCADE)
     item_ids = models.JSONField(blank=True, null=True)
+
 
 class Record(ItemFields):
     PENDING = 'Pending'
