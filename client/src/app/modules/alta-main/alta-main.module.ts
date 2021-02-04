@@ -34,6 +34,8 @@ import {
   EditOrganizationComponent
 } from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
+import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
+
 
 @NgModule({
   declarations: [
@@ -54,7 +56,8 @@ import { ReviewAuditComponent } from 'src/app/components/review-audit/review-aud
     DisableOrganizationDialogComponent,
     AssignStockKeepersComponent,
     ManageStockKeepersDesignationComponent,
-    ReviewAuditComponent
+    ReviewAuditComponent,
+    ManageAuditsComponent
   ],
 
   imports: [
