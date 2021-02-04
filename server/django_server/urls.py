@@ -19,6 +19,7 @@ from .load_csv_to_db import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('login.urls')),
     path('', include('user_account.urls')),
     path('', include('organization.urls')),
     path('', include('inventory_item.urls')),

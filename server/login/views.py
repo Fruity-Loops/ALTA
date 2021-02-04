@@ -1,13 +1,16 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from rest_framework import status, viewsets
+from django.contrib.auth.hashers import check_password
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import status, viewsets, generics
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, \
     UserHasSameOrg, HasSameOrgInQuery, PermissionFactory
-from .serializers import CustomUserSerializer
-from .models import CustomUser
+from user_account.serializers import CustomUserSerializer
+from user_account.models import CustomUser
 
 
 class OpenRegistrationView(viewsets.ModelViewSet):
@@ -38,6 +41,92 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         if not data:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+class LoginView(generics.GenericAPIView):
+    """
+    Authenticate a System Admin.
+    """
+
+    # serializer_class = CustomUserSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = CustomUserSerializer
+        serializer_class.Meta.fields = ['email', 'password']
+        return serializer_class(*args, **kwargs)
+
+    def post(self, request):
+        """
+        Verify that a System Admin has valid credentials and is active.
+        :param request: request.data: email, password
+        :return: user_name, token
+        """
+        data = request.data
+        email = data.get('email', '')
+        password = data.get('password', '')
+        org_id = ""
+        org_name = ""
+        response = Response({"detail": "Login Failed"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+
+            is_verified = check_password(password, user.password)
+            if is_verified and user.is_active:
+                has_token = Token.objects.filter(user=user).count()
+                if has_token:
+                    token = Token.objects.get(user=user)
+                else:
+                    token = Token.objects.create(user=user)
+                if user.organization:
+                    org_id = user.organization.org_id
+                    org_name = user.organization.org_name
+                data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'organization_id': org_id,
+                        'organization_name': org_name,
+                        'token': token.key}
+
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            return response
+
+        return response
+
+
+class LoginMobileView(generics.GenericAPIView):
+    """
+    Authenticate a Mobile Log in.
+    """
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        pass  # TODO: Implement mobile specific endpoint
+        # Should be implemented when different options to password auth are determined
+
+
+class LogoutView(generics.GenericAPIView):
+    """
+    Logout a System Admin.
+    """
+
+    def post(self, request):
+        """
+        :param request: request.user (token)
+        """
+        return self.remove_token(request)
+
+    def remove_token(self, request):  # pylint: disable=no-self-use
+        """
+        Deleting user token from the database when he logout.
+        :param request
+        """
+
+        Token.objects.get(user=request.user).delete()
+
+        return Response({"success": "Successfully logged out."},
+                        status=status.HTTP_200_OK)
 
 
 class CustomUserView(viewsets.ModelViewSet):

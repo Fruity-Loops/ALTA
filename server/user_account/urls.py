@@ -13,7 +13,4 @@ router.register(r'accessClients', views.AccessMembers, basename='accessClients')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('login/', views.LoginView.as_view()),
-    path('logout/', views.LogoutView.as_view()),
-    path('login-mobile/', views.LoginView.as_view()) # TODO: Call mobile specific view
 ]
