@@ -9,5 +9,6 @@ router.register(r'record', views.RecordViewSet, basename='record')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('audit/', include(router.urls)),
     path('bin-to-sk/', include(router.urls)),
 ]

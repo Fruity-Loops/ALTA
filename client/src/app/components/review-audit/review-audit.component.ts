@@ -35,14 +35,17 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   getTableData(): void {
-    this.manageAuditsService.getAssignedBins(this.auditID).subscribe((auditData) => {
-      this.buildTable(auditData);
-    });
+    if (this.auditID) {
+      this.manageAuditsService.getAssignedBins(this.auditID).subscribe(
+        (auditData) => {
+          this.buildTable(auditData);
+        });
+    }
   }
 
   buildTable(itemSKData: any): void {
     const table: any[] = [];
-    this.locationsAndUsers = [{location: undefined}];
+    this.locationsAndUsers = [{ location: undefined }];
 
     itemSKData.forEach((bin: any) => {
       table.push(

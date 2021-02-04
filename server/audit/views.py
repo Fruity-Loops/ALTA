@@ -5,6 +5,7 @@ from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
 from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
 from .serializers import *
+from inventory_item.serializers import ItemSerializer
 from .models import Audit, BinToSK, Record
 
 
@@ -41,6 +42,23 @@ class AuditViewSet(viewsets.ModelViewSet):
             self.queryset = self.queryset.filter(assigned_sk__id=assigned_sk)
 
         serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def get_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
+        serializer_class = ItemSerializer
+        return serializer_class(*args, **kwargs)
+
+    @action(detail=False, methods=['GET'], name='Check Item for Validation')
+    def check_item(self, request):
+        bin_id = request.query_params.get('bin_id')
+        audit_id = request.query_params.get('audit_id')
+        item_id = request.query_params.get('item_id')
+
+        bins = BinToSK.objects.get(bin_id=bin_id)
+        audit = Audit.objects.get(audit_id=audit_id)
+        item = audit.inventory_items.get(_id=item_id)
+
+        serializer = self.get_item_serializer(item, many=False)
         return Response(serializer.data)
 
 
@@ -111,3 +129,11 @@ class RecordViewSet(viewsets.ModelViewSet):
     def get_serializer(self, *args, **kwargs):
         serializer_class = RecordSerializer
         return serializer_class(*args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        record = serializer.save()
+        if not record:
+            return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
