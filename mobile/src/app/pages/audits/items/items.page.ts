@@ -150,6 +150,11 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.barcode = '';
   }
 
+  handleItemClick(item_id) {
+    this.barcode = item_id;
+    this.validateItem();
+  }
+
   validateItem() {
     this.auditService.checkItem(
       this.loggedInUser.user_id,
@@ -184,5 +189,4 @@ export class ItemsPage implements OnInit, OnDestroy {
     });
     return await modal.present();
   }
-
 }

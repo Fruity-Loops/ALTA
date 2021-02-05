@@ -16,7 +16,7 @@
 <ion-content>
   <ion-spinner *ngIf="!items" name="crescent" class="center"></ion-spinner>
   <ion-list>
-      <ion-item *ngFor="let item of items" [routerLink]="item._id"> 
+      <ion-item button *ngFor="let item of items" (click)="handleItemClick(item._id)"> 
           <ion-label>
               <p> Item: {{ item._id }}</p>
               <p> Description: {{ item.Part_Description }}</p>

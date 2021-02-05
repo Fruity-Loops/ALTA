@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ItemsRoutingModule } from './items-routing.module';
 import { ItemsPage } from './items.page';
+import { RecordModule } from 'src/app/pages/audits/items/record/record.module'
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ItemsPage } from './items.page';
     IonicModule,
     ItemsRoutingModule,
     ComponentsModule,
+    RecordModule
   ],
   declarations: [ItemsPage]
 })
