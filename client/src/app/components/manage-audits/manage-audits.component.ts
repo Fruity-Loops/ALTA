@@ -36,7 +36,7 @@ export class ManageAuditsComponent implements OnInit {
   // Http URL params
   params = new HttpParams();
 
-  inventoryItemToAudit: number[];
+  selectedAudits: number[];
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -85,7 +85,7 @@ export class ManageAuditsComponent implements OnInit {
       Unit_of_Measure: [''],
     });
     this.dataSource = new MatTableDataSource<any>();
-    this.inventoryItemToAudit = [];
+    this.selectedAudits = [];
   }
 
   ngOnInit(): void {
@@ -95,7 +95,7 @@ export class ManageAuditsComponent implements OnInit {
     this.params = this.params.append('status', 'Active');
     this.init();
     this.getItems();
-    this.inventoryItemToAudit = [];
+    this.selectedAudits = [];
   }
 
   init(): void {
@@ -185,13 +185,13 @@ export class ManageAuditsComponent implements OnInit {
   }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: number): void {
-    if (this.inventoryItemToAudit.includes(value)) {
-      this.inventoryItemToAudit.splice(
-        this.inventoryItemToAudit.indexOf(value),
+    if (this.selectedAudits.includes(value)) {
+      this.selectedAudits.splice(
+        this.selectedAudits.indexOf(value),
         1
       );
     } else {
-      this.inventoryItemToAudit.push(value);
+      this.selectedAudits.push(value);
     }
   }
 }
