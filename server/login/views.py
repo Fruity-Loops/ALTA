@@ -12,6 +12,10 @@ from user_account.models import CustomUser
 from user_account.views import CustomUserView
 from django.http import HttpRequest
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 class LoginView(generics.GenericAPIView):
     """
@@ -72,9 +76,9 @@ class LoginMobileEmailView(generics.GenericAPIView):
     serializer_class = CustomUserSerializer
 
     def save_new_pin(self, email, user):
-        first_part = ''.join(random.choice(string.ascii_uppercase) for i in range(3))
+        first_part = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(3))
         second_part = '-'
-        third_part = ''.join(random.choice(string.ascii_uppercase) for i in range(3))
+        third_part = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(3))
         request = HttpRequest()
         request.data = {'password': first_part + second_part + third_part}
         request.user = email
@@ -85,6 +89,51 @@ class LoginMobileEmailView(generics.GenericAPIView):
         custom_user_view.action = 'partial_update'
         custom_user_view.data = request.data
         custom_user_view.update(request=request, **kwargs)
+        return request.data['password']
+
+    def send_email(self, sender, sender_password, receiver, pin):
+        msg = MIMEMultipart('alternative')
+        # msg = MIMEText('Your Pin is: ' + pin)
+        msg['Subject'] = 'ALTA Pin'
+        msg['From'] = sender
+        msg['To'] = receiver
+
+        text = "Pin: " + pin
+        html = """\
+        <html>
+          <head></head>
+          <body>
+            <p>Your Pin is: kkk""" + pin + """</p>
+          </body>
+        </html>
+        """
+
+        # Record the MIME types of both parts - text/plain and text/html.
+        part1 = MIMEText(text, 'plain')
+        part2 = MIMEText(html, 'html')
+
+        # Attach parts into message container.
+        # According to RFC 2046, the last part of a multipart message, in this case
+        # the HTML message, is best and preferred.
+        msg.attach(part1)
+        msg.attach(part2)
+
+        # Send the message via local SMTP server.
+        try:
+            # mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+            mailserver = smtplib.SMTP('smtp.gmail.com', 587)
+            # identify ourselves to smtp gmail client
+            mailserver.ehlo()
+            # secure our email with tls encryption
+            # mailserver.connect('smtp.gmail.com', 465)
+            mailserver.starttls()
+            # re-identify ourselves as an encrypted connection
+            mailserver.ehlo()
+            mailserver.login(sender, sender_password)
+            mailserver.sendmail(sender, receiver, msg.as_string())
+            mailserver.quit()
+        except smtplib.SMTPException as e:
+            print(e)
 
     def post(self, request):
         data = request.data
@@ -94,7 +143,6 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
         try:
             user = CustomUser.objects.get(email=email)
-
             if user.is_active:
                 org_id = user.organization.org_id
                 org_name = user.organization.org_name
@@ -103,11 +151,12 @@ class LoginMobileEmailView(generics.GenericAPIView):
                         'organization_name': org_name}
 
                 # Update the Password as the new PIN and send an email
-                self.save_new_pin(email, user)
+                pin = self.save_new_pin(email, user)
+                self.send_email('Neehamk@gmail.com', 'password', email, pin)
                 response = Response(data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            pass
+            print("here")
 
         return response
 
