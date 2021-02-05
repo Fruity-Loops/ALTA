@@ -1,46 +1,16 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
+import string, random
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status, viewsets, generics
+from rest_framework import status, generics
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, \
-    UserHasSameOrg, HasSameOrgInQuery, PermissionFactory
 from user_account.serializers import CustomUserSerializer
 from user_account.models import CustomUser
-
-
-class OpenRegistrationView(viewsets.ModelViewSet):
-    """
-    OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
-    """
-    http_method_names = ['post']
-
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = CustomUserSerializer
-        serializer_class.Meta.fields = list(self.request.data.keys())
-        return serializer_class(*args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        """
-        :param request: request.data: first_name,
-        last_name, user_name, password, role, email, is_active
-        :return: user_name, token
-        """
-        user = None
-        data = None
-        if request.data:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            user = serializer.save()
-        if user:
-            data = {'success': 'success'}
-        if not data:
-            return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(data, status=status.HTTP_201_CREATED)
+from user_account.views import CustomUserView
+from django.http import HttpRequest
 
 
 class LoginView(generics.GenericAPIView):
@@ -90,20 +60,100 @@ class LoginView(generics.GenericAPIView):
                 response = Response(data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            return response
+            pass
 
         return response
 
 
-class LoginMobileView(generics.GenericAPIView):
+class LoginMobileEmailView(generics.GenericAPIView):
     """
     Authenticate a Mobile Log in.
     """
     serializer_class = CustomUserSerializer
 
+    def save_new_pin(self, email, user):
+        first_part = ''.join(random.choice(string.ascii_uppercase) for i in range(3))
+        second_part = '-'
+        third_part = ''.join(random.choice(string.ascii_uppercase) for i in range(3))
+        request = HttpRequest()
+        request.data = {'password': first_part + second_part + third_part}
+        request.user = email
+        kwargs = {'partial': True, 'pk': user.id}
+        custom_user_view = CustomUserView()
+        custom_user_view.kwargs = kwargs
+        custom_user_view.request = request
+        custom_user_view.action = 'partial_update'
+        custom_user_view.data = request.data
+        custom_user_view.update(request=request, **kwargs)
+
     def post(self, request):
-        pass  # TODO: Implement mobile specific endpoint
-        # Should be implemented when different options to password auth are determined
+        data = request.data
+        email = data.get('email', '')
+        response = Response({"detail": "Login Failed"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+
+            if user.is_active:
+                org_id = user.organization.org_id
+                org_name = user.organization.org_name
+                data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'organization_id': org_id,
+                        'organization_name': org_name}
+
+                # Update the Password as the new PIN and send an email
+                self.save_new_pin(email, user)
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            pass
+
+        return response
+
+
+class LoginMobilePinView(generics.GenericAPIView):
+    """
+    Authenticate a System Admin.
+    """
+
+    # serializer_class = CustomUserSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = CustomUserSerializer
+        serializer_class.Meta.fields = ['email', 'password']
+        return serializer_class(*args, **kwargs)
+
+    def post(self, request):
+        """
+        Verify that a System Admin has valid credentials and is active.
+        :param request: request.data: email, password
+        :return: user_name, token
+        """
+        data = request.data
+        email = data.get('email', '')
+        password = data.get('pin', '')
+        response = Response({"detail": "Login Failed"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = CustomUser.objects.get(email=email)
+
+            is_verified = check_password(password, user.password)
+            if is_verified and user.is_active:
+                has_token = Token.objects.filter(user=user).count()
+                if has_token:
+                    token = Token.objects.get(user=user)
+                else:
+                    token = Token.objects.create(user=user)
+                data = {'token': token.key}
+
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist:
+            return response
+
+        return response
 
 
 class LogoutView(generics.GenericAPIView):
@@ -127,110 +177,3 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
-
-
-class CustomUserView(viewsets.ModelViewSet):
-    http_method_names = ['get', 'post', 'patch']
-    data = None
-
-    def get_permissions(self):
-        factory = PermissionFactory(self.request)
-        if self.action in ['create', 'retrieve', 'list']:
-            permission_classes = factory.get_general_permissions([
-                UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
-        elif self.action in ['partial_update']:
-            permission_classes = factory.get_general_permissions([
-                IsHigherInOrganization, CanUpdateKeys])
-        else:
-            permission_classes = factory.get_general_permissions([])
-        return [permission() for permission in permission_classes]
-
-    def get_queryset(self):
-        final_queryset = CustomUser.objects.filter().exclude()
-        return final_queryset
-
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = CustomUserSerializer
-        if self.action == 'partial_update':
-            serializer_class.Meta.fields = list(self.data.keys())
-        elif self.action == 'create':
-            serializer_class.Meta.fields = list(self.request.data.keys())
-        else:
-            serializer_class.Meta.fields = [
-                'first_name',
-                'last_name',
-                'email', 'role',
-                'is_active',
-                'id',
-                'location',
-                'organization',
-                'user_name']
-        return serializer_class(*args, **kwargs)
-
-    def create(self, request, *args, **kwargs):
-        """ returns: user_name, token and organization"""
-        # Retrieve the authenticated user making the request
-        auth_content = {
-            'user': str(request.user),
-            'auth': str(request.auth),
-        }
-
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        if not user:
-            return Response({'status': 'failed because empty info sent'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        if user.organization is None:
-            data = {'user': user.user_name, 'organization': '',
-                    'token': auth_content['auth']}
-        else:
-            data = {'user': user.user_name, 'organization': user.organization.org_id,
-                    'token': auth_content['auth']}
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-    def list(self, request):
-        """
-        It's important to be careful if this queryset is modified, as there are plenty of
-        possibilities to list out employees, and there may be a way to make it vulnerable
-        if this is changed (although it shouldn't)
-        """
-        queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')) \
-            .exclude(role='SA').exclude(id=request.user.id)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
-
-    def update(self, request, *args, **kwargs):  # pylint: disable=unused-argument
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        self.data = dict(self.request.data)
-        # deleting role key from dictionary to make sure it is not modifiable
-        self.data.pop('role', None)
-        serializer = self.get_serializer(data=self.data, partial=partial, context=kwargs['pk'])
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}  # pylint: disable=protected-access
-
-        return Response(serializer.data)
-
-
-class AccessMembers(viewsets.ModelViewSet):
-    """
-    Allows obtaining all clients and updating them
-    """
-    http_method_names = ['get']
-    permission_classes = [IsAuthenticated, IsSystemAdmin]
-
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = CustomUserSerializer
-        serializer_class.Meta.fields = ['user_name', 'first_name', 'last_name', 'email',
-                                        'role', 'location', 'is_active', 'id']
-        return serializer_class(*args, **kwargs)
-
-    def get_queryset(self):
-        return CustomUser.objects.filter(role='SA').exclude(id=self.request.user.id)
