@@ -11,9 +11,17 @@ export async function setLoggedInUser(userObject): Promise<void> {
             user_id: userObject.user_id,
             role: userObject.role,
             organization_id: userObject.organization_id,
-            organization_name: userObject.organization_name,
-            token: userObject.token,
+            organization_name: userObject.organization_name
         })
+    });
+}
+
+export async function setToken(userObject): Promise<void> {
+    let value = await fetchLoggedInUser();
+    value.token = userObject.token;
+    await Storage.set({
+        key: USER_KEY,
+        value: JSON.stringify(value)
     });
 }
 

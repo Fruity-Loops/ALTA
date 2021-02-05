@@ -18,6 +18,6 @@ export class SettingsPage implements OnInit {
 
   async logout() {
     await this.authService.logout();
-    this.router.navigateByUrl('login', { replaceUrl: true });
+    this.router.navigateByUrl('signin', { replaceUrl: true });
   }
 }
