@@ -1,8 +1,6 @@
 <ion-content>
   <div class="form-container">
-    <form [formGroup]="formGroup" (ngSubmit)="validate()">
-      <ion-button id="validateButton" type="submit" expand="block" size="large">Validate
-      </ion-button>
+    <form id="scannedItemForm" [formGroup]="formGroup" (ngSubmit)="validate()">
 
       <ion-item>
         <ion-label position="floating" color="primary">id</ion-label>
@@ -89,3 +87,7 @@
     </form>
   </div>
 </ion-content>
+
+<button id="validateButton" form="scannedItemForm" type="submit" [disabled]="!formGroup.valid" expand="block"
+  size="large">Validate
+</button>

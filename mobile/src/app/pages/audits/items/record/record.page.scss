@@ -1,0 +1,13 @@
+#validateButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    font-size: 16px;
+  }
+
+
+#validateButton[disabled]{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
