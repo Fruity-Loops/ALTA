@@ -47,6 +47,10 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer_class = ItemSerializer
         return serializer_class(*args, **kwargs)
 
+    def get_record_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
+        serializer_class = RecordSerializer
+        return serializer_class(*args, **kwargs)
+
     @action(detail=False, methods=['GET'], name='Check Item for Validation')
     def check_item(self, request):
         bin_id = request.query_params.get('bin_id')
@@ -58,6 +62,22 @@ class AuditViewSet(viewsets.ModelViewSet):
         item = audit.inventory_items.get(_id=item_id)
 
         serializer = self.get_item_serializer(item, many=False)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'], name='Get Completed Items for Audit')
+    def completed_items_audit(self, request):
+        audit_id = request.query_params.get('audit_id')
+        records = Record.objects.filter(audit_id=audit_id)
+        
+        serializer = self.get_record_serializer(records, many=True)
+        return Response(serializer.data)
+        
+    @action(detail=False, methods=['GET'], name='Get Completed Items for Bin')
+    def completed_items_bin(self, request):
+        bin_id = request.query_params.get('bin_id')
+        records = Record.objects.filter(bin_to_sk_id=bin_id)
+        
+        serializer = self.get_record_serializer(records, many=True)
         return Response(serializer.data)
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')

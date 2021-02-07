@@ -21,7 +21,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   loggedInUser: any;
   currentSegment = 'items';
   items: any;
-  completedItems: [];
+  completedItems: any;
   auditID: string;
   binID: string;
 
@@ -69,11 +69,27 @@ export class ItemsPage implements OnInit, OnDestroy {
       user => {
         if (user) {
           this.loggedInUser = user;
-          this.auditService.getItems(user.user_id, this.auditID, this.binID).subscribe(
+          this.auditService.getItems(
+            user.user_id,
+            this.auditID,
+            this.binID
+          ).subscribe(
             (res: any) => {
-              this.items = res.inventory_items;
+              this.items = res;
             });
         }
+      });
+  }
+
+  getCompletedItems() {
+    this.auditService.getCompletedItemsBin(
+      this.loggedInUser.user_id,
+      this.auditID,
+      this.binID
+    ).subscribe(
+      (res: any) => {
+        this.completedItems = res;
+        console.log(JSON.stringify(res))
       });
   }
 
@@ -182,6 +198,13 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   segmentChanged(ev: CustomEvent) {
     this.currentSegment = ev.detail.value;
+
+    if (this.currentSegment === 'items' && !this.items){
+      this.getItems()
+    }
+    else if (this.currentSegment === 'completedItems' && !this.completedItems) {
+      this.getCompletedItems();
+    }
   }
 
   async presentRecordModal(data) {

@@ -15,14 +15,24 @@
 
 <ion-content>
   <ion-spinner *ngIf="!items" name="crescent" class="center"></ion-spinner>
-  <ion-list>
-      <ion-item button *ngFor="let item of items" onclick="this.blur()" (click)="handleItemClick(item._id)"> 
-          <ion-label>
-              <p> Item: {{ item._id }}</p>
-              <p> Description: {{ item.Part_Description }}</p>
-          </ion-label>
-          <ion-icon name="information-circle" slot="end"></ion-icon>
-      </ion-item>
+  <ion-list [hidden]="currentSegment!='items'">
+    <ion-item button *ngFor="let item of items" onclick="this.blur()" (click)="handleItemClick(item._id)">
+      <ion-label>
+        <p> Item: {{ item._id }}</p>
+        <p> Description: {{ item.Part_Description }}</p>
+      </ion-label>
+      <ion-icon name="information-circle" slot="end"></ion-icon>
+    </ion-item>
+  </ion-list>
+  <ion-list [hidden]="currentSegment!='completedItems'">
+    <ion-item button *ngFor="let item of completedItems" onclick="this.blur()" (click)="handleItemClick(item.item_id)">
+      <ion-label>
+        <p> Item: {{ item.item_id }}</p>
+        <p> Description: {{ item.Part_Description }}</p>
+        <p> Submitted On: {{ item.last_verified_on }}</p>
+      </ion-label>
+      <ion-icon name="information-circle" slot="end"></ion-icon>
+    </ion-item>
   </ion-list>
 </ion-content>
 

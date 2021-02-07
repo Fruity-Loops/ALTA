@@ -79,6 +79,19 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
+
+  getCompletedItemsBin(userID, auditID, binID){
+    return this.http.get(`${BASEURL}/audit/completed_items_bin/`, {
+      params: {
+        customuser_id: userID,
+        audit_id: auditID,
+        bin_id: binID,
+      }
+    })
+      .pipe(catchError(errorHandler));
+  }
+
+
   validate(record){
     return this.http.post(`${BASEURL}/record/`, record)
       .pipe(catchError(errorHandler));
