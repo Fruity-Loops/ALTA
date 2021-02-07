@@ -24,6 +24,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   completedItems: any;
   auditID: string;
   binID: string;
+  refreshEvent: any;
 
   constructor(
     private auditService: AuditService,
@@ -76,6 +77,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           ).subscribe(
             (res: any) => {
               this.items = res;
+              this.finishRefresh();
             });
         }
       });
@@ -89,7 +91,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     ).subscribe(
       (res: any) => {
         this.completedItems = res;
-        console.log(JSON.stringify(res))
+        this.finishRefresh();
       });
   }
 
@@ -199,8 +201,8 @@ export class ItemsPage implements OnInit, OnDestroy {
   segmentChanged(ev: CustomEvent) {
     this.currentSegment = ev.detail.value;
 
-    if (this.currentSegment === 'items' && !this.items){
-      this.getItems()
+    if (this.currentSegment === 'items' && !this.items) {
+      this.getItems();
     }
     else if (this.currentSegment === 'completedItems' && !this.completedItems) {
       this.getCompletedItems();
@@ -218,10 +220,27 @@ export class ItemsPage implements OnInit, OnDestroy {
       }
     });
     modal.onDidDismiss()
-      .then(() => {
+      .then((res) => {
+        if (res.data?.itemValidated){
+          this.doRefresh(null);
+        }
         this.setExternalScanListener();
       });
     return await modal.present();
+  }
 
+  async doRefresh(event) {
+    this.refreshEvent = event;
+    if (this.currentSegment === 'completedItems') {
+      this.getCompletedItems();
+    }
+    this.getItems();
+  }
+
+  async finishRefresh() {
+    if (this.refreshEvent) {
+      this.refreshEvent.target.complete();
+      this.refreshEvent = null;
+    }
   }
 }

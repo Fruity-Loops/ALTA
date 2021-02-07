@@ -75,7 +75,7 @@ export class RecordPage implements OnInit {
           buttons: ['Dismiss'],
         });
         await alert.present();
-      })
+      });
 
   }
 
@@ -88,7 +88,7 @@ export class RecordPage implements OnInit {
 
   dismissModal() {
     this.modalController.dismiss({
-      'dismissed': true
+      itemValidated: true,
     });
   }
 
