@@ -78,4 +78,9 @@ export class AuditService {
     })
       .pipe(catchError(errorHandler));
   }
+
+  validate(record){
+    return this.http.post(`${BASEURL}/record/`, record)
+      .pipe(catchError(errorHandler));
+  }
 }

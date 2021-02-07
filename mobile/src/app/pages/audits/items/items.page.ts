@@ -162,7 +162,13 @@ export class ItemsPage implements OnInit, OnDestroy {
       this.binID,
       this.barcode).subscribe(
         (item: any) => {
-          this.presentRecordModal(item);
+          const modalData = {
+            itemData: item,
+            loggedInUser: this.loggedInUser.user_id,
+            auditID: this.auditID,
+            binID: this.binID,
+          };
+          this.presentRecordModal(modalData);
           this.scanStateChanged(false);
         });
   }
@@ -178,14 +184,14 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.currentSegment = ev.detail.value;
   }
 
-  async presentRecordModal(item) {
+  async presentRecordModal(data) {
     this.keypressEvent.unsubscribe();
     const modal = await this.modalController.create({
       component: RecordPage,
       cssClass: 'record-modal',
       showBackdrop: true,
       componentProps: {
-        scannedItem: item,
+        modalData: data,
       }
     });
     modal.onDidDismiss()

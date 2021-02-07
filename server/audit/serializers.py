@@ -46,8 +46,6 @@ class BinItemSerializer(serializers.ModelSerializer):
         fields = ['inventory_items']
 
 class RecordSerializer(serializers.ModelSerializer):
-    bin_to_sk = BinItemSerializer(read_only=True, many=False)
-    audit = AuditSerializer(read_only=True, many=False)
 
     class Meta:
         model = Record

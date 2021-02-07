@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { AuditService } from 'src/app/services/audit.service';
 
 @Component({
   selector: 'app-record',
@@ -8,38 +9,38 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./record.page.scss'],
 })
 export class RecordPage implements OnInit {
-  @Input() scannedItem: any = {};
+  @Input() modalData: any = {itemData:{}};
   formGroup: FormGroup;
   isItemDetailsHidden = true;
 
   constructor(
     private formBuilder: FormBuilder,
-    public modalController: ModalController
-    ) { }
+    public modalController: ModalController,
+    private auditService: AuditService,
+  ) { }
 
   ngOnInit() {
-    console.log(JSON.stringify(this.scannedItem));
     this.buildLoginForm();
   }
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      id: [this.scannedItem._id, [Validators.required]],
-      Location: [this.scannedItem.Location, [Validators.required]],
-      Plant: [this.scannedItem.Plant, [Validators.required]],
-      Zone: [this.scannedItem.Zone, [Validators.required]],
-      Aisle: [this.scannedItem.Aisle, [Validators.required]],
-      Bin: [this.scannedItem.Bin, [Validators.required]],
-      PartNumber: [this.scannedItem.Part_Number, [Validators.required]],
-      PartDescription: [this.scannedItem.Part_Description, [Validators.required]],
-      SerialNumber: [this.scannedItem.Serial_Number, [Validators.required]],
-      Condition: [this.scannedItem.Condition, [Validators.required]],
-      Category: [this.scannedItem.Category, [Validators.required]],
-      Owner: [this.scannedItem.Owner, [Validators.required]],
-      Criticality: [this.scannedItem.Criticality, [Validators.required]],
-      AverageCost: [this.scannedItem.Average_Cost, [Validators.required]],
-      Quantity: [this.scannedItem.Quantity, [Validators.required]],
-      UnitOfMeasure: [this.scannedItem.Unit_of_Measure, [Validators.required]],
+      id: [this.modalData.itemData._id, [Validators.required]],
+      Location: [this.modalData.itemData.Location, [Validators.required]],
+      Plant: [this.modalData.itemData.Plant, [Validators.required]],
+      Zone: [this.modalData.itemData.Zone, [Validators.required]],
+      Aisle: [this.modalData.itemData.Aisle, [Validators.required]],
+      Bin: [this.modalData.itemData.Bin, [Validators.required]],
+      PartNumber: [this.modalData.itemData.Part_Number, [Validators.required]],
+      PartDescription: [this.modalData.itemData.Part_Description, [Validators.required]],
+      SerialNumber: [this.modalData.itemData.Serial_Number, [Validators.required]],
+      Condition: [this.modalData.itemData.Condition, [Validators.required]],
+      Category: [this.modalData.itemData.Category, [Validators.required]],
+      Owner: [this.modalData.itemData.Owner, [Validators.required]],
+      Criticality: [this.modalData.itemData.Criticality, [Validators.required]],
+      AverageCost: [this.modalData.itemData.Average_Cost, [Validators.required]],
+      Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
+      UnitOfMeasure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
       status: ['', [Validators.required]],
       comment: ['']
 
@@ -47,6 +48,17 @@ export class RecordPage implements OnInit {
   }
 
   validate() {
-    console.log(JSON.stringify(this.formGroup.value));
+    const record = this.curateData();
+    this.auditService.validate(record).subscribe((data: any) => {
+      console.log(JSON.stringify(data));
+    });
+  }
+
+  curateData() {
+    const data = this.formGroup.value;
+    data.item_id = data.id;
+    data.audit = this.modalData.auditID;
+    data.bin_to_sk = this.modalData.binID;
+    return data;
   }
 }
