@@ -150,8 +150,8 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.barcode = '';
   }
 
-  handleItemClick(item_id) {
-    this.barcode = item_id;
+  handleItemClick(itemID) {
+    this.barcode = itemID;
     this.validateItem();
   }
 
@@ -179,6 +179,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
   async presentRecordModal(item) {
+    this.keypressEvent.unsubscribe();
     const modal = await this.modalController.create({
       component: RecordPage,
       cssClass: 'record-modal',
@@ -187,6 +188,11 @@ export class ItemsPage implements OnInit, OnDestroy {
         scannedItem: item,
       }
     });
+    modal.onDidDismiss()
+      .then(() => {
+        this.setExternalScanListener();
+      });
     return await modal.present();
+
   }
 }

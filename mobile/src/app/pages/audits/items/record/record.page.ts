@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-record',
@@ -9,8 +10,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class RecordPage implements OnInit {
   @Input() scannedItem: any = {};
   formGroup: FormGroup;
+  isItemDetailsHidden = true;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    public modalController: ModalController
+    ) { }
 
   ngOnInit() {
     console.log(JSON.stringify(this.scannedItem));
@@ -35,6 +40,9 @@ export class RecordPage implements OnInit {
       AverageCost: [this.scannedItem.Average_Cost, [Validators.required]],
       Quantity: [this.scannedItem.Quantity, [Validators.required]],
       UnitOfMeasure: [this.scannedItem.Unit_of_Measure, [Validators.required]],
+      status: ['', [Validators.required]],
+      comment: ['']
+
     });
   }
 
