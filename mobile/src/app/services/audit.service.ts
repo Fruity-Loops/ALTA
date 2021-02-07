@@ -69,7 +69,7 @@ export class AuditService {
   }
 
   getItems(userID, auditID, binID){
-    return this.http.get(`${BASEURL}/bin-to-sk/items/`, {
+    return this.http.get(`${BASEURL}/audit/items/`, {
       params: {
         customuser_id: userID,
         audit_id: auditID,

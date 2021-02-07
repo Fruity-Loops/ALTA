@@ -206,7 +206,7 @@ class BinTestCase(APITestCase):
     def test_bins_get_items(self):
         self.client.force_authenticate(user=self.inv_manager)
         self.predefined_audit = Audit.objects.get(pk=1)
-        response = self.client.get("/bin-to-sk/items/", {'bin_id': 3, 'audit_id': 2})
+        response = self.client.get("/audit/items/", {'bin_id': 3, 'audit_id': 2})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 class RecordTestCase(APITestCase):
@@ -240,6 +240,7 @@ class RecordTestCase(APITestCase):
                 "status": "Pending",
                 "audit": self.audit.audit_id,
                 "bin_to_sk": self.bin.bin_id,
+                "item_id": self.item_one._id,
                 "location": "YUL",
                 
             }, format="json")

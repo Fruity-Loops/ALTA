@@ -8,7 +8,6 @@ from .serializers import *
 from inventory_item.serializers import ItemSerializer
 from .models import Audit, BinToSK, Record
 
-
 class AuditViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
@@ -61,6 +60,22 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_item_serializer(item, many=False)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['GET'], name='Get Items In Bin')
+    def items(self, request):
+        bin_id = request.query_params.get('bin_id')
+        audit_id = request.query_params.get('audit_id')
+        bins = BinToSK.objects.get(bin_id=bin_id)
+        queryset = Audit.objects.get(audit_id=audit_id)
+        records = Record.objects.filter(bin_to_sk_id=bin_id).all()
+        completed_items =[record.item_id for record in records]
+        bin_items = []
+        for item in queryset.inventory_items.all():
+            if int(item._id) in bins.item_ids and int(item._id) not in completed_items:
+                bin_items.append(item)
+
+        serializer = self.get_item_serializer(bin_items, many=True)
+        return Response(serializer.data)
+
 
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
@@ -101,26 +116,6 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
-
-    def get_bin_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
-        serializer_class = BinItemSerializer
-        return serializer_class(*args, **kwargs)
-
-    @action(detail=False, methods=['GET'], name='Get Items In Bin')
-    def items(self, request):
-        bin_id = request.query_params.get('bin_id')
-        audit_id = request.query_params.get('audit_id')
-        bins = BinToSK.objects.get(bin_id=bin_id)
-        queryset = Audit.objects.get(audit_id=audit_id)
-        bin_items = []
-        for item in queryset.inventory_items.all():
-            if int(item._id) in bins.item_ids:
-                bin_items.append(item)
-        queryset.inventory_items.set(bin_items)
-
-        serializer = self.get_bin_item_serializer(queryset, many=False)
-        return Response(serializer.data)
-
 
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch']
