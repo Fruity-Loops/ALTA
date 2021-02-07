@@ -25,22 +25,22 @@ export class RecordPage implements OnInit {
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      id: [this.modalData.itemData._id, [Validators.required]],
+      item_id: [this.modalData.itemData._id, [Validators.required]],
       Location: [this.modalData.itemData.Location, [Validators.required]],
       Plant: [this.modalData.itemData.Plant, [Validators.required]],
       Zone: [this.modalData.itemData.Zone, [Validators.required]],
       Aisle: [this.modalData.itemData.Aisle, [Validators.required]],
       Bin: [this.modalData.itemData.Bin, [Validators.required]],
-      PartNumber: [this.modalData.itemData.Part_Number, [Validators.required]],
-      PartDescription: [this.modalData.itemData.Part_Description, [Validators.required]],
-      SerialNumber: [this.modalData.itemData.Serial_Number, [Validators.required]],
+      Part_Number: [this.modalData.itemData.Part_Number, [Validators.required]],
+      Part_Description: [this.modalData.itemData.Part_Description, [Validators.required]],
+      Serial_Number: [this.modalData.itemData.Serial_Number, [Validators.required]],
       Condition: [this.modalData.itemData.Condition, [Validators.required]],
       Category: [this.modalData.itemData.Category, [Validators.required]],
       Owner: [this.modalData.itemData.Owner, [Validators.required]],
       Criticality: [this.modalData.itemData.Criticality, [Validators.required]],
-      AverageCost: [this.modalData.itemData.Average_Cost, [Validators.required]],
+      Average_Cost: [this.modalData.itemData.Average_Cost, [Validators.required]],
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
-      UnitOfMeasure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
+      Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
       status: ['', [Validators.required]],
       comment: ['']
 
@@ -56,7 +56,6 @@ export class RecordPage implements OnInit {
 
   curateData() {
     const data = this.formGroup.value;
-    data.item_id = data.id;
     data.audit = this.modalData.auditID;
     data.bin_to_sk = this.modalData.binID;
     return data;
