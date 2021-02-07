@@ -47,7 +47,7 @@ class Record(ItemFields):
         default=PENDING,
     )
     record_id = models.AutoField(primary_key=True)
-    item_id = models.IntegerField(null=True)
+    item_id = models.IntegerField(null=False, unique=True)
     audit=models.ForeignKey(Audit, on_delete=models.CASCADE)
     bin_to_sk=models.ForeignKey(BinToSK, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)

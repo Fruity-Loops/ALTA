@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { AuditService } from 'src/app/services/audit.service';
+import { AlertController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-record',
@@ -9,7 +10,7 @@ import { AuditService } from 'src/app/services/audit.service';
   styleUrls: ['./record.page.scss'],
 })
 export class RecordPage implements OnInit {
-  @Input() modalData: any = {itemData:{}};
+  @Input() modalData: any = { itemData: {} };
   formGroup: FormGroup;
   isItemDetailsHidden = true;
 
@@ -17,6 +18,8 @@ export class RecordPage implements OnInit {
     private formBuilder: FormBuilder,
     public modalController: ModalController,
     private auditService: AuditService,
+    private loadingController: LoadingController,
+    private alertController: AlertController,
   ) { }
 
   ngOnInit() {
@@ -47,11 +50,33 @@ export class RecordPage implements OnInit {
     });
   }
 
-  validate() {
+  async validate() {
+    const whileLoading = await this.loadingController.create();
+    await whileLoading.present();
+
     const record = this.curateData();
-    this.auditService.validate(record).subscribe((data: any) => {
-      console.log(JSON.stringify(data));
-    });
+    this.auditService.validate(record).subscribe(
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Item Validated',
+          message: 'The item has been successfully submitted.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present().then(_ => {
+          this.dismissModal();
+        });
+      },
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'There was a problem validating this item.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present();
+      })
+
   }
 
   curateData() {
@@ -60,4 +85,11 @@ export class RecordPage implements OnInit {
     data.bin_to_sk = this.modalData.binID;
     return data;
   }
+
+  dismissModal() {
+    this.modalController.dismiss({
+      'dismissed': true
+    });
+  }
+
 }
