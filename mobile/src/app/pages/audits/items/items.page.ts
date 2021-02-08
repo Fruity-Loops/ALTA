@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Platform, AlertController, ToastController, ModalController } from '@ionic/angular';
+import { Platform, AlertController, ToastController, ModalController, ActionSheetController } from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -36,6 +36,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     public platform: Platform,
     private activatedRoute: ActivatedRoute,
     public modalController: ModalController,
+    public actionSheetController: ActionSheetController,
   ) {
     this.barcode = '';
   }
@@ -182,13 +183,30 @@ export class ItemsPage implements OnInit, OnDestroy {
         (item: any) => {
           const modalData = {
             itemData: item,
-            loggedInUser: this.loggedInUser.user_id,
+            customuser_id: this.loggedInUser.user_id,
             auditID: this.auditID,
             binID: this.binID,
           };
           this.presentRecordModal(modalData);
           this.scanStateChanged(false);
         });
+  }
+
+  getRecord(recordID) {
+    this.auditService.getRecord(
+      this.loggedInUser.user_id,
+      this.auditID,
+      this.binID,
+      recordID).subscribe(
+        (record: any) => {
+          const modalData = {
+            itemData: record,
+            customuser_id: this.loggedInUser.user_id,
+            auditID: this.auditID,
+            binID: this.binID,
+          };
+          this.presentRecordModal(modalData)
+        })
   }
 
   scanStateChanged(isScanning: boolean) {
@@ -221,7 +239,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     });
     modal.onDidDismiss()
       .then((res) => {
-        if (res.data?.itemValidated){
+        if (res.data?.itemValidated) {
           this.doRefresh(null);
         }
         this.setExternalScanListener();
@@ -242,5 +260,34 @@ export class ItemsPage implements OnInit, OnDestroy {
       this.refreshEvent.target.complete();
       this.refreshEvent = null;
     }
+  }
+
+  async presentCompltedItemActionSheet(recordID) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Options',
+      buttons: [
+        {
+          text: 'Edit',
+          icon: 'create',
+          handler: () => {
+            this.getRecord(recordID);
+          }
+        }, {
+          text: 'Delete',
+          role: 'destructive',
+          icon: 'trash',
+          handler: () => {
+            console.log('Delete clicked');
+          }
+        }, {
+          text: 'Cancel',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }]
+    });
+    await actionSheet.present();
   }
 }

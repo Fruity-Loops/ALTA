@@ -15,9 +15,7 @@
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content
-      pullingIcon="chevron-down-circle-outline"
-      refreshingSpinner="circular">
+    <ion-refresher-content pullingIcon="chevron-down-circle-outline" refreshingSpinner="circular">
     </ion-refresher-content>
   </ion-refresher>
 
@@ -32,13 +30,17 @@
     </ion-item>
   </ion-list>
   <ion-list [hidden]="currentSegment!='completedItems'">
-    <ion-item button *ngFor="let item of completedItems" onclick="this.blur()" (click)="handleItemClick(item.item_id)">
+    <ion-item *ngFor="let item of completedItems" onclick="this.blur()">
+
       <ion-label>
         <p> Item: {{ item.item_id }}</p>
-        <p> Description: {{ item.Part_Description }}</p>
+        <p> Status: {{ item.status }}</p>
         <p> Submitted On: {{ item.last_verified_on }}</p>
       </ion-label>
-      <ion-icon name="information-circle" slot="end"></ion-icon>
+      <ion-button (click)="presentCompltedItemActionSheet(item.record_id)">
+        <ion-icon name="hammer-outline"></ion-icon>
+      </ion-button>
+
     </ion-item>
   </ion-list>
 </ion-content>

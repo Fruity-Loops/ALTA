@@ -12,6 +12,9 @@ import { AlertController, LoadingController } from '@ionic/angular';
 export class RecordPage implements OnInit {
   @Input() modalData: any = { itemData: {} };
   formGroup: FormGroup;
+  recordID: number;
+  modalTitle = "Item";
+  lastModifiedOn: string;
   isItemDetailsHidden = true;
 
   constructor(
@@ -23,12 +26,22 @@ export class RecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.setRecordData();
     this.buildLoginForm();
+  }
+
+  setRecordData() {
+    this.recordID = this.modalData.itemData.record_id;
+    if (this.recordID) {
+      // Record(completed item) passed
+      this.modalTitle = `Editing Record ${this.recordID}`
+      this.lastModifiedOn = this.modalData.itemData.last_verified_on;
+    }
   }
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      item_id: [this.modalData.itemData._id, [Validators.required]],
+      item_id: [this.modalData.itemData._id || this.modalData.itemData.item_id, [Validators.required]],
       Location: [this.modalData.itemData.Location, [Validators.required]],
       Plant: [this.modalData.itemData.Plant, [Validators.required]],
       Zone: [this.modalData.itemData.Zone, [Validators.required]],
@@ -44,10 +57,17 @@ export class RecordPage implements OnInit {
       Average_Cost: [this.modalData.itemData.Average_Cost, [Validators.required]],
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
       Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
-      status: ['', [Validators.required]],
-      comment: ['']
+      status: [this.modalData.itemData.status, [Validators.required]],
+      comment: [this.modalData.itemData.comment]
 
     });
+  }
+
+  submit() {
+    if (this.recordID) {
+      return this.patch();
+    }
+    return this.validate();
   }
 
   async validate() {
@@ -55,7 +75,7 @@ export class RecordPage implements OnInit {
     await whileLoading.present();
 
     const record = this.curateData();
-    this.auditService.validate(record).subscribe(
+    this.auditService.createRecord(record).subscribe(
       async (res) => {
         await whileLoading.dismiss();
         const alert = await this.alertController.create({
@@ -77,6 +97,34 @@ export class RecordPage implements OnInit {
         await alert.present();
       });
 
+  }
+
+  async patch() {
+    const whileLoading = await this.loadingController.create();
+    await whileLoading.present();
+
+    const record = this.curateData();
+    this.auditService.patchRecord(this.recordID, record).subscribe(
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Record Validated',
+          message: 'The record has been successfully modifed.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present().then(_ => {
+          this.dismissModal();
+        });
+      },
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'There was a problem modifying this record.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present();
+      });
   }
 
   curateData() {

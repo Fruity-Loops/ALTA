@@ -91,8 +91,24 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
+  getRecord(userID, auditID, binID, recordID){
+    return this.http.get(`${BASEURL}/record/${recordID}/`,
+    {
+      params: {
+        customuser_id: userID,
+        audit_id: auditID,
+        bin_id: binID,
+      }
+    })
+      .pipe(catchError(errorHandler));
+  }
 
-  validate(record){
+  patchRecord(recordID, recordData){
+    return this.http.patch(`${BASEURL}/record/${recordID}/`, recordData)
+      .pipe(catchError(errorHandler));
+  }
+
+  createRecord(record){
     return this.http.post(`${BASEURL}/record/`, record)
       .pipe(catchError(errorHandler));
   }
