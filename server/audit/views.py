@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
-from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
+from .permissions import *
 from .serializers import *
 from inventory_item.serializers import ItemSerializer
 from .models import Audit, BinToSK, Record
@@ -140,6 +140,13 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch']
     queryset = Record.objects.all()
+    permission_classes = []
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([
+            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = RecordSerializer
