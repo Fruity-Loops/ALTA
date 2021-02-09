@@ -175,7 +175,6 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   finishScan() {
     this.validateItem();
-    this.barcode = '';
   }
 
   handleItemClick(itemID) {
@@ -183,23 +182,48 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.validateItem();
   }
 
-  validateItem() {
+  async validateItem() {
+    const whileLoading = await this.loadingController.create();
+    if (!this.isScanning) {
+      await whileLoading.present();
+    }
+
     this.auditService.getItem(
       this.loggedInUser.user_id,
       this.auditID,
       this.binID,
       this.barcode).subscribe(
-        (item: any) => {
+        async (res) => {
+          await whileLoading.dismiss();
           const modalData = {
-            itemData: item,
+            itemData: res,
             customuser_id: this.loggedInUser.user_id,
             auditID: this.auditID,
             binID: this.binID,
           };
           this.presentRecordModal(modalData);
           this.scanStateChanged(false);
+          this.barcode = '';
+        },
+        async (res) => {
+          let header = 'No Match';
+          let message = `There was no match for #${this.barcode}`;
+          await whileLoading.dismiss();
+          if (res.error?.inAudit) {
+            header = 'Item Not Part of Bin';
+            message = `This item is part of the current audit but belongs to another bin (#${res.error.inAudit}).`;
+          }
+          const alert = await this.alertController.create({
+            header,
+            message,
+            buttons: ['Dismiss'],
+          });
+          this.scanStateChanged(false);
+          await alert.present();
+          this.barcode = '';
         });
   }
+
 
   getRecord(recordID) {
     this.auditService.getRecord(

@@ -1,11 +1,14 @@
+from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from user_account.permissions import HasSameOrgInQuery, \
     PermissionFactory
-from .permissions import *
-from .serializers import *
 from inventory_item.serializers import ItemSerializer
+from .serializers import AuditSerializer, GetAuditSerializer, GetBinToSKSerializer, \
+    PostBinToSKSerializer, RecordSerializer
+from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
 from .models import Audit, BinToSK, Record
 
 class AuditViewSet(viewsets.ModelViewSet):
@@ -59,24 +62,32 @@ class AuditViewSet(viewsets.ModelViewSet):
 
         bins = BinToSK.objects.get(bin_id=bin_id)
         audit = Audit.objects.get(audit_id=audit_id)
-        item = audit.inventory_items.get(_id=item_id)
+        try:
+            item = audit.inventory_items.get(_id=item_id)
+        except:
+            raise Http404
 
-        serializer = self.get_item_serializer(item, many=False)
-        return Response(serializer.data)
+        if item._id in bins.item_ids:
+            serializer = self.get_item_serializer(item, many=False)
+            return Response(serializer.data)
+        return Response({
+            'detail': 'Item part of Audit but not of Bin',
+            'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
+        
 
     @action(detail=False, methods=['GET'], name='Get Completed Items for Audit')
     def completed_items_audit(self, request):
         audit_id = request.query_params.get('audit_id')
         records = Record.objects.filter(audit_id=audit_id)
-        
+
         serializer = self.get_record_serializer(records, many=True)
         return Response(serializer.data)
-        
+
     @action(detail=False, methods=['GET'], name='Get Completed Items for Bin')
     def completed_items_bin(self, request):
         bin_id = request.query_params.get('bin_id')
         records = Record.objects.filter(bin_to_sk_id=bin_id)
-        
+
         serializer = self.get_record_serializer(records, many=True)
         return Response(serializer.data)
 
@@ -144,8 +155,8 @@ class RecordViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
-        permission_classes = factory.get_general_permissions([
-            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        permission_classes = factory.get_general_permissions(
+            [HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):

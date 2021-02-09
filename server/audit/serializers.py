@@ -1,9 +1,8 @@
 
 from rest_framework import serializers
-from rest_framework.fields import empty
 from inventory_item.serializers import ItemSerializer
 from user_account.serializers import UserAuditSerializer
-from .models import Audit, BinToSK, Record, Item
+from .models import Audit, BinToSK, Record
 
 
 class AuditSerializer(serializers.ModelSerializer):
