@@ -45,7 +45,15 @@ export class ReviewAuditComponent implements OnInit {
 
   buildTable(itemSKData: any): void {
     const table: any[] = [];
-    this.locationsAndUsers = [{ location: undefined }];
+    const locations: any[] = [];
+
+    itemSKData.forEach((bin: any) => {
+      if (!locations.some(loc => loc.location === bin.customuser.location)) {
+        locations.push({ location: bin.customuser.location });
+      }
+    });
+
+    this.locationsAndUsers = locations;
 
     itemSKData.forEach((bin: any) => {
       table.push(
@@ -54,7 +62,8 @@ export class ReviewAuditComponent implements OnInit {
           bins: bin.Bin,
           numberOfParts: JSON.parse(bin.item_ids).length,
           initiatedBy: bin.init_audit.initiated_by.first_name + ' ' + bin.init_audit.initiated_by.last_name,
-          date: bin.initiated_on ? bin.initiated_on : 'N/A'
+          date: bin.initiated_on ? bin.initiated_on : 'N/A',
+          location: bin.customuser.location
         }
       );
     });
