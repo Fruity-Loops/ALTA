@@ -3,9 +3,18 @@
     <h1>Audits</h1>
 </ion-item-divider>
 <ion-content>
-    <ion-spinner *ngIf="!audits" name="crescent" class="center"></ion-spinner>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" refreshingSpinner="circular">
+        </ion-refresher-content>
+      </ion-refresher>
+          
+    <div *ngIf="!audits || audits?.length == 0" class="center">
+        <ion-text color="dark">
+            {{ blankMessage }}
+        </ion-text>
+    </div>
     <ion-list>
-        <ion-item *ngFor="let audit of audits" [routerLink]="audit.audit_id"> 
+        <ion-item *ngFor="let audit of audits" [routerLink]="audit.audit_id">
             <ion-label>
                 <p> Audit {{ audit.audit_id }}</p>
                 <p> Status {{ audit.status }}</p>

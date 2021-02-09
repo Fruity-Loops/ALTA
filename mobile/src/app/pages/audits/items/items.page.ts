@@ -86,7 +86,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           ).subscribe(
             (res: any) => {
               this.items = res;
-              this.finishRefresh();
+              this.completeRefresh();
             });
         }
       });
@@ -100,7 +100,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     ).subscribe(
       (res: any) => {
         this.completedItems = res;
-        this.finishRefresh();
+        this.completeRefresh();
       });
   }
 
@@ -338,7 +338,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.getItems();
   }
 
-  async finishRefresh() {
+  async completeRefresh() {
     if (this.refreshEvent) {
       this.refreshEvent.target.complete();
       this.refreshEvent = null;
