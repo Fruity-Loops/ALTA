@@ -159,7 +159,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# LOGGING
+# LOGGING https://docs.djangoproject.com/en/3.0/topics/logging/
 
 LOGGING = {
     'version': 1,

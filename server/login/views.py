@@ -1,6 +1,8 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
+import os
+import logging
 import string, random
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,6 +18,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+logger = logging.getLogger(__name__)
 
 class LoginView(generics.GenericAPIView):
     """
@@ -133,16 +136,16 @@ class LoginMobileEmailView(generics.GenericAPIView):
             mailserver.sendmail(sender, receiver, msg.as_string())
             mailserver.quit()
         except smtplib.SMTPException as e:
-            print(e)
+            logger.error(e)
 
     def post(self, request):
         data = request.data
-        email = data.get('email', '')
+        receiver_email = data.get('email', '')
         response = Response({"detail": "Login Failed"},
                             status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            user = CustomUser.objects.get(email=email)
+            user = CustomUser.objects.get(email=receiver_email)
             if user.is_active:
                 org_id = user.organization.org_id
                 org_name = user.organization.org_name
@@ -151,12 +154,19 @@ class LoginMobileEmailView(generics.GenericAPIView):
                         'organization_name': org_name}
 
                 # Update the Password as the new PIN and send an email
-                pin = self.save_new_pin(email, user)
-                self.send_email('Neehamk@gmail.com', 'password', email, pin)
+                pin = self.save_new_pin(receiver_email, user)
+                sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
+                sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
+
+                self.send_email(
+                    sender_email,
+                    sender_password,
+                    receiver_email,
+                    pin)
                 response = Response(data, status=status.HTTP_200_OK)
 
-        except ObjectDoesNotExist:
-            print("here")
+        except ObjectDoesNotExist as e:
+            logger.error(e)
 
         return response
 
