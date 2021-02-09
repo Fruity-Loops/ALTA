@@ -56,7 +56,7 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  checkItem(userID, auditID, binID, itemID){
+  getItem(userID, auditID, binID, itemID){
     return this.http.get(`${BASEURL}/audit/check_item/`, {
       params: {
         customuser_id: userID,
@@ -110,6 +110,11 @@ export class AuditService {
 
   createRecord(record){
     return this.http.post(`${BASEURL}/record/`, record)
+      .pipe(catchError(errorHandler));
+  }
+
+  deleteRecord(recordID){
+    return this.http.delete(`${BASEURL}/record/${recordID}/`)
       .pipe(catchError(errorHandler));
   }
 }

@@ -138,7 +138,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class RecordViewSet(viewsets.ModelViewSet):
-    http_method_names = ['post', 'get', 'patch']
+    http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Record.objects.all()
     permission_classes = []
 

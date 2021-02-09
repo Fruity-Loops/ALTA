@@ -13,7 +13,7 @@ export class RecordPage implements OnInit {
   @Input() modalData: any = { itemData: {} };
   formGroup: FormGroup;
   recordID: number;
-  modalTitle = "Item";
+  modalTitle = 'Item';
   lastModifiedOn: string;
   isItemDetailsHidden = true;
 
@@ -34,7 +34,7 @@ export class RecordPage implements OnInit {
     this.recordID = this.modalData.itemData.record_id;
     if (this.recordID) {
       // Record(completed item) passed
-      this.modalTitle = `Editing Record ${this.recordID}`
+      this.modalTitle = `Editing Record ${this.recordID}`;
       this.lastModifiedOn = this.modalData.itemData.last_verified_on;
     }
   }
@@ -58,7 +58,7 @@ export class RecordPage implements OnInit {
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
       Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
       status: [this.modalData.itemData.status, [Validators.required]],
-      comment: [this.modalData.itemData.comment]
+      comment: [this.modalData.itemData.comment || '']
 
     });
   }

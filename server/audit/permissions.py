@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 from django.core.exceptions import ObjectDoesNotExist
 from user_account.models import CustomUser
-from .models import Audit
+from .models import Audit, Record
 
 class CheckAuditOrganizationById(BasePermission):
     message = "You must be an Inventory Manager of this organization to do this operation"
@@ -56,10 +56,16 @@ class IsAssignedSK(BasePermission):
                 assigned_sk = (request.query_params.get('assigned_sk')
                 or request.query_params.get('customuser_id'))
                 return user.role == 'SK' and str(assigned_sk) == str(user.id)
-            audit_id = request.data['audit']
-            if audit_id:
-                audit = Audit.objects.get(audit_id=audit_id)
+
+            if request.method == 'DELETE':
+                record_id = view.kwargs["pk"]
+                record = Record.objects.get(pk=record_id)
+                assigned_sk = record.audit.assigned_sk.get(id=user.id)
+                return user.role == 'SK' and assigned_sk
+
+            if request.data['audit']:
+                audit = Audit.objects.get(audit_id=request.data['audit'])
                 assigned_sk = audit.assigned_sk.get(id=user.id)
             return user.role == 'SK' and assigned_sk
-        except ObjectDoesNotExist:
+        except Exception as e:
             return False

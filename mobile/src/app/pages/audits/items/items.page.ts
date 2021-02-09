@@ -1,5 +1,12 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Platform, AlertController, ToastController, ModalController, ActionSheetController } from '@ionic/angular';
+import {
+  Platform,
+  AlertController,
+  ToastController,
+  ModalController,
+  ActionSheetController,
+  LoadingController
+} from '@ionic/angular';
 import { Subscription, fromEvent } from 'rxjs';
 import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
@@ -37,6 +44,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     public modalController: ModalController,
     public actionSheetController: ActionSheetController,
+    private loadingController: LoadingController
   ) {
     this.barcode = '';
   }
@@ -164,6 +172,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
+
   finishScan() {
     this.validateItem();
     this.barcode = '';
@@ -175,7 +184,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
   validateItem() {
-    this.auditService.checkItem(
+    this.auditService.getItem(
       this.loggedInUser.user_id,
       this.auditID,
       this.binID,
@@ -205,9 +214,59 @@ export class ItemsPage implements OnInit, OnDestroy {
             auditID: this.auditID,
             binID: this.binID,
           };
-          this.presentRecordModal(modalData)
-        })
+          this.presentRecordModal(modalData);
+        });
   }
+
+  async deleteRecord(recordID) {
+    const whileLoading = await this.loadingController.create();
+    await whileLoading.present();
+
+    this.auditService.deleteRecord(recordID).subscribe(
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Record Deleted',
+          message: 'The record has been successfully deleted.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present().then(_ => {
+
+        });
+      },
+      async (res) => {
+        await whileLoading.dismiss();
+        const alert = await this.alertController.create({
+          header: 'Error',
+          message: 'There was a problem deleting this record.',
+          buttons: ['Dismiss'],
+        });
+        await alert.present();
+      });
+  }
+
+
+  async presentDeleteRecordAlert(recordID) {
+    const alert = await this.alertController.create({
+      header: 'Delete Record',
+      message: 'Are you sure you want to delete this record ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+          }
+        }, {
+          text: 'Delete',
+          handler: () => {
+            this.deleteRecord(recordID);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
 
   scanStateChanged(isScanning: boolean) {
     if (this.isScanning !== isScanning) {
@@ -277,14 +336,13 @@ export class ItemsPage implements OnInit, OnDestroy {
           role: 'destructive',
           icon: 'trash',
           handler: () => {
-            console.log('Delete clicked');
+            this.presentDeleteRecordAlert(recordID);
           }
         }, {
           text: 'Cancel',
           icon: 'close',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }]
     });
