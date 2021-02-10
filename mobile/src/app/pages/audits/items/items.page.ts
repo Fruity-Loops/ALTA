@@ -15,6 +15,11 @@ import { fetchLoggedInUser } from 'src/app/services/cache';
 import { ActivatedRoute } from '@angular/router';
 import { RecordPage } from 'src/app/pages/audits/items/record/record.page';
 
+enum Segment {
+  ITEMS = 'items',
+  COMPLETED_ITEMS = 'completedItems',
+}
+
 @Component({
   selector: 'app-items',
   templateUrl: './items.page.html',
@@ -26,12 +31,17 @@ export class ItemsPage implements OnInit, OnDestroy {
   keypressEvent: Subscription;
   isScanning: boolean;
   loggedInUser: any;
-  currentSegment = 'items';
+  Segment = Segment;
+  currentSegment = Segment.ITEMS;
   items: any;
   completedItems: any;
   auditID: string;
   binID: string;
+  itemsBlankMessage: string;
+  completedItemsBlankMessage: string;
   refreshEvent: any;
+  dataSetChanged: boolean;
+
 
   constructor(
     private auditService: AuditService,
@@ -52,7 +62,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.setPermissions();
     this.getSelectedBin();
-    this.getItems();
+    this.getItems(true);
     this.setExternalScanListener();
   }
 
@@ -74,7 +84,14 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.binID = this.activatedRoute.snapshot.paramMap.get('bin_id');
   }
 
-  getItems() {
+  async getItems(withLoading: boolean) {
+    const whileLoading = await this.loadingController.create({
+      message: 'Fetching Items...'
+    });
+    if (withLoading) {
+      await whileLoading.present();
+    }
+
     fetchLoggedInUser().then(
       user => {
         if (user) {
@@ -84,23 +101,62 @@ export class ItemsPage implements OnInit, OnDestroy {
             this.auditID,
             this.binID
           ).subscribe(
-            (res: any) => {
+            async (res) => {
+              await whileLoading.dismiss();
               this.items = res;
+              this.itemsBlankMessage = 'There are no items left';
               this.completeRefresh();
+            },
+            async (res) => {
+              this.itemsBlankMessage = 'There was a problem trying to fetch items.';
+              await whileLoading.dismiss();
+              const alert = await this.alertController.create({
+                header: 'Error',
+                message: this.itemsBlankMessage,
+                buttons: ['Dismiss'],
+              });
+              this.completeRefresh();
+              await alert.present();
             });
         }
       });
   }
 
-  getCompletedItems() {
-    this.auditService.getCompletedItemsBin(
-      this.loggedInUser.user_id,
-      this.auditID,
-      this.binID
-    ).subscribe(
-      (res: any) => {
-        this.completedItems = res;
-        this.completeRefresh();
+  async getCompletedItems(withLoading) {
+    const whileLoading = await this.loadingController.create({
+      message: 'Fetching Records...'
+    });
+    if (withLoading) {
+      await whileLoading.present();
+    }
+
+    fetchLoggedInUser().then(
+      user => {
+        if (user) {
+          this.loggedInUser = user;
+          this.auditService.getCompletedItemsBin(
+            user.user_id,
+            this.auditID,
+            this.binID
+          ).subscribe(
+            async (res) => {
+              await whileLoading.dismiss();
+              this.completedItemsBlankMessage = 'No item records present';
+              this.completedItems = res;
+              this.completeRefresh();
+            },
+            async (res) => {
+              this.completedItemsBlankMessage = 'There was a problem trying to fetch completed item records.';
+              await whileLoading.dismiss();
+              const alert = await this.alertController.create({
+                header: 'Error',
+                message: this.completedItemsBlankMessage,
+                buttons: ['Dismiss'],
+              });
+              this.completeRefresh();
+              await alert.present();
+            });
+        }
       });
   }
 
@@ -171,7 +227,6 @@ export class ItemsPage implements OnInit, OnDestroy {
     });
     await alert.present();
   }
-
 
   finishScan() {
     this.validateItem();
@@ -249,13 +304,12 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.auditService.deleteRecord(recordID).subscribe(
       async (res) => {
         await whileLoading.dismiss();
+        this.doRefresh(null);
+        this.notifyDataSetChanged(true);
         const alert = await this.alertController.create({
           header: 'Record Deleted',
           message: 'The record has been successfully deleted.',
           buttons: ['Dismiss'],
-        });
-        await alert.present().then(_ => {
-
         });
       },
       async (res) => {
@@ -302,11 +356,13 @@ export class ItemsPage implements OnInit, OnDestroy {
   segmentChanged(ev: CustomEvent) {
     this.currentSegment = ev.detail.value;
 
-    if (this.currentSegment === 'items' && !this.items) {
-      this.getItems();
+    if (this.currentSegment === Segment.ITEMS && (!this.items || this.dataSetChanged)) {
+      this.getItems(true);
+      this.notifyDataSetChanged(false);
     }
-    else if (this.currentSegment === 'completedItems' && !this.completedItems) {
-      this.getCompletedItems();
+    else if (this.currentSegment === Segment.COMPLETED_ITEMS && (!this.completedItems || this.dataSetChanged)) {
+      this.getCompletedItems(true);
+      this.notifyDataSetChanged(false);
     }
   }
 
@@ -324,6 +380,7 @@ export class ItemsPage implements OnInit, OnDestroy {
       .then((res) => {
         if (res.data?.itemValidated) {
           this.doRefresh(null);
+          this.notifyDataSetChanged(true);
         }
         this.setExternalScanListener();
       });
@@ -332,10 +389,12 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   async doRefresh(event) {
     this.refreshEvent = event;
-    if (this.currentSegment === 'completedItems') {
-      this.getCompletedItems();
+    if (this.currentSegment === Segment.COMPLETED_ITEMS) {
+      this.getCompletedItems(false);
     }
-    this.getItems();
+    else if (this.currentSegment === Segment.ITEMS) {
+      this.getItems(false);
+    }
   }
 
   async completeRefresh() {
@@ -343,6 +402,10 @@ export class ItemsPage implements OnInit, OnDestroy {
       this.refreshEvent.target.complete();
       this.refreshEvent = null;
     }
+  }
+
+  notifyDataSetChanged(dataSetChanged: boolean) {
+    this.dataSetChanged = dataSetChanged;
   }
 
   async presentCompltedItemActionSheet(recordID) {

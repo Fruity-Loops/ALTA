@@ -19,29 +19,43 @@
     </ion-refresher-content>
   </ion-refresher>
 
-  <ion-spinner *ngIf="!items" name="crescent" class="center"></ion-spinner>
-  <ion-list [hidden]="currentSegment!='items'">
-    <ion-item button *ngFor="let item of items" onclick="this.blur()" (click)="handleItemClick(item._id)">
-      <ion-label>
-        <p> Item: {{ item._id }}</p>
-        <p> Description: {{ item.Part_Description }}</p>
-      </ion-label>
-      <ion-icon name="information-circle" slot="end"></ion-icon>
-    </ion-item>
-  </ion-list>
-  <ion-list [hidden]="currentSegment!='completedItems'">
-    <ion-item *ngFor="let item of completedItems" onclick="this.blur()">
+  <div [hidden]="currentSegment!=Segment.ITEMS">
+    <div *ngIf="!items || items?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ itemsBlankMessage }}
+      </ion-text>
+    </div>
+    <ion-list>
+      <ion-item button *ngFor="let item of items" onclick="this.blur()" (click)="handleItemClick(item._id)">
+        <ion-label>
+          <p> Item: {{ item._id }}</p>
+          <p> Description: {{ item.Part_Description }}</p>
+        </ion-label>
+        <ion-icon name="information-circle" slot="end"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </div>
 
-      <ion-label>
-        <p> Item: {{ item.item_id }}</p>
-        <p> Status: {{ item.status }}</p>
-      </ion-label>
-      <ion-button (click)="presentCompltedItemActionSheet(item.record_id)">
-        <ion-icon name="hammer-outline"></ion-icon>
-      </ion-button>
+  <div [hidden]="currentSegment!=Segment.COMPLETED_ITEMS">
+    <div *ngIf="!completedItems || completedItems?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ completedItemsBlankMessage }}
+      </ion-text>
+    </div>
+    <ion-list>
+      <ion-item *ngFor="let item of completedItems" onclick="this.blur()">
 
-    </ion-item>
-  </ion-list>
+        <ion-label>
+          <p> Item: {{ item.item_id }}</p>
+          <p> Status: {{ item.status }}</p>
+        </ion-label>
+        <ion-button (click)="presentCompltedItemActionSheet(item.record_id)">
+          <ion-icon name="hammer-outline"></ion-icon>
+        </ion-button>
+
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>
 
 <ion-button fill="outline" onclick="this.blur()" (click)="handleCameraScan()">

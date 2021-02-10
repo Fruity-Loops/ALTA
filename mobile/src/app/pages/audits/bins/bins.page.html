@@ -17,7 +17,7 @@
     <ion-item *ngFor="let bin of bins" [routerLink]="bin.bin_id">
       <ion-label>
         <p> Bin: {{ bin.Bin }}</p>
-        <p> Total Items: {{ bin.item_ids }}</p>
+        <p> Total Items: {{ bin.item_ids?.length }}</p>
       </ion-label>
       <ion-icon name="information-circle" slot="end"></ion-icon>
     </ion-item>
