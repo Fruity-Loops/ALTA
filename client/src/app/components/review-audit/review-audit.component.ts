@@ -64,13 +64,15 @@ export class ReviewAuditComponent implements OnInit {
     this.locationsAndUsers = locations;
 
     itemSKData.forEach((bin: any) => {
+      let initDate =  new Date(bin.init_audit.initiated_on);
+      let pasteDate = (initDate.getMonth() + 1) + '/' + initDate.getDate() + '/' + initDate.getFullYear() + ' ' + initDate.getHours() + ':' + initDate.getMinutes(); 
       table.push(
         {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
           bins: bin.Bin,
           numberOfParts: JSON.parse(bin.item_ids).length,
           initiatedBy: this.currentUser.first_name + ' ' + this.currentUser.last_name,
-          date: bin.initiated_on ? bin.initiated_on : 'N/A',
+          date: pasteDate,
           location: bin.customuser.location
         }
       );
