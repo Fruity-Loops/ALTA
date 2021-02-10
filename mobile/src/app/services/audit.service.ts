@@ -81,11 +81,11 @@ export class AuditService {
 
 
   getCompletedItemsBin(userID, auditID, binID){
-    return this.http.get(`${BASEURL}/audit/completed_items_bin/`, {
+    return this.http.get(`${BASEURL}/record/completed_items/`, {
       params: {
         customuser_id: userID,
         audit_id: auditID,
-        bin_id: binID,
+        bin_to_sk: binID,
       }
     })
       .pipe(catchError(errorHandler));
