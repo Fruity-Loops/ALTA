@@ -58,10 +58,21 @@
   </div>
 </ion-content>
 
-<ion-button fill="outline" onclick="this.blur()" (click)="handleCameraScan()">
-  <ion-icon name="scan"></ion-icon>Scan Barcode With Camera<ion-icon name="scan"></ion-icon>
-</ion-button>
-
-<ion-button fill="outline" color="danger" onclick="this.blur()" (click)="handleManualInput()">
-  <ion-icon name="create-outline"></ion-icon>Input Barcode Manually<ion-icon name="create-outline"></ion-icon>
-</ion-button>
+<section>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button id="cameraScanButton" size="large" fill="outline" expand="block" onclick="this.blur()"
+          (click)="handleCameraScan()">
+          <ion-icon name="scan"></ion-icon>Camera
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button id="manualInputButton" size="large" fill="outline" expand="block" color="danger"
+          onclick="this.blur()" (click)="handleManualInput()">
+          <ion-icon name="create-outline"></ion-icon>Input
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</section>
