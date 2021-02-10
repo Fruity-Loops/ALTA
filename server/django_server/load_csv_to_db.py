@@ -56,7 +56,7 @@ def update_items(csv_file, collection_name, org_id):
     try:
         for document in dict_of_records:
             collection.update({'_id': document["_id"]}, document, upsert=True)
-        logger.debug("Data Refreshed for organization ID: " + str(org_id))
+        logger.debug("Data Refreshed for organization ID: %d" , org_id)
     except pym.errors.BulkWriteError as error:
         logger.error(error)
 

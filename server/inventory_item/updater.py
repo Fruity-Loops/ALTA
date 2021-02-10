@@ -112,9 +112,7 @@ def print_all_job():
 
 def get_specific_job(job_id):
     job = scheduler.get_job(job_id)
-    logger.debug("#############")
-    logger.debug("###" + str(job_id) + "### " + str(job))
-    logger.debug("#############")
+    logger.debug('#############\n###%d###%s\n#############', job_id, str(job))
 
 
 def get_job_queries(repetition, day_of_week, months):

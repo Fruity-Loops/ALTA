@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
 from .models import Audit, Record
@@ -66,5 +67,5 @@ class IsAssignedSK(BasePermission):
                 audit = Audit.objects.get(audit_id=request.data['audit'])
                 assigned_sk = audit.assigned_sk.get(id=user.id)
             return user.role == 'SK' and assigned_sk
-        except:
+        except (ObjectDoesNotExist, KeyError):
             return False

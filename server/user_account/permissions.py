@@ -1,7 +1,7 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
-from audit.permissions import ValidateSKOfSameOrg, IsAssignedSK
-from django.core.exceptions import ObjectDoesNotExist
+from audit.permissions import IsAssignedSK
 
 
 class PermissionFactory:

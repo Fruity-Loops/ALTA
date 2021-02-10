@@ -50,6 +50,7 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer_class = ItemSerializer
         return serializer_class(*args, **kwargs)
 
+    # pylint: disable=protected-access
     @action(detail=False, methods=['GET'], name='Check Item for Validation')
     def check_item(self, request):
         bin_id = request.query_params.get('bin_id')
@@ -63,8 +64,8 @@ class AuditViewSet(viewsets.ModelViewSet):
             bins = BinToSK.objects.get(bin_id=bin_id)
             audit = Audit.objects.get(audit_id=audit_id)
             item = audit.inventory_items.get(_id=item_id)
-        except ObjectDoesNotExist:
-            raise Http404
+        except (ObjectDoesNotExist, ValueError) as ex:
+            raise Http404 from ex
 
         if item._id in bins.item_ids:
             serializer = self.get_item_serializer(item, many=False)
