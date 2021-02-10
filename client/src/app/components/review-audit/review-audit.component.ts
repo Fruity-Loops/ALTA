@@ -1,5 +1,6 @@
 import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
 import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -15,6 +16,7 @@ export class ReviewAuditComponent implements OnInit {
   locationsAndUsers: Array<any>;
   auditID: number;
   itemData: Array<any>;
+  currentUser: any;
 
   panelOpenState = false;
   allExpandState = false;
@@ -23,9 +25,11 @@ export class ReviewAuditComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
+    private authservice: AuthService,
     private router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
+    this.currentUser = null;
     this.itemData = [];
     this.auditID = Number(localStorage.getItem('audit_id'));
   }
@@ -38,7 +42,11 @@ export class ReviewAuditComponent implements OnInit {
     if (this.auditID) {
       this.manageAuditsService.getAssignedBins(this.auditID).subscribe(
         (auditData) => {
-          this.buildTable(auditData);
+          const id: any = localStorage.getItem('id')
+          this.authservice.getCurrentUser(id).subscribe((user) => {
+            this.currentUser = user;
+            this.buildTable(auditData);
+          });
         });
     }
   }
@@ -61,7 +69,7 @@ export class ReviewAuditComponent implements OnInit {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
           bins: bin.Bin,
           numberOfParts: JSON.parse(bin.item_ids).length,
-          initiatedBy: bin.init_audit.initiated_by.first_name + ' ' + bin.init_audit.initiated_by.last_name,
+          initiatedBy: this.currentUser.first_name + ' ' + this.currentUser.last_name,
           date: bin.initiated_on ? bin.initiated_on : 'N/A',
           location: bin.customuser.location
         }
