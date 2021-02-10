@@ -1,11 +1,11 @@
-<ion-toolbar color="primary">
+<ion-toolbar>
   <ion-buttons slot="end">
     <ion-button (click)="isItemDetailsHidden=!isItemDetailsHidden">
-      <ion-icon name="eye-outline"></ion-icon>
+      <ion-icon color="light" name="eye-outline"></ion-icon>
     </ion-button>
   </ion-buttons>
-  <ion-title>{{modalTitle}}</ion-title>
-  <ion-title *ngIf="lastModifiedOn" size="small">Last Modified On: {{lastModifiedOn | date:'MM/dd/yyyy h:mm a'}}
+  <ion-title color="light">{{modalTitle}}</ion-title>
+  <ion-title color="light" *ngIf="lastModifiedOn" size="small">Last Modified On: {{lastModifiedOn | date:'MM/dd/yyyy h:mm a'}}
   </ion-title>
 </ion-toolbar>
 

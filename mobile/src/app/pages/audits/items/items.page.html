@@ -49,8 +49,8 @@
           <p> Item: {{ item.item_id }}</p>
           <p> Status: {{ item.status }}</p>
         </ion-label>
-        <ion-button (click)="presentCompltedItemActionSheet(item.record_id)">
-          <ion-icon name="hammer-outline"></ion-icon>
+        <ion-button id="optionsButton" (click)="presentCompltedItemActionSheet(item.record_id)">
+          <ion-icon color="light" name="hammer-outline"></ion-icon>
         </ion-button>
 
       </ion-item>
