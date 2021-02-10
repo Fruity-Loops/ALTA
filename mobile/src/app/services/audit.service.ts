@@ -81,7 +81,7 @@ export class AuditService {
 
 
   getCompletedItemsBin(userID, auditID, binID){
-    return this.http.get(`${BASEURL}/record/completed_items/`, {
+    return this.http.get(`${BASEURL}/audit/record/completed_items/`, {
       params: {
         customuser_id: userID,
         audit_id: auditID,
