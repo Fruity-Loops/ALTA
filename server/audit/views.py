@@ -55,18 +55,21 @@ class AuditViewSet(viewsets.ModelViewSet):
         bin_id = request.query_params.get('bin_id')
         audit_id = request.query_params.get('audit_id')
         item_id = request.query_params.get('item_id')
+        response = Response({
+            'detail': 'Item part of Audit but not of Bin',
+            'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
 
-        bins = BinToSK.objects.get(bin_id=bin_id)
-        audit = Audit.objects.get(audit_id=audit_id)
         try:
+            bins = BinToSK.objects.get(bin_id=bin_id)
+            audit = Audit.objects.get(audit_id=audit_id)
             item = audit.inventory_items.get(_id=item_id)
-        except:
+        except ObjectDoesNotExist:
             raise Http404
 
         if item._id in bins.item_ids:
             serializer = self.get_item_serializer(item, many=False)
-            return Response(serializer.data)
-        return Response({
+            response = Response(serializer.data)
+        return response
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
     def items(self, request):
