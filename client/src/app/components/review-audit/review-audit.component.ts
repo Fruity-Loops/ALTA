@@ -109,11 +109,16 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   confirmReviewAuditData(): void {
-    setTimeout(() => {
-      this.router.navigate(['audits'], { replaceUrl: true });
-    }, 1000);
-
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.assignSK({status: 'Active'}, Number(localStorage.getItem('audit_id'))).subscribe(
+      (data) => {
+        setTimeout(() => {
+          this.router.navigate(['audits'], { replaceUrl: true });
+        }, 1000);
+    
+        localStorage.removeItem('audit_id');
+      }
+    )
+    
   }
 
   openDialogWithRef(ref: TemplateRef<any>): void {
