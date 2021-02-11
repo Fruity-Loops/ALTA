@@ -246,6 +246,12 @@ export class ItemsPage implements OnInit, OnDestroy {
       await whileLoading.present();
     }
 
+    const modalData: any = {
+      customuser_id: this.loggedInUser.user_id,
+      auditID: this.auditID,
+      binID: this.binID,
+    };
+
     this.auditService.getItem(
       this.loggedInUser.user_id,
       this.auditID,
@@ -253,31 +259,51 @@ export class ItemsPage implements OnInit, OnDestroy {
       this.barcode).subscribe(
         async (res) => {
           await whileLoading.dismiss();
-          const modalData = {
-            itemData: res,
-            customuser_id: this.loggedInUser.user_id,
-            auditID: this.auditID,
-            binID: this.binID,
-          };
+          modalData.itemData = res;
           this.presentRecordModal(modalData);
           this.terminateScan();
         },
         async (res) => {
+          const barcode = this.barcode;
           let header = 'No Match';
-          let message = `There was no match for #${this.barcode}`;
+          let message = `There was no match for #${this.barcode}\n`;
+
           await whileLoading.dismiss();
           if (res.error?.inAudit) {
             header = 'Item Not Part of Bin';
             message = `This item is part of the current audit but belongs to another bin.`;
           }
-          if (res.error?.alreadyMatched) {
+          else if (res.error?.alreadyMatched) {
             header = 'Item Record Exists';
             message = `This item has already been submitted for this audit (Record ID: ${res.error.alreadyMatched}).`;
+          }
+          else {
+            const noMatchAlert = await this.alertController.create({
+              header,
+              message,
+              buttons: [
+                {
+                  text: 'Dismiss',
+                }, {
+                  text: 'Add as NEW',
+                  handler: () => {
+                    modalData.itemData = {
+                      item_id: barcode,
+                      status: 'New'
+                    };
+                    this.presentRecordModal(modalData);
+                  }
+                }
+              ]
+            });
+            await noMatchAlert.present();
+            this.terminateScan();
+            return;
           }
           const alert = await this.alertController.create({
             header,
             message,
-            buttons: ['Dismiss'],
+            buttons: ['Dismiss']
           });
           await alert.present();
           this.terminateScan();
@@ -313,9 +339,10 @@ export class ItemsPage implements OnInit, OnDestroy {
         this.notifyDataSetChanged(true);
         const alert = await this.alertController.create({
           header: 'Record Deleted',
-          message: 'The record has been successfully deleted.',
+          message: 'The record has been successfully removed.',
           buttons: ['Dismiss'],
         });
+        await alert.present();
       },
       async (res) => {
         await whileLoading.dismiss();
