@@ -99,6 +99,17 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_item_serializer(bin_items, many=True)
         return Response(serializer.data)
 
+def set_audit_accuracy(audit_id):
+    audit = Audit.objects.get(audit_id=audit_id)
+    records = Record.objects.filter(audit=audit_id)
+
+    missing = records.filter(status='Missing').count()
+    found = records.filter(status='Provided').count()
+    total_records_no_new = found + missing
+
+    audit_accuracy = 0.0 if total_records_no_new == 0 else found / total_records_no_new
+    setattr(audit, 'accuracy', audit_accuracy)
+    audit.save()
 
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
@@ -161,7 +172,23 @@ class RecordViewSet(viewsets.ModelViewSet):
         record = serializer.save()
         if not record:
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+        set_audit_accuracy(record.audit.audit_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        set_audit_accuracy(instance.audit.audit_id)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs): # pylint: disable=unused-argument
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        set_audit_accuracy(instance.audit.audit_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):

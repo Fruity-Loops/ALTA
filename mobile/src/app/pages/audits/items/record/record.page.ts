@@ -76,7 +76,6 @@ export class RecordPage implements OnInit {
     await whileLoading.present();
 
     const record = this.curateData();
-    console.log(JSON.stringify(record))
     this.auditService.createRecord(record).subscribe(
       async (res) => {
         await whileLoading.dismiss();
@@ -131,13 +130,11 @@ export class RecordPage implements OnInit {
 
   curateData() {
     const data = this.formGroup.value;
-    console.log(JSON.stringify(data));
     data.audit = this.modalData.auditID;
     data.bin_to_sk = this.modalData.binID;
     if (!data.flagged){
       data.flagged = false;
     }
-    console.log(data.flagged)
     return data;
   }
 

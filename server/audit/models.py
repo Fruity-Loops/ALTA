@@ -29,6 +29,7 @@ class Audit(models.Model):
     inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
+    accuracy = models.FloatField(default=0.0)
 
 
 class BinToSK(models.Model):
