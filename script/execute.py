@@ -8,6 +8,9 @@ import time
 import sys
 import webbrowser
 import platform
+from os import listdir
+from os.path import isfile, join
+from os import walk
 
 python_interpreter = ""
 
@@ -91,8 +94,22 @@ def lint():
     with open('__init__.py', 'w'):
         pass
     os.remove("__init__.py")
+    onlyfiles = []
+    f = []
+    for (dirpath, dirnames, filenames) in walk(os.getcwd()):
+        f.extend(filenames)
+        break
+    for dir in dirnames:
+        for (dirpath2, dirnames2, filenames2) in walk(os.getcwd() + '/' + dir):
+            f.extend(filenames)
+            break
+        if 'migrations' in dirnames2:
+            onlyfiles.append(dir)
+    printme = ''
+    for i in onlyfiles:
+        printme = printme + ' ' + i
     os.system(
-        f'DJANGO_SETTINGS_MODULE=django_server.settings pylint --load-plugins pylint_django $(git ls-files \'*.py\')')
+        f'pylint --load-plugins pylint_django --django-settings-module=django_server.settings ' + printme)
     print(
         "\n\n\n**************************************************\n\n\n"
         "Frontend linter test will now run"
