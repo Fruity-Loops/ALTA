@@ -5,7 +5,8 @@
     </ion-button>
   </ion-buttons>
   <ion-title color="light">{{modalTitle}}</ion-title>
-  <ion-title color="light" *ngIf="lastModifiedOn" size="small">Last Modified On: {{lastModifiedOn | date:'MM/dd/yyyy h:mm a'}}
+  <ion-title color="light" *ngIf="lastModifiedOn" size="small">Last Modified On: {{lastModifiedOn | date:'MM/dd/yyyy
+    h:mm a'}}
   </ion-title>
 </ion-toolbar>
 
@@ -97,9 +98,20 @@
         </ion-item>
 
       </div>
+      <ion-item-divider color="medium">
+        <ion-label>
+          Comment And Status
+        </ion-label>
+      </ion-item-divider>
+
       <ion-item>
         <ion-label position="floating" color="primary">Comment</ion-label>
         <ion-textarea formControlName="comment" placeholder="Enter more information here..."></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-checkbox formControlName="flagged" color="danger" slot="start"></ion-checkbox>
+        <ion-label color="danger">Flag</ion-label>
       </ion-item>
 
       <ion-list>
@@ -110,17 +122,17 @@
 
           <ion-item>
             <ion-label>Provided</ion-label>
-            <ion-radio slot="start"  value="Provided"></ion-radio>
+            <ion-radio color="success" slot="start" value="Provided"></ion-radio>
           </ion-item>
 
           <ion-item>
             <ion-label>New</ion-label>
-            <ion-radio slot="start" value="New"></ion-radio>
+            <ion-radio color="danger" slot="start" value="New"></ion-radio>
           </ion-item>
 
           <ion-item>
             <ion-label>Missing</ion-label>
-            <ion-radio slot="start" value="Missing"></ion-radio>
+            <ion-radio color="danger" slot="start" value="Missing"></ion-radio>
           </ion-item>
         </ion-radio-group>
       </ion-list>

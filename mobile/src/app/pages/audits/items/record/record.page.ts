@@ -58,6 +58,7 @@ export class RecordPage implements OnInit {
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
       Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
       status: [this.modalData.itemData.status, [Validators.required]],
+      flagged: [this.modalData.itemData.flagged],
       comment: [this.modalData.itemData.comment || '']
 
     });

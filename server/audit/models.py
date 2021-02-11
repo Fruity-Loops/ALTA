@@ -2,7 +2,6 @@ from djongo import models
 from inventory_item.models import Item, ItemFields
 from audit_template.models import AuditTemplate
 
-
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
     organization = models.ForeignKey(to='organization.Organization',
@@ -16,7 +15,17 @@ class Audit(models.Model):
         related_name='initiated_by')
     initiated_on = models.DateTimeField(auto_now_add=True) # Auto set when object is first created
     last_modified_on = models.DateTimeField(auto_now=True) # Auto set every time object is saved
-    status = models.CharField(max_length=50, default="Pending")
+
+    PENDING = 'Pending'
+    COMPLETE = 'Complete'
+    ACTIVE = 'Active'
+
+    AUDIT_STATUS = [(
+        PENDING, 'Pending'),
+        (COMPLETE, 'Complete'),
+        (ACTIVE, 'Active')
+    ]
+    status = models.CharField(max_length=12, choices=AUDIT_STATUS, default=PENDING)
     inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
@@ -41,11 +50,7 @@ class Record(ItemFields):
         (MISSING, 'Missing'),
         (NEW, 'New')
     ]
-    status = models.CharField(
-        max_length=8,
-        choices=RECORD_STATUS,
-        default=PENDING,
-    )
+    status = models.CharField(max_length=8, choices=RECORD_STATUS,default=PENDING)
     record_id = models.AutoField(primary_key=True)
     item_id = models.IntegerField(null=False, unique=True)
     audit=models.ForeignKey(Audit, on_delete=models.CASCADE)

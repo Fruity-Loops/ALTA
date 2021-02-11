@@ -163,10 +163,6 @@ class RecordViewSet(viewsets.ModelViewSet):
             return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def get_record_serializer(self, *args, **kwargs): # pylint: disable=no-self-use
-        serializer_class = RecordSerializer
-        return serializer_class(*args, **kwargs)
-
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):
         params = list(request.GET.keys())
@@ -175,5 +171,5 @@ class RecordViewSet(viewsets.ModelViewSet):
                 params.remove(bad_key)
         for key in params:
             self.queryset = self.queryset.filter(**{key: request.GET.get(key)})
-        serializer = self.get_record_serializer(self.queryset, many=True)
+        serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
