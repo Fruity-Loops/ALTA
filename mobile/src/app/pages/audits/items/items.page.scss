@@ -8,3 +8,28 @@
 #optionsButton {
     --background: #283C52;
 }
+
+.valid_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #27AE60;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.new_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #F2C94C;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.missing_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #EB5757;
+    border-radius: 50%;
+    display: inline-block;
+}

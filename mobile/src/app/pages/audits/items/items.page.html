@@ -44,13 +44,21 @@
     </div>
     <ion-list>
       <ion-item *ngFor="let item of completedItems" onclick="this.blur()">
-
+        <ion-thumbnail slot="start">
+          <span *ngIf="item?.status == 'Provided'" class="valid_ellipse"></span>
+          <span *ngIf="item?.status == 'Missing'" class="missing_ellipse"></span>
+          <span *ngIf="item?.status == 'New'" class="new_ellipse"></span>
+        </ion-thumbnail>
         <ion-label>
           <p> Item: {{ item.item_id }}</p>
           <p> Status: {{ item.status }}</p>
         </ion-label>
+        <ion-chip *ngIf="item?.flagged" color="danger" disabled >
+          <ion-icon name="flag"></ion-icon>
+          <ion-label>Flagged</ion-label>
+        </ion-chip>        
         <ion-button id="optionsButton" (click)="presentCompltedItemActionSheet(item.record_id)">
-          <ion-icon color="light" name="hammer-outline"></ion-icon>
+          <ion-icon color="light" name="settings-outline"></ion-icon>
         </ion-button>
 
       </ion-item>

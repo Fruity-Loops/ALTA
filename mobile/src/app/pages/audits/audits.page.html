@@ -14,10 +14,16 @@
         </ion-text>
     </div>
     <ion-list>
-        <ion-item *ngFor="let audit of audits" [routerLink]="audit.audit_id">
+        <ion-item *ngFor="let audit of audits" [routerLink]="audit?.audit_id">
+            <ion-thumbnail slot="start">
+                <span *ngIf="audit?.status == 'Pending'" class="pending_ellipse"></span>
+                <span *ngIf="audit?.status == 'Active'" class="active_ellipse"></span>
+                <span *ngIf="audit?.status == 'Complete'" class="complete_ellipse"></span>
+              </ion-thumbnail>
             <ion-label>
-                <p> Audit {{ audit.audit_id }}</p>
-                <p> Status {{ audit.status }}</p>
+                <p> Audit: {{ audit?.audit_id }}</p>
+                <p> Total Items: {{ audit?.inventory_items.length }}</p>
+                <p> Status: {{ audit?.status }}</p>
             </ion-label>
             <ion-icon name="information-circle" slot="end"></ion-icon>
         </ion-item>
