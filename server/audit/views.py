@@ -56,20 +56,32 @@ class AuditViewSet(viewsets.ModelViewSet):
         bin_id = request.query_params.get('bin_id')
         audit_id = request.query_params.get('audit_id')
         item_id = request.query_params.get('item_id')
-        response = Response({
-            'detail': 'Item part of Audit but not of Bin',
-            'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
+        try: # Check that the item exists for this Audit
             bins = BinToSK.objects.get(bin_id=bin_id)
             audit = Audit.objects.get(audit_id=audit_id)
             item = audit.inventory_items.get(_id=item_id)
         except (ObjectDoesNotExist, ValueError) as ex:
             raise Http404 from ex
 
-        if item._id in bins.item_ids:
-            serializer = self.get_item_serializer(item, many=False)
-            response = Response(serializer.data)
+        record = {}
+        try: # Check that the item hasn't already been recorded
+            record = Record.objects.get(item_id=item_id)
+        except ObjectDoesNotExist:
+            if item._id in bins.item_ids: # Check that the item belongs to the current bin
+                serializer = self.get_item_serializer(item, many=False)
+                response = Response(serializer.data)
+            else:
+                response = Response({
+                'detail': 'Item part of Audit but not of Bin',
+                'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
+
+        if record and str(record.audit.audit_id) == str(audit_id):
+            response = Response({
+            'detail': 'This item has already been completed',
+            'alreadyMatched': record.record_id},
+            status=status.HTTP_400_BAD_REQUEST)
+
         return response
 
     @action(detail=False, methods=['GET'], name='Get Items In Bin')

@@ -163,8 +163,10 @@ export class ItemsPage implements OnInit, OnDestroy {
   setExternalScanListener() {
     // A Keyboard Event is triggered from an external bluetooth scanner
     this.keypressEvent = fromEvent(document, 'keypress').subscribe(event => {
-      this.scanStateChanged(true);
-      this.handleKeyboardEvent(event as KeyboardEvent);
+      if (this.platform.is('mobile')) {
+        this.scanStateChanged(true);
+        this.handleKeyboardEvent(event as KeyboardEvent);
+      }
     });
   }
 
@@ -172,7 +174,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     const key = event.key;
     // The last key is always 'Enter'
     if (key === 'Enter') {
-      this.finishScan();
+      this.validateItem();
     }
     else {
       this.barcode += key;
@@ -183,7 +185,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.cameraScanner.scan().then(barcodeData => {
       if (barcodeData.cancelled === false) {
         this.barcode = barcodeData.text;
-        this.finishScan();
+        this.validateItem();
       }
     }).catch(async err => {
       console.log('Camera Scanner Error:', err);
@@ -219,7 +221,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           handler: input => {
             if (input && input.barcode) {
               this.barcode = input.barcode;
-              this.finishScan();
+              this.validateItem();
             }
           }
         }
@@ -228,8 +230,9 @@ export class ItemsPage implements OnInit, OnDestroy {
     await alert.present();
   }
 
-  finishScan() {
-    this.validateItem();
+  terminateScan() {
+    this.scanStateChanged(false);
+    this.barcode = '';
   }
 
   handleItemClick(itemID) {
@@ -257,8 +260,7 @@ export class ItemsPage implements OnInit, OnDestroy {
             binID: this.binID,
           };
           this.presentRecordModal(modalData);
-          this.scanStateChanged(false);
-          this.barcode = '';
+          this.terminateScan();
         },
         async (res) => {
           let header = 'No Match';
@@ -266,16 +268,19 @@ export class ItemsPage implements OnInit, OnDestroy {
           await whileLoading.dismiss();
           if (res.error?.inAudit) {
             header = 'Item Not Part of Bin';
-            message = `This item is part of the current audit but belongs to another bin (#${res.error.inAudit}).`;
+            message = `This item is part of the current audit but belongs to another bin.`;
+          }
+          if (res.error?.alreadyMatched) {
+            header = 'Item Record Exists';
+            message = `This item has already been submitted for this audit (Record ID: ${res.error.alreadyMatched}).`;
           }
           const alert = await this.alertController.create({
             header,
             message,
             buttons: ['Dismiss'],
           });
-          this.scanStateChanged(false);
           await alert.present();
-          this.barcode = '';
+          this.terminateScan();
         });
   }
 
