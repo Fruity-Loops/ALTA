@@ -1,5 +1,5 @@
 [MASTER]
-ignore=manage.py, test_settings.py, tests.py
+ignore=manage.py, test_settings.py, tests.py, populate_db.py
 ignore-patterns=\d{4}_.*?.py # migration files
 load-plugins=pylint_django
 disable=

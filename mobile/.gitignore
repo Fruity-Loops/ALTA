@@ -17,6 +17,8 @@ collection/
 dist/
 dist-transpiled/
 node_modules/
+plugins/
+resources/
 tmp/
 temp/
 core/theme-builder/
