@@ -40,32 +40,25 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   autoAssign(): void {
-    console.table("BEFORE Original: ", this.locationsWithBinsAndSKs)
-    console.table("BEFORE After: ", this.binToSks)
-
-    let tester = "";
+    let sksOfCurrentLocation = [];
     let associatedItems = [];
-    let indexToRemove = "";
 
-    this.binToSks.forEach(index => {
+    this.locationsWithBinsAndSKs.forEach(index => {
+      let currentSK = 0;
+      index.bins.forEach(bin => {
+        associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
+        const associatedItemsIds = associatedItems.map(item => item._id);
 
-      tester = this.locationsWithBinsAndSKs.find(obj => obj.Location === index.sk_location)
+        sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location)
+        let currentToAssign = currentSK % sksOfCurrentLocation.length;
 
-      tester.bins.forEach(bin => {
-        associatedItems = this.getAssociatedItemsGivenBin(index.sk_location, [bin]);
-        const holdIds = associatedItems.map(item => item._id);
-        index.bins.push(bin);
-        index.item_ids = holdIds;
+        sksOfCurrentLocation[currentToAssign].bins.push(bin);
+        sksOfCurrentLocation[currentToAssign].item_ids = associatedItemsIds;
 
-        let holder = this.locationsWithBinsAndSKs.find(obj => obj.Location === index.sk_location);
-        indexToRemove = holder.bins.findIndex(obj => obj === bin);
-        holder.bins.splice(indexToRemove, 1);
+        currentSK++;
       });
+      index.bins = [];
     });
-
-    console.log(indexToRemove)
-    console.table("AFTER Original: ", this.locationsWithBinsAndSKs)
-    console.table("AFTER After: ", this.binToSks)
   }
 
   populateBinsAndSKs(selectedItems: Item[], assignedSks: SKUser[]): void {
