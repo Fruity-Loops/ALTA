@@ -4,7 +4,7 @@
 
 export const env = {
   production: false,
-  api_root: 'http://localhost:8000',
+  api_root: 'http://b087606fea8b.ngrok.io',
   open_registration: false, // Set to 'true' to allow registartion from the greeting page
 };
 
