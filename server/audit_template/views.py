@@ -17,13 +17,11 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
-    permission_classes = [IsAuthenticated, CheckTemplateOrganizationById | IsSystemAdmin]
     http_method_names = ['post', 'get', 'patch', 'delete']
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
-        permission_classes = factory.get_general_permissions([
-            CheckTemplateOrganizationById, HasSameOrgInQuery])
+        permission_classes = factory.get_general_permissions([CheckTemplateOrganizationById])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):

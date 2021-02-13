@@ -5,10 +5,9 @@ from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status, viewsets, generics
 from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, CanUpdateKeys, IsHigherInOrganization, \
-    UserHasSameOrg, HasSameOrgInQuery, PermissionFactory
+from user_account.permissions import CanUpdateKeys, IsHigherInOrganization, \
+    UserHasSameOrg, PermissionFactory
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
@@ -224,7 +223,11 @@ class AccessMembers(viewsets.ModelViewSet):
     Allows obtaining all clients and updating them
     """
     http_method_names = ['get']
-    permission_classes = [IsAuthenticated, IsSystemAdmin]
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.base_sa_permissions
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer

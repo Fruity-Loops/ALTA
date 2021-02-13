@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from rest_framework import filters
-from rest_framework.permissions import IsAuthenticated
+from user_account.permissions import PermissionFactory
 from rest_framework.pagination import PageNumberPagination
 
 from .serializers import ItemSerializer
@@ -52,7 +52,6 @@ class ItemViewSet(viewsets.ModelViewSet):
     """
     queryset = Item.objects.all().order_by('_id')
     serializer_class = ItemSerializer
-    permission_classes = [IsAuthenticated]
     http_method_names = ['get']
     # pagination
     pagination_class = ItemResultsSetPagination
@@ -60,3 +59,8 @@ class ItemViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, CustomSearchFilter]
     search_fields = ['Location', 'Zone', 'Plant', 'Part_Number', 'Part_Description',
                      'Serial_Number', 'Condition', 'Category', 'Owner', 'Unit_of_Measure']
+
+    def get_permissions(self):
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([])
+        return [permission() for permission in permission_classes]

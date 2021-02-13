@@ -18,7 +18,6 @@ class AuditViewSet(viewsets.ModelViewSet):
     """
     http_method_names = ['post', 'patch', 'get', 'delete']
     queryset = Audit.objects.all()
-    permission_classes = []
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
@@ -162,7 +161,6 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Record.objects.all()
-    permission_classes = []
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
