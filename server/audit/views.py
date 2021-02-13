@@ -20,7 +20,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = PermissionFactory(self.request, True)
         permission_classes = factory.get_general_permissions([
             CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
@@ -120,7 +120,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = PermissionFactory(self.request, True)
         permission_classes = factory.get_general_permissions([
             CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
@@ -157,7 +157,7 @@ class RecordViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = PermissionFactory(self.request, True)
         permission_classes = factory.get_general_permissions(
             [HasSameOrgInQuery, ValidateSKOfSameOrg])
         return [permission() for permission in permission_classes]
