@@ -8,8 +8,9 @@ from user_account.permissions import HasSameOrgInQuery, \
 from inventory_item.serializers import ItemSerializer
 from .serializers import AuditSerializer, GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer
-from .permissions import CheckAuditOrganizationById, ValidateSKOfSameOrg
+from .permissions import *
 from .models import Audit, BinToSK, Record
+
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -20,9 +21,11 @@ class AuditViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request, True)
-        permission_classes = factory.get_general_permissions([
-            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions(
+                im_additional_perms=[CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg],
+                sk_additional_perms=[IsAssignedToAudit]
+        )
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -99,6 +102,7 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_item_serializer(bin_items, many=True)
         return Response(serializer.data)
 
+
 def set_audit_accuracy(audit_id):
     audit = Audit.objects.get(audit_id=audit_id)
     records = Record.objects.filter(audit=audit_id)
@@ -111,6 +115,7 @@ def set_audit_accuracy(audit_id):
     setattr(audit, 'accuracy', audit_accuracy)
     audit.save()
 
+
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
@@ -120,9 +125,11 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request, True)
-        permission_classes = factory.get_general_permissions([
-            CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg])
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions(
+            im_additional_perms=[CheckAuditOrganizationById, HasSameOrgInQuery, ValidateSKOfSameOrg],
+            sk_additional_perms=[IsAssignedToBin]
+        )
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
@@ -151,15 +158,18 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Record.objects.all()
     permission_classes = []
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request, True)
+        factory = PermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
-            [HasSameOrgInQuery, ValidateSKOfSameOrg])
+            im_additional_perms=[HasSameOrgInQuery, ValidateSKOfSameOrg],
+            sk_additional_perms=[IsAssignedToRecord]
+        )
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):

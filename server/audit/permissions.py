@@ -3,6 +3,7 @@ from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
 from .models import Audit, Record
 
+
 class CheckAuditOrganizationById(BasePermission):
     message = "You must be an Inventory Manager of this organization to do this operation"
 
@@ -46,26 +47,47 @@ class ValidateSKOfSameOrg(BasePermission):
         return True
 
 
-class IsAssignedSK(BasePermission):
-    message = "Must be a Stock Keeper that is retrieving their own audits"
+class IsAssignedToBin(BasePermission):
+    message = "You must be assigned to this bin to access it's information"
 
     def has_permission(self, request, view):
-        try:
-            user = CustomUser.objects.get(email=request.user)
-            if request.method == 'GET':
-                assigned_sk = (request.query_params.get('assigned_sk')
-                or request.query_params.get('customuser_id'))
-                return user.role == 'SK' and str(assigned_sk) == str(user.id)
+        assigned_sk = False
+        if 'customuser_id' in request.query_params:
+            try:
+                user = CustomUser.objects.get(email=request.user)
+                assigned_sk = request.query_params.get('customuser_id')
+                assigned_sk = str(assigned_sk) == str(user.id)
+            except (ObjectDoesNotExist, KeyError):
+                pass
+        return assigned_sk
 
-            if request.method == 'DELETE':
-                record_id = view.kwargs["pk"]
-                record = Record.objects.get(pk=record_id)
-                assigned_sk = record.audit.assigned_sk.get(id=user.id)
-                return user.role == 'SK' and assigned_sk
 
-            if request.data['audit']:
+class IsAssignedToAudit(BasePermission):
+    message = "You must be assigned to this audit to access it's information"
+
+    def has_permission(self, request, view):
+        assigned_sk = True
+        if 'audit' in request.data:
+            try:
+                user = CustomUser.objects.get(email=request.user)
                 audit = Audit.objects.get(audit_id=request.data['audit'])
                 assigned_sk = audit.assigned_sk.get(id=user.id)
-            return user.role == 'SK' and assigned_sk
-        except (ObjectDoesNotExist, KeyError):
-            return False
+            except (ObjectDoesNotExist, KeyError):
+                assigned_sk = False
+        return assigned_sk
+
+
+class IsAssignedToRecord(BasePermission):
+    message = "You must be assigned to this record to access it's information"
+
+    def has_permission(self, request, view):
+        assigned_sk = True
+        if 'pk' in view.kwargs:
+            record_id = view.kwargs["pk"]
+            try:
+                user = CustomUser.objects.get(email=request.user)
+                record = Record.objects.get(pk=record_id)
+                assigned_sk = record.audit.assigned_sk.get(id=user.id)
+            except (ObjectDoesNotExist, KeyError):
+                assigned_sk = False
+        return assigned_sk
