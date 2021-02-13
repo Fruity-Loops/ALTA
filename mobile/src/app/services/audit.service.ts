@@ -57,7 +57,7 @@ export class AuditService {
   }
 
   getItem(userID, auditID, binID, itemID){
-    return this.http.get(`${BASEURL}/audit/check_item/`, {
+    return this.http.get(`${BASEURL}/audit/record/check_item/`, {
       params: {
         customuser_id: userID,
         audit_id: auditID,
@@ -69,7 +69,7 @@ export class AuditService {
   }
 
   getItems(userID, auditID, binID){
-    return this.http.get(`${BASEURL}/audit/items/`, {
+    return this.http.get(`${BASEURL}/audit/bin-to-sk/items/`, {
       params: {
         customuser_id: userID,
         audit_id: auditID,

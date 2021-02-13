@@ -48,59 +48,6 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
-    def get_item_serializer(self, *args, **kwargs): # pylint: disable=no-self-use 
-        serializer_class = ItemSerializer
-        return serializer_class(*args, **kwargs)
-
-    # pylint: disable=protected-access
-    @action(detail=False, methods=['GET'], name='Check Item for Validation')
-    def check_item(self, request):
-        bin_id = request.query_params.get('bin_id')
-        audit_id = request.query_params.get('audit_id')
-        item_id = request.query_params.get('item_id')
-
-        try: # Check that the item exists for this Audit
-            bins = BinToSK.objects.get(bin_id=bin_id)
-            audit = Audit.objects.get(audit_id=audit_id)
-            item = audit.inventory_items.get(_id=item_id)
-        except (ObjectDoesNotExist, ValueError) as ex:
-            raise Http404 from ex
-
-        record = {}
-        try: # Check that the item hasn't already been recorded
-            record = Record.objects.get(item_id=item_id)
-        except ObjectDoesNotExist:
-            if item._id in bins.item_ids: # Check that the item belongs to the current bin
-                serializer = self.get_item_serializer(item, many=False)
-                response = Response(serializer.data)
-            else:
-                response = Response({
-                'detail': 'Item part of Audit but not of Bin',
-                'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
-
-        if record and str(record.audit.audit_id) == str(audit_id):
-            response = Response({
-            'detail': 'This item has already been completed',
-            'alreadyMatched': record.record_id},
-            status=status.HTTP_400_BAD_REQUEST)
-
-        return response
-
-    @action(detail=False, methods=['GET'], name='Get Items In Bin')
-    def items(self, request):
-        bin_id = request.query_params.get('bin_id')
-        audit_id = request.query_params.get('audit_id')
-        bins = BinToSK.objects.get(bin_id=bin_id)
-        queryset = Audit.objects.get(audit_id=audit_id)
-        records = Record.objects.filter(bin_to_sk_id=bin_id).all()
-        completed_items =[record.item_id for record in records]
-        bin_items = []
-        for item in queryset.inventory_items.all():
-            if int(item._id) in bins.item_ids and int(item._id) not in completed_items:
-                bin_items.append(item)
-        serializer = self.get_item_serializer(bin_items, many=True)
-        return Response(serializer.data)
-
 
 def set_audit_accuracy(audit_id):
     audit = Audit.objects.get(audit_id=audit_id)
@@ -115,13 +62,17 @@ def set_audit_accuracy(audit_id):
     audit.save()
 
 
+def get_item_serializer(*args, **kwargs): # pylint: disable=no-self-use
+    serializer_class = ItemSerializer
+    return serializer_class(*args, **kwargs)
+
+
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
     http_method_names = ['post', 'get', 'delete']
     queryset = BinToSK.objects.all()
-    permission_classes = []
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
@@ -157,6 +108,21 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['GET'], name='Get Items In Bin')
+    def items(self, request):
+        bin_id = request.query_params.get('bin_id')
+        audit_id = request.query_params.get('audit_id')
+        bins = BinToSK.objects.get(bin_id=bin_id)
+        queryset = Audit.objects.get(audit_id=audit_id)
+        records = Record.objects.filter(bin_to_sk_id=bin_id).all()
+        completed_items = [record.item_id for record in records]
+        bin_items = []
+        for item in queryset.inventory_items.all():
+            if int(item._id) in bins.item_ids and int(item._id) not in completed_items:
+                bin_items.append(item)
+        serializer = get_item_serializer(bin_items, many=True)
+        return Response(serializer.data)
+
 
 class RecordViewSet(viewsets.ModelViewSet):
     http_method_names = ['post', 'get', 'patch', 'delete']
@@ -164,9 +130,15 @@ class RecordViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
+        if self.request.method == 'GET':
+            sk_perms = [IsAssignedToBin]
+        elif self.request.method in ['PATCH', 'DELETE']:
+            sk_perms = [IsAssignedToRecord]
+        else:
+            sk_perms = [CanCreateRecord]
         permission_classes = factory.get_general_permissions(
             im_additional_perms=[ValidateSKOfSameOrg],
-            sk_additional_perms=[IsAssignedToRecord]
+            sk_additional_perms=sk_perms
         )
         return [permission() for permission in permission_classes]
 
@@ -208,3 +180,38 @@ class RecordViewSet(viewsets.ModelViewSet):
             self.queryset = self.queryset.filter(**{key: request.GET.get(key)})
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
+
+    # pylint: disable=protected-access
+    @action(detail=False, methods=['GET'], name='Check Item for Validation')
+    def check_item(self, request):
+        bin_id = request.query_params.get('bin_id')
+        audit_id = request.query_params.get('audit_id')
+        item_id = request.query_params.get('item_id')
+        response = Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:  # Check that the item exists for this Audit
+            bins = BinToSK.objects.get(bin_id=bin_id)
+            audit = Audit.objects.get(audit_id=audit_id)
+            item = audit.inventory_items.get(_id=item_id)
+        except (ObjectDoesNotExist, ValueError) as ex:
+            raise Http404 from ex
+
+        record = {}
+        try:  # Check that the item hasn't already been recorded
+            record = Record.objects.get(item_id=item_id)
+        except ObjectDoesNotExist:
+            if item._id in bins.item_ids:  # Check that the item belongs to the current bin
+                serializer = get_item_serializer(item, many=False)
+                response = Response(serializer.data)
+            else:
+                response = Response({
+                    'detail': 'Item part of Audit but not of Bin',
+                    'inAudit': audit_id}, status=status.HTTP_400_BAD_REQUEST)
+
+        if record and str(record.audit.audit_id) == str(audit_id):
+            response = Response({
+                'detail': 'This item has already been completed',
+                'alreadyMatched': record.record_id},
+                status=status.HTTP_400_BAD_REQUEST)
+
+        return response

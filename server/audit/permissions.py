@@ -1,7 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
-from .models import Audit, Record
+from .models import Audit, Record, BinToSK
+from .serializers import AuditSerializer
 
 
 class CheckAuditOrganizationById(BasePermission):
@@ -52,26 +53,38 @@ class IsAssignedToBin(BasePermission):
 
     def has_permission(self, request, view):
         assigned_sk = False
-        if 'customuser_id' in request.query_params:
+        if 'customuser_id' in request.data:
+            assigned_sk_var = request.data['customuser_id']
+            audit_var = request.data['init_audit_id']
+        else:
+            assigned_sk_var = request.GET.get('customuser_id')
+            audit_var = request.GET.get('init_audit_id')
+            if not audit_var:
+                audit_var = request.GET.get('audit_id')
+        if assigned_sk_var and audit_var:
             try:
                 user = CustomUser.objects.get(email=request.user)
-                assigned_sk = request.query_params.get('customuser_id')
-                assigned_sk = str(assigned_sk) == str(user.id)
+                serializer = AuditSerializer(Audit.objects.get(audit_id=audit_var), many=False)
+                audit = serializer.data
+                assigned_sk = assigned_sk_var == str(user.id) and user.id in audit['assigned_sk']
             except (ObjectDoesNotExist, KeyError):
-                pass
+                assigned_sk = False
         return assigned_sk
 
 
 class IsAssignedToAudit(BasePermission):
-    message = "You must be assigned to this audit to access it's information"
+    message = "You must be an assigned stock keeper in this audit to access it's information"
 
     def has_permission(self, request, view):
-        assigned_sk = True
-        if 'audit' in request.data:
+        assigned_sk = False
+        if 'assigned_sk' in request.data:
+            assigned_sk_var = request.data['assigned_sk']
+        else:
+            assigned_sk_var = request.GET.get('assigned_sk')
+        if assigned_sk_var:
             try:
                 user = CustomUser.objects.get(email=request.user)
-                audit = Audit.objects.get(audit_id=request.data['audit'])
-                assigned_sk = audit.assigned_sk.get(id=user.id)
+                assigned_sk = assigned_sk_var == str(user.id)
             except (ObjectDoesNotExist, KeyError):
                 assigned_sk = False
         return assigned_sk
@@ -91,3 +104,26 @@ class IsAssignedToRecord(BasePermission):
             except (ObjectDoesNotExist, KeyError):
                 assigned_sk = False
         return assigned_sk
+
+
+class CanCreateRecord(BasePermission):
+    message = "You must have initiated this audit to access it's information"
+
+    def has_permission(self, request, view):
+        can_create = True
+        for key in ['audit', 'bin_to_sk', 'Bin']:
+            if key not in list(request.data.keys()):
+                can_create = False
+
+        if can_create:
+            try:
+                user = CustomUser.objects.get(email=request.user)
+                serializer = AuditSerializer(Audit.objects.get(audit_id=request.data['audit']), many=False)
+                audit = serializer.data
+                bin_to_sk = BinToSK.objects.get(bin_id=request.data['bin_to_sk'])
+                if user.id not in audit['assigned_sk'] or\
+                        user.id != bin_to_sk.customuser.id:
+                    can_create = False
+            except (ObjectDoesNotExist, KeyError):
+                can_create = False
+        return can_create
