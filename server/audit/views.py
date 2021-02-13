@@ -1,12 +1,9 @@
 from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from user_account.permissions import HasSameOrgInQuery, \
-    PermissionFactory
 from inventory_item.serializers import ItemSerializer
-from .serializers import AuditSerializer, GetAuditSerializer, GetBinToSKSerializer, \
+from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer
 from .permissions import *
 from .models import Audit, BinToSK, Record
@@ -20,7 +17,7 @@ class AuditViewSet(viewsets.ModelViewSet):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
                 im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
                 sk_additional_perms=[IsAssignedToAudit]
@@ -75,7 +72,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     queryset = BinToSK.objects.all()
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
             im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
             sk_additional_perms=[IsAssignedToBin]
@@ -129,7 +126,7 @@ class RecordViewSet(viewsets.ModelViewSet):
     queryset = Record.objects.all()
 
     def get_permissions(self):
-        factory = PermissionFactory(self.request)
+        factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
             sk_perms = [IsAssignedToBin]
         elif self.request.method in ['PATCH', 'DELETE']:

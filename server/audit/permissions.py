@@ -3,6 +3,36 @@ from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
 from .models import Audit, Record, BinToSK
 from .serializers import AuditSerializer
+from user_account.permissions import PermissionFactory, IsAuthenticated,\
+    HasSameOrgInBody, HasSameOrgInQuery, IsSystemAdmin
+
+
+class SKPermissionFactory(PermissionFactory):
+    def __init__(self, request):
+        self.base_sk_permissions = [IsAuthenticated, IsStockKeeper, HasSameOrgInBody, HasSameOrgInQuery]
+        super(SKPermissionFactory, self).__init__(request)
+
+    def validate_is_sa(self):
+        return IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
+
+    def get_general_permissions(self, im_additional_perms, sk_additional_perms=None):
+        permission_classes = self.base_sa_permissions
+        if self.validate_is_im():
+            permission_classes = self.base_im_permissions + im_additional_perms
+        elif sk_additional_perms and not self.validate_is_sa():
+            permission_classes = self.base_sk_permissions + sk_additional_perms
+        return permission_classes
+
+
+class IsStockKeeper(BasePermission):
+    message = "You must be a Stock Keeper to do this operation"
+
+    def has_permission(self, request, view):
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            return user.role == 'SK'
+        except ObjectDoesNotExist:
+            return False
 
 
 class CheckAuditOrganizationById(BasePermission):

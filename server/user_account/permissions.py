@@ -7,21 +7,15 @@ class PermissionFactory:
     def __init__(self, request):
         self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
         self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody, HasSameOrgInQuery]
-        self.base_sk_permissions = [IsAuthenticated, IsStockKeeper, HasSameOrgInBody, HasSameOrgInQuery]
         self.request = request
 
     def validate_is_im(self):
         return IsInventoryManager.has_permission(IsInventoryManager(), self.request, None)
 
-    def validate_is_sa(self):
-        return IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
-
-    def get_general_permissions(self, im_additional_perms, sk_additional_perms=None):
+    def get_general_permissions(self, im_additional_perms):
         permission_classes = self.base_sa_permissions
         if self.validate_is_im():
             permission_classes = self.base_im_permissions + im_additional_perms
-        elif sk_additional_perms and not self.validate_is_sa():
-            permission_classes = self.base_sk_permissions + sk_additional_perms
         return permission_classes
 
 
@@ -59,17 +53,6 @@ class IsInventoryManager(BasePermission):
         try:
             user = CustomUser.objects.get(email=request.user)
             return user.role in ['IM']
-        except ObjectDoesNotExist:
-            return False
-
-
-class IsStockKeeper(BasePermission):
-    message = "You must be a Stock Keeper to do this operation"
-
-    def has_permission(self, request, view):
-        try:
-            user = CustomUser.objects.get(email=request.user)
-            return user.role == 'SK'
         except ObjectDoesNotExist:
             return False
 
