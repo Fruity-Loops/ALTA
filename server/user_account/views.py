@@ -137,7 +137,7 @@ class CustomUserView(viewsets.ModelViewSet):
         factory = PermissionFactory(self.request)
         if self.action in ['create', 'retrieve', 'list']:
             permission_classes = factory.get_general_permissions([
-                UserHasSameOrg, IsHigherInOrganization, HasSameOrgInQuery])
+                UserHasSameOrg, IsHigherInOrganization])
         elif self.action in ['partial_update']:
             permission_classes = factory.get_general_permissions([
                 IsHigherInOrganization, CanUpdateKeys])
