@@ -18,15 +18,19 @@ class ItemResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
 
+def get_fields():
+    return ['Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Part_Description',
+            'Serial_Number', 'Condition', 'Category', 'Owner', 'Criticality',
+            'Unit_of_Measure']
+
+
 class CustomSearchFilter(filters.SearchFilter):
     """
     Filter that only allows users to see their own objects.
     """
     def filter_queryset(self, request, queryset, view):
-        filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity']
-        filterset_iexact_fields = ['Location', 'Plant', 'Zone', 'Aisle', 'Part_Number',
-                                   'Serial_Number', 'Condition', 'Category', 'Owner',
-                                   'Unit_of_Measure']
+        filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity', 'organization']
+        filterset_iexact_fields = get_fields()
 
         for field in filterset_qty_fields:
             field_from = '{0}_from'.format(field)
@@ -42,7 +46,6 @@ class CustomSearchFilter(filters.SearchFilter):
             if field in request.query_params:
                 param = {'{0}__{1}'.format(field, 'iexact'): request.query_params[field]}
                 queryset = queryset.filter(**param)
-
         return queryset
 
 
@@ -57,8 +60,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     pagination_class = ItemResultsSetPagination
     # search and filter
     filter_backends = [filters.SearchFilter, CustomSearchFilter]
-    search_fields = ['Location', 'Zone', 'Plant', 'Part_Number', 'Part_Description',
-                     'Serial_Number', 'Condition', 'Category', 'Owner', 'Unit_of_Measure']
+    search_fields = get_fields()
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
