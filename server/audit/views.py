@@ -143,29 +143,37 @@ class RecordViewSet(viewsets.ModelViewSet):
         serializer_class = RecordSerializer
         return serializer_class(*args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        record = serializer.save()
-        if not record:
-            return Response({'error': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
-        set_audit_accuracy(record.audit.audit_id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def dispatch(self, request, *args, **kwargs):
+        """
+        `.dispatch()` is pretty much the same as Django's regular dispatch,
+        but with extra hooks for startup, finalize, and exception handling.
+        Overriding this message to set the accuracy after updates and creations
+        """
+        self.args = args
+        self.kwargs = kwargs
+        request = self.initialize_request(request, *args, **kwargs)
+        self.request = request
+        self.headers = self.default_response_headers  # deprecate?
 
-    def update(self, request, *args, **kwargs): # pylint: disable=unused-argument
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        set_audit_accuracy(instance.audit.audit_id)
-        return Response(serializer.data)
+        try:
+            self.initial(request, *args, **kwargs)
 
-    def destroy(self, request, *args, **kwargs): # pylint: disable=unused-argument
-        instance = self.get_object()
-        self.perform_destroy(instance)
-        set_audit_accuracy(instance.audit.audit_id)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+            # Get the appropriate handler method
+            if request.method.lower() in self.http_method_names:
+                handler = getattr(self, request.method.lower(),
+                                  self.http_method_not_allowed)
+            else:
+                handler = self.http_method_not_allowed
+
+            response = handler(request, *args, **kwargs)
+
+        except Exception as exc:
+            response = self.handle_exception(exc)
+        if response.data:
+            if 'audit' in response.data:
+                set_audit_accuracy(response.data['audit'])
+        self.response = self.finalize_response(request, response, *args, **kwargs)
+        return self.response
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):
