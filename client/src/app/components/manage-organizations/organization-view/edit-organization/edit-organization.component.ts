@@ -1,5 +1,5 @@
 import {Component, Inject, Optional} from '@angular/core';
-import {ManageOrganizationsService} from '../../../../services/manage-organizations.service';
+import {ManageOrganizationsService} from '../../../../services/organizations/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {OrganizationViewComponent} from '../organization-view.component';

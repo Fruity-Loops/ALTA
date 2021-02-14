@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { User } from 'src/app/models/user.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';

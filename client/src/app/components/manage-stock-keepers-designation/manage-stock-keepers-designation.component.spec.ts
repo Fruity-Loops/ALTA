@@ -3,8 +3,8 @@ import { ManageStockKeepersDesignationComponent } from './manage-stock-keepers-d
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 
 describe('AssignStockKeepersComponent', () => {
   let component: ManageStockKeepersDesignationComponent;

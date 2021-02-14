@@ -3,8 +3,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, EMPTY} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {User} from '../models/user.model';
-import {AuthService} from './auth.service';
+import {User} from '../../models/user.model';
+import {AuthService} from '../authentication/auth.service';
 
 
 // TODO: if dead code, remove
