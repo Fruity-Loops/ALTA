@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
+import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';

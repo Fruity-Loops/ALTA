@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';

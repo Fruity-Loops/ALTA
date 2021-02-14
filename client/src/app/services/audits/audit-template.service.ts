@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {env} from 'src/environments/environment';
-import {Template} from '../components/audit-template/Template';
+import {Template} from '../../components/audit-template/Template';
 
 // Connection with the backend
 const BASEURL = env.api_root;

@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EmployeeListComponent} from './employee-list.component';
 import {HttpClientModule} from '@angular/common/http';
-import {ManageMembersService} from 'src/app/services/manage-members.service';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('ClientGridViewComponent', () => {

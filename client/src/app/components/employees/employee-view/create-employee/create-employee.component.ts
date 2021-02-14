@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from 'src/app/services/auth.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {TokenService} from 'src/app/services/token.service';
+import {TokenService} from 'src/app/services/authentication/token.service';
 import createMembersRoles from 'src/app/fixtures/create_members_roles.json';
 import {BaseEmployeeForm, EmployeeView} from '../employee-view';
 

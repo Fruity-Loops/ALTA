@@ -65,7 +65,7 @@ describe('TokenInterceptor', () => {
     );
     expect(httpReq.request.headers.get('Accept')).toBe('application/json');
 
-    //  TODO: Should check out how to see if tokens are set
+    //  TODO: Should check out how to see if authentication are set
     // Expect(httpReq.request.headers.has('Authorization')).toEqual(true);
   });
 });

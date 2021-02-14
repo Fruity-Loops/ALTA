@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ManageMembersService } from '../../../../services/manage-members.service';
+import { ManageMembersService } from '../../../../services/users/manage-members.service';
 import { ActivatedRoute } from '@angular/router';
 import roles from 'src/app/fixtures/roles.json';
 import {BaseEmployeeForm, EmployeeView} from '../employee-view';
