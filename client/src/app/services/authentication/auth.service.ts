@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, BehaviorSubject, combineLatest} from 'rxjs';
 import {map, debounceTime} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {LocalStorageInterface} from '../LocalStorage.interface';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -12,7 +13,7 @@ const BASEURL = env.api_root;
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements LocalStorageInterface {
 
   private observables: any = {};
 

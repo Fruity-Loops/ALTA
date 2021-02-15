@@ -2,6 +2,7 @@ import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {LocalStorageInterface} from '../LocalStorage.interface';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -9,7 +10,7 @@ const BASEURL = env.api_root;
 @Injectable({
   providedIn: 'root',
 })
-export class ManageAuditsService {
+export class ManageAuditsService implements LocalStorageInterface {
 
   constructor(private http: HttpClient) {}
 
