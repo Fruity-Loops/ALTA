@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {env} from 'src/environments/environment';
 import {Template} from '../../components/audit-template/Template';
-import {AuthService, LocalStorage} from '../authentication/auth.service';
+import {AuthService, UserLocalStorage} from '../authentication/auth.service';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -20,7 +20,7 @@ export class AuditTemplateService {
   }
 
   getOrgId(): void {
-    const orgId = this.authService.getLocalStorage(LocalStorage.OrgId);
+    const orgId = this.authService.getLocalStorage(UserLocalStorage.OrgId);
     if (orgId) {
       this.orgId = orgId;
     } else {

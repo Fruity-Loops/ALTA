@@ -4,7 +4,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, EMPTY} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {User} from '../../models/user.model';
-import {AuthService, LocalStorage} from '../authentication/auth.service';
+import {AuthService, UserLocalStorage} from '../authentication/auth.service';
 
 
 // TODO: if dead code, remove
@@ -24,7 +24,7 @@ export class ManageMembersService {
   }
 
   getOrgId(): any{
-    let orgId = this.authService.getLocalStorage(LocalStorage.OrgId);
+    let orgId = this.authService.getLocalStorage(UserLocalStorage.OrgId);
     if (!orgId) {
       orgId = '';
     }

@@ -16,7 +16,7 @@ export class AuthService {
 
   private observables: any = {};
 
-  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this.getLocalStorage(LocalStorage.OrgId));
+  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this.getLocalStorage(UserLocalStorage.OrgId));
 
   subscription;
 
@@ -29,17 +29,17 @@ export class AuthService {
     this.initializeObservables();
     this.sharedUser = this.getSharedUser();
 
-    if (this.getLocalStorage(LocalStorage.UserID)) {
-      this.subscription = this.getCurrentUser(this.getLocalStorage(LocalStorage.UserID) as string)
+    if (this.getLocalStorage(UserLocalStorage.UserID)) {
+      this.subscription = this.getCurrentUser(this.getLocalStorage(UserLocalStorage.UserID) as string)
         .subscribe((data) => {
-          this.updateLocalStorage(LocalStorage.UserID, data.user_id);
-          this.updateLocalStorage(LocalStorage.Username, data.user_name);
-          this.updateLocalStorage(LocalStorage.Role, data.role);
-          this.updateLocalStorage(LocalStorage.OrgId, data.organization);
-          this.updateLocalStorage(LocalStorage.OrgName, this.getLocalStorage(LocalStorage.OrgName) as string);
+          this.updateLocalStorage(UserLocalStorage.UserID, data.user_id);
+          this.updateLocalStorage(UserLocalStorage.Username, data.user_name);
+          this.updateLocalStorage(UserLocalStorage.Role, data.role);
+          this.updateLocalStorage(UserLocalStorage.OrgId, data.organization);
+          this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName) as string);
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({organization_name: this.getLocalStorage(LocalStorage.OrgName), ...data}, false);
+            this.turnOnOrgMode({organization_name: this.getLocalStorage(UserLocalStorage.OrgName), ...data}, false);
           }
         });
     }
@@ -47,24 +47,24 @@ export class AuthService {
 
   initializeObservables(): void {
     // tslint:disable-next-line:forin
-    for (const localStorageKey of Object.values(LocalStorage)) {
+    for (const localStorageKey of Object.values(UserLocalStorage)) {
       this.observables[localStorageKey] = new BehaviorSubject('');
     }
   }
 
   getSharedUser(): Observable<any> {
-    return combineLatest([this.observables[LocalStorage.UserID].asObservable(),
-      this.observables[LocalStorage.Username].asObservable(),
-      this.observables[LocalStorage.Role].asObservable(),
-      this.observables[LocalStorage.OrgId].asObservable(),
-      this.observables[LocalStorage.OrgName].asObservable()])
+    return combineLatest([this.observables[UserLocalStorage.UserID].asObservable(),
+      this.observables[UserLocalStorage.Username].asObservable(),
+      this.observables[UserLocalStorage.Role].asObservable(),
+      this.observables[UserLocalStorage.OrgId].asObservable(),
+      this.observables[UserLocalStorage.OrgName].asObservable()])
       .pipe(map(([userId, username, role, orgId, org]) => {
         return {
-          userId: this.observables[LocalStorage.UserID].value,
-          username: this.observables[LocalStorage.Username].value,
-          role: this.observables[LocalStorage.Role].value,
-          orgId: this.observables[LocalStorage.OrgId].value,
-          org: this.observables[LocalStorage.OrgName].value
+          userId: this.observables[UserLocalStorage.UserID].value,
+          username: this.observables[UserLocalStorage.Username].value,
+          role: this.observables[UserLocalStorage.Role].value,
+          orgId: this.observables[UserLocalStorage.OrgId].value,
+          org: this.observables[UserLocalStorage.OrgName].value
         };
       }), debounceTime(0));
   }
@@ -77,23 +77,23 @@ export class AuthService {
     this.orgMode.next(state);
   }
 
-  updateLocalStorage(storageId: LocalStorage, value: any): void {
+  updateLocalStorage(storageId: UserLocalStorage, value: any): void {
     localStorage.setItem(storageId, value);
     this.observables[storageId].next(value);
   }
 
-  getLocalStorage(storageId: LocalStorage): string | null {
+  getLocalStorage(storageId: UserLocalStorage): string | null {
     return localStorage.getItem(storageId);
   }
 
-  removeFromLocalStorage(storageId: LocalStorage): void {
+  removeFromLocalStorage(storageId: UserLocalStorage): void {
     localStorage.removeItem(storageId);
     this.observables[storageId].next('');
   }
 
   turnOnOrgMode(org: any, doNavigate: boolean): void {
-    this.updateLocalStorage(LocalStorage.OrgId, org.organization);
-    this.updateLocalStorage(LocalStorage.OrgName, org.organization_name);
+    this.updateLocalStorage(UserLocalStorage.OrgId, org.organization);
+    this.updateLocalStorage(UserLocalStorage.OrgName, org.organization_name);
     this.orgMode.next(true);
     if (doNavigate) {
       this.router.navigate(['dashboard']);
@@ -101,9 +101,9 @@ export class AuthService {
   }
 
   turnOffOrgMode(): void {
-    if (this.observables[LocalStorage.Role].getValue() === 'SA') {
-      this.removeFromLocalStorage(LocalStorage.OrgId);
-      this.removeFromLocalStorage(LocalStorage.OrgName);
+    if (this.observables[UserLocalStorage.Role].getValue() === 'SA') {
+      this.removeFromLocalStorage(UserLocalStorage.OrgId);
+      this.removeFromLocalStorage(UserLocalStorage.OrgName);
       this.router.navigate(['manage-organizations']);
       this.orgMode.next(false);
     } else {
@@ -133,20 +133,20 @@ export class AuthService {
   }
 
   setNext(nextUserId: any, nextUser: any, nextRole: any, nextOrgId: any, nextOrg: any): void {
-    this.updateLocalStorage(LocalStorage.UserID, nextUserId);
-    this.updateLocalStorage(LocalStorage.Username, nextUser);
-    this.updateLocalStorage(LocalStorage.Role, nextRole);
-    this.updateLocalStorage(LocalStorage.OrgId, nextOrgId);
-    this.updateLocalStorage(LocalStorage.OrgName, nextOrg);
+    this.updateLocalStorage(UserLocalStorage.UserID, nextUserId);
+    this.updateLocalStorage(UserLocalStorage.Username, nextUser);
+    this.updateLocalStorage(UserLocalStorage.Role, nextRole);
+    this.updateLocalStorage(UserLocalStorage.OrgId, nextOrgId);
+    this.updateLocalStorage(UserLocalStorage.OrgName, nextOrg);
   }
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
-    this.removeFromLocalStorage(LocalStorage.UserID);
-    this.removeFromLocalStorage(LocalStorage.Role);
-    this.removeFromLocalStorage(LocalStorage.Username);
-    this.removeFromLocalStorage(LocalStorage.OrgName);
-    this.removeFromLocalStorage(LocalStorage.OrgId);
+    this.removeFromLocalStorage(UserLocalStorage.UserID);
+    this.removeFromLocalStorage(UserLocalStorage.Role);
+    this.removeFromLocalStorage(UserLocalStorage.Username);
+    this.removeFromLocalStorage(UserLocalStorage.OrgName);
+    this.removeFromLocalStorage(UserLocalStorage.OrgId);
   }
 
   OnDestroy(): void {
@@ -157,7 +157,7 @@ export class AuthService {
 }
 
 
-export enum LocalStorage {
+export enum UserLocalStorage {
   UserID = 'id',
   Role = 'role',
   OrgName = 'organization',

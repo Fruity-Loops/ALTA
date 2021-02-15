@@ -7,7 +7,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {AuthService, LocalStorage} from '../../services/authentication/auth.service';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -180,7 +180,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   refreshTime(): void {
     this.body = {
       new_job_timing: this.timeForm.value.time,
-      organization: this.authService.getLocalStorage(LocalStorage.OrgId),
+      organization: this.authService.getLocalStorage(UserLocalStorage.OrgId),
     };
 
     this.itemsService.updateRefreshItemsTime(this.body).subscribe(
@@ -223,7 +223,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     let bodyAudit: object;
     bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
-      organization: Number(this.authService.getLocalStorage(LocalStorage.OrgId)),
+      organization: Number(this.authService.getLocalStorage(UserLocalStorage.OrgId)),
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
