@@ -67,9 +67,15 @@ export class AuthService {
     this.orgMode.next(state);
   }
 
+  updateLocalStorage(storageId: LocalStorage, value: any): void {
+    localStorage.setItem(storageId, value);
+  }
+
+  getOrgId = () => this.organizationId.getValue();
+
   turnOnOrgMode(org: any, doNavigate: boolean): void {
-    localStorage.setItem('organization_id', org.organization);
-    localStorage.setItem('organization', org.organization_name);
+    this.updateLocalStorage(LocalStorage.OrgId, org.organization);
+    this.updateLocalStorage(LocalStorage.OrgName, org.organization_name);
     this.organization.next(org.organization_name);
     this.orgMode.next(true);
     if (doNavigate) {
@@ -116,13 +122,12 @@ export class AuthService {
     this.organizationId.next(nextOrgId);
     this.organization.next(nextOrg);
 
-    localStorage.setItem('id', nextUserId);
+    this.updateLocalStorage(LocalStorage.UserID, nextUserId);
   }
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
     localStorage.removeItem('id');
-    localStorage.removeItem('user_id');
     localStorage.removeItem('role');
     localStorage.removeItem('role');
     localStorage.removeItem('organization');
@@ -134,4 +139,12 @@ export class AuthService {
       this.subscription.unsubscribe();
     }
   }
+}
+
+// @ts-ignore
+enum LocalStorage {
+  UserID = 'id',
+  Role = 'role',
+  OrgName = 'organization',
+  OrgId = 'organization_id'
 }
