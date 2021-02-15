@@ -13,6 +13,18 @@ export class ManageAuditsService {
 
   constructor(private http: HttpClient) {}
 
+  updateLocalStorage(storageId: AuditLocalStorage, value: any): void {
+    localStorage.setItem(storageId, value);
+  }
+
+  getLocalStorage(storageId: AuditLocalStorage): any {
+    return localStorage.getItem(storageId);
+  }
+
+  removeFromLocalStorage(storageId: AuditLocalStorage): void {
+    localStorage.removeItem(storageId);
+  }
+
   createAudit(inventoryItem: object): Observable<any> {
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
@@ -45,4 +57,8 @@ export class ManageAuditsService {
     return this.http.delete(`${BASEURL}/item-to-sk/${id}/`);
   }
 
+}
+
+export enum AuditLocalStorage {
+  AuditId = 'audit_id'
 }
