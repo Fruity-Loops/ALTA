@@ -71,8 +71,8 @@ export class AuthService {
     localStorage.setItem(storageId, value);
   }
 
-  getLocalStorage(storageId: LocalStorage): string {
-    return localStorage.getItem(storageId) as string;
+  getLocalStorage(storageId: LocalStorage): string | null {
+    return localStorage.getItem(storageId);
   }
 
   removeFromLocalStorage(storageId: LocalStorage): void {
