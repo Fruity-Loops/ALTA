@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
-import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -227,7 +227,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
-        localStorage.setItem('audit_id', data.audit_id);
+        this.auditService.updateLocalStorage(AuditLocalStorage.AuditId, data.audit_id);
         this.inventoryItemToAudit = [];
         setTimeout(() => {
           // Redirect user to component assign-stock-keepers

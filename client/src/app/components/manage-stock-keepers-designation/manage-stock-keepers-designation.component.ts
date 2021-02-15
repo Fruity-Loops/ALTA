@@ -1,10 +1,10 @@
-import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { SKUser } from 'src/app/models/user.model';
-import { Item } from 'src/app/models/item.model';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {SKUser} from 'src/app/models/user.model';
+import {Item} from 'src/app/models/item.model';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
@@ -28,7 +28,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     private router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
-    this.auditID = Number(localStorage.getItem('audit_id'));
+    this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
@@ -163,7 +163,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       (err) => {
         this.errorMessage = err;
       }));
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
   @HostListener('window:popstate', ['$event'])

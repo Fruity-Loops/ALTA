@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
-import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {User} from 'src/app/models/user.model';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
@@ -39,7 +39,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.busySKs = new Array<any>();
-    this.auditID = Number(localStorage.getItem('audit_id'));
+    this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
@@ -130,7 +130,7 @@ export class AssignStockKeepersComponent implements OnInit {
       (err) => {
         this.errorMessage = err;
       }));
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
   @HostListener('window:popstate', ['$event'])
