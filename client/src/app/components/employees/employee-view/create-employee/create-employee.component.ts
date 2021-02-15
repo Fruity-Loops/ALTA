@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService, LocalStorage} from 'src/app/services/authentication/auth.service';
+import {AuthService, UserLocalStorage} from 'src/app/services/authentication/auth.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {TokenService} from 'src/app/services/authentication/token.service';
@@ -38,7 +38,7 @@ export class CreateEmployeeComponent extends EmployeeView implements OnInit {
     this.subscription = this.authService.getOrgMode()
       .subscribe(orgMode => {
         if (orgMode) {
-          this.selectedOrganization = this.authService.getLocalStorage(LocalStorage.OrgId);
+          this.selectedOrganization = this.authService.getLocalStorage(UserLocalStorage.OrgId);
           this.isEmployee = true;
         }
         this.init();

@@ -5,7 +5,7 @@ import roles from 'src/app/fixtures/roles.json';
 import {BaseEmployeeForm, EmployeeView} from '../employee-view';
 import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService, LocalStorage} from '../../../../services/authentication/auth.service';
+import {AuthService, UserLocalStorage} from '../../../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-employee-settings',
@@ -38,10 +38,10 @@ export class EditEmployeeComponent extends EmployeeView {
     super();
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
-      this.id = routeParams.ID ? routeParams.ID : this.authService.getLocalStorage(LocalStorage.UserID);
+      this.id = routeParams.ID ? routeParams.ID : this.authService.getLocalStorage(UserLocalStorage.UserID);
 
       // Verifying that the logged in user is accessing their own information
-      if (this.id === this.authService.getLocalStorage(LocalStorage.UserID)) {
+      if (this.id === this.authService.getLocalStorage(UserLocalStorage.UserID)) {
         // tslint:disable-next-line:no-non-null-assertion
         // @ts-ignore
         this.isLoggedInUser.next(true);

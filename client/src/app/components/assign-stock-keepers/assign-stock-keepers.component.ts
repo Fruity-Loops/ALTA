@@ -6,7 +6,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
-import {AuthService, LocalStorage} from '../../services/authentication/auth.service';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -44,7 +44,7 @@ export class AssignStockKeepersComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.params = this.params.append('organization', String(this.authService.getLocalStorage(LocalStorage.OrgId)));
+    this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
 
     this.manageAuditsService.getBusySKs(this.params)
