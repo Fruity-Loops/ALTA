@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {env} from 'src/environments/environment';
 import {Template} from '../../components/audit-template/Template';
+import {AuthService, LocalStorage} from '../authentication/auth.service';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -13,12 +14,13 @@ const BASEURL = env.api_root;
 export class AuditTemplateService {
   orgId: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private authService: AuthService) {
     this.orgId = '';
   }
 
-  getOrgId(): void{
-    const orgId = localStorage.getItem('organization_id');
+  getOrgId(): void {
+    const orgId = this.authService.getLocalStorage(LocalStorage.OrgId);
     if (orgId) {
       this.orgId = orgId;
     } else {

@@ -157,7 +157,7 @@ export class AuthService {
 }
 
 
-enum LocalStorage {
+export enum LocalStorage {
   UserID = 'id',
   Role = 'role',
   OrgName = 'organization',
