@@ -20,7 +20,7 @@ export class AuthService {
   private organizationId = new BehaviorSubject('');
   private organization = new BehaviorSubject('');
 
-  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!localStorage.getItem('organization_id'));
+  orgMode: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this.getLocalStorage(LocalStorage.OrgId));
 
   subscription;
 
@@ -43,17 +43,17 @@ export class AuthService {
   constructor(
     private http: HttpClient, // We inject the http client in the constructor to do our REST operations
     private router: Router) {
-    if (localStorage.getItem('id')) {
-      this.subscription = this.getCurrentUser(localStorage.getItem('id') as string)
+    if (this.getLocalStorage(LocalStorage.UserID)) {
+      this.subscription = this.getCurrentUser(this.getLocalStorage(LocalStorage.UserID) as string)
         .subscribe((data) => {
           this.userId.next(data.user_id);
           this.username.next(data.user_name);
           this.role.next(data.role);
           this.organizationId.next(data.organization);
-          this.organization.next(localStorage.getItem('organization') as string);
+          this.organization.next(this.getLocalStorage(LocalStorage.OrgName) as string);
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
-            this.turnOnOrgMode({organization_name: localStorage.getItem('organization'), ...data}, false);
+            this.turnOnOrgMode({organization_name: this.getLocalStorage(LocalStorage.OrgName), ...data}, false);
           }
         });
     }
@@ -71,6 +71,14 @@ export class AuthService {
     localStorage.setItem(storageId, value);
   }
 
+  getLocalStorage(storageId: LocalStorage): string {
+    return localStorage.getItem(storageId) as string;
+  }
+
+  removeFromLocalStorage(storageId: LocalStorage): void {
+    localStorage.removeItem(storageId);
+  }
+
   getOrgId = () => this.organizationId.getValue();
 
   turnOnOrgMode(org: any, doNavigate: boolean): void {
@@ -85,7 +93,7 @@ export class AuthService {
 
   turnOffOrgMode(): void {
     if (this.role.getValue() === 'SA') {
-      localStorage.removeItem('organization_id');
+      this.removeFromLocalStorage(LocalStorage.OrgId);
       this.router.navigate(['manage-organizations']);
       this.orgMode.next(false);
       this.organization.next('');
@@ -127,11 +135,11 @@ export class AuthService {
 
   setLogOut(): void {
     this.setNext('', '', '', '', '');
-    localStorage.removeItem('id');
-    localStorage.removeItem('role');
-    localStorage.removeItem('role');
-    localStorage.removeItem('organization');
-    localStorage.removeItem('organization_id');
+    this.removeFromLocalStorage(LocalStorage.UserID);
+    this.removeFromLocalStorage(LocalStorage.Role);
+    this.removeFromLocalStorage(LocalStorage.Role);
+    this.removeFromLocalStorage(LocalStorage.OrgName);
+    this.removeFromLocalStorage(LocalStorage.OrgId);
   }
 
   OnDestroy(): void {
@@ -141,7 +149,7 @@ export class AuthService {
   }
 }
 
-// @ts-ignore
+
 enum LocalStorage {
   UserID = 'id',
   Role = 'role',
