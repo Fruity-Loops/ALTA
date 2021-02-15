@@ -2,15 +2,11 @@
 
 import os
 import subprocess
-from psutil import process_iter
-from signal import SIGTERM
-import time
+import psutil
+import signal
 import sys
 import webbrowser
 import platform
-from os import listdir
-from os.path import isfile, join
-from os import walk
 
 python_interpreter = ""
 
@@ -26,7 +22,8 @@ def e2e():
     os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
     os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
     os.system(
-        f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json audits.json bins.json --settings django_server.test_settings')
+        f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json '
+        f'audits.json bins.json --settings django_server.test_settings')
     subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                      f'--settings django_server.test_settings', shell=True)
     os.chdir(os.path.dirname(os.getcwd()))
@@ -66,18 +63,17 @@ def load():
         "\n\n\n**************************************************\n\n\n"
         "load tests will now run"
         "\n\n\n**************************************************\n\n\n")
-    # time.sleep(5)
     kill_port()
     os.system(f'{python_interpreter} manage.py flush --no-input --settings django_server.test_settings')
     os.system(f'{python_interpreter} manage.py makemigrations --settings django_server.test_settings')
     os.system(f'{python_interpreter} manage.py migrate --settings django_server.test_settings')
     os.system(
-        f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json --settings django_server.test_settings')
+        f'{python_interpreter} manage.py loaddata users.json organizations.json items.json audit_template.json '
+        f'--settings django_server.test_settings')
     subprocess.Popen(f'{python_interpreter} manage.py runserver 127.0.0.1:8000 '
                      f'--settings django_server.test_settings', shell=True)
     os.chdir(os.path.dirname(os.getcwd()))
     os.chdir("server/performance_test")
-    # os.system(f'{python_interpreter} -mwebbrowser 127.0.0.1:8089')
     p1 = subprocess.Popen("locust --config=load_testing.conf", shell=True)
     p1.wait()
     kill_port()
@@ -90,26 +86,12 @@ def lint():
         "\n\n\n**************************************************\n\n\n"
         "Backend linter test will now run"
         "\n\n\n**************************************************\n\n\n")
-    kill_port()
-    with open('__init__.py', 'w'):
-        pass
-    os.remove("__init__.py")
-    onlyfiles = []
-    f = []
-    for (dirpath, dirnames, filenames) in walk(os.getcwd()):
-        f.extend(filenames)
-        break
-    for dir in dirnames:
-        for (dirpath2, dirnames2, filenames2) in walk(os.getcwd() + '/' + dir):
-            f.extend(filenames)
-            break
-        if 'migrations' in dirnames2:
-            onlyfiles.append(dir)
-    printme = ''
-    for i in onlyfiles:
-        printme = printme + ' ' + i
+    lint_me = ''
+    for folder_name in os.listdir():
+        if os.path.exists(os.path.join(os.getcwd(), folder_name, 'migrations')):
+            lint_me += folder_name + ' '
     os.system(
-        f'pylint --load-plugins pylint_django --django-settings-module=django_server.settings ' + printme)
+        f'pylint --load-plugins pylint_django --django-settings-module=django_server.settings ' + lint_me)
     print(
         "\n\n\n**************************************************\n\n\n"
         "Frontend linter test will now run"
@@ -132,10 +114,10 @@ def execute(args):
 
 def kill_port():
     if platform.system() == "Windows":
-        for proc in process_iter():
+        for proc in psutil.process_iter():
             for conns in proc.connections(kind='inet'):
                 if conns.laddr.port == 8000:
-                    proc.send_signal(SIGTERM)
+                    proc.send_signal(signal.SIGTERM)
     elif platform.system() == "Linux":
         os.system("fuser -k 8000/tcp")
 
