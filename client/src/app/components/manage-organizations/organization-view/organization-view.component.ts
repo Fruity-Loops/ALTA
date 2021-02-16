@@ -10,13 +10,13 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   location: string;
   orgName: string;
+  locations: string[] = [];
 
   orgError: string | undefined;
 
   csvRecords: any[] = [];
   header = false;
   //array varibales to store csv data
-  lines: any[] = []; //for headings
   linesR: any[] = []; // for rows
 
   protected constructor() {

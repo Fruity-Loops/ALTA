@@ -30,7 +30,7 @@
       <div class="vertical-stack">
         <mat-label>Location:</mat-label>
         <mat-form-field appearance="outline" class="text-input" *ngIf="!isEdit">
-          <input matInput placeholder="Montreal, QC" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
+          <input matInput placeholder="Location Code,Location Description" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
         </mat-form-field>
       </div>
       <div class="upload-button-spacer" *ngIf="!isEdit">
