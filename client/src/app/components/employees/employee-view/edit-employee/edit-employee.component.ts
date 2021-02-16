@@ -141,20 +141,20 @@ export class EditEmployeeComponent extends EmployeeView {
       // tslint:disable-next-line:no-non-null-assertion
       .updateClientInfo(patchedEmployee, this.id!)
       .subscribe((response) => {
-        location.reload();
-      });
-
-    // update user password
-    if (this.password.length > 0) {
-      // tslint:disable-next-line:no-non-null-assertion
-      this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
-        (response) => {
+        // update user password
+        if (this.password.length > 0) {
+          // tslint:disable-next-line:no-non-null-assertion
+          this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
+             _ => {
+              location.reload();
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+        } else {
           location.reload();
-        },
-        (err) => {
-          console.log(err);
         }
-      );
-    }
+      });
   }
 }
