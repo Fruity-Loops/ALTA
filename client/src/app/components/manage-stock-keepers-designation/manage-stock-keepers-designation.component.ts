@@ -45,7 +45,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.locationsWithBinsAndSKs.forEach(index => {
       let currentSK = 0;
-      index.bins.forEach(bin => {
+      index.bins.forEach((bin: any) => {
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
         const associatedItemsIds = associatedItems.map(item => item._id);
 
