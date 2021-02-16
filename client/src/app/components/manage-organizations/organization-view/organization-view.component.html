@@ -40,8 +40,9 @@
         <button mat-stroked-button class="upload-button" [disabled]="isEdit && !editOn">
           Submit (.csv) file
         </button><!-- if checks throws error then do not send data -->
+        <input type="file" class="upload" (change)="changeListener($event.target.files)">
       </div>
-
+      
     </div>
   </div>
 
