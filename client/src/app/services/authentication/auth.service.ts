@@ -1,6 +1,6 @@
 import {env} from 'src/environments/environment';
 // @ts-ignore
-import {Injectable} from '@angular/core';
+import {Component, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, BehaviorSubject, combineLatest} from 'rxjs';
 import {map, debounceTime} from 'rxjs/operators';
@@ -33,11 +33,13 @@ export class AuthService implements LocalStorageInterface {
     if (this.getLocalStorage(UserLocalStorage.UserID)) {
       this.subscription = this.getCurrentUser(this.getLocalStorage(UserLocalStorage.UserID) as string)
         .subscribe((data) => {
-          this.updateLocalStorage(UserLocalStorage.UserID, data.user_id);
+          this.updateLocalStorage(UserLocalStorage.UserID, data.id);
           this.updateLocalStorage(UserLocalStorage.Username, data.user_name);
           this.updateLocalStorage(UserLocalStorage.Role, data.role);
-          this.updateLocalStorage(UserLocalStorage.OrgId, data.organization);
-          this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName) as string);
+          if (data.organization) {
+            this.updateLocalStorage(UserLocalStorage.OrgId, data.organization);
+            this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName) as string);
+          }
           // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
             this.turnOnOrgMode({organization_name: this.getLocalStorage(UserLocalStorage.OrgName), ...data}, false);
