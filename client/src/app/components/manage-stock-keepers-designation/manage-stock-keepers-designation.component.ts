@@ -49,8 +49,8 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
         const associatedItemsIds = associatedItems.map(item => item._id);
 
-        sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location)
-        let currentToAssign = currentSK % sksOfCurrentLocation.length;
+        sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location);
+        const currentToAssign = currentSK % sksOfCurrentLocation.length;
 
         sksOfCurrentLocation[currentToAssign].bins.push(bin);
         sksOfCurrentLocation[currentToAssign].item_ids = associatedItemsIds;
