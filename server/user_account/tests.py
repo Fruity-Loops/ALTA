@@ -1,4 +1,3 @@
-import json
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
@@ -8,6 +7,7 @@ from django.db.models import signals
 from django.test import TestCase
 from organization.models import Organization
 from .models import CustomUser
+
 
 class CustomUserTestCase(TestCase):
     # Having the fixtures loads the entries into the db for testing
@@ -161,8 +161,8 @@ class OpenRegistrationTestCase(APITestCase):
                 "is_active": "True",
                 "location": "",
                 "organization": organization.org_id}
-        response = self.client.post("/open-registration/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        request = self.client.post("/open-registration/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_success_not_linked_to_organization(self):
         """ User was registered correctly without its organization"""
@@ -175,20 +175,20 @@ class OpenRegistrationTestCase(APITestCase):
                 "location": "",
                 "organization": "",
                 "is_active": "True"}
-        response = self.client.post("/open-registration/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        request = self.client.post("/open-registration/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_registration_failure(self):
         """ User can't register if missing fields """
         data = {'user_name': 'test_case', "password": "password", "first_name": "test",
                 "last_name": "user", "role": "SA", "location": ""}
-        response = self.client.post("/open-registration/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        request = self.client.post("/open-registration/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_registration_unauthorized_request(self):
         """ User can't access the GET method at this particular endpoint """
-        response = self.client.get("/open-registration/")
-        self.assertEqual(response.status_code,
+        request = self.client.get("/open-registration/")
+        self.assertEqual(request.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
@@ -197,37 +197,32 @@ class LoginTest(APITestCase):
 
     def test_login_invalid_user(self):
         """ User that does not exist in database """
-        response = self.client.post(
+        request = self.client.post(
             "/login/", {"email": "t@test.com", "password": "test"})
-        self.assertEqual(response.status_code,
+        self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
-        response = self.client.post(
+        request = self.client.post(
             "/login/", {"email": "sa2@test.com", "password": "test12"})
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_not_active(self):
         """ User that has a valid account but is not active """
-        response = self.client.post(
+        request = self.client.post(
             "/login/", {"email": "sa2@test.com", "password": "sa"})
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    # def test_login_success_without_existing_token(self):
-    #     """ User can login successfully and doesn't have token in db"""
-    #     response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'sa'})
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_users_with_or_without_organization(self):
-        response = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'password'})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization_name'], "")
+        request = self.client.post("/login/", {'email': 'sa@test.com', 'password': 'password'})
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data['organization_name'], "")
 
-        response = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'password',\
-                                                'organization': 1})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization_name'], 'test')
+        request = self.client.post("/login/", {'email': 'sk@test.com', 'password': 'password',
+                                               'organization': 1})
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data['organization_name'], 'test')
 
 
 class LogoutTest(APITestCase):
@@ -252,14 +247,14 @@ class LogoutTest(APITestCase):
 
     def test_logout_success(self):
         """ User can logout successfully with valid token """
-        response = self.client.post('/logout/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request = self.client.post('/logout/')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_logout_failure(self):
         """ User can't logout without a valid token """
         self.api_authentication_invalid_token()
-        response = self.client.post('/logout/')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        request = self.client.post('/logout/')
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class UpdateProfileTest(APITestCase):
@@ -281,55 +276,56 @@ class UpdateProfileTest(APITestCase):
     def test_update_another_user_information(self):
         """ User can't update the info of another user """
         self.client.force_authenticate(user=self.manager)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
             {"user_name": "random"}, format='json')
-        self.assertEqual(response.status_code,
+        self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
     def test_im_update_sk_user_information(self):
         """ Inventory manager can update Stock Keeper's info"""
         self.client.force_authenticate(user=self.manager)
-        response = self.client.patch(self.url + str(self.stock_keeper.id) +
-                                     "/", {"user_name": "aaa"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request = self.client.patch(self.url + str(self.stock_keeper.id) +
+                                    "/", {"user_name": "aaa"}, format='json')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_update_own_user_information(self):
         """ Users can update their own regular info """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.patch(self.url + str(self.sys_admin_id) + "/",
-                                     {"user_name": "random"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request = self.client.patch(self.url + str(self.sys_admin_id) + "/",
+                                    {"user_name": "random"}, format='json')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.manager)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.manager.id) + "/",
             {"user_name": "random1"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_update_own_user_role(self):
         """ Users shouldn't be able to update their own roles """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
             {"role": "IM"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        response = self.client.get(self.url + str(self.sys_admin_id) + "/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['role'], 'SA')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        request = self.client.get(self.url + str(self.sys_admin_id) + "/")
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data['role'], 'SA')
 
         self.client.force_authenticate(user=self.manager)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.manager.id) + "/",
             {"role": "SA"}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        response = self.client.get(self.url + str(self.manager.id) + "/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['role'], 'IM')
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+        request = self.client.get(self.url + str(self.manager.id) + "/")
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data['role'], 'IM')
 
 
 class ChangePasswordTest(APITestCase):
     fixtures = ["users.json", "organizations"]
+
     # pylint: disable=too-many-instance-attributes
     def setUp(self):
         self.client = APIClient()
@@ -345,28 +341,28 @@ class ChangePasswordTest(APITestCase):
         """ User can't update the password of another user unless he is
          an admin or the same user """
         self.client.force_authenticate(user=self.i_m)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.sa_id) + "/", self.save_fields)
-        self.assertEqual(response.status_code,
+        self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_password(self):
         """ Users can update their own password """
         self.client.force_authenticate(user=self.s_a)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.sa_id) + "/", self.save_fields, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
         self.client.force_authenticate(user=self.i_m)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.i_m.id) + "/", self.save_fields, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_im_update_sk_password(self):
         self.client.force_authenticate(user=self.i_m)
-        response = self.client.patch(
+        request = self.client.patch(
             self.url + str(self.s_k.id) + "/", self.save_fields)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class RetreivePersonalInfoTest(APITestCase):
@@ -383,15 +379,15 @@ class RetreivePersonalInfoTest(APITestCase):
     def test_update_another_user_password(self):
         """ User can't update the password of another user unless if he is an admin """
         self.client.force_authenticate(user=self.inventory)
-        response = self.client.get(
+        request = self.client.get(
             self.url + str(self.us_id) + "/")
-        self.assertEqual(response.status_code,
+        self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_password(self):
         """ User can update his own password """
         self.client.force_authenticate(user=self.user)
-        response = self.client.get(
+        request = self.client.get(
             self.url + str(self.us_id) + "/")
-        self.assertEqual(response.status_code,
+        self.assertEqual(request.status_code,
                          status.HTTP_200_OK)

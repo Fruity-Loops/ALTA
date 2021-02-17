@@ -36,41 +36,41 @@ class OrganizationTestCase(APITestCase):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
         data = {'org_name': 'test_case'}
-        response = self.client.post("/organization/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        request = self.client.post("/organization/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_create_organization_inventory_manager_success(self):
         """ Inventory manager is not allowed to create an organization """
         self.client.force_authenticate(user=self.inventory_manager)
         data = {'org_name': 'test_case'}
-        response = self.client.post("/organization/", data)
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        request = self.client.post("/organization/", data)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_organization_failure(self):
         """ User can't create organization if missing fields """
         self.client.force_authenticate(user=self.system_admin)
         data = {}
-        response = self.client.post("/organization/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        request = self.client.post("/organization/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_organization_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """
-        response = self.client.get("/organization/")
-        self.assertEqual(response.status_code,
+        request = self.client.get("/organization/")
+        self.assertEqual(request.status_code,
                          status.HTTP_401_UNAUTHORIZED)
 
     def test_organization_unauthorized_clearence(self):
         """ IM can create or delete an organization """
         self.client.force_authenticate(user=self.inventory_manager)
-        response = self.client.delete("/organization/")
-        self.assertEqual(response.status_code,
+        request = self.client.delete("/organization/")
+        self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
     def test_get_all_organization(self):
         """ IM can get a list of organization """
         self.client.force_authenticate(user=self.inventory_manager)
-        response = self.client.get("/organization/")
-        self.assertEqual(response.status_code,
+        request = self.client.get("/organization/")
+        self.assertEqual(request.status_code,
                          status.HTTP_403_FORBIDDEN)
 
 
@@ -89,15 +89,15 @@ class InventoryItemRefreshTestCase(APITestCase):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.system_admin)
         data = {"organization": self.organization, "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_org_inventory_item_refresh_time_im(self):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.im)
         data = {"organization": self.organization, "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        request = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
 
     def test_org_item_refresh_time_fail(self):
         """
@@ -106,5 +106,5 @@ class InventoryItemRefreshTestCase(APITestCase):
         """
         self.client.force_authenticate(user=self.system_admin)
         data = {"organization": "1234", "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        request = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        self.assertEqual(request.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
