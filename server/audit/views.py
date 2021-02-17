@@ -7,7 +7,7 @@ from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer
 from .permissions import *
 from .models import Audit, BinToSK, Record
-
+import json
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
@@ -204,7 +204,8 @@ class RecordViewSet(viewsets.ModelViewSet):
 
         record = {}
         try:  # Check that the item hasn't already been recorded
-            record = Record.objects.get(item_id=item_id)
+            audit_records = Record.objects.filter(audit=audit_id)
+            record = audit_records.get(item_id=item_id)
         except ObjectDoesNotExist:
             if item._id in bins.item_ids:  # Check that the item belongs to the current bin
                 serializer = get_item_serializer(item, many=False)
