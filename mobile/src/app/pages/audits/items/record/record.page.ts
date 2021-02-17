@@ -85,7 +85,7 @@ export class RecordPage implements OnInit {
           buttons: ['Dismiss'],
         });
         await alert.present().then(_ => {
-          this.dismissModal();
+          this.dismissModal(true);
         });
       },
       async (res) => {
@@ -114,7 +114,7 @@ export class RecordPage implements OnInit {
           buttons: ['Dismiss'],
         });
         await alert.present().then(_ => {
-          this.dismissModal();
+          this.dismissModal(true);
         });
       },
       async (res) => {
@@ -138,9 +138,9 @@ export class RecordPage implements OnInit {
     return data;
   }
 
-  dismissModal() {
+  dismissModal(isItemValid: boolean) {
     this.modalController.dismiss({
-      itemValidated: true,
+      itemValidated: isItemValid,
     });
   }
 

@@ -53,10 +53,10 @@
           <p> Item: {{ item.item_id }}</p>
           <p> Status: {{ item.status }}</p>
         </ion-label>
-        <ion-chip *ngIf="item?.flagged" color="danger" disabled >
+        <ion-chip *ngIf="item?.flagged" color="danger" disabled>
           <ion-icon name="flag"></ion-icon>
           <ion-label>Flagged</ion-label>
-        </ion-chip>        
+        </ion-chip>
         <ion-button id="optionsButton" (click)="presentCompltedItemActionSheet(item.record_id)">
           <ion-icon color="light" name="settings-outline"></ion-icon>
         </ion-button>
@@ -66,7 +66,7 @@
   </div>
 </ion-content>
 
-<section>
+<section *ngIf="currentSegment==Segment.ITEMS">
   <ion-grid>
     <ion-row>
       <ion-col>
@@ -80,6 +80,16 @@
           onclick="this.blur()" (click)="handleManualInput()">
           <ion-icon name="create-outline"></ion-icon>Input
         </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</section>
+
+<section *ngIf="currentSegment==Segment.COMPLETED_ITEMS">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="secondary" size="large">Complete Bin</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

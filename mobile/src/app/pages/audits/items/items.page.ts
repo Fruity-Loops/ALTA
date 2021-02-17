@@ -214,7 +214,6 @@ export class ItemsPage implements OnInit, OnDestroy {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Confirm Cancel');
           }
         }, {
           text: 'Confirm',
@@ -451,7 +450,7 @@ export class ItemsPage implements OnInit, OnDestroy {
             this.getRecord(recordID);
           }
         }, {
-          text: 'Delete',
+          text: 'Remove',
           role: 'destructive',
           icon: 'trash',
           handler: () => {

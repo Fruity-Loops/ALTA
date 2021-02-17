@@ -1,4 +1,9 @@
 <ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button (click)="dismissModal(false)">
+      <ion-icon color="light" name="close"></ion-icon>
+    </ion-button>
+  </ion-buttons>
   <ion-buttons slot="end">
     <ion-button (click)="isItemDetailsHidden=!isItemDetailsHidden">
       <ion-icon color="light" name="eye-outline"></ion-icon>
@@ -18,6 +23,7 @@
         <ion-input id="IdInput" type="text" formControlName="item_id" required></ion-input>
       </ion-item>
 
+      <div [hidden]="isItemDetailsHidden">
       <ion-item>
         <ion-label position="floating" color="primary">Location</ion-label>
         <ion-input id="LocationInput" type="text" formControlName="Location" required></ion-input>
@@ -27,7 +33,6 @@
         <ion-label position="floating" color="primary">Plant</ion-label>
         <ion-input id="PlantInput" formControlName="Plant" required></ion-input>
       </ion-item>
-      <div [hidden]="isItemDetailsHidden">
 
         <ion-item>
           <ion-label position="floating" color="primary">Zone</ion-label>

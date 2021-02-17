@@ -95,7 +95,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   ngOnInit(): void {
     this.params = this.params.append('page', String(this.pageIndex));
     this.params = this.params.append('page_size', String(this.pageSize));
-    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')))
+    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.getItems();
     this.init();
     this.inventoryItemToAudit = [];
