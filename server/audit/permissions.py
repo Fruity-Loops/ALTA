@@ -96,7 +96,7 @@ class IsAssignedToBin(BasePermission):
                 user = CustomUser.objects.get(email=request.user)
                 serializer = AuditSerializer(Audit.objects.get(audit_id=audit_var), many=False)
                 audit = serializer.data
-                assigned_sk = assigned_sk_var == str(user.id) and user.id in audit['assigned_sk']
+                assigned_sk = str(assigned_sk_var) == str(user.id) and user.id in audit['assigned_sk']
             except (ObjectDoesNotExist, KeyError):
                 assigned_sk = False
         return assigned_sk

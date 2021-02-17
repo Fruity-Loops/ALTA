@@ -7,7 +7,6 @@ from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer
 from .permissions import *
 from .models import Audit, BinToSK, Record
-import json
 
 class AuditViewSet(viewsets.ModelViewSet):
     """
