@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { ProfilePopoverMenuComponent } from 'src/app/components/toolbar/popovers/profile-popover-menu/profile-popover-menu.component';
 import { NotificationPopoverMenuComponent } from 'src/app/components/toolbar/popovers/notification-popover-menu/notification-popover-menu.component';
 import { fetchLoggedInUser } from 'src/app/services/cache';
@@ -12,7 +13,8 @@ import { fetchLoggedInUser } from 'src/app/services/cache';
 export class ToolbarComponent implements OnInit {
   loggedInUser: string;
   constructor(
-    public popoverController: PopoverController
+    public popoverController: PopoverController,
+    private router: Router,
   ) { }
 
   ngOnInit() { }
@@ -35,6 +37,10 @@ export class ToolbarComponent implements OnInit {
       translucent: true,
     });
     return await popover.present();
+  }
+
+  navigate(){
+    this.router.navigateByUrl('/audits', { replaceUrl: true });
   }
 
 }

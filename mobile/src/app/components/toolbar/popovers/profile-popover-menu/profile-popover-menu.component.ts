@@ -32,4 +32,10 @@ export class ProfilePopoverMenuComponent implements OnInit {
   async dismissPopover() {
     await this.popoverController.dismiss();
   }
+
+  navigate(){
+    this.dismissPopover();
+    this.router.navigateByUrl('/settings', { replaceUrl: false });
+  }
+
 }
