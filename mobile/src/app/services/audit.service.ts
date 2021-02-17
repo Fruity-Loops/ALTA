@@ -15,11 +15,12 @@ export class AuditService {
 
   constructor(private http: HttpClient) { }
 
-  getAudits(userID): Observable<any> {
+  getAudits(userID, org): Observable<any> {
     return this.http.get(`${BASEURL}/audit/`,
       {
         params: {
           assigned_sk: userID,
+          organization: org
         }
       })
       .pipe(catchError(errorHandler));

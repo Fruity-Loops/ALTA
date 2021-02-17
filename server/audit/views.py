@@ -31,16 +31,15 @@ class AuditViewSet(viewsets.ModelViewSet):
         return serializer_class(*args, **kwargs)
 
     def list(self, request):
-        org_id = request.query_params.get('organization')
+        org_id = request.query_params.get('organization', -1)
         audit_status = request.query_params.get('status')
         assigned_sk = request.query_params.get('assigned_sk')
 
         if audit_status:
             self.queryset = self.queryset.filter(status=audit_status)
-        if org_id:
-            self.queryset = self.queryset.filter(organization_id=org_id)
         if assigned_sk:
             self.queryset = self.queryset.filter(assigned_sk__id=assigned_sk)
+        self.queryset = self.queryset.filter(organization_id=org_id)
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
@@ -95,15 +94,14 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         customuser_id = request.query_params.get('customuser_id')
-        init_audit_id = request.query_params.get('init_audit_id')
         bin_status = request.query_params.get('status')
+        init_audit_id = request.query_params.get('init_audit_id', -1)
 
         if bin_status:
             self.queryset = self.queryset.filter(status=bin_status)
         if customuser_id:
             self.queryset = self.queryset.filter(customuser_id=customuser_id)
-        if init_audit_id:
-            self.queryset = self.queryset.filter(init_audit_id=init_audit_id)
+        self.queryset = self.queryset.filter(init_audit_id=init_audit_id)
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
@@ -192,9 +190,9 @@ class RecordViewSet(viewsets.ModelViewSet):
     # pylint: disable=protected-access
     @action(detail=False, methods=['GET'], name='Check Item for Validation')
     def check_item(self, request):
-        bin_id = request.query_params.get('bin_id')
-        audit_id = request.query_params.get('audit_id')
-        item_id = request.query_params.get('item_id')
+        bin_id = request.query_params.get('bin_id', -1)
+        audit_id = request.query_params.get('audit_id', -1)
+        item_id = request.query_params.get('item_id', -1)
         response = Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:  # Check that the item exists for this Audit
