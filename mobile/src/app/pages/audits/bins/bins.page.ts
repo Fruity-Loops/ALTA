@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuditService } from 'src/app/services/audit.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { fetchLoggedInUser } from 'src/app/services/cache';
 import { AlertController, LoadingController } from '@ionic/angular';
 
@@ -29,11 +29,26 @@ export class BinsPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private loadingController: LoadingController,
     private alertController: AlertController,
-  ) { }
+    private router: Router,
+  ) {
+  }
 
   ngOnInit() {
+    this.setSegment();
     this.getSelectedAudit();
     this.getBins();
+  }
+
+  setSegment() {
+    this.router.events.subscribe(
+      (event) => {
+        if (event instanceof NavigationEnd) {
+          const state = window.history.state;
+          if (state.data?.segment){
+            this.currentSegment = state.data?.segment;
+          }
+        }
+      });
   }
 
   getSelectedAudit() {

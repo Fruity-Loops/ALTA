@@ -12,7 +12,7 @@ import { AuditService } from 'src/app/services/audit.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { fetchLoggedInUser } from 'src/app/services/cache';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RecordPage } from 'src/app/pages/audits/items/record/record.page';
 
 enum Segment {
@@ -52,6 +52,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     private androidPermissions: AndroidPermissions,
     public platform: Platform,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     public modalController: ModalController,
     public actionSheetController: ActionSheetController,
     private loadingController: LoadingController
@@ -462,8 +463,6 @@ export class ItemsPage implements OnInit, OnDestroy {
           text: 'Cancel',
           icon: 'close',
           role: 'cancel',
-          handler: () => {
-          }
         }]
     });
     await actionSheet.present();
@@ -494,6 +493,12 @@ export class ItemsPage implements OnInit, OnDestroy {
                       buttons: ['Dismiss'],
                     });
                     await successAlert.present();
+                    successAlert.onDidDismiss()
+                      .then(_ => {
+                        this.router.navigate([`/audits/${this.auditID}`], {
+                          state: { data: { segment: 'completedBins' } }
+                        });
+                      });
                   },
                   async (res) => {
                     const errorAlert = await this.alertController.create({
