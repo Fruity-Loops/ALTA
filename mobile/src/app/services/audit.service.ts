@@ -60,13 +60,10 @@ export class AuditService {
 
 
   completeBin(userID, auditID, binID, binStatus): Observable<any> {
-    return this.http.patch(`${BASEURL}/bin-to-sk/`, {
-      params: {
-        customuser_id: userID,
-        init_audit_id: auditID,
-        bin_id: binID,
-        status: binStatus
-      }
+    return this.http.patch(`${BASEURL}/bin-to-sk/${binID}/`, {
+      customuser_id: userID,
+      init_audit_id: auditID,
+      status: binStatus
     })
       .pipe(catchError(errorHandler));
   }
