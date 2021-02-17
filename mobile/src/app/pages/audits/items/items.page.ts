@@ -84,9 +84,9 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.binID = this.activatedRoute.snapshot.paramMap.get('bin_id');
   }
 
-  async getItems(withLoading: boolean) {
+  async getItems(withLoading: boolean, loadingMesage = 'Fetching Items...') {
     const whileLoading = await this.loadingController.create({
-      message: 'Fetching Items...'
+      message: loadingMesage
     });
     if (withLoading) {
       await whileLoading.present();
@@ -467,5 +467,61 @@ export class ItemsPage implements OnInit, OnDestroy {
         }]
     });
     await actionSheet.present();
+  }
+
+  async completeBin() {
+    const alert = await this.alertController.create({
+      header: 'Complete Bin ?',
+      message: 'Are you sure you want to complete this bin ?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        }, {
+          text: 'Complete',
+          handler: async () => {
+            const isBinValid = await this.validateBin();
+            if (isBinValid) {
+              this.auditService.completeBin(
+                this.loggedInUser.user_id,
+                this.auditID,
+                this.binID,
+                'Complete').subscribe(
+                  async (res) => {
+                    const successAlert = await this.alertController.create({
+                      header: 'Bin Completed',
+                      message: 'The bin has been successfully completed.',
+                      buttons: ['Dismiss'],
+                    });
+                    await successAlert.present();
+                  },
+                  async (res) => {
+                    const errorAlert = await this.alertController.create({
+                      header: 'Error',
+                      message: 'There was a problem trying to complete this bin.',
+                      buttons: ['Dismiss'],
+                    });
+                    await errorAlert.present();
+                  });
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async validateBin(): Promise<boolean> {
+    await this.getItems(true, 'Validating Items...');
+    if (this.items?.length > 0) {
+      const cannotCompleteAlert = await this.alertController.create({
+        header: 'Cannot Complete Bin',
+        message: `This bin cannot currently be completed as there are still items(${this.items?.length}) left to audit.`,
+        buttons: ['Dismiss'],
+      });
+      await cannotCompleteAlert.present();
+      return false;
+    }
+    return true;
   }
 }

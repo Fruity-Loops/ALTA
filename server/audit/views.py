@@ -68,7 +68,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Audits to be created.
     """
-    http_method_names = ['post', 'get', 'delete']
+    http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = BinToSK.objects.all()
 
     def get_permissions(self):
@@ -96,7 +96,10 @@ class BinToSKViewSet(viewsets.ModelViewSet):
     def list(self, request):
         customuser_id = request.query_params.get('customuser_id')
         init_audit_id = request.query_params.get('init_audit_id')
+        bin_status = request.query_params.get('status')
 
+        if bin_status:
+            self.queryset = self.queryset.filter(status=bin_status)
         if customuser_id:
             self.queryset = self.queryset.filter(customuser_id=customuser_id)
         if init_audit_id:

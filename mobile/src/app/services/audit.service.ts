@@ -25,18 +25,19 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  getBinSKAudit(userID, auditID): Observable<any> {
+  getBinSKAudit(userID, auditID, binStatus): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {
       params: {
         customuser_id: userID,
         init_audit_id: auditID,
+        status: binStatus
       }
     })
       .pipe(catchError(errorHandler));
   }
 
-  getBins(userID, auditID): Observable<any> {
-    return this.getBinSKAudit(userID, auditID)
+  getBins(userID, auditID, binStatus): Observable<any> {
+    return this.getBinSKAudit(userID, auditID, binStatus)
       .pipe(
         map(res => {
           res.map(bin => bin.item_ids = JSON.parse(bin.item_ids));
@@ -56,7 +57,20 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  getItem(userID, auditID, binID, itemID){
+
+  completeBin(userID, auditID, binID, binStatus): Observable<any> {
+    return this.http.patch(`${BASEURL}/bin-to-sk/`, {
+      params: {
+        customuser_id: userID,
+        init_audit_id: auditID,
+        bin_id: binID,
+        status: binStatus
+      }
+    })
+      .pipe(catchError(errorHandler));
+  }
+
+  getItem(userID, auditID, binID, itemID) {
     return this.http.get(`${BASEURL}/audit/record/check_item/`, {
       params: {
         customuser_id: userID,
@@ -68,7 +82,7 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  getItems(userID, auditID, binID){
+  getItems(userID, auditID, binID) {
     return this.http.get(`${BASEURL}/audit/bin-to-sk/items/`, {
       params: {
         customuser_id: userID,
@@ -80,7 +94,7 @@ export class AuditService {
   }
 
 
-  getCompletedItemsBin(userID, auditID, binID){
+  getCompletedItemsBin(userID, auditID, binID) {
     return this.http.get(`${BASEURL}/audit/record/completed_items/`, {
       params: {
         customuser_id: userID,
@@ -91,29 +105,29 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
-  getRecord(userID, auditID, binID, recordID){
+  getRecord(userID, auditID, binID, recordID) {
     return this.http.get(`${BASEURL}/record/${recordID}/`,
-    {
-      params: {
-        customuser_id: userID,
-        audit_id: auditID,
-        bin_id: binID,
-      }
-    })
+      {
+        params: {
+          customuser_id: userID,
+          audit_id: auditID,
+          bin_id: binID,
+        }
+      })
       .pipe(catchError(errorHandler));
   }
 
-  patchRecord(recordID, recordData){
+  patchRecord(recordID, recordData) {
     return this.http.patch(`${BASEURL}/record/${recordID}/`, recordData)
       .pipe(catchError(errorHandler));
   }
 
-  createRecord(record){
+  createRecord(record) {
     return this.http.post(`${BASEURL}/record/`, record)
       .pipe(catchError(errorHandler));
   }
 
-  deleteRecord(recordID){
+  deleteRecord(recordID) {
     return this.http.delete(`${BASEURL}/record/${recordID}/`)
       .pipe(catchError(errorHandler));
   }
