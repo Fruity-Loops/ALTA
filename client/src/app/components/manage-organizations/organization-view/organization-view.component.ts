@@ -10,22 +10,18 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   location: string;
   orgName: string;
-  locationFileName: string = '';
-  locations: string[] = [];
 
   orgError: string | undefined;
 
-  csvRecords: any[] = [];
-  header = false;
   //array varibales to store csv data
   linesR: any[] = []; // for rows
+  locationFileName: string = '';
+  locations: string[] = [];
 
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be
     [this.location, this.orgName] = ['', ''];
   }
-
-  // @ViewChild('fileImportInput', { static: false }) fileImportInput: any;
 
   ngOnInit(): void {
     [this.editOn, this.isEdit] = this.getEditInfo();
@@ -49,9 +45,6 @@ export abstract class OrganizationViewComponent implements OnInit {
     this.linesR = [];
     if (files && files.length > 0) {
       let file: File = files.item(0)!; // non null assertion : https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html
-      console.log(file.name);
-      console.log(file.size);
-      console.log(file.type);
       this.locationFileName = file.name;
       //File reader method
       let reader: FileReader = new FileReader();
@@ -78,7 +71,6 @@ export abstract class OrganizationViewComponent implements OnInit {
         //Push rows to array variable
         this.linesR.push(tarrR);
       };
-      console.log(this.linesR);
     }
   }
 
