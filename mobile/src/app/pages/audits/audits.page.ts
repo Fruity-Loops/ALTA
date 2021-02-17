@@ -71,4 +71,8 @@ export class AuditsPage implements OnInit {
     }
   }
 
+  displayProgression(event) {
+    event.preventDefault();
+    event.stopPropagation();
+ }
 }

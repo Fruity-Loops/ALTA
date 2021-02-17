@@ -1,10 +1,12 @@
 <app-toolbar></app-toolbar>
-<ion-item-divider>
-  <h1>Audit {{ auditID }} - Bins </h1>
-</ion-item-divider>
+<ion-item>
+  <ion-text color="dark">
+    <h1>Bins</h1>
+  </ion-text>
+</ion-item>
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content pullingIcon="chevron-down-circle-outline" refreshingSpinner="circular">
+    <ion-refresher-content pullingIcon="refresh" refreshingSpinner="crescent">
     </ion-refresher-content>
   </ion-refresher>
 
@@ -13,13 +15,17 @@
       {{ blankMessage }}
     </ion-text>
   </div>
-  <ion-list>
-    <ion-item *ngFor="let bin of bins" [routerLink]="bin.bin_id">
+  <ion-list lines="none" inset="true">
+    <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
       <ion-label>
-        <p> Bin: {{ bin.Bin }}</p>
+        <ion-text color="dark">
+          <h2>Bin {{ bin.Bin }}</h2>
+        </ion-text>
         <p> Total Items: {{ bin.item_ids?.length }}</p>
       </ion-label>
-      <ion-icon name="information-circle" slot="end"></ion-icon>
+      <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event)">
+        <ion-icon button size="large" name="information-circle"></ion-icon>
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

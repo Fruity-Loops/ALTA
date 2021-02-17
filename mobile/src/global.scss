@@ -26,8 +26,11 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 
+:root{
+    --ion-background-color: #ececec;
+}
+
 .record-modal .modal-wrapper {
     height: 80%;
     width: 80%;
  }
- 

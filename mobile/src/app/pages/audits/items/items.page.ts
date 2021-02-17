@@ -206,15 +206,13 @@ export class ItemsPage implements OnInit, OnDestroy {
         {
           name: 'barcode',
           type: 'text',
-          placeholder: 'Barcode #'
+          placeholder: 'Barcode Number'
         },
       ],
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
-          handler: () => {
-          }
         }, {
           text: 'Confirm',
           handler: input => {
@@ -234,12 +232,14 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.barcode = '';
   }
 
-  handleItemClick(itemID) {
+  handleItemClick(event, itemID, flag) {
+    event.preventDefault();
+    event.stopPropagation();
     this.barcode = itemID;
-    this.validateItem();
+    this.validateItem(flag);
   }
 
-  async validateItem() {
+  async validateItem(flagged = false) {
     const whileLoading = await this.loadingController.create();
     if (!this.isScanning) {
       await whileLoading.present();
@@ -259,6 +259,8 @@ export class ItemsPage implements OnInit, OnDestroy {
         async (res) => {
           await whileLoading.dismiss();
           modalData.itemData = res;
+          modalData.itemData.flagged = flagged;
+          modalData.itemData.status = flagged ? 'Missing' : 'Provided';
           this.presentRecordModal(modalData);
           this.terminateScan();
         },
@@ -337,7 +339,7 @@ export class ItemsPage implements OnInit, OnDestroy {
         this.doRefresh(null);
         this.notifyDataSetChanged(true);
         const alert = await this.alertController.create({
-          header: 'Record Deleted',
+          header: 'Record Removed',
           message: 'The record has been successfully removed.',
           buttons: ['Dismiss'],
         });
@@ -347,7 +349,7 @@ export class ItemsPage implements OnInit, OnDestroy {
         await whileLoading.dismiss();
         const alert = await this.alertController.create({
           header: 'Error',
-          message: 'There was a problem deleting this record.',
+          message: 'There was a problem removing this record.',
           buttons: ['Dismiss'],
         });
         await alert.present();
@@ -357,8 +359,8 @@ export class ItemsPage implements OnInit, OnDestroy {
 
   async presentDeleteRecordAlert(recordID) {
     const alert = await this.alertController.create({
-      header: 'Delete Record',
-      message: 'Are you sure you want to delete this record ?',
+      header: 'Remove Record ?',
+      message: 'Are you sure you want to remove this record ?',
       buttons: [
         {
           text: 'Cancel',
@@ -366,7 +368,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           handler: () => {
           }
         }, {
-          text: 'Delete',
+          text: 'Remove',
           handler: () => {
             this.deleteRecord(recordID);
           }

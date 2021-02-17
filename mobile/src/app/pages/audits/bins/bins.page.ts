@@ -77,4 +77,9 @@ export class BinsPage implements OnInit {
       this.refreshEvent = null;
     }
   }
+
+  displayProgression(event) {
+    event.preventDefault();
+    event.stopPropagation();
+ }
 }
