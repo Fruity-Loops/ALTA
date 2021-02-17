@@ -29,8 +29,9 @@ class CustomSearchFilter(filters.SearchFilter):
     Filter that only allows users to see their own objects.
     """
     def filter_queryset(self, request, queryset, view):
-        filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity', 'organization']
+        filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity']
         filterset_iexact_fields = get_fields()
+        queryset = queryset.filter(organization=request.query_params.get('organization', -1))
 
         for field in filterset_qty_fields:
             field_from = '{0}_from'.format(field)
