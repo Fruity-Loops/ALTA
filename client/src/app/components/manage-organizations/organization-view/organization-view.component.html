@@ -37,11 +37,18 @@
         or
       </div>
       <div class="upload-button-spacer" *ngIf="!isEdit">
-        <button mat-stroked-button class="upload-button" [disabled]="isEdit && !editOn">
+        <!-- <button mat-stroked-button   class="upload-button" [disabled]="isEdit && !editOn">
           Submit (.csv) file
-        </button><!-- if checks throws error then do not send data -->
-        <input type="file" class="upload" (change)="changeListener($event.target.files)">
+          
+        </button>
+        <input mat-stroked-button type="file" class="upload" (change)="changeListener($event.target.files)"> -->
+        <input #csvInput hidden="true" type="file" (change)="changeListener($event.target.files)" accept=".csv"/>
+        <button mat-stroked-button color="primary" class="upload-button" (click)="csvInput.click()" [disabled]="isEdit && !editOn"> Submit (.csv) file</button>
+        <p *ngIf=locationFileName>{{locationFileName}}</p>
       </div>
+      
+      <!-- <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="csvInputChange($event)" accept=".csv"/>
+<button mat-flat-button color="primary" (click)="csvInput.click()">Choose Spreadsheet File (CSV)</button> -->
       
     </div>
   </div>

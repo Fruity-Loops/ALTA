@@ -10,6 +10,7 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   location: string;
   orgName: string;
+  locationFileName: string = '';
   locations: string[] = [];
 
   orgError: string | undefined;
@@ -45,11 +46,13 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   public changeListener(files: FileList) {
     console.log(files);
+    this.linesR = [];
     if (files && files.length > 0) {
       let file: File = files.item(0)!; // non null assertion : https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html
       console.log(file.name);
       console.log(file.size);
       console.log(file.type);
+      this.locationFileName = file.name;
       //File reader method
       let reader: FileReader = new FileReader();
       reader.readAsText(file);
