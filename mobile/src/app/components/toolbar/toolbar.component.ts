@@ -25,6 +25,7 @@ export class ToolbarComponent implements OnInit {
       component: ProfilePopoverMenuComponent,
       event: ev,
       translucent: true,
+      showBackdrop: true,
       componentProps: { loggedInUser: username },
     });
     return await popover.present();
@@ -35,6 +36,7 @@ export class ToolbarComponent implements OnInit {
       component: NotificationPopoverMenuComponent,
       event: ev,
       translucent: true,
+      showBackdrop: true,
     });
     return await popover.present();
   }

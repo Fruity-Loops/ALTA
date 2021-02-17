@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuditService } from 'src/app/services/audit.service';
 import { fetchLoggedInUser } from 'src/app/services/cache';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
+import { ProgressionMetricsPopoverComponent } from 'src/app/pages/audits/popovers/progression-metrics-popover/progression-metrics-popover.component';
 
 @Component({
   selector: 'app-audits',
@@ -18,6 +19,7 @@ export class AuditsPage implements OnInit {
     private auditService: AuditService,
     private loadingController: LoadingController,
     private alertController: AlertController,
+    public popoverController: PopoverController,
   ) {
   }
 
@@ -74,5 +76,16 @@ export class AuditsPage implements OnInit {
   displayProgression(event) {
     event.preventDefault();
     event.stopPropagation();
- }
+    this.presentProgressionMetricsPopover(event);
+  }
+
+  async presentProgressionMetricsPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: ProgressionMetricsPopoverComponent,
+      event: ev,
+      translucent: true,
+      showBackdrop: true,
+    });
+    return await popover.present();
+  }
 }
