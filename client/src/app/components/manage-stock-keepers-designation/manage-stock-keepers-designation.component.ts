@@ -39,6 +39,28 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       });
   }
 
+  autoAssign(): void {
+    let sksOfCurrentLocation = [];
+    let associatedItems = [];
+
+    this.locationsWithBinsAndSKs.forEach(index => {
+      let currentSK = 0;
+      index.bins.forEach((bin: any) => {
+        associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
+        const associatedItemsIds = associatedItems.map(item => item._id);
+
+        sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location);
+        const currentToAssign = currentSK % sksOfCurrentLocation.length;
+
+        sksOfCurrentLocation[currentToAssign].bins.push(bin);
+        sksOfCurrentLocation[currentToAssign].item_ids = associatedItemsIds;
+
+        currentSK++;
+      });
+      index.bins = [];
+    });
+  }
+
   populateBinsAndSKs(selectedItems: Item[], assignedSks: SKUser[]): void {
     /* TODO: look into performance impact of:
     * 1. returning a large amount of items
