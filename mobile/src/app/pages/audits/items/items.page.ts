@@ -206,7 +206,7 @@ export class ItemsPage implements OnInit, OnDestroy {
       inputs: [
         {
           name: 'barcode',
-          type: 'text',
+          type: 'number',
           placeholder: 'Barcode Number'
         },
       ],
@@ -226,6 +226,10 @@ export class ItemsPage implements OnInit, OnDestroy {
       ]
     });
     await alert.present();
+    alert.onDidDismiss()
+    .then(_ => {
+      this.isScanning = false;
+      });
   }
 
   terminateScan() {
@@ -291,7 +295,8 @@ export class ItemsPage implements OnInit, OnDestroy {
                   handler: () => {
                     modalData.itemData = {
                       item_id: barcode,
-                      status: 'New'
+                      status: 'New',
+                      flagged: true
                     };
                     this.presentRecordModal(modalData);
                   }

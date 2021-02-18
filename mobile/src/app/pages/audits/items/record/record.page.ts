@@ -13,8 +13,9 @@ export class RecordPage implements OnInit {
   @Input() modalData: any = { itemData: {} };
   formGroup: FormGroup;
   recordID: number;
-  modalTitle = 'Item';
+  modalTitle: string;
   lastModifiedOn: string;
+  submitButton = 'SUBMIT';
   isItemDetailsHidden = true;
 
   constructor(
@@ -37,27 +38,48 @@ export class RecordPage implements OnInit {
       this.modalTitle = `Editing Record ${this.recordID}`;
       this.lastModifiedOn = this.modalData.itemData.last_verified_on;
     }
+    else {
+      this.setStatus();
+    }
+  }
+
+  setStatus() {
+    switch (this.modalData.itemData.status) {
+      case 'Missing': {
+        this.modalTitle = 'Flag Item';
+        this.submitButton = 'FLAG AS MISSING';
+        break;
+      }
+      case 'New': {
+        this.modalTitle = 'New Item';
+        this.submitButton = 'FLAG AS NEW';
+        break;
+      }
+      case 'Provided': {
+        this.modalTitle = 'Found Item';
+      }
+    }
   }
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
       item_id: [this.modalData.itemData._id || this.modalData.itemData.item_id, [Validators.required]],
-      Location: [this.modalData.itemData.Location, [Validators.required]],
-      Plant: [this.modalData.itemData.Plant, [Validators.required]],
-      Zone: [this.modalData.itemData.Zone, [Validators.required]],
-      Aisle: [this.modalData.itemData.Aisle, [Validators.required]],
-      Bin: [this.modalData.itemData.Bin, [Validators.required]],
-      Part_Number: [this.modalData.itemData.Part_Number, [Validators.required]],
-      Part_Description: [this.modalData.itemData.Part_Description, [Validators.required]],
-      Serial_Number: [this.modalData.itemData.Serial_Number, [Validators.required]],
-      Condition: [this.modalData.itemData.Condition, [Validators.required]],
-      Category: [this.modalData.itemData.Category, [Validators.required]],
-      Owner: [this.modalData.itemData.Owner, [Validators.required]],
-      Criticality: [this.modalData.itemData.Criticality, [Validators.required]],
-      Average_Cost: [this.modalData.itemData.Average_Cost, [Validators.required]],
+      Location: [this.modalData.itemData.Location],
+      Plant: [this.modalData.itemData.Plant],
+      Zone: [this.modalData.itemData.Zone],
+      Aisle: [this.modalData.itemData.Aisle],
+      Bin: [this.modalData.itemData.Bin],
+      Part_Number: [this.modalData.itemData.Part_Number],
+      Part_Description: [this.modalData.itemData.Part_Description],
+      Serial_Number: [this.modalData.itemData.Serial_Number],
+      Condition: [this.modalData.itemData.Condition],
+      Category: [this.modalData.itemData.Category],
+      Owner: [this.modalData.itemData.Owner],
+      Criticality: [this.modalData.itemData.Criticality],
+      Average_Cost: [this.modalData.itemData.Average_Cost],
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
-      Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure, [Validators.required]],
-      status: [this.modalData.itemData.status, [Validators.required]],
+      Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure],
+      status: [this.modalData.itemData.status],
       flagged: [this.modalData.itemData.flagged],
       comment: [this.modalData.itemData.comment || '']
 
@@ -109,7 +131,7 @@ export class RecordPage implements OnInit {
       async (res) => {
         await whileLoading.dismiss();
         const alert = await this.alertController.create({
-          header: 'Record Validated',
+          header: 'Record Modified',
           message: 'The record has been successfully modifed.',
           buttons: ['Dismiss'],
         });
@@ -132,8 +154,22 @@ export class RecordPage implements OnInit {
     const data = this.formGroup.value;
     data.audit = this.modalData.auditID;
     data.bin_to_sk = this.modalData.binID;
-    if (!data.flagged){
+    if (!data.flagged) {
       data.flagged = false;
+    }
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (data[key] === null) {
+          data[key] = 'N/A';
+          if (key === 'Aisle') {
+            data[key] = 0;
+          }
+          else if (key === 'comment') {
+            data[key] = '';
+          }
+        }
+      }
     }
     return data;
   }

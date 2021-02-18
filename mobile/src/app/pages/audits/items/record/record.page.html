@@ -19,103 +19,104 @@
   <div class="form-container">
     <form id="scannedItemForm" [formGroup]="formGroup" (ngSubmit)="submit()">
       <ion-item>
-        <ion-label position="floating" color="primary">id</ion-label>
-        <ion-input id="IdInput" type="text" formControlName="item_id" required></ion-input>
+        <ion-label position="floating"  color="primary">id</ion-label>
+        <ion-input id="IdInput" type="number" formControlName="item_id" disabled></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked"  color="primary">Quantity</ion-label>
+        <ion-input id="QuantityInput" type="number" formControlName="Quantity" required></ion-input>
       </ion-item>
 
       <div [hidden]="isItemDetailsHidden">
-      <ion-item>
-        <ion-label position="floating" color="primary">Location</ion-label>
-        <ion-input id="LocationInput" type="text" formControlName="Location" required></ion-input>
-      </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Location</ion-label>
+          <ion-input id="LocationInput" type="text" formControlName="Location" disabled></ion-input>
+        </ion-item>
 
-      <ion-item>
-        <ion-label position="floating" color="primary">Plant</ion-label>
-        <ion-input id="PlantInput" formControlName="Plant" required></ion-input>
-      </ion-item>
+        <ion-item>
+          <ion-label position="floating" color="primary">Plant</ion-label>
+          <ion-input id="PlantInput" formControlName="Plant" disabled></ion-input>
+        </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Zone</ion-label>
-          <ion-input id="ZoneInput" formControlName="Zone" required></ion-input>
+          <ion-input id="ZoneInput" formControlName="Zone" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Aisle</ion-label>
-          <ion-input id="AisleInput" formControlName="Aisle" required></ion-input>
+          <ion-input id="AisleInput" type="number" formControlName="Aisle" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Bin</ion-label>
-          <ion-input id="BinInput" formControlName="Bin" required></ion-input>
+          <ion-input id="BinInput" formControlName="Bin" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Part Number</ion-label>
-          <ion-input id="PartNumberInput" formControlName="Part_Number" required></ion-input>
+          <ion-input id="PartNumberInput" formControlName="Part_Number" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Part Description</ion-label>
-          <ion-input id="PartDescriptionInput" formControlName="Part_Description" required>
+          <ion-input id="PartDescriptionInput" formControlName="Part_Description" disabled>
           </ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Serial Number</ion-label>
-          <ion-input id="SerialNumberInput" formControlName="Serial_Number" required></ion-input>
+          <ion-input id="SerialNumberInput" formControlName="Serial_Number" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Condition</ion-label>
-          <ion-input id="ConditionInput" formControlName="Condition" required></ion-input>
+          <ion-input id="ConditionInput" formControlName="Condition" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Category</ion-label>
-          <ion-input id="CategoryInput" formControlName="Category" required></ion-input>
+          <ion-input id="CategoryInput" formControlName="Category" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Owner</ion-label>
-          <ion-input id="OwnerInput" formControlName="Owner" required></ion-input>
+          <ion-input id="OwnerInput" formControlName="Owner" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Criticality</ion-label>
-          <ion-input id="CriticalityInput" formControlName="Criticality" required></ion-input>
+          <ion-input id="CriticalityInput" formControlName="Criticality" disabled></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Average Cost</ion-label>
-          <ion-input id="AverageCostInput" formControlName="Average_Cost" required>
+          <ion-input id="AverageCostInput" formControlName="Average_Cost" disabled>
           </ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="floating" color="primary">Quantity</ion-label>
-          <ion-input id="QuantityInput" formControlName="Quantity" required></ion-input>
         </ion-item>
 
         <ion-item>
           <ion-label position="floating" color="primary">Unit Of Measure</ion-label>
-          <ion-input id="UnitofMeasureInput" formControlName="Unit_of_Measure" required>
+          <ion-input id="UnitofMeasureInput" formControlName="Unit_of_Measure" disabled>
           </ion-input>
         </ion-item>
-
       </div>
 
       <ion-item>
-        <ion-label position="floating" color="primary">Comment</ion-label>
-        <ion-textarea formControlName="comment" placeholder="Enter more information here..."></ion-textarea>
-      </ion-item>
-
-      <ion-item>
-        <ion-checkbox formControlName="flagged" color="danger" slot="start"></ion-checkbox>
+        <ion-checkbox formControlName="flagged" color="danger" slot="start" disabled></ion-checkbox>
         <ion-label color="danger">Flag</ion-label>
       </ion-item>
 
-      <ion-list>
-        <ion-radio-group formControlName="status">
+      <ion-item>
+        <ion-label position="floating" color="primary">Comment</ion-label>
+        <ion-textarea formControlName="comment" size="large" rows="5"
+          placeholder="Enter more information here..."></ion-textarea>
+      </ion-item>
+
+
+      <ion-list [hidden]=true>
+        <ion-radio-group formControlName="status" disabled>
           <ion-list-header>
             <ion-label color="primary">Status</ion-label>
           </ion-list-header>
@@ -142,5 +143,5 @@
 </ion-content>
 
 <button id="validateButton" form="scannedItemForm" type="submit" [disabled]="!formGroup.valid" expand="block"
-  size="large">Submit
+  size="large">{{submitButton}}
 </button>

@@ -26,8 +26,7 @@
       </ion-text>
     </div>
     <ion-list lines="none" inset="true">
-      <ion-item button *ngFor="let item of items" lines="none" class="list-items" onclick="this.blur()"
-        (click)="handleItemClick($event, item._id, false)">
+      <ion-item *ngFor="let item of items" lines="none" class="list-items" onclick="this.blur()">
         <ion-label>
           <ion-text color="dark">
             <h2 class="item_id">Item {{ item._id }}</h2>
