@@ -71,20 +71,27 @@ class AuditViewSet(viewsets.ModelViewSet):
 def set_audit_accuracy(audit_id):
     audit = Audit.objects.get(audit_id=audit_id)
     records = Record.objects.filter(audit=audit_id)
-
-    missing = records.filter(status='Missing').count()
-    found = records.filter(status='Provided').count()
-    total_records_no_new = found + missing
-
-    audit_accuracy = 0.0 if total_records_no_new == 0 else found / total_records_no_new
+    audit_accuracy = calculate_accuracy(records)
     setattr(audit, 'accuracy', audit_accuracy)
     audit.save()
+
+def set_bin_accuracy(bin_id):
+    bintosk = BinToSK.objects.get(bin_id=bin_id)
+    records = Record.objects.filter(bin_to_sk=bin_id)
+    bin_accuracy = calculate_accuracy(records)
+    setattr(bintosk, 'accuracy', bin_accuracy)
+    bintosk.save()
+
+def calculate_accuracy(record_queryset):
+    missing = record_queryset.filter(status='Missing').count()
+    found = record_queryset.filter(status='Provided').count()
+    total_records_no_new = found + missing
+    return 0.0 if total_records_no_new == 0 else found / total_records_no_new
 
 
 def get_item_serializer(*args, **kwargs): # pylint: disable=no-self-use
     serializer_class = ItemSerializer
     return serializer_class(*args, **kwargs)
-
 
 class BinToSKViewSet(viewsets.ModelViewSet):
     """
@@ -172,7 +179,16 @@ class RecordViewSet(viewsets.ModelViewSet):
         if response.data:
             if 'audit' in response.data:
                 set_audit_accuracy(response.data['audit'])
+            if 'bin_to_sk' in response.data:
+                set_bin_accuracy(response.data['bin_to_sk'])
         return self.response
+
+    def destroy(self, request, *args, **kwargs): # pylint: disable=unused-argument
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        set_audit_accuracy(instance.audit.audit_id)
+        set_bin_accuracy(instance.bin_to_sk.bin_id)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):
