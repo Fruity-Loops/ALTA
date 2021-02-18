@@ -37,8 +37,8 @@
         or
       </div>
       <div class="upload-button-spacer" *ngIf="!isEdit">
-        <input #csvInput hidden="true" type="file" (change)="changeListener($event.target.files)" accept=".csv"/>
-        <button mat-stroked-button color="primary" class="upload-button" (click)="csvInput.click()" [disabled]="isEdit && !editOn"> Submit (.csv) file</button>
+        <input #csvInput hidden="true" type="file" (change)="changeListener($event.target.files)" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+        <button mat-stroked-button color="primary" class="upload-button" (click)="csvInput.click()" [disabled]="isEdit && !editOn"> Submit (.xlsx) file</button>
         <p *ngIf=locationFileName>{{locationFileName}}</p>
       </div>
 

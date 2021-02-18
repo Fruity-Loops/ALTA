@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import * as XLSX from 'xlsx';
 
 @Component({
   template: '',
@@ -40,40 +41,36 @@ export abstract class OrganizationViewComponent implements OnInit {
     }
   }
 
+  // tslint:disable-next-line:typedef
   public changeListener(files: FileList) {
-    console.log(files);
+    // @ts-ignore
+    // tslint:disable-next-line:no-non-null-assertion
+    this.locationFileName = files.item(0).name!;
     this.linesR = [];
-    if (files && files.length > 0) {
-      // tslint:disable-next-line:max-line-length no-non-null-assertion
-      const file: File = files.item(0)!; // non null assertion : https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html
-      this.locationFileName = file.name;
-      // File reader method
-      const reader: FileReader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = (e) => {
-        const csv: any = reader.result;
-        let allTextLines: any[];
-        allTextLines = csv.split(/\r|\n|\r/);
-
-        // Table Rows
+    const reader = new FileReader();
+    // @ts-ignore
+    reader.readAsArrayBuffer(files.item(0));
+    reader.onload = () => {
+      const arrayBuffer = reader.result;
+      // @ts-ignore
+      const data = new Uint8Array(arrayBuffer);
+      const arr = [];
+      for (let i = 0; i !== data.length; ++i) {
+        arr[i] = String.fromCharCode(data[i]);
+      }
+      const workbook = XLSX.read(arr.join(''), {type: 'binary'});
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const jsonFormat = XLSX.utils.sheet_to_json(worksheet, {raw: true, blankrows: false});
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < jsonFormat.length; i++) {
         const tarrR = [];
-
-        const arrl = allTextLines.length;
-        const rows = [];
-        for (let i = 1; i < arrl; i++) {
-          rows.push(allTextLines[i].split(';'));
+        // @ts-ignore
+        for (const [key, value] of Object.entries(jsonFormat[i])) {
+          tarrR.push(value);
         }
-
-        for (let j = 0; j < arrl; j++) {
-          // tslint:disable-next-line:triple-equals
-          if (rows[j] != '' && rows[j] !== undefined) {
-            tarrR.push(rows[j]);
-          }
-        }
-        // Push rows to array variable
         this.linesR.push(tarrR);
-      };
-    }
+      }
+    };
   }
 
   // A function called by the HTML to be implemented for submitting the org info to the REST API
