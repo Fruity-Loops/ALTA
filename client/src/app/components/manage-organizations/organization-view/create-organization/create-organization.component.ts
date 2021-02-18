@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ManageOrganizationsService } from '../../../../services/manage-organizations.service';
+import { ManageOrganizationsService } from '../../../../services/organizations/manage-organizations.service';
 import { Router } from '@angular/router';
 import { OrganizationViewComponent } from '../organization-view.component';
 

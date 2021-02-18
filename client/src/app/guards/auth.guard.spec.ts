@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {TokenService} from '../services/token.service';
+import {TokenService} from '../services/authentication/token.service';
 import {RouterTestingModule} from '@angular/router/testing';
 
 import {AuthGuard} from './auth.guard';

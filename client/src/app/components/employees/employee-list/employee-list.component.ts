@@ -4,7 +4,7 @@ import { ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import roles from 'src/app/fixtures/roles.json';
 
 @Component({

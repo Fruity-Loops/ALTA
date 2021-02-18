@@ -1,13 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { ManageInventoryItemsService } from 'src/app/services/manage-inventory-items.service';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {HttpParams} from '@angular/common/http';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -56,6 +56,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   constructor(
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
+    private authService: AuthService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -179,7 +180,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   refreshTime(): void {
     this.body = {
       new_job_timing: this.timeForm.value.time,
-      organization: localStorage.getItem('organization_id'),
+      organization: this.authService.getLocalStorage(UserLocalStorage.OrgId),
     };
 
     this.itemsService.updateRefreshItemsTime(this.body).subscribe(
@@ -222,11 +223,11 @@ export class ManageInventoryItemsComponent implements OnInit {
     let bodyAudit: object;
     bodyAudit = {
       inventory_items: this.inventoryItemToAudit,
-      organization: Number(localStorage.getItem('organization_id')),
+      organization: Number(this.authService.getLocalStorage(UserLocalStorage.OrgId)),
     };
     this.auditService.createAudit(bodyAudit).subscribe(
       (data) => {
-        localStorage.setItem('audit_id', data.audit_id);
+        this.auditService.updateLocalStorage(AuditLocalStorage.AuditId, data.audit_id);
         this.inventoryItemToAudit = [];
         setTimeout(() => {
           // Redirect user to component assign-stock-keepers
