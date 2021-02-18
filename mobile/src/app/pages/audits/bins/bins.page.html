@@ -31,7 +31,7 @@
           </ion-text>
           <p> Total Items: {{ bin.item_ids?.length }}</p>
         </ion-label>
-        <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event)">
+        <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event, bin.bin_id)">
           <ion-icon button size="large" name="information-circle"></ion-icon>
         </ion-button>
       </ion-item>

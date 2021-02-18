@@ -14,6 +14,7 @@ export class ProgressionMetricsPopoverComponent implements OnInit {
   progressionMetrics: any;
   errorMessage: any;
   auditID: string;
+  binID: string;
 
   constructor(
     public navParams: NavParams,
@@ -21,10 +22,16 @@ export class ProgressionMetricsPopoverComponent implements OnInit {
     private auditService: AuditService,
   ) {
     this.auditID = this.navParams.get('auditID');
+    this.binID = this.navParams.get('binID');
   }
 
   ngOnInit() {
-    this.getAuditProgressionMetrics();
+    if (this.binID) {
+      this.getBinProgressionMetrics();
+    }
+    else {
+      this.getAuditProgressionMetrics();
+    }
   }
 
   async getAuditProgressionMetrics() {
@@ -47,6 +54,26 @@ export class ProgressionMetricsPopoverComponent implements OnInit {
       });
   }
 
+
+  async getBinProgressionMetrics() {
+    fetchLoggedInUser().then(
+      user => {
+        if (user) {
+          this.loggedInUser = user;
+          this.auditService.getBinProgressionMetrics(
+            user.user_id,
+            user.organization_id,
+            this.binID || this.navParams.get('binID'),
+          ).subscribe(
+            async (res) => {
+              this.progressionMetrics = res;
+            },
+            async (res) => {
+              this.errorMessage = 'There was a problem trying to fetch progression metrics';
+            });
+        }
+      });
+  }
 
   async dismissPopover() {
     await this.popoverController.dismiss();

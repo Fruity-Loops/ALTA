@@ -141,4 +141,16 @@ export class AuditService {
       })
       .pipe(catchError(errorHandler));
   }
+
+  getBinProgressionMetrics(userID, auditID, binID): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/progression_metrics/`,
+      {
+        params: {
+          customuser_id: userID,
+          audit_id: auditID,
+          bin_id: binID,
+        }
+      })
+      .pipe(catchError(errorHandler));
+  }
 }

@@ -48,24 +48,16 @@ class AuditViewSet(viewsets.ModelViewSet):
         audit_id = request.query_params.get('audit_id', -1)
         try:
             audit = Audit.objects.get(audit_id=audit_id)
-            total_items_to_audit = audit.inventory_items.count()
-            completed_items = Record.objects.filter(audit=audit_id).count()
-            new_items = Record.objects.filter(status='New').count()
+            total_items = audit.inventory_items.count()
+            records = Record.objects.filter(audit=audit_id)
+            new_items = records.filter(status='New').count()
+            completed_items = records.count() - new_items
         except ObjectDoesNotExist as ex:
             raise Http404 from ex
             
-        remaining_items = total_items_to_audit - (completed_items - new_items)
-        percent_complete = 0.0 if total_items_to_audit == 0 else ((completed_items / total_items_to_audit) * 100)
-        percent_complete = round(percent_complete, 2)
-        audit_accuracy = round(audit.accuracy * 100, 2)
-
-        metrics_report = {
-            'completed_items' : completed_items,
-            'remaining_items' :  remaining_items,
-            'completion_percentage' : percent_complete,
-            'accuracy' : audit_accuracy
-        }
-        return Response(metrics_report, status=status.HTTP_200_OK)
+        return Response(
+            compile_progression_metrics(completed_items, total_items, audit.accuracy),
+            status=status.HTTP_200_OK)
 
 
 def set_audit_accuracy(audit_id):
@@ -87,6 +79,20 @@ def calculate_accuracy(record_queryset):
     found = record_queryset.filter(status='Provided').count()
     total_records_no_new = found + missing
     return 0.0 if total_records_no_new == 0 else found / total_records_no_new
+
+def compile_progression_metrics(completed_items, total_items, accuracy):
+    remaining_items = total_items - completed_items
+    percent_complete = 0.0 if total_items == 0 else ((completed_items / total_items) * 100)
+    percent_complete = round(percent_complete, 2)
+    audit_accuracy = round(accuracy * 100, 2)
+
+    metrics_report = {
+        'completed_items' : completed_items,
+        'remaining_items' :  remaining_items,
+        'completion_percentage' : percent_complete,
+        'accuracy' : audit_accuracy
+    }
+    return metrics_report
 
 
 def get_item_serializer(*args, **kwargs): # pylint: disable=no-self-use
@@ -150,6 +156,22 @@ class BinToSKViewSet(viewsets.ModelViewSet):
                 bin_items.append(item)
         serializer = get_item_serializer(bin_items, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['GET'], name='Bin Progression Metrics')
+    def progression_metrics(self, request):
+        bin_id = request.query_params.get('bin_id', -1)
+        try:
+            bintosk = BinToSK.objects.get(bin_id=bin_id)
+            total_items = len(bintosk.item_ids)
+            records = Record.objects.filter(bin_to_sk=bin_id)
+            new_items = records.filter(status='New').count()
+            completed_items = records.count() - new_items
+        except ObjectDoesNotExist as ex:
+            raise Http404 from ex
+            
+        return Response(
+            compile_progression_metrics(completed_items, total_items, bintosk.accuracy),
+            status=status.HTTP_200_OK)
 
 
 class RecordViewSet(viewsets.ModelViewSet):

@@ -136,18 +136,19 @@ export class BinsPage implements OnInit {
     }
   }
 
-  displayProgression(event) {
+  displayProgression(event, binID) {
     event.preventDefault();
     event.stopPropagation();
-    this.presentProgressionMetricsPopover(event);
+    this.presentProgressionMetricsPopover(event, binID);
   }
 
-  async presentProgressionMetricsPopover(ev: any) {
+  async presentProgressionMetricsPopover(ev: any, binID) {
     const popover = await this.popoverController.create({
       component: ProgressionMetricsPopoverComponent,
       event: ev,
       translucent: true,
       showBackdrop: true,
+      componentProps: { binID, auditID: this.auditID },
     });
     return await popover.present();
   }

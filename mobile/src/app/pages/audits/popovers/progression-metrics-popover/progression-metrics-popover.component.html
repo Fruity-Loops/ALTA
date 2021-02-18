@@ -1,11 +1,11 @@
-<ion-list [hidden]=!progressionMetrics>
+<ion-list>
   <ion-list-header><h5>Progression Metrics</h5></ion-list-header>
-  <ion-item >Completed {{ progressionMetrics?.completed_items }} Items</ion-item>
-  <ion-item >{{ progressionMetrics?.remaining_items }} Items Left</ion-item>
+  <ion-item >Completed {{ progressionMetrics?.completed_items }} Item(s)</ion-item>
+  <ion-item >{{ progressionMetrics?.remaining_items }} Item(s) Left</ion-item>
   <ion-item>Completion: {{ progressionMetrics?.completion_percentage }}%</ion-item>
   <ion-item>Accuracy: {{ progressionMetrics?.accuracy }}%</ion-item>
 </ion-list>
 
-<ion-item [hidden]="progressionMetrics && !errorMessage">
+<ion-item [hidden]="!errorMessage">
   <ion-text color="danger">{{ errorMessage }}</ion-text>
 </ion-item>
