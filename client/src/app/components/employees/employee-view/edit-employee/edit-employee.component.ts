@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { ManageMembersService } from '../../../../services/manage-members.service';
-import { ActivatedRoute } from '@angular/router';
+import {Component, Input} from '@angular/core';
+import {ManageMembersService} from '../../../../services/users/manage-members.service';
+import {ActivatedRoute} from '@angular/router';
 import roles from 'src/app/fixtures/roles.json';
 import {BaseEmployeeForm, EmployeeView} from '../employee-view';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthService, UserLocalStorage} from '../../../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-employee-settings',
@@ -31,15 +32,16 @@ export class EditEmployeeComponent extends EmployeeView {
   constructor(
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
     private fb: FormBuilder,
   ) {
     super();
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
-      this.id = routeParams.ID ? routeParams.ID : localStorage.getItem('id');
+      this.id = routeParams.ID ? routeParams.ID : this.authService.getLocalStorage(UserLocalStorage.UserID);
 
       // Verifying that the logged in user is accessing their own information
-      if (this.id === localStorage.getItem('id')) {
+      if (this.id === this.authService.getLocalStorage(UserLocalStorage.UserID)) {
         // tslint:disable-next-line:no-non-null-assertion
         // @ts-ignore
         this.isLoggedInUser.next(true);
@@ -139,20 +141,20 @@ export class EditEmployeeComponent extends EmployeeView {
       // tslint:disable-next-line:no-non-null-assertion
       .updateClientInfo(patchedEmployee, this.id!)
       .subscribe((response) => {
-        location.reload();
-      });
-
-    // update user password
-    if (this.password.length > 0) {
-      // tslint:disable-next-line:no-non-null-assertion
-      this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
-        (response) => {
+        // update user password
+        if (this.password.length > 0) {
+          // tslint:disable-next-line:no-non-null-assertion
+          this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
+             _ => {
+              location.reload();
+            },
+            (err) => {
+              console.log(err);
+            }
+          );
+        } else {
           location.reload();
-        },
-        (err) => {
-          console.log(err);
         }
-      );
-    }
+      });
   }
 }

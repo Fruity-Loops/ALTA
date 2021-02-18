@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {SidenavService} from 'src/app/services/sidenav.service';
-import {AuthService} from 'src/app/services/auth.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 
 // TODO: remove
 // import {Router} from '@angular/router';

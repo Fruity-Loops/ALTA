@@ -1,8 +1,8 @@
-import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-review-audit',
@@ -27,7 +27,7 @@ export class ReviewAuditComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
     this.itemData = [];
-    this.auditID = Number(localStorage.getItem('audit_id'));
+    this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
@@ -86,7 +86,7 @@ export class ReviewAuditComponent implements OnInit {
       (err) => {
         this.errorMessage = err;
       }));
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
   confirmReviewAuditData(): void {
@@ -94,7 +94,7 @@ export class ReviewAuditComponent implements OnInit {
       this.router.navigate(['audits'], { replaceUrl: true });
     }, 1000);
 
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
   openDialogWithRef(ref: TemplateRef<any>): void {
