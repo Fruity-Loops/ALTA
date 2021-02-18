@@ -25,7 +25,7 @@ class Audit(models.Model):
     accuracy = models.FloatField(default=0.0)
 
     ACTIVE = 'Active'
-    
+
     AUDIT_STATUS = [(
         PENDING, 'Pending'),
         (COMPLETE, 'Complete'),

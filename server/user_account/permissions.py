@@ -6,7 +6,12 @@ from user_account.models import CustomUser
 class PermissionFactory:
     def __init__(self, request):
         self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
-        self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody, HasSameOrgInQuery]
+        self.base_im_permissions = [
+            IsAuthenticated,
+            IsInventoryManager,
+            HasSameOrgInBody,
+            HasSameOrgInQuery
+        ]
         self.request = request
 
     def validate_is_im(self):

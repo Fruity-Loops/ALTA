@@ -37,7 +37,7 @@ def scheduler_listener(event):
     else:
         logger.debug('The job worked :)')
 
-
+# pylint: disable=too-few-public-methods
 class Scheduler(metaclass=Singleton):
     """
     Creates an object that holds the scheduler

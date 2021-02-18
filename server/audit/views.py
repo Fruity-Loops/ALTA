@@ -1,11 +1,15 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
-    PostBinToSKSerializer, RecordSerializer
-from .permissions import *
+    PostBinToSKSerializer, RecordSerializer, AuditSerializer
+from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
+        ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
+            IsAssignedToRecord, CanCreateRecord
+
 from .models import Audit, BinToSK, Record
 
 class AuditViewSet(viewsets.ModelViewSet):
@@ -44,7 +48,7 @@ class AuditViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=['GET'], name='Audit Progression Metrics')
-    def progression_metrics(self, request):
+    def progression_metrics(self, request): # pylint: disable=no-self-use 
         audit_id = request.query_params.get('audit_id', -1)
         try:
             audit = Audit.objects.get(audit_id=audit_id)
@@ -54,7 +58,7 @@ class AuditViewSet(viewsets.ModelViewSet):
             completed_items = records.count() - new_items
         except ObjectDoesNotExist as ex:
             raise Http404 from ex
-            
+
         return Response(
             compile_progression_metrics(completed_items, total_items, audit.accuracy),
             status=status.HTTP_200_OK)
@@ -142,9 +146,10 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+    # pylint: disable=protected-access
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
     def items(self, request):
-        bin_id = request.query_params.get('bin_id')
+        bin_id = self.request.query_params.get('bin_id')
         audit_id = request.query_params.get('audit_id')
         bins = BinToSK.objects.get(bin_id=bin_id)
         queryset = Audit.objects.get(audit_id=audit_id)
@@ -159,7 +164,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['GET'], name='Bin Progression Metrics')
     def progression_metrics(self, request):
-        bin_id = request.query_params.get('bin_id', -1)
+        bin_id = self.request.query_params.get('bin_id', -1)
         try:
             bintosk = BinToSK.objects.get(bin_id=bin_id)
             total_items = len(bintosk.item_ids)
@@ -168,7 +173,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
             completed_items = records.count() - new_items
         except ObjectDoesNotExist as ex:
             raise Http404 from ex
-            
+
         return Response(
             compile_progression_metrics(completed_items, total_items, bintosk.accuracy),
             status=status.HTTP_200_OK)
@@ -226,9 +231,9 @@ class RecordViewSet(viewsets.ModelViewSet):
     # pylint: disable=protected-access
     @action(detail=False, methods=['GET'], name='Check Item for Validation')
     def check_item(self, request):
-        bin_id = request.query_params.get('bin_id', -1)
-        audit_id = request.query_params.get('audit_id', -1)
-        item_id = request.query_params.get('item_id', -1)
+        bin_id = self.request.query_params.get('bin_id', -1)
+        audit_id = self.request.query_params.get('audit_id', -1)
+        item_id = self.request.query_params.get('item_id', -1)
         response = Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:  # Check that the item exists for this Audit

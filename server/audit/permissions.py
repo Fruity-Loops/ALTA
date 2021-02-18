@@ -1,20 +1,26 @@
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
-from .models import Audit, Record, BinToSK
-from .serializers import AuditSerializer
 from user_account.permissions import PermissionFactory, IsAuthenticated,\
     HasSameOrgInBody, HasSameOrgInQuery, IsSystemAdmin
+from .models import Audit, Record, BinToSK
+from .serializers import AuditSerializer
 
 
 class SKPermissionFactory(PermissionFactory):
     def __init__(self, request):
-        self.base_sk_permissions = [IsAuthenticated, IsStockKeeper, HasSameOrgInBody, HasSameOrgInQuery]
-        super(SKPermissionFactory, self).__init__(request)
+        self.base_sk_permissions = [
+            IsAuthenticated,
+            IsStockKeeper,
+            HasSameOrgInBody,
+            HasSameOrgInQuery
+        ]
+        super().__init__(request)
 
     def validate_is_sa(self):
         return IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
 
+    # pylint: disable=arguments-differ 
     def get_general_permissions(self, im_additional_perms, sk_additional_perms=None):
         permission_classes = self.base_sa_permissions
         if self.validate_is_im():
@@ -96,7 +102,8 @@ class IsAssignedToBin(BasePermission):
                 user = CustomUser.objects.get(email=request.user)
                 serializer = AuditSerializer(Audit.objects.get(audit_id=audit_var), many=False)
                 audit = serializer.data
-                assigned_sk = str(assigned_sk_var) == str(user.id) and user.id in audit['assigned_sk']
+                assigned_sk = str(assigned_sk_var) == str(user.id) \
+                and user.id in audit['assigned_sk']
             except (ObjectDoesNotExist, KeyError):
                 assigned_sk = False
         return assigned_sk
@@ -148,7 +155,9 @@ class CanCreateRecord(BasePermission):
         if can_create:
             try:
                 user = CustomUser.objects.get(email=request.user)
-                serializer = AuditSerializer(Audit.objects.get(audit_id=request.data['audit']), many=False)
+                serializer = AuditSerializer(
+                    Audit.objects.get(audit_id=request.data['audit']),
+                    many=False)
                 audit = serializer.data
                 bin_to_sk = BinToSK.objects.get(bin_id=request.data['bin_to_sk'])
                 if user.id not in audit['assigned_sk'] or\
