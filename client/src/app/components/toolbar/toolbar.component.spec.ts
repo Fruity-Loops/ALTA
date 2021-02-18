@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {AuthService} from 'src/app/services/auth.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SidenavService} from 'src/app/services/sidenav.service';

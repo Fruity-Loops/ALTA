@@ -1,11 +1,12 @@
-import { Component, OnInit, TemplateRef, HostListener } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
-import { User } from 'src/app/models/user.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {User} from 'src/app/models/user.model';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {HttpParams} from '@angular/common/http';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -30,6 +31,7 @@ export class AssignStockKeepersComponent implements OnInit {
     private manageMembersService: ManageMembersService,
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
+    private authService: AuthService,
     private router: Router
   ) {
 
@@ -37,12 +39,12 @@ export class AssignStockKeepersComponent implements OnInit {
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.busySKs = new Array<any>();
-    this.auditID = Number(localStorage.getItem('audit_id'));
+    this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
 
-    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
 
     this.manageAuditsService.getBusySKs(this.params)
@@ -128,7 +130,7 @@ export class AssignStockKeepersComponent implements OnInit {
       (err) => {
         this.errorMessage = err;
       }));
-    localStorage.removeItem('audit_id');
+    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
   @HostListener('window:popstate', ['$event'])

@@ -4,7 +4,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {HomeComponent} from 'src/app/components/home/home.component';
-import {AuthService} from 'src/app/services/auth.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {DashboardComponent} from 'src/app/components/dashboard/dashboard.component';
 import {SideNavComponent} from 'src/app/components/sidenav/sidenav.component';
 import {MatModule} from '../material/material-module';
@@ -14,7 +14,7 @@ import {EmployeeListComponent} from 'src/app/components/employees/employee-list/
 import {
   ManageOrganizationsComponent,
 } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
-import { ManageMembersService } from 'src/app/services/manage-members.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { FormsModule } from '@angular/forms';
 import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
 import { MatMenuModule } from '@angular/material/menu';
