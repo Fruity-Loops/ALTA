@@ -25,12 +25,12 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
   }
 
   submitQuery(): void {
-    if (this.linesR.length > 0 && this.location == '') {
+    if (this.linesR.length > 0 && this.location === '') {
       this.locations = this.linesR;
     } else if (this.linesR.length > 0 && this.location !== '') {
       this.locations = this.linesR;
       this.locations.push(this.location);
-    } else if (this.linesR.length == 0 && this.location !== '') {
+    } else if (this.linesR.length === 0 && this.location !== '') {
       this.locations.push(this.location);
     }
     this.organizationService
@@ -43,7 +43,7 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['/manage-organizations']);
+            this.router.navigate(['/manage-organizations']).then(r => {});
           }, 1000);
         },
         (err) => {

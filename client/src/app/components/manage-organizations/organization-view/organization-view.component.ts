@@ -13,9 +13,9 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   orgError: string | undefined;
 
-  //array varibales to store csv data
+  // array varibales to store csv data
   linesR: any[] = []; // for rows
-  locationFileName: string = '';
+  locationFileName = '';
   locations: string[] = [];
 
   protected constructor() {
@@ -44,31 +44,33 @@ export abstract class OrganizationViewComponent implements OnInit {
     console.log(files);
     this.linesR = [];
     if (files && files.length > 0) {
-      let file: File = files.item(0)!; // non null assertion : https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html
+      // tslint:disable-next-line:max-line-length no-non-null-assertion
+      const file: File = files.item(0)!; // non null assertion : https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-0.html
       this.locationFileName = file.name;
-      //File reader method
-      let reader: FileReader = new FileReader();
+      // File reader method
+      const reader: FileReader = new FileReader();
       reader.readAsText(file);
       reader.onload = (e) => {
-        let csv: any = reader.result;
-        let allTextLines = [];
+        const csv: any = reader.result;
+        let allTextLines: any[];
         allTextLines = csv.split(/\r|\n|\r/);
 
         // Table Rows
-        var tarrR = [];
+        const tarrR = [];
 
-        let arrl = allTextLines.length;
-        let rows = [];
+        const arrl = allTextLines.length;
+        const rows = [];
         for (let i = 1; i < arrl; i++) {
           rows.push(allTextLines[i].split(';'));
         }
 
         for (let j = 0; j < arrl; j++) {
+          // tslint:disable-next-line:triple-equals
           if (rows[j] != '' && rows[j] !== undefined) {
             tarrR.push(rows[j]);
           }
         }
-        //Push rows to array variable
+        // Push rows to array variable
         this.linesR.push(tarrR);
       };
     }
