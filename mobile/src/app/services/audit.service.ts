@@ -129,4 +129,16 @@ export class AuditService {
     return this.http.delete(`${BASEURL}/record/${recordID}/`)
       .pipe(catchError(errorHandler));
   }
+
+  getAuditProgressionMetrics(userID, org, auditID): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/progression_metrics/`,
+      {
+        params: {
+          assigned_sk: userID,
+          organization: org,
+          audit_id: auditID
+        }
+      })
+      .pipe(catchError(errorHandler));
+  }
 }

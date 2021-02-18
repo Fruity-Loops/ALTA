@@ -43,6 +43,30 @@ class AuditViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['GET'], name='Audit Progression Metrics')
+    def progression_metrics(self, request):
+        audit_id = request.query_params.get('audit_id', -1)
+        try:
+            audit = Audit.objects.get(audit_id=audit_id)
+            total_items_to_audit = audit.inventory_items.count()
+            completed_items = Record.objects.filter(audit=audit_id).count()
+            new_items = Record.objects.filter(status='New').count()
+        except ObjectDoesNotExist as ex:
+            raise Http404 from ex
+            
+        remaining_items = total_items_to_audit - (completed_items - new_items)
+        percent_complete = 0.0 if total_items_to_audit == 0 else ((completed_items / total_items_to_audit) * 100)
+        percent_complete = round(percent_complete, 2)
+        audit_accuracy = round(audit.accuracy * 100, 2)
+
+        metrics_report = {
+            'completed_items' : completed_items,
+            'remaining_items' :  remaining_items,
+            'completion_percentage' : percent_complete,
+            'accuracy' : audit_accuracy
+        }
+        return Response(metrics_report, status=status.HTTP_200_OK)
+
 
 def set_audit_accuracy(audit_id):
     audit = Audit.objects.get(audit_id=audit_id)

@@ -73,18 +73,19 @@ export class AuditsPage implements OnInit {
     }
   }
 
-  displayProgression(event) {
+  displayProgression(event, auditID) {
     event.preventDefault();
     event.stopPropagation();
-    this.presentProgressionMetricsPopover(event);
+    this.presentProgressionMetricsPopover(event, auditID);
   }
 
-  async presentProgressionMetricsPopover(ev: any) {
+  async presentProgressionMetricsPopover(ev: any, auditID) {
     const popover = await this.popoverController.create({
       component: ProgressionMetricsPopoverComponent,
       event: ev,
       translucent: true,
       showBackdrop: true,
+      componentProps: { auditID },
     });
     return await popover.present();
   }
