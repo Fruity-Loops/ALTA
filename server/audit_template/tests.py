@@ -15,8 +15,8 @@ class AuditTemplateTestCase(APITestCase):
 
     def test_create_template(self):
         """
-        Tests the creation of a template through the post request method, and tests a failing case, when the user attempts
-        to create an template for another organization.
+        Tests the creation of a template through the post request method, and tests a failing case, when the user
+        attempts to create an template for another organization.
         """
 
         # Template to create
@@ -55,8 +55,26 @@ class AuditTemplateTestCase(APITestCase):
         """
         self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.get(f'{self.url}?organization={self.inventory_manager.organization_id}')
-        print(self.inventory_manager.organization_id)
         self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data[0]['template_id'], 'c8c1a994-1f7d-4224-9091-2cfebafe2899')
+        self.assertEqual(request.data[0]['author'], 'nick nick')
+        self.assertEqual(request.data[0]['title'], 'fewqfwq')
+        self.assertEqual(request.data[0]['location'], "['fewqfewq']")
+        self.assertEqual(request.data[0]['plant'], '[]')
+        self.assertEqual(request.data[0]['zones'], '[]')
+        self.assertEqual(request.data[0]['aisles'], '[]')
+        self.assertEqual(request.data[0]['bins'], '[]')
+        self.assertEqual(request.data[0]['part_number'], '[]')
+        self.assertEqual(request.data[0]['serial_number'], '[]')
+        self.assertEqual(request.data[0]['description'], '')
+        self.assertEqual(request.data[0]['start_date'], '2026-02-14T13:55:00')
+        self.assertEqual(request.data[0]['repeat_every'], None)
+        self.assertEqual(request.data[0]['on_day'], '[]')
+        self.assertEqual(request.data[0]['for_month'], '[]')
+        self.assertEqual(request.data[0]['time_zone_utc'], 'America/Detroit')
+        self.assertEqual(request.data[0]['calendar_date'], 'January 08, 2021')
+        self.assertEqual(request.data[0]['organization'], 1)
+
         for template in request.data:
             self.assertEqual(template["organization"], self.inventory_manager.organization_id)
         self.assertGreater(len(request.data), 0)

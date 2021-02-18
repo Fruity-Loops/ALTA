@@ -32,8 +32,7 @@ class AuditTestCase(APITestCase):
         request = self.client.post("/audit/",
                                    {"inventory_items": [self.item_one._id, self.item_two._id]},
                                    format="json")
-        self.assertEqual(request.status_code,
-                         status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_audit_as_sa(self):
         """ Create audit as system admin """
@@ -41,8 +40,7 @@ class AuditTestCase(APITestCase):
         request = self.client.post("/audit/",
                                    {"inventory_items": [self.item_one._id, self.item_two._id],
                                     "organization": 1}, format="json")
-        self.assertEqual(request.status_code,
-                         status.HTTP_201_CREATED)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
         self.assertEqual(request.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(request.data['inventory_items'][1], self.item_two._id)
@@ -54,8 +52,7 @@ class AuditTestCase(APITestCase):
         request = self.client.post("/audit/",
                                    {"inventory_items": [self.item_one._id, self.item_two._id],
                                     "organization": 3}, format="json")
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_create_audit_as_im(self):
         """ Create audit as inventory manager from their organization """
@@ -66,8 +63,7 @@ class AuditTestCase(APITestCase):
                                    {"inventory_items": [self.item_one._id, self.item_two._id],
                                     "organization": self.inventory_manager.organization.org_id},
                                    format="json")
-        self.assertEqual(request.status_code,
-                         status.HTTP_201_CREATED)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
         self.assertEqual(request.data['inventory_items'][0], self.item_one._id)
         self.assertEqual(request.data['inventory_items'][1], self.item_two._id)
@@ -85,6 +81,13 @@ class AuditTestCase(APITestCase):
         self.assertEqual(request.data['organization'], self.org_id.org_id)
         self.assertEqual(request.data['assigned_sk'][0], self.stock_keeper.id)
 
+        # Testing the same scenario but as a Stock Keeper.
+        self.client.force_authenticate(user=self.stock_keeper)
+
+        new_request = self.client.patch('/audit/'f'{self.predefined_audit.audit_id}/',
+                                        {"assigned_sk": [self.stock_keeper.id]}, format="json")
+        self.assertEqual(new_request.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_update_audit_with_im_bad_org(self):
         """ Try to access an audit as inventory manager from other organization """
         self.client.force_authenticate(user=self.inventory_manager)
@@ -92,8 +95,7 @@ class AuditTestCase(APITestCase):
 
         request = self.client.get('/audit/'f'{self.predefined_audit.audit_id}/')
 
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_item_to_sk_designation(self):
         """ Create ItemToSK designation as inventory manager """
@@ -106,8 +108,7 @@ class AuditTestCase(APITestCase):
 
         request = self.client.post("/item-to-sk/", request_body, format="json")
 
-        self.assertEqual(request.status_code,
-                         status.HTTP_201_CREATED)
+        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
         self.assertEqual(request.data['success'], "success")
 
@@ -128,8 +129,7 @@ class AuditTestCase(APITestCase):
                                     "item_ids": [12752842],
                                     "bins": ['A10']}, format="json")
 
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_audit(self):
         self.client.force_authenticate(user=self.inventory_manager)

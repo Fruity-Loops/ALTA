@@ -10,7 +10,6 @@ from .models import CustomUser
 
 
 class CustomUserTestCase(TestCase):
-    # Having the fixtures loads the entries into the db for testing
     fixtures = ["users.json"]
 
     def test_user_creation(self):
@@ -26,10 +25,10 @@ class RegistrationTestCase(APITestCase):
         self.client = APIClient()
         self.url = "/user/"
 
-        # Create each type of user that could be making the registration request
+        # Create each type of user
         self.system_admin = CustomUser.objects.get(user_name="sa")
-
         self.inventory_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
         organization = self.inventory_manager.organization
 
         # Create each type of user that could be registered
@@ -97,52 +96,57 @@ class RegistrationTestCase(APITestCase):
         self.client.force_authenticate(user=None)
         request = self.client.post(self.url, self.registered_system_admin,
                                    format='json')
-        self.assertEqual(request.status_code,
-                         status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_registration_failure_missing_fields(self):
         """ Can't register user with missing fields """
         self.client.force_authenticate(user=self.system_admin)
         registered_missing_fields = {'user_name': 'missing_fields', "location": ""}
-        request = self.client.post(self.url, registered_missing_fields,
-                                   format='json')
+        request = self.client.post(self.url, registered_missing_fields, format='json')
         self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_im_creates_sk(self):
-        """ IM can create a stock keeper"""
+        """ IM can create a SK"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, self.store_keeper,
-                                   format='json')
+        request = self.client.post(self.url, self.store_keeper, format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
     def test_im_creates_im(self):
         """ IM can create an IM"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, self.im2,
-                                   format='json')
+        request = self.client.post(self.url, self.im2, format='json')
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+
+    def test_sk_creates_im(self):
+        """ SK can't create a IM"""
+        self.client.force_authenticate(user=self.stock_keeper)
+        request = self.client.post(self.url, self.store_keeper, format='json')
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_sk_creates_sk(self):
+        """ SK can't create a SK"""
+        self.client.force_authenticate(user=self.stock_keeper)
+        request = self.client.post(self.url, self.store_keeper, format='json')
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_im_creates_sa(self):
         """ IM can't create an SA"""
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.post(self.url, self.registered_system_admin_2,
-                                   format='json')
+        request = self.client.post(self.url, self.registered_system_admin_2, format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_im_creates_sk_diff_org(self):
         """ IM can't create a stock keeper in a different organization"""
         self.client.force_authenticate(user=self.inventory_manager)
         self.store_keeper["organization"] = ""
-        request = self.client.post(self.url, self.store_keeper,
-                                   format='json')
+        request = self.client.post(self.url, self.store_keeper, format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_im_creates_im_diff_org(self):
         """ IM can't create an inventory manager in a different organization"""
         self.client.force_authenticate(user=self.inventory_manager)
         self.im2["organization"] = ""
-        request = self.client.post(self.url, self.im2,
-                                   format='json')
+        request = self.client.post(self.url, self.im2, format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
 
@@ -188,8 +192,7 @@ class OpenRegistrationTestCase(APITestCase):
     def test_registration_unauthorized_request(self):
         """ User can't access the GET method at this particular endpoint """
         request = self.client.get("/open-registration/")
-        self.assertEqual(request.status_code,
-                         status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(request.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class LoginTest(APITestCase):
@@ -199,8 +202,7 @@ class LoginTest(APITestCase):
         """ User that does not exist in database """
         request = self.client.post(
             "/login/", {"email": "t@test.com", "password": "test"})
-        self.assertEqual(request.status_code,
-                         status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(request.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_login_wrong_credentials(self):
         """ User that has wrong credentials """
@@ -230,7 +232,6 @@ class LogoutTest(APITestCase):
 
     def setUp(self):
         user = CustomUser.objects.get(user_name="sa")
-
         self.token = Token.objects.create(user=user)
         self.api_authentication_valid_token()
 
@@ -267,24 +268,22 @@ class UpdateProfileTest(APITestCase):
 
         # Create each type of user that could be making the request
         self.system_admin = CustomUser.objects.get(user_name="sa")
-        self.manager = CustomUser.objects.get(user_name="im")
+        self.inventory_manager = CustomUser.objects.get(user_name="im")
         self.stock_keeper = CustomUser.objects.get(user_name="sk")
-
         self.sys_admin_id = self.system_admin.id
         self.save_email = {"email": "1@test.com"}
 
     def test_update_another_user_information(self):
         """ User can't update the info of another user """
-        self.client.force_authenticate(user=self.manager)
+        self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.patch(
             self.url + str(self.sys_admin_id) + "/",
             {"user_name": "random"}, format='json')
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_im_update_sk_user_information(self):
         """ Inventory manager can update Stock Keeper's info"""
-        self.client.force_authenticate(user=self.manager)
+        self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.patch(self.url + str(self.stock_keeper.id) +
                                     "/", {"user_name": "aaa"}, format='json')
         self.assertEqual(request.status_code, status.HTTP_200_OK)
@@ -296,9 +295,9 @@ class UpdateProfileTest(APITestCase):
                                     {"user_name": "random"}, format='json')
         self.assertEqual(request.status_code, status.HTTP_200_OK)
 
-        self.client.force_authenticate(user=self.manager)
+        self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.patch(
-            self.url + str(self.manager.id) + "/",
+            self.url + str(self.inventory_manager.id) + "/",
             {"user_name": "random1"}, format='json')
         self.assertEqual(request.status_code, status.HTTP_200_OK)
 
@@ -313,12 +312,12 @@ class UpdateProfileTest(APITestCase):
         self.assertEqual(request.status_code, status.HTTP_200_OK)
         self.assertEqual(request.data['role'], 'SA')
 
-        self.client.force_authenticate(user=self.manager)
+        self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.patch(
-            self.url + str(self.manager.id) + "/",
+            self.url + str(self.inventory_manager.id) + "/",
             {"role": "SA"}, format='json')
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
-        request = self.client.get(self.url + str(self.manager.id) + "/")
+        request = self.client.get(self.url + str(self.inventory_manager.id) + "/")
         self.assertEqual(request.status_code, status.HTTP_200_OK)
         self.assertEqual(request.data['role'], 'IM')
 
@@ -330,64 +329,38 @@ class ChangePasswordTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.url = "/user/"
-
-        self.s_a = CustomUser.objects.get(user_name="sa")
-        self.i_m = CustomUser.objects.get(user_name="im")
-        self.s_k = CustomUser.objects.get(user_name="sk")
-        self.sa_id = self.s_a.id
+        self.system_admin = CustomUser.objects.get(user_name="sa")
+        self.inventory_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
         self.save_fields = {"password": "123456"}
 
     def test_update_another_user_password(self):
-        """ User can't update the password of another user unless he is
-         an admin or the same user """
-        self.client.force_authenticate(user=self.i_m)
+        """ IM can't update SA password """
+        self.client.force_authenticate(user=self.inventory_manager)
         request = self.client.patch(
-            self.url + str(self.sa_id) + "/", self.save_fields)
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
-
-    def test_update_own_user_password(self):
-        """ Users can update their own password """
-        self.client.force_authenticate(user=self.s_a)
-        request = self.client.patch(
-            self.url + str(self.sa_id) + "/", self.save_fields, format='json')
-        self.assertEqual(request.status_code, status.HTTP_200_OK)
-
-        self.client.force_authenticate(user=self.i_m)
-        request = self.client.patch(
-            self.url + str(self.i_m.id) + "/", self.save_fields, format='json')
-        self.assertEqual(request.status_code, status.HTTP_200_OK)
-
-    def test_im_update_sk_password(self):
-        self.client.force_authenticate(user=self.i_m)
-        request = self.client.patch(
-            self.url + str(self.s_k.id) + "/", self.save_fields)
+            self.url + str(self.system_admin.id) + "/", self.save_fields)
         self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
-
-class RetreivePersonalInfoTest(APITestCase):
-    fixtures = ["users.json", "organizations"]
-
-    def setUp(self):
-        self.client = APIClient()
-        self.url = "/user/"
-
-        self.user = CustomUser.objects.get(user_name="sa")
-        self.inventory = CustomUser.objects.get(user_name="im")
-        self.us_id = self.user.id
-
-    def test_update_another_user_password(self):
-        """ User can't update the password of another user unless if he is an admin """
-        self.client.force_authenticate(user=self.inventory)
-        request = self.client.get(
-            self.url + str(self.us_id) + "/")
-        self.assertEqual(request.status_code,
-                         status.HTTP_403_FORBIDDEN)
+    def test_im_update_sk_password(self):
+        """" IM can't update SK password """
+        self.client.force_authenticate(user=self.inventory_manager)
+        request = self.client.patch(
+            self.url + str(self.system_admin.id) + "/", self.save_fields)
+        self.assertEqual(request.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_own_user_password(self):
-        """ User can update his own password """
-        self.client.force_authenticate(user=self.user)
-        request = self.client.get(
-            self.url + str(self.us_id) + "/")
-        self.assertEqual(request.status_code,
-                         status.HTTP_200_OK)
+        """ Users can update their own password (except SA) """
+        self.client.force_authenticate(user=self.system_admin)
+        request = self.client.patch(
+            self.url + str(self.system_admin.id) + "/", self.save_fields, format='json')
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.inventory_manager)
+        new_request = self.client.patch(
+            self.url + str(self.inventory_manager.id) + "/", self.save_fields, format='json')
+        self.assertEqual(new_request.status_code, status.HTTP_200_OK)
+
+        self.client.force_authenticate(user=self.stock_keeper)
+        new_request_1 = self.client.patch(
+            self.url + str(self.inventory_manager.id) + "/", self.save_fields, format='json')
+        self.assertEqual(new_request_1.status_code, status.HTTP_403_FORBIDDEN)
