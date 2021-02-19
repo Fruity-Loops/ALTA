@@ -20,16 +20,17 @@ def clean_data(csv_file, org_id):
     dataframe = pd.read_csv(csv_file)
 
     # Renaming column to be compatible with models fields ( which doesn't contain spaces'
-    dataframe = dataframe.rename(columns={'Batch Number': '_id', 'Part Number': 'Part_Number',
+    dataframe = dataframe.rename(columns={'Batch Number': 'Batch_Number',
+                                          'Part Number': 'Part_Number',
                                           'Part Description': 'Part_Description',
                                           'Serial Number': 'Serial_Number',
                                           'Average Cost': 'Average_Cost',
                                           'Unit of Measure (UoM)': 'Unit_of_Measure'})
 
     # Cleaning dataframe
-    dataframe = dataframe.dropna(subset=['_id'])
+    dataframe = dataframe.dropna(subset=['Batch_Number'])
 
-    dataframe["organization"] = org_id
+    dataframe["organization_id"] = org_id
 
     return dataframe.to_dict('records')
 
@@ -53,9 +54,16 @@ def update_items(csv_file, collection_name, org_id):
     collection = get_collection(collection_name)
     dict_of_records = clean_data(csv_file, org_id)
 
+
     try:
         for document in dict_of_records:
-            collection.update({'_id': document["_id"]}, document, upsert=True)
+            document['organization_id'] = org_id
+            if collection.find({'Batch_Number': document["Batch_Number"],
+                                'organization_id': org_id}).count():
+                collection.update({'Batch_Number': document["Batch_Number"],
+                                   'organization_id': org_id}, document)
+            else:
+                collection.insert(document)
         logger.debug("Data Refreshed for organization ID: %d" , org_id)
     except pym.errors.BulkWriteError as error:
         logger.error(error)
@@ -63,8 +71,10 @@ def update_items(csv_file, collection_name, org_id):
 
 def main(org_id, is_initializing=False):
     current_path = os.path.dirname(__file__)
-    csv = os.path.join(current_path, "test_organization.csv")
-    if is_initializing:
-        populate_items(csv, "inventory_item_item", 4)
-    else:
-        update_items(csv, "inventory_item_item", org_id)
+    org_path = f'org_files/{org_id}.csv'
+    csv = os.path.join(current_path, org_path)
+    if os.path.isfile(csv):
+        if is_initializing:
+            populate_items(csv, "inventory_item_item", 4)
+        else:
+            update_items(csv, "inventory_item_item", int(org_id))

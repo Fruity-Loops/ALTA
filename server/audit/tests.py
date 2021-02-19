@@ -22,15 +22,15 @@ class AuditTestCase(APITestCase):
         self.org_id = Organization.objects.get(org_id="1")
 
         # Create audit components
-        self.item_one = Item.objects.get(_id=12731369)
-        self.item_two = Item.objects.get(_id=12752842)
+        self.item_one = Item.objects.get(Batch_Number=12731369)
+        self.item_two = Item.objects.get(Batch_Number=12752842)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
+        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
 
     def test_audit_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id]},
+                                    {"inventory_items": [self.item_one.Batch_Number, self.item_two.Batch_Number]},
                                     format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_401_UNAUTHORIZED)
@@ -39,22 +39,22 @@ class AuditTestCase(APITestCase):
         """ Create audit as system admin """
         self.client.force_authenticate(user=self.system_admin)
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id],
+                                    {"inventory_items": [self.item_one.Batch_Number, self.item_two.Batch_Number],
                                      "organization": 1,
                                      "initiated_by": self.system_admin.id
                                      }, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
-        self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
-        self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
+        self.assertEqual(response.data['inventory_items'][0], self.item_one.Batch_Number)
+        self.assertEqual(response.data['inventory_items'][1], self.item_two.Batch_Number)
         self.assertEqual(response.data['organization'], 1)
 
     def test_create_audit_as_im_bad_org(self):
         """ Try to create audit as inventory manager from another organization """
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id],
+                                    {"inventory_items": [self.item_one.Batch_Number, self.item_two.Batch_Number],
                                      "organization": 3}, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_403_FORBIDDEN)
@@ -65,15 +65,15 @@ class AuditTestCase(APITestCase):
 
         # create initial audit with inventory items
         response = self.client.post("/audit/",
-                                    {"inventory_items": [self.item_one._id, self.item_two._id],
+                                    {"inventory_items": [self.item_one.Batch_Number, self.item_two.Batch_Number],
                                      "organization": self.inv_manager.organization.org_id,
                                      "initiated_by": self.inv_manager.id},
                                     format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
 
-        self.assertEqual(response.data['inventory_items'][0], self.item_one._id)
-        self.assertEqual(response.data['inventory_items'][1], self.item_two._id)
+        self.assertEqual(response.data['inventory_items'][0], self.item_one.Batch_Number)
+        self.assertEqual(response.data['inventory_items'][1], self.item_two.Batch_Number)
         self.assertEqual(response.data['organization'], self.org_id.org_id)
 
     def test_update_audit_with_sks(self):
@@ -137,10 +137,10 @@ class BinTestCase(APITestCase):
         self.org_id = Organization.objects.get(org_id="1")
 
         # Create audit components
-        self.item_one = Item.objects.get(_id=12731370)
-        self.item_two = Item.objects.get(_id=12752843)
+        self.item_one = Item.objects.get(Batch_Number=12731370)
+        self.item_two = Item.objects.get(Batch_Number=12752843)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
+        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
 
     def test_bin_to_sk_create(self):
         """ Create BinToSK designation as inventory manager """
@@ -150,7 +150,7 @@ class BinTestCase(APITestCase):
             "Bin": "A10",
             "init_audit": self.predefined_audit.audit_id,
             "customuser": self.stock_keeper.id,
-            "item_ids": [self.item_one._id, self.item_two._id],
+            "item_ids": [self.item_one.Batch_Number, self.item_two.Batch_Number],
         }
         response = self.client.post("/bin-to-sk/", request_body, format="json")
 
@@ -158,7 +158,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data['Bin'], "A10")
         self.assertEqual(response.data['init_audit'], self.predefined_audit.audit_id)
         self.assertEqual(response.data['customuser'], self.stock_keeper.id)
-        self.assertEqual(response.data['item_ids'], str([self.item_one._id, self.item_two._id]))
+        self.assertEqual(response.data['item_ids'], str([self.item_one.Batch_Number, self.item_two.Batch_Number]))
 
     def test_bin_to_sk_diff_org_create(self):
         """ Create BinToSK designation as inventory manager to SK in a different organization"""
@@ -192,7 +192,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data[0]['bin_id'], 2)
         self.assertEqual(response.data[0]['Bin'], 'C20')
         self.assertEqual(response.data[0]['customuser']['user_name'], 'sk')
-        self.assertEqual(response.data[0]['item_ids'], str([self.item_one._id, self.item_two._id]))
+        self.assertEqual(response.data[0]['item_ids'], str([self.item_one.Batch_Number, self.item_two.Batch_Number]))
 
     def test_bin_to_sk_retrieve(self):
         self.client.force_authenticate(user=self.inv_manager)
@@ -201,7 +201,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data['bin_id'], 2)
         self.assertEqual(response.data['Bin'], 'C20')
         self.assertEqual(response.data['customuser']['user_name'], 'sk')
-        self.assertEqual(response.data['item_ids'], str([self.item_one._id, self.item_two._id]))
+        self.assertEqual(response.data['item_ids'], str([self.item_one.Batch_Number, self.item_two.Batch_Number]))
 
     def test_bins_get_items(self):
         self.client.force_authenticate(user=self.inv_manager)
@@ -224,10 +224,10 @@ class RecordTestCase(APITestCase):
         self.org_id = Organization.objects.get(org_id="1")
 
         # Create audit components
-        self.item_one = Item.objects.get(_id=12731370)
-        self.item_two = Item.objects.get(_id=12752843)
+        self.item_one = Item.objects.get(Batch_Number=12731370)
+        self.item_two = Item.objects.get(Batch_Number=12752843)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one._id, self.item_two._id)  # check if this was there before
+        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
 
 
     def test_create_record(self):
@@ -240,7 +240,7 @@ class RecordTestCase(APITestCase):
                 "status": "Pending",
                 "audit": self.audit.audit_id,
                 "bin_to_sk": self.bin.bin_id,
-                "item_id": self.item_one._id,
+                "item_id": self.item_one.Batch_Number,
                 "location": "YUL",
                 
             }, format="json")

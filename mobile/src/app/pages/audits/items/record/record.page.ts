@@ -63,7 +63,7 @@ export class RecordPage implements OnInit {
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      item_id: [this.modalData.itemData._id || this.modalData.itemData.item_id, [Validators.required]],
+      item_id: [this.modalData.itemData.Batch_Number || this.modalData.itemData.item_id, [Validators.required]],
       Location: [this.modalData.itemData.Location],
       Plant: [this.modalData.itemData.Plant],
       Zone: [this.modalData.itemData.Zone],

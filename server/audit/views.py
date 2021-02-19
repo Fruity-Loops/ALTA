@@ -157,7 +157,8 @@ class BinToSKViewSet(viewsets.ModelViewSet):
         completed_items = [record.item_id for record in records]
         bin_items = []
         for item in queryset.inventory_items.all():
-            if int(item._id) in bins.item_ids and int(item._id) not in completed_items:
+            if int(item.Batch_Number) in bins.item_ids\
+                    and int(item.Batch_Number) not in completed_items:
                 bin_items.append(item)
         serializer = get_item_serializer(bin_items, many=True)
         return Response(serializer.data)
@@ -239,7 +240,7 @@ class RecordViewSet(viewsets.ModelViewSet):
         try:  # Check that the item exists for this Audit
             bins = BinToSK.objects.get(bin_id=bin_id)
             audit = Audit.objects.get(audit_id=audit_id)
-            item = audit.inventory_items.get(_id=item_id)
+            item = audit.inventory_items.get(Batch_Number=item_id)
         except (ObjectDoesNotExist, ValueError) as ex:
             raise Http404 from ex
 
@@ -248,7 +249,7 @@ class RecordViewSet(viewsets.ModelViewSet):
             audit_records = Record.objects.filter(audit=audit_id)
             record = audit_records.get(item_id=item_id)
         except ObjectDoesNotExist:
-            if item._id in bins.item_ids:  # Check that the item belongs to the current bin
+            if item.Batch_Number in bins.item_ids:  # Check that the item belongs to the current bin
                 serializer = get_item_serializer(item, many=False)
                 response = Response(serializer.data)
             else:

@@ -22,6 +22,6 @@ class ItemFields(models.Model):
         abstract = True
 
 class Item(ItemFields):
-    _id = models.AutoField(primary_key=True)
+    Batch_Number = models.AutoField(primary_key=True, unique=False)
     organization = models.ForeignKey(to='organization.Organization',
                                      on_delete=models.CASCADE, blank=True, null=True)

@@ -29,7 +29,7 @@ class CustomSearchFilter(filters.SearchFilter):
     Filter that only allows users to see their own objects.
     """
     def filter_queryset(self, request, queryset, view):
-        filterset_qty_fields = ['_id', 'Average_Cost', 'Quantity']
+        filterset_qty_fields = ['Batch_Number', 'Average_Cost', 'Quantity']
         filterset_iexact_fields = get_fields()
         queryset = queryset.filter(organization=request.query_params.get('organization', -1))
 
@@ -54,7 +54,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows organizations to be viewed or edited.
     """
-    queryset = Item.objects.all().order_by('_id')
+    queryset = Item.objects.all().order_by('Batch_Number')
     serializer_class = ItemSerializer
     http_method_names = ['get']
     # pagination
