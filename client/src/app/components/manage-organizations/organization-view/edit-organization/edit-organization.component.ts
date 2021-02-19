@@ -34,7 +34,14 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
         this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
         this.originalStatus = organization.status;
         this.orgName = organization.org_name;
-        this.location = organization.address;
+        let locationAddress = '';
+        for (let i = 0; i < organization.address.length; i++) {
+          // tslint:disable-next-line:max-line-length
+          if (organization.address[i] !== '[' && organization.address[i] !== ']' && organization.address[i] !== ' ' && organization.address[i] !== '\'') {
+              locationAddress += organization.address[i];
+          }
+        }
+        this.location = locationAddress;
       });
     });
   }
@@ -52,7 +59,6 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   }
 
   submitQuery(): void {
-
     if (this.originalStatus && this.isActive === 'Disabled') {
       this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});
       this.dialogRef.afterClosed().subscribe((result: any) => {
@@ -66,10 +72,18 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   }
 
   updateOrganization(): void {
+    if (this.linesR.length > 0 && this.location === '') {
+      this.populateExcelElem();
+    } else if (this.linesR.length > 0 && this.location !== '') {
+      this.populateExcelElem();
+      this.populateUserInputElem();
+    } else if (this.linesR.length === 0 && this.location !== '') {
+      this.populateUserInputElem();
+    }
     this.organizationService.updateOrganization({
       org_id: this.orgID,
       org_name: this.orgName,
-      address: this.location,
+      address: this.locations,
       status: this.isActive === this.activeStates[0]
     }).subscribe(() => {
       location.reload();

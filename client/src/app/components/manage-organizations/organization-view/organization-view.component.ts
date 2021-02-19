@@ -14,7 +14,7 @@ export abstract class OrganizationViewComponent implements OnInit {
 
   orgError: string | undefined;
 
-  // array varibales to store csv data
+  // array variables to store csv data
   linesR: any[] = []; // for rows
   locationFileName = '';
   locations: string[] = [];
@@ -38,6 +38,26 @@ export abstract class OrganizationViewComponent implements OnInit {
       this.orgError = 'Please enter a name for the organization';
     } else {
       this.submitQuery();
+    }
+  }
+
+  populateExcelElem(): void {
+    for (const elem of this.linesR) {
+      this.locations.push(elem);
+    }
+  }
+
+  populateUserInputElem(): void {
+    const locArr = this.location.split(',');
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < locArr.length; i += 2) {
+      if (i !== locArr.length - 1) {
+        const tempArr = [];
+        tempArr.push(locArr[i]);
+        tempArr.push(locArr[i + 1]);
+        // @ts-ignore
+        this.locations.push(tempArr);
+      }
     }
   }
 

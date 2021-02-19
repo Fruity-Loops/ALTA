@@ -26,31 +26,33 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
 
   submitQuery(): void {
     if (this.linesR.length > 0 && this.location === '') {
-      this.locations = this.linesR;
+      this.populateExcelElem();
     } else if (this.linesR.length > 0 && this.location !== '') {
-      this.locations = this.linesR;
-      this.locations.push(this.location);
+      this.populateExcelElem();
+      this.populateUserInputElem();
     } else if (this.linesR.length === 0 && this.location !== '') {
-      this.locations.push(this.location);
+      this.populateUserInputElem();
     }
+
     this.organizationService
-      .createOrganization({
-        org_name: this.orgName,
-        address: this.locations,
-        status: true,
-      })
-      .subscribe(
-        () => {
-          setTimeout(() => {
-            // Redirect user back to list of templates
-            this.router.navigate(['/manage-organizations']).then(r => {});
-          }, 1000);
-        },
-        (err) => {
-          if (err.error && err.error.org_name) {
-            this.orgError = 'An organization with this name already exists';
+        .createOrganization({
+          org_name: this.orgName,
+          address: this.locations,
+          status: true,
+        })
+        .subscribe(
+          () => {
+            setTimeout(() => {
+              // Redirect user back to list of templates
+              this.router.navigate(['/manage-organizations']).then(r => {
+              });
+            }, 1000);
+          },
+          (err) => {
+            if (err.error && err.error.org_name) {
+              this.orgError = 'An organization with this name already exists';
+            }
           }
-        }
-      );
-  }
+        );
+    }
 }

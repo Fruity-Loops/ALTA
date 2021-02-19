@@ -29,14 +29,12 @@
 <!--      TODO: For 3.8 display old csv file -->
       <div class="vertical-stack">
         <mat-label>Location:</mat-label>
-        <mat-form-field appearance="outline" class="text-input" *ngIf="!isEdit">
+        <mat-form-field appearance="outline" class="text-input">
           <input matInput placeholder="Location Code,Location Description" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
         </mat-form-field>
       </div>
-      <div class="upload-button-spacer" *ngIf="!isEdit">
-        or
-      </div>
-      <div class="upload-button-spacer" *ngIf="!isEdit">
+      <div class="upload-button-spacer">OR</div>
+      <div class="upload-button-spacer">
         <input #csvInput hidden="true" type="file" (change)="changeListener($event.target.files)" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         <button mat-stroked-button color="primary" class="upload-button" (click)="csvInput.click()" [disabled]="isEdit && !editOn"> Submit (.xlsx) file</button>
         <p *ngIf=locationFileName>{{locationFileName}}</p>
