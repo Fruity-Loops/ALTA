@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-
-import { RecordRoutingModule } from './record-routing.module';
-
 import { RecordPage } from './record.page';
 
 @NgModule({
@@ -13,7 +10,6 @@ import { RecordPage } from './record.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    RecordRoutingModule,
     ReactiveFormsModule
   ],
   declarations: [RecordPage]

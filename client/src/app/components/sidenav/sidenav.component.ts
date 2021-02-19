@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SideNavOption } from './sidenavOption';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/services/authentication/auth.service';
 import { SystemNavListings, OrganizationNavListings } from './sidenavListing';
 import {NavigationEnd, NavigationStart, Router} from '@angular/router';
-import { TokenService } from '../../services/token.service';
+import { TokenService } from '../../services/authentication/token.service';
 import roles from '../../fixtures/roles.json';
 import { routes } from '../../modules/alta-main-routing/alta-main-routing.module';
 

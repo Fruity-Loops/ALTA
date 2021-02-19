@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { SidenavPage } from './sidenav.page';
+import { NavigationPage } from './navigation.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: SidenavPage,
+    component: NavigationPage,
     children: [
-      {
-        path: 'dashboard',
-        loadChildren: () => import('../pages/dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
       {
         path: 'audits',
         loadChildren: () => import('../pages/audits/audits.module').then(m => m.AuditsModule)
@@ -30,7 +26,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'audits',
         pathMatch: 'full'
       }
     ]
@@ -41,4 +37,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SidenavPageRoutingModule {}
+export class NavigationRoutingModule {}

@@ -7,7 +7,7 @@ import {
   Router,
 } from '@angular/router';
 import {Observable} from 'rxjs';
-import {TokenService} from '../services/token.service';
+import {TokenService} from '../services/authentication/token.service';
 
 @Injectable({
   providedIn: 'root',

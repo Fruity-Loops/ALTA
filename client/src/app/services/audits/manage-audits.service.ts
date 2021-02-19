@@ -2,6 +2,7 @@ import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {LocalStorageInterface} from '../LocalStorage.interface';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -9,12 +10,24 @@ const BASEURL = env.api_root;
 @Injectable({
   providedIn: 'root',
 })
-export class ManageAuditsService {
+export class ManageAuditsService implements LocalStorageInterface {
 
   constructor(private http: HttpClient) {}
 
-  createAudit(audit: object): Observable<any> {
-    return this.http.post(`${BASEURL}/audit/`, audit);
+  updateLocalStorage(storageId: AuditLocalStorage, value: any): void {
+    localStorage.setItem(storageId, value);
+  }
+
+  getLocalStorage(storageId: AuditLocalStorage): any {
+    return localStorage.getItem(storageId);
+  }
+
+  removeFromLocalStorage(storageId: AuditLocalStorage): void {
+    localStorage.removeItem(storageId);
+  }
+
+  createAudit(inventoryItem: object): Observable<any> {
+    return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 
   deleteAudit(auditId: number): Observable<any> {
@@ -48,4 +61,8 @@ export class ManageAuditsService {
   getProperAudits(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
   }
+}
+
+export enum AuditLocalStorage {
+  AuditId = 'audit_id'
 }

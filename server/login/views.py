@@ -154,15 +154,15 @@ class LoginMobileEmailView(generics.GenericAPIView):
                         'organization_name': org_name}
 
                 # Update the Password as the new PIN and send an email
-                pin = self.save_new_pin(receiver_email, user)
+                # pin = self.save_new_pin(receiver_email, user)
                 sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
                 sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
 
-                self.send_email(
-                    sender_email,
-                    sender_password,
-                    receiver_email,
-                    pin)
+                # self.send_email(
+                #     sender_email,
+                #     sender_password,
+                #     receiver_email,
+                #     pin)
                 response = Response(data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist as e:

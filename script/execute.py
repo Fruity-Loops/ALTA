@@ -86,7 +86,7 @@ def lint():
         "\n\n\n**************************************************\n\n\n"
         "Backend linter test will now run"
         "\n\n\n**************************************************\n\n\n")
-    lint_me = ''
+    lint_me = 'django_server '
     for folder_name in os.listdir():
         if os.path.exists(os.path.join(os.getcwd(), folder_name, 'migrations')):
             lint_me += folder_name + ' '

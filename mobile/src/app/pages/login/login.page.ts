@@ -32,7 +32,9 @@ export class LoginPage implements OnInit {
   }
 
   async login() {
-    const whileLoading = await this.loadingController.create();
+    const whileLoading = await this.loadingController.create({
+      message: 'Signing in...'
+    });
     await whileLoading.present();
     
     this.authService.login(this.formGroup.value).subscribe(

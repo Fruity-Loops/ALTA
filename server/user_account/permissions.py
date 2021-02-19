@@ -1,29 +1,26 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
-from audit.permissions import ValidateSKOfSameOrg, IsAssignedSK
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class PermissionFactory:
     def __init__(self, request):
         self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
-        self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
-        self.base_sk_permissions = [IsAssignedSK]
+        self.base_im_permissions = [
+            IsAuthenticated,
+            IsInventoryManager,
+            HasSameOrgInBody,
+            HasSameOrgInQuery
+        ]
         self.request = request
-
-    def validate_is_sa(self):
-        return IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
 
     def validate_is_im(self):
         return IsInventoryManager.has_permission(IsInventoryManager(), self.request, None)
 
-    def get_general_permissions(self, additional_perms):
-        if self.validate_is_sa():
-            permission_classes = self.base_sa_permissions
-        elif self.validate_is_im():
-            permission_classes = self.base_im_permissions + additional_perms
-        else:
-            permission_classes = self.base_sk_permissions + additional_perms
+    def get_general_permissions(self, im_additional_perms):
+        permission_classes = self.base_sa_permissions
+        if self.validate_is_im():
+            permission_classes = self.base_im_permissions + im_additional_perms
         return permission_classes
 
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuditTemplateService } from '../../../../services/audit-template.service';
+import { AuditTemplateService } from '../../../../services/audits/audit-template.service';
 import { ActivatedRoute } from '@angular/router';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 import { Template } from '../../Template';

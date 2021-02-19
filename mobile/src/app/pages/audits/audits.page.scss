@@ -1,5 +1,40 @@
 .center {
-    margin:0 auto;
-    top: 50%;
-    display: block;
+    margin: auto;
+    text-align: center;
+    width: 50%;
+    padding: 50% 0;
+}
+
+.active_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #27AE60;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.pending_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #F2C94C;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+
+.complete_ellipse {
+    height: 50px;
+    width: 50px;
+    background-color: #EB5757;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.list-items{
+    --ion-background-color:#FFFF;
+    background-color:#FFFF;
+    border-color: #403E39;
+    border-width: 1px;
+    border-style: solid;
+    margin:10px auto;
 }

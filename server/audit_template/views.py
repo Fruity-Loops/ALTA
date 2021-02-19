@@ -1,9 +1,8 @@
 from datetime import date
 import numpy as np
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from user_account.permissions import IsSystemAdmin, HasSameOrgInQuery, PermissionFactory
+from user_account.permissions import PermissionFactory
 from inventory_item.updater import start_new_cron_job, start_new_job_once_at_specific_date
 from .permissions import CheckTemplateOrganizationById
 from .serializers import AuditTemplateSerializer
@@ -17,13 +16,11 @@ class AuditTemplateViewSet(viewsets.ModelViewSet):
 
     queryset = AuditTemplate.objects.all()
     serializer_class = AuditTemplateSerializer
-    permission_classes = [IsAuthenticated, CheckTemplateOrganizationById | IsSystemAdmin]
     http_method_names = ['post', 'get', 'patch', 'delete']
 
     def get_permissions(self):
         factory = PermissionFactory(self.request)
-        permission_classes = factory.get_general_permissions([
-            CheckTemplateOrganizationById, HasSameOrgInQuery])
+        permission_classes = factory.get_general_permissions([CheckTemplateOrganizationById])
         return [permission() for permission in permission_classes]
 
     def create(self, request, *args, **kwargs):

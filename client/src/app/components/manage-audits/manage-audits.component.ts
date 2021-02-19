@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import { ManageAuditsService } from 'src/app/services/manage-audits.service';
+import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
@@ -104,7 +104,7 @@ export class ManageAuditsComponent implements OnInit {
 
   getItems(): void {
     this.auditService.getProperAudits(this.params).subscribe(
-      (data) => {
+      (data: any) => {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
         for (const key in data[0]) {
@@ -116,7 +116,7 @@ export class ManageAuditsComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      (err) => {
+      (err: any) => {
         this.errorMessage = err;
       }
     );
@@ -141,11 +141,11 @@ export class ManageAuditsComponent implements OnInit {
 
   updatePage(): void {
     this.auditService.getProperAudits(this.params).subscribe(
-      (data) => {
+      (data: any) => {
         this.data = data;
         this.updatePaginator();
       },
-      (err) => {
+      (err: any) => {
         this.errorMessage = err;
       }
     );

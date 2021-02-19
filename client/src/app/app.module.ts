@@ -8,7 +8,7 @@ import { AltaMainModule } from './modules/alta-main/alta-main.module';
 import { AltaMainRoutingModule } from './modules/alta-main-routing/alta-main-routing.module';
 import { AuthRoutingModule } from './modules/auth-routing/auth-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './services/token-interceptor';
+import { TokenInterceptor } from './services/authentication/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
