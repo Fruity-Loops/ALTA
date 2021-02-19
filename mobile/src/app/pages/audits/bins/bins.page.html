@@ -1,0 +1,65 @@
+<app-toolbar></app-toolbar>
+<ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="currentSegment" value="bins">
+  <ion-segment-button value="bins">
+    <ion-label>Bins</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="completedBins">
+    <ion-label>Completed Bins</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh" refreshingSpinner="crescent">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div [hidden]="currentSegment!=Segment.BINS">
+    <div *ngIf="!bins || bins?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ blankMessage }}
+      </ion-text>
+    </div>
+
+    <ion-list lines="none" inset="true">
+      <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
+        <ion-thumbnail slot="start">
+          <span *ngIf="bin?.status == 'Pending'" class="pending_ellipse"></span>
+        </ion-thumbnail>
+        <ion-label>
+          <ion-text color="dark">
+            <h2>Bin {{ bin.Bin }}</h2>
+          </ion-text>
+          <p> Total Items: {{ bin.item_ids?.length }}</p>
+        </ion-label>
+        <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event, bin.bin_id)">
+          <ion-icon button size="large" name="information-circle"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div [hidden]="currentSegment!=Segment.COMPLETED_BINS">
+    <div *ngIf="!completedBins || completedBins?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ blankMessage }}
+      </ion-text>
+    </div>
+
+    <ion-list lines="none" inset="true">
+      <ion-item *ngFor="let bin of completedBins" lines="none" class="list-items">
+        <ion-thumbnail slot="start">
+          <span *ngIf="bin?.status == 'Complete'" class="complete_ellipse"></span>
+        </ion-thumbnail>
+        <ion-label>
+          <ion-text color="dark">
+            <h2>Bin {{ bin.Bin }}</h2>
+          </ion-text>
+          <p> Completed Items: {{ bin.item_ids?.length }}</p>
+        </ion-label>
+        <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event)">
+          <ion-icon button size="large" name="information-circle"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

@@ -41,8 +41,8 @@ describe('AT-2.3: Inventory Manager can acess their organization\'s inventory', 
      */
     it('should show inventory items from the organization', () => {
         expect(inventoryPage.getInventoryTable().isDisplayed()).toBeTruthy();
-        expect(inventoryPage.getCheckBoxForID(12731369).isDisplayed()).toBeTruthy();
-        expect(inventoryPage.getCheckBoxForID(12752842).isDisplayed()).toBeTruthy();
+        expect(inventoryPage.getCheckBoxForID(12731370).isDisplayed()).toBeTruthy();
+        expect(inventoryPage.getCheckBoxForID(12752843).isDisplayed()).toBeTruthy();
     });
   });
 
@@ -88,7 +88,7 @@ describe('AT-2.5: Inventory Manager can search through their organization\'s inv
       expect(inventoryPage.getInventoryTable().isDisplayed()).toBeTruthy();
       inventoryPage.getSearchInputField().sendKeys('False');
       inventoryPage.getSearchButton().click();
-      expect(inventoryPage.getCheckBoxForID(12731369).isDisplayed()).toBeTruthy();
-      expect(browser.isElementPresent(inventoryPage.getCheckBoxForID(12752842))).toBeFalsy();
+      expect(inventoryPage.getCheckBoxForID(12731370).isDisplayed()).toBeTruthy();
+      expect(browser.isElementPresent(inventoryPage.getCheckBoxForID(12752843))).toBeFalsy();
   });
 });

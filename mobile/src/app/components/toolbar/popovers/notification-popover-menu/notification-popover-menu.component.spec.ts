@@ -1,18 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
-import { DashboardPage } from './dashboard.page';
 
-describe('DashboardPage', () => {
-  let component: DashboardPage;
-  let fixture: ComponentFixture<DashboardPage>;
+import { NotificationPopoverMenuComponent } from './notification-popover-menu.component';
+
+describe('NotificationPopoverMenuComponent', () => {
+  let component: NotificationPopoverMenuComponent;
+  let fixture: ComponentFixture<NotificationPopoverMenuComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardPage ],
+      declarations: [ NotificationPopoverMenuComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardPage);
+    fixture = TestBed.createComponent(NotificationPopoverMenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
