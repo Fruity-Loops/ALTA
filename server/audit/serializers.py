@@ -27,7 +27,8 @@ class ProperAuditSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Audit
-        fields = ['audit_id', 'initiated_by', 'initiated_on', 'status', 'inventory_items', 'accuracy']
+        fields = ['audit_id', 'initiated_by', 'initiated_on', 'status',
+                  'inventory_items', 'accuracy']
 
 
 class GetBinToSKSerializer(serializers.ModelSerializer):

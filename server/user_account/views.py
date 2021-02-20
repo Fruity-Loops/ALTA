@@ -1,10 +1,7 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from django.contrib.auth.hashers import check_password
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status, viewsets, generics
-from rest_framework.authtoken.models import Token
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from user_account.permissions import CanUpdateKeys, IsHigherInOrganization, \
     UserHasSameOrg, PermissionFactory

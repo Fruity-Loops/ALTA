@@ -108,7 +108,9 @@ export class ManageAuditsComponent implements OnInit {
         this.data = data;
         // Getting the field name of the item object returned and populating the column of the table
         for (const key in data[0]) {
-          this.displayedColumns.push(key);
+          if (this.data[0].hasOwnProperty(key)) {
+            this.displayedColumns.push(key);
+          }
         }
 
         this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns

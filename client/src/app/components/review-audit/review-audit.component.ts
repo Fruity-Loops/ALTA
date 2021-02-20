@@ -1,6 +1,6 @@
 import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
-import {AuthService} from 'src/app/services/authentication/auth.service'
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
@@ -42,7 +42,7 @@ export class ReviewAuditComponent implements OnInit {
     if (this.auditID) {
       this.manageAuditsService.getAssignedBins(this.auditID).subscribe(
         (auditData) => {
-          const id: any = localStorage.getItem('id')
+          const id: any = localStorage.getItem('id');
           this.authservice.getCurrentUser(id).subscribe((user) => {
             this.currentUser = user;
             this.buildTable(auditData);
@@ -64,8 +64,9 @@ export class ReviewAuditComponent implements OnInit {
     this.locationsAndUsers = locations;
 
     itemSKData.forEach((bin: any) => {
-      let initDate =  new Date(bin.init_audit.initiated_on);
-      let pasteDate = (initDate.getMonth() + 1) + '/' + initDate.getDate() + '/' + initDate.getFullYear() + ' ' + initDate.getHours() + ':' + initDate.getMinutes(); 
+      const initDate =  new Date(bin.init_audit.initiated_on);
+      const pasteDate = (initDate.getMonth() + 1) + '/' + initDate.getDate() + '/' + initDate.getFullYear() + ' ' +
+                      initDate.getHours() + ':' + initDate.getMinutes();
       table.push(
         {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
@@ -116,8 +117,7 @@ export class ReviewAuditComponent implements OnInit {
           this.router.navigate(['audits'], { replaceUrl: true });
         }, 1000);
       }
-    )
-    
+    );
   }
 
   openDialogWithRef(ref: TemplateRef<any>): void {
