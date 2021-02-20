@@ -109,9 +109,9 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 
 def save_new_pin(email, user):
-    first_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3))
+    first_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3)) #NOSONAR
     second_part = '-'
-    third_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3))
+    third_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3)) #NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
     request.user = email
