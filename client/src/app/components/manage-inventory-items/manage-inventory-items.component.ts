@@ -143,11 +143,21 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     this.dataSource = new MatTableDataSource(this.items);
   }
 
-  refreshTime(): void {
-    this.body = {
-      new_job_timing: this.timeForm.value.time,
-      organization: this.authService.getLocalStorage(UserLocalStorage.OrgId),
-    };
+  // refreshTime(): void {
+  //   this.body = {
+  //     new_job_timing: this.timeForm.value.time,
+  //     organization: localStorage.getItem('organization_id'),
+  //   };
+  //
+  //   this.itemsService.updateRefreshItemsTime(this.body).subscribe(
+  //     (data) => {
+  //       this.timeForm.reset();
+  //     },
+  //     (err) => {
+  //       this.errorMessage = err;
+  //     }
+  //   );
+  // }
 
     this.itemsService.updateRefreshItemsTime(this.body).subscribe(
       (data) => {
@@ -157,6 +167,21 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
         this.errorMessage = err;
       }
     );
+  }
+
+  searchItem(): void {
+
+    this.pageIndex = 1;
+    this.params = this.params.set('page', String(this.pageIndex));
+
+    for (const value in this.searchForm.value) {
+      if (this.searchForm.value[value] === '') {
+        this.params = this.params.delete(value);
+      } else {
+        this.params = this.params.set(value, this.searchForm.value[value]);
+      }
+    }
+    this.updatePage();
   }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: number): void {

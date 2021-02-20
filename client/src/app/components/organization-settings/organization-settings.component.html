@@ -1,0 +1,20 @@
+<mat-card>
+  <h1>Organization Settings</h1>
+<div id="refresh">
+  <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">
+    <mat-form-field appearance="outline">
+      <input matInput id="time" type="number" formControlName="time" placeholder="Time in minutes"/>
+    </mat-form-field>
+    <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
+      Update Refresh time
+    </button>
+  </form>
+  <mat-divider>
+  </mat-divider>
+  <h1>Inventory Extractions</h1>
+  <mat-form-field appearance="outline">
+    <mat-label>FTP File Location</mat-label>
+    <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+  </mat-form-field>
+</div>
+</mat-card>

@@ -12,11 +12,13 @@ import { TokenInterceptor } from './services/authentication/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { OrganizationSettingsComponent } from './components/organization-settings/organization-settings.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
     AppComponent,
+    OrganizationSettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     MatModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     CookieService, // To manage cookie in frontend

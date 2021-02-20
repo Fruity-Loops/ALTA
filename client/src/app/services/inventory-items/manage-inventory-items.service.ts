@@ -17,7 +17,7 @@ export class ManageInventoryItemsService {
     return this.http.get(`${BASEURL}/item/`, {params});
   }
 
-  updateRefreshItemsTime(body: object): Observable<any> {
-    return this.http.post(`${BASEURL}/InventoryItemRefreshTime/`, body);
-  }
+  // updateRefreshItemsTime(body: object): Observable<any> {
+  //   return this.http.post(`${BASEURL}/InventoryItemRefreshTime/`, body);
+  // }
 }
