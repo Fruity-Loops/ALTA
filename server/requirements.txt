@@ -31,3 +31,4 @@ uuid==1.30
 wrapt==1.12.1
 numpy==1.19.3
 pandas==1.1.4
+colorlog==4.7.2

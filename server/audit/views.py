@@ -2,9 +2,11 @@ import copy
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+
+from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer
@@ -14,7 +16,7 @@ from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
 from .models import Audit, BinToSK, Record
 
 
-class AuditViewSet(viewsets.ModelViewSet):
+class AuditViewSet(LoggingViewset):
     """
     API endpoint that allows Audits to be created.
     """
@@ -148,7 +150,7 @@ def get_proper_serializer(*args, **kwargs):
     return serializer_class(*args, **kwargs)
 
 
-class BinToSKViewSet(viewsets.ModelViewSet):
+class BinToSKViewSet(LoggingViewset):
     """
     API endpoint that allows Audits to be created.
     """
@@ -225,7 +227,7 @@ class BinToSKViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK)
 
 
-class RecordViewSet(viewsets.ModelViewSet):
+class RecordViewSet(LoggingViewset):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Record.objects.all()
 

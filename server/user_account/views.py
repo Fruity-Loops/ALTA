@@ -3,13 +3,15 @@ This file provides functionality for all the endpoints for interacting with user
 """
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+
+from django_server.custom_logging import LoggingViewset
 from user_account.permissions import CanUpdateKeys, IsHigherInOrganization, \
     UserHasSameOrg, PermissionFactory
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
 
-class OpenRegistrationView(viewsets.ModelViewSet):
+class OpenRegistrationView(LoggingViewset):
     """
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
@@ -39,7 +41,7 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
-class CustomUserView(viewsets.ModelViewSet):
+class CustomUserView(LoggingViewset):
     http_method_names = ['get', 'post', 'patch']
     data = None
 
@@ -129,7 +131,7 @@ class CustomUserView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AccessMembers(viewsets.ModelViewSet):
+class AccessMembers(LoggingViewset):
     """
     Allows obtaining all clients and updating them
     """
