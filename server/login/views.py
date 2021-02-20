@@ -3,8 +3,8 @@ This file provides functionality for all the endpoints for interacting with user
 """
 import os
 import logging
+import secrets
 import string
-import random
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -19,14 +19,13 @@ from user_account.models import CustomUser
 from user_account.views import CustomUserView
 
 logger = logging.getLogger(__name__)
+login_failed = {"detail": "Login Failed"}
 
 
 class LoginView(generics.GenericAPIView):
     """
     Authenticate a System Admin.
     """
-
-    # serializer_class = CustomUserSerializer
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
@@ -44,8 +43,7 @@ class LoginView(generics.GenericAPIView):
         password = data.get('password', '')
         org_id = ""
         org_name = ""
-        response = Response({"detail": "Login Failed"},
-                            status=status.HTTP_401_UNAUTHORIZED)
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             user = CustomUser.objects.get(email=email)
@@ -82,8 +80,7 @@ class LoginMobileEmailView(generics.GenericAPIView):
     def post(self, request):
         data = request.data
         receiver_email = data.get('email', '')
-        response = Response({"detail": "Login Failed"},
-                            status=status.HTTP_401_UNAUTHORIZED)
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             user = CustomUser.objects.get(email=receiver_email)
@@ -112,9 +109,9 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 
 def save_new_pin(email, user):
-    first_part = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(3))
+    first_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3))
     second_part = '-'
-    third_part = ''.join(random.choice(string.ascii_letters + string.digits) for i in range(3))
+    third_part = ''.join(secrets.choice(string.ascii_letters + string.digits) for _i in range(3))
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
     request.user = email
@@ -130,7 +127,6 @@ def save_new_pin(email, user):
 
 def send_email(sender, sender_password, receiver, pin):
     msg = MIMEMultipart('alternative')
-    # msg = MIMEText('Your Pin is: ' + pin)
     msg['Subject'] = 'ALTA Pin'
     msg['From'] = sender
     msg['To'] = receiver
@@ -157,7 +153,6 @@ def send_email(sender, sender_password, receiver, pin):
 
     # Send the message via local SMTP server.
     try:
-        # mailserver = smtplib.SMTP('smtp.gmail.com', 587)
         mailserver = smtplib.SMTP('smtp.gmail.com', 587)
         # identify ourselves to smtp gmail client
         mailserver.ehlo()
@@ -178,8 +173,6 @@ class LoginMobilePinView(generics.GenericAPIView):
     Authenticate a System Admin.
     """
 
-    # serializer_class = CustomUserSerializer
-
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
         serializer_class.Meta.fields = ['email', 'password']
@@ -194,8 +187,7 @@ class LoginMobilePinView(generics.GenericAPIView):
         data = request.data
         email = data.get('email', '')
         password = data.get('pin', '')
-        response = Response({"detail": "Login Failed"},
-                            status=status.HTTP_401_UNAUTHORIZED)
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
             user = CustomUser.objects.get(email=email)

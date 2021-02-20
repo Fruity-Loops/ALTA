@@ -55,7 +55,7 @@ export const routes: Routes = [
       { path: 'review-audit', component: ReviewAuditComponent },
       { path: 'audits', children: [
         {
-          path: '', component: ManageAuditsComponent // TODO: Create Audit Component
+          path: '', component: ManageAuditsComponent
         },
         {
           path: 'assign-sk', children: [

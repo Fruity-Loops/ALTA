@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
@@ -25,7 +24,6 @@ export class ManageAuditsComponent implements OnInit {
   organization: string;
 
   // MatPaginator Output
-  // TODO: dead code?
   // pageEvent: PageEvent;
 
   // Items data
@@ -93,13 +91,8 @@ export class ManageAuditsComponent implements OnInit {
     this.params = this.params.append('page_size', String(this.pageSize));
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.params = this.params.append('status', 'Active');
-    this.init();
     this.getItems();
     this.selectedAudits = [];
-  }
-
-  init(): void {
-
   }
 
   getItems(): void {
@@ -127,7 +120,6 @@ export class ManageAuditsComponent implements OnInit {
   paginatorAction(event: object): void {
     // page index starts at 1
 
-    // TODO: set keys as keyof 'event'
     const pageIndex = 'pageIndex';
     const pageSize = 'pageSize';
     // @ts-ignore
@@ -162,11 +154,9 @@ export class ManageAuditsComponent implements OnInit {
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    // this.pageSize = this.data[results].length;
     this.items = this.data;
     this.errorMessage = '';
 
-    // TODO: define proper types
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }
