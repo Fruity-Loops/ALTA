@@ -2,7 +2,7 @@
   <mat-card-title>List of Audits</mat-card-title>
   <div>
 
-      <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchItem()" (keydown.Enter)="searchItem();">
+      <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">
         <mat-divider></mat-divider>
       <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel >
         <mat-expansion-panel-header hideToggle="true">
@@ -11,7 +11,7 @@
                            (keydown.Enter)="$event.stopImmediatePropagation();">
             <mat-form-field class="searchInventoryBar" style="width: 100%" >
 
-              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="inventorySearchBar">
+              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="auditSearchBar">
             </mat-form-field>
             <button mat-icon-button id="searchbtn" class="save">
               <mat-icon matSuffix>search</mat-icon>
@@ -22,66 +22,27 @@
             <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
-        <p>
-          ID
-        </p>
+        <p>Audit details</p>
       <mat-form-field appearance="outline">
-        <input matInput id="item_id_from" type="text" formControlName="_id_from" placeholder="from"/>
-      </mat-form-field>
-        -
-        <mat-form-field appearance="outline">
-          <input matInput id="item_id_to" type="text" formControlName="_id_to" placeholder="to"/>
-        </mat-form-field>
-        <p>Localisation</p>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_location2" type="text" formControlName="Location" placeholder="Location"/>
+        <input matInput id="inventory_items" type="text" formControlName="inventory_items" placeholder="Inventory Items"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_zone" type="text" formControlName="Zone" placeholder="Zone"/>
+        <input matInput id="assigned_sk" type="text" formControlName="assigned_sk" placeholder="Assigned SK"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_aisle" type="text" formControlName="Aisle" placeholder="Aisle"/>
-      </mat-form-field>
-        <p>Item details</p>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_part_number" type="text" formControlName="Part_Number" placeholder="Part Number"/>
+        <input matInput id="initiated_by" type="text" formControlName="initiated_by" placeholder="Initiated By"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_sn" type="text" formControlName="Serial_Number" placeholder="Serial Number"/>
+        <input matInput id="initiated_on" type="text" formControlName="initiated_on" placeholder="Initiated On"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_condition" type="text" formControlName="Condition" placeholder="Condition"/>
+        <input matInput id="last_modified_on" type="text" formControlName="last_modified_on" placeholder="Last Modified Date"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_category" type="text" formControlName="Category" placeholder="Category"/>
+        <input matInput id="template_id" type="text" formControlName="template_id" placeholder="Template ID"/>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <input matInput id="item_owner" type="text" formControlName="Owner" placeholder="Owner"/>
-      </mat-form-field>
-        <p>
-          Average Cost
-        </p>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_average_cost_from" type="text" formControlName="Average_Cost_from" placeholder="from"/>
-      </mat-form-field>
-        -
-        <mat-form-field appearance="outline">
-          <input matInput id="item_average_cost_to" type="text" formControlName="Average_Cost_to" placeholder="to"/>
-        </mat-form-field>
-        <p>
-          Quantity
-        </p>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_quantity_from" type="text" formControlName="Quantity_from" placeholder="from"/>
-      </mat-form-field>
-        -
-        <mat-form-field appearance="outline">
-          <input matInput id="item_quantity_to" type="text" formControlName="Quantity_to" placeholder="to"/>
-        </mat-form-field>
-        <br/>
-      <mat-form-field appearance="outline">
-        <input matInput id="item_unit_of_measure" type="text" formControlName="Unit_of_Measure"
-               placeholder="Unit of Measure"/>
+        <input matInput id="accuracy" type="text" formControlName="accuracy" placeholder="Acuracy"/>
       </mat-form-field>
       </mat-expansion-panel>
 
