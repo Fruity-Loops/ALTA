@@ -21,6 +21,7 @@ class AuditTemplateViewSet(LoggingViewset):
     http_method_names = ['post', 'get', 'patch', 'delete']
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         permission_classes = factory.get_general_permissions([CheckTemplateOrganizationById])
         return [permission() for permission in permission_classes]
@@ -48,7 +49,7 @@ class AuditTemplateViewSet(LoggingViewset):
             start_new_job_once_at_specific_date(template.template_id, data['start_date'],
                                                 data['time_zone_utc'])
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def list(self, request):
         queryset = self.filter_queryset(self.get_queryset()).filter(

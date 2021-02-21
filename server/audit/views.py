@@ -24,6 +24,7 @@ class AuditViewSet(LoggingViewset):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
                 im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
@@ -158,6 +159,7 @@ class BinToSKViewSet(LoggingViewset):
     queryset = BinToSK.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
             im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
@@ -232,6 +234,7 @@ class RecordViewSet(LoggingViewset):
     queryset = Record.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
             sk_perms = [IsAssignedToBin]
