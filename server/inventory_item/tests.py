@@ -27,23 +27,23 @@ class ItemTestCase(APITestCase):
     def test_get_all_inventory_items(self):
         """ Obtaining all items """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.get("/item/?organization=3")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
-        self.assertEqual(response.data['results'][0]['Part_Number'], self.item_one.Part_Number)
-        self.assertEqual(response.data['results'][1]['Part_Number'], self.item_two.Part_Number)
+        request = self.client.get("/item/?organization=3")
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(request.data), 4)
+        self.assertEqual(request.data['results'][0]['Part_Number'], self.item_one.Part_Number)
+        self.assertEqual(request.data['results'][1]['Part_Number'], self.item_two.Part_Number)
 
     def test_get_one_item(self):
         """ Obtains the first item """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.get("/item/?organization=3&page=1&page_size=1")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['results'][0]['Part_Number'], self.item_one.Part_Number)
+        request = self.client.get("/item/?organization=3&page=1&page_size=1")
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(request.data['results'][0]['Part_Number'], self.item_one.Part_Number)
 
     def test_get_search_items(self):
         """ Obtaining searched items """
         self.client.force_authenticate(user=self.system_admin)
-        response = self.client.get("/item/?organization=3&page=1&page_size=25&search=YYC")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 4)
-        self.assertEqual(response.data['results'][0]['Location'], 'YYC')
+        request = self.client.get("/item/?organization=3&page=1&page_size=25&search=YYC")
+        self.assertEqual(request.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(request.data), 4)
+        self.assertEqual(request.data['results'][0]['Location'], 'YYC')
