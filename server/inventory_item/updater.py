@@ -1,4 +1,5 @@
 import datetime
+import logging
 import pytz
 import pymongo as pym
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
@@ -8,6 +9,7 @@ from audit.utils import create_audit
 from audit_template.models import AuditTemplate
 from django_server.load_csv_to_db import main
 
+logger = logging.getLogger(__name__)
 
 class Singleton(type):  # pylint: disable=too-few-public-methods
     """
@@ -31,11 +33,11 @@ def scheduler_listener(event):
     called with one argument, the event object.
     """
     if event.exception:
-        print('The job crashed :(')
+        logger.error('The job crashed :(')
     else:
-        print('The job worked :)')
+        logger.debug('The job worked :)')
 
-
+# pylint: disable=too-few-public-methods
 class Scheduler(metaclass=Singleton):
     """
     Creates an object that holds the scheduler
@@ -103,16 +105,14 @@ def start_new_job_once_at_specific_date(template_id, date, time_zone):
 
 
 def print_all_job():
-    print("######ALL JOBS#######")
-    scheduler.print_jobs()
-    print("#####################")
+    logger.debug("######ALL JOBS#######")
+    logger.debug(scheduler.get_jobs())
+    logger.debug("#####################")
 
 
 def get_specific_job(job_id):
     job = scheduler.get_job(job_id)
-    print("#############")
-    print("###" + str(job_id) + "### " + str(job))
-    print("#############")
+    logger.debug('#############\n###%d###%s\n#############', job_id, str(job))
 
 
 def get_job_queries(repetition, day_of_week, months):

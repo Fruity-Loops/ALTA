@@ -1,7 +1,7 @@
 [
     {
         "model": "inventory_item.item",
-        "pk": 12731369.0,
+        "pk": 12731369,
         "fields": {
             "Location": "YYC",
             "Plant": "False",
@@ -14,16 +14,16 @@
             "Condition": "Serviceable",
             "Category": "SERIALIZED",
             "Owner": "FG",
-            "Criticality": NaN,
+            "Criticality": "Medium",
             "Average_Cost": " $9,000.00 ",
             "Quantity": 1.0,
             "Unit_of_Measure": "EA",
-            "organization": null
+            "organization": 3
         }
     },
     {
         "model": "inventory_item.item",
-        "pk": 12752842.0,
+        "pk": 12752842,
         "fields": {
             "Location": "YYC",
             "Plant": "True",
@@ -36,11 +36,56 @@
             "Condition": "Serviceable",
             "Category": "SERIALIZED",
             "Owner": "FG",
-            "Criticality": NaN,
+            "Criticality": "Low",
             "Average_Cost": " $9,000.00 ",
             "Quantity": 1.0,
             "Unit_of_Measure": "EA",
-            "organization": null
+            "organization": 3
+        }
+    },
+
+    {
+        "model": "inventory_item.item",
+        "pk": 12731370,
+        "fields": {
+            "Location": "Florida",
+            "Plant": "False",
+            "Zone": "B",
+            "Aisle": 3.0,
+            "Bin": "C20",
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 1",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": "High",
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": 1
+        }
+    },
+    {
+        "model": "inventory_item.item",
+        "pk": 12752843,
+        "fields": {
+            "Location": "Florida",
+            "Plant": "True",
+            "Zone": "B",
+            "Aisle": 1.0,
+            "Bin": "C20",
+            "Part_Number": "PART-3",
+            "Part_Description": "Dummy Part 2",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": "High",
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1.0,
+            "Unit_of_Measure": "EA",
+            "organization": 1
         }
     }
 ]

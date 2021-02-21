@@ -46,16 +46,16 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.get(`${BASEURL}/audit/`, {params});
   }
 
-  initiatePreAudit(preAuditData: object): Observable<any> {
-    return this.http.post(`${BASEURL}/item-to-sk/`, preAuditData);
+  initiatePreAudit(preAuditData: any): Observable<any> {
+    return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
 
-  getItemSKAudit(auditId: any): Observable<any> {
-    return this.http.get(`${BASEURL}/item-to-sk/`, {params: {init_audit_id: auditId}});
+  getAssignedBins(auditId: any): Observable<any> {
+    return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
   }
 
   deletePreAudit(id: any): Observable<any> {
-    return this.http.delete(`${BASEURL}/item-to-sk/${id}/`);
+    return this.http.delete(`${BASEURL}/bin-to-sk/${id}/`);
   }
 
 }

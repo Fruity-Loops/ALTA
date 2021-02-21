@@ -1,0 +1,107 @@
+<app-toolbar></app-toolbar>
+<div *ngIf="isScanning" id="scanInfoHeader">
+  <ion-item color="primary">Scanning...</ion-item>
+  <ion-progress-bar type='indeterminate'></ion-progress-bar>
+</div>
+
+<ion-segment (ionChange)="segmentChanged($event)" [(ngModel)]="currentSegment" value="items">
+  <ion-segment-button value="items">
+    <ion-label>Items</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="completedItems">
+    <ion-label>Completed Items</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="refresh" refreshingSpinner="crescent">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div [hidden]="currentSegment!=Segment.ITEMS">
+    <div *ngIf="!items || items?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ itemsBlankMessage }}
+      </ion-text>
+    </div>
+    <ion-list lines="none" inset="true">
+      <ion-item *ngFor="let item of items" lines="none" class="list-items" onclick="this.blur()">
+        <ion-label>
+          <ion-text color="dark">
+            <h2 class="item_id">Item {{ item.Batch_Number }}</h2>
+          </ion-text>
+          <p> Part {{ item.Part_Number }}</p>
+          <p> Serial no. {{ item.Serial_Number }}</p>
+        </ion-label>
+        <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="secondary"
+          (click)="handleItemClick($event, item.Batch_Number, false)">
+          <ion-icon size="large" name="checkmark-done-circle-sharp"></ion-icon>
+        </ion-button>
+        <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="danger"
+          (click)="handleItemClick($event, item.Batch_Number, true)">
+          <ion-icon button size="large" name="flag"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div [hidden]="currentSegment!=Segment.COMPLETED_ITEMS">
+    <div *ngIf="!completedItems || completedItems?.length == 0" class="center">
+      <ion-text color="dark">
+        {{ completedItemsBlankMessage }}
+      </ion-text>
+    </div>
+    <ion-list lines="none" inset="true">
+      <ion-item *ngFor="let item of completedItems" lines="none" class="list-items" onclick="this.blur()">
+        <ion-thumbnail slot="start">
+          <span *ngIf="item?.status == 'Provided'" class="valid_ellipse"></span>
+          <span *ngIf="item?.status == 'Missing'" class="missing_ellipse"></span>
+          <span *ngIf="item?.status == 'New'" class="new_ellipse"></span>
+        </ion-thumbnail>
+        <ion-label>
+          <ion-text color="dark">
+            <h2>Item {{ item.item_id }}</h2>
+          </ion-text>
+          <p> Status: {{ item.status }}</p>
+        </ion-label>
+        <ion-item *ngIf="item?.flagged">
+          <ion-icon name="flag" color="danger"></ion-icon>
+        </ion-item>
+        <ion-button id="optionsButton" (click)="presentCompltedItemActionSheet(item.record_id)">
+          <ion-icon color="light" name="settings-outline"></ion-icon>
+        </ion-button>
+
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+
+<section *ngIf="currentSegment==Segment.ITEMS">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button id="cameraScanButton" size="large" fill="outline" expand="block" onclick="this.blur()"
+          (click)="handleCameraScan()">
+          <ion-icon name="scan"></ion-icon>Camera
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button id="manualInputButton" size="large" fill="outline" expand="block" color="danger"
+          onclick="this.blur()" (click)="handleManualInput()">
+          <ion-icon name="create-outline"></ion-icon>Input
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</section>
+
+<section *ngIf="currentSegment==Segment.COMPLETED_ITEMS">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="secondary" size="large" (click)="completeBin()">Complete Bin</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</section>

@@ -3,10 +3,10 @@ import { MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sidenav',
-  templateUrl: './sidenav.page.html',
-  styleUrls: ['./sidenav.page.scss'],
+  templateUrl: './navigation.page.html',
+  styleUrls: ['./navigation.page.scss'],
 })
-export class SidenavPage implements OnInit {
+export class NavigationPage implements OnInit {
   sideNav = 'sideNavId';
 
   constructor(private menu: MenuController) { }

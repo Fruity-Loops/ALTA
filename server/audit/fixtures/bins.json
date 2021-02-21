@@ -1,0 +1,38 @@
+[
+{
+    "model": "audit.bintosk",
+    "pk": 1,
+    "fields": {
+        "Bin": "A10",
+        "init_audit": 1,
+        "customuser": 6,
+        "item_ids": [12731369, 12752842],
+        "accuracy": 0.0,
+        "status": "Pending"
+    }
+},
+{
+    "model": "audit.bintosk",
+    "pk": 2,
+    "fields": {
+        "Bin": "C20",
+        "init_audit": 1,
+        "customuser": 3,
+        "item_ids": [12731370, 12752843],
+        "accuracy": 0.0,
+        "status": "Pending"
+    }
+},
+{
+    "model": "audit.bintosk",
+    "pk": 3,
+    "fields": {
+        "Bin": "C20",
+        "init_audit": 2,
+        "customuser": 3,
+        "item_ids": [12752843],
+        "accuracy": 0.0,
+        "status": "Pending"
+    }
+}
+]

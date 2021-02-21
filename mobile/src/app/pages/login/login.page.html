@@ -4,7 +4,7 @@
   </div>
 
   <div class="form-container">
-    <form [formGroup]="formGroup" (ngSubmit)="login()">
+    <form [formGroup]="formGroup" (ngSubmit)="login()" (keyup.enter)="login()">
 
       <ion-item >
         <ion-label position="floating" color="primary">Email</ion-label>

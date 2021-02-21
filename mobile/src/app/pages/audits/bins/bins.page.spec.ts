@@ -1,23 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { IonicModule } from '@ionic/angular';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { BinsPage } from './bins.page';
 
-import { SidenavPage } from './sidenav.page';
-
-describe('SidenavPage', () => {
-  let component: SidenavPage;
-  let fixture: ComponentFixture<SidenavPage>;
+describe('BinsPage', () => {
+  let component: BinsPage;
+  let fixture: ComponentFixture<BinsPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SidenavPage],
+      declarations: [ BinsPage ],
       imports: [
         IonicModule.forRoot(),
-        RouterTestingModule
+        HttpClientTestingModule,
+        RouterTestingModule,
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SidenavPage);
+    fixture = TestBed.createComponent(BinsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
