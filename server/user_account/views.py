@@ -1,7 +1,7 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.response import Response
 
 from django_server.custom_logging import LoggingViewset

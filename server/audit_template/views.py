@@ -1,6 +1,6 @@
 from datetime import date
 import numpy as np
-from rest_framework import viewsets, status
+from rest_framework import status
 from rest_framework.response import Response
 
 from django_server.custom_logging import LoggingViewset
