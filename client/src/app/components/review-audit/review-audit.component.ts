@@ -35,60 +35,30 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   getTableData(): void {
-
-    this.manageAuditsService.getAuditData(this.auditID)
-      .subscribe((auditData) => {
-        const assignedSks = auditData.assigned_sk;
-
-        this.manageAuditsService.getItemSKAudit(this.auditID)
-          .subscribe((itemSKData) => {
-            this.itemData = itemSKData;
-            assignedSks.forEach((sk: any) => {
-              itemSKData.forEach((itemSK: any) => {
-                if (sk.id === itemSK.customuser) {
-                  itemSK.location = sk.location;
-                }
-              });
-            });
-            this.buildTable(itemSKData, assignedSks);
-          });
-      });
+    if (this.auditID) {
+      this.manageAuditsService.getAssignedBins(this.auditID).subscribe(
+        (auditData) => {
+          this.buildTable(auditData);
+        });
+    }
   }
 
-  buildTable(itemSKData: any, sks: any): void {
+  buildTable(itemSKData: any): void {
     const table: any[] = [];
-    const locations: any[] = [];
+    this.locationsAndUsers = [{ location: undefined }];
 
-    sks.forEach((item: any) => {
-      if (!locations.some(loc => loc.location === item.location)) {
-        locations.push({ location: item.location });
-      }
-    });
-
-    this.locationsAndUsers = locations;
-
-    itemSKData.forEach((sk: any) => {
+    itemSKData.forEach((bin: any) => {
       table.push(
         {
-          name: this.getSKName(sks, sk.customuser),
-          bins: sk.bins,
-          numberOfParts: JSON.parse(sk.item_ids).length,
-          initiatedBy: 'N/A',
-          date: 'N/A',
-          location: sk.location,
+          name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
+          bins: bin.Bin,
+          numberOfParts: JSON.parse(bin.item_ids).length,
+          initiatedBy: bin.init_audit.initiated_by.first_name + ' ' + bin.init_audit.initiated_by.last_name,
+          date: bin.initiated_on ? bin.initiated_on : 'N/A'
         }
       );
     });
     this.dataSource = new MatTableDataSource(table);
-  }
-
-  getSKName(sks: any, id: any): string {
-    for (const sk of sks) {
-      if (sk.id === id) {
-        return sk.first_name + ' ' + sk.last_name;
-      }
-    }
-    return 'N/A';
   }
 
   @HostListener('window:popstate', ['$event'])

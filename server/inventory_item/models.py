@@ -1,22 +1,27 @@
 from django.db import models
 
+class ItemFields(models.Model):
+    DEFAULT_FIELD = 'N/A'
+    Location = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Plant = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Zone = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Aisle = models.IntegerField(null=True)
+    Bin = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Part_Number = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Part_Description = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Serial_Number = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Condition = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Category = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Owner = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Criticality = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Average_Cost = models.CharField(max_length=256, default=DEFAULT_FIELD)
+    Quantity = models.IntegerField(null=True)
+    Unit_of_Measure = models.CharField(max_length=256, default=DEFAULT_FIELD)
 
-class Item(models.Model):
-    _id = models.AutoField(primary_key=True)
-    Location = models.CharField(max_length=256)
-    Plant = models.CharField(max_length=256)
-    Zone = models.CharField(max_length=256)
-    Aisle = models.IntegerField()
-    Bin = models.CharField(max_length=256)
-    Part_Number = models.CharField(max_length=256)
-    Part_Description = models.CharField(max_length=256)
-    Serial_Number = models.CharField(max_length=256)
-    Condition = models.CharField(max_length=256)
-    Category = models.CharField(max_length=256)
-    Owner = models.CharField(max_length=256)
-    Criticality = models.CharField(max_length=256)
-    Average_Cost = models.CharField(max_length=256)
-    Quantity = models.IntegerField()
-    Unit_of_Measure = models.CharField(max_length=256)
+    class Meta:
+        abstract = True
+
+class Item(ItemFields):
+    Batch_Number = models.AutoField(primary_key=True, unique=False)
     organization = models.ForeignKey(to='organization.Organization',
                                      on_delete=models.CASCADE, blank=True, null=True)

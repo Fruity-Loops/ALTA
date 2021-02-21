@@ -9,7 +9,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    loadChildren: () => import('./sidenav/sidenav.module').then( m => m.SidenavPageModule),
+    loadChildren: () => import('./navigation/navigation.module').then( m => m.NavigationModule),
     canLoad: [AuthGuard]
   },
   {

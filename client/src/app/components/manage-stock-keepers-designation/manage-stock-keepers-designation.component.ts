@@ -32,7 +32,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.manageAuditsService.getAuditData(this.auditID)
       .subscribe((auditData) => {
         this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
@@ -47,7 +46,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       let currentSK = 0;
       index.bins.forEach((bin: any) => {
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
-        const associatedItemsIds = associatedItems.map(item => item._id);
+        const associatedItemsIds = associatedItems.map(item => item.Batch_Number);
 
         sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location);
         const currentToAssign = currentSK % sksOfCurrentLocation.length;
@@ -141,35 +140,30 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
       auditComp.bins.forEach((bin: any) => {
-        // check if the bin has already been assigned to a stock-keeper
-        if (!holdItemsOfBins.find(predefinedBin => predefinedBin === bin) &&
-          !holdBodyPreAuditData.find(predefinedSK => predefinedSK.customuser === auditComp.sk_id)) {
-          // get the affiliated items of a bin
-          holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, auditComp.bins);
-          // check if the bin has items
-          if (holdItemsOfBins.length > 0) {
-            // construct array to hold the item ids
-            const holdIds = holdItemsOfBins.map(item => item._id);
-            holdBodyPreAuditData.push(
-              {
-                init_audit: this.auditID,
-                customuser: auditComp.sk_id,
-                bins: auditComp.bins,
-                item_ids: holdIds
-              });
-            // empty array for next bin in loop
-            holdItemsOfBins = new Array<any>();
-          }
+        holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
+
+        if (holdItemsOfBins.length > 0) {
+          // construct array to hold the item ids
+          const holdIds = holdItemsOfBins.map(item => item.Batch_Number);
+          holdBodyPreAuditData.push(
+            {
+              Bin: bin,
+              init_audit: this.auditID,
+              customuser: auditComp.sk_id,
+              item_ids: holdIds,
+            });
+          // empty array for next bin in loop
+          holdItemsOfBins = new Array<any>();
         }
       });
     });
 
-    holdBodyPreAuditData.forEach(bodyPreAuditData =>
+    holdBodyPreAuditData.forEach(bodyPreAuditData => {
       this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
         .subscribe((err) => {
           this.errorMessage = err;
-        })
-    );
+        });
+    });
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];

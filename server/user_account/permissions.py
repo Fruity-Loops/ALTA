@@ -1,23 +1,26 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from user_account.models import CustomUser
 
 
 class PermissionFactory:
     def __init__(self, request):
-        self.base_im_permissions = [IsAuthenticated, IsInventoryManager, HasSameOrgInBody]
         self.base_sa_permissions = [IsAuthenticated, IsSystemAdmin]
+        self.base_im_permissions = [
+            IsAuthenticated,
+            IsInventoryManager,
+            HasSameOrgInBody,
+            HasSameOrgInQuery
+        ]
         self.request = request
 
-    def validate_is_sa(self):
-        return IsAuthenticated.has_permission(IsAuthenticated(), self.request, None) and \
-                IsSystemAdmin.has_permission(IsSystemAdmin(), self.request, None)
+    def validate_is_im(self):
+        return IsInventoryManager.has_permission(IsInventoryManager(), self.request, None)
 
-    def get_general_permissions(self, get_im_perms):
-        if self.validate_is_sa():
-            permission_classes = self.base_sa_permissions
-        else:
-            # concatenate lists
-            permission_classes = self.base_im_permissions + get_im_perms
+    def get_general_permissions(self, im_additional_perms):
+        permission_classes = self.base_sa_permissions
+        if self.validate_is_im():
+            permission_classes = self.base_im_permissions + im_additional_perms
         return permission_classes
 
 
@@ -33,8 +36,11 @@ class IsSystemAdmin(BasePermission):
         :param view:
         :return: True/False : Whether the user is a SysAdmin or Not
         """
-        user = CustomUser.objects.get(email=request.user)
-        return user.role == 'SA'
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            return user.role == 'SA'
+        except ObjectDoesNotExist:
+            return False
 
 
 class IsInventoryManager(BasePermission):
@@ -49,8 +55,11 @@ class IsInventoryManager(BasePermission):
         :param view:
         :return: True/False : Whether the user is a Inventory Manager or Not
         """
-        user = CustomUser.objects.get(email=request.user)
-        return user.role in ['IM']
+        try:
+            user = CustomUser.objects.get(email=request.user)
+            return user.role in ['IM']
+        except ObjectDoesNotExist:
+            return False
 
 
 class HasSameOrgInQuery(BasePermission):

@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .load_csv_to_db import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +24,3 @@ urlpatterns = [
     path('', include('audit_template.urls')),
     path('', include('audit.urls'))
 ]
-
-# Initialize inventory Items collection
-main('', True)
