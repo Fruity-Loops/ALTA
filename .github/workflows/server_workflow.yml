@@ -37,6 +37,7 @@ jobs:
     - name: Running tests with coverage using Pytest
       working-directory: server
       run: |
+        cp .env.test .env
         pytest --cov --cov-report term --ignore=django-seed-master
         pytest --cov --cov-report xml:cov.xml --ignore=django-seed-master
     - name: Uploading tests coverage result to Codecov
