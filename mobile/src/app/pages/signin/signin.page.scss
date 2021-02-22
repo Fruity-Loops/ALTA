@@ -1,0 +1,40 @@
+.signinGroup {
+    --padding-top: 10%;
+}
+
+.header {
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #0F2336;
+    text-align: center;
+  }
+
+.errorMessage {
+    font-size: small;
+    color: #000;
+    background: var(--ion-color-danger);
+
+}
+
+ion-content {
+    --background: #0F2336;
+}
+
+ion-item {
+    --background: #1a2d41;
+    --border-radius: 10px;
+    --highlight-height: 5;
+    padding: 10px
+}
+
+.form-container {
+    background: #283C52;
+    padding: 15px
+}
+
+#signinButton {
+    --background: #4ECEC9;
+    --border-radius: 10px;
+    padding: 5px;
+}

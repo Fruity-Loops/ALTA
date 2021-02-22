@@ -1,22 +1,26 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from django.contrib.auth.hashers import check_password
-from django.core.exceptions import ObjectDoesNotExist
-from rest_framework import status, viewsets, generics
-from rest_framework.authtoken.models import Token
+from rest_framework import status
 from rest_framework.response import Response
+
+from django_server.custom_logging import LoggingViewset
 from user_account.permissions import CanUpdateKeys, IsHigherInOrganization, \
     UserHasSameOrg, PermissionFactory
 from .serializers import CustomUserSerializer
 from .models import CustomUser
 
 
-class OpenRegistrationView(viewsets.ModelViewSet):
+class OpenRegistrationView(LoggingViewset):
     """
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
     http_method_names = ['post']
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        permission_classes = []
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
@@ -42,97 +46,12 @@ class OpenRegistrationView(viewsets.ModelViewSet):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
-class LoginView(generics.GenericAPIView):
-    """
-    Authenticate a System Admin.
-    """
-
-    # serializer_class = CustomUserSerializer
-
-    def get_serializer(self, *args, **kwargs):
-        serializer_class = CustomUserSerializer
-        serializer_class.Meta.fields = ['email', 'password']
-        return serializer_class(*args, **kwargs)
-
-    def post(self, request):
-        """
-        Verify that a System Admin has valid credentials and is active.
-        :param request: request.data: email, password
-        :return: user_name, token
-        """
-        data = request.data
-        email = data.get('email', '')
-        password = data.get('password', '')
-        org_id = ""
-        org_name = ""
-        response = Response({"detail": "Login Failed"},
-                            status=status.HTTP_401_UNAUTHORIZED)
-
-        try:
-            user = CustomUser.objects.get(email=email)
-
-            is_verified = check_password(password, user.password)
-            if is_verified and user.is_active:
-                has_token = Token.objects.filter(user=user).count()
-                if has_token:
-                    token = Token.objects.get(user=user)
-                else:
-                    token = Token.objects.create(user=user)
-                if user.organization:
-                    org_id = user.organization.org_id
-                    org_name = user.organization.org_name
-                data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                        'organization_id': org_id,
-                        'organization_name': org_name,
-                        'token': token.key}
-
-                response = Response(data, status=status.HTTP_200_OK)
-
-        except ObjectDoesNotExist:
-            return response
-
-        return response
-
-
-class LoginMobileView(generics.GenericAPIView):
-    """
-    Authenticate a Mobile Log in.
-    """
-    serializer_class = CustomUserSerializer
-
-    def post(self, request):
-        pass  # TODO: Implement mobile specific endpoint
-        # Should be implemented when different options to password auth are determined
-
-
-class LogoutView(generics.GenericAPIView):
-    """
-    Logout a System Admin.
-    """
-
-    def post(self, request):
-        """
-        :param request: request.user (token)
-        """
-        return self.remove_token(request)
-
-    def remove_token(self, request):  # pylint: disable=no-self-use
-        """
-        Deleting user token from the database when he logout.
-        :param request
-        """
-
-        Token.objects.get(user=request.user).delete()
-
-        return Response({"success": "Successfully logged out."},
-                        status=status.HTTP_200_OK)
-
-
-class CustomUserView(viewsets.ModelViewSet):
+class CustomUserView(LoggingViewset):
     http_method_names = ['get', 'post', 'patch']
     data = None
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         if self.action in ['create', 'retrieve', 'list']:
             permission_classes = factory.get_general_permissions([
@@ -218,13 +137,14 @@ class CustomUserView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AccessMembers(viewsets.ModelViewSet):
+class AccessMembers(LoggingViewset):
     """
     Allows obtaining all clients and updating them
     """
     http_method_names = ['get']
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         permission_classes = factory.base_sa_permissions
         return [permission() for permission in permission_classes]

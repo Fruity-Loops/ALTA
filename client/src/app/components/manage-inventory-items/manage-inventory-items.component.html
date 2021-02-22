@@ -107,7 +107,7 @@
       <ng-container matColumnDef="Select">
         <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
         <td mat-cell *matCellDef="let object">
-          <mat-checkbox  (change)='onChange(object["Batch_Number"])' [id]="'checkBox' + object['Batch_Number']"></mat-checkbox>
+          <mat-checkbox  (change)='onChange(object["Item_Id"])' [id]="'checkBox' + object['Item_Id']"></mat-checkbox>
         </td>
       </ng-container>
 

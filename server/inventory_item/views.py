@@ -1,8 +1,7 @@
-from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.pagination import PageNumberPagination
+from django_server.custom_logging import LoggingViewset
 from user_account.permissions import PermissionFactory
-
 from .serializers import ItemSerializer
 from .models import Item
 
@@ -50,7 +49,7 @@ class CustomSearchFilter(filters.SearchFilter):
         return queryset
 
 
-class ItemViewSet(viewsets.ModelViewSet):
+class ItemViewSet(LoggingViewset):
     """
     API endpoint that allows organizations to be viewed or edited.
     """
@@ -64,6 +63,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     search_fields = get_fields()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         permission_classes = factory.get_general_permissions([])
         return [permission() for permission in permission_classes]

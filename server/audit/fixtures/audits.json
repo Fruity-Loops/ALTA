@@ -6,13 +6,16 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            12752842.0,
-            12852846.0,
-            13059579.0
+            12731370,
+            12752843
         ],
         "assigned_sk": [
             3
-        ]
+        ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -22,13 +25,16 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            12852846.0,
-            13059579.0,
-            13797174.0
+            12731370,
+            12752843
         ],
         "assigned_sk": [
           5
-        ]
+        ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -38,11 +44,15 @@
         "organization": 3,
         "status": "Active",
         "inventory_items": [
-            14679376.0
+            12752842
         ],
         "assigned_sk": [
             6
-        ]
+        ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -52,10 +62,13 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            13797174.0,
-            14679376.0
+            12731370
         ],
-        "assigned_sk": [ 3 ]
+        "assigned_sk": [ 3 ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -65,9 +78,13 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            14679376.0
+            12731370
         ],
-        "assigned_sk": [ 5 ]
+        "assigned_sk": [ 5 ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -77,10 +94,13 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            13059579.0,
-            13797174.0
+            12731370
         ],
-        "assigned_sk": [ 5 ]
+        "assigned_sk": [ 5 ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
@@ -90,37 +110,33 @@
         "organization": 1,
         "status": "Active",
         "inventory_items": [
-            13797174.0,
-            14679376.0
+            12731370,
+            12752843
         ],
-        "assigned_sk": [ 3 ]
+        "assigned_sk": [ 3 ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 },
 {
     "model": "audit.audit",
     "pk": 8,
     "fields": {
-        "organization": 2,
-        "status": "Active",
-        "inventory_items": [
-            13797174.0,
-            14679376.0
-        ],
-        "assigned_sk": [ 6 ]
-    }
-},
-{
-    "model": "audit.audit",
-    "pk": 9,
-    "fields": {
         "organization": 1,
         "status": "Pending",
         "inventory_items": [
-            13797174.0
+            12731370,
+            12752843
         ],
         "assigned_sk": [
             5
-        ]
+        ],
+        "initiated_by": 2,
+        "initiated_on": "2021-02-04T21:57:00.012Z",
+        "status": "Active",
+        "accuracy": "100"
     }
 }
 ]

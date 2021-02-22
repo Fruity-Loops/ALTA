@@ -1,6 +1,8 @@
 from datetime import date
-from rest_framework import viewsets, generics, status
+from rest_framework import generics, status
 from rest_framework.response import Response
+
+from django_server.custom_logging import LoggingViewset
 from inventory_item.updater import start_new_job
 from user_account.permissions import PermissionFactory
 
@@ -9,7 +11,7 @@ from .models import Organization
 from .permissions import ValidateOrgMatchesUser
 
 
-class OrganizationViewSet(viewsets.ModelViewSet):
+class OrganizationViewSet(LoggingViewset):
     """
     API endpoint that allows organizations to be viewed or edited.
     """
@@ -18,6 +20,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizationSerializer
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         if self.action in ['retrieve', 'update', 'partial_update']:
             permission_classes = factory.get_general_permissions([ValidateOrgMatchesUser])

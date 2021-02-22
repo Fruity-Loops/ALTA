@@ -2,6 +2,7 @@ from django.db import models
 
 class ItemFields(models.Model):
     DEFAULT_FIELD = 'N/A'
+    Batch_Number = models.CharField(max_length=256, default=DEFAULT_FIELD)
     Location = models.CharField(max_length=256, default=DEFAULT_FIELD)
     Plant = models.CharField(max_length=256, default=DEFAULT_FIELD)
     Zone = models.CharField(max_length=256, default=DEFAULT_FIELD)
@@ -22,6 +23,6 @@ class ItemFields(models.Model):
         abstract = True
 
 class Item(ItemFields):
-    Batch_Number = models.AutoField(primary_key=True, unique=False)
+    Item_Id = models.CharField(primary_key=True, max_length=256)
     organization = models.ForeignKey(to='organization.Organization',
                                      on_delete=models.CASCADE, blank=True, null=True)

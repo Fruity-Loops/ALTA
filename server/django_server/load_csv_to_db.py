@@ -58,10 +58,11 @@ def update_items(csv_file, collection_name, org_id):
     try:
         for document in dict_of_records:
             document['organization_id'] = org_id
-            if collection.find({'Batch_Number': document["Batch_Number"],
-                                'organization_id': org_id}).count():
-                collection.update({'Batch_Number': document["Batch_Number"],
-                                   'organization_id': org_id}, document)
+            item_id = f'{int(document["Batch_Number"])}_{org_id}'
+            document['Item_Id'] = item_id
+            document['Batch_Number'] = int(document['Batch_Number'])
+            if collection.find({'Item_Id': item_id}).count():
+                collection.update({'Item_Id': item_id}, document)
             else:
                 collection.insert(document)
         logger.debug("Data Refreshed for organization ID: %d" , org_id)
