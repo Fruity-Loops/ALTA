@@ -14,18 +14,24 @@ class LoggingViewset(viewsets.ModelViewSet):
     logger_is_initialized = True
     logger = None
     test_mode = False
+    request = {}
+
+    def set_request_data(self, request):
+        if request.data:
+            LoggingViewset.request = copy.deepcopy(request.data)
+        else:
+            LoggingViewset.request = {}
 
     def dispatch(self, request, *args, **kwargs):
         custom_logging = os.getenv('CUSTOM_LOGGING', 'False')
         if len(sys.argv) > 1 and sys.argv[1] == 'test':
             self.test_mode = True
         if custom_logging in ['True', 'TRUE', 'true'] and not self.test_mode:
-            req = {}
-            if 'data' in request:
-                req = copy.deepcopy(request.data)
+            response = super().dispatch(request, *args, **kwargs)
+            req = LoggingViewset.request
             method = copy.deepcopy(request.method)
             url = copy.deepcopy(request.path_info) + '' + urlencode(query=request.GET)
-            response = super().dispatch(request, *args, **kwargs)
+
             status = response.status_code
             if LoggingViewset.logger_is_initialized:
                 initialize_logger()

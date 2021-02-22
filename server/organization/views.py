@@ -20,6 +20,7 @@ class OrganizationViewSet(LoggingViewset):
     serializer_class = OrganizationSerializer
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         if self.action in ['retrieve', 'update', 'partial_update']:
             permission_classes = factory.get_general_permissions([ValidateOrgMatchesUser])

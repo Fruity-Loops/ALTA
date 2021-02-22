@@ -159,7 +159,6 @@ def send_email(sender, sender_password, receiver, pin):
         # identify ourselves to smtp gmail client
         mailserver.ehlo()
         # secure our email with tls encryption
-        # mailserver.connect('smtp.gmail.com', 465)
         mailserver.starttls()
         # re-identify ourselves as an encrypted connection
         mailserver.ehlo()

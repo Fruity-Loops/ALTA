@@ -65,22 +65,13 @@ export class ManageAuditsComponent implements OnInit {
     });
     this.searchForm = this.fb.group({
       search: [''],
-      _id_from: [''],
-      _id_to: [''],
-      Location: [''],
-      Zone: [''],
-      Aisle: [''],
-      Bin: [''],
-      Part_Number: [''],
-      Serial_Number: [''],
-      Condition: [''],
-      Category: [''],
-      Owner: [''],
-      Average_Cost_from: [''],
-      Average_Cost_to: [''],
-      Quantity_from: [''],
-      Quantity_to: [''],
-      Unit_of_Measure: [''],
+      inventory_items: [''],
+      assigned_sk: [''],
+      initiated_by: [''],
+      initiated_on: [''],
+      last_modified_on: [''],
+      template_id: [''],
+      accuracy: [''],
     });
     this.dataSource = new MatTableDataSource<any>();
     this.selectedAudits = [];
@@ -91,11 +82,11 @@ export class ManageAuditsComponent implements OnInit {
     this.params = this.params.append('page_size', String(this.pageSize));
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.params = this.params.append('status', 'Active');
-    this.getItems();
+    this.searchAudit();
     this.selectedAudits = [];
   }
 
-  getItems(): void {
+  searchAudit(): void {
     this.auditService.getProperAudits(this.params).subscribe(
       (data: any) => {
         this.data = data;

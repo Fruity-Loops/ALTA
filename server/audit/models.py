@@ -21,7 +21,6 @@ class Audit(models.Model):
         related_name='initiated_by')
     initiated_on = models.DateTimeField(auto_now_add=True) # Auto set when object is first created
     last_modified_on = models.DateTimeField(auto_now=True) # Auto set every time object is saved
-    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(to=USER_MODEL, blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
     accuracy = models.FloatField(default=0.0)

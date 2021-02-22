@@ -63,6 +63,7 @@ class ItemViewSet(LoggingViewset):
     search_fields = get_fields()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         permission_classes = factory.get_general_permissions([])
         return [permission() for permission in permission_classes]

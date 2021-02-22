@@ -1,4 +1,3 @@
-import copy
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -24,6 +23,7 @@ class AuditViewSet(LoggingViewset):
     queryset = Audit.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
                 im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
@@ -60,7 +60,7 @@ class AuditViewSet(LoggingViewset):
         for key in params:
             self.queryset = self.queryset.filter(**{key: request.GET.get(key)})
         serializer = get_proper_serializer(self.queryset, many=True)
-        data = copy.deepcopy(serializer.data)
+        data = serializer.data
         for dictionary in data:
             dictionary = fix_audit(dictionary)
         return Response(data)
@@ -141,13 +141,11 @@ def compile_progression_metrics(completed_items, total_items, accuracy):
 
 
 def get_item_serializer(*args, **kwargs): # pylint: disable=no-self-use
-    serializer_class = ItemSerializer
-    return serializer_class(*args, **kwargs)
+    return ItemSerializer(*args, **kwargs)
 
 
 def get_proper_serializer(*args, **kwargs):
-    serializer_class = ProperAuditSerializer
-    return serializer_class(*args, **kwargs)
+    return ProperAuditSerializer(*args, **kwargs)
 
 
 class BinToSKViewSet(LoggingViewset):
@@ -158,6 +156,7 @@ class BinToSKViewSet(LoggingViewset):
     queryset = BinToSK.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         permission_classes = factory.get_general_permissions(
             im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
@@ -232,6 +231,7 @@ class RecordViewSet(LoggingViewset):
     queryset = Record.objects.all()
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
             sk_perms = [IsAssignedToBin]

@@ -1,7 +1,7 @@
 """
 This file provides functionality for all the endpoints for interacting with user accounts
 """
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.response import Response
 
 from django_server.custom_logging import LoggingViewset
@@ -16,6 +16,11 @@ class OpenRegistrationView(LoggingViewset):
     OPEN REGISTRATION VIEW THAT ALLOWS FOR ANY REGISTRATION
     """
     http_method_names = ['post']
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        permission_classes = []
+        return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = CustomUserSerializer
@@ -46,6 +51,7 @@ class CustomUserView(LoggingViewset):
     data = None
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         if self.action in ['create', 'retrieve', 'list']:
             permission_classes = factory.get_general_permissions([
@@ -138,6 +144,7 @@ class AccessMembers(LoggingViewset):
     http_method_names = ['get']
 
     def get_permissions(self):
+        super().set_request_data(self.request)
         factory = PermissionFactory(self.request)
         permission_classes = factory.base_sa_permissions
         return [permission() for permission in permission_classes]
