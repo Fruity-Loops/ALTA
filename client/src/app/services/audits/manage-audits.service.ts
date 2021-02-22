@@ -58,6 +58,9 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.delete(`${BASEURL}/bin-to-sk/${id}/`);
   }
 
+  getProperAudits(params: HttpParams): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
+  }
 }
 
 export enum AuditLocalStorage {

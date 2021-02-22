@@ -8,6 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from audit.utils import create_audit
 from audit_template.models import AuditTemplate
 from django_server.load_csv_to_db import main
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +72,8 @@ def start():
     all the jobs that are stored in the jobs
     collection will be retrieved
     """
+    if len(sys.argv) > 1 and sys.argv[1] != "runserver":
+        return
     scheduler.start()
     print_all_job()
 

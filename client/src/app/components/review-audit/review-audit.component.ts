@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
@@ -15,6 +16,7 @@ export class ReviewAuditComponent implements OnInit {
   locationsAndUsers: Array<any>;
   auditID: number;
   itemData: Array<any>;
+  currentUser: any;
 
   panelOpenState = false;
   allExpandState = false;
@@ -23,9 +25,11 @@ export class ReviewAuditComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
+    private authservice: AuthService,
     private router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
+    this.currentUser = null;
     this.itemData = [];
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
@@ -38,23 +42,39 @@ export class ReviewAuditComponent implements OnInit {
     if (this.auditID) {
       this.manageAuditsService.getAssignedBins(this.auditID).subscribe(
         (auditData) => {
-          this.buildTable(auditData);
+          const id: any = localStorage.getItem('id');
+          this.authservice.getCurrentUser(id).subscribe((user) => {
+            this.currentUser = user;
+            this.buildTable(auditData);
+          });
         });
     }
   }
 
   buildTable(itemSKData: any): void {
     const table: any[] = [];
-    this.locationsAndUsers = [{ location: undefined }];
+    const locations: any[] = [];
 
     itemSKData.forEach((bin: any) => {
+      if (!locations.some(loc => loc.location === bin.customuser.location)) {
+        locations.push({ location: bin.customuser.location });
+      }
+    });
+
+    this.locationsAndUsers = locations;
+
+    itemSKData.forEach((bin: any) => {
+      const initDate =  new Date(bin.init_audit.initiated_on);
+      const pasteDate = (initDate.getMonth() + 1) + '/' + initDate.getDate() + '/' + initDate.getFullYear() + ' ' +
+                      initDate.getHours() + ':' + initDate.getMinutes();
       table.push(
         {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
           bins: bin.Bin,
-          numberOfParts: JSON.parse(bin.item_ids).length,
-          initiatedBy: bin.init_audit.initiated_by.first_name + ' ' + bin.init_audit.initiated_by.last_name,
-          date: bin.initiated_on ? bin.initiated_on : 'N/A'
+          numberOfParts: JSON.parse(bin.item_ids.replaceAll('\'', '"')).length,
+          initiatedBy: this.currentUser.first_name + ' ' + this.currentUser.last_name,
+          date: pasteDate,
+          location: bin.customuser.location
         }
       );
     });
@@ -90,11 +110,14 @@ export class ReviewAuditComponent implements OnInit {
   }
 
   confirmReviewAuditData(): void {
-    setTimeout(() => {
-      this.router.navigate(['audits'], { replaceUrl: true });
-    }, 1000);
-
-    this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
+    this.manageAuditsService.assignSK({status: 'Active'}, Number(localStorage.getItem('audit_id'))).subscribe(
+      (data) => {
+        setTimeout(() => {
+          this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
+          this.router.navigate(['audits'], { replaceUrl: true });
+        }, 1000);
+      }
+    );
   }
 
   openDialogWithRef(ref: TemplateRef<any>): void {

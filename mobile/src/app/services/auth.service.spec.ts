@@ -23,18 +23,4 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should signin and authenticate', () => {
-    const user = {
-      email: 'sk@test.com',
-      password: '123456789',
-    };
-    service.login(user).subscribe(async () => {
-      expect(service.isAuthenticated.value).toEqual(true);
-    });
-
-    const req = controller.expectOne(`${env.api_root}/login-mobile/`);
-    expect(req.request.method).toEqual('POST');
-    req.flush(user);
-  });
-
 });

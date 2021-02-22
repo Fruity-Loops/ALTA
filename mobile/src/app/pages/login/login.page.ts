@@ -11,13 +11,14 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginPage implements OnInit {
   formGroup: FormGroup;
+  email: string;
 
   constructor(
     private router: Router,
     private loadingController: LoadingController,
     private alertController: AlertController,
     private authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -26,8 +27,7 @@ export class LoginPage implements OnInit {
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(2)]],
+      pin: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 
@@ -36,10 +36,11 @@ export class LoginPage implements OnInit {
       message: 'Signing in...'
     });
     await whileLoading.present();
-
+    
     this.authService.login(this.formGroup.value).subscribe(
       async (res) => {
         await whileLoading.dismiss();
+        this.authService.verifyAccessToken();
         this.router.navigateByUrl('', { replaceUrl: true });
       },
       async (res) => {
@@ -54,12 +55,8 @@ export class LoginPage implements OnInit {
     );
   }
 
-  get email() {
-    return this.formGroup.get('email');
-  }
-
-  get password() {
-    return this.formGroup.get('password');
+  get pin() {
+    return this.formGroup.get('pin');
   }
 
 }

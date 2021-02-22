@@ -180,21 +180,23 @@ class BinTestCase(APITestCase):
     def test_bin_to_sk_list(self):
         """ Verifying all the correct data is returned """
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.get("/bin-to-sk/", {"customuser_id": 3, "init_audit_id": 1})
-        self.assertEqual(request.status_code, status.HTTP_200_OK)
-        self.assertEqual(request.data[0]['bin_id'], 2)
-        self.assertEqual(request.data[0]['Bin'], 'C20')
-        self.assertEqual(request.data[0]['customuser']['user_name'], 'sk')
-        self.assertEqual(request.data[0]['item_ids'], str([self.item_one.Batch_Number, self.item_two.Batch_Number]))
+        response = self.client.get("/bin-to-sk/", {"customuser_id": 3, "init_audit_id": 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data[0]['bin_id'], 2)
+        self.assertEqual(response.data[0]['Bin'], 'C20')
+        self.assertEqual(response.data[0]['customuser']['user_name'], 'sk')
+        self.assertEqual(response.data[0]['item_ids'], str([int(item) for item in
+                                                            [self.item_one.Batch_Number, self.item_two.Batch_Number]]))
 
     def test_bin_to_sk_retrieve(self):
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.get("/bin-to-sk/2/")
-        self.assertEqual(request.status_code, status.HTTP_200_OK)
-        self.assertEqual(request.data['bin_id'], 2)
-        self.assertEqual(request.data['Bin'], 'C20')
-        self.assertEqual(request.data['customuser']['user_name'], 'sk')
-        self.assertEqual(request.data['item_ids'], str([self.item_one.Batch_Number, self.item_two.Batch_Number]))
+        response = self.client.get("/bin-to-sk/2/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['bin_id'], 2)
+        self.assertEqual(response.data['Bin'], 'C20')
+        self.assertEqual(response.data['customuser']['user_name'], 'sk')
+        self.assertEqual(response.data['item_ids'], str([int(item) for item in
+                                                         [self.item_one.Batch_Number, self.item_two.Batch_Number]]))
 
     def test_bins_get_items(self):
         self.client.force_authenticate(user=self.inventory_manager)
