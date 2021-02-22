@@ -29,17 +29,17 @@
       <ion-item *ngFor="let item of items" lines="none" class="list-items" onclick="this.blur()">
         <ion-label>
           <ion-text color="dark">
-            <h2 class="item_id">Item {{ item.Batch_Number }}</h2>
+            <h2 class="item_id">Item {{ item.Item_Id }}</h2>
           </ion-text>
           <p> Part {{ item.Part_Number }}</p>
           <p> Serial no. {{ item.Serial_Number }}</p>
         </ion-label>
         <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="secondary"
-          (click)="handleItemClick($event, item.Batch_Number, false)">
+          (click)="handleItemClick($event, item.Item_Id, false)">
           <ion-icon size="large" name="checkmark-done-circle-sharp"></ion-icon>
         </ion-button>
         <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="danger"
-          (click)="handleItemClick($event, item.Batch_Number, true)">
+          (click)="handleItemClick($event, item.Item_Id, true)">
           <ion-icon button size="large" name="flag"></ion-icon>
         </ion-button>
       </ion-item>

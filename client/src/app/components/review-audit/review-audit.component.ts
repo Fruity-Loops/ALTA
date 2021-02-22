@@ -71,7 +71,7 @@ export class ReviewAuditComponent implements OnInit {
         {
           name: bin.customuser.first_name + ' ' + bin.customuser.last_name,
           bins: bin.Bin,
-          numberOfParts: JSON.parse(bin.item_ids).length,
+          numberOfParts: JSON.parse(bin.item_ids.replaceAll('\'', '"')).length,
           initiatedBy: this.currentUser.first_name + ' ' + this.currentUser.last_name,
           date: pasteDate,
           location: bin.customuser.location

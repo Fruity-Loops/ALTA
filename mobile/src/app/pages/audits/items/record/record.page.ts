@@ -63,7 +63,7 @@ export class RecordPage implements OnInit {
 
   buildLoginForm() {
     this.formGroup = this.formBuilder.group({
-      item_id: [this.modalData.itemData.Batch_Number || this.modalData.itemData.item_id, [Validators.required]],
+      item_id: [this.modalData.itemData.Item_Id || this.modalData.itemData.item_id, [Validators.required]],
       Location: [this.modalData.itemData.Location],
       Plant: [this.modalData.itemData.Plant],
       Zone: [this.modalData.itemData.Zone],
@@ -98,6 +98,7 @@ export class RecordPage implements OnInit {
     await whileLoading.present();
 
     const record = this.curateData();
+    console.log(record);
     this.auditService.createRecord(record).subscribe(
       async (res) => {
         await whileLoading.dismiss();

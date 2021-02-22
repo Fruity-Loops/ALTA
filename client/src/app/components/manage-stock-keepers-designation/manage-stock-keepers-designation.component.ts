@@ -46,7 +46,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
       let currentSK = 0;
       index.bins.forEach((bin: any) => {
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
-        const associatedItemsIds = associatedItems.map(item => item.Batch_Number);
+        const associatedItemsIds = associatedItems.map(item => item.Item_Id);
 
         sksOfCurrentLocation = this.binToSks.filter(obj => obj.sk_location === index.Location);
         const currentToAssign = currentSK % sksOfCurrentLocation.length;
@@ -144,7 +144,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
         if (holdItemsOfBins.length > 0) {
           // construct array to hold the item ids
-          const holdIds = holdItemsOfBins.map(item => item.Batch_Number);
+          const holdIds = holdItemsOfBins.map(item => item.Item_Id);
           holdBodyPreAuditData.push(
             {
               Bin: bin,

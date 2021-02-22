@@ -3,6 +3,7 @@
         "model": "inventory_item.item",
         "pk": 12731369,
         "fields": {
+            "Batch_Number": 12731369,
             "Location": "YYC",
             "Plant": "False",
             "Zone": "B",
@@ -25,6 +26,7 @@
         "model": "inventory_item.item",
         "pk": 12752842,
         "fields": {
+            "Batch_Number": 12752842,
             "Location": "YYC",
             "Plant": "True",
             "Zone": "B",
@@ -48,6 +50,7 @@
         "model": "inventory_item.item",
         "pk": 12731370,
         "fields": {
+            "Batch_Number": 12731370,
             "Location": "Florida",
             "Plant": "False",
             "Zone": "B",
@@ -70,6 +73,7 @@
         "model": "inventory_item.item",
         "pk": 12752843,
         "fields": {
+            "Batch_Number": 12752843,
             "Location": "Florida",
             "Plant": "True",
             "Zone": "B",

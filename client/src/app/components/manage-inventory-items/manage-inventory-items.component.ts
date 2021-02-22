@@ -110,6 +110,7 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
+        console.log(data);
         // Getting the field name of the item object returned and populating the column of the table
         const results = 'results';
         for (const key in data[results][0]) {

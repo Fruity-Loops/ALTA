@@ -77,6 +77,7 @@ export class BinsPage implements OnInit {
               this.completeRefresh();
             },
             async (res) => {
+              console.log(res);
               this.blankMessage = `There was a problem trying to fetch the bins for Audit ${this.auditID}.`;
               await whileLoading.dismiss();
               const alert = await this.alertController.create({

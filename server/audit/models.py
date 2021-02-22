@@ -52,7 +52,7 @@ class BinToSK(models.Model):
 
 class Record(ItemFields):
     record_id = models.AutoField(primary_key=True)
-    item_id = models.BigIntegerField(null=False)
+    item_id = models.CharField(max_length=256, null=False)
     audit=models.ForeignKey(Audit, on_delete=models.CASCADE)
     bin_to_sk=models.ForeignKey(BinToSK, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)
