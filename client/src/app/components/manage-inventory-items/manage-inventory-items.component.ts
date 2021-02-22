@@ -1,30 +1,22 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {HttpParams} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import {TableManagementComponent} from '../TableManagement.component';
 
 @Component({
   selector: 'app-manage-inventory-items',
   templateUrl: './manage-inventory-items.component.html',
   styleUrls: ['./manage-inventory-items.component.scss'],
 })
-export class ManageInventoryItemsComponent implements OnInit {
-  // MatPaginator Inputs
-  length: number;
-  pageSize: number;
-  pageIndex: number;
-  previousPageIndex: number;
-  timeForm: FormGroup;
-  searchForm: FormGroup;
+export class ManageInventoryItemsComponent extends TableManagementComponent implements OnInit {
   body: any;
   subscription: any;
-  organization: string;
 
   // MatPaginator Output
   // TODO: dead code?
@@ -35,9 +27,6 @@ export class ManageInventoryItemsComponent implements OnInit {
   items = [];
   errorMessage = '';
 
-  // Http URL params
-  params = new HttpParams();
-
   inventoryItemToAudit: number[];
 
   // Member variable is automatically initialized after view init is completed
@@ -46,8 +35,7 @@ export class ManageInventoryItemsComponent implements OnInit {
   // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
-  filterTerm: string;
-  selected: string;
+
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
@@ -58,19 +46,15 @@ export class ManageInventoryItemsComponent implements OnInit {
     private auditService: ManageAuditsService,
     private authService: AuthService,
     private router: Router,
-    private fb: FormBuilder
+    protected fb: FormBuilder
   ) {
-    this.length = 0;
-    this.pageSize = 25;
-    this.pageIndex = 1;
-    this.previousPageIndex = 0;
-    this.organization = '';
-    this.filterTerm = '';
-    this.selected = 'All';
-    this.timeForm = this.fb.group({
-      time: ['', Validators.required],
-    });
-    this.searchForm = this.fb.group({
+    super(fb);
+    this.dataSource = new MatTableDataSource<any>();
+    this.inventoryItemToAudit = [];
+  }
+
+  getSearchForm(): any {
+    return {
       search: [''],
       _id_from: [''],
       _id_to: [''],
@@ -88,9 +72,7 @@ export class ManageInventoryItemsComponent implements OnInit {
       Quantity_from: [''],
       Quantity_to: [''],
       Unit_of_Measure: [''],
-    });
-    this.dataSource = new MatTableDataSource<any>();
-    this.inventoryItemToAudit = [];
+    };
   }
 
   ngOnInit(): void {
@@ -110,7 +92,6 @@ export class ManageInventoryItemsComponent implements OnInit {
     this.itemsService.getPageItems(this.params).subscribe(
       (data) => {
         this.data = data;
-        console.log(data);
         // Getting the field name of the item object returned and populating the column of the table
         const results = 'results';
         for (const key in data[results][0]) {
@@ -129,23 +110,6 @@ export class ManageInventoryItemsComponent implements OnInit {
         this.errorMessage = err;
       }
     );
-  }
-
-  paginatorAction(event: object): void {
-    // page index starts at 1
-
-    // TODO: set keys as keyof 'event'
-    const pageIndex = 'pageIndex';
-    const pageSize = 'pageSize';
-    // @ts-ignore
-    this.pageIndex = 1 + event[pageIndex];
-    // @ts-ignore
-    this.pageSize = event[pageSize];
-
-    this.params = this.params.set('page', String(this.pageIndex));
-    this.params = this.params.set('page_size', String(this.pageSize));
-
-    this.updatePage();
   }
 
   updatePage(): void {
@@ -193,21 +157,6 @@ export class ManageInventoryItemsComponent implements OnInit {
         this.errorMessage = err;
       }
     );
-  }
-
-  searchItem(): void {
-
-    this.pageIndex = 1;
-    this.params = this.params.set('page', String(this.pageIndex));
-
-    for (const value in this.searchForm.value) {
-      if (this.searchForm.value[value] === '') {
-        this.params = this.params.delete(value);
-      } else {
-        this.params = this.params.set(value, this.searchForm.value[value]);
-      }
-    }
-    this.updatePage();
   }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: number): void {

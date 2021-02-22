@@ -27,7 +27,6 @@ export class ManageAuditsService implements LocalStorageInterface {
   }
 
   createAudit(inventoryItem: object): Observable<any> {
-    console.log(inventoryItem);
     return this.http.post(`${BASEURL}/audit/`, inventoryItem);
   }
 

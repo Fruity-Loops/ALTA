@@ -1,27 +1,19 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
-import {HttpParams} from '@angular/common/http';
+import {TableManagementComponent} from '../TableManagement.component';
 
 @Component({
   selector: 'app-manage-audits',
   templateUrl: './manage-audits.component.html',
   styleUrls: ['./manage-audits.component.scss'],
 })
-export class ManageAuditsComponent implements OnInit {
-  // MatPaginator Inputs
-  length: number;
-  pageSize: number;
-  pageIndex: number;
-  previousPageIndex: number;
-  timeForm: FormGroup;
-  searchForm: FormGroup;
+export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
   body: any;
   subscription: any;
-  organization: string;
 
   // MatPaginator Output
   // pageEvent: PageEvent;
@@ -30,9 +22,7 @@ export class ManageAuditsComponent implements OnInit {
   data: any;
   items = [];
   errorMessage = '';
-
-  // Http URL params
-  params = new HttpParams();
+  formg: FormBuilder;
 
   selectedAudits: number[];
 
@@ -42,28 +32,22 @@ export class ManageAuditsComponent implements OnInit {
   // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
-  filterTerm: string;
-  selected: string;
-
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   constructor(
     private auditService: ManageAuditsService,
-    private fb: FormBuilder
+    protected fb: FormBuilder
   ) {
-    this.length = 0;
-    this.pageSize = 25;
-    this.pageIndex = 1;
-    this.previousPageIndex = 0;
-    this.organization = '';
-    this.filterTerm = '';
-    this.selected = 'All';
-    this.timeForm = this.fb.group({
-      time: ['', Validators.required],
-    });
-    this.searchForm = this.fb.group({
+    super(fb);
+    this.formg = fb;
+    this.dataSource = new MatTableDataSource<any>();
+    this.selectedAudits = [];
+  }
+
+  getSearchForm(): any {
+    return {
       search: [''],
       inventory_items: [''],
       assigned_sk: [''],
@@ -72,9 +56,7 @@ export class ManageAuditsComponent implements OnInit {
       last_modified_on: [''],
       template_id: [''],
       accuracy: [''],
-    });
-    this.dataSource = new MatTableDataSource<any>();
-    this.selectedAudits = [];
+    };
   }
 
   ngOnInit(): void {
@@ -108,22 +90,6 @@ export class ManageAuditsComponent implements OnInit {
     );
   }
 
-  paginatorAction(event: object): void {
-    // page index starts at 1
-
-    const pageIndex = 'pageIndex';
-    const pageSize = 'pageSize';
-    // @ts-ignore
-    this.pageIndex = 1 + event[pageIndex];
-    // @ts-ignore
-    this.pageSize = event[pageSize];
-
-    this.params = this.params.set('page', String(this.pageIndex));
-    this.params = this.params.set('page_size', String(this.pageSize));
-
-    this.updatePage();
-  }
-
   updatePage(): void {
     this.auditService.getProperAudits(this.params).subscribe(
       (data: any) => {
@@ -152,20 +118,6 @@ export class ManageAuditsComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.items);
   }
 
-  searchItem(): void {
-
-    this.pageIndex = 1;
-    this.params = this.params.set('page', String(this.pageIndex));
-
-    for (const value in this.searchForm.value) {
-      if (this.searchForm.value[value] === '') {
-        this.params = this.params.delete(value);
-      } else {
-        this.params = this.params.set(value, this.searchForm.value[value]);
-      }
-    }
-    this.updatePage();
-  }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: number): void {
     if (this.selectedAudits.includes(value)) {
