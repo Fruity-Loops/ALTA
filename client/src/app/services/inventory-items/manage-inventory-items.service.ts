@@ -14,7 +14,6 @@ export class ManageInventoryItemsService {
   }
 
   getPageItems(params: HttpParams): Observable<any> {
-    console.log(params);
     return this.http.get(`${BASEURL}/item/`, {params});
   }
 

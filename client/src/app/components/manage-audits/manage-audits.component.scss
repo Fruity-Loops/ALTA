@@ -1,0 +1,37 @@
+@import "./src/theme.scss";
+
+.mat-table {
+  width: 100%;
+}
+mat-expansion-panel {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  width: 100%;
+}
+
+button.create {
+  position: relative;
+  float: right;
+  display: inline;
+  margin-right: 10%;
+  padding-left: 3em;
+  padding-right: 3em;
+  border-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary, 500);
+}
+
+mat-expansion-panel-header {
+  width: 100%;
+}
+
+mat-panel-title {
+  width: 90%;
+}
+
+.expandSearchButton {
+  padding-top: 1em;
+  padding-right: 1em;
+  display: flex;
+  justify-content: flex-end;
+}
+

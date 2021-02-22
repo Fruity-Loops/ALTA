@@ -14,9 +14,9 @@ class ItemTestCase(APITestCase):
         # Create each type of user that could be making the registration request
         self.system_admin = CustomUser.objects.get(user_name="sa")
 
-        self.item_one = Item.objects.get(Batch_Number=12731369.0)
+        self.item_one = Item.objects.get(Batch_Number="12731369")
 
-        self.item_two = Item.objects.get(Batch_Number=12752842.0)
+        self.item_two = Item.objects.get(Batch_Number="12752842")
 
     def test_organization_unauthorized_request(self):
         """ User can't access any of the method if token is not in header of request """

@@ -41,7 +41,7 @@ export class AuditService {
     return this.getBinSKAudit(userID, auditID, binStatus)
       .pipe(
         map(res => {
-          res.map(bin => bin.item_ids = JSON.parse(bin.item_ids));
+          res.map(bin => bin.item_ids = JSON.parse(bin.item_ids.replaceAll('\'', '\"')));
           return res;
         }),
       );

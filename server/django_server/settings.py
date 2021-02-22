@@ -88,7 +88,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'django_server.urls'
@@ -160,19 +159,57 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-# LOGGING
+# LOGGING https://docs.djangoproject.com/en/3.0/topics/logging/
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[{server_time}] {message}',
+            'style': '{',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        },
+        'off_filter': {
+            '()': 'django_server.custom_logging.OffFilter'
+        }
+    },
     'handlers': {
-        'console': {
+        'DJANGO_DEFAULT': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
+            'formatter': 'default'
+        },
+        'ORIGINAL': {
+            'class': 'logging.StreamHandler',
+        },
+        'OFF': {
+            'filters': ['off_filter'],
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': [os.getenv('DJANGO_HANDLER', 'DJANGO_DEFAULT')],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+            'propagate': False,
+        },
+        'apscheduler.scheduler': {
+            'handlers': [os.getenv('JOB_LOG_HANDLER', 'ORIGINAL')],
+            'propagate': False,
         },
     },
     'root': {
-        'handlers': ['console'],
-        'level': os.getenv('LOG_LEVEL', 'WARNING'),
+        'handlers': [os.getenv('DEFAULT_LOG_HANDLER', 'ORIGINAL')],
+        'level': os.getenv('DEFAULT_LOG_LEVEL', 'DEBUG'),
+        'propagate': False,
     },
 }
 

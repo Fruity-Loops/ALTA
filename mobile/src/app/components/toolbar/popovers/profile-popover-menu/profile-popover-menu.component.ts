@@ -26,7 +26,7 @@ export class ProfilePopoverMenuComponent implements OnInit {
   async logout() {
     this.dismissPopover();
     await this.authService.logout();
-    this.router.navigateByUrl('login', { replaceUrl: true });
+    this.router.navigateByUrl('signin', { replaceUrl: true });
   }
 
   async dismissPopover() {

@@ -13,13 +13,14 @@ class Audit(models.Model):
                                      blank=False,
                                      null=False,
                                      default=0)
+    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
+    assigned_sk = models.ManyToManyField(to='user_account.CustomUser', blank=True, default=0)
     initiated_by = models.ForeignKey(
         to=USER_MODEL,
         on_delete=models.CASCADE,
         related_name='initiated_by')
     initiated_on = models.DateTimeField(auto_now_add=True) # Auto set when object is first created
     last_modified_on = models.DateTimeField(auto_now=True) # Auto set every time object is saved
-    inventory_items = models.ManyToManyField(Item, blank=True, default=0)
     assigned_sk = models.ManyToManyField(to=USER_MODEL, blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
     accuracy = models.FloatField(default=0.0)
@@ -50,7 +51,7 @@ class BinToSK(models.Model):
 
 class Record(ItemFields):
     record_id = models.AutoField(primary_key=True)
-    item_id = models.BigIntegerField(null=False)
+    item_id = models.CharField(max_length=256, null=False)
     audit=models.ForeignKey(Audit, on_delete=models.CASCADE)
     bin_to_sk=models.ForeignKey(BinToSK, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)

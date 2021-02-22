@@ -6,19 +6,10 @@
   <div class="form-container">
     <form [formGroup]="formGroup" (ngSubmit)="login()" (keyup.enter)="login()">
 
-      <ion-item >
-        <ion-label position="floating" color="primary">Email</ion-label>
-        <ion-input id="emailInput" type="email" formControlName="email" color="light" required></ion-input>
-      </ion-item>
-      <div *ngIf="email.touched && email.errors " class="errorMessage">
-        <span *ngIf="email.errors?.email">Invalid format</span>
-      </div>
-
       <ion-item>
-        <ion-label position="floating" color="primary">Password</ion-label>
-        <ion-input id="passwordInput" formControlName="password" type="password" color="light" required></ion-input>
+        <ion-label position="floating" color="primary">Pin</ion-label>
+        <ion-input id="passwordInput" formControlName="pin" type="password" color="light" required></ion-input>
       </ion-item>
-
 
       <ion-button id="loginButton" type="submit" expand="block" size="large" [disabled]="!formGroup.valid">Sign in</ion-button>
     </form>
