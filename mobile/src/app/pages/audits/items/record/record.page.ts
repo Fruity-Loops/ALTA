@@ -17,6 +17,7 @@ export class RecordPage implements OnInit {
   lastModifiedOn: string;
   submitButton = 'SUBMIT';
   isItemDetailsHidden = true;
+  isPresent = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -98,7 +99,6 @@ export class RecordPage implements OnInit {
     await whileLoading.present();
 
     const record = this.curateData();
-    console.log(record);
     this.auditService.createRecord(record).subscribe(
       async (res) => {
         await whileLoading.dismiss();
@@ -169,6 +169,9 @@ export class RecordPage implements OnInit {
           else if (key === 'comment') {
             data[key] = '';
           }
+        }
+        if (key === 'Quantity' && typeof data[key] === 'boolean') {
+          data[key] = data[key] ? 1 : 0;
         }
       }
     }
