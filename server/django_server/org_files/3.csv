@@ -1,8 +1,8 @@
 ﻿Location,Plant,Zone,Aisle,Bin,Batch Number,Part Number,Part Description,Serial Number,Condition,Category,Owner,Criticality,Average Cost,Quantity,Unit of Measure (UoM)
 YYC,Plant 2,B,3,A10,12731369,PART-4,Dummy Part 4,SN-4,Serviceable,SERIALIZED,FG,," $9,000.00 ",1,EA
 YYC,Plant 2,B,1,B2,12752842,PART-4,Dummy Part 4,SN-4,Serviceable,SERIALIZED,FG,," $9,000.00 ",1,EA
-YUL,Plant 2,B,2,A1,12852846,PART-1,Dummy Part 1,SN-1,Serviceable,SERIALIZED,FG,," $10,000.00 ",1,EA
-YUL,Plant 1,A,1,A1,13059579,PART-1,Dummy Part 1,SN-1,Serviceable,SERIALIZED,FG,," $10,000.00 ",1,EA
+YUL,Plant 2,B,2,A1,12852846,PART-1,Dummy Part 1,SN-1,Serviceable,SERIALIZED2,FG,," $10,000.00 ",1,EA
+YUL,Plant 1,A,1,A1,13059579,PART-1,Dummy Part 1,SN-1,Serviceable,SERIALIZED2,FG,," $10,000.00 ",1,EA
 YYZ,Plant 3,C,1,B1,13797174,PART-3,Dummy Part 3,SN-3,Serviceable,SERIALIZED,FG,," $150,000.00 ",1,EA
 YYZ,Plant 2,B,3,A3,14679376,PART-3,Dummy Part 3,SN-3,Serviceable,SERIALIZED,FG,," $150,000.00 ",1,EA
 YYZ,Plant 2,B,1,A3,14788437,PART-3,Dummy Part 3,SN-3,Serviceable,SERIALIZED,FG,," $150,000.00 ",1,EA
