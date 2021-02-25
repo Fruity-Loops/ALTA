@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageInventoryItemsComponent } from './manage-inventory-items.component';
 import { FormBuilder } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
@@ -31,5 +32,12 @@ describe('ManageInventoryItemsComponent', () => {
 
   it('should create Inventory Items Component', () => {
     expect(component).toBeTruthy();
+  });
+
+  // Test that Start Audit button is disabled when no items selected
+  it('should disable Start button when no item selected', () => {
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.css("button"));
+    expect(button.nativeElement.disabled).toBeTruthy();
   });
 });
