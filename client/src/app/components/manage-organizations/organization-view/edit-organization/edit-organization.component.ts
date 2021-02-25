@@ -1,5 +1,5 @@
 import {Component, Inject, Optional} from '@angular/core';
-import {ManageOrganizationsService} from '../../../../services/organizations/manage-organizations.service';
+import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {OrganizationViewComponent} from '../organization-view.component';
@@ -34,14 +34,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
         this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
         this.originalStatus = organization.status;
         this.orgName = organization.org_name;
-        let locationAddress = '';
-        for (let i = 0; i < organization.address.length; i++) {
-          // tslint:disable-next-line:max-line-length
-          if (organization.address[i] !== '[' && organization.address[i] !== ']' && organization.address[i] !== ' ' && organization.address[i] !== '\'') {
-              locationAddress += organization.address[i];
-          }
-        }
-        this.location = locationAddress;
+        this.location = organization.address.replace(/\[|\]|\'/g, '');
       });
     });
   }
@@ -72,14 +65,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   }
 
   updateOrganization(): void {
-    if (this.linesR.length > 0 && this.location === '') {
-      this.populateExcelElem();
-    } else if (this.linesR.length > 0 && this.location !== '') {
-      this.populateExcelElem();
-      this.populateUserInputElem();
-    } else if (this.linesR.length === 0 && this.location !== '') {
-      this.populateUserInputElem();
-    }
+    this.locationInputOrFile();
     this.organizationService.updateOrganization({
       org_id: this.orgID,
       org_name: this.orgName,

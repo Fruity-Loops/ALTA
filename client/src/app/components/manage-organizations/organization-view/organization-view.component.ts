@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -41,6 +41,17 @@ export abstract class OrganizationViewComponent implements OnInit {
     }
   }
 
+  locationInputOrFile(): void {
+    if (this.linesR.length > 0 && this.location === '') { // If only Excel file is uploaded with a list of location.
+      this.populateExcelElem();
+    } else if (this.linesR.length > 0 && this.location !== '') { // If Excel file is uploaded and list of location is manually entered.
+      this.populateExcelElem();
+      this.populateUserInputElem();
+    } else if (this.linesR.length === 0 && this.location !== '') { // If only list of location is manually entered.
+      this.populateUserInputElem();
+    }
+  }
+
   populateExcelElem(): void {
     for (const elem of this.linesR) {
       this.locations.push(elem);
@@ -62,7 +73,7 @@ export abstract class OrganizationViewComponent implements OnInit {
   }
 
   // tslint:disable-next-line:typedef
-  public changeListener(files: FileList) {
+  public readFromExcelFile(files: FileList) {
     // @ts-ignore
     // tslint:disable-next-line:no-non-null-assertion
     this.locationFileName = files.item(0).name!;
@@ -85,7 +96,7 @@ export abstract class OrganizationViewComponent implements OnInit {
       for (let i = 0; i < jsonFormat.length; i++) {
         const tarrR = [];
         // @ts-ignore
-        for (const [key, value] of Object.entries(jsonFormat[i])) {
+        for (const value of Object.values(jsonFormat[i])) {
           tarrR.push(value);
         }
         this.linesR.push(tarrR);
