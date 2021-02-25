@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('org_id', models.AutoField(primary_key=True, serialize=False)),
                 ('org_name', models.CharField(max_length=256, unique=True)),
-                ('address', models.JSONField(null=True, blank=False)),
+                ('address', models.JSONField(null=False, blank=False)),
                 ('status', models.BooleanField(default=False)),
                 ('inventory_items_refresh_job', models.IntegerField(default=1)),
                 ('calendar_date', models.CharField(max_length=100)),
