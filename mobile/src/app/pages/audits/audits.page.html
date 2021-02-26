@@ -16,11 +16,6 @@
     </div>
     <ion-list lines="none" inset="true">
         <ion-item *ngFor="let audit of audits" lines="none" class="list-items" [routerLink]="audit?.audit_id" >
-            <ion-thumbnail slot="start">
-                <span *ngIf="audit?.status == 'Pending'" class="pending_ellipse"></span>
-                <span *ngIf="audit?.status == 'Active'" class="active_ellipse"></span>
-                <span *ngIf="audit?.status == 'Complete'" class="complete_ellipse"></span>
-            </ion-thumbnail>
             <ion-label>
                 <ion-text color="dark">
                     <h2>Audit {{ audit?.audit_id }}</h2>
