@@ -109,17 +109,6 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.data[0]['inventory_items'], [])
         self.assertEqual(response.data[0]['assigned_sk'], [])
 
-    
-    def test_check_item(self):
-        self.client.force_authenticate(user=self.stock_keeper)
-        response = self.client.get(
-            "/audit/check_item/",
-            {
-                'item_id': 12852846,
-                'bin_id': 3,
-                'audit_id': 2
-            })
-
 
 
 class BinTestCase(APITestCase):
