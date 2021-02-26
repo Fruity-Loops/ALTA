@@ -88,15 +88,15 @@ class InventoryItemRefreshTestCase(APITestCase):
     def test_org_item_refresh_time_sa(self):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.system_admin)
-        data = {"organization": self.organization, "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        data = {'new_job_timing': ['60'], 'new_job_interval': ['minutes'], 'ftp_location': ['ftp://host/inventory'], 'organization_id': ['1'], 'file': ['dummy_data.xlsx']}
+        response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_org_inventory_item_refresh_time_im(self):
         """ Timing has been updated correctly """
         self.client.force_authenticate(user=self.im)
-        data = {"organization": self.organization, "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        data = {'new_job_timing': ['60'], 'new_job_interval': ['minutes'], 'ftp_location': ['ftp://host/inventory'], 'organization_id': ['1'], 'file': ['dummy_data.xlsx']}
+        response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_org_item_refresh_time_fail(self):
@@ -106,5 +106,5 @@ class InventoryItemRefreshTestCase(APITestCase):
         """
         self.client.force_authenticate(user=self.system_admin)
         data = {"organization": "1234", "new_job_timing": "14"}
-        response = self.client.post("/InventoryItemRefreshTime/", data, format='json')
+        response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
