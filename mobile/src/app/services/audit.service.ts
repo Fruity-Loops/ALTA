@@ -20,7 +20,8 @@ export class AuditService {
       {
         params: {
           assigned_sk: userID,
-          organization: org
+          organization: org,
+          exclude_status: 'Complete'
         }
       })
       .pipe(catchError(errorHandler));
