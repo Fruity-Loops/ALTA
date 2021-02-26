@@ -12,5 +12,4 @@ router.register(r'organization', views.OrganizationViewSet, basename='organizati
 urlpatterns = [
     path('', include(router.urls)),
     path('InventoryItemRefreshTime/', views.ModifyOrganizationInventoryItemsDataUpdate.as_view()),
-    path('FTPLocation/', views.ModifyOrganizationFTPLocationUpdate.as_view())
 ]

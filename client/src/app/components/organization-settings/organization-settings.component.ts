@@ -1,13 +1,16 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrganizationSettingsService} from "../../services/organization-settings.service";
 import {VERSION} from "@angular/material";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-organization-settings',
   templateUrl: './organization-settings.component.html',
   styleUrls: ['./organization-settings.component.scss']
 })
+
+@Injectable()
 export class OrganizationSettingsComponent implements OnInit {
   version = VERSION;
   orgSettingsForm: FormGroup;
@@ -18,14 +21,20 @@ export class OrganizationSettingsComponent implements OnInit {
   errorMessage = '';
   constructor(
     private organizationSettings: OrganizationSettingsService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {
-
     this.orgSettingsForm = this.fb.group({
       time: ['', Validators.required],
       ftpLocation: ['', Validators.required],
       inv_extract_file: ['', Validators.required]
     });
+  }
+
+  openSnackBar(message: string, action: string){
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    })
   }
 
   ngOnInit(): void {
@@ -52,17 +61,13 @@ export class OrganizationSettingsComponent implements OnInit {
     //   new_job_interval: this.orgSettingsForm.value.interval,
     //   ftp_location: this.orgSettingsForm.value.ftpLocation,
     //   organization_id: localStorage.getItem('organization_id'),
-
-      // new_job_timing: this.orgSettingsForm.value.time,
-      // organization: localStorage.getItem('organization_id'),
     // };
 
-    // console.log(this.body.file)
 
     this.organizationSettings.updateRefreshItemsTime(formData).subscribe(
-      (data: any) => {
-        this.orgSettingsForm.reset();
-      },
+      // (data: any) => {
+      //   this.orgSettingsForm.reset();
+      // },
       (err: string) => {
         this.errorMessage = err;
       }
@@ -79,8 +84,8 @@ export class OrganizationSettingsComponent implements OnInit {
 
   selectFile(event: any) {
     if (event.target.files.length > 0){
-      const file = event.target.files[0];
-      this.orgSettingsForm.get('inv_extract_file')?.setValue(file);
+      this.file = event.target.files[0];
+      this.orgSettingsForm.get('inv_extract_file')?.setValue(this.file);
     }
   }
 

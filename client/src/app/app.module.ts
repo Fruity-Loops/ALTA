@@ -14,6 +14,7 @@ import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { OrganizationSettingsComponent } from './components/organization-settings/organization-settings.component';
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     MatModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    MatSnackBarModule,
   ],
   providers: [
     CookieService, // To manage cookie in frontend

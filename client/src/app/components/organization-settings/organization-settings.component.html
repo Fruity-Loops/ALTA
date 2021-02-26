@@ -23,7 +23,7 @@
           <div class="flex-container" fxLayout="row" fxLayoutAlign="none none">
             <mat-form-field appearance="outline">
               <mat-label>Repeat Every</mat-label>
-              <input matInput id="time" type="number" formControlName="time" placeholder="Time unit"/>
+              <input matInput id="time" type="number" required formControlName="time" placeholder="Time unit"/>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Interval</mat-label>
@@ -40,7 +40,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>FTP File Location</mat-label>
-          <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+          <input matInput id="ftpLocation" required formControlName="ftpLocation" placeholder="ftp://example/invetory1">
         </mat-form-field>
       </div>
 <!--      XLSX FILE INPUT-->
@@ -50,7 +50,7 @@
       </div>
 <!--      SUBMIT BUTTON-->
       <div class="flex-container-submit" fxLayout="row" fxLayoutAlign="space-evenly space-evenly">
-        <button mat-stroked-button type="submit" id="signupbtn" [disabled]="!orgSettingsForm.valid" class="save">
+        <button mat-stroked-button type="submit" id="signupbtn" [disabled]="!orgSettingsForm.valid" (click)="openSnackBar('Submitted' , 'Close')" class="save">
           Submit
         </button>
       </div>

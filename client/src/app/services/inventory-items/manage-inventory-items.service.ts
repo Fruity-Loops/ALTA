@@ -9,6 +9,7 @@ const BASEURL = env.api_root;
 @Injectable({
   providedIn: 'root',
 })
+
 export class ManageInventoryItemsService {
   constructor(private http: HttpClient) {
   }
@@ -17,7 +18,4 @@ export class ManageInventoryItemsService {
     return this.http.get(`${BASEURL}/item/`, {params});
   }
 
-  // updateRefreshItemsTime(body: object): Observable<any> {
-  //   return this.http.post(`${BASEURL}/InventoryItemRefreshTime/`, body);
-  // }
 }

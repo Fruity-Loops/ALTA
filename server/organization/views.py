@@ -6,6 +6,8 @@ from django_server.custom_logging import LoggingViewset
 from inventory_item.updater import start_new_job
 from user_account.permissions import PermissionFactory
 
+from rest_framework.parsers import FormParser, MultiPartParser
+
 from .serializers import OrganizationSerializer
 from .models import Organization
 from .permissions import ValidateOrgMatchesUser
@@ -42,57 +44,40 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
     the Inventory Data is refreshed
     """
 
+    default_refresh_time = 15
+
+    # parser_classes = [FormParser, MultiPartParser]
+
     # Note: if other methods are added here, keep in mind that the permissions will need to change
     def get_permissions(self):
         permission_classes = PermissionFactory(self.request).get_general_permissions([])
         return [permission() for permission in permission_classes]
 
     def post(self, request):
-        print(request.data.get('file'))
         data = request.data
-        # print(data)
         org_id = data.get('organization', '')
-        # new_job_timing = int(data.get('new_job_timing', ''))
+        new_job_timing = data.get('new_job_timing', '')
 
-        # file = data.get('file')
-        # print(file)
+        #TODO implement file upload into DB
+        file = data.get('file')
+        if file:
+            print('RECEIVED .XLSX FILE: ' + str(file))
+        else:
+            print('NO .XLSX FILE RECEIVED')
 
         response = {}
 
+        #TODO implement FTP Location URL
+        #TODO implement interval for refresh time
         if org_id and new_job_timing:
             try:
                 organization = Organization.objects.get(org_id=org_id)
+                if not new_job_timing:
+                    new_job_timing = self.default_refresh_time
                 organization.inventory_items_refresh_job = new_job_timing
                 organization.save()
                 start_new_job(str(org_id), new_job_timing)
                 response.update({'time_detail': 'Time has been updated'})
-
-            except Organization.DoesNotExist:
-                return Response({'detail': 'Invalid organization'},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response(response, status=status.HTTP_200_OK)
-
-
-class ModifyOrganizationFTPLocationUpdate(generics.GenericAPIView):
-
-    def get_permissions(self):
-        permission_classes = PermissionFactory(self.request).get_general_permissions([])
-        return [permission() for permission in permission_classes]
-
-    def post(self, request):
-        data = request.data
-        org_id = data.get('organization', '')
-        new_ftp_location = data.get('ftp_location', '')
-
-        response = {}
-
-        if org_id & new_ftp_location:
-            try:
-                organization = Organization.objects.get(org_id=org_id)
-                # TODO FTP LOCATION IN THE DB
-                organization.save()
-                response.update({'ftp_detail': 'FTP Location has been updated'})
 
             except Organization.DoesNotExist:
                 return Response({'detail': 'Invalid organization'},
