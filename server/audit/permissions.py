@@ -89,6 +89,9 @@ class IsAssignedToBin(BasePermission):
 
     def has_permission(self, request, view):
         assigned_sk = False
+        if 'pk' in view.kwargs:
+            bin = BinToSK.objects.get(bin_id=view.kwargs['pk'])
+            return request.user.id == bin.customuser_id
         if 'customuser_id' in request.data:
             assigned_sk_var = request.data['customuser_id']
             audit_var = request.data['init_audit_id']
