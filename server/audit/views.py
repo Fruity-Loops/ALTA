@@ -10,8 +10,8 @@ from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
-        ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
-            IsAssignedToRecord, CanCreateRecord
+    ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
+    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
 from .models import Audit, BinToSK, Record
 
 
@@ -234,7 +234,7 @@ class RecordViewSet(LoggingViewset):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
-            sk_perms = [IsAssignedToBin]
+            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord]
         elif self.request.method in ['PATCH', 'DELETE']:
             sk_perms = [IsAssignedToRecord]
         else:
@@ -264,6 +264,10 @@ class RecordViewSet(LoggingViewset):
         set_audit_accuracy(instance.audit.audit_id)
         set_bin_accuracy(instance.bin_to_sk.bin_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
+    def list(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):
