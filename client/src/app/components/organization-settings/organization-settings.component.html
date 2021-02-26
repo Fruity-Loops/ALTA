@@ -1,20 +1,64 @@
 <mat-card>
-  <h1>Organization Settings</h1>
-<div id="refresh">
-  <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">
-    <mat-form-field appearance="outline">
-      <input matInput id="time" type="number" formControlName="time" placeholder="Time in minutes"/>
-    </mat-form-field>
-    <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
-      Update Refresh time
-    </button>
-  </form>
-  <mat-divider>
-  </mat-divider>
-  <h1>Inventory Extractions</h1>
-  <mat-form-field appearance="outline">
-    <mat-label>FTP File Location</mat-label>
-    <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
-  </mat-form-field>
-</div>
+  <mat-card-header>
+    <mat-card-title>
+      Organization Settings
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-divider></mat-divider>
+
+  <div class="container">
+    <div class="subtitle">
+      <mat-card-header>
+        <mat-card-subtitle>
+          Inventory Extractions
+        </mat-card-subtitle>
+      </mat-card-header>
+    </div>
+
+    <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">
+      <div class="flex-container" fxLayout="row" fxLayoutAlign="space-evenly none">
+        <div class="flex-container" fxLayout="column" fxLayoutAlign="none none">
+
+          <mat-form-field appearance="outline">
+            <mat-label>FTP File Location</mat-label>
+            <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+          </mat-form-field>
+        </div>
+        <div class="flex-container" fxLayout="column" fxLayoutAlign="none none">
+          <div class="flex-container" fxLayout="row" fxLayoutAlign="none none">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Repeat Every</mat-label>
+              <input matInput id="time" type="number" formControlName="time" placeholder="Time unit"/>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Interval</mat-label>
+              <mat-select matNativeControl required>
+                <mat-option value="minutes">Minutes</mat-option>
+                <mat-option value="hours">Hours</mat-option>
+                <mat-option value="days">Days</mat-option>
+                <mat-option value="weeks">Weeks</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+<!--      XLSX FILE INPUT-->
+      <div class="flex-container" fxLayout="row" fxLayoutAlign="space-evenly none">
+          <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="csvInputChange($event)" accept=".xlsx"/>
+          <button mat-stroked-button color="primary" (click)="csvInput.click()">Choose Spreadsheet File (.xlsx)</button>
+      </div>
+<!--      SUBMIT BUTTON-->
+      <div class="flex-container-submit" fxLayout="row" fxLayoutAlign="space-evenly space-evenly">
+        <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
+          Submit
+        </button>
+      </div>
+    </form>
+
+
+  </div>
+  <span class="version-info">Current build: {{version.full}}</span>
+
 </mat-card>

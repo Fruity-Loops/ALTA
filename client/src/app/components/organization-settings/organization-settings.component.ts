@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrganizationSettingsService} from "../../services/organization-settings.service";
+import {VERSION} from "@angular/material";
 
 @Component({
   selector: 'app-organization-settings',
@@ -8,6 +9,7 @@ import {OrganizationSettingsService} from "../../services/organization-settings.
   styleUrls: ['./organization-settings.component.scss']
 })
 export class OrganizationSettingsComponent implements OnInit {
+  version = VERSION;
   timeForm: FormGroup;
   body: any;
   data: any;
@@ -15,12 +17,12 @@ export class OrganizationSettingsComponent implements OnInit {
   errorMessage = '';
   constructor(
     private organizationSettings: OrganizationSettingsService,
-
     private fb: FormBuilder
   ) {
 
     this.timeForm = this.fb.group({
       time: ['', Validators.required],
+      ftpLocation: ['', Validators.required]
     });
 
 
@@ -43,6 +45,10 @@ export class OrganizationSettingsComponent implements OnInit {
         this.errorMessage = err;
       }
     );
+  }
+
+  csvInputChange(fileInputEvent: any) {
+    console.log(fileInputEvent.target.files[0]);
   }
 
 }
