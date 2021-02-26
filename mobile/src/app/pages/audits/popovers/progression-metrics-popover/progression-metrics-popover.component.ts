@@ -62,7 +62,7 @@ export class ProgressionMetricsPopoverComponent implements OnInit {
           this.loggedInUser = user;
           this.auditService.getBinProgressionMetrics(
             user.user_id,
-            user.organization_id,
+            this.auditID,
             this.binID || this.navParams.get('binID'),
           ).subscribe(
             async (res) => {
