@@ -140,7 +140,19 @@ class BinTestCase(APITestCase):
         self.item_one = Item.objects.get(Batch_Number=12731370)
         self.item_two = Item.objects.get(Batch_Number=12752843)
         self.audit = Audit.objects.create()
-        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
+        # check if this was there before
+        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)
+
+    def test_bin_to_sk_retrieve_as_sk_pk(self):
+        """ Validate permissions for retrieving single bin work """
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.get("/bin-to-sk/2/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['bin_id'], 2)
+
+        response2 = self.client.get("/bin-to-sk/1/")
+        self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN)
+
 
     def test_bin_to_sk_create(self):
         """ Create BinToSK designation as inventory manager """
