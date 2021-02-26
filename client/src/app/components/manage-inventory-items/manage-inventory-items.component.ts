@@ -9,6 +9,10 @@ import {Router} from '@angular/router';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {TableManagementComponent} from '../TableManagement.component';
 
+@NgModule({
+  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
+})
+
 @Component({
   selector: 'app-manage-inventory-items',
   templateUrl: './manage-inventory-items.component.html',

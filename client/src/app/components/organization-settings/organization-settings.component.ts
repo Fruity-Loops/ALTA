@@ -1,7 +1,6 @@
 import {Component, Injectable, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrganizationSettingsService} from "../../services/organization-settings.service";
-import {VERSION} from "@angular/material";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -10,9 +9,10 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   styleUrls: ['./organization-settings.component.scss']
 })
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OrganizationSettingsComponent implements OnInit {
-  version = VERSION;
   orgSettingsForm: FormGroup;
   body: any;
   data: any;
