@@ -76,9 +76,9 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
   }
 
   ngOnInit(): void {
-    this.params = this.params.append('page', String(this.pageIndex));
-    this.params = this.params.append('page_size', String(this.pageSize));
-    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.append('page', String(this.pageIndex))
+      .append('page_size', String(this.pageSize))
+      .append('organization', String(localStorage.getItem('organization_id')));
     this.getItems();
     this.init();
     this.inventoryItemToAudit = [];
@@ -143,20 +143,6 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     this.dataSource = new MatTableDataSource(this.items);
   }
 
-  searchItem(): void {
-
-    this.pageIndex = 1;
-    this.params = this.params.set('page', String(this.pageIndex));
-
-    for (const value in this.searchForm.value) {
-      if (this.searchForm.value[value] === '') {
-        this.params = this.params.delete(value);
-      } else {
-        this.params = this.params.set(value, this.searchForm.value[value]);
-      }
-    }
-    this.updatePage();
-  }
   // If an Inventory item checkbox is selected then add the id to the list
   onChange(value: number): void {
     if (this.inventoryItemToAudit.includes(value)) {
