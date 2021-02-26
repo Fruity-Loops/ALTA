@@ -16,11 +16,8 @@ export class OrganizationSettingsService {
   constructor(private http: HttpClient) {
   }
 
-  updateRefreshItemsTime(body: object): Observable<any> {
+  updateOrganizationSettings(body: object): Observable<any> {
     return this.http.post(`${BASEURL}/InventoryItemRefreshTime/`, body);
   }
 
-  updateFTPLocation(body: object): Observable<any> {
-    return this.http.post(`${BASEURL}/FTPLocation/`, body);
-  }
 }

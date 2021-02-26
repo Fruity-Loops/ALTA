@@ -31,11 +31,6 @@ export class OrganizationSettingsComponent implements OnInit {
     });
   }
 
-  openSnackBar(message: string, action: string){
-    this._snackBar.open(message, action, {
-      duration: 2000,
-    })
-  }
 
   ngOnInit(): void {
     this.orgSettingsForm = this.fb.group({
@@ -55,19 +50,7 @@ export class OrganizationSettingsComponent implements OnInit {
     formData.append('organization_id', localStorage.getItem('organization_id') || '');
 
 
-    // this.body = {
-    //   file: this.orgSettingsForm.getRawValue().inv_extract_file,
-    //   new_job_timing: this.orgSettingsForm.value.time,
-    //   new_job_interval: this.orgSettingsForm.value.interval,
-    //   ftp_location: this.orgSettingsForm.value.ftpLocation,
-    //   organization_id: localStorage.getItem('organization_id'),
-    // };
-
-
-    this.organizationSettings.updateRefreshItemsTime(formData).subscribe(
-      // (data: any) => {
-      //   this.orgSettingsForm.reset();
-      // },
+    this.organizationSettings.updateOrganizationSettings(formData).subscribe(
       (err: string) => {
         this.errorMessage = err;
       }
@@ -87,6 +70,12 @@ export class OrganizationSettingsComponent implements OnInit {
       this.file = event.target.files[0];
       this.orgSettingsForm.get('inv_extract_file')?.setValue(this.file);
     }
+  }
+
+  openSnackBar(message: string, action: string){
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    })
   }
 
 }

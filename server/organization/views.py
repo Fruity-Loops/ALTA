@@ -46,8 +46,6 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
 
     default_refresh_time = 15
 
-    # parser_classes = [FormParser, MultiPartParser]
-
     # Note: if other methods are added here, keep in mind that the permissions will need to change
     def get_permissions(self):
         permission_classes = PermissionFactory(self.request).get_general_permissions([])
