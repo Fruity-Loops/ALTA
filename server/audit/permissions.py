@@ -112,6 +112,17 @@ class IsAssignedToBin(BasePermission):
         return assigned_sk
 
 
+class CanAccessAuditQParam(BasePermission):
+    message = "The audit ID being accessed through query params should have the same organization as you"
+
+    def has_permission(self, request, view):
+        audit_id = request.GET.get('audit_id', '')
+        if audit_id != '':
+            audit = Audit.objects.get(audit_id=audit_id)
+            return request.user.organization_id == audit.organization_id
+        return True
+
+
 class IsAssignedToAudit(BasePermission):
     message = "You must be an assigned stock keeper in this audit to access it's information"
 
