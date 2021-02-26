@@ -9,10 +9,6 @@ import {Router} from '@angular/router';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {TableManagementComponent} from '../TableManagement.component';
 
-@NgModule({
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
-})
-
 @Component({
   selector: 'app-manage-inventory-items',
   templateUrl: './manage-inventory-items.component.html',
@@ -145,32 +141,6 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     // TODO: define proper types
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
-  }
-
-  // refreshTime(): void {
-  //   this.body = {
-  //     new_job_timing: this.timeForm.value.time,
-  //     organization: localStorage.getItem('organization_id'),
-  //   };
-  //
-  //   this.itemsService.updateRefreshItemsTime(this.body).subscribe(
-  //     (data) => {
-  //       this.timeForm.reset();
-  //     },
-  //     (err) => {
-  //       this.errorMessage = err;
-  //     }
-  //   );
-  // }
-
-    this.itemsService.updateRefreshItemsTime(this.body).subscribe(
-      (data) => {
-        this.timeForm.reset();
-      },
-      (err) => {
-        this.errorMessage = err;
-      }
-    );
   }
 
   searchItem(): void {
