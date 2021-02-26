@@ -16,25 +16,18 @@
       </mat-card-header>
     </div>
 
-    <form class="col s12" [formGroup]="timeForm" novalidate (ngSubmit)="refreshTime()">
-      <div class="flex-container" fxLayout="row" fxLayoutAlign="space-evenly none">
-        <div class="flex-container" fxLayout="column" fxLayoutAlign="none none">
+    <form class="col s12" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="refreshTime()">
+      <div class="form-settings">
 
-          <mat-form-field appearance="outline">
-            <mat-label>FTP File Location</mat-label>
-            <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
-          </mat-form-field>
-        </div>
-        <div class="flex-container" fxLayout="column" fxLayoutAlign="none none">
+<!--      REPEAT TIME-->
           <div class="flex-container" fxLayout="row" fxLayoutAlign="none none">
-
             <mat-form-field appearance="outline">
               <mat-label>Repeat Every</mat-label>
               <input matInput id="time" type="number" formControlName="time" placeholder="Time unit"/>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Interval</mat-label>
-              <mat-select matNativeControl required>
+              <mat-select matNativeControl required formControlName="interval">
                 <mat-option value="minutes">Minutes</mat-option>
                 <mat-option value="hours">Hours</mat-option>
                 <mat-option value="days">Days</mat-option>
@@ -42,18 +35,25 @@
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
+<!--      FTP LOCATION-->
+      <div class="flex-container" fxLayout="row" fxLayoutAlign="start none">
+
+        <mat-form-field appearance="outline">
+          <mat-label>FTP File Location</mat-label>
+          <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+        </mat-form-field>
       </div>
 <!--      XLSX FILE INPUT-->
-      <div class="flex-container" fxLayout="row" fxLayoutAlign="space-evenly none">
-          <input #csvInput hidden="true" type="file" onclick="this.value=null" (change)="csvInputChange($event)" accept=".xlsx"/>
-          <button mat-stroked-button color="primary" (click)="csvInput.click()">Choose Spreadsheet File (.xlsx)</button>
+      <div class="flex-container" fxLayout="row" fxLayoutAlign="start-evenly none">
+          <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".xlsx"/>
+          <button mat-stroked-button type="button" color="primary" (click)="csvInput.click()" >{{getFileName()}}</button>
       </div>
 <!--      SUBMIT BUTTON-->
       <div class="flex-container-submit" fxLayout="row" fxLayoutAlign="space-evenly space-evenly">
-        <button mat-stroked-button id="signupbtn" [disabled]="!timeForm.valid" class="save">
+        <button mat-stroked-button type="submit" id="signupbtn" [disabled]="!orgSettingsForm.valid" class="save">
           Submit
         </button>
+      </div>
       </div>
     </form>
 

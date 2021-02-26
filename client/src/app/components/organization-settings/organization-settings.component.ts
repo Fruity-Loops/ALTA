@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrganizationSettingsService} from "../../services/organization-settings.service";
 import {VERSION} from "@angular/material";
@@ -10,9 +10,10 @@ import {VERSION} from "@angular/material";
 })
 export class OrganizationSettingsComponent implements OnInit {
   version = VERSION;
-  timeForm: FormGroup;
+  orgSettingsForm: FormGroup;
   body: any;
   data: any;
+  file: any;
 
   errorMessage = '';
   constructor(
@@ -20,26 +21,47 @@ export class OrganizationSettingsComponent implements OnInit {
     private fb: FormBuilder
   ) {
 
-    this.timeForm = this.fb.group({
+    this.orgSettingsForm = this.fb.group({
       time: ['', Validators.required],
-      ftpLocation: ['', Validators.required]
+      ftpLocation: ['', Validators.required],
+      inv_extract_file: ['', Validators.required]
     });
-
-
   }
 
   ngOnInit(): void {
+    this.orgSettingsForm = this.fb.group({
+      time: [''],
+      interval: [''],
+      ftpLocation: [''],
+      inv_extract_file: ['']
+    });
   }
 
   refreshTime(): void {
-    this.body = {
-      new_job_timing: this.timeForm.value.time,
-      organization: localStorage.getItem('organization_id'),
-    };
+    const formData = new FormData();
+    formData.append('file', this.orgSettingsForm.get('inv_extract_file')?.value);
+    formData.append('new_job_timing', this.orgSettingsForm.value.time);
+    formData.append('new_job_interval', this.orgSettingsForm.value.interval);
+    formData.append('ftp_location', this.orgSettingsForm.value.ftpLocation);
+    formData.append('organization_id', localStorage.getItem('organization_id') || '');
 
-    this.organizationSettings.updateRefreshItemsTime(this.body).subscribe(
+
+    // this.body = {
+    //   file: this.orgSettingsForm.getRawValue().inv_extract_file,
+    //   new_job_timing: this.orgSettingsForm.value.time,
+    //   new_job_interval: this.orgSettingsForm.value.interval,
+    //   ftp_location: this.orgSettingsForm.value.ftpLocation,
+    //   organization_id: localStorage.getItem('organization_id'),
+
+      // new_job_timing: this.orgSettingsForm.value.time,
+      // organization: localStorage.getItem('organization_id'),
+    // };
+
+    // console.log(this.body.file)
+
+    this.organizationSettings.updateRefreshItemsTime(formData).subscribe(
       (data: any) => {
-        this.timeForm.reset();
+        this.orgSettingsForm.reset();
       },
       (err: string) => {
         this.errorMessage = err;
@@ -47,8 +69,19 @@ export class OrganizationSettingsComponent implements OnInit {
     );
   }
 
-  csvInputChange(fileInputEvent: any) {
-    console.log(fileInputEvent.target.files[0]);
+  getFileName(): string {
+    if(this.file){
+      return this.file.name;
+    } else {
+      return "Choose Spreadsheet File (.xlsx)"
+    }
+  }
+
+  selectFile(event: any) {
+    if (event.target.files.length > 0){
+      const file = event.target.files[0];
+      this.orgSettingsForm.get('inv_extract_file')?.setValue(file);
+    }
   }
 
 }

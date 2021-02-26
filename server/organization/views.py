@@ -48,17 +48,54 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
         return [permission() for permission in permission_classes]
 
     def post(self, request):
+        print(request.data.get('file'))
+        data = request.data
+        # print(data)
+        org_id = data.get('organization', '')
+        # new_job_timing = int(data.get('new_job_timing', ''))
+
+        # file = data.get('file')
+        # print(file)
+
+        response = {}
+
+        if org_id and new_job_timing:
+            try:
+                organization = Organization.objects.get(org_id=org_id)
+                organization.inventory_items_refresh_job = new_job_timing
+                organization.save()
+                start_new_job(str(org_id), new_job_timing)
+                response.update({'time_detail': 'Time has been updated'})
+
+            except Organization.DoesNotExist:
+                return Response({'detail': 'Invalid organization'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(response, status=status.HTTP_200_OK)
+
+
+class ModifyOrganizationFTPLocationUpdate(generics.GenericAPIView):
+
+    def get_permissions(self):
+        permission_classes = PermissionFactory(self.request).get_general_permissions([])
+        return [permission() for permission in permission_classes]
+
+    def post(self, request):
         data = request.data
         org_id = data.get('organization', '')
-        new_job_timing = int(data.get('new_job_timing', ''))
+        new_ftp_location = data.get('ftp_location', '')
 
-        try:
-            organization = Organization.objects.get(org_id=org_id)
-            organization.inventory_items_refresh_job = new_job_timing
-            organization.save()
-            start_new_job(str(org_id), new_job_timing)
-            return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
+        response = {}
 
-        except Organization.DoesNotExist:
-            return Response({'detail': 'Invalid organization'},
-                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if org_id & new_ftp_location:
+            try:
+                organization = Organization.objects.get(org_id=org_id)
+                # TODO FTP LOCATION IN THE DB
+                organization.save()
+                response.update({'ftp_detail': 'FTP Location has been updated'})
+
+            except Organization.DoesNotExist:
+                return Response({'detail': 'Invalid organization'},
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response(response, status=status.HTTP_200_OK)
