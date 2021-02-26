@@ -25,11 +25,11 @@ class AuditViewSet(LoggingViewset):
     def get_permissions(self):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
-        permission_classes = []
-        # permission_classes = factory.get_general_permissions(
-        #         im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
-        #         sk_additional_perms=[]
-        # )
+        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
+        permission_classes = factory.get_general_permissions(
+                im_additional_perms=audit_permissions,
+                sk_additional_perms=audit_permissions
+        )
         return [permission() for permission in permission_classes]
 
     def get_serializer(self, *args, **kwargs):

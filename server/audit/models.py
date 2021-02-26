@@ -6,6 +6,7 @@ USER_MODEL = 'user_account.CustomUser'
 PENDING = 'Pending'
 COMPLETE = 'Complete'
 
+
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
     organization = models.ForeignKey(to='organization.Organization',
