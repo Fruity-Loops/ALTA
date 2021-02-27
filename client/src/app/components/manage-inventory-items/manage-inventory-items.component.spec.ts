@@ -66,7 +66,7 @@ describe('ManageInventoryItemsComponent', () => {
 
   it('should check initial time input is empty',() => {
     fixture.detectChanges();
-    expect(timeInput.value).toBe('')
+    expect(timeInput.value).toBe('');
   });
 
   it('should check initial Update Refresh Time Button is disabled',() => {

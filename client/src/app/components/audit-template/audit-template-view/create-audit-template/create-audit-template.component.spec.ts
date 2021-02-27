@@ -4,10 +4,25 @@ import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CreateAuditTemplateComponent } from './create-audit-template.component';
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
+import { By } from '@angular/platform-browser';
 
 describe('AuditTemplateComponent', () => {
   let component: CreateAuditTemplateComponent;
   let fixture: ComponentFixture<CreateAuditTemplateComponent>;
+
+  // @ts-ignore
+  let service: AuditTemplateService;
+
+  let startDateInput: HTMLInputElement;
+  let startTimeInput: HTMLInputElement;
+  
+  let templateInput: HTMLInputElement;
+  
+//  let locationInput: HTMLInputElement;
+//  let locationBtn: HTMLButtonElement;
+  
+//  let plantInput: HTMLInputElement;
+//  let plantBtn: HTMLButtonElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -26,10 +41,87 @@ describe('AuditTemplateComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
+    service = TestBed.inject(AuditTemplateService);
+
+    startDateInput = fixture.debugElement.query(By.css('#date')).nativeElement;
+    startTimeInput = fixture.debugElement.query(By.css('#time')).nativeElement;
+    
+    templateInput = fixture.debugElement.query(By.css('#title')).nativeElement;
+    
+//    locationInput = fixture.debugElement.query(By.css('#location')).nativeElement;
+//    locationBtn = fixture.debugElement.query(By.css('.ng-tns-c74-16')).nativeElement;
+    
+//    plantInput = fixture.debugElement.query(By.css('#plant')).nativeElement;
+//    plantBtn = fixture.debugElement.query(By.css('.ng-tns-c74-c74-17')).nativeElement;
+
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+     // Test that Save button creates a new template
+     it('should create a new template', () => {
+      fixture.detectChanges();
+      const button = fixture.debugElement.query(By.css("#create-template-button")).nativeElement;
+      expect(button.disabled).toBeFalsy();
+    });
+
+  it('should be able to enter Start Date', () => {
+    fixture.detectChanges();
+//    fixture.whenStable().then(() => {
+      startDateInput.value = '27/20/2021';
+      startDateInput.dispatchEvent(new Event('change'));
+      expect(startDateInput.value).toBe('27/20/2021');
+//      const button = fixture.debugElement.query(By.css("#create-template-button")).nativeElement;
+//      button.click;
+//    });
+  });
+
+  it('should be able to enter Start Time', () => {
+    fixture.detectChanges();
+//    fixture.whenStable().then(() => {
+      startTimeInput.value = '23:33';
+      startTimeInput.dispatchEvent(new Event('change'));
+      expect(startTimeInput.value).toBe('23:33');
+//    });
+  });
+
+  it('should be able to enter Template name', () => {
+    fixture.detectChanges();
+//    fixture.whenStable().then(() => {
+      templateInput.value = 'Test 001';
+      templateInput.dispatchEvent(new Event('change'));
+      expect(templateInput.value).toBe('Test 001');
+//    });
+  });
+
+/*
+  it('should be able to enter Location', () => {
+    fixture.detectChanges();
+//    fixture.whenStable().then(() => {
+      locationInput.value = 'Montreal';
+      locationInput.dispatchEvent(new Event('change'));
+      expect(locationInput.value).toBe('Montreal');
+
+      locationBtn.click;
+//      const selectedItem = fixture.debugElement.query(By.css('.ng-star-inserted')).nativeElement;
+//      expect(selectedItem.value).toBe(' Location: Montreal ');
+//    });
+  });
+
+  it('should be able to enter Plant', () => {
+    fixture.detectChanges();
+//    fixture.whenStable().then(() => {
+//      plantInput.value = 'Big One';
+//      plantInput.dispatchEvent(new Event('change'));
+//      expect(plantInput.value).toBe('Big One');
+
+//      plantBtn.click;
+//      const selected = fixture.debugElement.query(By.css('.ng-star-inserted')).nativeElement;
+//      expect(selected.value).toBe(' Plant: Big One ');
+//    });
+  });
+*/
 });
