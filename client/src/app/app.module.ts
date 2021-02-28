@@ -14,6 +14,7 @@ import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AuditReportComponent } from './components/audit-report/audit-report.component';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -30,7 +31,7 @@ import { AuditReportComponent } from './components/audit-report/audit-report.com
     HttpClientModule,
     MatModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     CookieService, // To manage cookie in frontend

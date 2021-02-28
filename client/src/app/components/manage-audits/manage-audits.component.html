@@ -66,7 +66,6 @@
         <td mat-cell *matCellDef="let object">
           <div *ngIf="column == 'audit_id'; else elseBlock" >
             <a [routerLink]="'audit-report/'+object['audit_id']">
-<!--               href="" (click)="goToReport(object['audit_id'])">-->
               {{ object[column]}}
             </a>
           </div>
@@ -77,10 +76,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-        <td *ngFor="let cell of row" (click)="alert()"></td>
-
-      </tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
     </table>
 

@@ -137,7 +137,4 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     console.log(id);
   }
 
-  alert(): void {
-    alert(1);
-  }
 }
