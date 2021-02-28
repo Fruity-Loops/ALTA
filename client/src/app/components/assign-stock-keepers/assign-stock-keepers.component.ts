@@ -16,6 +16,7 @@ import {AuthService, UserLocalStorage} from '../../services/authentication/auth.
 export class AssignStockKeepersComponent implements OnInit {
   skToAssign: Array<any>;
   busySKs: Array<any>;
+  itemLocations: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
@@ -38,6 +39,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
+    this.itemLocations = [];
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
@@ -64,35 +66,46 @@ export class AssignStockKeepersComponent implements OnInit {
     * 2. how slow this can be to compute on the front-end
     */
 
-    clients.forEach((element: any) => {
-      if (element.role === 'SK') {
-        const isBusy = this.busySKs.find(user => user === element.id);
-        if (isBusy === undefined) {
-          element.availability = 'Available';
-        } else {
-          element.availability = 'Busy';
-        }
+    this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
+       const itemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
+       itemsLocation.forEach((selectedItem: any) => {
+        const obj = this.locationsAndUsers.find((item: any) => item.location === selectedItem);
+          if (obj === undefined) {
+            const getSKForLoc = clients.filter((user: any) => user.location === selectedItem && user.role === "SK");
+            if(getSKForLoc.length !== 0) {
+              this.locationsAndUsers.push(
+              {
+                location: selectedItem,
+                users: getSKForLoc
+              });
+            } else {
+              this.locationsAndUsers.push(
+              {
+                location: selectedItem,
+                users: []
+              });
+            }
+          }
+       });
 
-        const obj = this.locationsAndUsers.find(item => item.location === element.location);
-        if (obj === undefined) {
-          this.locationsAndUsers.push(
-            {
-              location: element.location,
-              users: new Array<User>(element)
-            });
-        }
-        else {
-          obj.users.push(element);
-        }
-      }
-    });
-
-    this.dataSource = new MatTableDataSource();
-    this.locationsAndUsers.forEach(item => {
-      item.users.forEach((user: User) => {
-        this.dataSource.data.push(user);
+      this.locationsAndUsers.forEach((location: any) => {
+        location.users.forEach((user: any) => {
+          const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
+       	  if (isBusy === undefined) {
+       	    user.availability = 'Available';
+          } else {
+            user.availability = 'Busy';
+          }
+        });
       });
-    });
+
+      this.dataSource = new MatTableDataSource();
+      this.locationsAndUsers.forEach(item => {
+        item.users.forEach((user: User) => {
+          this.dataSource.data.push(user);
+        });
+      });
+   });
   }
 
   // If a stock-keeper checkbox is selected then add the id to the list

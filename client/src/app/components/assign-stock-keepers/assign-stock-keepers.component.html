@@ -15,7 +15,11 @@
     </mat-card-header>
 	</mat-expansion-panel-header>
 
-	<table aria-labelledby="select_sks" mat-table [dataSource]="dataSource" matSort>
+  <div class="error-no-SK" *ngIf="item.users.length == 0">
+    Error: there are no stock-keepers from this location
+  </div>
+
+	<table *ngIf="item.users.length !== 0" aria-labelledby="select_sks" mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="Check_Boxes">
         <th id="select_check_box" mat-header-cell *matHeaderCellDef>Select</th>
@@ -49,9 +53,9 @@
 </mat-expansion-panel>
 
 <div class="bottom-buttons">
-      <button mat-stroked-button  id="goback" class="bottom-goback" 
+      <button mat-stroked-button  id="goback" class="bottom-goback"
               (click)="goBackIventory()">Go Back</button>
-      <button mat-stroked-button  id="discard" class="bottom-discard" color="warn" 
+      <button mat-stroked-button  id="discard" class="bottom-discard" color="warn"
               (click)="openDialogWithRef(discardDialog)">Discard</button>
       <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"
               (click)="submitAssignedSKs()">Assign</button>
