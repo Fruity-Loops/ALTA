@@ -57,7 +57,7 @@
               (click)="goBackIventory()">Go Back</button>
       <button mat-stroked-button  id="discard" class="bottom-discard" color="warn"
               (click)="openDialogWithRef(discardDialog)">Discard</button>
-      <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0"
+      <button mat-stroked-button  id="assign" class="bottom-assign" [disabled]="skToAssign.length<=0 || disableAssign"
               (click)="submitAssignedSKs()">Assign</button>
 </div>
 

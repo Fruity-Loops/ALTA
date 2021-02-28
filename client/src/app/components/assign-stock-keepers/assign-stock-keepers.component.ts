@@ -25,6 +25,7 @@ export class AssignStockKeepersComponent implements OnInit {
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
+  disableAssign = false;
 
   params = new HttpParams();
 
@@ -84,6 +85,7 @@ export class AssignStockKeepersComponent implements OnInit {
                 location: selectedItem,
                 users: []
               });
+              this.disableAssign = true;
             }
           }
        });
