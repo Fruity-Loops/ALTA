@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { TableManagementComponent } from '../TableManagement.component';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-manage-audits',
@@ -38,7 +39,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   constructor(
     private auditService: ManageAuditsService,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    private router: Router
   ) {
     super(fb);
     this.formg = fb;
@@ -60,10 +62,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   }
 
   ngOnInit(): void {
-    this.params = this.params.append('page', String(this.pageIndex));
-    this.params = this.params.append('page_size', String(this.pageSize));
-    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
-    this.params = this.params.append('status', 'Active');
+    this.params = this.params.append('page', String(this.pageIndex))
+      .append('page_size', String(this.pageSize))
+      .append('organization', String(localStorage.getItem('organization_id')))
+      .append('status', 'Active');
     this.searchAudit();
     this.selectedAudits = [];
   }
@@ -128,5 +130,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     } else {
       this.selectedAudits.push(value);
     }
+  }
+
+  goToReport(id: number): void {
+    this.router.navigate(['audit-report/'+id])
+    console.log(id);
+  }
+
+  alert(): void {
+    alert(1);
   }
 }

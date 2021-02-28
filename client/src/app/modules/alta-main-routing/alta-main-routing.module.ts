@@ -17,6 +17,7 @@ import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-kee
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
+import {AuditReportComponent} from "../../components/audit-report/audit-report.component";
 
 
 export const routes: Routes = [
@@ -57,6 +58,9 @@ export const routes: Routes = [
         {
           path: '', component: ManageAuditsComponent
         },
+          {
+            path: 'audit-report/:ID', component: AuditReportComponent
+          },
         {
           path: 'assign-sk', children: [
             {
