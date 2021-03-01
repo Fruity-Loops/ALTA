@@ -35,7 +35,7 @@ class OrganizationTestCase(APITestCase):
     def test_create_organization_sys_admin_success(self):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
-        data = {'org_name': 'test_case'}
+        data = {'org_name': 'test_case', 'address': ['Florida']}
         response = self.client.post("/organization/", data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

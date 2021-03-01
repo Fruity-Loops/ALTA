@@ -89,6 +89,16 @@ export class ManageOrganizationsComponent implements OnInit {
     this.isActive = organization.status ? 'active' : 'disabled';
   }
 
+  isGlobal(address: string): string {
+    const bracketCount = address.split('[').length - 1;
+    if (bracketCount > 3) {
+      return 'GLOBAL';
+    } else {
+      // Remove open and close bracket and apostrophe from the address string.
+      return address.replace(/\[|\]|\'/g, '');
+    }
+  }
+
   openCreateDialog(): void {
     this.dialog.open(this.createOrgDialog);
   }
