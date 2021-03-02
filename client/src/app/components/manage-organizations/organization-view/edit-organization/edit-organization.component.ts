@@ -1,5 +1,5 @@
 import {Component, Inject, Optional} from '@angular/core';
-import {ManageOrganizationsService} from '../../../../services/organizations/manage-organizations.service';
+import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import {ActivatedRoute} from '@angular/router';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {OrganizationViewComponent} from '../organization-view.component';
@@ -34,7 +34,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
         this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
         this.originalStatus = organization.status;
         this.orgName = organization.org_name;
-        this.location = organization.address;
+        this.location = organization.address.replace(/\[|\]|\'/g, '');
       });
     });
   }
@@ -52,7 +52,6 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   }
 
   submitQuery(): void {
-
     if (this.originalStatus && this.isActive === 'Disabled') {
       this.dialogRef = this.dialog.open(DisableOrganizationDialogComponent, {data: {id: this.orgID, title: this.orgName}});
       this.dialogRef.afterClosed().subscribe((result: any) => {
@@ -66,10 +65,11 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
   }
 
   updateOrganization(): void {
+    this.locationInputOrFile();
     this.organizationService.updateOrganization({
       org_id: this.orgID,
       org_name: this.orgName,
-      address: this.location,
+      address: this.locations,
       status: this.isActive === this.activeStates[0]
     }).subscribe(() => {
       location.reload();
