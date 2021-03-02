@@ -175,7 +175,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     const key = event.key;
     // The last key is always 'Enter'
     if (key === 'Enter') {
-      this.validateItem();
+      this.validateItem(false, true);
     }
     else {
       this.barcode += key;
@@ -321,7 +321,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
 
-  getRecord(recordID) {
+  async getRecord(recordID) {
     this.auditService.getRecord(
       this.loggedInUser.user_id,
       this.auditID,

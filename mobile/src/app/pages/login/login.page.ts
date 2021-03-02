@@ -36,7 +36,7 @@ export class LoginPage implements OnInit {
       message: 'Signing in...'
     });
     await whileLoading.present();
-    
+
     this.authService.login(this.formGroup.value).subscribe(
       async (res) => {
         await whileLoading.dismiss();

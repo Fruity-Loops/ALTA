@@ -17,7 +17,7 @@ export async function setLoggedInUser(userObject): Promise<void> {
 }
 
 export async function setToken(userObject): Promise<void> {
-    let value = await fetchLoggedInUser();
+    const value = await fetchLoggedInUser();
     value.token = userObject.token;
     await Storage.set({
         key: USER_KEY,

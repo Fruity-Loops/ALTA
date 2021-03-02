@@ -33,7 +33,7 @@ export class AuthService {
   }
 
   login(body): Observable<any> {
-    body.email = this.email
+    body.email = this.email;
     return this.http.post(`${BASEURL}/login-mobile-pin/`, body)
       .pipe(
         switchMap((data: any) => {
