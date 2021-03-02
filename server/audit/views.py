@@ -8,11 +8,12 @@ from rest_framework.decorators import action
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
-    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer
+    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
+        AssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
-from .models import Audit, BinToSK, Record
+from .models import Audit, Assignment, BinToSK, Record
 
 
 class AuditViewSet(LoggingViewset):
@@ -150,6 +151,30 @@ def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
 
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
+
+class AssignmentViewSet(LoggingViewset):
+    http_method_names = ['post', 'get', 'patch', 'delete']
+    queryset = Assignment.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = AssignmentSerializer
+        return serializer_class(*args, **kwargs)
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = SKPermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions(
+            im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
+            sk_additional_perms=[IsAssignedToBin]
+        )
+        return [permission() for permission in permission_classes]
+
+    def create(self, request, *args, **kwargs):
+        is_many = isinstance(request.data, list)
+        serializer = self.get_serializer(data=request.data, many=is_many)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BinToSKViewSet(LoggingViewset):
