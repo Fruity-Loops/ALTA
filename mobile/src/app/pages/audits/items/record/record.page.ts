@@ -29,7 +29,7 @@ export class RecordPage implements OnInit {
 
   ngOnInit() {
     this.setRecordData();
-    this.buildLoginForm();
+    this.buildForm();
   }
 
   setRecordData() {
@@ -44,7 +44,7 @@ export class RecordPage implements OnInit {
     }
   }
 
-  buildLoginForm() {
+  buildForm() {
     this.expectedQuantity = this.modalData.itemData.Quantity;
     this.modalData.itemData.Quantity = this.expectedQuantity !== 0 ? this.modalData.itemData.Quantity : '';
     this.formGroup = this.formBuilder.group({
@@ -73,12 +73,12 @@ export class RecordPage implements OnInit {
 
   submit() {
     if (this.recordID) {
-      return this.patch();
+      return this.patchRecord();
     }
-    return this.validate();
+    return this.validateItem();
   }
 
-  async validate() {
+  async validateItem() {
     const whileLoading = await this.loadingController.create();
     await whileLoading.present();
 
@@ -107,7 +107,7 @@ export class RecordPage implements OnInit {
 
   }
 
-  async patch() {
+  async patchRecord() {
     const whileLoading = await this.loadingController.create();
     await whileLoading.present();
 
