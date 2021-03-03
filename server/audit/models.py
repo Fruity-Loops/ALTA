@@ -1,6 +1,7 @@
 from djongo import models
 from inventory_item.models import Item, ItemFields
 from audit_template.models import AuditTemplate
+
 USER_MODEL = 'user_account.CustomUser'
 
 PENDING = 'Pending'
@@ -20,8 +21,8 @@ class Audit(models.Model):
         to=USER_MODEL,
         on_delete=models.CASCADE,
         related_name='initiated_by')
-    initiated_on = models.DateTimeField(auto_now_add=True) # Auto set when object is first created
-    last_modified_on = models.DateTimeField(auto_now=True) # Auto set every time object is saved
+    initiated_on = models.DateTimeField(auto_now_add=True)  # Auto set when object is first created
+    last_modified_on = models.DateTimeField(auto_now=True)  # Auto set every time object is saved
     assigned_sk = models.ManyToManyField(to=USER_MODEL, blank=True, default=0)
     template_id = models.ForeignKey(AuditTemplate, on_delete=models.CASCADE, blank=True, null=True)
     accuracy = models.FloatField(default=0.0)
@@ -50,11 +51,12 @@ class BinToSK(models.Model):
     ]
     status = models.CharField(max_length=12, choices=BIN_STATUS, default=PENDING)
 
+
 class Record(ItemFields):
     record_id = models.AutoField(primary_key=True)
     item_id = models.CharField(max_length=256, null=False)
-    audit=models.ForeignKey(Audit, on_delete=models.CASCADE)
-    bin_to_sk=models.ForeignKey(BinToSK, on_delete=models.CASCADE)
+    audit = models.ForeignKey(Audit, on_delete=models.CASCADE)
+    bin_to_sk = models.ForeignKey(BinToSK, on_delete=models.CASCADE)
     comment = models.TextField(blank=True)
     flagged = models.BooleanField(default=False)
     first_verified_on = models.DateTimeField(auto_now_add=True)
@@ -70,4 +72,4 @@ class Record(ItemFields):
         (MISSING, 'Missing'),
         (NEW, 'New')
     ]
-    status = models.CharField(max_length=8, choices=RECORD_STATUS,default=PENDING)
+    status = models.CharField(max_length=8, choices=RECORD_STATUS, default=PENDING)
