@@ -1,4 +1,3 @@
-
 from rest_framework import serializers
 from inventory_item.serializers import ItemSerializer
 from user_account.serializers import UserAuditSerializer
@@ -6,7 +5,6 @@ from .models import Audit, BinToSK, Record
 
 
 class AuditSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Audit
         fields = '__all__'
@@ -31,6 +29,15 @@ class ProperAuditSerializer(serializers.ModelSerializer):
                   'inventory_items', 'accuracy']
 
 
+class RecommendationBinSerializer(serializers.ModelSerializer):
+    customuser = UserAuditSerializer(read_only=True, many=False)
+    init_audit = AuditSerializer(read_only=True, many=False)
+
+    class Meta:
+        model = BinToSK
+        fields = ['bin_id','Bin','init_audit', 'customuser']
+
+
 class GetBinToSKSerializer(serializers.ModelSerializer):
     customuser = UserAuditSerializer(read_only=True, many=False)
     init_audit = AuditSerializer(read_only=True, many=False)
@@ -41,7 +48,6 @@ class GetBinToSKSerializer(serializers.ModelSerializer):
 
 
 class PostBinToSKSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = BinToSK
         fields = '__all__'
@@ -56,7 +62,6 @@ class BinItemSerializer(serializers.ModelSerializer):
 
 
 class RecordSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Record
         fields = "__all__"

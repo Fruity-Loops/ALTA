@@ -8,6 +8,7 @@ router.register(r'audit/bin-to-sk', views.BinToSKViewSet, basename='bin-to-sk')
 router.register(r'audit', views.AuditViewSet, basename='audit')
 router.register(r'bin-to-sk', views.BinToSKViewSet, basename='bin-to-sk')
 router.register(r'record', views.RecordViewSet, basename='record')
+router.register(r'recommendation', views.RecommendationViewSet, basename='recommendation')
 
 urlpatterns = [
     path('', include(router.urls)),

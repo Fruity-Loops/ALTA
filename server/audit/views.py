@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.decorators import action
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
-    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer
+    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, RecommendationBinSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
@@ -27,8 +28,8 @@ class AuditViewSet(LoggingViewset):
         factory = SKPermissionFactory(self.request)
         audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-                im_additional_perms=audit_permissions,
-                sk_additional_perms=audit_permissions
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
 
@@ -336,3 +337,21 @@ class RecordViewSet(LoggingViewset):
                 status=status.HTTP_400_BAD_REQUEST)
 
         return response
+
+
+class RecommendationViewSet(LoggingViewset):
+    """
+    Allows obtaining all clients and updating them
+    """
+    http_method_names = ['get']
+    serializer_class = RecommendationBinSerializer
+
+    # def get_queryset(self):
+    #     return BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values('Bin','total')
+
+    def list(self, request):
+        bins = list(BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values(
+            'Bin', 'total').order_by('total')[:5])
+
+        # serializer = UserSerializer(queryset, many=True)
+        return Response(bins)
