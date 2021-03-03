@@ -344,14 +344,22 @@ class RecommendationViewSet(LoggingViewset):
     Allows obtaining all clients and updating them
     """
     http_method_names = ['get']
-    serializer_class = RecommendationBinSerializer
+    serializer_class = GetBinToSKSerializer
 
     # def get_queryset(self):
     #     return BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values('Bin','total')
 
     def list(self, request):
-        bins = list(BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values(
+        bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values(
             'Bin', 'total').order_by('total')[:5])
 
+        queryset = BinToSK.objects.all()
+        serializer = GetBinToSKSerializer(queryset, many=True)
+
+        parts_to_recommend = list(Record.objects.values('Part_Number').annotate(total=Count('Part_Number')).values('Part_Number', 'total').order_by('total').order_by('total')[:5])
+        # serializer = RecordSerializer(queryset,many=True)
+
+
         # serializer = UserSerializer(queryset, many=True)
-        return Response(bins)
+        data = {'bins_recommendation': bins_to_recommend, 'parts_recommendations': parts_to_recommend}
+        return Response(data)
