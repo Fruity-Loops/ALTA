@@ -359,7 +359,7 @@ class RecommendationViewSet(LoggingViewset):
         parts_to_recommend = list(Record.objects.values('Part_Number').annotate(total=Count('Part_Number')).values('Part_Number', 'total').order_by('total').order_by('total')[:5])
         # serializer = RecordSerializer(queryset,many=True)
 
-
-        # serializer = UserSerializer(queryset, many=True)
-        data = {'bins_recommendation': bins_to_recommend, 'parts_recommendations': parts_to_recommend}
+        items_to_recommend = list(Record.objects.filter(flagged=False).values('item_id').annotate(total=Count('item_id')).values('item_id', 'total').order_by('total')[:5])
+        # serializer = RecordSerializer(items_to_recommend, many=True)
+        data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend, 'items_recommendation': items_to_recommend}
         return Response(data)
