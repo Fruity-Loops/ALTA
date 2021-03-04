@@ -9,7 +9,7 @@ from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer
+        AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
@@ -158,16 +158,37 @@ class AssignmentViewSet(LoggingViewset):
 
     def get_serializer(self, *args, **kwargs):
         serializer_class = AssignmentSerializer
+        if self.action in ['list', 'retrieve']:
+            serializer_class = GetAssignmentSerializer
         return serializer_class(*args, **kwargs)
 
     def get_permissions(self):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
+        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-            im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
-            sk_additional_perms=[IsAssignedToBin]
+                im_additional_perms=audit_permissions,
+                sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.query_params.get('organization', -1)
+        status = request.query_params.get('status')
+        assigned_sk = request.query_params.get('assigned_sk')
+        exclude_status = request.query_params.get('exclude_status')
+
+        if status:
+            self.queryset = self.queryset.filter(audit__status=status)
+        if assigned_sk:
+            self.queryset = self.queryset.filter(assigned_sk=assigned_sk)
+        if exclude_status:
+            self.queryset = self.queryset.exclude(audit__status=exclude_status)
+        self.queryset = self.queryset.filter(audit__organization_id=org_id)
+
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
 
     def create(self, request, *args, **kwargs):
         is_many = isinstance(request.data, list)

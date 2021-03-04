@@ -66,3 +66,10 @@ class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
         fields = "__all__"
+
+class GetAssignmentSerializer(serializers.ModelSerializer):
+    audit = AuditSerializer(read_only=True, many=False)
+
+    class Meta:
+        model = Assignment
+        fields = "__all__"
