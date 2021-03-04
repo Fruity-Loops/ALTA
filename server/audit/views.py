@@ -4,6 +4,8 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+import csv
+from django.http import HttpResponse
 
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
@@ -84,6 +86,36 @@ class AuditViewSet(LoggingViewset):
         return Response(
             compile_progression_metrics(completed_items, total_items, audit.accuracy),
             status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'], name='Return Audit File')
+    def audit_file(self, request):
+        """
+        Action on route audit/audit_file/ that takes the parameter audit_id. This will return an HTTP response
+        containing the data about the audit as a csv file.
+        """
+
+        audit_id = int(request.GET.get('audit_id'))
+
+        # The values_list argument takes fields and not a list
+        audit_items = Audit.objects.get(audit_id=audit_id).inventory_items.all() \
+            .values_list('Batch_Number', 'Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Part_Description',
+                         'Serial_Number', 'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity',
+                         'Unit_of_Measure')
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="audit.csv"'
+
+        # Write the csv file in the response
+        writer = csv.writer(response)
+        headers = ['Batch_Number', 'Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Part_Description',
+                   'Serial_Number', 'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity',
+                   'Unit_of_Measure']
+        writer.writerow(headers)
+
+        for item in audit_items:
+            writer.writerow(item)
+
+        return response
 
 
 def fix_audit(dictionary):
