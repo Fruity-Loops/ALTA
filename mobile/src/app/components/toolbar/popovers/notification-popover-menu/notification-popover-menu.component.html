@@ -1,3 +1,11 @@
 <ion-list>
-  <ion-item lines="none"> No Notifications</ion-item>
+  <ion-list-header>
+    <ion-text color="danger">
+    <h5>Alerts</h5>
+    </ion-text>
+  </ion-list-header>
+  <ion-item *ngFor="let audit of notificationData">
+    <ion-text color="dark">New Audit({{ audit?.audit.audit_id }}) Assigned
+    </ion-text>
+  </ion-item>
 </ion-list>

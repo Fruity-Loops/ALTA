@@ -36,7 +36,7 @@ export class AuditService {
           organization: org,
           exclude_status: 'Complete'
         }
-      })
+      });
   }
 
   getBinSKAudit(userID, auditID, binStatus): Observable<any> {

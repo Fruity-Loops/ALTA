@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuditService } from 'src/app/services/audit.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { fetchLoggedInUser } from 'src/app/services/cache';
 import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { ProgressionMetricsPopoverComponent } from 'src/app/pages/audits/popovers/progression-metrics-popover/progression-metrics-popover.component';
@@ -17,6 +18,7 @@ export class AuditsPage implements OnInit {
 
   constructor(
     private auditService: AuditService,
+    private notificationService: NotificationService,
     private loadingController: LoadingController,
     private alertController: AlertController,
     public popoverController: PopoverController,
@@ -45,7 +47,8 @@ export class AuditsPage implements OnInit {
             async (res) => {
               await whileLoading.dismiss();
               this.audits = res;
-              const newAudits = res.filter(obj => obj.seen == false);
+              const newAudits = res.filter(obj => obj.seen === false);
+              this.notificationService.notify(newAudits);
               this.blankMessage = 'No Audits Currently Pending';
               this.completeRefresh();
             },
