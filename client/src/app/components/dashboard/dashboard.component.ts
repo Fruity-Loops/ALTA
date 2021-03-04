@@ -31,13 +31,10 @@ export class DashboardComponent implements OnInit {
   getRecommendations(): void {
     console.log(this.params);
     this.dashService.getRecommendations(this.params).subscribe((data) => {
-      console.log(data);
-      // this.response = data['bins_recommendation'][0].Bin;
       this.response = data['bins_recommendation'];
       this.dataSource = data['bins_recommendation'];
       this.dataSource_2 = data['parts_recommendation'];
       this.dataSource_3 = data['items_recommendation'];
-      // console.log(Object.values(data));
     });
   }
 }
