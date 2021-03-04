@@ -61,6 +61,10 @@ export class ManageAuditsService implements LocalStorageInterface {
   getProperAudits(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
   }
+
+  getAuditFile(params: any): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/audit_file/`, {params, responseType: 'blob'});
+  }
 }
 
 export enum AuditLocalStorage {
