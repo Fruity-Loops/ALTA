@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
+from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, RecommendationBinSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
@@ -346,11 +347,13 @@ class RecommendationViewSet(LoggingViewset):
     http_method_names = ['get']
     serializer_class = GetBinToSKSerializer
 
-    # def get_queryset(self):
-    #     return BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values('Bin','total')
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([])
+        return [permission() for permission in permission_classes]
 
     def list(self, request):
-        print('#################',request.GET.get("organization", None))
         org_id = request.GET.get("organization", None)
         bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
                                  annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
