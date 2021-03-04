@@ -24,7 +24,7 @@
       <ng-container matColumnDef="Check_Boxes">
         <th id="select_check_box" mat-header-cell *matHeaderCellDef>Select</th>
         <td mat-cell *matCellDef="let row">
-          <mat-checkbox (change)='onChange(row.id)'></mat-checkbox>
+          <mat-checkbox [disabled]="row.disabled" (change)='onChange(row.id, item.location)'></mat-checkbox>
         </td>
       </ng-container>
 

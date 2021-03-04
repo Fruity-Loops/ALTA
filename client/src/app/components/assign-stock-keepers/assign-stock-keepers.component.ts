@@ -16,10 +16,11 @@ import {AuthService, UserLocalStorage} from '../../services/authentication/auth.
 export class AssignStockKeepersComponent implements OnInit {
   skToAssign: Array<any>;
   busySKs: Array<any>;
-  itemLocations: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
+  holdItemsLocation: Array<any>;
+  maxAssignPerLocation: Array<any>;
   auditID: number;
 
   panelOpenState = false;
@@ -40,7 +41,8 @@ export class AssignStockKeepersComponent implements OnInit {
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
-    this.itemLocations = [];
+    this.holdItemsLocation = [];
+    this.maxAssignPerLocation = new Array<any>();
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
@@ -68,8 +70,19 @@ export class AssignStockKeepersComponent implements OnInit {
     */
 
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
-       const itemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
-       itemsLocation.forEach((selectedItem: any) => {
+       this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
+       this.holdItemsLocation.forEach((selectedItem: any) => {
+
+       if (!this.maxAssignPerLocation.some((item: any) => item.location === selectedItem)) {
+        let locTotalBins = new Set(selectedItems.inventory_items.filter((obj: any) =>
+            obj.Location === selectedItem).map((obj: any) => obj.Bin)).size;
+
+        this.maxAssignPerLocation.push({
+          location: selectedItem,
+          totalBins: locTotalBins
+        });
+       }
+
         const obj = this.locationsAndUsers.find((item: any) => item.location === selectedItem);
           if (obj === undefined) {
             const getSKForLoc = clients.filter((user: any) => user.location === selectedItem && user.role === "SK");
@@ -98,6 +111,7 @@ export class AssignStockKeepersComponent implements OnInit {
           } else {
             user.availability = 'Busy';
           }
+          user.disabled = false;
         });
       });
 
@@ -110,15 +124,47 @@ export class AssignStockKeepersComponent implements OnInit {
    });
   }
 
-  // If a stock-keeper checkbox is selected then add the id to the list
-  onChange(value: any): void {
-    if (this.skToAssign.includes(value)) {
+  onChange(user_id: any, loc: any): void {
+
+    const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
+    const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
+        map((obj: any) => obj.users).flat(1);
+
+    // get all the user id's for this location
+    const sksFromLocation = holdUsersForThisLocation.map((user: any) => user.id);
+
+    if (this.skToAssign.includes(user_id)) {
       this.skToAssign.splice(
-        this.skToAssign.indexOf(value),
+        this.skToAssign.indexOf(user_id),
         1
       );
+
+      // get the updated intersection of selected SKs for this location
+      const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
+
+      // if there are still SKs to assign after unselecting a user
+      if (intersection.length < getLimitOfAssignees) {
+        sksFromLocation.forEach((sk: any) => {
+          // enable the selection of other SKs of this location
+          if (!intersection.some((id: any) => id === sk)) {
+            holdUsersForThisLocation.find(user => user.id === sk).disabled = false;
+          }
+        });
+      }
     } else {
-      this.skToAssign.push(value);
+      this.skToAssign.push(user_id);
+
+      // get the updated intersection of selected SKs for this location
+      const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
+
+      if (intersection.length >= getLimitOfAssignees) {
+        sksFromLocation.forEach((sk: any) => {
+          // disable the selection of other SKs of this location
+          if (!intersection.some((id: any) => id === sk)) {
+            holdUsersForThisLocation.find(user => user.id === sk).disabled = true;
+          }
+        });
+      }
     }
   }
 
