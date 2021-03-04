@@ -1,1 +1,27 @@
-<p>Inside {{view}} Component</p>
+<mat-card style="margin-bottom: 30px">  Recommendations</mat-card>
+<table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container matColumnDef="Bin">
+      <th mat-header-cell *matHeaderCellDef> Audit Bin </th>
+      <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource_2" class="mat-elevation-z8">
+    <ng-container matColumnDef="Part">
+      <th mat-header-cell *matHeaderCellDef> Audit Part </th>
+      <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns_2"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns_2;"></tr>
+  </table>
+
+  <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource_3" class="mat-elevation-z8">
+    <ng-container matColumnDef="Item">
+      <th mat-header-cell *matHeaderCellDef> Audit Item </th>
+      <td mat-cell *matCellDef="let element"> {{element.item_id}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns_3"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns_3;"></tr>
+  </table>
