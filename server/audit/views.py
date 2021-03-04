@@ -350,19 +350,20 @@ class RecommendationViewSet(LoggingViewset):
     #     return BinToSK.objects.filter(init_audit__organization=1).values('Bin').annotate(total=Count('Bin')).values('Bin','total')
 
     def list(self, request):
-        org_id = request.data['organization']
+        print('#################',request.GET.get("organization", None))
+        org_id = request.GET.get("organization", None)
         bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
-                                 annotate(total=Count('Bin')).values('Bin', 'total').order_by('total')[:5])
+                                 annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
 
         parts_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
                 total=Count('Part_Number'))
-            .values('Part_Number', 'total').order_by('total').order_by('total')[:5])
+            .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
 
         items_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
                 total=Count('item_id'))
-            .values('item_id', 'total').order_by('total')[:5])
+            .values('item_id', 'total').order_by('-total')[:5])
 
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
                 'items_recommendation': items_to_recommend}
