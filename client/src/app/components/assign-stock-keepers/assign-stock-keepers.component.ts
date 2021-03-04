@@ -26,7 +26,7 @@ export class AssignStockKeepersComponent implements OnInit {
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
-  disableAssign = false;
+  missingAssignedLocations = true;
 
   params = new HttpParams();
 
@@ -98,7 +98,6 @@ export class AssignStockKeepersComponent implements OnInit {
                 location: selectedItem,
                 users: []
               });
-              this.disableAssign = true;
             }
           }
        });
@@ -219,5 +218,24 @@ export class AssignStockKeepersComponent implements OnInit {
   discardAudit(): void {
     this.deleteAudit();
     this.dialog.closeAll();
+  }
+
+  disableAssign(): boolean {
+    if (this.skToAssign.length === 0) {
+      return true;
+    }
+
+    let counter = 0;
+    this.locationsAndUsers.forEach((loc: any) => {
+      const intersection = new Set(loc.users.flat().map((obj: any) => obj.id).filter((x: any) => this.skToAssign.includes(x)));
+      if (intersection.size !== 0) {
+        counter++;
+      }
+    });
+
+    if (counter < this.locationsAndUsers.length) {
+      return true;
+    }
+    return false;
   }
 }
