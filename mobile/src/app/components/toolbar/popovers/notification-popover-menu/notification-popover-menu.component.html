@@ -1,11 +1,18 @@
 <ion-list>
   <ion-list-header>
     <ion-text color="danger">
-    <h5>Alerts</h5>
+      <h3>Alerts</h3>
     </ion-text>
   </ion-list-header>
-  <ion-item *ngFor="let audit of notificationData">
-    <ion-text color="dark">New Audit({{ audit?.audit.audit_id }}) Assigned
-    </ion-text>
-  </ion-item>
+  <div class="notification_section">
+    <ion-item *ngIf="!notificationData || notificationData?.length==0">
+      <ion-text color="dark">No New Alerts</ion-text>
+    </ion-item>
+    <ion-item button *ngFor="let audit of notificationData" (click)="handleNotificationClick(audit?.audit.audit_id)">
+      <ion-icon name="alert-circle-sharp" slot="start" color="danger"></ion-icon>
+      <ion-text color="dark">
+        <h5>New Audit ({{ audit?.audit.audit_id }}) Assigned</h5>
+      </ion-text>
+    </ion-item>
+  </div>
 </ion-list>

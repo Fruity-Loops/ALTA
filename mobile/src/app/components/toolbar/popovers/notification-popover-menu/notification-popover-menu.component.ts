@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, NavParams } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-popover-menu',
@@ -11,6 +12,7 @@ export class NotificationPopoverMenuComponent implements OnInit {
   notificationData: any;
 
   constructor(
+    private router: Router,
     public navParams: NavParams,
     private popoverController: PopoverController,
   ) {
@@ -21,6 +23,11 @@ export class NotificationPopoverMenuComponent implements OnInit {
 
   async dismissPopover() {
     await this.popoverController.dismiss();
+  }
+
+  handleNotificationClick(id){
+    this.dismissPopover();
+    this.router.navigateByUrl(`/audits/${id}`, { replaceUrl: false });
   }
 
 }

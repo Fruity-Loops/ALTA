@@ -15,15 +15,23 @@
         </ion-text>
     </div>
     <ion-list lines="none" inset="true">
-        <ion-item *ngFor="let audit of audits" lines="none" class="list-items" [routerLink]="audit?.audit.audit_id" >
+        <ion-item *ngFor="let audit of audits" lines="none" class="list-items" [routerLink]="audit?.audit.audit_id">
             <ion-label>
-                <ion-text color="dark">
-                    <h2>Audit {{ audit?.audit.audit_id }}</h2>
+                <ion-text color="dark" *ngIf="audit?.seen">
+                    <h1>Audit {{ audit?.audit.audit_id }}</h1>
+                </ion-text>
+                <ion-text color="dark" *ngIf="!audit?.seen">
+                    <h1>
+                        <b>Audit {{ audit?.audit.audit_id }}</b>
+                        <ion-icon class="alertIcon" name="alert-circle-sharp" size="small" color="danger"></ion-icon>
+                    </h1>
+
                 </ion-text>
                 <p> Total Items: {{ audit?.audit.inventory_items.length }}</p>
             </ion-label>
-            <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event, audit?.audit.audit_id)">
-                <ion-icon button size="large" name="information-circle" ></ion-icon>
+            <ion-button fill="clear" size="large" color="medium" shape="round"
+                (click)="displayProgression($event, audit?.audit.audit_id)">
+                <ion-icon button size="large" name="information-circle"></ion-icon>
             </ion-button>
         </ion-item>
     </ion-list>
