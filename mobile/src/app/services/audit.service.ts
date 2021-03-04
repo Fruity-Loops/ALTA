@@ -27,6 +27,18 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 
+
+  getAuditAssignments(userID, org): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/assignment/`,
+      {
+        params: {
+          assigned_sk: userID,
+          organization: org,
+          exclude_status: 'Complete'
+        }
+      })
+  }
+
   getBinSKAudit(userID, auditID, binStatus): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {
       params: {
@@ -144,3 +156,4 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 }
+

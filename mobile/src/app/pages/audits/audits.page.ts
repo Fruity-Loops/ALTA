@@ -39,10 +39,13 @@ export class AuditsPage implements OnInit {
       user => {
         if (user) {
           this.loggedInUser = user;
-          this.auditService.getAudits(user.user_id, user.organization_id).subscribe(
+          this.auditService.getAuditAssignments(
+            user.user_id,
+            user.organization_id).subscribe(
             async (res) => {
               await whileLoading.dismiss();
               this.audits = res;
+              const newAudits = res.filter(obj => obj.seen == false);
               this.blankMessage = 'No Audits Currently Pending';
               this.completeRefresh();
             },
