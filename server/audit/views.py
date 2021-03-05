@@ -12,7 +12,8 @@ from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
         AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
-    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
+    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
+        CheckAssignmentOrganizationById
 from .models import Audit, Assignment, BinToSK, Record
 
 
@@ -165,7 +166,7 @@ class AssignmentViewSet(LoggingViewset):
     def get_permissions(self):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
-        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
+        audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
                 im_additional_perms=audit_permissions,
                 sk_additional_perms=audit_permissions
