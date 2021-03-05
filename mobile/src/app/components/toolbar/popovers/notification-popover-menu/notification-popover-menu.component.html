@@ -8,7 +8,7 @@
     <ion-item *ngIf="!notificationData || notificationData?.length==0">
       <ion-text color="dark">No New Alerts</ion-text>
     </ion-item>
-    <ion-item button *ngFor="let audit of notificationData" (click)="handleNotificationClick(audit?.audit.audit_id)">
+    <ion-item button *ngFor="let audit of notificationData" (click)="handleNotificationClick()">
       <ion-icon name="alert-circle-sharp" slot="start" color="danger"></ion-icon>
       <ion-text color="dark">
         <h5>New Audit ({{ audit?.audit.audit_id }}) Assigned</h5>

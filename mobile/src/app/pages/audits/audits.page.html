@@ -15,7 +15,8 @@
         </ion-text>
     </div>
     <ion-list lines="none" inset="true">
-        <ion-item *ngFor="let audit of audits" lines="none" class="list-items" [routerLink]="audit?.audit.audit_id">
+        <ion-item *ngFor="let audit of audits" lines="none" class="list-items" (click)="setAuditAssignmentSeen(audit?.id)"
+         [routerLink]="audit?.audit.audit_id">
             <ion-label>
                 <ion-text color="dark" *ngIf="audit?.seen">
                     <h1>Audit {{ audit?.audit.audit_id }}</h1>

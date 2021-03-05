@@ -39,6 +39,15 @@ export class AuditService {
       });
   }
 
+  setAssignmentSeen(userID, assignmentID, seen): Observable<any> {
+    return this.http.patch(`${BASEURL}/audit/assignment/${assignmentID}/`,
+      {
+        assigned_sk: userID,
+        id: assignmentID,
+        seen
+      });
+  }
+
   getBinSKAudit(userID, auditID, binStatus): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {
       params: {
