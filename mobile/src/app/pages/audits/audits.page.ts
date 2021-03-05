@@ -97,9 +97,8 @@ export class AuditsPage implements OnInit {
   }
 
   setAuditAssignmentSeen(assignmentID) {
-    const auditSeen = this.audits.find(
-      a => {
-        return a.id == assignmentID;
+    const auditSeen = this.audits.find(a => {
+        return a.id === assignmentID;
       });
     if (auditSeen && !auditSeen.seen) {
       fetchLoggedInUser().then(
