@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {Component, HostListener, OnInit, OnDestroy, TemplateRef} from '@angular/core';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {User} from 'src/app/models/user.model';
@@ -7,13 +7,15 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-assign-stock-keepers',
   templateUrl: './assign-stock-keepers.component.html',
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
-export class AssignStockKeepersComponent implements OnInit {
+
+export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactivateComponent {
   skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
@@ -27,8 +29,10 @@ export class AssignStockKeepersComponent implements OnInit {
   allExpandState = false;
   errorMessage = '';
   missingAssignedLocations = true;
+  isDirty = false;
 
   params = new HttpParams();
+
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -165,6 +169,11 @@ export class AssignStockKeepersComponent implements OnInit {
         });
       }
     }
+    if (this.skToAssign.length > 0) {
+      this.isDirty = true;
+    } else {
+      this.isDirty = false;
+    }
   }
 
   submitAssignedSKs(): void {
@@ -237,5 +246,26 @@ export class AssignStockKeepersComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  // handles refresh and closing tab
+  @HostListener('window:beforeunload', ['$event'])
+    canDeactivate(event: BeforeUnloadEvent): void {
+      event.returnValue = true;
+  }
+
+  // handles in-app navigation
+  canExit() : boolean {
+    if (confirm("Do you wish to Please confirm")) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.isDirty) {
+      this.canExit();
+    }
   }
 }

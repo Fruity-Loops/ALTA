@@ -61,6 +61,14 @@ export class ManageAuditsService implements LocalStorageInterface {
   getProperAudits(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
   }
+
+  canDeactivate(): boolean {
+    let test = confirm("Warning, there are unsaved changes. If you confirm the changes will be lost.");
+    console.log(test)
+
+
+    return test;
+  }
 }
 
 export enum AuditLocalStorage {

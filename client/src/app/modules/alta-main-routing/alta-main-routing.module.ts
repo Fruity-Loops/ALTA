@@ -4,6 +4,7 @@ import { DashboardComponent } from 'src/app/components/dashboard/dashboard.compo
 import { HomeComponent } from 'src/app/components/home/home.component';
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { AuthGuard } from '../../guards/auth.guard';
+import { CanDeactivateGuard } from '../../guards/can-deactivate.guard';
 import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
 import { EmployeeListComponent } from '../../components/employees/employee-list/employee-list.component';
 import { CreateEmployeeComponent } from '../../components/employees/employee-view/create-employee/create-employee.component';
@@ -50,7 +51,7 @@ export const routes: Routes = [
       { path: 'settings', component: EditEmployeeComponent },
       { path: 'sa-settings', component: EditEmployeeComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
-      { path: 'assign-sk', component: AssignStockKeepersComponent },
+      { path: 'assign-sk', component: AssignStockKeepersComponent, canDeactivate:[CanDeactivateGuard] },
       { path: 'designate-sk', component: ManageStockKeepersDesignationComponent },
       { path: 'review-audit', component: ReviewAuditComponent },
       { path: 'audits', children: [

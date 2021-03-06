@@ -35,7 +35,7 @@ import {
 } from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
-
+import { CanDeactivateGuard } from '../../guards/can-deactivate.guard';
 
 @NgModule({
   declarations: [
@@ -77,7 +77,12 @@ import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-a
     MatExpansionModule,
     MatSortModule,
   ],
-  providers: [AuthService, ManageMembersService, ManageOrganizationsComponent, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
+  providers: [
+    AuthService,
+    ManageMembersService,
+    ManageOrganizationsComponent,
+    CanDeactivateGuard,
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'} ],
 })
 export class AltaMainModule {
 }
