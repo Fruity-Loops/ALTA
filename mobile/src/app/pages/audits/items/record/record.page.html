@@ -10,8 +10,8 @@
     </ion-button>
   </ion-buttons>
   <ion-title color="light">{{modalTitle}}</ion-title>
-  <ion-title color="light" *ngIf="lastModifiedOn" size="small">Last Modified On: {{lastModifiedOn | date:'MM/dd/yyyy
-    h:mm a'}}
+  <ion-title color="light" *ngIf="lastModifiedOn" size="small">Last Modified On:
+    {{lastModifiedOn | date:'MM/dd/yyyyh:mm a'}}
   </ion-title>
 </ion-toolbar>
 
@@ -23,7 +23,12 @@
         <ion-input id="IdInput" type="number" formControlName="item_id" disabled></ion-input>
       </ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="modalData.itemData.Category === 'SERIALIZED'">
+        <ion-label position="stacked" color="primary">Item Present</ion-label>
+        <ion-toggle id="toggleSerializedPart" formControlName="Quantity"></ion-toggle>
+      </ion-item>
+
+      <ion-item *ngIf="modalData.itemData.Category !== 'SERIALIZED'">
         <ion-label position="stacked"  color="primary">Quantity</ion-label>
         <ion-input id="QuantityInput" type="number" formControlName="Quantity" required></ion-input>
       </ion-item>
@@ -104,7 +109,7 @@
       </div>
 
       <ion-item>
-        <ion-checkbox formControlName="flagged" color="danger" slot="start" disabled></ion-checkbox>
+        <ion-checkbox formControlName="flagged" color="danger" slot="start"></ion-checkbox>
         <ion-label color="danger">Flag</ion-label>
       </ion-item>
 
@@ -113,30 +118,6 @@
         <ion-textarea formControlName="comment" size="large" rows="5"
           placeholder="Enter more information here..."></ion-textarea>
       </ion-item>
-
-
-      <ion-list [hidden]=true>
-        <ion-radio-group formControlName="status" disabled>
-          <ion-list-header>
-            <ion-label color="primary">Status</ion-label>
-          </ion-list-header>
-
-          <ion-item>
-            <ion-label>Provided</ion-label>
-            <ion-radio color="success" slot="start" value="Provided"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>New</ion-label>
-            <ion-radio color="danger" slot="start" value="New"></ion-radio>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Missing</ion-label>
-            <ion-radio color="danger" slot="start" value="Missing"></ion-radio>
-          </ion-item>
-        </ion-radio-group>
-      </ion-list>
 
     </form>
   </div>

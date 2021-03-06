@@ -29,10 +29,11 @@
       <ion-item *ngFor="let item of items" lines="none" class="list-items" onclick="this.blur()">
         <ion-label>
           <ion-text color="dark">
-            <h2 class="item_id">Item {{ item.Item_Id }}</h2>
+            <h2 class="item_id">Batch {{ item.Batch_Number }}</h2>
           </ion-text>
           <p> Part {{ item.Part_Number }}</p>
-          <p> Serial no. {{ item.Serial_Number }}</p>
+          <p *ngIf="item.Category === 'SERIALIZED'"> Serial no. {{ item.Serial_Number }}</p>
+          <p *ngIf="item.Category !== 'SERIALIZED'">Quantity: {{item.Quantity}}</p>
         </ion-label>
         <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="secondary"
           (click)="handleItemClick($event, item.Item_Id, false)">
@@ -54,16 +55,17 @@
     </div>
     <ion-list lines="none" inset="true">
       <ion-item *ngFor="let item of completedItems" lines="none" class="list-items" onclick="this.blur()">
-        <ion-thumbnail slot="start">
+        <ion-thumbnail slot="start" class="thumbnail">
           <span *ngIf="item?.status == 'Provided'" class="valid_ellipse"></span>
           <span *ngIf="item?.status == 'Missing'" class="missing_ellipse"></span>
           <span *ngIf="item?.status == 'New'" class="new_ellipse"></span>
+          <ion-text>{{item?.status}}</ion-text>
         </ion-thumbnail>
         <ion-label>
           <ion-text color="dark">
-            <h2>Item {{ item.item_id }}</h2>
+            <h2>Batch {{ item.Batch_Number }}</h2>
           </ion-text>
-          <p> Status: {{ item.status }}</p>
+          <p> Observed: {{ item.Quantity }}</p>
         </ion-label>
         <ion-item *ngIf="item?.flagged">
           <ion-icon name="flag" color="danger"></ion-icon>

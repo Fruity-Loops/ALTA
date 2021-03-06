@@ -17,6 +17,7 @@ export class RecordPage implements OnInit {
   lastModifiedOn: string;
   submitButton = 'SUBMIT';
   isItemDetailsHidden = true;
+  expectedQuantity;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,7 +29,7 @@ export class RecordPage implements OnInit {
 
   ngOnInit() {
     this.setRecordData();
-    this.buildLoginForm();
+    this.buildForm();
   }
 
   setRecordData() {
@@ -39,31 +40,16 @@ export class RecordPage implements OnInit {
       this.lastModifiedOn = this.modalData.itemData.last_verified_on;
     }
     else {
-      this.setStatus();
+      this.modalTitle = 'Found Item';
     }
   }
 
-  setStatus() {
-    switch (this.modalData.itemData.status) {
-      case 'Missing': {
-        this.modalTitle = 'Flag Item';
-        this.submitButton = 'FLAG AS MISSING';
-        break;
-      }
-      case 'New': {
-        this.modalTitle = 'New Item';
-        this.submitButton = 'FLAG AS NEW';
-        break;
-      }
-      case 'Provided': {
-        this.modalTitle = 'Found Item';
-      }
-    }
-  }
-
-  buildLoginForm() {
+  buildForm() {
+    this.expectedQuantity = this.modalData.itemData.Quantity;
+    this.modalData.itemData.Quantity = this.expectedQuantity !== 0 ? this.modalData.itemData.Quantity : '';
     this.formGroup = this.formBuilder.group({
       item_id: [this.modalData.itemData.Item_Id || this.modalData.itemData.item_id, [Validators.required]],
+      Batch_Number: [this.modalData.itemData.Batch_Number],
       Location: [this.modalData.itemData.Location],
       Plant: [this.modalData.itemData.Plant],
       Zone: [this.modalData.itemData.Zone],
@@ -79,7 +65,6 @@ export class RecordPage implements OnInit {
       Average_Cost: [this.modalData.itemData.Average_Cost],
       Quantity: [this.modalData.itemData.Quantity, [Validators.required]],
       Unit_of_Measure: [this.modalData.itemData.Unit_of_Measure],
-      status: [this.modalData.itemData.status],
       flagged: [this.modalData.itemData.flagged],
       comment: [this.modalData.itemData.comment || '']
 
@@ -88,17 +73,16 @@ export class RecordPage implements OnInit {
 
   submit() {
     if (this.recordID) {
-      return this.patch();
+      return this.patchRecord();
     }
-    return this.validate();
+    return this.validateItem();
   }
 
-  async validate() {
+  async validateItem() {
     const whileLoading = await this.loadingController.create();
     await whileLoading.present();
 
     const record = this.curateData();
-    console.log(record);
     this.auditService.createRecord(record).subscribe(
       async (res) => {
         await whileLoading.dismiss();
@@ -123,7 +107,7 @@ export class RecordPage implements OnInit {
 
   }
 
-  async patch() {
+  async patchRecord() {
     const whileLoading = await this.loadingController.create();
     await whileLoading.present();
 
@@ -172,6 +156,14 @@ export class RecordPage implements OnInit {
         }
       }
     }
+
+    if (typeof data.Quantity === 'boolean') {
+      data.Quantity = data.Quantity ? 1 : 0;
+    }
+    if (data.Quantity === this.expectedQuantity) { data.status = 'Provided'; }
+    else if (data.Quantity < this.expectedQuantity) { data.status = 'Missing'; }
+    else if (data.Quantity > this.expectedQuantity) { data.status = 'New'; }
+
     return data;
   }
 

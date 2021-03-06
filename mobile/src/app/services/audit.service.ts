@@ -20,7 +20,8 @@ export class AuditService {
       {
         params: {
           assigned_sk: userID,
-          organization: org
+          organization: org,
+          exclude_status: 'Complete'
         }
       })
       .pipe(catchError(errorHandler));
@@ -45,17 +46,6 @@ export class AuditService {
           return res;
         }),
       );
-  }
-
-  getBin(userID, auditID, binID): Observable<any> {
-    return this.http.get(`${BASEURL}/bin-to-sk/`, {
-      params: {
-        customuser_id: userID,
-        init_audit_id: auditID,
-        bin_id: binID,
-      }
-    })
-      .pipe(catchError(errorHandler));
   }
 
 
