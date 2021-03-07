@@ -1,12 +1,13 @@
-import {Component, HostListener, OnInit, OnDestroy, TemplateRef} from '@angular/core';
-import {ManageMembersService} from 'src/app/services/users/manage-members.service';
-import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
-import {User} from 'src/app/models/user.model';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {HttpParams} from '@angular/common/http';
-import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
+import { User } from 'src/app/models/user.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -15,7 +16,7 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 
-export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactivateComponent {
+export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
   skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
@@ -74,43 +75,43 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
     */
 
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
-       this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
-       this.holdItemsLocation.forEach((selectedItem: any) => {
+      this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
+      this.holdItemsLocation.forEach((selectedItem: any) => {
 
-       if (!this.maxAssignPerLocation.some((item: any) => item.location === selectedItem)) {
-        let locTotalBins = new Set(selectedItems.inventory_items.filter((obj: any) =>
+        if (!this.maxAssignPerLocation.some((item: any) => item.location === selectedItem)) {
+          let locTotalBins = new Set(selectedItems.inventory_items.filter((obj: any) =>
             obj.Location === selectedItem).map((obj: any) => obj.Bin)).size;
 
-        this.maxAssignPerLocation.push({
-          location: selectedItem,
-          totalBins: locTotalBins
-        });
-       }
+          this.maxAssignPerLocation.push({
+            location: selectedItem,
+            totalBins: locTotalBins
+          });
+        }
 
         const obj = this.locationsAndUsers.find((item: any) => item.location === selectedItem);
-          if (obj === undefined) {
-            const getSKForLoc = clients.filter((user: any) => user.location === selectedItem && user.role === "SK");
-            if(getSKForLoc.length !== 0) {
-              this.locationsAndUsers.push(
+        if (obj === undefined) {
+          const getSKForLoc = clients.filter((user: any) => user.location === selectedItem && user.role === "SK");
+          if (getSKForLoc.length !== 0) {
+            this.locationsAndUsers.push(
               {
                 location: selectedItem,
                 users: getSKForLoc
               });
-            } else {
-              this.locationsAndUsers.push(
+          } else {
+            this.locationsAndUsers.push(
               {
                 location: selectedItem,
                 users: []
               });
-            }
           }
-       });
+        }
+      });
 
       this.locationsAndUsers.forEach((location: any) => {
         location.users.forEach((user: any) => {
           const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
-       	  if (isBusy === undefined) {
-       	    user.availability = 'Available';
+          if (isBusy === undefined) {
+            user.availability = 'Available';
           } else {
             user.availability = 'Busy';
           }
@@ -124,14 +125,14 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
           this.dataSource.data.push(user);
         });
       });
-   });
+    });
   }
 
   onChange(user_id: any, loc: any): void {
 
     const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
-        map((obj: any) => obj.users).flat(1);
+      map((obj: any) => obj.users).flat(1);
 
     // get all the user id's for this location
     const sksFromLocation = holdUsersForThisLocation.map((user: any) => user.id);
@@ -169,11 +170,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
         });
       }
     }
-    if (this.skToAssign.length > 0) {
-      this.isDirty = true;
-    } else {
-      this.isDirty = false;
-    }
+    this.isDirty = this.skToAssign?.length > 0 ? true : false;
   }
 
   submitAssignedSKs(): void {
@@ -184,6 +181,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
     this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
+        this.isDirty = false;
         setTimeout(() => {
           this.router.navigate(['audits/assign-sk/designate-sk']);
         }, 1000);
@@ -200,13 +198,6 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
         this.errorMessage = err;
       }));
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
-  }
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBack(event: Event): void {
-    // Overrides browser back button
-    event.preventDefault();
-    this.goBackIventory();
   }
 
   goBackIventory(): void {
@@ -242,30 +233,11 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
       }
     });
 
-    if (counter < this.locationsAndUsers.length) {
-      return true;
-    }
-    return false;
+    return counter < this.locationsAndUsers.length;
   }
 
-  // handles refresh and closing tab
   @HostListener('window:beforeunload', ['$event'])
-    canDeactivate(event: BeforeUnloadEvent): void {
-      event.returnValue = true;
-  }
-
-  // handles in-app navigation
-  canExit() : boolean {
-    if (confirm("Do you wish to Please confirm")) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.isDirty) {
-      this.canExit();
-    }
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    return !this.isDirty;
   }
 }

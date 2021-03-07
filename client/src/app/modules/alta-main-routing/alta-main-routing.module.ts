@@ -51,9 +51,6 @@ export const routes: Routes = [
       { path: 'settings', component: EditEmployeeComponent },
       { path: 'sa-settings', component: EditEmployeeComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
-      { path: 'assign-sk', component: AssignStockKeepersComponent, canDeactivate:[CanDeactivateGuard] },
-      { path: 'designate-sk', component: ManageStockKeepersDesignationComponent },
-      { path: 'review-audit', component: ReviewAuditComponent },
       { path: 'audits', children: [
         {
           path: '', component: ManageAuditsComponent
@@ -61,7 +58,7 @@ export const routes: Routes = [
         {
           path: 'assign-sk', children: [
             {
-              path: '', component: AssignStockKeepersComponent
+              path: '', component: AssignStockKeepersComponent,  canDeactivate:[CanDeactivateGuard],
             },
             {
               path: 'designate-sk', children: [
