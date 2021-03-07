@@ -249,3 +249,37 @@ class RecordTestCase(APITestCase):
             }, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
+
+class AssignmentTestCase(APITestCase):
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json"]
+
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create each type of user that could be making the registration request
+        self.system_admin = CustomUser.objects.get(user_name="sa")
+        self.inv_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
+
+        # Create the affiliated organization
+        self.org_id = Organization.objects.get(org_id="1")
+
+        # Create audit components
+        self.item_one = Item.objects.get(Batch_Number=12731370)
+        self.item_two = Item.objects.get(Batch_Number=12752843)
+        self.audit = Audit.objects.create()
+        self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
+
+
+    def test_create_assignment(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        self.audit = Audit.objects.get(pk=1)
+        response = self.client.post(
+            "/audit/assignment/",
+            {
+                "audit": self.audit.audit_id,
+                "assigned_sk": self.stock_keeper.id,
+                
+            }, format="json")
+        self.assertEqual(response.status_code,
+                         status.HTTP_201_CREATED)

@@ -46,7 +46,7 @@ export class BinsPage implements OnInit {
       (event) => {
         if (event instanceof NavigationEnd) {
           const state = window.history.state;
-          if (state.data?.segment){
+          if (state.data?.segment) {
             this.currentSegment = state.data?.segment;
           }
         }
