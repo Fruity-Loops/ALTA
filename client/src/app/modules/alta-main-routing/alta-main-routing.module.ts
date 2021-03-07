@@ -12,8 +12,8 @@ import { ManageInventoryItemsComponent } from 'src/app/components/manage-invento
 import { CreateAuditTemplateComponent } from '../../components/audit-template/audit-template-view/create-audit-template/create-audit-template.component';
 import { AuditTemplateComponent } from '../../components/audit-template/audit-template-list/audit-template.component';
 import { EditAuditTemplateComponent } from 'src/app/components/audit-template/audit-template-view/edit-audit-template/edit-audit-template.component';
-import {CreateOrganizationComponent} from '../../components/manage-organizations/organization-view/create-organization/create-organization.component';
-import {EditOrganizationComponent} from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
+import { CreateOrganizationComponent } from '../../components/manage-organizations/organization-view/create-organization/create-organization.component';
+import { EditOrganizationComponent } from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-keepers/assign-stock-keepers.component';
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
@@ -35,7 +35,8 @@ export const routes: Routes = [
       { path: 'create-members', component: CreateEmployeeComponent },
       { path: 'modify-members', component: EmployeeListComponent },
       { path: 'sa-modify-members', component: EmployeeListComponent },
-      { path: 'manage-organizations', children: [
+      {
+        path: 'manage-organizations', children: [
           {
             path: '', component: ManageOrganizationsComponent
           },
@@ -51,28 +52,38 @@ export const routes: Routes = [
       { path: 'settings', component: EditEmployeeComponent },
       { path: 'sa-settings', component: EditEmployeeComponent },
       { path: 'manage-items', component: ManageInventoryItemsComponent },
-      { path: 'audits', children: [
-        {
-          path: '', component: ManageAuditsComponent
-        },
-        {
-          path: 'assign-sk', children: [
-            {
-              path: '', component: AssignStockKeepersComponent,  canDeactivate:[CanDeactivateGuard],
-            },
-            {
-              path: 'designate-sk', children: [
-                {
-                  path: '', component: ManageStockKeepersDesignationComponent
-                },
-                {
-                  path: 'review-audit', component: ReviewAuditComponent
-                }
-              ]
-            }
-          ]},
-      ]},
-      { path: 'template', children: [
+      {
+        path: 'audits', children: [
+          {
+            path: '', component: ManageAuditsComponent
+          },
+          {
+            path: 'assign-sk', children: [
+              {
+                path: '',
+                component: AssignStockKeepersComponent,
+                canDeactivate: [CanDeactivateGuard],
+              },
+              {
+                path: 'designate-sk', children: [
+                  {
+                    path: '',
+                    component: ManageStockKeepersDesignationComponent,
+                    canDeactivate: [CanDeactivateGuard],
+                  },
+                  {
+                    path: 'review-audit',
+                    component: ReviewAuditComponent,
+                    canDeactivate: [CanDeactivateGuard],
+                  }
+                ]
+              }
+            ]
+          },
+        ]
+      },
+      {
+        path: 'template', children: [
           {
             path: '', component: AuditTemplateComponent
           },
@@ -82,7 +93,8 @@ export const routes: Routes = [
           {
             path: 'edit-template/:ID', component: EditAuditTemplateComponent
           }
-        ]},
+        ]
+      },
     ],
   },
 ];

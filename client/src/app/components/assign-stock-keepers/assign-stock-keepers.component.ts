@@ -79,8 +79,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       this.holdItemsLocation.forEach((selectedItem: any) => {
 
         if (!this.maxAssignPerLocation.some((item: any) => item.location === selectedItem)) {
-          let locTotalBins = new Set(selectedItems.inventory_items.filter((obj: any) =>
-            obj.Location === selectedItem).map((obj: any) => obj.Bin)).size;
+          const locTotalBins = new Set(selectedItems.inventory_items.filter((item: any) =>
+            item.Location === selectedItem).map((ob: any) => ob.Bin)).size;
 
           this.maxAssignPerLocation.push({
             location: selectedItem,
@@ -90,7 +90,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
         const obj = this.locationsAndUsers.find((item: any) => item.location === selectedItem);
         if (obj === undefined) {
-          const getSKForLoc = clients.filter((user: any) => user.location === selectedItem && user.role === "SK");
+          const getSKForLoc = clients.filter((user: any) =>
+            user.location === selectedItem && user.role === 'SK');
           if (getSKForLoc.length !== 0) {
             this.locationsAndUsers.push(
               {
@@ -128,7 +129,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
   }
 
-  onChange(user_id: any, loc: any): void {
+  onChange(userId: any, loc: any): void {
 
     const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
@@ -137,9 +138,9 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     // get all the user id's for this location
     const sksFromLocation = holdUsersForThisLocation.map((user: any) => user.id);
 
-    if (this.skToAssign.includes(user_id)) {
+    if (this.skToAssign.includes(userId)) {
       this.skToAssign.splice(
-        this.skToAssign.indexOf(user_id),
+        this.skToAssign.indexOf(userId),
         1
       );
 
@@ -156,7 +157,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         });
       }
     } else {
-      this.skToAssign.push(user_id);
+      this.skToAssign.push(userId);
 
       // get the updated intersection of selected SKs for this location
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
@@ -216,6 +217,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   discardAudit(): void {
+    this.isDirty = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }
@@ -238,6 +240,9 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.isDirty) {
+      return confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.');
+    }
     return !this.isDirty;
   }
 }

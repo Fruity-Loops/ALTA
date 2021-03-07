@@ -1,17 +1,19 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
-import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {SKUser} from 'src/app/models/user.model';
-import {Item} from 'src/app/models/item.model';
+import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { SKUser } from 'src/app/models/user.model';
+import { Item } from 'src/app/models/item.model';
+import { Observable } from 'rxjs';
+import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
   templateUrl: './manage-stock-keepers-designation.component.html',
   styleUrls: ['./manage-stock-keepers-designation.component.scss']
 })
-export class ManageStockKeepersDesignationComponent implements OnInit {
+export class ManageStockKeepersDesignationComponent implements OnInit, IDeactivateComponent {
 
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
@@ -21,6 +23,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
+  isDirty = false;
 
   constructor(
     private dialog: MatDialog,
@@ -167,6 +170,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
+    this.isDirty = false;
 
     setTimeout(() => {
       // Redirect user to review-audit component
@@ -180,13 +184,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         this.errorMessage = err;
       }));
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
-  }
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBack(event: Event): void {
-    // Overrides browser back button
-    event.preventDefault();
-    this.goBackAssignSK();
   }
 
   goBackAssignSK(): void {
@@ -203,6 +200,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+      this.isDirty = true;
     }
   }
 
@@ -215,11 +213,20 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   discardAudit(): void {
+    this.isDirty = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }
 
   checkDisableButton(binArray: any[]): boolean {
     return binArray.map(index => index.bins).every(array => array.length <= 0);
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+    if (this.isDirty) {
+      return confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.');
+    }
+    return !this.isDirty;
   }
 }

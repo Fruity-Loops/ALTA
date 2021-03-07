@@ -28,7 +28,6 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
     boolean |
     UrlTree {
 
-    return component?.canDeactivate() ? true :
-      confirm("Warning, there are unsaved changes. If you confirm the changes will be lost.");
+    return component?.canDeactivate();
   }
 }
