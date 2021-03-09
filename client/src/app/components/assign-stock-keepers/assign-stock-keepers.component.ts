@@ -124,7 +124,7 @@ export class AssignStockKeepersComponent implements OnInit {
       (data) => {
         this.skToAssign = [];
         this.manageAuditsService.createAuditAssignments(this.assignments).subscribe(
-          _=> {
+          _ => {
             this.assignments = [];
           },
           (err) => {

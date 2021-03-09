@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { EditAuditTemplateComponent } from './edit-audit-template.component';
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 describe('AuditTemplateComponent', () => {
   let component: EditAuditTemplateComponent;
@@ -12,7 +13,11 @@ describe('AuditTemplateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EditAuditTemplateComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatAutocompleteModule
+      ],
       providers: [
         FormBuilder,
         {

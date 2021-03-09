@@ -1,5 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {Template} from '../Template';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Template } from '../Template';
 import timeZones from '../audit-template-view/create-audit-template/timezone.json';
 
 interface DaysCheckBox {
@@ -84,11 +85,24 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   title = '';
   description = '';
 
+  autocompleteFormGroup: FormGroup | undefined;
+  filterFieldResults: string[] | undefined;
+  autoCompletePool: string[] = ['demo', 'angular', 'django'];
+  autoFields = [
+    'location',
+    'plant',
+    'zones',
+    'aisles',
+    'bins',
+    'part_number',
+    'serial_number'
+  ];
 
   protected constructor() { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.initAutocomplete();
   }
 
   abstract initializeForm(): void;
@@ -156,57 +170,78 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   }
 
   updateCheckboxDay(): void {
-      this.allDaysChecked =
-        this.recurrenceDay.subCheckBox != null &&
-        this.recurrenceDay.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxDay = ' ';
+    this.allDaysChecked =
+      this.recurrenceDay.subCheckBox != null &&
+      this.recurrenceDay.subCheckBox.every((t) => t.checked);
+    this.errorMessageCheckboxDay = ' ';
   }
 
   updateCheckboxMonth(): void {
-      this.allMonthsChecked =
-        this.recurrenceMonth.subCheckBox != null &&
-        this.recurrenceMonth.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxMonth = ' ';
+    this.allMonthsChecked =
+      this.recurrenceMonth.subCheckBox != null &&
+      this.recurrenceMonth.subCheckBox.every((t) => t.checked);
+    this.errorMessageCheckboxMonth = ' ';
   }
 
   // @ts-ignore
   someCheckboxDay(): boolean {
-      if (this.recurrenceDay.subCheckBox == null) {
-        return false;
-      }
-      return (
-        this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
-        !this.allDaysChecked
-      );
+    if (this.recurrenceDay.subCheckBox == null) {
+      return false;
+    }
+    return (
+      this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
+      !this.allDaysChecked
+    );
   }
 
   // @ts-ignore
   someCheckboxMonth(): boolean {
-      if (this.recurrenceMonth.subCheckBox == null) {
-        return false;
-      }
-      return (
-        this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
-        !this.allMonthsChecked
-      );
+    if (this.recurrenceMonth.subCheckBox == null) {
+      return false;
+    }
+    return (
+      this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
+      !this.allMonthsChecked
+    );
   }
 
   setAllCheckboxDay(checked: boolean): void {
-      this.allDaysChecked = checked;
-      if (this.recurrenceDay.subCheckBox == null) {
-        return;
-      }
-      this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
+    this.allDaysChecked = checked;
+    if (this.recurrenceDay.subCheckBox == null) {
+      return;
+    }
+    this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
   }
 
   setAllCheckboxMonth(checked: boolean): void {
-      this.allMonthsChecked = checked;
-      if (this.recurrenceMonth.subCheckBox == null) {
-        return;
-      }
-      this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
+    this.allMonthsChecked = checked;
+    if (this.recurrenceMonth.subCheckBox == null) {
+      return;
+    }
+    this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
   }
 
   abstract submitQuery(body: any): void;
+
+
+  initAutocomplete(): void {
+    const formGroup: any = {};
+    this.autoFields.forEach(field => {
+      formGroup[field] = new FormControl();
+      formGroup[field].valueChanges.subscribe(
+        (val: any) => {
+          this.filterFieldResults = this.filter(val, field);
+        }
+      );
+    });
+    this.autocompleteFormGroup = new FormGroup(formGroup);
+  }
+
+  filter(val: string, field: any): string[] {
+    const value = val.toLowerCase();
+    return this.autoCompletePool.filter(element =>
+      element.toLowerCase().includes(value)
+    );
+  }
 
 }
