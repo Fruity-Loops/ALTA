@@ -218,8 +218,16 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.dialog.closeAll();
   }
 
-  checkDisableButton(binArray: any[]): boolean {
-    return binArray.map(index => index.bins).every(array => array.length <= 0);
+  disableAssign(): boolean {
+    if (this.locationsWithBinsAndSKs.map((obj: any) => obj.bins).flat().length === 0) {
+      for (let i = 0; i < this.binToSks.length; ++i) {
+        if (this.binToSks[i].bins.length === 0) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
   }
 
   @HostListener('window:beforeunload', ['$event'])

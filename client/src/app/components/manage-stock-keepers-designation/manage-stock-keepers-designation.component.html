@@ -71,7 +71,7 @@
     <button mat-stroked-button  id="discard" class="bottom-discard"
             (click)="openDialogWithRef(discardDialog)">Discard</button>
     <button mat-stroked-button  id="assign" class="bottom-assign"
-            [disabled]="checkDisableButton(binToSks)"
+            [disabled]="disableAssign()"
             (click)="submitPreAuditData()">Assign</button>
   </div>
 
