@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Template } from '../Template';
 import timeZones from '../audit-template-view/create-audit-template/timezone.json';
+import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
+import { HttpParams } from '@angular/common/http';
 
 interface DaysCheckBox {
   name: string;
@@ -85,20 +87,23 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   title = '';
   description = '';
 
+  params = new HttpParams();
   autocompleteFormGroup: FormGroup | undefined;
   filterFieldResults: string[] | undefined;
-  autoCompletePool: string[] = ['demo', 'angular', 'django'];
+
   autoFields = [
-    'location',
-    'plant',
-    'zones',
-    'aisles',
-    'bins',
-    'part_number',
-    'serial_number'
+    'Location',
+    'Plant',
+    'Zone',
+    'Aisle',
+    'Bin',
+    'Part_Number',
+    'Serial_Number'
   ];
 
-  protected constructor() { }
+  constructor(
+    private itemsService: ManageInventoryItemsService
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -229,19 +234,30 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     this.autoFields.forEach(field => {
       formGroup[field] = new FormControl();
       formGroup[field].valueChanges.subscribe(
-        (val: any) => {
-          this.filterFieldResults = this.filter(val, field);
+        async (val: any) => {
+          this.filter(val, field);
         }
       );
     });
     this.autocompleteFormGroup = new FormGroup(formGroup);
   }
 
-  filter(val: string, field: any): string[] {
-    const value = val.toLowerCase();
-    return this.autoCompletePool.filter(element =>
-      element.toLowerCase().includes(value)
+  filter(value: string, field: string): void {
+    const val = value.toLowerCase();
+    this.params = new HttpParams();
+    this.params = this.params.set('page', '1');
+    this.params = this.params.set('page_size', '6');
+    this.params = this.params.set('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.set(field, value);
+    this.itemsService.getPageItems(this.params).subscribe(
+      (data) => {
+        const results = data.results.map((fields: any) => fields[field]);
+        const filtered: string[] = results.filter(
+          (element: string) =>
+            element.toLowerCase().includes(val)
+        );
+        this.filterFieldResults = [...new Set(filtered)].sort(); // Sorted Without Duplicates
+      }
     );
   }
-
 }

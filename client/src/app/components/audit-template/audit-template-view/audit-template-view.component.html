@@ -27,7 +27,7 @@
             <mat-label>Location</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
-                placeholder="Location" [disabled]="disabled" [matAutocomplete]="auto" formControlName="location" />
+                placeholder="Location" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Location" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -46,7 +46,7 @@
             <mat-label>Plant</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
-                placeholder="Plant" [disabled]="disabled" [matAutocomplete]="auto" formControlName="plant" />
+                placeholder="Plant" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Plant" />
 
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -64,7 +64,7 @@
             <mat-label>Zones</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
-                placeholder="Zones" [disabled]="disabled" [matAutocomplete]="auto" formControlName="zones" />
+                placeholder="Zones" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Zone" />
 
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -82,7 +82,7 @@
             <mat-label>Aisles</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
-                placeholder="Aisles" [disabled]="disabled" [matAutocomplete]="auto" formControlName="aisles" />
+                placeholder="Aisles" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Aisle" />
 
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -101,7 +101,7 @@
             <mat-label>Bins</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
-                placeholder="Bins" [disabled]="disabled" [matAutocomplete]="auto" formControlName="bins" />
+                placeholder="Bins" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Bin" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -120,7 +120,7 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
                 placeholder="Part Number" [disabled]="disabled" [matAutocomplete]="auto"
-                formControlName="part_number" />
+                formControlName="Part_Number" />
 
                 <mat-autocomplete #auto="matAutocomplete">
                   <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -140,7 +140,7 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"
                 [(ngModel)]="templateValues.serial_number" placeholder="Serial Number" [matAutocomplete]="auto"
-                formControlName="serial_number" />
+                formControlName="Serial_Number"/>
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
