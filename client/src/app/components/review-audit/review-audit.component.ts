@@ -3,8 +3,8 @@ import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router, GuardsCheckEnd } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -19,6 +19,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   auditID: number;
   binData: any;
   currentUser: any;
+  subscription: Subscription;
 
   panelOpenState = false;
   allExpandState = false;
@@ -134,11 +135,24 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.isDirty) {
-      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')){
-        this.deleteBinSKData();
-        return true;
+      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
+        this.subscription = this.router.events.subscribe((event: any) => {
+
+          // if event is a navigation attempt
+          if (event instanceof GuardsCheckEnd) {
+            this.isDirty = false;
+
+            // see if navigation is to previous page
+            if (event.url === '/audits/assign-sk/designate-sk') {
+              return true;
+            } else {
+              this.deleteAudit();
+              return true;
+            }
+          }
+        });
+        this.isDirty = false;
       }
-      return false;
     }
     return !this.isDirty;
   }

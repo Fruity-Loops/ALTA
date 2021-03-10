@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, GuardsCheckEnd } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -18,12 +18,13 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
+  subscription: Subscription;
   auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
-  isDirty = false;
+  isDirty = true;
 
   constructor(
     private dialog: MatDialog,
@@ -48,6 +49,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.locationsWithBinsAndSKs.forEach(index => {
       let currentSK = 0;
       index.bins.forEach((bin: any) => {
+
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
         const associatedItemsIds = associatedItems.map(item => item.Item_Id);
 
@@ -233,7 +235,24 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.isDirty) {
-      return confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.');
+      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
+        this.subscription = this.router.events.subscribe((event: any) => {
+
+          // if event is a navigation attempt
+          if (event instanceof GuardsCheckEnd) {
+            this.isDirty = false;
+
+            // see if navigation is to previous page
+            if (event.url === '/audits/assign-sk') {
+              return true;
+            } else {
+              this.deleteAudit();
+              return true;
+            }
+          }
+        });
+        this.isDirty = false;
+      }
     }
     return !this.isDirty;
   }

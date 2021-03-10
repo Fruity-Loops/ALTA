@@ -1,11 +1,11 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { User } from 'src/app/models/user.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { Router, GuardsCheckEnd } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
@@ -24,13 +24,15 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   locationsAndUsers: Array<any>;
   holdItemsLocation: Array<any>;
   maxAssignPerLocation: Array<any>;
+  subscription: Subscription;
   auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
   missingAssignedLocations = true;
-  isDirty = false;
+  isDirty = true;
+  browserRefresh = false;
 
   params = new HttpParams();
 
@@ -53,7 +55,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   ngOnInit(): void {
-
     this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
 
@@ -152,7 +153,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         sksFromLocation.forEach((sk: any) => {
           // enable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
-            holdUsersForThisLocation.find(user => user.id === sk).disabled = false;
+            holdUsersForThisLocation.find((user: any) => user.id === sk).disabled = false;
           }
         });
       }
@@ -166,7 +167,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         sksFromLocation.forEach((sk: any) => {
           // disable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
-            holdUsersForThisLocation.find(user => user.id === sk).disabled = true;
+            holdUsersForThisLocation.find((user: any) => user.id === sk).disabled = true;
           }
         });
       }
@@ -241,7 +242,24 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   @HostListener('window:beforeunload', ['$event'])
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.isDirty) {
-      return confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.');
+      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
+        this.subscription = this.router.events.subscribe((event: any) => {
+
+          // if event is a navigation attempt
+          if (event instanceof GuardsCheckEnd) {
+            this.isDirty = false;
+
+            // see if navigation is to previous page
+            if (event.url === '/manage-items') {
+              return true;
+            } else {
+              this.deleteAudit();
+              return true;
+            }
+          }
+        });
+        this.isDirty = false;
+      }
     }
     return !this.isDirty;
   }
