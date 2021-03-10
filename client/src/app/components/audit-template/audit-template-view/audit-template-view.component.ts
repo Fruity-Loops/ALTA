@@ -235,7 +235,9 @@ export abstract class AuditTemplateViewComponent implements OnInit {
       formGroup[field] = new FormControl();
       formGroup[field].valueChanges.subscribe(
         async (val: any) => {
-          this.filter(val, field);
+          if (val !== '') {
+            this.filter(val, field);
+          }
         }
       );
     });
@@ -259,5 +261,13 @@ export abstract class AuditTemplateViewComponent implements OnInit {
         this.filterFieldResults = [...new Set(filtered)].sort(); // Sorted Without Duplicates
       }
     );
+  }
+
+  onAutoFieldFocusIn(event: any, field: string) {
+    this.filter(event.target?.value, field);
+  }
+
+  onAutoFieldFocusOut(event: any){
+    this.filterFieldResults = [];
   }
 }
