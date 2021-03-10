@@ -142,8 +142,10 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
           if (event instanceof GuardsCheckEnd) {
             this.isDirty = false;
 
-            // see if navigation is to previous page
-            if (event.url === '/audits/assign-sk/designate-sk') {
+            // see if navigation is to previous or next page
+            if (event.url === '/audits/assign-sk/designate-sk' ||
+                event.url === '/audits/assign-sk/designate-sk/review-audit' ||
+                event.url === 'audits') {
               return true;
             } else {
               this.deleteAudit();

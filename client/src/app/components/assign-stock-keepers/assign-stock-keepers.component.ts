@@ -249,8 +249,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
           if (event instanceof GuardsCheckEnd) {
             this.isDirty = false;
 
-            // see if navigation is to previous page
-            if (event.url === '/manage-items') {
+            // see if navigation is to previous or current page
+            if (event.url === '/audits/assign-sk/designate-sk' || event.url === '/audits/assign-sk') {
               return true;
             } else {
               this.deleteAudit();

@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, GuardsCheckEnd } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
@@ -39,7 +39,40 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.manageAuditsService.getAuditData(this.auditID)
       .subscribe((auditData) => {
         this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
-      });
+    });
+
+    this.manageAuditsService.getAssignedBins(this.auditID)
+      .subscribe((auditData) => {
+        if (auditData !== []) {
+          const listOfSKs = auditData.map(obj => obj.customuser);
+          listOfSKs.forEach((index: any) => {
+
+            let skToUpdate = this.binToSks.find(obj => obj.sk_id === index.id);
+
+            // check if user assigned a different SK from original
+            if (skToUpdate !== undefined) {
+              let getAssignedData = auditData.find(obj => obj.customuser === index);
+
+              // add in the bins
+              skToUpdate.bins.push(getAssignedData.Bin);
+
+              // add in the item_ids
+              skToUpdate.item_ids = getAssignedData.item_ids;
+            }
+          });
+
+          /* remove from original array
+          this.locationsWithBinsAndSKs.forEach(element => {
+            element.item = [];
+            element.bins = [];
+          });
+*/
+
+          console.log("hold init data: ", this.locationsWithBinsAndSKs)
+          console.log("hold page data: ", this.binToSks)
+          console.log("hold previous data: ", auditData)
+        }
+    });
   }
 
   autoAssign(): void {
@@ -108,6 +141,8 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
           bins: new Array<any>()
         });
     });
+
+
   }
 
   identifyUser(httpId: number): [] {
@@ -237,13 +272,15 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     if (this.isDirty) {
       if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
         this.subscription = this.router.events.subscribe((event: any) => {
-
+console.log(event)
           // if event is a navigation attempt
-          if (event instanceof GuardsCheckEnd) {
+          if (event instanceof NavigationEnd) {
             this.isDirty = false;
 
-            // see if navigation is to previous page
-            if (event.url === '/audits/assign-sk') {
+            // see if navigation is to previous, next, or current page
+            if (event.urlAfterRedirects === '/audits/assign-sk' ||
+                event.urlAfterRedirects === '/audits/assign-sk/designate-sk/review-audit' ||
+                event.urlAfterRedirects === '/audits/assign-sk/designate-sk') {
               return true;
             } else {
               this.deleteAudit();
