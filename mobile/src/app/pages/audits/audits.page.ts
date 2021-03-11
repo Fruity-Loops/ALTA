@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuditService } from 'src/app/services/audit.service';
+import { NotificationService } from 'src/app/services/notification.service';
 import { fetchLoggedInUser } from 'src/app/services/cache';
 import { AlertController, LoadingController, PopoverController } from '@ionic/angular';
 import { ProgressionMetricsPopoverComponent } from 'src/app/pages/audits/popovers/progression-metrics-popover/progression-metrics-popover.component';
@@ -17,6 +18,7 @@ export class AuditsPage implements OnInit {
 
   constructor(
     private auditService: AuditService,
+    private notificationService: NotificationService,
     private loadingController: LoadingController,
     private alertController: AlertController,
     public popoverController: PopoverController,
@@ -39,24 +41,28 @@ export class AuditsPage implements OnInit {
       user => {
         if (user) {
           this.loggedInUser = user;
-          this.auditService.getAudits(user.user_id, user.organization_id).subscribe(
-            async (res) => {
-              await whileLoading.dismiss();
-              this.audits = res;
-              this.blankMessage = 'No Audits Currently Pending';
-              this.completeRefresh();
-            },
-            async (res) => {
-              this.blankMessage = 'There was a problem trying to fetch audits.';
-              await whileLoading.dismiss();
-              const alert = await this.alertController.create({
-                header: 'Error',
-                message: this.blankMessage,
-                buttons: ['Dismiss'],
+          this.auditService.getAuditAssignments(
+            user.user_id,
+            user.organization_id).subscribe(
+              async (res) => {
+                await whileLoading.dismiss();
+                this.audits = res;
+                const newAudits = res.filter(obj => obj.seen === false);
+                this.notificationService.notify(newAudits);
+                this.blankMessage = 'No Audits Currently Pending';
+                this.completeRefresh();
+              },
+              async (res) => {
+                this.blankMessage = 'There was a problem trying to fetch audits.';
+                await whileLoading.dismiss();
+                const alert = await this.alertController.create({
+                  header: 'Error',
+                  message: this.blankMessage,
+                  buttons: ['Dismiss'],
+                });
+                this.completeRefresh();
+                await alert.present();
               });
-              this.completeRefresh();
-              await alert.present();
-            });
         }
       });
   }
@@ -88,5 +94,31 @@ export class AuditsPage implements OnInit {
       componentProps: { auditID },
     });
     return await popover.present();
+  }
+
+  setAuditAssignmentSeen(assignmentID) {
+    const auditSeen = this.audits.find(a => {
+        return a.id === assignmentID;
+      });
+    if (auditSeen && !auditSeen.seen) {
+      fetchLoggedInUser().then(
+        user => {
+          if (user) {
+            this.loggedInUser = user;
+            this.auditService.setAssignmentSeen(
+              user.user_id,
+              assignmentID,
+              true
+            ).subscribe(
+              (res) => {
+                auditSeen.seen = true;
+                this.notificationService.notify(
+                  this.audits.filter(obj => obj.seen === false)
+                );
+              }
+            );
+          }
+        });
+    }
   }
 }

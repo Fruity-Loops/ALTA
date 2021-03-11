@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
 from user_account.permissions import PermissionFactory, IsAuthenticated,\
     HasSameOrgInBody, HasSameOrgInQuery, IsSystemAdmin
-from .models import Audit, Record, BinToSK
+from .models import Audit, Assignment, Record, BinToSK
 from .serializers import AuditSerializer
 
 
@@ -54,6 +54,18 @@ class CheckAuditOrganizationById(BasePermission):
 
         return True
 
+class CheckAssignmentOrganizationById(BasePermission):
+    message = "You must be part of this organization to do this operation"
+
+    def has_permission(self, request, view):
+        user = CustomUser.objects.get(email=request.user)
+        if request.parser_context['kwargs'] is not None \
+                and 'pk' in request.parser_context['kwargs']:
+            assignment = Assignment.objects.get(id=request.parser_context['kwargs']['pk'])
+            audit = Audit.objects.get(audit_id=assignment.audit.audit_id)
+            return audit.organization_id == user.organization.org_id
+
+        return True
 
 class CheckInitAuditData(BasePermission):
     message = "The requested audit must be for the same organization as the requesting user"
