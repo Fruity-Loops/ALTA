@@ -3,7 +3,7 @@ from rest_framework.permissions import BasePermission
 from user_account.models import CustomUser
 from user_account.permissions import PermissionFactory, IsAuthenticated,\
     HasSameOrgInBody, HasSameOrgInQuery, IsSystemAdmin
-from .models import Audit, Record, BinToSK
+from .models import Audit, Assignment, Record, BinToSK
 from .serializers import AuditSerializer
 
 
@@ -54,6 +54,18 @@ class CheckAuditOrganizationById(BasePermission):
 
         return True
 
+class CheckAssignmentOrganizationById(BasePermission):
+    message = "You must be part of this organization to do this operation"
+
+    def has_permission(self, request, view):
+        user = CustomUser.objects.get(email=request.user)
+        if request.parser_context['kwargs'] is not None \
+                and 'pk' in request.parser_context['kwargs']:
+            assignment = Assignment.objects.get(id=request.parser_context['kwargs']['pk'])
+            audit = Audit.objects.get(audit_id=assignment.audit.audit_id)
+            return audit.organization_id == user.organization.org_id
+
+        return True
 
 class CheckInitAuditData(BasePermission):
     message = "The requested audit must be for the same organization as the requesting user"
@@ -89,6 +101,9 @@ class IsAssignedToBin(BasePermission):
 
     def has_permission(self, request, view):
         assigned_sk = False
+        if 'pk' in view.kwargs:
+            assigned_bin = BinToSK.objects.get(bin_id=view.kwargs['pk'])
+            return request.user.id == assigned_bin.customuser_id
         if 'customuser_id' in request.data:
             assigned_sk_var = request.data['customuser_id']
             audit_var = request.data['init_audit_id']
@@ -107,6 +122,17 @@ class IsAssignedToBin(BasePermission):
             except (ObjectDoesNotExist, KeyError):
                 assigned_sk = False
         return assigned_sk
+
+
+class CanAccessAuditQParam(BasePermission):
+    message = "The audit ID being accessed through query params should have the same organization as you"
+
+    def has_permission(self, request, view):
+        audit_id = request.GET.get('audit_id', '')
+        if audit_id != '':
+            audit = Audit.objects.get(audit_id=audit_id)
+            return request.user.organization_id == audit.organization_id
+        return True
 
 
 class IsAssignedToAudit(BasePermission):

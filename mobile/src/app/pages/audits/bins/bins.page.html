@@ -22,9 +22,6 @@
 
     <ion-list lines="none" inset="true">
       <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
-        <ion-thumbnail slot="start">
-          <span *ngIf="bin?.status == 'Pending'" class="pending_ellipse"></span>
-        </ion-thumbnail>
         <ion-label>
           <ion-text color="dark">
             <h2>Bin {{ bin.Bin }}</h2>
@@ -47,9 +44,6 @@
 
     <ion-list lines="none" inset="true">
       <ion-item *ngFor="let bin of completedBins" lines="none" class="list-items">
-        <ion-thumbnail slot="start">
-          <span *ngIf="bin?.status == 'Complete'" class="complete_ellipse"></span>
-        </ion-thumbnail>
         <ion-label>
           <ion-text color="dark">
             <h2>Bin {{ bin.Bin }}</h2>

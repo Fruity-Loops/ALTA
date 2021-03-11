@@ -6,6 +6,7 @@ USER_MODEL = 'user_account.CustomUser'
 PENDING = 'Pending'
 COMPLETE = 'Complete'
 
+
 class Audit(models.Model):
     audit_id = models.AutoField(primary_key=True)
     organization = models.ForeignKey(to='organization.Organization',
@@ -34,6 +35,11 @@ class Audit(models.Model):
     ]
     status = models.CharField(max_length=12, choices=AUDIT_STATUS, default=PENDING)
 
+class Assignment(models.Model):
+    audit=models.ForeignKey(Audit, on_delete=models.CASCADE)
+    assigned_sk = models.ForeignKey(to=USER_MODEL, on_delete=models.CASCADE)
+    seen=models.BooleanField(default=False)
+    seen_on=models.DateTimeField(auto_now=True)
 
 class BinToSK(models.Model):
     bin_id = models.AutoField(primary_key=True)

@@ -1,4 +1,4 @@
-from django.db import models
+from djongo import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 from inventory_item.updater import start_new_job
@@ -7,7 +7,7 @@ from inventory_item.updater import start_new_job
 class Organization(models.Model):
     org_id = models.AutoField(primary_key=True)
     org_name = models.CharField(max_length=256, unique=True)
-    address = models.CharField(max_length=256, default="None")
+    address = models.JSONField(null=False, blank=False)
     status = models.BooleanField(default=False)
     inventory_items_refresh_job = models.IntegerField(default=1)
     calendar_date = models.CharField(max_length=100)

@@ -43,9 +43,9 @@ class OrganizationTestCase(APITestCase):
     def test_create_organization_sys_admin_success(self):
         """ Organization was created correctly """
         self.client.force_authenticate(user=self.system_admin)
-        data = {'org_name': 'test_case'}
-        request = self.client.post("/organization/", data, format='json')
-        self.assertEqual(request.status_code, status.HTTP_201_CREATED)
+        data = {'org_name': 'test_case', 'address': ['Florida']}
+        response = self.client.post("/organization/", data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_organization_inventory_manager_success(self):
         """ Inventory manager and Stock Keeper is not allowed to create an organization """

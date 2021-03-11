@@ -20,10 +20,32 @@ export class AuditService {
       {
         params: {
           assigned_sk: userID,
-          organization: org
+          organization: org,
+          exclude_status: 'Complete'
         }
       })
       .pipe(catchError(errorHandler));
+  }
+
+
+  getAuditAssignments(userID, org): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/assignment/`,
+      {
+        params: {
+          assigned_sk: userID,
+          organization: org,
+          exclude_status: 'Complete'
+        }
+      });
+  }
+
+  setAssignmentSeen(userID, assignmentID, seen): Observable<any> {
+    return this.http.patch(`${BASEURL}/audit/assignment/${assignmentID}/`,
+      {
+        assigned_sk: userID,
+        id: assignmentID,
+        seen
+      });
   }
 
   getBinSKAudit(userID, auditID, binStatus): Observable<any> {
@@ -45,17 +67,6 @@ export class AuditService {
           return res;
         }),
       );
-  }
-
-  getBin(userID, auditID, binID): Observable<any> {
-    return this.http.get(`${BASEURL}/bin-to-sk/`, {
-      params: {
-        customuser_id: userID,
-        init_audit_id: auditID,
-        bin_id: binID,
-      }
-    })
-      .pipe(catchError(errorHandler));
   }
 
 
@@ -154,3 +165,4 @@ export class AuditService {
       .pipe(catchError(errorHandler));
   }
 }
+
