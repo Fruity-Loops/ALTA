@@ -44,15 +44,12 @@ class CustomSearchFilter(filters.SearchFilter):
 
         for field in filterset_iexact_fields:
             if field in request.query_params:
-                param = {'{0}__{1}'.format(field, 'iexact'): request.query_params[field]}
+                param = {'{0}__{1}'.format(field, 'icontains'): request.query_params[field]}
                 queryset = queryset.filter(**param)
         return queryset
 
 
 class ItemViewSet(LoggingViewset):
-    """
-    API endpoint that allows organizations to be viewed or edited.
-    """
     queryset = Item.objects.all().order_by('Batch_Number')
     serializer_class = ItemSerializer
     http_method_names = ['get']

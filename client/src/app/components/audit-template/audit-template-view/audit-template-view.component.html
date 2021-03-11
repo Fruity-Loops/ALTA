@@ -27,8 +27,8 @@
             <mat-label>Location</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="location" type="text" matInput [(ngModel)]="templateValues.location"
-                placeholder="Location" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Location"
-                (focus)="onAutoFieldFocusIn($event, 'Location')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Location" [disabled]="disabled" [matAutocomplete]="auto" onclick="this.blur()"
+                [formControlName]="AutoFields.LOCATION" (focus)="onAutoFieldFocusIn($event, AutoFields.LOCATION)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -47,8 +47,8 @@
             <mat-label>Plant</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.plant"
-                placeholder="Plant" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Plant"
-                (focus)="onAutoFieldFocusIn($event, 'Plant')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Plant" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.PLANT"
+                (focus)="onAutoFieldFocusIn($event, AutoFields.PLANT)" onclick="this.blur()"/>
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -66,8 +66,8 @@
             <mat-label>Zones</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="zones" type="text" matInput [(ngModel)]="templateValues.zones"
-                placeholder="Zones" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Zone"
-                (focus)="onAutoFieldFocusIn($event, 'Zone')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Zones" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.ZONE"
+                (focus)="onAutoFieldFocusIn($event, AutoFields.ZONE)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -85,8 +85,8 @@
             <mat-label>Aisles</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="aisles" type="text" matInput [(ngModel)]="templateValues.aisles"
-                placeholder="Aisles" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Aisle"
-                (focus)="onAutoFieldFocusIn($event, 'Aisle')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Aisles" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.AISLE"
+                (focus)="onAutoFieldFocusIn($event, AutoFields.AISLE)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -105,8 +105,8 @@
             <mat-label>Bins</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="bins" type="text" matInput [(ngModel)]="templateValues.bins"
-                placeholder="Bins" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Bin"
-                (focus)="onAutoFieldFocusIn($event, 'Bin')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Bins" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.BIN"
+                (focus)="onAutoFieldFocusIn($event, AutoFields.BIN)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -124,8 +124,9 @@
             <mat-label>Part Number</mat-label>
             <mat-form-field appearance="outline">
               <input class="form-control" id="part_number" type="text" matInput [(ngModel)]="templateValues.part_number"
-                placeholder="Part Number" [disabled]="disabled" [matAutocomplete]="auto" formControlName="Part_Number"
-                (focus)="onAutoFieldFocusIn($event, 'Part_Number')" (focusout)="onAutoFieldFocusOut($event)" />
+                placeholder="Part Number" [disabled]="disabled" [matAutocomplete]="auto"
+                [formControlName]="AutoFields.PART_NUMBER"
+                (focus)="onAutoFieldFocusIn($event, AutoFields.PART_NUMBER)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">
@@ -145,8 +146,8 @@
             <mat-form-field appearance="outline">
               <input class="form-control" id="serial_number" type="text" matInput [disabled]="disabled"
                 [(ngModel)]="templateValues.serial_number" placeholder="Serial Number" [matAutocomplete]="auto"
-                formControlName="Serial_Number" (focus)="onAutoFieldFocusIn($event, 'Serial_Number')"
-                (focusout)="onAutoFieldFocusOut($event)" />
+                [formControlName]="AutoFields.SERIAL_NUMBER"
+                (focus)="onAutoFieldFocusIn($event,AutoFields.SERIAL_NUMBER)" />
 
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let result of filterFieldResults" [value]="result">

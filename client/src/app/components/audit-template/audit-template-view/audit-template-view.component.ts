@@ -17,6 +17,16 @@ interface MonthsCheckBox {
   subCheckBox?: MonthsCheckBox[];
 }
 
+enum AutoFields {
+  LOCATION = 'Location',
+  PLANT = 'Plant',
+  ZONE = 'Zone',
+  AISLE = 'Aisle',
+  BIN = 'Bin',
+  PART_NUMBER = 'Part_Number',
+  SERIAL_NUMBER = 'Serial_Number'
+}
+
 @Component({
   template: ''
 })
@@ -88,18 +98,9 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   description = '';
 
   params = new HttpParams();
+  AutoFields = AutoFields;
   autocompleteFormGroup: FormGroup | undefined;
   filterFieldResults: string[] | undefined;
-
-  autoFields = [
-    'Location',
-    'Plant',
-    'Zone',
-    'Aisle',
-    'Bin',
-    'Part_Number',
-    'Serial_Number'
-  ];
 
   constructor(
     private itemsService: ManageInventoryItemsService
@@ -231,7 +232,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
 
   initAutocomplete(): void {
     const formGroup: any = {};
-    this.autoFields.forEach(field => {
+    Object.values(this.AutoFields).forEach(field => {
       formGroup[field] = new FormControl();
       formGroup[field].valueChanges.subscribe(
         async (val: any) => {
@@ -245,6 +246,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   }
 
   filter(value: string, field: string): void {
+    this.filterFieldResults = [];
     const val = value.toLowerCase();
     this.params = new HttpParams();
     this.params = this.params.set('page', '1');
@@ -258,16 +260,14 @@ export abstract class AuditTemplateViewComponent implements OnInit {
           (element: string) =>
             element.toLowerCase().includes(val)
         );
-        this.filterFieldResults = [...new Set(filtered)].sort(); // Sorted Without Duplicates
+        setTimeout(() => {
+          this.filterFieldResults = [...new Set(filtered)].sort(); // Sorted Without Duplicates
+        }, 100);
       }
     );
   }
 
-  onAutoFieldFocusIn(event: any, field: string) {
+  onAutoFieldFocusIn(event: any, field: string): void {
     this.filter(event.target?.value, field);
-  }
-
-  onAutoFieldFocusOut(event: any){
-    this.filterFieldResults = [];
   }
 }
