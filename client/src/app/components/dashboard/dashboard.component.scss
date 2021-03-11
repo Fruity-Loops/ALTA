@@ -1,27 +1,5 @@
 @import "./src/theme.scss";
 
-.mat-table {
-    width: 100%;
-  }
-  mat-expansion-panel {
-    padding-top: 1em;
-    padding-bottom: 1em;
-    width: 100%;
-  }
-  
-  mat-expansion-panel-header {
-    width: 100%;
-  }
-  
-  mat-panel-title {
-    width: 90%;
-  }
-  
-  .expandSearchButton {
-    padding-top: 1em;
-    padding-right: 1em;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  
+table {
+  width: 100%;
+}

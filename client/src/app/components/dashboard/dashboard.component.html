@@ -1,9 +1,59 @@
 <mat-card>
-    <mat-card-title>Most Recent Audits</mat-card-title>
+  <br>
+  <mat-card-title>Last 30 Days Audits</mat-card-title>
+  <br>
 
+  <mat-divider></mat-divider>
 
+  <div class="mat-elevation-z0">
+    <table mat-table [dataSource]="dataSource" matSort>
 
+      <ng-container matColumnDef="dateInitiated">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Initiated</th>
+        <td mat-cell *matCellDef="let row"> {{row.dateInitiated}} </td>
+      </ng-container>
 
+      <ng-container matColumnDef="ID">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+        <td mat-cell *matCellDef="let row"> {{row.ID}}%</td>
+      </ng-container>
 
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Description</th>
+        <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Location</th>
+        <td mat-cell *matCellDef="let row"> {{row.location}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Bin</th>
+        <td mat-cell *matCellDef="let row"> {{row.bin}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="initiatedBy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> initiated By</th>
+        <td mat-cell *matCellDef="let row"> {{row.initiatedBy}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accuracy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Accuracy</th>
+        <td mat-cell *matCellDef="let row"> {{row.accuracy}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+        <td mat-cell *matCellDef="let row"> {{row.status}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5]"></mat-paginator>
+  </div>
 
 </mat-card>
