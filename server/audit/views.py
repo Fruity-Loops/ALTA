@@ -10,11 +10,13 @@ from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
-    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, RecommendationBinSerializer
+    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
+        AssignmentSerializer, GetAssignmentSerializer, RecommendationBinSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
-    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam
-from .models import Audit, BinToSK, Record
+    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
+        CheckAssignmentOrganizationById
+from .models import Audit, Assignment, BinToSK, Record
 
 
 class AuditViewSet(LoggingViewset):
@@ -152,6 +154,51 @@ def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
 
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
+
+class AssignmentViewSet(LoggingViewset):
+    http_method_names = ['post', 'get', 'patch', 'delete']
+    queryset = Assignment.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = AssignmentSerializer
+        if self.action in ['list', 'retrieve']:
+            serializer_class = GetAssignmentSerializer
+        return serializer_class(*args, **kwargs)
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = SKPermissionFactory(self.request)
+        audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
+        permission_classes = factory.get_general_permissions(
+                im_additional_perms=audit_permissions,
+                sk_additional_perms=audit_permissions
+        )
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.query_params.get('organization', -1)
+        status = request.query_params.get('status')
+        assigned_sk = request.query_params.get('assigned_sk')
+        exclude_status = request.query_params.get('exclude_status')
+
+        if status:
+            self.queryset = self.queryset.filter(audit__status=status)
+        if assigned_sk:
+            self.queryset = self.queryset.filter(assigned_sk=assigned_sk)
+        if exclude_status:
+            self.queryset = self.queryset.exclude(audit__status=exclude_status)
+        self.queryset = self.queryset.filter(audit__organization_id=org_id)
+
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+
+    def create(self, request, *args, **kwargs):
+        is_many = isinstance(request.data, list)
+        serializer = self.get_serializer(data=request.data, many=is_many)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BinToSKViewSet(LoggingViewset):

@@ -1,12 +1,12 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
-import {ManageMembersService} from 'src/app/services/users/manage-members.service';
-import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
-import {User} from 'src/app/models/user.model';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {HttpParams} from '@angular/common/http';
-import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
+import { User } from 'src/app/models/user.model';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
+import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -15,6 +15,7 @@ import {AuthService, UserLocalStorage} from '../../services/authentication/auth.
 })
 export class AssignStockKeepersComponent implements OnInit {
   skToAssign: Array<any>;
+  assignments: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
@@ -38,6 +39,7 @@ export class AssignStockKeepersComponent implements OnInit {
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
+    this.assignments = [];
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
@@ -102,8 +104,14 @@ export class AssignStockKeepersComponent implements OnInit {
         this.skToAssign.indexOf(value),
         1
       );
+      this.assignments = this.assignments.filter(obj => obj.assigned_sk !== value);
     } else {
       this.skToAssign.push(value);
+      this.assignments.push({
+        audit: this.auditID,
+        assigned_sk: value,
+        seen: false
+      });
     }
   }
 
@@ -115,6 +123,14 @@ export class AssignStockKeepersComponent implements OnInit {
     this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
+        this.manageAuditsService.createAuditAssignments(this.assignments).subscribe(
+          _=> {
+            this.assignments = [];
+          },
+          (err) => {
+            this.errorMessage = err;
+          }
+        );
         setTimeout(() => {
           this.router.navigate(['audits/assign-sk/designate-sk']);
         }, 1000);
