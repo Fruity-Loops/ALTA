@@ -342,7 +342,7 @@ class RecordViewSet(LoggingViewset):
 
 class RecommendationViewSet(LoggingViewset):
     """
-    Allows obtaining all clients and updating them
+    Allows getting recommendations on what to audit next
     """
     http_method_names = ['get']
     serializer_class = GetBinToSKSerializer
