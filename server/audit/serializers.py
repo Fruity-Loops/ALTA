@@ -27,16 +27,7 @@ class ProperAuditSerializer(serializers.ModelSerializer):
         model = Audit
         fields = ['audit_id', 'initiated_by', 'initiated_on', 'status',
                   'inventory_items', 'accuracy']
-
-
-class RecommendationBinSerializer(serializers.ModelSerializer):
-    customuser = UserAuditSerializer(read_only=True, many=False)
-    init_audit = AuditSerializer(read_only=True, many=False)
-
-    class Meta:
-        model = BinToSK
-        fields = ['bin_id','Bin','init_audit', 'customuser']
-
+        
 
 class GetBinToSKSerializer(serializers.ModelSerializer):
     customuser = UserAuditSerializer(read_only=True, many=False)
