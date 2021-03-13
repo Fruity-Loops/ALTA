@@ -11,7 +11,7 @@ from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer, GetAssignmentSerializer, RecommendationBinSerializer
+        AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
