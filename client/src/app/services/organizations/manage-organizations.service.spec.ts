@@ -1,7 +1,10 @@
-import {TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
-import {ManageOrganizationsService} from './manage-organizations.service';
+import { ManageOrganizationsService } from './manage-organizations.service';
 
 describe('ManageOrganizationsService', () => {
   let service: ManageOrganizationsService;
@@ -11,7 +14,7 @@ describe('ManageOrganizationsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
