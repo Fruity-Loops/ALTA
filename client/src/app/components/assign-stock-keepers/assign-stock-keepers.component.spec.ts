@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import { By } from '@angular/platform-browser';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 
 describe('AssignStockKeepersComponent', () => {
@@ -33,4 +34,19 @@ describe('AssignStockKeepersComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Test that Start Audit button is disabled when no items selected
+  it('should enable Assign button when item(s) selected', () => {
+    fixture.detectChanges();
+     var checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
+     expect(checkboxArray.length).toBe(0);
+     for (const input  of checkboxArray){
+        expect(input.nativeElement.checked).toBeFalsy(); 
+        input.nativeElement.click();
+        fixture.detectChanges();
+        const button = fixture.debugElement.query(By.css('.button.bottom-assign'));
+        expect(button.nativeElement.disabled).toBeFalsy();
+      }
+  });
+
 });

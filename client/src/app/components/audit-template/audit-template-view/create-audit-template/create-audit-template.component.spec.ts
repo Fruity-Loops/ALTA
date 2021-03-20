@@ -76,9 +76,9 @@ describe('AuditTemplateComponent', () => {
   it('should be able to enter Start Date', () => {
     fixture.detectChanges();
 //    fixture.whenStable().then(() => {
-      startDateInput.value = '27/20/2021';
+      startDateInput.value = '2021-01-18T15:37:42';
       startDateInput.dispatchEvent(new Event('change'));
-      expect(startDateInput.value).toBe('27/20/2021');
+      expect(startDateInput.value).toBe('2021-01-18T15:37:42');
 //      const button = fixture.debugElement.query(By.css("#create-template-button")).nativeElement;
 //      button.click;
 //    });
