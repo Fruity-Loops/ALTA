@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,14 +12,14 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   templateUrl: './review-audit.component.html',
   styleUrls: ['./review-audit.component.scss']
 })
-export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
+export class ReviewAuditComponent implements OnInit, OnDestroy, IDeactivateComponent {
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['stockkeeper', 'bins', 'numberparts', 'initiator', 'initiationdate'];
   locationsAndUsers: Array<any>;
   auditID: number;
   binData: any;
   currentUser: any;
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
   panelOpenState = false;
   allExpandState = false;
@@ -144,8 +144,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
 
             // see if navigation is to previous or next page
             if (event.url === '/audits/assign-sk/designate-sk' ||
-                event.url === '/audits/assign-sk/designate-sk/review-audit' ||
-                event.url === 'audits') {
+                event.url === '/audits') {
               return true;
             } else {
               this.deleteAudit();
@@ -157,5 +156,9 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
       }
     }
     return !this.isDirty;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

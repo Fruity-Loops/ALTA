@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
@@ -16,7 +16,7 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 
-export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
+export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactivateComponent {
   skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
@@ -24,7 +24,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   locationsAndUsers: Array<any>;
   holdItemsLocation: Array<any>;
   maxAssignPerLocation: Array<any>;
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
   auditID: number;
 
   panelOpenState = false;
@@ -127,7 +127,15 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
           this.dataSource.data.push(user);
         });
       });
+
+      if (selectedItems.assigned_sk !== []) {
+        this.skToAssign = selectedItems.assigned_sk.map(obj => obj.id);
+      }
     });
+  }
+
+  isChecked(userId: any): boolean {
+    return this.skToAssign.indexOf(userId) !== -1;
   }
 
   onChange(userId: any, loc: any): void {
@@ -249,8 +257,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
           if (event instanceof GuardsCheckEnd) {
             this.isDirty = false;
 
-            // see if navigation is to previous or current page
-            if (event.url === '/audits/assign-sk/designate-sk' || event.url === '/audits/assign-sk') {
+            // see if navigation is to next page
+            if (event.url === '/audits/assign-sk/designate-sk') {
               return true;
             } else {
               this.deleteAudit();
@@ -262,5 +270,9 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       }
     }
     return !this.isDirty;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

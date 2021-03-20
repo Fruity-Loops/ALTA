@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, GuardsCheckEnd } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
@@ -13,12 +13,13 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   templateUrl: './manage-stock-keepers-designation.component.html',
   styleUrls: ['./manage-stock-keepers-designation.component.scss']
 })
-export class ManageStockKeepersDesignationComponent implements OnInit, IDeactivateComponent {
+export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy, IDeactivateComponent {
 
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
+  holdBinIdsOfPreviousAssign: Array<any>;
   auditID: number;
 
   panelOpenState = false;
@@ -32,6 +33,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     private router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
+    this.holdBinIdsOfPreviousAssign = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
@@ -44,7 +46,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.manageAuditsService.getAssignedBins(this.auditID)
       .subscribe((auditData) => {
         if (auditData !== []) {
-          const listOfSKs = auditData.map(obj => obj.customuser);
+          this.holdBinIdsOfPreviousAssign = auditData.map((obj: any) => ({ bin_id: obj.bin_id, Bin: obj.Bin }));
+
+          const listOfSKs = auditData.map((obj: any) => obj.customuser);
           listOfSKs.forEach((index: any) => {
 
             let skToUpdate = this.binToSks.find(obj => obj.sk_id === index.id);
@@ -53,24 +57,25 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
             if (skToUpdate !== undefined) {
               let getAssignedData = auditData.find(obj => obj.customuser === index);
 
+              let arrayFromString = getAssignedData.item_ids.replace(/'/g, '"');
+              arrayFromString = JSON.parse(arrayFromString);
+
+              // add in the item_ids
+              arrayFromString.forEach(id => {
+                skToUpdate.item_ids.push(id);
+              });
+
               // add in the bins
               skToUpdate.bins.push(getAssignedData.Bin);
 
-              // add in the item_ids
-              skToUpdate.item_ids = getAssignedData.item_ids;
+              // remove bin from original array
+              const locationToUpdate = this.locationsWithBinsAndSKs.find(obj => obj.Location === skToUpdate.sk_location);
+              locationToUpdate.bins.splice(
+                locationToUpdate.bins.indexOf(getAssignedData.Bin),
+                1
+              );
             }
           });
-
-          /* remove from original array
-          this.locationsWithBinsAndSKs.forEach(element => {
-            element.item = [];
-            element.bins = [];
-          });
-*/
-
-          console.log("hold init data: ", this.locationsWithBinsAndSKs)
-          console.log("hold page data: ", this.binToSks)
-          console.log("hold previous data: ", auditData)
         }
     });
   }
@@ -141,8 +146,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
           bins: new Array<any>()
         });
     });
-
-
   }
 
   identifyUser(httpId: number): [] {
@@ -174,36 +177,66 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   }
 
   submitPreAuditData(): void {
-    const holdBodyPreAuditData = new Array<any>();
+    const holdBodyPreAuditDataWithoutBinIDs = new Array<any>();
+    const holdBodyPreAuditDataWithBinIDs = new Array<any>();
     let holdItemsOfBins = new Array<any>();
+
+    const getPrevAssignedBins = this.holdBinIdsOfPreviousAssign.map(obj => obj.Bin);
 
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
       auditComp.bins.forEach((bin: any) => {
-        holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
 
+        holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
         if (holdItemsOfBins.length > 0) {
-          // construct array to hold the item ids
-          const holdIds = holdItemsOfBins.map(item => item.Item_Id);
-          holdBodyPreAuditData.push(
-            {
-              Bin: bin,
-              init_audit: this.auditID,
-              customuser: auditComp.sk_id,
-              item_ids: holdIds,
-            });
-          // empty array for next bin in loop
-          holdItemsOfBins = new Array<any>();
+
+          // determine if bin was previously assigned - patch
+          if (this.holdBinIdsOfPreviousAssign.map(obj => obj.Bin).includes(bin)) {
+
+            const getBinId = this.holdBinIdsOfPreviousAssign.
+                              filter((obj: any) => obj.Bin === bin).
+                              map((obj: any) => obj.bin_id)[0];
+
+            holdBodyPreAuditDataWithBinIDs.push(
+              {
+                bin_id: getBinId,
+                init_audit_id: this.auditID,
+                customuser: auditComp.sk_id
+              });
+
+          } else {
+            // construct array to hold the item ids - post
+            holdBodyPreAuditDataWithoutBinIDs.push(
+              {
+                Bin: bin,
+                init_audit: this.auditID,
+                customuser: auditComp.sk_id,
+                item_ids: holdItemsOfBins.map(item => item.Item_Id),
+              });
+          }
         }
+        // empty array for next bin in loop
+        holdItemsOfBins = new Array<any>();
       });
     });
 
-    holdBodyPreAuditData.forEach(bodyPreAuditData => {
-      this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
-        .subscribe((err) => {
-          this.errorMessage = err;
-        });
-    });
+    if (holdBodyPreAuditDataWithoutBinIDs.length > 0) {
+      holdBodyPreAuditDataWithoutBinIDs.forEach(bodyPreAuditData => {
+        this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
+          .subscribe((err) => {
+            this.errorMessage = err;
+          });
+      });
+    }
+
+    if (holdBodyPreAuditDataWithBinIDs.length > 0) {
+      holdBodyPreAuditDataWithBinIDs.forEach(bodyPreAuditData => {
+        this.manageAuditsService.updatePreAudit(bodyPreAuditData.init_audit_id, bodyPreAuditData)
+          .subscribe((err) => {
+            this.errorMessage = err;
+          });
+      });
+    }
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
@@ -272,15 +305,14 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     if (this.isDirty) {
       if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
         this.subscription = this.router.events.subscribe((event: any) => {
-console.log(event)
+
           // if event is a navigation attempt
-          if (event instanceof NavigationEnd) {
+          if (event instanceof GuardsCheckEnd) {
             this.isDirty = false;
 
-            // see if navigation is to previous, next, or current page
-            if (event.urlAfterRedirects === '/audits/assign-sk' ||
-                event.urlAfterRedirects === '/audits/assign-sk/designate-sk/review-audit' ||
-                event.urlAfterRedirects === '/audits/assign-sk/designate-sk') {
+            // see if navigation is to previous or page
+            if (event.url === '/audits/assign-sk'||
+                event.url === '/audits/assign-sk/designate-sk/review-audit') {
               return true;
             } else {
               this.deleteAudit();
@@ -292,5 +324,9 @@ console.log(event)
       }
     }
     return !this.isDirty;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
