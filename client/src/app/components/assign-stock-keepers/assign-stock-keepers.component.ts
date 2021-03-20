@@ -109,16 +109,40 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
         }
       });
 
+
+      if (selectedItems.assigned_sk !== []) {
+        this.skToAssign = selectedItems.assigned_sk.map(obj => obj.id);
+      }
+
       this.locationsAndUsers.forEach((location: any) => {
+
+        const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
+        let counter = 0;
+
         location.users.forEach((user: any) => {
+
+          // enable the checkbox for previously selected SKs
+          if (this.skToAssign.includes(user.id)) {
+            user.disabled = false;
+            counter++;
+          }
+
           const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
           if (isBusy === undefined) {
             user.availability = 'Available';
           } else {
             user.availability = 'Busy';
           }
-          user.disabled = false;
         });
+
+        // disable other SKs if assign limit is reached for location
+        if (counter >= maxPerLocation) {
+          location.users.forEach((user: any) => {
+            if (!this.skToAssign.includes(user.id)) {
+              user.disabled = true;
+            }
+          });
+        }
       });
 
       this.dataSource = new MatTableDataSource();
@@ -128,9 +152,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
         });
       });
 
-      if (selectedItems.assigned_sk !== []) {
-        this.skToAssign = selectedItems.assigned_sk.map(obj => obj.id);
-      }
+
     });
   }
 
