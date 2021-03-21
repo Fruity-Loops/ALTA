@@ -74,39 +74,14 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
     * 1. sending all an organization's users with a realistic amount of users
     * 2. how slow this can be to compute on the front-end
     */
-
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
+
       this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
-      this.holdItemsLocation.forEach((selectedItem: any) => {
+      this.holdItemsLocation.forEach((location: any) => {
 
-        if (!this.maxAssignPerLocation.some((item: any) => item.location === selectedItem)) {
-          const locTotalBins = new Set(selectedItems.inventory_items.filter((item: any) =>
-            item.Location === selectedItem).map((ob: any) => ob.Bin)).size;
+        this.setMaxAssignPerLocation(location, selectedItems);
 
-          this.maxAssignPerLocation.push({
-            location: selectedItem,
-            totalBins: locTotalBins
-          });
-        }
-
-        const obj = this.locationsAndUsers.find((item: any) => item.location === selectedItem);
-        if (obj === undefined) {
-          const getSKForLoc = clients.filter((user: any) =>
-            user.location === selectedItem && user.role === 'SK');
-          if (getSKForLoc.length !== 0) {
-            this.locationsAndUsers.push(
-              {
-                location: selectedItem,
-                users: getSKForLoc
-              });
-          } else {
-            this.locationsAndUsers.push(
-              {
-                location: selectedItem,
-                users: []
-              });
-          }
-        }
+        this.addLocationWithSKs(location, clients);
       });
 
 
@@ -114,36 +89,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
         this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
       }
 
-      this.locationsAndUsers.forEach((location: any) => {
-
-        const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
-        let counter = 0;
-
-        location.users.forEach((user: any) => {
-
-          // enable the checkbox for previously selected SKs
-          if (this.skToAssign.includes(user.id)) {
-            user.disabled = false;
-            counter++;
-          }
-
-          const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
-          if (isBusy === undefined) {
-            user.availability = 'Available';
-          } else {
-            user.availability = 'Busy';
-          }
-        });
-
-        // disable other SKs if assign limit is reached for location
-        if (counter >= maxPerLocation) {
-          location.users.forEach((user: any) => {
-            if (!this.skToAssign.includes(user.id)) {
-              user.disabled = true;
-            }
-          });
-        }
-      });
+      this.setCheckboxDisableStatus();
 
       this.dataSource = new MatTableDataSource();
       this.locationsAndUsers.forEach(item => {
@@ -151,9 +97,75 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
           this.dataSource.data.push(user);
         });
       });
-
-
     });
+  }
+
+  setMaxAssignPerLocation(location: any, correspondingObj: any): void {
+    if (!this.maxAssignPerLocation.some((item: any) => item.location === location)) {
+      const locTotalBins = new Set(correspondingObj.inventory_items.filter((item: any) =>
+        item.Location === location).map((ob: any) => ob.Bin)).size;
+
+        this.maxAssignPerLocation.push({
+          location: location,
+          totalBins: locTotalBins
+        });
+    }
+  }
+
+  addLocationWithSKs(location: any, clients: any): void {
+    if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
+      const getSKForLoc = clients.filter((user: any) =>
+        user.location === location && user.role === 'SK');
+        if (getSKForLoc.length !== 0) {
+          this.locationsAndUsers.push(
+            {
+              location: location,
+              users: getSKForLoc
+            });
+        } else {
+          this.locationsAndUsers.push(
+            {
+              location: location,
+              users: []
+            });
+        }
+    }
+  }
+
+  setCheckboxDisableStatus(): void {
+    this.locationsAndUsers.forEach((location: any) => {
+
+      const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
+      let counter = 0;
+
+      location.users.forEach((user: any) => {
+        this.setBusyStatus(user);
+
+        // enable the checkbox for previously selected SKs
+        if (this.skToAssign.includes(user.id)) {
+          user.disabled = false;
+          counter++;
+        }
+      });
+
+      // disable other SKs if assign limit is reached for location
+      if (counter >= maxPerLocation) {
+        location.users.forEach((user: any) => {
+          if (!this.skToAssign.includes(user.id)) {
+            user.disabled = true;
+          }
+        });
+      }
+    });
+  }
+
+  setBusyStatus(user: any): void {
+    const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
+    if (isBusy === undefined) {
+      user.availability = 'Available';
+    } else {
+      user.availability = 'Busy';
+    }
   }
 
   isChecked(userId: any): boolean {
