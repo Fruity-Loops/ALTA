@@ -15,6 +15,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
@@ -34,7 +35,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatDividerModule,
     MatListModule,
     MatCheckboxModule,
-    MatGridListModule
+    MatGridListModule,
+    MatAutocompleteModule,
   ],
   providers: [],
   exports: [
@@ -55,6 +57,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatCheckboxModule,
     MatExpansionModule,
     DragDropModule,
+    MatAutocompleteModule,
   ]
 })
 export class MatModule {}
