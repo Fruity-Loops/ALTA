@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
   audits: Array<any>;
-  displayedColumns: string[] = ['initiated_on', 'audit_id', 'description', 'location', 'bin', 'initiated_by', 'accuracy', 'status'];
+  displayedColumns: string[] = ['initiated_on', 'audit_id', 'location', 'bin', 'initiated_by', 'accuracy', 'status'];
   chartOptions: any;
   private params = new HttpParams();
   private xData = [];
