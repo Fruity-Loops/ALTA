@@ -10,51 +10,76 @@
   <div class="container">
     <div class="subtitle">
       <mat-card-header>
-        <mat-card-subtitle>
-          Inventory Extractions
-        </mat-card-subtitle>
+        Inventory Extractions
       </mat-card-header>
     </div>
 
-    <form class="col s12" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="refreshTime()">
-      <div class="form-settings">
+    <mat-divider [inset]="true"></mat-divider>
 
-<!--      REPEAT TIME-->
-          <div class="flex-container" fxLayout="row" fxLayoutAlign="none none">
-            <mat-form-field appearance="outline">
-              <mat-label>Repeat Every</mat-label>
-              <input matInput id="time" type="number" required formControlName="time" placeholder="Time unit"/>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Interval</mat-label>
-              <mat-select matNativeControl required formControlName="interval">
-                <mat-option value="minutes">Minutes</mat-option>
-                <mat-option value="hours">Hours</mat-option>
-                <mat-option value="days">Days</mat-option>
-                <mat-option value="weeks">Weeks</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-<!--      FTP LOCATION-->
-      <div class="flex-container" fxLayout="row" fxLayoutAlign="start none">
 
-        <mat-form-field appearance="outline">
-          <mat-label>FTP File Location</mat-label>
-          <input matInput id="ftpLocation" required formControlName="ftpLocation" placeholder="ftp://example/invetory1">
-        </mat-form-field>
-      </div>
-<!--      XLSX FILE INPUT-->
-      <div class="flex-container" fxLayout="row" fxLayoutAlign="start-evenly none">
-          <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".xlsx"/>
-          <button mat-stroked-button type="button" color="primary" (click)="csvInput.click()" >{{getFileName()}}</button>
-      </div>
-<!--      SUBMIT BUTTON-->
-      <div class="flex-container-submit" fxLayout="row" fxLayoutAlign="space-evenly space-evenly">
+    <form class="row" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="refreshTime()">
+      <mat-card-content>
+        <div class="centerMe"></div>
+        <mat-grid-list cols="4" rowHeight="100px">
+
+          <!--      FTP LOCATION-->
+          <mat-grid-tile colspan="2">
+            <div class="form-group">
+              <mat-label for="ftpLocation">FTP Location:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput id="ftpLocation" required formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+
+          <!--      REPEAT TIME-->
+          <mat-grid-tile>
+            <div class="repeat-every-form-group">
+              <mat-label >Repeat Every:</mat-label>
+              <mat-form-field appearance="outline">
+                <input matInput id="time" type="number" required formControlName="time" placeholder="Time unit"/>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+
+          <mat-grid-tile>
+            <div class="repeat-every-form-group">
+              <mat-label > <br> </mat-label>
+              <mat-form-field appearance="outline">
+                <mat-select matNativeControl required formControlName="interval" placeholder="Repeat" floatlLabel="never">
+                  <mat-option value="minutes">Minutes</mat-option>
+                  <mat-option value="hours">Hours</mat-option>
+                  <mat-option value="days">Days</mat-option>
+                  <mat-option value="weeks">Weeks</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+
+          <!--      XLSX FILE INPUT-->
+          <mat-grid-tile colspan="2">
+            <div class="form-group">
+              <div class="upload-csv">
+                <mat-label>Upload Inventory Extract:</mat-label>
+                <!--              <mat-form-field appearance="outline">-->
+                <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".xlsx"/>
+                <button mat-stroked-button type="button" color="primary" (click)="csvInput.click()" >{{getFileName()}}</button>
+                <!--              </mat-form-field>-->
+              </div>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
+
+
+
+
+      </mat-card-content>
+      <mat-card-actions align="center">
         <button mat-stroked-button type="submit" id="signupbtn" [disabled]="!orgSettingsForm.valid" (click)="openSnackBar('Submitted' , 'Close')" class="save">
-          Submit
+          Edit
         </button>
-      </div>
-      </div>
+      </mat-card-actions>
+
     </form>
 
 

@@ -58,10 +58,10 @@ export class OrganizationSettingsComponent implements OnInit {
   }
 
   getFileName(): string {
-    if(this.file){
+    if (this.file){
       return this.file.name;
     } else {
-      return "Choose Spreadsheet File (.xlsx)"
+      return 'Select (.csv) File';
     }
   }
 
