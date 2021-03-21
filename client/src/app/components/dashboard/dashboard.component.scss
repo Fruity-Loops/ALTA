@@ -10,6 +10,23 @@ table {
   width: 100%;
 }
 
+.mat-card-title {
+  color: map-get($alta-primary, 500);
+  padding: 0.7em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 20px;
+}
+
+.mat-card-subtitle {
+  color: map-get($alta-primary, 900);
+  padding: 0.7em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 14px;
+  font-weight:bold;
+}
+
 #chart {
   max-width: 100%;
   display: block;
