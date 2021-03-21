@@ -55,13 +55,13 @@ export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy
 
             // check if user assigned a different SK from original
             if (skToUpdate !== undefined) {
-              let getAssignedData = auditData.find(obj => obj.customuser === index);
+              let getAssignedData = auditData.find((obj: any) => obj.customuser === index);
 
               let arrayFromString = getAssignedData.item_ids.replace(/'/g, '"');
               arrayFromString = JSON.parse(arrayFromString);
 
               // add in the item_ids
-              arrayFromString.forEach(id => {
+              arrayFromString.forEach((id: any) => {
                 skToUpdate.item_ids.push(id);
               });
 
@@ -181,8 +181,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy
     const holdBodyPreAuditDataWithBinIDs = new Array<any>();
     let holdItemsOfBins = new Array<any>();
 
-    const getPrevAssignedBins = this.holdBinIdsOfPreviousAssign.map(obj => obj.Bin);
-
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
       auditComp.bins.forEach((bin: any) => {
@@ -290,8 +288,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy
 
   disableAssign(): boolean {
     if (this.locationsWithBinsAndSKs.map((obj: any) => obj.bins).flat().length === 0) {
-      for (let i = 0; i < this.binToSks.length; ++i) {
-        if (this.binToSks[i].bins.length === 0) {
+
+      for (let obj of this.binToSks) {
+        if (obj.bins.length === 0) {
           return true;
         }
       }
@@ -319,6 +318,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy
               return true;
             }
           }
+          return false;
         });
         this.isDirty = false;
       }

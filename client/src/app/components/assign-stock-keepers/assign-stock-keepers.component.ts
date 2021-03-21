@@ -111,7 +111,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
 
 
       if (selectedItems.assigned_sk !== []) {
-        this.skToAssign = selectedItems.assigned_sk.map(obj => obj.id);
+        this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
       }
 
       this.locationsAndUsers.forEach((location: any) => {
@@ -287,6 +287,7 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
               return true;
             }
           }
+          return false;
         });
         this.isDirty = false;
       }

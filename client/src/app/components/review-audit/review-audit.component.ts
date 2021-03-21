@@ -151,6 +151,7 @@ export class ReviewAuditComponent implements OnInit, OnDestroy, IDeactivateCompo
               return true;
             }
           }
+        return false;
         });
         this.isDirty = false;
       }

@@ -16,8 +16,6 @@ export interface IDeactivateComponent {
 })
 export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
 
-  constructor() { }
-
   canDeactivate(
     component: IDeactivateComponent,
     route: ActivatedRouteSnapshot,
