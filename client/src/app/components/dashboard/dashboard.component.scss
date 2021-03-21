@@ -1,6 +1,6 @@
 @import "./src/theme.scss";
 
-:host ::ng-deep .mat-sort-header-container {
+:host ::ng-deep .dashboard-audits-table .mat-sort-header-container {
   display: flex;
   justify-content: center;
 }
