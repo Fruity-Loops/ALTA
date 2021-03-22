@@ -1,10 +1,9 @@
-import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, GuardsCheckEnd } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -12,14 +11,13 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   templateUrl: './review-audit.component.html',
   styleUrls: ['./review-audit.component.scss']
 })
-export class ReviewAuditComponent implements OnInit, OnDestroy, IDeactivateComponent {
+export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['stockkeeper', 'bins', 'numberparts', 'initiator', 'initiationdate'];
   locationsAndUsers: Array<any>;
   auditID: number;
   binData: any;
   currentUser: any;
-  subscription: Subscription = new Subscription();
 
   panelOpenState = false;
   allExpandState = false;
@@ -86,6 +84,7 @@ export class ReviewAuditComponent implements OnInit, OnDestroy, IDeactivateCompo
   }
 
   goBackDesignateSK(): void {
+    this.isDirty = false;
     this.router.navigate(['audits/assign-sk/designate-sk'], { replaceUrl: true });
   }
 
@@ -130,36 +129,5 @@ export class ReviewAuditComponent implements OnInit, OnDestroy, IDeactivateCompo
     this.isDirty = false;
     this.deleteAudit();
     this.dialog.closeAll();
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.isDirty) {
-      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
-        this.subscription = this.router.events.subscribe((event: any) => {
-
-          // if event is a navigation attempt
-          if (event instanceof GuardsCheckEnd) {
-            this.isDirty = false;
-
-            // see if navigation is to previous or next page
-            if (event.url === '/audits/assign-sk/designate-sk' ||
-                event.url === '/audits') {
-              return true;
-            } else {
-              this.deleteAudit();
-              return true;
-            }
-          }
-        return false;
-        });
-        this.isDirty = false;
-      }
-    }
-    return !this.isDirty;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }

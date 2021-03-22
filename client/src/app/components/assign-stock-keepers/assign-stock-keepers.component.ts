@@ -1,11 +1,10 @@
-import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { User } from 'src/app/models/user.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, GuardsCheckEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
@@ -16,7 +15,7 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
 
-export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactivateComponent {
+export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
   skToAssign: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
@@ -24,7 +23,6 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
   locationsAndUsers: Array<any>;
   holdItemsLocation: Array<any>;
   maxAssignPerLocation: Array<any>;
-  subscription: Subscription = new Subscription();
   auditID: number;
 
   panelOpenState = false;
@@ -279,35 +277,5 @@ export class AssignStockKeepersComponent implements OnInit, OnDestroy, IDeactiva
     });
 
     return counter < this.locationsAndUsers.length;
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.isDirty) {
-      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
-        this.subscription = this.router.events.subscribe((event: any) => {
-
-          // if event is a navigation attempt
-          if (event instanceof GuardsCheckEnd) {
-            this.isDirty = false;
-
-            // see if navigation is to next page
-            if (event.url === '/audits/assign-sk/designate-sk') {
-              return true;
-            } else {
-              this.deleteAudit();
-              return true;
-            }
-          }
-          return false;
-        });
-        this.isDirty = false;
-      }
-    }
-    return !this.isDirty;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }

@@ -1,11 +1,10 @@
-import { Component, HostListener, OnInit, OnDestroy, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router, GuardsCheckEnd } from '@angular/router';
+import { Router } from '@angular/router';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
-import { Observable, Subscription } from 'rxjs';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -13,12 +12,11 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
   templateUrl: './manage-stock-keepers-designation.component.html',
   styleUrls: ['./manage-stock-keepers-designation.component.scss']
 })
-export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy, IDeactivateComponent {
+export class ManageStockKeepersDesignationComponent implements OnInit, IDeactivateComponent {
 
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
-  subscription: Subscription = new Subscription();
   holdBinIdsOfPreviousAssign: Array<any>;
   auditID: number;
 
@@ -297,36 +295,5 @@ export class ManageStockKeepersDesignationComponent implements OnInit, OnDestroy
       return false;
     }
     return true;
-  }
-
-  @HostListener('window:beforeunload', ['$event'])
-  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.isDirty) {
-      if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
-        this.subscription = this.router.events.subscribe((event: any) => {
-
-          // if event is a navigation attempt
-          if (event instanceof GuardsCheckEnd) {
-            this.isDirty = false;
-
-            // see if navigation is to previous or page
-            if (event.url === '/audits/assign-sk'||
-                event.url === '/audits/assign-sk/designate-sk/review-audit') {
-              return true;
-            } else {
-              this.deleteAudit();
-              return true;
-            }
-          }
-          return false;
-        });
-        this.isDirty = false;
-      }
-    }
-    return !this.isDirty;
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 }
