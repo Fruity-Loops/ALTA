@@ -76,6 +76,9 @@ div.dropdown {
 .mat-card-title {
   color: map-get($alta-primary, 500);
   padding: 0.7em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 20px;
 }
 
 .settings-padding {

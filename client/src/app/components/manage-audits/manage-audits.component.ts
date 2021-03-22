@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {TableManagementComponent} from '../TableManagement.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { TableManagementComponent } from '../TableManagement.component';
 
 @Component({
   selector: 'app-manage-audits',
@@ -107,7 +107,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   updatePaginator(): void {
     const count = 'count';
     this.length = this.data[count];
-    if (this.pageIndex > 0){
+    if (this.pageIndex > 0) {
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }

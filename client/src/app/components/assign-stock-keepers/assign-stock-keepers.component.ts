@@ -17,6 +17,7 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
   skToAssign: Array<any>;
+  assignments: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];

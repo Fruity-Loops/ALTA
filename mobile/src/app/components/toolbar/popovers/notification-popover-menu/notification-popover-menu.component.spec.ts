@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { NotificationPopoverMenuComponent } from './notification-popover-menu.component';
 
@@ -9,8 +10,11 @@ describe('NotificationPopoverMenuComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NotificationPopoverMenuComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [NotificationPopoverMenuComponent],
+      imports: [
+        IonicModule.forRoot(),
+        RouterTestingModule
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NotificationPopoverMenuComponent);

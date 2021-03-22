@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Template} from '../Template';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Template } from '../Template';
 import timeZones from '../audit-template-view/create-audit-template/timezone.json';
+import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
+import { HttpParams } from '@angular/common/http';
 
 interface DaysCheckBox {
   name: string;
@@ -12,6 +15,16 @@ interface MonthsCheckBox {
   name: string;
   checked: boolean;
   subCheckBox?: MonthsCheckBox[];
+}
+
+enum AutoFields {
+  LOCATION = 'Location',
+  PLANT = 'Plant',
+  ZONE = 'Zone',
+  AISLE = 'Aisle',
+  BIN = 'Bin',
+  PART_NUMBER = 'Part_Number',
+  SERIAL_NUMBER = 'Serial_Number'
 }
 
 @Component({
@@ -84,11 +97,18 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   title = '';
   description = '';
 
+  params = new HttpParams();
+  AutoFields = AutoFields;
+  autocompleteFormGroup: FormGroup | undefined;
+  filterFieldResults: string[] | undefined;
 
-  protected constructor() { }
+  constructor(
+    private itemsService: ManageInventoryItemsService
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.initAutocomplete();
   }
 
   abstract initializeForm(): void;
@@ -156,57 +176,98 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   }
 
   updateCheckboxDay(): void {
-      this.allDaysChecked =
-        this.recurrenceDay.subCheckBox != null &&
-        this.recurrenceDay.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxDay = ' ';
+    this.allDaysChecked =
+      this.recurrenceDay.subCheckBox != null &&
+      this.recurrenceDay.subCheckBox.every((t) => t.checked);
+    this.errorMessageCheckboxDay = ' ';
   }
 
   updateCheckboxMonth(): void {
-      this.allMonthsChecked =
-        this.recurrenceMonth.subCheckBox != null &&
-        this.recurrenceMonth.subCheckBox.every((t) => t.checked);
-      this.errorMessageCheckboxMonth = ' ';
+    this.allMonthsChecked =
+      this.recurrenceMonth.subCheckBox != null &&
+      this.recurrenceMonth.subCheckBox.every((t) => t.checked);
+    this.errorMessageCheckboxMonth = ' ';
   }
 
   // @ts-ignore
   someCheckboxDay(): boolean {
-      if (this.recurrenceDay.subCheckBox == null) {
-        return false;
-      }
-      return (
-        this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
-        !this.allDaysChecked
-      );
+    if (this.recurrenceDay.subCheckBox == null) {
+      return false;
+    }
+    return (
+      this.recurrenceDay.subCheckBox.filter((t) => t.checked).length > 0 &&
+      !this.allDaysChecked
+    );
   }
 
   // @ts-ignore
   someCheckboxMonth(): boolean {
-      if (this.recurrenceMonth.subCheckBox == null) {
-        return false;
-      }
-      return (
-        this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
-        !this.allMonthsChecked
-      );
+    if (this.recurrenceMonth.subCheckBox == null) {
+      return false;
+    }
+    return (
+      this.recurrenceMonth.subCheckBox.filter((t) => t.checked).length > 0 &&
+      !this.allMonthsChecked
+    );
   }
 
   setAllCheckboxDay(checked: boolean): void {
-      this.allDaysChecked = checked;
-      if (this.recurrenceDay.subCheckBox == null) {
-        return;
-      }
-      this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
+    this.allDaysChecked = checked;
+    if (this.recurrenceDay.subCheckBox == null) {
+      return;
+    }
+    this.recurrenceDay.subCheckBox.forEach((t) => (t.checked = checked));
   }
 
   setAllCheckboxMonth(checked: boolean): void {
-      this.allMonthsChecked = checked;
-      if (this.recurrenceMonth.subCheckBox == null) {
-        return;
-      }
-      this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
+    this.allMonthsChecked = checked;
+    if (this.recurrenceMonth.subCheckBox == null) {
+      return;
+    }
+    this.recurrenceMonth.subCheckBox.forEach((t) => (t.checked = checked));
   }
 
   abstract submitQuery(body: any): void;
 
+
+  initAutocomplete(): void {
+    const formGroup: any = {};
+    Object.values(this.AutoFields).forEach(field => {
+      formGroup[field] = new FormControl();
+      formGroup[field].valueChanges.subscribe(
+        async (val: any) => {
+          if (val !== '') {
+            this.filter(val, field);
+          }
+        }
+      );
+    });
+    this.autocompleteFormGroup = new FormGroup(formGroup);
+  }
+
+  filter(value: string, field: string): void {
+    this.filterFieldResults = [];
+    const val = value.toLowerCase();
+    this.params = new HttpParams();
+    this.params = this.params.set('page', '1');
+    this.params = this.params.set('page_size', '6');
+    this.params = this.params.set('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.set(field, value);
+    this.itemsService.getPageItems(this.params).subscribe(
+      (data) => {
+        const results = data.results.map((fields: any) => fields[field]);
+        const filtered: string[] = results.filter(
+          (element: string) =>
+            element.toLowerCase().includes(val)
+        );
+        setTimeout(() => {
+          this.filterFieldResults = [...new Set(filtered)].sort(); // Sorted Without Duplicates
+        }, 100);
+      }
+    );
+  }
+
+  onAutoFieldFocusIn(event: any, field: string): void {
+    this.filter(event.target?.value, field);
+  }
 }

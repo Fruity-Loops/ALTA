@@ -38,6 +38,10 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
 
+  createAuditAssignments(assignments: object): Observable<any> {
+    return this.http.post(`${BASEURL}/audit/assignment/`, assignments);
+  }
+
   getAuditData(auditId: number): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
   }
