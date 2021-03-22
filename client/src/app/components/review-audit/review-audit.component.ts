@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -129,5 +129,10 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
     this.isDirty = false;
     this.deleteAudit();
     this.dialog.closeAll();
+  }
+  // handles page refresh and out-of-app navigation
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    return confirm('');
   }
 }

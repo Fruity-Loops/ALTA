@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -295,5 +295,11 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
       return false;
     }
     return true;
+  }
+
+  // handles page refresh and out-of-app navigation
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    return confirm('');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { User } from 'src/app/models/user.model';
@@ -293,5 +293,11 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
 
     return counter < this.locationsAndUsers.length;
+  }
+
+  // handles page refresh and out-of-app navigation
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any) {
+    return confirm('');
   }
 }
