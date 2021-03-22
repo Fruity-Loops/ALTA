@@ -43,6 +43,7 @@ import {
 } from '../../components/manage-organizations/organization-view/edit-organization/edit-organization.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
+import {NgApexchartsModule} from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-a
     MatChipsModule,
     MatExpansionModule,
     MatSortModule,
+    NgApexchartsModule,
   ],
   providers: [
     AuthService,
