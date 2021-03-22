@@ -14,7 +14,6 @@ import { ReviewAuditComponent } from 'src/app/components/review-audit/review-aud
 export interface IDeactivateComponent {
   isDirty: boolean;
   deleteAudit(): void;
-  // canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
 }
 
 @Injectable({
@@ -34,30 +33,44 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
 
     if (component.isDirty) {
       if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
-
-        if (component instanceof AssignStockKeepersComponent) {
-          if (nextState.url !== '/audits/assign-sk/designate-sk') {
-            this.initiateAuditDiscard(component);
-          }
-        }
-
-        if (component instanceof ManageStockKeepersDesignationComponent) {
-          if (nextState.url !== '/audits/assign-sk' &&
-              nextState.url !== '/audits/assign-sk/designate-sk/review-audit') {
-            this.initiateAuditDiscard(component);
-          }
-        }
-
-        if (component instanceof ReviewAuditComponent) {
-          if (nextState.url !== '/audits/assign-sk/designate-sk' &&
-              nextState.url !== '/audits') {
-            this.initiateAuditDiscard(component);
-          }
-        }
-        return true;
+        return (this.checkAssignStockKeepersNav(component, nextState) ||
+                this.checkManageStockKeepersDesignationNav(component, nextState) ||
+                this.checkReviewAuditNav(component, nextState));
       }
     }
    return !component.isDirty;
+  }
+
+  checkAssignStockKeepersNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
+    if (component instanceof AssignStockKeepersComponent) {
+      if (nextState.url !== '/audits/assign-sk/designate-sk') {
+        this.initiateAuditDiscard(component);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  checkManageStockKeepersDesignationNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
+    if (component instanceof ManageStockKeepersDesignationComponent) {
+      if (nextState.url !== '/audits/assign-sk' &&
+          nextState.url !== '/audits/assign-sk/designate-sk/review-audit') {
+            this.initiateAuditDiscard(component);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  checkReviewAuditNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
+    if (component instanceof ReviewAuditComponent) {
+      if (nextState.url !== '/audits/assign-sk/designate-sk' &&
+          nextState.url !== '/audits') {
+            this.initiateAuditDiscard(component);
+      }
+      return true;
+    }
+    return false;
   }
 
   initiateAuditDiscard(component: IDeactivateComponent) {
