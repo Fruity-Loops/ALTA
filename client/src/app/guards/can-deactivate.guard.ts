@@ -54,11 +54,9 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
             this.initiateAuditDiscard(component);
           }
         }
-        console.log("should be the end")
         return true;
       }
     }
-    console.log("still getting called!")
    return !component.isDirty;
   }
 

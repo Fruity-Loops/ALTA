@@ -158,7 +158,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   setBusyStatus(user: any): void {
-    const isBusy = this.busySKs.find(busyUser => busyUser === user.id);
+    const isBusy = this.busySKs.find(busyUser => busyUser.id === user.id);
     if (isBusy === undefined) {
       user.availability = 'Available';
     } else {
