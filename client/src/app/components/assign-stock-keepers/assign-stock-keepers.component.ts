@@ -47,6 +47,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
+    this.assignments = [];
     this.holdItemsLocation = [];
     this.maxAssignPerLocation = new Array<any>();
     this.busySKs = new Array<any>();
@@ -185,6 +186,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         this.skToAssign.indexOf(userId),
         1
       );
+      this.assignments = this.assignments.filter(obj => obj.assigned_sk !== userId);
 
       // get the updated intersection of selected SKs for this location
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
@@ -200,6 +202,11 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       }
     } else {
       this.skToAssign.push(userId);
+      this.assignments.push({
+        audit: this.auditID,
+        assigned_sk: userId,
+        seen: false
+      });
 
       // get the updated intersection of selected SKs for this location
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
@@ -224,6 +231,14 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
+        this.manageAuditsService.createAuditAssignments(this.assignments).subscribe(
+          _ => {
+            this.assignments = [];
+          },
+          (err) => {
+            this.errorMessage = err;
+          }
+        );
         this.isDirty = false;
         setTimeout(() => {
           this.router.navigate(['audits/assign-sk/designate-sk']);
