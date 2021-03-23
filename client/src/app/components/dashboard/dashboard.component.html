@@ -1,27 +1,73 @@
-<mat-card style="margin-bottom: 30px">  Recommendations</mat-card>
-<table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container matColumnDef="Bin">
-      <th mat-header-cell *matHeaderCellDef> Audit Bin </th>
-      <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+<mat-card>
 
-  <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource_2" class="mat-elevation-z8">
-    <ng-container matColumnDef="Part">
-      <th mat-header-cell *matHeaderCellDef> Audit Part </th>
-      <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns_2"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns_2;"></tr>
-  </table>
+  <mat-card-title>Dashboard</mat-card-title>
 
-  <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSource_3" class="mat-elevation-z8">
-    <ng-container matColumnDef="Item">
-      <th mat-header-cell *matHeaderCellDef> Audit Item </th>
-      <td mat-cell *matCellDef="let element"> {{element.item_id}} </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns_3"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns_3;"></tr>
-  </table>
+
+  <mat-divider></mat-divider>
+  <br>
+  <mat-card-subtitle>Most Recent Audits</mat-card-subtitle>
+
+  <div class="dashboard-audits-table mat-elevation-z0">
+    <table mat-table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="initiated_on">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Initiated</th>
+        <td mat-cell *matCellDef="let row"> {{row.initiated_on}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="audit_id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+        <td mat-cell *matCellDef="let row"> {{row.audit_id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Location</th>
+        <td mat-cell *matCellDef="let row"> {{row.location}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="bin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Bin</th>
+        <td mat-cell *matCellDef="let row"> {{row.bin}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="initiated_by">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> initiated By</th>
+        <td mat-cell *matCellDef="let row"> {{row.initiated_by}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accuracy">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Accuracy</th>
+        <td mat-cell *matCellDef="let row"> {{row.accuracy}}%</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+        <td mat-cell class="{{row.status}}" *matCellDef="let row"> {{row.status}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5]"></mat-paginator>
+  </div>
+
+  <br>
+
+</mat-card>
+<br>
+<mat-card>
+  <div id="chart">
+    <apx-chart
+      [series]="chartOptions.accuracyOverTime"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [stroke]="chartOptions.stroke"
+      [dataLabels]="chartOptions.dataLabels"
+      [yaxis]="chartOptions.yaxis"
+      [labels]="chartOptions.labels"
+      [title]="chartOptions.title"
+    ></apx-chart>
+  </div>
+</mat-card>
