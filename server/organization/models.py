@@ -11,6 +11,7 @@ class Organization(models.Model):
     status = models.BooleanField(default=False)
     inventory_items_refresh_job = models.IntegerField(default=1)
     calendar_date = models.CharField(max_length=100)
+    # org_file = models.JSONField()
 
 
 @receiver(post_save, sender=Organization)

@@ -62,9 +62,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
             if not new_job_timing:
                 new_job_timing = self.default_refresh_time
             organization.inventory_items_refresh_job = new_job_timing
-            # The save below throws an error
-            # ValueError: Value: <organization_name> must be of type dict/list
-            # organization.save()
+            organization.save()
             start_new_job(org_id, new_job_timing)
             return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
 
