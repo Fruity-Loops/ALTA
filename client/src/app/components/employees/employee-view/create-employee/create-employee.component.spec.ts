@@ -49,4 +49,14 @@ describe('SignupComponent', () => {
   it('should create create-employee component', () => {
     expect(component).toBeTruthy();
   });
+
+    // Test the submitForm()
+    it('Call method', () => {
+      try {
+        component.submitForm()
+      }
+      catch (error) {
+      console.error(error);
+      }
+    });
 });

@@ -23,6 +23,7 @@ describe('ClientGridViewComponent', () => {
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
+    
   });
 
   it('should create Client grid view component', () => {
@@ -34,5 +35,27 @@ describe('ClientGridViewComponent', () => {
     fixture.detectChanges();
     createBtn = fixture.debugElement.query(By.css("#create")).nativeElement;
     expect(createBtn.disabled).toBeFalsy();
+  });
+
+  // Test the applyFilter()
+  it('Call method', () => {
+    component.applyFilter("")
+  });
+
+  // Test the populateTable()
+  it('Call method', () => {
+    try {
+      component.populateTable([{
+      first_name: "Nick",
+      last_name: "Nick",
+      role: "SA",
+      is_active: true,
+      id: 2,
+      email: "nick@test.com",
+      location: "Terrebonne",}])
+      }
+    catch (error) {
+    console.error(error);
+    }
   });
 });
