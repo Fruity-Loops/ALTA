@@ -26,8 +26,10 @@ export class OrganizationSettingsComponent implements OnInit {
   ) {
     this.orgSettingsForm = this.fb.group({
       time: ['', Validators.required],
+      interval: ['', Validators.required],
       ftpLocation: ['', Validators.required],
-      inv_extract_file: ['', Validators.required]
+      inv_extract_file: ['', Validators.required],
+      organization_id: ['', Validators.required]
     });
   }
 
@@ -37,20 +39,13 @@ export class OrganizationSettingsComponent implements OnInit {
       time: [''],
       interval: [''],
       ftpLocation: [''],
-      inv_extract_file: ['']
+      inv_extract_file: [''],
+      organization_id: [localStorage.getItem('organization_id')]
     });
   }
 
-  refreshTime(): void {
-    const formData = new FormData();
-    formData.append('file', this.orgSettingsForm.get('inv_extract_file')?.value);
-    formData.append('new_job_timing', this.orgSettingsForm.value.time);
-    formData.append('new_job_interval', this.orgSettingsForm.value.interval);
-    formData.append('ftp_location', this.orgSettingsForm.value.ftpLocation);
-    formData.append('organization_id', localStorage.getItem('organization_id') || '');
-
-
-    this.organizationSettings.updateOrganizationSettings(formData).subscribe(
+  submitForm(): void {
+    this.organizationSettings.updateOrganizationSettings(this.orgSettingsForm.value).subscribe(
       (err: string) => {
         this.errorMessage = err;
       }
@@ -68,7 +63,6 @@ export class OrganizationSettingsComponent implements OnInit {
   selectFile(event: any) {
     if (event.target.files.length > 0){
       this.file = event.target.files[0];
-      this.orgSettingsForm.get('inv_extract_file')?.setValue(this.file);
     }
   }
 

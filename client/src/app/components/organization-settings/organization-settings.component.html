@@ -17,7 +17,7 @@
     <mat-divider [inset]="true"></mat-divider>
 
 
-    <form class="row" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="refreshTime()">
+    <form class="row" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="submitForm()">
       <mat-card-content>
         <div class="centerMe"></div>
         <mat-grid-list cols="4" rowHeight="100px">
@@ -62,7 +62,7 @@
               <div class="upload-csv">
                 <mat-label>Upload Inventory Extract:</mat-label>
                 <!--              <mat-form-field appearance="outline">-->
-                <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".xlsx"/>
+                <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".csv"/>
                 <button mat-stroked-button type="button" color="primary" (click)="csvInput.click()" >{{getFileName()}}</button>
                 <!--              </mat-form-field>-->
               </div>

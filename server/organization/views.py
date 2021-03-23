@@ -53,32 +53,21 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
 
     def post(self, request):
         data = request.data
-        org_id = data.get('organization', '')
-        new_job_timing = data.get('new_job_timing', '')
+        print(data)
+        org_id = data.get('organization_id')
+        new_job_timing = int(data.get('time'))
 
-        #TODO implement file upload into DB
-        file = data.get('file')
-        if file:
-            print('RECEIVED .XLSX FILE: ' + str(file))
-        else:
-            print('NO .XLSX FILE RECEIVED')
+        try:
+            organization = Organization.objects.get(org_id=org_id)
+            if not new_job_timing:
+                new_job_timing = self.default_refresh_time
+            organization.inventory_items_refresh_job = new_job_timing
+            # The save below throws an error
+            # ValueError: Value: <organization_name> must be of type dict/list
+            # organization.save()
+            start_new_job(org_id, new_job_timing)
+            return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
 
-        response = {}
-
-        #TODO implement FTP Location URL
-        #TODO implement interval for refresh time
-        if org_id and new_job_timing:
-            try:
-                organization = Organization.objects.get(org_id=org_id)
-                if not new_job_timing:
-                    new_job_timing = self.default_refresh_time
-                organization.inventory_items_refresh_job = new_job_timing
-                organization.save()
-                start_new_job(str(org_id), new_job_timing)
-                response.update({'time_detail': 'Time has been updated'})
-
-            except Organization.DoesNotExist:
-                return Response({'detail': 'Invalid organization'},
-                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        return Response(response, status=status.HTTP_200_OK)
+        except Organization.DoesNotExist:
+            return Response({'detail': 'Invalid organization'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
