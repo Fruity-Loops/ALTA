@@ -22,7 +22,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
-  isDirty = true;
+  requestConfirmation = true;
 
   constructor(
     private dialog: MatDialog,
@@ -84,7 +84,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   }
 
   goBackDesignateSK(): void {
-    this.isDirty = false;
+    this.requestConfirmation = false;
     this.router.navigate(['audits/assign-sk/designate-sk'], { replaceUrl: true });
   }
 
@@ -110,7 +110,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
       (data) => {
         setTimeout(() => {
           this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
-          this.isDirty = false;
+          this.requestConfirmation = false;
           this.router.navigate(['audits'], { replaceUrl: true });
         }, 1000);
       }
@@ -126,7 +126,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   }
 
   discardAudit(): void {
-    this.isDirty = false;
+    this.requestConfirmation = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }

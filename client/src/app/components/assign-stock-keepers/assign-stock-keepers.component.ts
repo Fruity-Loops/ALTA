@@ -30,8 +30,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   allExpandState = false;
   errorMessage = '';
   missingAssignedLocations = true;
-  isDirty = true;
-  browserRefresh = false;
+  requestConfirmation = true;
 
   params = new HttpParams();
 
@@ -220,7 +219,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         });
       }
     }
-    this.isDirty = this.skToAssign?.length > 0 ? true : false;
+    this.requestConfirmation = this.skToAssign?.length > 0 ? true : false;
   }
 
   submitAssignedSKs(): void {
@@ -239,7 +238,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
             this.errorMessage = err;
           }
         );
-        this.isDirty = false;
+        this.requestConfirmation = false;
         setTimeout(() => {
           this.router.navigate(['audits/assign-sk/designate-sk']);
         }, 1000);
@@ -274,7 +273,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   discardAudit(): void {
-    this.isDirty = false;
+    this.requestConfirmation = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }

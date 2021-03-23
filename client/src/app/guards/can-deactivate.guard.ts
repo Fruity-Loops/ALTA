@@ -12,7 +12,7 @@ import { ManageStockKeepersDesignationComponent }
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 
 export interface IDeactivateComponent {
-  isDirty: boolean;
+  requestConfirmation: boolean;
   deleteAudit(): void;
 }
 
@@ -31,14 +31,14 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
     boolean |
     UrlTree {
 
-    if (component.isDirty) {
+    if (component.requestConfirmation) {
       if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
         return (this.checkAssignStockKeepersNav(component, nextState) ||
                 this.checkManageStockKeepersDesignationNav(component, nextState) ||
                 this.checkReviewAuditNav(component, nextState));
       }
     }
-   return !component.isDirty;
+   return !component.requestConfirmation;
   }
 
   checkAssignStockKeepersNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
@@ -74,7 +74,7 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
   }
 
   initiateAuditDiscard(component: IDeactivateComponent) {
-    component.isDirty = false;
+    component.requestConfirmation = false;
     component.deleteAudit();
   }
 }

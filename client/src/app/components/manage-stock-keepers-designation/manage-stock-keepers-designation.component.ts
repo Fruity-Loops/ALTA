@@ -23,7 +23,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
-  isDirty = true;
+  requestConfirmation = true;
 
   constructor(
     private dialog: MatDialog,
@@ -53,8 +53,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
 
             // check if user assigned a different SK from original
             if (skToUpdate !== undefined) {
-              let getAssignedData = auditData.find((obj: any) => obj.customuser === index);
+              const getAssignedData = auditData.find((obj: any) => obj.customuser === index);
 
+              // create iterable array from the string of assigned stock-keepers id
               let arrayFromString = getAssignedData.item_ids.replace(/'/g, '"');
               arrayFromString = JSON.parse(arrayFromString);
 
@@ -236,7 +237,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
-    this.isDirty = false;
+    this.requestConfirmation = false;
 
     setTimeout(() => {
       // Redirect user to review-audit component
@@ -266,7 +267,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-      this.isDirty = true;
+      this.requestConfirmation = true;
     }
   }
 
@@ -279,7 +280,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   }
 
   discardAudit(): void {
-    this.isDirty = false;
+    this.requestConfirmation = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }
