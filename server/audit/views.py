@@ -251,6 +251,14 @@ class BinToSKViewSet(LoggingViewset):
             bins_left = BinToSK.objects.filter(init_audit_id=audit_id).exclude(status='Complete')
             if len(bins_left) == 1:
                 self.complete_audit(audit_id)
+
+        if 'customuser' in request.data and 'bin_id' in request.data:
+            assigned_bin = BinToSK.objects.get(bin_id=request.data['bin_id'])
+            setattr(assigned_bin, 'customuser_id', request.data['customuser'])
+            assigned_bin.save()
+            serializer = self.get_serializer(assigned_bin)
+            return Response(serializer.data)
+
         return super().update(request, *args, **kwargs)
 
     def complete_audit(self, audit_id):

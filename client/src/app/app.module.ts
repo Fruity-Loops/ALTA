@@ -40,7 +40,7 @@ import {FileUploadModule} from 'ng2-file-upload'
       provide: HTTP_INTERCEPTORS, // To be able to use the http interceptor in app
       useClass: TokenInterceptor,
       multi: true,
-    },
+    }
   ],
   bootstrap: [AppComponent],
 })

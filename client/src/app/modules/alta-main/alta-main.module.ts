@@ -46,6 +46,8 @@ import { ReviewAuditComponent } from 'src/app/components/review-audit/review-aud
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
 import {NgApexchartsModule} from 'ng-apexcharts';
 import {FileUploadModule} from "ng2-file-upload";
+import { CanDeactivateGuard } from '../../guards/can-deactivate.guard';
+
 
 @NgModule({
   declarations: [
@@ -95,6 +97,7 @@ import {FileUploadModule} from "ng2-file-upload";
     ManageMembersService,
     ManageOrganizationsComponent,
     DashboardService,
+    CanDeactivateGuard,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })
