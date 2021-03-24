@@ -36,7 +36,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       provide: HTTP_INTERCEPTORS, // To be able to use the http interceptor in app
       useClass: TokenInterceptor,
       multi: true,
-    },
+    }
   ],
   bootstrap: [AppComponent],
 })

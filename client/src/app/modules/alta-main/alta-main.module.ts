@@ -44,6 +44,7 @@ import {
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
 import {NgApexchartsModule} from 'ng-apexcharts';
+import { CanDeactivateGuard } from '../../guards/can-deactivate.guard';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,7 @@ import {NgApexchartsModule} from 'ng-apexcharts';
     ManageMembersService,
     ManageOrganizationsComponent,
     DashboardService,
+    CanDeactivateGuard,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })

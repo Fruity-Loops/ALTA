@@ -54,6 +54,10 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
 
+  updatePreAudit(auditId: any, preAuditData: any): Observable<any> {
+    return this.http.patch(`${BASEURL}/bin-to-sk/${auditId}/`, preAuditData);
+  }
+
   getAssignedBins(auditId: any): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
   }
