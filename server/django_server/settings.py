@@ -163,8 +163,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR,  'media')
+MEDIA_URL = '/django_server/org_files/'
+MEDIA_ROOT = os.path.join(BASE_DIR,  'django_server/org_files')
 
 
 # LOGGING https://docs.djangoproject.com/en/3.0/topics/logging/

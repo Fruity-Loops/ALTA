@@ -1,3 +1,4 @@
+import os
 from datetime import date
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -11,6 +12,7 @@ from rest_framework.parsers import FormParser, MultiPartParser
 from .serializers import OrganizationSerializer
 from .models import Organization
 from .permissions import ValidateOrgMatchesUser
+
 
 
 class OrganizationViewSet(LoggingViewset):
@@ -80,8 +82,13 @@ class ModifyOrganizationInventoryItemFile(generics.GenericAPIView):
 
     def post(self, request):
         data = request.data
-        org_id = data.get('organization_id')
+        org_id = request.user.organization_id
         file = data.get('file')
+        filename = str(org_id) + '.csv'
+
+        # Replace existing file for organization
+        os.remove('django_server/org_files/'+filename)
+        file.name = str(org_id)+'.csv'
 
         try:
             organization = Organization.objects.get(org_id=org_id)

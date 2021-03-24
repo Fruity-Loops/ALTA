@@ -83,22 +83,25 @@ export class OrganizationSettingsComponent implements OnInit {
     this.hasBaseDropZoneOver  =  event;
   }
 
-  getFile(): FileLikeObject {
-    return this.uploader.queue[this.uploader.queue.length-1].file;
+  getFile(): FileLikeObject | null {
+    if (this.uploader.queue.length>0){
+      return this.uploader.queue[this.uploader.queue.length-1].file;
+    }
+    else return null;
   }
 
   upload(){
     let file = this.getFile();
-    const formData: FormData = new FormData();
-    formData.append('organization_id', localStorage.getItem('organization_id') || '');
-    formData.append('file', file.rawFile, file.name);
+    if (file) {
+      const formData: FormData = new FormData();
+      formData.append('file', file.rawFile, file.name);
 
-    this.organizationSettings.uploadInventoryFile(formData).subscribe(
-      (err: string) => {
-        this.errorMessage = err;
-      }
-    );
-
+      this.organizationSettings.uploadInventoryFile(formData).subscribe(
+        (err: string) => {
+          this.errorMessage = err;
+        }
+      );
+    }
   }
 
 }
