@@ -1,5 +1,8 @@
 <mat-card>
-  <mat-card-title>List of Audits</mat-card-title>
+
+  <mat-tab-group>
+    <mat-tab label="List of Audits">
+      <ng-template matTabContent>
   <div>
 
       <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">
@@ -90,4 +93,13 @@
 
 
   </div>
+
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Graphs and Trends">
+      <ng-template matTabContent>
+        Some nice UI
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
 </mat-card>
