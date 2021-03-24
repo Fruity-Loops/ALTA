@@ -24,4 +24,8 @@ export class OrganizationSettingsService {
     return this.http.post(`${BASEURL}/InventoryItemFile/`, file);
   }
 
+  getOrganization(id: string): Observable<any>{
+    return this.http.get(`${BASEURL}/organization/${id}/`);
+  }
+
 }

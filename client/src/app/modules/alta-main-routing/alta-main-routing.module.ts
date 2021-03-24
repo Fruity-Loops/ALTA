@@ -17,7 +17,7 @@ import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-kee
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
-import {OrganizationSettingsComponent} from "../../components/organization-settings/organization-settings.component";
+import {EditOrganizationSettingsComponent} from "../../components/organization-settings/edit-organization-settings/edit-organization-settings.component";
 
 
 export const routes: Routes = [
@@ -86,7 +86,7 @@ export const routes: Routes = [
             path: 'edit-template/:ID', component: EditAuditTemplateComponent
           }
         ]},
-      { path: 'organization-settings', component: OrganizationSettingsComponent}
+      { path: 'organization-settings', component: EditOrganizationSettingsComponent}
     ],
   },
 ];

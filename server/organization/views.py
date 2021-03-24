@@ -58,12 +58,17 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
 
         org_id = data.get('organization_id')
         new_job_timing = int(data.get('time'))
+        new_job_interval = data.get('interval')
+        new_ftp_location = data.get('ftpLocation')
 
         try:
             organization = Organization.objects.get(org_id=org_id)
-            if not new_job_timing:
-                new_job_timing = self.default_refresh_time
-            organization.inventory_items_refresh_job = new_job_timing
+            if new_job_timing:
+                organization.inventory_items_refresh_job = new_job_timing
+            if new_job_interval:
+                organization.repeat_interval = new_job_interval
+            if new_ftp_location:
+                organization.ftp_location = new_ftp_location
             organization.save()
             start_new_job(org_id, new_job_timing)
             return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
