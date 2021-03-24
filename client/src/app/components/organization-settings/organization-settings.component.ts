@@ -85,10 +85,6 @@ export class OrganizationSettingsComponent implements OnInit {
 
   getFile(): FileLikeObject {
     return this.uploader.queue[this.uploader.queue.length-1].file;
-
-    // return this.uploader.queue.map((fileItem) => {
-    //   return fileItem.file;
-    // });
   }
 
   upload(){
@@ -104,25 +100,5 @@ export class OrganizationSettingsComponent implements OnInit {
     );
 
   }
-
-  // upload() {
-  //   let files = this.getFiles();
-  //   console.log(files);
-  //   let requests = [];
-  //   files.forEach((file) => {
-  //     let formData = new FormData();
-  //     formData.append('file' , file.rawFile, file.name);
-  //     requests.push(this.uploadService.upload(formData));
-  //   });
-  //
-  //   concat(...requests).subscribe(
-  //     (res) => {
-  //       console.log(res);
-  //     },
-  //     (err) => {
-  //       console.log(err);
-  //     }
-  //   );
-  // }
 
 }
