@@ -1,6 +1,4 @@
 import {BaseOrganizationSettingsForm, OrganizationSettingsView} from "../organization-settings-view";
-// import {ActivatedRoute} from "@angular/router";
-// import {AuthService} from "../../../services/authentication/auth.service";
 import {Component, Injectable} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
