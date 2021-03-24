@@ -23,7 +23,6 @@ describe('ClientGridViewComponent', () => {
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
-    
   });
 
   it('should create Client grid view component', () => {
@@ -31,31 +30,32 @@ describe('ClientGridViewComponent', () => {
   });
 
    // Test that Start Audit button is disabled when no items selected
-   it('Create button should be active', () => {
+  it('Create button should be active', () => {
     fixture.detectChanges();
-    createBtn = fixture.debugElement.query(By.css("#create")).nativeElement;
+    createBtn = fixture.debugElement.query(By.css('#create')).nativeElement;
     expect(createBtn.disabled).toBeFalsy();
   });
 
   // Test the applyFilter()
   it('Call method', () => {
-    component.applyFilter("")
+    component.applyFilter('');
   });
 
   // Test the populateTable()
   it('Call method', () => {
     try {
       component.populateTable([{
-      first_name: "Nick",
-      last_name: "Nick",
-      role: "SA",
-      is_active: true,
-      id: 2,
-      email: "nick@test.com",
-      location: "Terrebonne",}])
-      }
+        first_name: 'Nick',
+        last_name: 'Nick',
+        role: 'SA',
+        is_active: true,
+        id: 2,
+        email: 'nick@test.com',
+        location: 'Terrebonne',
+      }]);
+    }
     catch (error) {
-    console.error(error);
+      console.error(error);
     }
   });
 });
