@@ -20,14 +20,14 @@
     <form class="row" [formGroup]="orgSettingsForm" novalidate (ngSubmit)="submitForm()">
       <mat-card-content>
         <div class="centerMe"></div>
-        <mat-grid-list cols="4" rowHeight="100px">
+        <mat-grid-list cols="4" rowHeight="200px">
 
           <!--      FTP LOCATION-->
           <mat-grid-tile colspan="2">
             <div class="form-group">
               <mat-label for="ftpLocation">FTP Location:</mat-label>
               <mat-form-field appearance="outline">
-                <input matInput id="ftpLocation" required formControlName="ftpLocation" placeholder="ftp://example/invetory1">
+                <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
               </mat-form-field>
             </div>
           </mat-grid-tile>
@@ -56,27 +56,31 @@
             </div>
           </mat-grid-tile>
 
-          <!--      XLSX FILE INPUT-->
-          <mat-grid-tile colspan="2">
-            <div class="form-group">
-              <div class="upload-csv">
-                <mat-label>Upload Inventory Extract:</mat-label>
-                <!--              <mat-form-field appearance="outline">-->
-                <input #csvInput hidden="true" formControlName="inv_extract_file" type="file" (change)="selectFile($event)" accept=".csv"/>
-                <button mat-stroked-button type="button" color="primary" (click)="csvInput.click()" >{{getFileName()}}</button>
-                <!--              </mat-form-field>-->
+<!--          FILE UPLOAD-->
+          <mat-grid-tile colspan="4">
+            <div ng2FileDrop
+                 [ngClass]="{'drop-file-over': hasBaseDropZoneOver}"
+                 (fileOver)="fileOverBase($event)"
+                 [uploader]="uploader"
+                 class="area">
+
+              <div id="dropZone">
+                <div id="file" *ngIf="uploader.queue.length>0; else other">
+                  {{ uploader.queue[uploader.queue.length-1].file?.name}}
+                </div>
+                <ng-template #other>
+                  Drop .csv here
+                </ng-template>
               </div>
             </div>
+
           </mat-grid-tile>
         </mat-grid-list>
-
-
-
 
       </mat-card-content>
       <mat-card-actions align="center">
         <button mat-stroked-button type="submit" id="signupbtn" [disabled]="!orgSettingsForm.valid" (click)="openSnackBar('Submitted' , 'Close')" class="save">
-          Edit
+          Save
         </button>
       </mat-card-actions>
 

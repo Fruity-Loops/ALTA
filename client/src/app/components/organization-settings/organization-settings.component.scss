@@ -76,3 +76,22 @@ div.repeat-every-form-group {
   height: 100%;
   margin: 0;
 }
+
+.area {
+  width: 45em;
+  padding: 15px;
+  //border: 1px solid map-get($alta-accent, 300);
+  background: rgba(0,0,0,0.01);
+}
+#dropZone {
+  border: 2px dashed map-get($alta-accent, 300);
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 50px;
+  text-align: center;
+  color: map-get($alta-accent, 600);
+}
+
+#file {
+  color: map-get($alta-accent, 600);
+}

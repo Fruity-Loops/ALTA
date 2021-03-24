@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^10.1.6",
     "@angular/router": "^10.1.6",
     "@schematics/angular": "^10.2.0",
+    "ng2-file-upload": "^1.4.0",
     "apexcharts": "^3.25.0",
     "ng-apexcharts": "^1.5.8",
     "ngx-cookie-service": "^10.1.1",

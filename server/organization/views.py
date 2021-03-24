@@ -53,7 +53,7 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
 
     def post(self, request):
         data = request.data
-        print(data)
+
         org_id = data.get('organization_id')
         new_job_timing = int(data.get('time'))
 
@@ -65,6 +65,29 @@ class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
             organization.save()
             start_new_job(org_id, new_job_timing)
             return Response({'detail': 'Time has been updated'}, status=status.HTTP_200_OK)
+
+        except Organization.DoesNotExist:
+            return Response({'detail': 'Invalid organization'},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ModifyOrganizationInventoryItemFile(generics.GenericAPIView):
+
+    # Note: if other methods are added here, keep in mind that the permissions will need to change
+    def get_permissions(self):
+        permission_classes = PermissionFactory(self.request).get_general_permissions([])
+        return [permission() for permission in permission_classes]
+
+    def post(self, request):
+        data = request.data
+        org_id = data.get('organization_id')
+        file = data.get('file')
+
+        try:
+            organization = Organization.objects.get(org_id=org_id)
+            organization.file = file
+            organization.save()
+            return Response({'detail': 'File has been updated'}, status=status.HTTP_200_OK)
 
         except Organization.DoesNotExist:
             return Response({'detail': 'Invalid organization'},

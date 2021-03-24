@@ -3,6 +3,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OrganizationSettingsService} from "../../services/organization-settings.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
+import { FileUploader, FileLikeObject } from 'ng2-file-upload';
+
 @Component({
   selector: 'app-organization-settings',
   templateUrl: './organization-settings.component.html',
@@ -17,6 +19,9 @@ export class OrganizationSettingsComponent implements OnInit {
   body: any;
   data: any;
   file: any;
+
+  public uploader: FileUploader = new FileUploader({});
+  public hasBaseDropZoneOver: boolean = false;
 
   errorMessage = '';
   constructor(
@@ -45,11 +50,13 @@ export class OrganizationSettingsComponent implements OnInit {
   }
 
   submitForm(): void {
+    this.upload();
     this.organizationSettings.updateOrganizationSettings(this.orgSettingsForm.value).subscribe(
       (err: string) => {
         this.errorMessage = err;
       }
     );
+
   }
 
   getFileName(): string {
@@ -71,5 +78,51 @@ export class OrganizationSettingsComponent implements OnInit {
       duration: 2000,
     })
   }
+
+  fileOverBase(event: any):  void {
+    this.hasBaseDropZoneOver  =  event;
+  }
+
+  getFile(): FileLikeObject {
+    return this.uploader.queue[this.uploader.queue.length-1].file;
+
+    // return this.uploader.queue.map((fileItem) => {
+    //   return fileItem.file;
+    // });
+  }
+
+  upload(){
+    let file = this.getFile();
+    const formData: FormData = new FormData();
+    formData.append('organization_id', localStorage.getItem('organization_id') || '');
+    formData.append('file', file.rawFile, file.name);
+
+    this.organizationSettings.uploadInventoryFile(formData).subscribe(
+      (err: string) => {
+        this.errorMessage = err;
+      }
+    );
+
+  }
+
+  // upload() {
+  //   let files = this.getFiles();
+  //   console.log(files);
+  //   let requests = [];
+  //   files.forEach((file) => {
+  //     let formData = new FormData();
+  //     formData.append('file' , file.rawFile, file.name);
+  //     requests.push(this.uploadService.upload(formData));
+  //   });
+  //
+  //   concat(...requests).subscribe(
+  //     (res) => {
+  //       console.log(res);
+  //     },
+  //     (err) => {
+  //       console.log(err);
+  //     }
+  //   );
+  // }
 
 }
