@@ -13,6 +13,9 @@ from .serializers import OrganizationSerializer
 from .models import Organization
 from .permissions import ValidateOrgMatchesUser
 
+from threading import Thread
+from inventory_item.updater import main
+
 
 
 class OrganizationViewSet(LoggingViewset):
@@ -94,6 +97,8 @@ class ModifyOrganizationInventoryItemFile(generics.GenericAPIView):
         # Replace existing file for organization
         os.remove('django_server/org_files/'+filename)
         file.name = str(org_id)+'.csv'
+        t = Thread(target=main, args=(org_id,))
+        t.start()
 
         try:
             organization = Organization.objects.get(org_id=org_id)
