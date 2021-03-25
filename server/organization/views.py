@@ -90,7 +90,7 @@ class ModifyOrganizationInventoryItemFile(generics.GenericAPIView):
 
     def post(self, request):
         data = request.data
-        org_id = request.user.organization_id
+        org_id = data.get('organization_id')
         file = data.get('file')
         filename = str(org_id) + '.csv'
 

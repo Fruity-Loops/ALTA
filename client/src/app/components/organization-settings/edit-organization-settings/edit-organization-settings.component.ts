@@ -113,6 +113,8 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
     let file = this.getFile();
     if (file) {
       const formData: FormData = new FormData();
+      // @ts-ignore
+      formData.append('organization_id', this.id)
       formData.append('file', file.rawFile, file.name);
 
       this.organizationSettings.uploadInventoryFile(formData).subscribe(
