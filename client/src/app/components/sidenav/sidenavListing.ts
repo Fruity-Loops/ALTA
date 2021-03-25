@@ -50,4 +50,9 @@ export const OrganizationNavListings: SideNavOption[] = [
     routerLink: 'settings',
     subMenuOptions: [],
   },
+  {
+    title: 'Organization Settings',
+    routerLink: 'organization-settings',
+    subMenuOptions: [],
+  }
 ];

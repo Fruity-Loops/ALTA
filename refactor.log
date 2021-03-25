@@ -1,0 +1,567 @@
+commit f0f9c84c92583615acfb285359192a9a1002ac1e
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 29 18:32:48 2021 -0500
+
+    refactor: removing dead dialog component
+--
+commit a1db7cb715d44c4c9d5f1659448fbaeae52a8b91
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Thu Jan 28 20:09:56 2021 -0500
+
+    refactor: e2e refactoring strict
+--
+commit 4a7ba55fda97002c4d936aa28fd232e60b590368
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Thu Jan 28 19:59:23 2021 -0500
+
+    refactor: added ts-ignore to e2e test
+--
+commit f57d43a2e7eee4d3bb16d6ab00b34ca970360635
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Thu Jan 28 19:21:25 2021 -0500
+
+    refactor: linting + added ts-ignore to spec var
+--
+commit 01769606c6537305921a11d092d4add892354cd8
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Thu Jan 28 19:15:33 2021 -0500
+
+    refactor: added ts-ignore on spec variables
+--
+commit 938e344324889a73ef2a4dc4dfc7e03bfcede5db
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Thu Jan 28 19:10:37 2021 -0500
+
+    refactor: refactored code such that it complies with strict configuration
+--
+commit 495399a9d16b45f6bb4ce9877b16daee2a786a20
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 24 13:22:49 2021 -0500
+
+    refactor: remove console log
+--
+commit 31f99032f211fdc553864fc3ed002c665cceec19
+Author: Neeham <Neehamk@gmail.com>
+Date:   Mon Jan 18 20:10:55 2021 -0500
+
+    refactor: remove/fix unused import variable, duplication, incorrect type
+--
+commit add610b1b037cfd7cb61bc7cbb471965aa55b254
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 10:38:46 2021 -0500
+
+    refactor: added TODO comments
+--
+commit 751b28ed73cebe5150b0dd8c89be62b2c2569566
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 10:34:31 2021 -0500
+
+    refactor: added explicit mem var type
+--
+commit 2df44b787478e8f9b281fe4f0a5f22c2de0ed863
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 10:19:07 2021 -0500
+
+    refactor: defined mem var types explicitly
+--
+commit 2ac5f4f1f0cd42b5d7a73490d01654fec6dbb192
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 10:04:14 2021 -0500
+
+    refactor: added null type guard
+--
+commit 4966052d0a1af573eb2227bc840012b5ff2feb13
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 10:00:45 2021 -0500
+
+    refactor: refactored mem vars types and default init
+--
+commit fc8e3bdbc8970f5e552cc18ca49e7f3869b89a71
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 08:42:16 2021 -0500
+
+    refactor: added default init for ir
+--
+commit 833f9032c6904abb749ed4e689419caca3ec699a
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 08:22:33 2021 -0500
+
+    refactor: defined explicit types for URL params
+--
+commit aae77d2d2c6226f4a73247a560cbe2d5618f2fa8
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 08:20:03 2021 -0500
+
+    refactor: changed type from any to object
+--
+commit 9892514e5a535c06d840ae0e8a074072f166c38e
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Sun Jan 17 08:16:52 2021 -0500
+
+    refactor: defined default init for member variables
+--
+commit fe61d2bc726eeacf26e6a6908f8f36515d908b33
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 07:17:55 2021 -0500
+
+    refactor: added default initializer in constructor, and specified var types
+--
+commit 90ef7035d1e764671b42931187616867c651860c
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 07:13:06 2021 -0500
+
+    refactor: added default initializers in constructor
+--
+commit 3083da098e58580501e7677e891dd09fe0798093
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 07:01:20 2021 -0500
+
+    refactor: fixed implicit types and left comment for error prone code when intializingForm
+--
+commit bb29bd434cdb31ed447e46d3e63ce79bd1417fe4
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 06:22:37 2021 -0500
+
+    refactor: sidenavListrings settings is unused, flag as possible deadcode
+--
+commit 571952384b82cc720dfa2d6555cec25bcee6a399
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 06:19:58 2021 -0500
+
+    refactor: refactor sidenav component according to ts strict mode
+--
+commit d032e3188c33da39b6f5946f0df83aeef5eebd1d
+Author: Dominik Ludera <domludera@gmail.com>
+Date:   Fri Jan 15 05:55:23 2021 -0500
+
+    refactor: refactor toolbar component according to ts strict config
+--
+commit d210668e212b2b1a688f72e74d3adc84c30fa0c2
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Jan 27 15:11:34 2021 -0500
+
+    refactor: linting e2e tests
+--
+commit dd288f0ae5b9f82218fdb8d158b7778a47cd543d
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Mon Jan 25 07:48:16 2021 -0500
+
+    refactor: fixed the forgotten lint issues
+--
+commit 3736bba3c055be8b530c2e1f316c6d697b24b8e7
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Mon Jan 25 07:45:15 2021 -0500
+
+    refactor: fixed lint issues
+--
+commit 52acf51a97e9ac166f4341e508468b2a94ec7afb
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Sun Jan 24 19:10:49 2021 -0500
+
+    refactor: set service variable from let to const
+--
+commit c775af877c00b57bac5fb5364bc57346b2c1235e
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Sun Jan 24 11:23:59 2021 -0500
+
+    refactor: fixed remaining sonarcloud issues and added comments to submitPreAuditData()
+--
+commit 0ddc3928456043c7632fd5a99c66e4a52829de03
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Sun Jan 24 10:31:41 2021 -0500
+
+    refactor: fixed lint, pylint, sonarcloud issues
+--
+commit 78085c60a4557052c0d195d8562b0fd88ddfff5f
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 23:17:56 2021 -0500
+
+    refactor: pull up submitForm & add template submitQuery
+--
+commit 477c45b2bfcfbb7e8c1619ac9cac1d465fa5934b
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 22:04:42 2021 -0500
+
+    refactor: pull up field errorMessage
+--
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+
+commit de7d78fe2f72cdd5cd862b67f80536643203b59c
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 21:57:13 2021 -0500
+
+    refactor: pull up isEdit and add template for initialization
+--
+commit 96ce37bf13b67104871d9462bb2d375c7ca2396e
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 21:45:33 2021 -0500
+
+    refactor: pull up field loaded to be used between edit/create
+--
+commit 7ba6b619ed12095181d6ca127b333b860a690b1d
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 21:17:07 2021 -0500
+
+    refactor: remove dead code in employee-view components
+--
+commit 9923baafcf7ab4b4ee7270eadaf8bd1dfe18ac59
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 20:06:35 2021 -0500
+
+    refactor: pull down common HTML attr to merge HTML files
+--
+commit bbfacc6e97efd5d817c2a0c6bc5340aa259df88d
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 18:07:10 2021 -0500
+
+    refactor: remove dead location
+--
+commit 525b3281da473514dc78854268a966992cd07285
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sat Jan 23 14:09:32 2021 -0500
+
+    refactor: pull up field and method for title out of HTML
+--
+commit 037ae3b8ab94527da879e3f0bbdab37425cd7f05
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 21:45:49 2021 -0500
+
+    refactor: pulling up organization info fields
+--
+commit 7e2bd9eaa9ed908db900e92693fcf6d5e7f39fe9
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 21:19:39 2021 -0500
+
+    refactor: pull up organization title and add initialization template
+--
+commit a81c705cb6c1aef3ded5f4fcf5d4206e6c9eb311
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 21:00:33 2021 -0500
+
+    refactor: pull up editing info and create template method
+--
+commit 22a00fde2ec88226b1596a4739381354878a72c4
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 14:33:06 2021 -0500
+
+    refactor: pull up method and add template method for submitting template
+--
+commit 517e4f5dd8e6b7fb3d2cbfb3ff08584ec0e0f9d4
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 14:11:59 2021 -0500
+
+    refactor: pull up title description and errormessage fields
+--
+commit 095adb49ea45b7b77b210985021dad2a9c027fac
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 13:59:13 2021 -0500
+
+    refactor: pull up remove item method
+--
+commit be1534691f0fb9d4a3014fbacc536f25d500e367
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 13:53:10 2021 -0500
+
+    refactor: pull up method addItem and pull up field template
+--
+commit a8a2c0d56f2b8a8fbc9955cf16e114e095ac1ba5
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Fri Jan 22 13:33:21 2021 -0500
+
+    refactor: add template method for initializing form
+--
+commit 38cc92ac1346f51a9da6262b8fbcc19ac1bd37cc
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Wed Jan 20 23:24:34 2021 -0500
+
+    refactor: fixed lint issues
+--
+commit f3d6d027d509b3b41c97f160f8f705eb08e98a24
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Wed Jan 20 22:31:01 2021 -0500
+
+    refactor: fixed pylint issues
+--
+commit 703ca386e8ff8fd26d02f9abe746fc6ccfddcf1b
+Author: Avery <averyndersingh@gmail.com>
+Date:   Tue Jan 19 19:23:29 2021 -0500
+
+    refactor: move file
+--
+commit b35d46c8e8e976618cbd96a0b38fc6ae526a6afe
+Author: Avery <averyndersingh@gmail.com>
+Date:   Mon Jan 18 05:31:11 2021 -0500
+
+    refactor: remove duplicate comment
+--
+commit e2a7a9a7c853746efccbb0ed7c559178c632ecf7
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Mon Jan 18 21:06:55 2021 -0500
+
+    refactor: reusing found object to add to array instead of findIndex
+--
+commit 07b70ec49e287422ff20edc60c082a5ebd95fe6a
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Wed Jan 13 14:21:21 2021 -0500
+
+    refactor: remove duplicate code and use super class' method
+--
+commit 0bc81703bf66cf0fc893b5890472cea0848e633b
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Sun Jan 10 18:12:12 2021 -0500
+
+    refactor: remove duplicate template interfaces and move to file
+--
+commit dd9f865c5b3ae8cec327f6a23847a69677d67b96
+Author: Khaled Badran <badrankhaled97@gmail.com>
+Date:   Sun Jan 10 14:55:06 2021 -0500
+
+    refactor: rename roles variable and remove duplicate code
+--
+commit cc4a7f9a78be44761a68a0024bb902f845c2a367
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Jan 9 15:09:36 2021 -0500
+
+    refactor: fixing lint issues
+--
+commit 23a7baecf3f8ad2a5cee7910777ded9ef57f6492
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Thu Dec 31 18:09:20 2020 +0200
+
+    refactor: restricting api acess
+--
+commit bd789c2aef1921982b3af738f1da3ac53bf87774
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 30 17:16:59 2020 -0500
+
+    refactor: remove middle man
+--
+commit b1496b893194ecd4fcde2f5fba5661ddb38a8995
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 30 17:15:59 2020 -0500
+
+    refactor: replaced in line code with function call
+--
+commit 1f391c21f2bf1283174d6778db4606c868496936
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 30 17:12:36 2020 -0500
+
+    refactor: moved roles into separate directory
+--
+commit 69872d142c2bfe0342e293efd81daf98335e4034
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Tue Dec 29 21:32:53 2020 +0200
+
+    refactor: fixing pull request review comments
+--
+commit 2cee5a861891aabf4ca65de710f248709e451c68
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sat Dec 26 12:24:37 2020 +0200
+
+    refactor: fixing linting
+--
+commit f3aefca41bfa92dd197a9890504bf45407ff8a08
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sat Dec 26 10:59:12 2020 +0200
+
+    refactor: fixing issues based on pr comments
+--
+commit 02d80c4c6d4e2f06ac41851eddcf6ffd63ae4350
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 23 18:07:58 2020 -0500
+
+    refactor: fixing lint errors
+--
+
+========================================================================================================================
+========================================================================================================================
+========================================================================================================================
+
+commit 68f7214c67f72fe4128215b94710fb4816d850af
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 23 14:04:33 2020 -0500
+
+    refactor: rename function call
+--
+commit 24f73993ce76028ee8ef8e714faeab03cde49a89
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Dec 23 10:27:58 2020 -0500
+
+    refactor: remove dead code
+--
+commit 94a8aaa07e7b28344ae922a9af5af0bc8b1616e2
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Dec 19 13:38:59 2020 -0500
+
+    refactor: removed dead code
+--
+commit 8cec659a23f036780cb935e35e68eb40472db6a1
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Dec 19 13:28:10 2020 -0500
+
+    refactor: Replace Function with Function
+--
+commit bed6dab560feb458b74263046fdb3412704d0023
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sun Dec 13 19:59:43 2020 -0500
+
+    refactor: move field
+    
+    This refactor replaces the strings used for the sidenav and instead replaces them with the ones already defined for the routes
+--
+commit 02d43b52b3e27c2ad7afa77c68d33f6290ed5172
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Dec 12 13:48:09 2020 -0500
+
+    refactor: moved module to json file
+--
+commit 445c75c92bfcc82c540159d2159f39b323d9d499
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Dec 12 00:49:34 2020 -0500
+
+    refactor: Moved Roles to model
+--
+commit c7eb51d385291e9c175cf489c7799be4b606681c
+Author: makchamp <makramadaime@hotmail.com>
+Date:   Sat Dec 12 20:18:11 2020 -0500
+
+    refactor: Rename pages to have proper names
+--
+commit 9f1fa05cac938eb6c95ff4fb68d7a8137cd1a530
+Author: Khaled Badran <badrankhaled97@gmail.com>
+Date:   Sat Dec 12 14:07:41 2020 -0500
+
+    refactor: move from audit template to create audit template
+--
+commit bc10cea68f83d75b80aad4b1b3ab15a44e849e76
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sun Dec 6 03:50:00 2020 +0200
+
+    refactor: modified code based on PR feedback
+--
+commit d5e7b96de31d909b85e488bb6af42f0fdc813809
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sat Dec 5 18:13:19 2020 -0500
+
+    refactor: simplify-conditional-logic
+--
+commit 651cdfc5f6d81e4b2ad414a3d632558c0718f403
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Fri Dec 4 12:04:24 2020 +0200
+
+    refactor: removed dead code
+--
+commit 8ffdfc1904fb69027d22a4e682c12d2862cf0667
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Fri Dec 4 04:04:42 2020 +0200
+
+    refactor: fixed the formating
+--
+commit e2936be6d640319d0960d304b25bd70f8f2bd817
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sun Nov 29 21:11:57 2020 -0500
+
+    refactor: created a singleton class to ensure the instantiation of one scheduler
+--
+commit d8e2e65d9c9136175527dac3c5657eb817e8c07f
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sun Nov 29 20:51:43 2020 -0500
+
+    refactor: Move Function
+--
+commit 066362263ae3831449ff591cb2c076e05d101113
+Author: Avery <averyndersingh@gmail.com>
+Date:   Sun Nov 29 18:05:47 2020 -0500
+
+    refactor: ignored linter error
+--
+commit 19eb5a0bbc2decd4e3047a7123dd2930739f3734
+Author: your username <makramadaime@hotmail.com>
+Date:   Sun Nov 29 01:22:59 2020 -0500
+
+    refactor: Add TODOs for mobile login view to avoid sonar code duplicatation error
+--
+commit c51dae6f04db715d490dc42272fb84c8df5bbff6
+Author: your username <makramadaime@hotmail.com>
+Date:   Sun Nov 29 01:14:29 2020 -0500
+
+    refactor: Remove dead code
+--
+commit 9b9107a372d6750389acbae082afb851f7749e8f
+Author: your username <makramadaime@hotmail.com>
+Date:   Sun Nov 29 01:11:09 2020 -0500
+
+    refactor: Move pages inside 'pages' directory
+--
+commit de4a15d2e72af262c37ab15304ddbbaa75b76b36
+Author: Amanda-Kolopa <amandakolopa@gmail.com>
+Date:   Sat Nov 28 13:26:27 2020 -0500
+
+    refactor: fixed lint issues
+--
+commit e1d732e001015405664f7434fed15a6ca374c3fb
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sat Nov 28 00:32:47 2020 -0500
+
+    refactor: updated file based on pr review
+--
+commit 730d6a6c83239936ba0472263a3edf431682ac38
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Fri Nov 27 18:41:16 2020 -0500
+
+    refactor: fixed lint issues
+--
+commit 08eccf6818d7eb385c1828bce7fc399d912c40e7
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Wed Nov 25 16:42:08 2020 -0500
+
+    refactor: fixing lint report issues
+--
+commit 2b33a6bbdf2a1b8b2ebfecaf06f3ee44deb23e6b
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Wed Nov 25 16:25:12 2020 -0500
+
+    refactor: abstracted the initialization of the collection
+--
+commit 4db4e509295575a57d4db86e818db25697e7c454
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Sat Nov 21 00:44:08 2020 -0500
+
+    refactor: modified hardcoded column and fields to be dynamic
+--
+commit 53d9431a4ac9d99529c495fbc3edd2483901902e
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Thu Nov 19 00:04:20 2020 -0500
+
+    refactor: deleted file that was there by mistake
+--
+commit 2d29148891e6bd3b600d6ad4d42ecb91a8e3fd9e
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Thu Nov 19 00:00:50 2020 -0500
+
+    refactor: modified code based on lint report
+--
+commit b3b8ee66faf7ff34048b2c64e06832a18ca7597e
+Author: Nicholas Nagy <ygannicholas@gmail.com>
+Date:   Thu Nov 5 16:55:00 2020 -0500
+
+    refactor: remove unused html code
+--
+commit 763496bfbcc9de58846bf25a042eb315ed537314
+Author: Avery <averyndersingh@gmail.com>
+Date:   Wed Nov 4 22:18:39 2020 -0500
+
+    refactor: fixed lint errors
+--
+Date:   Thu Oct 1 01:06:56 2020 -0400
+
+    refactor: removing empty lines
+--
+commit 3dadbb488d970090f6385a83391047b0db0b1b1b
+Author: Robert <robertbeaudenon@gmail.com>
+Date:   Wed Sep 30 20:56:30 2020 -0400
+
+    refactor: Renaming files to adapt to new feature
