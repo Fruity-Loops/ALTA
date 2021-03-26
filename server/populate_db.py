@@ -25,7 +25,7 @@ LOCATIONS = ['Montreal', 'Florida']
 def create_orgs_users_items_templates(seeder):
     seeder.add_entity(Organization, 1, {
         'org_name': lambda x: seeder.faker.company(),
-        "address": lambda x: seeder.faker.city(),
+        "address": lambda x: [seeder.faker.city()],
         "status": True,
         "inventory_items_refresh_job": 1,
         "calendar_date": "2021/01/02"
@@ -44,6 +44,7 @@ def create_orgs_users_items_templates(seeder):
     })
 
     seeder.add_entity(Item, 100, {
+        "Item_Id": lambda x: f'{seeder.faker.ean13()}',
         "Location": lambda x: random.choice(LOCATIONS),
         "Plant": lambda x: f'Plant-{random.randint(1, 10)}',
         "Zone": lambda x: random.choice(string.ascii_uppercase),
