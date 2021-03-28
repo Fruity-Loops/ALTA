@@ -49,7 +49,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
           const listOfSKs = auditData.map((obj: any) => obj.customuser);
           listOfSKs.forEach((index: any) => {
 
-            let skToUpdate = this.binToSks.find(obj => obj.sk_id === index.id);
+            const skToUpdate = this.binToSks.find(obj => obj.sk_id === index.id);
 
             // check if user assigned a different SK from original
             if (skToUpdate !== undefined) {
@@ -288,7 +288,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   disableAssign(): boolean {
     if (this.locationsWithBinsAndSKs.map((obj: any) => obj.bins).flat().length === 0) {
 
-      for (let obj of this.binToSks) {
+      for (const obj of this.binToSks) {
         if (obj.bins.length === 0) {
           return true;
         }
@@ -300,7 +300,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
 
   // handles page refresh and out-of-app navigation
   @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler(event: any) {
+  beforeUnloadHandler(event: any): boolean {
     return confirm('');
   }
 }

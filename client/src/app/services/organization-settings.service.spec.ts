@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController
-} from "@angular/common/http/testing";
+} from '@angular/common/http/testing';
 import { OrganizationSettingsService } from './organization-settings.service';
 
 describe('OrganizationSettingsService', () => {
   let service: OrganizationSettingsService;
   // @ts-ignore
-  let httpTestingController: HttpTestingController
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

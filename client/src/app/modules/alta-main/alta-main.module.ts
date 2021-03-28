@@ -16,7 +16,7 @@ import { ManageMembersService } from 'src/app/services/users/manage-members.serv
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { FormsModule } from '@angular/forms';
 import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
-import { EditOrganizationSettingsComponent} from "../../components/organization-settings/edit-organization-settings/edit-organization-settings.component";
+import { EditOrganizationSettingsComponent} from '../../components/organization-settings/edit-organization-settings/edit-organization-settings.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ManageInventoryItemsComponent } from '../../components/manage-inventory-items/manage-inventory-items.component';
@@ -45,7 +45,7 @@ import {
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
 import {NgApexchartsModule} from 'ng-apexcharts';
-import {FileUploadModule} from "ng2-file-upload";
+import {FileUploadModule} from 'ng2-file-upload';
 import { CanDeactivateGuard } from '../../guards/can-deactivate.guard';
 
 
