@@ -1,6 +1,13 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../../services/audits/audit-template.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {ManageAuditsService, AuditLocalStorage} from '../../../services/audits/manage-audits.service';
+import {AuthService, UserLocalStorage} from '../../../services/authentication/auth.service';
+import {ManageInventoryItemsService} from '../../../services/inventory-items/manage-inventory-items.service';
+import {HttpParams} from '@angular/common/http';
+
+// import {Template as Temp} from '../Template';
 
 interface Template {
   author: string;
@@ -19,9 +26,15 @@ export class AuditTemplateComponent implements OnInit {
   auditTemplates: [Template];
   errorMessage = '';
   dialogRef: any;
+  params = new HttpParams();
 
-  constructor(private auditTemplateService: AuditTemplateService,
-              public dialog: MatDialog
+  constructor(
+    private auditTemplateService: AuditTemplateService,
+    public dialog: MatDialog,
+    private router: Router,
+    private auditService: ManageAuditsService,
+    private authService: AuthService,
+    private itemService: ManageInventoryItemsService,
   ) {
   }
 
@@ -50,7 +63,62 @@ export class AuditTemplateComponent implements OnInit {
         });
       }
     });
+  }
 
+  startAudit(id: string): void {
+    this.auditTemplateService.getATemplate(id).subscribe(
+      (data) => {
+        this.getItemsForTemplate(data, id);
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
+  }
+
+  getItemsForTemplate(auditTemplate: object, id: string): void {
+    this.params = this.params = new HttpParams();
+    for (let key in auditTemplate)
+    {
+      // @ts-ignore
+      let value = auditTemplate[key]
+      this.params = this.params.set(key, value);
+    }
+    this.itemService.getPageItems(this.params).subscribe((data) => {
+      if (data.count > 0)
+      {
+        let items = [];
+        for (let item of data.results)
+          items.push(item.Item_Id)
+        this.createAudit(items, id);
+      }
+      else
+        alert("Template is Invalid");
+    },
+    (err) => {
+      this.errorMessage = err;
+    });
+  }
+
+  createAudit(items: object, id: string): void {
+    let bodyAudit: object;
+    bodyAudit = {
+      initiated_by: Number(localStorage.getItem('id')),
+      inventory_items: items,
+      organization: Number(this.authService.getLocalStorage(UserLocalStorage.OrgId)),
+      template_id: id
+    };
+    this.auditService.createAudit(bodyAudit).subscribe(
+      (data) => {
+        this.auditService.updateLocalStorage(AuditLocalStorage.AuditId, data.audit_id);
+        setTimeout(() => {
+          this.router.navigate(['audits/assign-sk']);
+        }, 1000);
+      },
+      (err) => {
+        this.errorMessage = err;
+      }
+    );
   }
 }
 
