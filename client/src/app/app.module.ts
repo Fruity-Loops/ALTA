@@ -14,7 +14,7 @@ import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {FileUploadModule} from 'ng2-file-upload'
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   declarations: [

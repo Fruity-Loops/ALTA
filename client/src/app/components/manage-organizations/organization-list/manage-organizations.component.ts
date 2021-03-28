@@ -107,7 +107,7 @@ export class ManageOrganizationsComponent extends TableManagementComponent imple
   getSearchForm(): any {
     return {
       search: [''],
-    }
+    };
   }
 
   preventPropagation(event: MouseEvent): void {

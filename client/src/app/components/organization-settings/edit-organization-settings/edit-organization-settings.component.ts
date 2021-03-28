@@ -1,9 +1,9 @@
-import {BaseOrganizationSettingsForm, OrganizationSettingsView} from "../organization-settings-view";
-import {Component, Injectable} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { BaseOrganizationSettingsForm, OrganizationSettingsView } from '../organization-settings-view';
+import { Component, Injectable } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileUploader, FileLikeObject } from 'ng2-file-upload';
-import {OrganizationSettingsService} from "../../../services/organization-settings.service";
+import { OrganizationSettingsService } from 'src/app/services/organization-settings.service';
 
 
 @Component({
@@ -21,41 +21,41 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
   edit = false;
   file: any;
   id: string | undefined;
-  current_file: string;
+  currentFile: string;
 
 
   orgSettingsForm: FormGroup | undefined;
 
   public uploader: FileUploader = new FileUploader({});
-  public hasBaseDropZoneOver: boolean = false;
+  public hasBaseDropZoneOver = false;
 
   errorMessage = '';
   constructor(
     private organizationSettings: OrganizationSettingsService,
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
   ) {
     super();
     this.id = localStorage.getItem('organization_id')?.toString();
     this.getOrganization();
-    this.current_file = 'none'
+    this.currentFile = 'none';
   }
 
   getIsEdit(): boolean {
     return true;
   }
 
-  getOrganization(): void{
+  getOrganization(): void {
     this.organizationSettings.getOrganization(this.id!).subscribe((organization: any) => {
 
       this.orgSettingsForm = this.fb.group({
-        ftpLocation: new FormControl({value: organization.ftp_location, disabled: !this.edit}, [Validators.required]),
-        time: new FormControl({value: organization.inventory_items_refresh_job, disabled: !this.edit}, [Validators.required]),
-        interval: new FormControl({value: organization.repeat_interval, disabled: !this.edit}, [Validators.required]),
+        ftpLocation: new FormControl({ value: organization.ftp_location, disabled: !this.edit }, [Validators.required]),
+        time: new FormControl({ value: organization.inventory_items_refresh_job, disabled: !this.edit }, [Validators.required]),
+        interval: new FormControl({ value: organization.repeat_interval, disabled: !this.edit }, [Validators.required]),
         organization_id: [localStorage.getItem('organization_id')]
       });
-      let file_arr = organization.file.split('/');
-      this.current_file = file_arr[file_arr.length-1];
+      const fileArr = organization.file.split('/');
+      this.currentFile = fileArr[fileArr.length - 1];
       this.isLoaded();
     });
   }
@@ -86,35 +86,37 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
     location.reload();
   }
 
-  selectFile(event: any) {
-    if (event.target.files.length > 0){
+  selectFile(event: any): void {
+    if (event.target.files.length > 0) {
       this.file = event.target.files[0];
     }
   }
 
-  openSnackBar(message: string, action: string){
-    this._snackBar.open(message, action, {
+  openSnackBar(message: string, action: string): void {
+    this.snackBar.open(message, action, {
       duration: 2000,
-    })
+    });
   }
 
-  fileOverBase(event: any):  void {
-    this.hasBaseDropZoneOver  =  event;
+  fileOverBase(event: any): void {
+    this.hasBaseDropZoneOver = event;
   }
 
   getFile(): FileLikeObject | null {
-    if (this.uploader.queue.length>0){
-      return this.uploader.queue[this.uploader.queue.length-1].file;
+    if (this.uploader.queue.length > 0) {
+      return this.uploader.queue[this.uploader.queue.length - 1].file;
     }
-    else return null;
+    else {
+      return null;
+    }
   }
 
-  upload(){
-    let file = this.getFile();
+  upload(): void {
+    const file = this.getFile();
     if (file) {
       const formData: FormData = new FormData();
       // @ts-ignore
-      formData.append('organization_id', this.id)
+      formData.append('organization_id', this.id);
       formData.append('file', file.rawFile, file.name);
 
       this.organizationSettings.uploadInventoryFile(formData).subscribe(

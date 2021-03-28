@@ -1,9 +1,9 @@
-import {FormGroup} from "@angular/forms";
+import {FormGroup} from '@angular/forms';
 
 export interface BaseOrganizationSettingsForm {
-  time: string,
-  interval: string,
-  ftpLocation: string,
+  time: string;
+  interval: string;
+  ftpLocation: string;
 }
 
 export abstract class OrganizationSettingsView {
@@ -30,7 +30,7 @@ export abstract class OrganizationSettingsView {
       interval: this.orgSettingsForm?.value.interval,
       ftpLocation: this.orgSettingsForm?.value.ftpLocation,
       organization_id: [localStorage.getItem('organization_id')]
-    }
+    };
     this.submitQuery(body);
   }
 
