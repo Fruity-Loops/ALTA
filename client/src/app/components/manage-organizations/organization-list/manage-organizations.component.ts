@@ -1,19 +1,22 @@
 import {Component, Input, OnInit, TemplateRef} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
-
-import {AuthService} from '../../../services/authentication/auth.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
 import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import {TableManagementComponent} from 'src/app/components/TableManagement.component';
 import {MatSort} from '@angular/material/sort';
-import {Organization} from '../../../models/organization';
+import {FormBuilder} from '@angular/forms';
+import {Organization} from 'src/app/models/organization';
 import {MatDialog} from '@angular/material/dialog';
+
 @Component({
   selector: 'app-manage-organizations',
   templateUrl: './manage-organizations.component.html',
   styleUrls: ['./manage-organizations.component.scss'],
 })
-export class ManageOrganizationsComponent implements OnInit {
+export class ManageOrganizationsComponent extends TableManagementComponent implements OnInit {
+  orgData: any;
   organizations = [];
   selectedOrganization: Organization;
   errorMessage = '';
@@ -40,8 +43,10 @@ export class ManageOrganizationsComponent implements OnInit {
   constructor(
     private organizationsService: ManageOrganizationsService,
     private authService: AuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    protected fb: FormBuilder
   ) {
+    super(fb);
     this.selectedOrganization = {org_id: -1, org_name: '', status: '', address: ''};
     this.errorMessage = '';
     this.activeStates = [{status: 'active'}, {status: 'disabled'}];
@@ -50,16 +55,24 @@ export class ManageOrganizationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllOrganizations();
+    this.setParams();
+    this.getPagedOrgs();
   }
 
-  getAllOrganizations(): void {
-    this.organizationsService.getAllOrganizations().subscribe(
+  setParams(): void {
+    this.params = this.params.append('page', String(this.pageIndex))
+    .append('page_size', String(this.pageSize));
+  }
+
+  getPagedOrgs(): void {
+    this.organizationsService.getPagedOrganizations(this.params).subscribe(
       (data) => {
-        this.organizations = data;
         this.errorMessage = '';
-        // @ts-ignore
-        this.dataSource = new MatTableDataSource(this.organizations);
+        this.orgData = data;
+        this.organizations = data.results;
+        this.updatePaginator();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       (err) => {
         this.errorMessage = err;
@@ -67,16 +80,34 @@ export class ManageOrganizationsComponent implements OnInit {
     );
   }
 
-  updateOrganization(organization: Organization): void {
-    this.organizationsService.updateOrganization(organization).subscribe(
+  updatePaginator(): void {
+    this.length = this.orgData.count;
+    if (this.pageIndex > 0){
+      this.pageIndex = this.pageIndex - 1;
+    }
+    this.errorMessage = '';
+    this.organizations = this.orgData.results;
+    // @ts-ignore
+    this.dataSource = new MatTableDataSource(this.organizations);
+  }
+
+
+  updatePage(): void {
+    this.organizationsService.getPagedOrganizations(this.params).subscribe(
       (data) => {
-        this.getAllOrganizations();
-        this.errorMessage = '';
+        this.orgData = data;
+        this.updatePaginator();
       },
       (err) => {
-        this.errorMessage = err.error.org_name;
+        this.errorMessage = err;
       }
     );
+  }
+
+  getSearchForm(): any {
+    return {
+      search: [''],
+    }
   }
 
   preventPropagation(event: MouseEvent): void {
