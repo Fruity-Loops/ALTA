@@ -56,6 +56,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   ngOnInit(): void {
     this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
+    this.params = this.params.append('no_pagination', 'True');
+
 
     this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
