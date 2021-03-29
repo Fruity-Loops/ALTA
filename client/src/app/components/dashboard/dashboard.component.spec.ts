@@ -31,4 +31,21 @@ describe('DashboardComponent', () => {
   it('should create Dashboard Component', () => {
     expect(component).toBeTruthy();
   });
+
+  // Test the retrieveData()
+  it('Call retrieveData to populate the audit', () => {
+    try {
+      component.retrieveData([{
+        getDate : '',
+        splitDate : '   ',
+        dateObj : 'MM/DD/YYYY',
+        date : '03/12/2021',
+        thirtyDaysAgo : 'MM/DD/YYYY',
+      }])
+    }
+    catch (errorMessage) {
+      console.error(errorMessage);
+    }
+  });
+
 });
