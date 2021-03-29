@@ -33,4 +33,18 @@ describe('AssignStockKeepersComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Test the deleteAudit()
+  it('Call deleteAudit', () => {
+    try {
+      component.deleteAudit()
+      component.discardAudit()
+    }
+    catch (errorMessage) {
+      console.error(errorMessage);
+    }
+   });
+
+
+
 });
