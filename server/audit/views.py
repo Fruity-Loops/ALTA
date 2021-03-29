@@ -63,8 +63,10 @@ class AuditViewSet(LoggingViewset):
             self.queryset = self.queryset.exclude(status=exclude_status)
         self.queryset = self.queryset.filter(organization_id=org_id)
 
+        no_pagination = request.query_params.get('no_pagination')
         page = self.paginate_queryset(self.queryset)
-        if page is not None:
+
+        if page is not None and not no_pagination:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
