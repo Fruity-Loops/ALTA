@@ -62,8 +62,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
         this.busySKs = response.map((obj: any) => obj.assigned_sk).flat();
 
         this.manageMembersService.getAllClients()
-          .subscribe((user) => {
-            this.populateTable(user);
+          .subscribe((data) => {
+            this.populateTable(data);
           });
       });
   }
