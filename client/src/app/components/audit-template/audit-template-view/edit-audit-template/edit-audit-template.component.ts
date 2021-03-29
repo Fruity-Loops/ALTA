@@ -26,13 +26,13 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
   initializeForm(): void {
     this.disabled = false;
     this.templateValues = {
-      location: '',
-      plant: '',
-      zones: '',
-      aisles: '',
-      bins: '',
-      part_number: '',
-      serial_number: '',
+      Location: '',
+      Plant: '',
+      Zone: '',
+      Aisle: '',
+      Bin: '',
+      Part_Number: '',
+      Serial_Number: '',
       start_date: '',
       repeat_every: '',
       on_day: '',
