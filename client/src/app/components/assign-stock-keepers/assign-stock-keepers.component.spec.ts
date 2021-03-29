@@ -49,4 +49,54 @@ describe('AssignStockKeepersComponent', () => {
       }
   });
 
+  // Test the deleteAudit()
+  it('Call deleteAudit', () => {
+    try {
+      component.deleteAudit()
+      component.discardAudit()
+    }
+    catch (errorMessage) {
+      console.error(errorMessage);
+    }
+  });
+
+  // Test the goBackIventory()
+  it('Call goBackIventory', () => {
+    try {
+      component.goBackIventory()
+    }
+    catch (err) {
+    console.error(err);
+    }
+  });
+
+   // Test the dialog window
+   it('Call the dialog object', () => {
+    try {
+      component.cancelDialog()
+    }
+    catch (err) {
+    console.error(err);
+    }
+  });
+
+  // Test the populateTable()
+  it('Call method', () => {
+    try {
+      component.populateTable([{
+      first_name: "Daph",
+      last_name: "Ne",
+      role: "SA",
+      is_active: true,
+      id: 2,
+      email: "daph@test.com",
+      location: "Montreal",}])
+      }
+    catch (error) {
+    console.error(error);
+    }
+  });
+
+
+
 });
