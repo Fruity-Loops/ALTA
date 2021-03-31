@@ -82,13 +82,26 @@ export class AuditTemplateComponent implements OnInit {
     {
       // @ts-ignore
       let value = auditTemplate[key]
-      this.params = this.params.set(key, value);
+      if (value != "[]" && value != "" && value != null)
+      {
+        if (value.toString().indexOf("[") > -1)
+        {
+          let arrayFromString = value.replace(/'/g, '"');
+          value = JSON.parse(arrayFromString);
+        }
+        this.params = this.params.set(key, value);
+      }
     }
-    this.itemService.getPageItems(this.params).subscribe((data) => {
-      if (data.count > 0)
+    let badKeys = ['template_id', 'author', 'title', 'start_date', 'calendar_date', 'time_zone_utc'];
+    for (let key in badKeys)
+    {
+      this.params = this.params.delete(badKeys[key]);
+    }
+    this.itemService.getTemplateItems(this.params).subscribe((data) => {
+      if (data.length > 0)
       {
         let items = [];
-        for (let item of data.results)
+        for (let item of data)
           items.push(item.Item_Id)
         this.createAudit(items, id);
       }
