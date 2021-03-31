@@ -71,11 +71,15 @@ class ItemViewSet(LoggingViewset):
     @action(detail=False, methods=['GET'], name='Get Items based on the template')
     def template(self, request):
         params = list(request.GET.keys())
-        for bad_key in ['page', 'page_size', 'organization']:
+        for bad_key in ['page', 'page_size']:
             if bad_key in params:
                 params.remove(bad_key)
         for key in params:
-            kwarg = {'{0}__in'.format(key): request.GET.get(key).split(',')}
+            value = request.GET.get(key).split(',')
+            if key == 'Aisle':
+                for i in range(len(value)):
+                    value[i] = int(value[i])
+            kwarg = {'{0}__in'.format(key): value}
             self.queryset = self.queryset.filter(**kwarg)
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
