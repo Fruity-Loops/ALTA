@@ -186,6 +186,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       chart: {
         type: 'area',
         height: 350,
+        toolbar: {
+          export: {
+            csv: {
+              headerCategory: 'Date',
+              headerValue: 'Accuracy (%)',
+            }
+          }
+        }
       },
       dataLabels: {
         enabled: false
