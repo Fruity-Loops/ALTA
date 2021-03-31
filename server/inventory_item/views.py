@@ -1,9 +1,12 @@
 from rest_framework import filters
+from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 from django_server.custom_logging import LoggingViewset
 from user_account.permissions import PermissionFactory
 from .serializers import ItemSerializer
 from .models import Item
+import json
 
 
 class DynamicSearchFilter(filters.SearchFilter):
@@ -64,3 +67,15 @@ class ItemViewSet(LoggingViewset):
         factory = PermissionFactory(self.request)
         permission_classes = factory.get_general_permissions([])
         return [permission() for permission in permission_classes]
+
+    @action(detail=False, methods=['GET'], name='Get Items based on the template')
+    def template(self, request):
+        params = list(request.GET.keys())
+        for bad_key in ['page', 'page_size', 'organization']:
+            if bad_key in params:
+                params.remove(bad_key)
+        for key in params:
+            kwarg = {'{0}__in'.format(key): request.GET.get(key).split(',')}
+            self.queryset = self.queryset.filter(**kwarg)
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
