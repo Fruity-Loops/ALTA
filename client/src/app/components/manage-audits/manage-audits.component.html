@@ -98,7 +98,26 @@
     </mat-tab>
     <mat-tab label="Graphs and Trends">
       <ng-template matTabContent>
-        Some nice UI
+        <br>
+        <div id="chart">
+          <!--
+          <button (click)="updateOptions('1m')" [class.active]="activeOptionButton=='1m'"> 1M </button>
+          <button (click)="updateOptions('6m')" [class.active]="activeOptionButton=='6m'"> 6M </button>
+          <button (click)="updateOptions('1y')" [class.active]="activeOptionButton=='1y'"> 1Y </button>
+          <button (click)="updateOptions('1yd')" [class.active]="activeOptionButton=='1yd'"> 1YD </button>
+          <button (click)="updateOptions('all')" [class.active]="activeOptionButton=='all'"> All </button>
+          -->
+          <apx-chart
+            [series]="chartOptions.accuracyOverTime"
+            [chart]="chartOptions.chart"
+            [xaxis]="chartOptions.xaxis"
+            [stroke]="chartOptions.stroke"
+            [dataLabels]="chartOptions.dataLabels"
+            [yaxis]="chartOptions.yaxis"
+            [labels]="chartOptions.labels"
+            [title]="chartOptions.title"
+          ></apx-chart>
+        </div>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

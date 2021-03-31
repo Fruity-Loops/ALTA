@@ -5,7 +5,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { TableManagementComponent } from '../TableManagement.component';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
+import {ChartComponent} from 'ng-apexcharts';
 
 @Component({
   selector: 'app-manage-audits',
@@ -13,6 +14,18 @@ import {Router} from "@angular/router";
   styleUrls: ['./manage-audits.component.scss'],
 })
 export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
+
+  constructor(
+    private auditService: ManageAuditsService,
+    protected fb: FormBuilder,
+    private router: Router
+  ) {
+    super(fb);
+    this.formg = fb;
+    this.dataSource = new MatTableDataSource<any>();
+    this.selectedAudits = [];
+    this.chartSetup();
+  }
   body: any;
   subscription: any;
 
@@ -25,6 +38,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   errorMessage = '';
   formg: FormBuilder;
 
+  chartOptions: any;
+  private xData = [];
+  private yData = [];
+
   selectedAudits: number[];
 
   // Member variable is automatically initialized after view init is completed
@@ -32,21 +49,44 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('chart', { static: false }) chart: ChartComponent | undefined;
+  public activeOptionButton = 'all';
+  public updateOptionsData = {
+    '1m': {
+      xaxis: {
+        min: new Date('05 Feb 2021').getTime(),
+        max: new Date('07 Feb 2021').getTime()
+      }
+    },
+    '6m': {
+      xaxis: {
+        min: new Date('05 Feb 2021').getTime(),
+        max: new Date('09 Feb 2021').getTime()
+      }
+    },
+    '1y': {
+      xaxis: {
+        min: new Date('08 Feb 2021').getTime(),
+        max: new Date('10 Feb 2021').getTime()
+      }
+    },
+    '1yd': {
+      xaxis: {
+        min: new Date('05 Feb 2021').getTime(),
+        max: new Date('11 Feb 2021').getTime()
+      }
+    },
+    all: {
+      xaxis: {
+        min: undefined,
+        max: undefined
+      }
+    }
+  };
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
-
-  constructor(
-    private auditService: ManageAuditsService,
-    protected fb: FormBuilder,
-    private router: Router
-  ) {
-    super(fb);
-    this.formg = fb;
-    this.dataSource = new MatTableDataSource<any>();
-    this.selectedAudits = [];
-  }
 
   getSearchForm(): any {
     return {
@@ -74,6 +114,15 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.auditService.getProperAudits(this.params).subscribe(
       (data: any) => {
         this.data = data;
+        data.forEach((element: any) => {
+          const getDate = element.initiated_on.replace(/\//g, ' '); // Remove forward slash from initiated date.
+          const splitDate = getDate.split(' ', 3); // Split the initiated date by space.
+          const dateObj = splitDate[1] + '/' + splitDate [0] + '/' + splitDate[2]; // change order to MM/DD/YYYY
+          // @ts-ignore
+          this.xData.push(dateObj);
+          // @ts-ignore
+          this.yData.push(element.accuracy);
+        });
         // Getting the field name of the item object returned and populating the column of the table
         for (const key in data[0]) {
           if (this.data[0].hasOwnProperty(key)) {
@@ -92,6 +141,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
   }
 
+  // updates data in table
   updatePage(): void {
     this.auditService.getProperAudits(this.params).subscribe(
       (data: any) => {
@@ -104,8 +154,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
 
   }
-
-  // updates data in table
   updatePaginator(): void {
     const count = 'count';
     this.length = this.data[count];
@@ -118,6 +166,61 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
+  }
+
+  chartSetup(): void {
+  this.chartOptions = {
+      accuracyOverTime: [
+        {
+          name: 'Accuracy (%)',
+          data: this.yData
+        }
+      ],
+      chart: {
+        type: 'area',
+        height: 350,
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2,
+      },
+      title: {
+        text: 'Audit Accuracy over Time',
+        align: 'left'
+      },
+      labels: this.xData,
+      xaxis: {
+        type: 'datetime',
+        tickAmount: 6
+      },
+      yaxis: {
+        opposite: false
+      },
+      tooltip: {
+        x: {
+          format: 'dd MMM yyyy'
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shadeIntensity: 1,
+          opacityFrom: 0.7,
+          opacityTo: 0.9,
+          stops: [0, 100]
+        }
+      },
+    };
+  }
+
+  updateOptions(option: any): void {
+    console.log(this.updateOptionsData[option]);
+    this.activeOptionButton = option;
+    // @ts-ignore
+    this.chart.updateOptions(this.updateOptionsData[option], false, true, true);
   }
 
   // If an Inventory item checkbox is selected then add the id to the list
@@ -133,7 +236,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   }
 
   goToReport(id: number): void {
-    this.router.navigate(['audit-report/'+id])
+    this.router.navigate(['audit-report/' + id]);
     console.log(id);
   }
 
