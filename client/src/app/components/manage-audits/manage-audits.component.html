@@ -3,96 +3,97 @@
   <mat-tab-group>
     <mat-tab label="List of Audits">
       <ng-template matTabContent>
-  <div>
+        <div>
 
-<!--      <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">-->
-<!--        <mat-divider></mat-divider>-->
-<!--      <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel >-->
-<!--        <mat-expansion-panel-header hideToggle="true">-->
-<!--          <mat-panel-title (click)="$event.stopPropagation();"-->
-<!--                           (keydown.Space)="$event.stopImmediatePropagation();"-->
-<!--                           (keydown.Enter)="$event.stopImmediatePropagation();">-->
-<!--            <mat-form-field class="searchInventoryBar" style="width: 100%" >-->
+          <!--      <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">-->
+          <!--        <mat-divider></mat-divider>-->
+          <!--      <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel >-->
+          <!--        <mat-expansion-panel-header hideToggle="true">-->
+          <!--          <mat-panel-title (click)="$event.stopPropagation();"-->
+          <!--                           (keydown.Space)="$event.stopImmediatePropagation();"-->
+          <!--                           (keydown.Enter)="$event.stopImmediatePropagation();">-->
+          <!--            <mat-form-field class="searchInventoryBar" style="width: 100%" >-->
 
-<!--              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="auditSearchBar">-->
-<!--            </mat-form-field>-->
-<!--            <button mat-icon-button id="searchbtn" class="save">-->
-<!--              <mat-icon matSuffix>search</mat-icon>-->
-<!--            </button>-->
-<!--          </mat-panel-title>-->
-<!--          <mat-panel-description class="expandSearchButton">-->
-<!--            <mat-icon *ngIf="!expansionPanel.expanded">filter_list</mat-icon>-->
-<!--            <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>-->
-<!--          </mat-panel-description>-->
-<!--        </mat-expansion-panel-header>-->
-<!--        <p>Audit details</p>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="inventory_items" type="text" formControlName="inventory_items" placeholder="Inventory Items"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="assigned_sk" type="text" formControlName="assigned_sk" placeholder="Assigned SK"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="initiated_by" type="text" formControlName="initiated_by" placeholder="Initiated By"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="initiated_on" type="text" formControlName="initiated_on" placeholder="Initiated On"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="last_modified_on" type="text" formControlName="last_modified_on" placeholder="Last Modified Date"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="template_id" type="text" formControlName="template_id" placeholder="Template ID"/>-->
-<!--      </mat-form-field>-->
-<!--      <mat-form-field appearance="outline">-->
-<!--        <input matInput id="accuracy" type="text" formControlName="accuracy" placeholder="Acuracy"/>-->
-<!--      </mat-form-field>-->
-<!--      </mat-expansion-panel>-->
+          <!--              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="auditSearchBar">-->
+          <!--            </mat-form-field>-->
+          <!--            <button mat-icon-button id="searchbtn" class="save">-->
+          <!--              <mat-icon matSuffix>search</mat-icon>-->
+          <!--            </button>-->
+          <!--          </mat-panel-title>-->
+          <!--          <mat-panel-description class="expandSearchButton">-->
+          <!--            <mat-icon *ngIf="!expansionPanel.expanded">filter_list</mat-icon>-->
+          <!--            <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>-->
+          <!--          </mat-panel-description>-->
+          <!--        </mat-expansion-panel-header>-->
+          <!--        <p>Audit details</p>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="inventory_items" type="text" formControlName="inventory_items" placeholder="Inventory Items"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="assigned_sk" type="text" formControlName="assigned_sk" placeholder="Assigned SK"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="initiated_by" type="text" formControlName="initiated_by" placeholder="Initiated By"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="initiated_on" type="text" formControlName="initiated_on" placeholder="Initiated On"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="last_modified_on" type="text" formControlName="last_modified_on" placeholder="Last Modified Date"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="template_id" type="text" formControlName="template_id" placeholder="Template ID"/>-->
+          <!--      </mat-form-field>-->
+          <!--      <mat-form-field appearance="outline">-->
+          <!--        <input matInput id="accuracy" type="text" formControlName="accuracy" placeholder="Acuracy"/>-->
+          <!--      </mat-form-field>-->
+          <!--      </mat-expansion-panel>-->
 
-<!--    </form>-->
-  </div>
+          <!--    </form>-->
+        </div>
 
-  <mat-divider></mat-divider>
-  <div>
-    <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
-      <div id="audit">List of Audits.</div>
+        <mat-divider></mat-divider>
+        <div>
+          <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+            <div id="audit">List of Audits.</div>
 
-      <ng-container matColumnDef="Select">
-        <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
-        <td mat-cell *matCellDef="let object">
-          <mat-checkbox  (change)='onChange(object["audit_id"])' [id]="'checkBox' + object['audit_id']"></mat-checkbox>
-        </td>
-      </ng-container>
+            <ng-container matColumnDef="Select">
+              <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
+              <td mat-cell *matCellDef="let object">
+                <mat-checkbox (change)='onChange(object["audit_id"])'
+                              [id]="'checkBox' + object['audit_id']"></mat-checkbox>
+              </td>
+            </ng-container>
 
-      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
-        <td mat-cell *matCellDef="let object">
-          <div *ngIf="column == 'audit_id'; else elseBlock" >
-            <a [routerLink]="'audit-report/'+object['audit_id']">
-              {{ object[column]}}
-            </a>
-          </div>
-          <ng-template #elseBlock>
-            {{ object[column]}}
-          </ng-template>
-        </td>
-      </ng-container>
+            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+              <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
+              <td mat-cell *matCellDef="let object">
+                <div *ngIf="column == 'audit_id'; else elseBlock">
+                  <a [routerLink]="'audit-report/'+object['audit_id']">
+                    {{ object[column]}}
+                  </a>
+                </div>
+                <ng-template #elseBlock>
+                  {{ object[column]}}
+                </ng-template>
+              </td>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    </table>
+          </table>
 
-    <mat-paginator
-      [length]="length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[25,50,100]"
-      [pageIndex]="pageIndex"
-      (page)="paginatorAction($event)">
-    </mat-paginator>
+          <mat-paginator
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[25,50,100]"
+            [pageIndex]="pageIndex"
+            (page)="paginatorAction($event)">
+          </mat-paginator>
 
 
-  </div>
+        </div>
 
       </ng-template>
     </mat-tab>
@@ -100,36 +101,11 @@
       <ng-template matTabContent>
         <br>
         <div id="chart">
-          <button
-            (click)="updateOptions( '1m' )"
-            [class.active]="activeOptionButton=='1m'"
-          >
-            1M
-          </button>
-          <button
-            (click)="updateOptions( '6m' )"
-            [class.active]="activeOptionButton=='6m'"
-          >
-            6M
-          </button>
-          <button
-            (click)="updateOptions( '1y' )"
-            [class.active]="activeOptionButton=='1y'"
-          >
-            1Y
-          </button>
-          <button
-            (click)="updateOptions( '1yd' )"
-            [class.active]="activeOptionButton=='1yd'"
-          >
-            1YD
-          </button>
-          <button
-            (click)="updateOptions( 'all' )"
-            [class.active]="activeOptionButton=='all'"
-          >
-            All
-          </button>
+          <button (click)="updateOptions( '1m' )" [class.active]="activeOptionButton=='1m'">1M</button>
+          <button (click)="updateOptions( '6m' )" [class.active]="activeOptionButton=='6m'">6M</button>
+          <button (click)="updateOptions( '1y' )" [class.active]="activeOptionButton=='1y'">1Y</button>
+          <button (click)="updateOptions( '1yd' )" [class.active]="activeOptionButton=='1yd'">1YD</button>
+          <button (click)="updateOptions( 'all' )" [class.active]="activeOptionButton=='all'">All</button>
           <apx-chart
             #chart
             [series]="chartOptions.accuracyOverTime"
@@ -142,6 +118,7 @@
             [title]="chartOptions.title"
           ></apx-chart>
         </div>
+        <br>
       </ng-template>
     </mat-tab>
   </mat-tab-group>
