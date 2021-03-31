@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { TableManagementComponent } from '../TableManagement.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
+import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {TableManagementComponent} from '../TableManagement.component';
 import {Router} from '@angular/router';
 import {ChartComponent} from 'ng-apexcharts';
 
@@ -26,6 +26,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.selectedAudits = [];
     this.chartSetup();
   }
+
   body: any;
   subscription: any;
 
@@ -41,6 +42,11 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   chartOptions: any;
   private xData = [];
   private yData = [];
+  min1mDate = '';
+  min6mDate = '';
+  min1yDate = '';
+  min1ydDate = '';
+  maxDate = '';
 
   selectedAudits: number[];
 
@@ -49,31 +55,31 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('chart', { static: false }) chart: ChartComponent | undefined;
+  @ViewChild('chart', {static: false}) chart: ChartComponent | undefined;
   public activeOptionButton = 'all';
   public updateOptionsData = {
     '1m': {
       xaxis: {
-        min: new Date('05 Feb 2021').getTime(),
-        max: new Date('07 Feb 2021').getTime()
+        min: 0,
+        max: 0
       }
     },
     '6m': {
       xaxis: {
-        min: new Date('05 Feb 2021').getTime(),
-        max: new Date('09 Feb 2021').getTime()
+        min: 0,
+        max: 0
       }
     },
     '1y': {
       xaxis: {
-        min: new Date('08 Feb 2021').getTime(),
-        max: new Date('10 Feb 2021').getTime()
+        min: 0,
+        max: 0
       }
     },
     '1yd': {
       xaxis: {
-        min: new Date('05 Feb 2021').getTime(),
-        max: new Date('11 Feb 2021').getTime()
+        min: 0,
+        max: 0
       }
     },
     all: {
@@ -154,6 +160,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
 
   }
+
   updatePaginator(): void {
     const count = 'count';
     this.length = this.data[count];
@@ -169,7 +176,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   }
 
   chartSetup(): void {
-  this.chartOptions = {
+    this.chartOptions = {
       accuracyOverTime: [
         {
           name: 'Accuracy (%)',
@@ -214,10 +221,54 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         }
       },
     };
+
+    this.maxDate = this.createDate(0, 0, 0, false); // Today's date
+    this.updateOptionsData['1m'].xaxis.max = new Date(this.maxDate).getTime();
+    this.updateOptionsData['6m'].xaxis.max = new Date(this.maxDate).getTime();
+    this.updateOptionsData['1y'].xaxis.max = new Date(this.maxDate).getTime();
+    this.updateOptionsData['1yd'].xaxis.max = new Date(this.maxDate).getTime();
+
+    // 1 month ago
+    this.min1mDate = this.createDate(0, -1, 0, false); // Today's date - 1 month
+    this.updateOptionsData['1m'].xaxis.min = new Date(this.min1mDate).getTime();
+
+    // 6 months ago
+    this.min6mDate = this.createDate(0, -6, 0, false); // Today's date - 6 months
+    this.updateOptionsData['6m'].xaxis.min = new Date(this.min6mDate).getTime();
+
+    // 1 year ago
+    this.min1yDate = this.createDate(0, 0, -1, false); // Today's date - 1 year
+    this.updateOptionsData['1y'].xaxis.min = new Date(this.min1yDate).getTime();
+
+    // 1 jan of this year or previous year. (1ydScenario)
+    this.min1ydDate = this.createDate(0, 0, 0, true);
+    this.updateOptionsData['1yd'].xaxis.min = new Date(this.min1ydDate).getTime();
+
+  }
+
+  // Create date using today's date and can subtract/add days, month and years.
+  createDate(days: any, months: any, years: any, oneYDScenario: any): string {
+    const date = new Date();
+    date.setDate(date.getDate() + days);
+    date.setMonth(date.getMonth() + months);
+    date.setFullYear(date.getFullYear() + years);
+    const dd = String(date.getDate()).padStart(2, '0');
+    const mm = date.getMonth();
+    const yyyy = date.getFullYear();
+    const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    if (oneYDScenario) {
+      if (dd === '01' && mm === 0) {
+        return '01 Jan ' + (yyyy - 1);
+      } else {
+        return '01 Jan ' + yyyy;
+      }
+    } else {
+      return dd + ' ' + month[mm] + ' ' + yyyy;
+    }
   }
 
   updateOptions(option: any): void {
-    console.log(this.updateOptionsData[option]);
     this.activeOptionButton = option;
     // @ts-ignore
     this.chart.updateOptions(this.updateOptionsData[option], false, true, true);
