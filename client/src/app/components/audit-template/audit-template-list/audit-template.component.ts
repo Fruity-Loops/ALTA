@@ -1,6 +1,8 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../../services/audits/audit-template.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {AuditTemplateListLangFactory, TemplateOptionLabels} from './audit-template-list.language';
+import {Language} from '../../../services/Language';
 
 interface Template {
   author: string;
@@ -20,14 +22,17 @@ export class AuditTemplateComponent implements OnInit {
   errorMessage = '';
   dialogRef: any;
 
-  title = 'Templates';
-  searchPlaceholder = 'Search Templates';
-  addButton = 'Add';
-  optionLabels = {edit: 'Edit', delete: 'Delete'};
+  title: string;
+  searchPlaceholder: string;
+  addButton: string;
+  optionLabels: TemplateOptionLabels;
 
   constructor(private auditTemplateService: AuditTemplateService,
               public dialog: MatDialog
   ) {
+    const lang = new AuditTemplateListLangFactory(Language.ENGLISH);
+    [this.title, this.searchPlaceholder, this.addButton, this.optionLabels] = [
+      lang.lang.title, lang.lang.searchPlaceholder, lang.lang.addButton, lang.lang.optionLabels];
   }
 
   ngOnInit(): void {
