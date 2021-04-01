@@ -16,6 +16,10 @@ export class EmployeeListComponent implements OnInit {
   view = 'Client Gridview';
   users: Array<User>;
 
+  title = 'Employees';
+  searchPlaceholder = 'Search Employees';
+  table = {first_name: 'First Name', last_name: 'Last Name', role: 'Role', location: 'Location', is_active: 'Status', settings: 'Settings'};
+
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = [
     'First_Name',
