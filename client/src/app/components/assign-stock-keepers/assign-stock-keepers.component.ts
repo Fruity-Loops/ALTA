@@ -21,6 +21,10 @@ export class AssignStockKeepersComponent implements OnInit {
   locationsAndUsers: Array<any>;
   auditID: number;
 
+  title = 'Select Stock-Keepers';
+  skTable = {select: 'Select', first_name: 'First Name', last_name: 'Last Name', availability: 'Availability'};
+  actionButtons = {expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', assign: 'Assign', cancel: 'Cancel'};
+
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
