@@ -138,7 +138,7 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="isEdit && !isLoggedInUser.value">
           <div class="form-group">
-            <mat-label for="is-active">{{fieldLabels.is_active}}</mat-label>
+            <mat-label for="is-active">{{fieldLabels.is_active}}:</mat-label>
             <mat-form-field appearance="outline">
               <mat-select class="statusDropDown" id="active" [(ngModel)]="isActive" [disabled]="!edit"
                           [ngModelOptions]="{standalone: true}">

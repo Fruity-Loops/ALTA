@@ -1,4 +1,6 @@
 import {FormGroup} from '@angular/forms';
+import {Language} from '../../../services/Language';
+import {EmployeeViewActionLabels, EmployeeViewLabels, EmployeeViewLangFactory, EmployeeViewPlaceHolders} from './employee-view.language';
 
 export interface BaseEmployeeForm {
   user_name: string;
@@ -16,15 +18,16 @@ export abstract class EmployeeView {
   errorMessage: string | undefined;
 
   employeeForm: FormGroup | undefined;
-  fieldLabels = {first_name: 'First Name', email: 'E-mail Address', last_name: 'Last Name', employee_id: 'Employee ID', role: 'Role',
-    is_active: 'Is Active', password: 'Password', location: 'Employment Location'};
-  fieldPlaceholders = {first_name: 'First name', email: 'E-mail address', last_name: 'Last name', employee_id: 'Employee ID',
-    password: 'Password', location: 'Employment Location'};
-  actionButtonLabels = {save: 'Save', edit: 'Edit', cancel: 'Cancel'};
+  fieldLabels: EmployeeViewLabels;
+  fieldPlaceholders: EmployeeViewPlaceHolders;
+  actionButtonLabels: EmployeeViewActionLabels;
 
   protected constructor() {
     this.title = this.getTitle();
     this.isEdit = this.getIsEdit();
+    const lang = new EmployeeViewLangFactory(Language.ENGLISH);
+    [this.fieldLabels, this.fieldPlaceholders, this.actionButtonLabels] = [lang.lang.fieldLabels, lang.lang.fieldPlaceholders,
+      lang.lang.actionLabels];
   }
 
   abstract getTitle(): string;
