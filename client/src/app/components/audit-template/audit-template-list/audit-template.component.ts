@@ -20,6 +20,11 @@ export class AuditTemplateComponent implements OnInit {
   errorMessage = '';
   dialogRef: any;
 
+  title = 'Templates';
+  searchPlaceholder = 'Search Templates';
+  addButton = 'Add';
+  optionLabels = {edit: 'Edit', delete: 'Delete'};
+
   constructor(private auditTemplateService: AuditTemplateService,
               public dialog: MatDialog
   ) {
