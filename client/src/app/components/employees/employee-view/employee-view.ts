@@ -16,6 +16,11 @@ export abstract class EmployeeView {
   errorMessage: string | undefined;
 
   employeeForm: FormGroup | undefined;
+  fieldLabels = {first_name: 'First Name', email: 'E-mail Address', last_name: 'Last Name', employee_id: 'Employee ID', role: 'Role',
+    is_active: 'Is Active', password: 'Password', location: 'Employment Location'};
+  fieldPlaceholders = {first_name: 'First name', email: 'E-mail address', last_name: 'Last name', employee_id: 'Employee ID',
+    password: 'Password', location: 'Employment Location'};
+  actionButtonLabels = {save: 'Save', edit: 'Edit', cancel: 'Cancel'};
 
   protected constructor() {
     this.title = this.getTitle();
