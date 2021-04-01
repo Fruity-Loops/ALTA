@@ -1,11 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { User } from 'src/app/models/user.model';
-import { ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {User} from 'src/app/models/user.model';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import roles from 'src/app/fixtures/roles.json';
+import {EmployeeListLangFactory, EmployeeListTable} from './employee-list.language';
+import {Language} from '../../../services/Language';
 
 @Component({
   selector: 'app-client-gridview',
@@ -16,9 +17,9 @@ export class EmployeeListComponent implements OnInit {
   view = 'Client Gridview';
   users: Array<User>;
 
-  title = 'Employees';
-  searchPlaceholder = 'Search Employees';
-  table = {first_name: 'First Name', last_name: 'Last Name', role: 'Role', location: 'Location', is_active: 'Status', settings: 'Settings'};
+  title: string;
+  searchPlaceholder: string;
+  table: EmployeeListTable;
 
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = [
@@ -47,6 +48,8 @@ export class EmployeeListComponent implements OnInit {
     });
     this.filterTerm = '';
     this.selected = 'All';
+    const lang = new EmployeeListLangFactory(Language.ENGLISH);
+    [this.title, this.searchPlaceholder, this.table] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.table];
   }
 
   ngOnInit(): void {}
