@@ -1,26 +1,29 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
-import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
-import {MatDialog} from '@angular/material/dialog';
-import {Router} from '@angular/router';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {SKUser} from 'src/app/models/user.model';
-import {Item} from 'src/app/models/item.model';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
+import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { SKUser } from 'src/app/models/user.model';
+import { Item } from 'src/app/models/item.model';
+import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
   templateUrl: './manage-stock-keepers-designation.component.html',
   styleUrls: ['./manage-stock-keepers-designation.component.scss']
 })
-export class ManageStockKeepersDesignationComponent implements OnInit {
+export class ManageStockKeepersDesignationComponent implements OnInit, IDeactivateComponent {
 
   preAuditData: any;
   locationsWithBinsAndSKs: Array<any>;
   binToSks: Array<any>;
+  holdBinIdsOfPreviousAssign: Array<any>;
   auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
+  requestConfirmation = true;
 
   constructor(
     private dialog: MatDialog,
@@ -28,6 +31,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     private router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
+    this.holdBinIdsOfPreviousAssign = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
@@ -35,7 +39,44 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     this.manageAuditsService.getAuditData(this.auditID)
       .subscribe((auditData) => {
         this.populateBinsAndSKs(auditData.inventory_items, auditData.assigned_sk);
-      });
+    });
+
+    this.manageAuditsService.getAssignedBins(this.auditID)
+      .subscribe((auditData) => {
+        if (auditData !== []) {
+          this.holdBinIdsOfPreviousAssign = auditData.map((obj: any) => ({ bin_id: obj.bin_id, Bin: obj.Bin }));
+
+          const listOfSKs = auditData.map((obj: any) => obj.customuser);
+          listOfSKs.forEach((index: any) => {
+
+            const skToUpdate = this.binToSks.find(obj => obj.sk_id === index.id);
+
+            // check if user assigned a different SK from original
+            if (skToUpdate !== undefined) {
+              const getAssignedData = auditData.find((obj: any) => obj.customuser === index);
+
+              // create iterable array from the string of assigned stock-keepers id
+              let arrayFromString = getAssignedData.item_ids.replace(/'/g, '"');
+              arrayFromString = JSON.parse(arrayFromString);
+
+              // add in the item_ids
+              arrayFromString.forEach((id: any) => {
+                skToUpdate.item_ids.push(id);
+              });
+
+              // add in the bins
+              skToUpdate.bins.push(getAssignedData.Bin);
+
+              // remove bin from original array
+              const locationToUpdate = this.locationsWithBinsAndSKs.find(obj => obj.Location === skToUpdate.sk_location);
+              locationToUpdate.bins.splice(
+                locationToUpdate.bins.indexOf(getAssignedData.Bin),
+                1
+              );
+            }
+          });
+        }
+    });
   }
 
   autoAssign(): void {
@@ -45,6 +86,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
     this.locationsWithBinsAndSKs.forEach(index => {
       let currentSK = 0;
       index.bins.forEach((bin: any) => {
+
         associatedItems = this.getAssociatedItemsGivenBin(index.Location, [bin]);
         const associatedItemsIds = associatedItems.map(item => item.Item_Id);
 
@@ -134,39 +176,68 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   submitPreAuditData(): void {
-    const holdBodyPreAuditData = new Array<any>();
+    const holdBodyPreAuditDataWithoutBinIDs = new Array<any>();
+    const holdBodyPreAuditDataWithBinIDs = new Array<any>();
     let holdItemsOfBins = new Array<any>();
 
     // loop through the assigned bins from the drag and drop arrays
     this.binToSks.forEach(auditComp => {
       auditComp.bins.forEach((bin: any) => {
-        holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
 
+        holdItemsOfBins = this.getAssociatedItemsGivenBin(auditComp.sk_location, [bin]);
         if (holdItemsOfBins.length > 0) {
-          // construct array to hold the item ids
-          const holdIds = holdItemsOfBins.map(item => item.Item_Id);
-          holdBodyPreAuditData.push(
-            {
-              Bin: bin,
-              init_audit: this.auditID,
-              customuser: auditComp.sk_id,
-              item_ids: holdIds,
-            });
-          // empty array for next bin in loop
-          holdItemsOfBins = new Array<any>();
+
+          // determine if bin was previously assigned - patch
+          if (this.holdBinIdsOfPreviousAssign.map(obj => obj.Bin).includes(bin)) {
+
+            const getBinId = this.holdBinIdsOfPreviousAssign.
+                              filter((obj: any) => obj.Bin === bin).
+                              map((obj: any) => obj.bin_id)[0];
+
+            holdBodyPreAuditDataWithBinIDs.push(
+              {
+                bin_id: getBinId,
+                init_audit_id: this.auditID,
+                customuser: auditComp.sk_id
+              });
+
+          } else {
+            // construct array to hold the item ids - post
+            holdBodyPreAuditDataWithoutBinIDs.push(
+              {
+                Bin: bin,
+                init_audit: this.auditID,
+                customuser: auditComp.sk_id,
+                item_ids: holdItemsOfBins.map(item => item.Item_Id),
+              });
+          }
         }
+        // empty array for next bin in loop
+        holdItemsOfBins = new Array<any>();
       });
     });
 
-    holdBodyPreAuditData.forEach(bodyPreAuditData => {
-      this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
-        .subscribe((err) => {
-          this.errorMessage = err;
-        });
-    });
+    if (holdBodyPreAuditDataWithoutBinIDs.length > 0) {
+      holdBodyPreAuditDataWithoutBinIDs.forEach(bodyPreAuditData => {
+        this.manageAuditsService.initiatePreAudit(bodyPreAuditData)
+          .subscribe((err) => {
+            this.errorMessage = err;
+          });
+      });
+    }
+
+    if (holdBodyPreAuditDataWithBinIDs.length > 0) {
+      holdBodyPreAuditDataWithBinIDs.forEach(bodyPreAuditData => {
+        this.manageAuditsService.updatePreAudit(bodyPreAuditData.init_audit_id, bodyPreAuditData)
+          .subscribe((err) => {
+            this.errorMessage = err;
+          });
+      });
+    }
 
     this.locationsWithBinsAndSKs = [];
     this.binToSks = [];
+    this.requestConfirmation = false;
 
     setTimeout(() => {
       // Redirect user to review-audit component
@@ -180,13 +251,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         this.errorMessage = err;
       }));
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
-  }
-
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBack(event: Event): void {
-    // Overrides browser back button
-    event.preventDefault();
-    this.goBackAssignSK();
   }
 
   goBackAssignSK(): void {
@@ -203,6 +267,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+      this.requestConfirmation = true;
     }
   }
 
@@ -215,11 +280,28 @@ export class ManageStockKeepersDesignationComponent implements OnInit {
   }
 
   discardAudit(): void {
+    this.requestConfirmation = false;
     this.deleteAudit();
     this.dialog.closeAll();
   }
 
-  checkDisableButton(binArray: any[]): boolean {
-    return binArray.map(index => index.bins).every(array => array.length <= 0);
+  disableAssign(): boolean {
+    // @ts-ignore
+    if (this.locationsWithBinsAndSKs.map((obj: any) => obj.bins).flat().length === 0) {
+
+      for (const obj of this.binToSks) {
+        if (obj.bins.length === 0) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
+  // handles page refresh and out-of-app navigation
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any): boolean {
+    return confirm('');
   }
 }

@@ -38,6 +38,10 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.patch(`${BASEURL}/audit/${auditId}/`, assignedSK);
   }
 
+  createAuditAssignments(assignments: object): Observable<any> {
+    return this.http.post(`${BASEURL}/audit/assignment/`, assignments);
+  }
+
   getAuditData(auditId: number): Observable<any> {
     return this.http.get(`${BASEURL}/audit/${auditId}/`);
   }
@@ -48,6 +52,10 @@ export class ManageAuditsService implements LocalStorageInterface {
 
   initiatePreAudit(preAuditData: any): Observable<any> {
     return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
+  }
+
+  updatePreAudit(auditId: any, preAuditData: any): Observable<any> {
+    return this.http.patch(`${BASEURL}/bin-to-sk/${auditId}/`, preAuditData);
   }
 
   getAssignedBins(auditId: any): Observable<any> {

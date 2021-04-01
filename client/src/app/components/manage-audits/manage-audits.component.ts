@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder} from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
-import {MatSort} from '@angular/material/sort';
-import {TableManagementComponent} from '../TableManagement.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { TableManagementComponent } from '../TableManagement.component';
 
 @Component({
   selector: 'app-manage-audits',
@@ -20,7 +20,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   // Items data
   data: any;
-  items = [];
+  audits = [];
   errorMessage = '';
   formg: FormBuilder;
 
@@ -107,15 +107,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   updatePaginator(): void {
     const count = 'count';
     this.length = this.data[count];
-    if (this.pageIndex > 0){
+    if (this.pageIndex > 0) {
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    this.items = this.data;
+    this.audits = this.data;
     this.errorMessage = '';
-
     // @ts-ignore
-    this.dataSource = new MatTableDataSource(this.items);
+    this.dataSource = new MatTableDataSource(this.audits);
   }
 
   // If an Inventory item checkbox is selected then add the id to the list

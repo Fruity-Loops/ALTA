@@ -3,6 +3,7 @@ This file provides functionality for all the endpoints for interacting with user
 """
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from django_server.custom_logging import LoggingViewset
 from user_account.permissions import CanUpdateKeys, IsHigherInOrganization, \
@@ -46,8 +47,14 @@ class OpenRegistrationView(LoggingViewset):
         return Response(data, status=status.HTTP_201_CREATED)
 
 
+class UserSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
 class CustomUserView(LoggingViewset):
     http_method_names = ['get', 'post', 'patch']
+    pagination_class = UserSetPagination
     data = None
 
     def get_permissions(self):
@@ -115,8 +122,15 @@ class CustomUserView(LoggingViewset):
         if this is changed (although it shouldn't)
         """
         queryset = self.get_queryset().filter(organization_id=request.GET.get("organization", '')) \
-            .exclude(role='SA').exclude(id=request.user.id)
-        serializer = self.get_serializer(queryset, many=True)
+            .exclude(role='SA').exclude(id=request.user.id).order_by('first_name')
+        no_pagination = request.query_params.get('no_pagination')
+        page = self.paginate_queryset(queryset)
+
+        if page is not None and not no_pagination:                                                                                              
+            serializer = self.get_serializer(page, many=True)                                                             
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)                                                             
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):  # pylint: disable=unused-argument
@@ -157,3 +171,6 @@ class AccessMembers(LoggingViewset):
 
     def get_queryset(self):
         return CustomUser.objects.filter(role='SA').exclude(id=self.request.user.id)
+
+class AccessMembersPaginated(AccessMembers):
+    pagination_class = UserSetPagination

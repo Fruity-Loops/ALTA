@@ -152,7 +152,7 @@ class OpenRegistrationTestCase(APITestCase):
     @factory.django.mute_signals(signals.pre_save, signals.post_save)
     def test_registration_success_linked_to_organization(self):
         """ User was registered correctly with its organization"""
-        organization = Organization.objects.create(org_name="Test")
+        organization = Organization.objects.create(org_name="Test", address=["florida"])
         data = {'user_name': 'test_case',
                 'email': 'test3@email.com',
                 "password": "password",

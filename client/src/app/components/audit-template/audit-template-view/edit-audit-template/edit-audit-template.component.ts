@@ -3,6 +3,7 @@ import { AuditTemplateService } from '../../../../services/audits/audit-template
 import { ActivatedRoute } from '@angular/router';
 import {AuditTemplateViewComponent} from '../audit-template-view.component';
 import { Template } from '../../Template';
+import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
 
 @Component({
   selector: 'app-edit-audit-template',
@@ -17,8 +18,9 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
   constructor(
     private auditTemplateService: AuditTemplateService,
     private activatedRoute: ActivatedRoute,
+    itemsService: ManageInventoryItemsService
   ) {
-    super();
+    super(itemsService);
   }
 
   initializeForm(): void {

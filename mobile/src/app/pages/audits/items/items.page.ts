@@ -175,7 +175,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     const key = event.key;
     // The last key is always 'Enter'
     if (key === 'Enter') {
-      this.validateItem();
+      this.validateItem(false, true);
     }
     else {
       this.barcode += key;
@@ -186,7 +186,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.cameraScanner.scan().then(barcodeData => {
       if (barcodeData.cancelled === false) {
         this.barcode = barcodeData.text;
-        this.validateItem();
+        this.validateItem(false, true);
       }
     }).catch(async err => {
       console.log('Camera Scanner Error:', err);
@@ -219,7 +219,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           handler: input => {
             if (input && input.barcode) {
               this.barcode = input.barcode;
-              this.validateItem();
+              this.validateItem(false, true);
             }
           }
         }
@@ -244,7 +244,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.validateItem(flag);
   }
 
-  async validateItem(flagged = false) {
+  async validateItem(flagged = false, externalInput = false) {
     const whileLoading = await this.loadingController.create();
     if (!this.isScanning) {
       await whileLoading.present();
@@ -256,16 +256,17 @@ export class ItemsPage implements OnInit, OnDestroy {
       binID: this.binID,
     };
 
+    const itemId = externalInput ? `${this.barcode}_${this.loggedInUser.organization_id}` : this.barcode;
+
     this.auditService.getItem(
       this.loggedInUser.user_id,
       this.auditID,
       this.binID,
-      this.barcode).subscribe(
+      itemId).subscribe(
         async (res) => {
           await whileLoading.dismiss();
           modalData.itemData = res;
           modalData.itemData.flagged = flagged;
-          modalData.itemData.status = flagged ? 'Missing' : 'Provided';
           this.presentRecordModal(modalData);
           this.terminateScan();
         },
@@ -294,8 +295,10 @@ export class ItemsPage implements OnInit, OnDestroy {
                   text: 'Add as NEW',
                   handler: () => {
                     modalData.itemData = {
-                      item_id: barcode,
+                      item_id: `${barcode}_${this.loggedInUser.organization_id}`,
+                      Batch_Number: barcode,
                       status: 'New',
+                      Quantity: 0, // expected quantity was 0
                       flagged: true
                     };
                     this.presentRecordModal(modalData);
@@ -318,7 +321,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
 
-  getRecord(recordID) {
+  async getRecord(recordID) {
     this.auditService.getRecord(
       this.loggedInUser.user_id,
       this.auditID,

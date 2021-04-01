@@ -1,33 +1,45 @@
 from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
+from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
-    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer
+    PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
+        AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
-        ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
-            IsAssignedToRecord, CanCreateRecord
-from .models import Audit, BinToSK, Record
+    ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
+    IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
+        CheckAssignmentOrganizationById
+from .models import Audit, Assignment, BinToSK, Record
 
+
+class AuditSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class AuditViewSet(LoggingViewset):
     """
     API endpoint that allows Audits to be created.
     """
     http_method_names = ['post', 'patch', 'get', 'delete']
-    queryset = Audit.objects.all()
+    queryset = Audit.objects.all().order_by('audit_id')
+    pagination_class = AuditSetPagination
 
     def get_permissions(self):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
+        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-                im_additional_perms=[CheckAuditOrganizationById, ValidateSKOfSameOrg],
-                sk_additional_perms=[IsAssignedToAudit]
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
 
@@ -39,14 +51,24 @@ class AuditViewSet(LoggingViewset):
 
     def list(self, request):
         org_id = request.query_params.get('organization', -1)
-        audit_status = request.query_params.get('status')
+        status = request.query_params.get('status')
         assigned_sk = request.query_params.get('assigned_sk')
+        exclude_status = request.query_params.get('exclude_status')
 
-        if audit_status:
-            self.queryset = self.queryset.filter(status=audit_status)
+        if status:
+            self.queryset = self.queryset.filter(status=status)
         if assigned_sk:
             self.queryset = self.queryset.filter(assigned_sk__id=assigned_sk)
+        if exclude_status:
+            self.queryset = self.queryset.exclude(status=exclude_status)
         self.queryset = self.queryset.filter(organization_id=org_id)
+
+        no_pagination = request.query_params.get('no_pagination')
+        page = self.paginate_queryset(self.queryset)
+
+        if page is not None and not no_pagination:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
@@ -132,20 +154,65 @@ def compile_progression_metrics(completed_items, total_items, accuracy):
     audit_accuracy = round(accuracy * 100, 2)
 
     metrics_report = {
-        'completed_items' : completed_items,
-        'remaining_items' :  remaining_items,
-        'completion_percentage' : percent_complete,
-        'accuracy' : audit_accuracy
+        'completed_items': completed_items,
+        'remaining_items': remaining_items,
+        'completion_percentage': percent_complete,
+        'accuracy': audit_accuracy
     }
     return metrics_report
 
 
-def get_item_serializer(*args, **kwargs): # pylint: disable=no-self-use
+def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
     return ItemSerializer(*args, **kwargs)
 
 
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
+
+class AssignmentViewSet(LoggingViewset):
+    http_method_names = ['post', 'get', 'patch', 'delete']
+    queryset = Assignment.objects.all()
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = AssignmentSerializer
+        if self.action in ['list', 'retrieve']:
+            serializer_class = GetAssignmentSerializer
+        return serializer_class(*args, **kwargs)
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = SKPermissionFactory(self.request)
+        audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
+        permission_classes = factory.get_general_permissions(
+                im_additional_perms=audit_permissions,
+                sk_additional_perms=audit_permissions
+        )
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.query_params.get('organization', -1)
+        status = request.query_params.get('status')
+        assigned_sk = request.query_params.get('assigned_sk')
+        exclude_status = request.query_params.get('exclude_status')
+
+        if status:
+            self.queryset = self.queryset.filter(audit__status=status)
+        if assigned_sk:
+            self.queryset = self.queryset.filter(assigned_sk=assigned_sk)
+        if exclude_status:
+            self.queryset = self.queryset.exclude(audit__status=exclude_status)
+        self.queryset = self.queryset.filter(audit__organization_id=org_id)
+
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+
+    def create(self, request, *args, **kwargs):
+        is_many = isinstance(request.data, list)
+        serializer = self.get_serializer(data=request.data, many=is_many)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class BinToSKViewSet(LoggingViewset):
@@ -192,6 +259,31 @@ class BinToSKViewSet(LoggingViewset):
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
 
+    def update(self, request, *args, **kwargs):
+        if 'status' in request.data and 'init_audit_id' in request.data:
+            audit_id = request.data['init_audit_id']
+            bins_left = BinToSK.objects.filter(init_audit_id=audit_id).exclude(status='Complete')
+            if len(bins_left) == 1:
+                self.complete_audit(audit_id)
+
+        if 'customuser' in request.data and 'bin_id' in request.data:
+            assigned_bin = BinToSK.objects.get(bin_id=request.data['bin_id'])
+            setattr(assigned_bin, 'customuser_id', request.data['customuser'])
+            assigned_bin.save()
+            serializer = self.get_serializer(assigned_bin)
+            return Response(serializer.data)
+
+        return super().update(request, *args, **kwargs)
+
+    def complete_audit(self, audit_id):
+        audit = Audit.objects.get(audit_id=audit_id)
+        if not audit:
+            return
+        data = {'status': 'Complete'}
+        serializer = self.get_serializer(instance=audit, data=data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
     # pylint: disable=protected-access
     @action(detail=False, methods=['GET'], name='Get Items In Bin')
     def items(self, request):
@@ -203,7 +295,7 @@ class BinToSKViewSet(LoggingViewset):
         completed_items = [record.item_id for record in records]
         bin_items = []
         for item in queryset.inventory_items.all():
-            if item.Item_Id in bins.item_ids\
+            if item.Item_Id in bins.item_ids \
                     and item.Item_Id not in completed_items:
                 bin_items.append(item)
         serializer = get_item_serializer(bin_items, many=True)
@@ -234,7 +326,7 @@ class RecordViewSet(LoggingViewset):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
-            sk_perms = [IsAssignedToBin]
+            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord]
         elif self.request.method in ['PATCH', 'DELETE']:
             sk_perms = [IsAssignedToRecord]
         else:
@@ -258,12 +350,16 @@ class RecordViewSet(LoggingViewset):
                 set_bin_accuracy(response.data['bin_to_sk'])
         return self.response
 
-    def destroy(self, request, *args, **kwargs): # pylint: disable=unused-argument
+    def destroy(self, request, *args, **kwargs):  # pylint: disable=unused-argument
         instance = self.get_object()
         self.perform_destroy(instance)
         set_audit_accuracy(instance.audit.audit_id)
         set_bin_accuracy(instance.bin_to_sk.bin_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    # There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
+    def list(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):
@@ -311,3 +407,36 @@ class RecordViewSet(LoggingViewset):
                 status=status.HTTP_400_BAD_REQUEST)
 
         return response
+
+
+class RecommendationViewSet(LoggingViewset):
+    """
+    Allows getting recommendations on what to audit next
+    """
+    http_method_names = ['get']
+    serializer_class = GetBinToSKSerializer
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([])
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.GET.get("organization", None)
+        bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
+                                 annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
+
+        parts_to_recommend = list(
+            Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
+                total=Count('Part_Number'))
+            .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
+
+        items_to_recommend = list(
+            Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
+                total=Count('item_id'))
+            .values('item_id', 'total').order_by('-total')[:5])
+
+        data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
+                'items_recommendation': items_to_recommend}
+        return Response(data)

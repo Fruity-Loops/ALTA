@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {User} from 'src/app/models/user.model';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
@@ -7,14 +7,17 @@ import {ManageMembersService} from 'src/app/services/users/manage-members.servic
 import roles from 'src/app/fixtures/roles.json';
 import {EmployeeListLangFactory, EmployeeListTable} from './employee-list.language';
 import {Language} from '../../../services/Language';
+import { FormBuilder } from '@angular/forms';
+import { TableManagementComponent } from 'src/app/components/TableManagement.component';
 
 @Component({
   selector: 'app-client-gridview',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss'],
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent extends TableManagementComponent implements OnInit {
   view = 'Client Gridview';
+  userData: any;
   users: Array<User>;
 
   title: string;
@@ -39,50 +42,63 @@ export class EmployeeListComponent implements OnInit {
 
   constructor(
     private manageMembersService: ManageMembersService,
-    private changeDetectorRefs: ChangeDetectorRef
+    protected fb: FormBuilder
   ) {
+    super(fb);
     this.dataSource = new MatTableDataSource<User>();
     this.users = new Array<User>();
-    this.manageMembersService.getAllClients().subscribe((user) => {
-      this.populateTable(user);
-    });
     this.filterTerm = '';
     this.selected = 'All';
     const lang = new EmployeeListLangFactory(Language.ENGLISH);
     [this.title, this.searchPlaceholder, this.table] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.table];
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.setParams();
+    this.getPagedUsers();
+  }
+
+  setParams(): void {
+    this.params = this.params.append('page', String(this.pageIndex))
+      .append('page_size', String(this.pageSize));
+  }
+
+  getPagedUsers(): void {
+    this.manageMembersService.getPaginatedClients(this.params).subscribe(
+      (data) => {
+        this.userData = data;
+        this.updatePaginator();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
+  }
 
   applyFilter(filterTerm: string): void {
     this.dataSource.filter = filterTerm;
   }
 
-  populateTable(clients: Array<User>): void {
-    if (clients[0].role !== 'SA') {
-      // TODO: inconsistent with declaration/initialization
-      this.displayedColumns = [
-        'First_Name',
-        'Last_Name',
-        'Role',
-        'Location',
-        'Status',
-        'Settings',
-      ];
-    }
-    clients.forEach((element) => {
-      const obj = this.roles.find((o) => o.abbrev === element.role);
-      if (obj) {
-        element.role = obj.name;
-      } else {
-        element.role = '';
+  getSearchForm(): any {
+    return {
+      search: [''],
+    };
+  }
+
+  updatePage(): void {
+    this.manageMembersService.getPaginatedClients(this.params).subscribe(
+      (data) => {
+        this.userData = data;
+        this.updatePaginator();
       }
-      this.users.push(element);
-    });
+    );
+  }
+
+  updatePaginator(): void {
+    this.length = this.userData.count;
+    if (this.pageIndex > 0) {
+      this.pageIndex = this.pageIndex - 1;
+    }
+    this.users = this.userData.results;
+    // @ts-ignore
     this.dataSource = new MatTableDataSource(this.users);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.paginator._intl.itemsPerPageLabel = 'Rows per page:';
-    this.dataSource.sort = this.sort;
-    this.changeDetectorRefs.detectChanges();
   }
 }
