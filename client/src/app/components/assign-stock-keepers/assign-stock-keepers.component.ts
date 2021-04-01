@@ -7,6 +7,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
+import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -21,9 +23,9 @@ export class AssignStockKeepersComponent implements OnInit {
   locationsAndUsers: Array<any>;
   auditID: number;
 
-  title = 'Select Stock-Keepers';
-  skTable = {select: 'Select', first_name: 'First Name', last_name: 'Last Name', availability: 'Availability'};
-  actionButtons = {expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', assign: 'Assign', cancel: 'Cancel'};
+  title: string;
+  skTable: SKTable;
+  actionButtons: ActionButtons;
 
   panelOpenState = false;
   allExpandState = false;
@@ -38,6 +40,8 @@ export class AssignStockKeepersComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {
+    const lang = new AssignStockKeepersLangFactory(Language.ENGLISH);
+    [this.title, this.skTable, this.actionButtons] = [lang.lang.title, lang.lang.skTable, lang.lang.actionButtons];
 
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
