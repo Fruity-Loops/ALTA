@@ -8,6 +8,8 @@ import {MatSort} from '@angular/material/sort';
 import {Router} from '@angular/router';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {TableManagementComponent} from '../TableManagement.component';
+import {Language} from '../../services/Language';
+import {ManageInventoryItemsLangFactory} from './manage-inventory-items.language';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -36,6 +38,9 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
   @ViewChild(MatSort) sort: MatSort;
 
 
+  title = 'Inventory Items';
+  searchPlaceholder = 'Search...';
+  startAuditBtn = 'Start Audit';
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
@@ -51,6 +56,9 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     super(fb);
     this.dataSource = new MatTableDataSource<any>();
     this.inventoryItemToAudit = [];
+
+    const lang = new ManageInventoryItemsLangFactory(Language.ENGLISH);
+    [this.title, this.searchPlaceholder, this.startAuditBtn] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.startAuditBtn];
   }
 
   getSearchForm(): any {
