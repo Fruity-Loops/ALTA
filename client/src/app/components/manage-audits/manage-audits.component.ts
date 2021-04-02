@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material/sort';
-import { TableManagementComponent } from '../TableManagement.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
+import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatSort} from '@angular/material/sort';
+import {TableManagementComponent} from '../TableManagement.component';
+import {ManageAuditsLangFactory} from './manage-audits.language';
+import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-manage-audits',
@@ -36,6 +38,9 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
+  title: string;
+  searchPlaceholder: string;
+
   constructor(
     private auditService: ManageAuditsService,
     protected fb: FormBuilder
@@ -44,6 +49,9 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
     this.selectedAudits = [];
+
+    const lang = new ManageAuditsLangFactory(Language.ENGLISH);
+    [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
   }
 
   getSearchForm(): any {
