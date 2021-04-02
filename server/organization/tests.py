@@ -113,7 +113,7 @@ class InventoryItemRefreshTestCase(APITestCase):
 
     def test_org_inventory_item_refresh_time_im(self):
         """ Timing has been updated correctly """
-        self.client.force_authenticate(user=self.im)
+        self.client.force_authenticate(user=self.inventory_manager)
         data = {'time': ['60'], 'new_job_interval': ['minutes'], 'ftp_location': ['ftp://host/inventory'], 'organization_id': ['1'], 'file': ['dummy_data.xlsx']}
         response = self.client.post("/InventoryItemRefreshTime/", data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -54,33 +54,14 @@ class AuditTemplateTestCase(APITestCase):
         and will fail otherwise.
         """
         self.client.force_authenticate(user=self.inventory_manager)
-        request = self.client.get(f'{self.url}?organization={self.inventory_manager.organization_id}')
-        self.assertEqual(request.status_code, status.HTTP_200_OK)
-        self.assertEqual(request.data[0]['template_id'], 'c8c1a994-1f7d-4224-9091-2cfebafe2899')
-        self.assertEqual(request.data[0]['author'], 'nick nick')
-        self.assertEqual(request.data[0]['title'], 'fewqfwq')
-        self.assertEqual(request.data[0]['location'], "['fewqfewq']")
-        self.assertEqual(request.data[0]['plant'], '[]')
-        self.assertEqual(request.data[0]['zones'], '[]')
-        self.assertEqual(request.data[0]['aisles'], '[]')
-        self.assertEqual(request.data[0]['bins'], '[]')
-        self.assertEqual(request.data[0]['part_number'], '[]')
-        self.assertEqual(request.data[0]['serial_number'], '[]')
-        self.assertEqual(request.data[0]['description'], '')
-        self.assertEqual(request.data[0]['start_date'], '2026-02-14T13:55:00')
-        self.assertEqual(request.data[0]['repeat_every'], None)
-        self.assertEqual(request.data[0]['on_day'], '[]')
-        self.assertEqual(request.data[0]['for_month'], '[]')
-        self.assertEqual(request.data[0]['time_zone_utc'], 'America/Detroit')
-        self.assertEqual(request.data[0]['calendar_date'], 'January 08, 2021')
-        self.assertEqual(request.data[0]['organization'], 1)
-
-        for template in request.data:
+        req = self.client.get(f'{self.url}?organization={self.inventory_manager.organization_id}')
+        self.assertEqual(req.status_code, status.HTTP_200_OK)
+        for template in req.data:
             self.assertEqual(template["organization"], self.inventory_manager.organization_id)
-        self.assertGreater(len(request.data), 0)
+        self.assertGreater(len(req.data), 0)
 
-        failed_request = self.client.get(f'{self.url}?organization=1234567890')
-        self.assertEqual(failed_request.status_code, status.HTTP_403_FORBIDDEN)
+        failed_req = self.client.get(f'{self.url}?organization=1234567890')
+        self.assertEqual(failed_req.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_a_template(self):
         """
