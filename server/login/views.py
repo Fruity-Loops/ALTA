@@ -231,3 +231,82 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
+
+
+class ResetPasswordEmailView(generics.GenericAPIView):
+    """
+    Reset a password of a user through his email.
+    """
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        data = request.data
+        receiver_email = data.get('email', '')
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
+        url = os.getenv('SERVER_URL', ' http://localhost:4200')
+
+        try:
+            user = CustomUser.objects.get(email=receiver_email)
+            if user.is_active:
+                has_token = Token.objects.filter(user=user).count()
+                if has_token:
+                    token = Token.objects.get(user=user)
+                else:
+                    token = Token.objects.create(user=user)
+                if user.role == 'SA':
+                    url += '/#/sa-settings?token=' + str(token.key)
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': "",
+                            'organization_name': "",
+                            'token': token.key}
+                else:
+                    url += '/#/settings?token=' + str(token.key)
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': user.organization.org_id,
+                            'organization_name': user.organization.org_name, 'token': token.key}
+
+
+                sender_email = 'Neehamk@gmail.com'
+                sender_password = 'yzkxhffpbobeitxz'
+                send_email(
+                    sender_email,
+                    sender_password,
+                    receiver_email,
+                    url)
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist as exception:
+            logger.error(exception)
+
+        return response
+
+
+class UserFromToken(generics.GenericAPIView):
+    """
+    Reset a password of a user through his email.
+    """
+    serializer_class = CustomUserSerializer
+
+    def get(self, request):
+        user_id = request.user
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = CustomUser.objects.get(email=user_id)
+            if user.is_active:
+                if user.role == 'SA':
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': "",
+                            'organization_name': ""}
+                else:
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': user.organization.org_id,
+                            'organization_name': user.organization.org_name}
+
+
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist as exception:
+            logger.error(exception)
+
+        return response
