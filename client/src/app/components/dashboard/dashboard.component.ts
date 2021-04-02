@@ -21,6 +21,11 @@ export class DashboardComponent implements OnInit {
   private xData = [];
   private yData = [];
 
+  title = 'Dashboard';
+  auditsTable = {title: 'Most Recent Audits', dateInitiated: 'Date Initiated', id: 'ID', location: 'Location', bin: 'Bin',
+    initiated_by: 'Initiated By', accuracy: 'Accuracy', status: 'Status'};
+  accuracyTitle = 'Audit Accuracy over Time';
+
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
   @ViewChild('chart') chart: ChartComponent | undefined;
@@ -87,7 +92,7 @@ export class DashboardComponent implements OnInit {
         width: 2,
       },
       title: {
-        text: 'Audit Accuracy over Time',
+        text: this.accuracyTitle,
         align: 'left'
       },
       labels: this.xData,
