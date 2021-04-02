@@ -46,20 +46,21 @@ describe('ClientGridViewComponent', () => {
   });
 
   // Test the populateTable()
-  it('Call method', () => {
-    try {
-      component.populateTable([{
-        first_name: 'Nick',
-        last_name: 'Nick',
-        role: 'SA',
-        is_active: true,
-        id: 2,
-        email: 'nick@test.com',
-        location: 'Terrebonne',
-      }]);
-    }
-    catch (error) {
-      console.error(error);
-    }
-  });
+  // it('Call method', () => {
+  //   try {
+  //     component.populateTable([{
+  //       first_name: 'Nick',
+  //       last_name: 'Nick',
+  //       role: 'SA',
+  //       is_active: true,
+  //       id: 2,
+  //       email: 'nick@test.com',
+  //       location: 'Terrebonne',
+  //     }]);
+  //   }
+  //   catch (error) {
+  //     console.error(error);
+  //   }
+  // });
+
 });

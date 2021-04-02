@@ -34,7 +34,7 @@ describe('ManageInventoryItemsComponent', () => {
     service = TestBed.inject(ManageInventoryItemsService);
 
     timeInput = fixture.debugElement.query(By.css('#time')).nativeElement;
-    timeBtn = fixture.debugElement.query(By.css("#signupbtn")).nativeElement;
+    timeBtn = fixture.debugElement.query(By.css('#signupbtn')).nativeElement;
 
   });
 
@@ -45,35 +45,35 @@ describe('ManageInventoryItemsComponent', () => {
   // Test that Start Audit button is disabled when no items selected
   it('should disable Start button when no item selected', () => {
     fixture.detectChanges();
-    const button = fixture.debugElement.query(By.css("#create"));
+    const button = fixture.debugElement.query(By.css('#create'));
     expect(button.nativeElement.disabled).toBeTruthy();
   });
 
   // Test that Start Audit button is disabled when no items selected
-   it('should enable Start button when item(s) selected', () => {
+  it('should enable Start button when item(s) selected', () => {
     fixture.detectChanges();
-     var checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
-     //expect(checkboxArray.length).toBeGreaterThan(0);
-     expect(checkboxArray.length).toBe(0);
-     for (const input  of checkboxArray){
-        expect(input.nativeElement.checked).toBeFalsy(); 
+    const checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
+     // expect(checkboxArray.length).toBeGreaterThan(0);
+    expect(checkboxArray.length).toBe(0);
+    for (const input  of checkboxArray){
+        expect(input.nativeElement.checked).toBeFalsy();
         input.nativeElement.click();
         fixture.detectChanges();
-        const button = fixture.debugElement.query(By.css("button"));
+        const button = fixture.debugElement.query(By.css('button'));
         expect(button.nativeElement.disabled).toBeFalsy();
       }
   });
 
-  it('should check initial time input is empty',() => {
+  it('should check initial time input is empty', () => {
     fixture.detectChanges();
     expect(timeInput.value).toBe('');
   });
 
-  it('should check initial Update Refresh Time Button is disabled',() => {
+  it('should check initial Update Refresh Time Button is disabled', () => {
     fixture.detectChanges();
     expect(timeBtn.disabled).toBeTruthy();
   });
-  
+
   it('should enable Update Refresh button when time value is entered', () => {
     fixture.detectChanges();
     fixture.whenStable().then(() => {

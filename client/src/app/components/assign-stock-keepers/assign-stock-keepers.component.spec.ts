@@ -38,10 +38,10 @@ describe('AssignStockKeepersComponent', () => {
   // Test that Start Audit button is disabled when no items selected
   it('should enable Assign button when item(s) selected', () => {
     fixture.detectChanges();
-     var checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
-     expect(checkboxArray.length).toBe(0);
-     for (const input  of checkboxArray){
-        expect(input.nativeElement.checked).toBeFalsy(); 
+    const checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
+    expect(checkboxArray.length).toBe(0);
+    for (const input  of checkboxArray){
+        expect(input.nativeElement.checked).toBeFalsy();
         input.nativeElement.click();
         fixture.detectChanges();
         const button = fixture.debugElement.query(By.css('.button.bottom-assign'));
@@ -52,8 +52,8 @@ describe('AssignStockKeepersComponent', () => {
   // Test the deleteAudit()
   it('Call deleteAudit', () => {
     try {
-      component.deleteAudit()
-      component.discardAudit()
+      component.deleteAudit();
+      component.discardAudit();
     }
     catch (errorMessage) {
       console.error(errorMessage);
@@ -63,7 +63,7 @@ describe('AssignStockKeepersComponent', () => {
   // Test the goBackIventory()
   it('Call goBackIventory', () => {
     try {
-      component.goBackIventory()
+      component.goBackIventory();
     }
     catch (err) {
     console.error(err);
@@ -71,9 +71,9 @@ describe('AssignStockKeepersComponent', () => {
   });
 
    // Test the dialog window
-   it('Call the dialog object', () => {
+  it('Call the dialog object', () => {
     try {
-      component.cancelDialog()
+      component.cancelDialog();
     }
     catch (err) {
     console.error(err);
@@ -84,13 +84,13 @@ describe('AssignStockKeepersComponent', () => {
   it('Call method', () => {
     try {
       component.populateTable([{
-      first_name: "Daph",
-      last_name: "Ne",
-      role: "SA",
+      first_name: 'Daph',
+      last_name: 'Ne',
+      role: 'SA',
       is_active: true,
       id: 2,
-      email: "daph@test.com",
-      location: "Montreal",}])
+      email: 'daph@test.com',
+      location: 'Montreal', }]);
       }
     catch (error) {
     console.error(error);

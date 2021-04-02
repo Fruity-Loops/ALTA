@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import {OrganizationViewComponent} from '../organization-view/organization-view.component';
+import {OrganizationViewComponent} from './organization-view.component';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('OrganizationViewComponent', () => {
   let component: OrganizationViewComponent;
+  // tslint:disable-next-line:prefer-const
   let fixture: ComponentFixture<OrganizationViewComponent>;
 
   beforeEach(async () => {
