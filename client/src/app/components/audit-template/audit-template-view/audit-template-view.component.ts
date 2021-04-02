@@ -1,9 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Template } from '../Template';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Template} from '../Template';
 import timeZones from '../audit-template-view/create-audit-template/timezone.json';
-import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
-import { HttpParams } from '@angular/common/http';
+import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
+import {HttpParams} from '@angular/common/http';
+import {
+  AuditRepetition,
+  AuditTemplateViewLangFactory,
+  TemplateActionButtons,
+  TemplateLabels,
+  TemplateScheduling
+} from './audit-template-view.language';
+import {Language} from '../../../services/Language';
 
 interface DaysCheckBox {
   name: string;
@@ -94,14 +102,10 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     time_zone_utc: ''
   };
   templateValues: Template | undefined;
-  templateLabels = {title: 'Template Title', location: 'Location', plant: 'Plant', zones: 'Zones', aisles: 'Aisles', bins: 'Bins',
-    part_number: 'Part Number', serial_number: 'Serial Number', description: 'Description'};
-  scheduling = {scheduling: 'Scheduling', start_date: 'Start Date', start_time: 'Start Time', recurrence: 'Recurrence',
-    repeat_every: 'Repeat Every', on: 'On', for_month: 'For the month of', timezone: 'Time Zone'};
-  repetition = {first_week: '1st week of the month', second_week: '2nd week of the month', third_week: '3rd week of the month',
-    last_week: 'Last week of the month', week: 'week'};
-  actionButtons = {save: 'SAVE', edit: 'EDIT', cancel: 'CANCEL'};
-
+  templateLabels: TemplateLabels;
+  scheduling: TemplateScheduling;
+  repetition: AuditRepetition;
+  actionButtons: TemplateActionButtons;
   title = '';
   description = '';
 
@@ -112,7 +116,11 @@ export abstract class AuditTemplateViewComponent implements OnInit {
 
   constructor(
     private itemsService: ManageInventoryItemsService
-  ) { }
+  ) {
+    const lang = new AuditTemplateViewLangFactory(Language.ENGLISH);
+    [this.templateLabels, this.scheduling, this.repetition, this.actionButtons] = [lang.lang.templateLabels, lang.lang.scheduling,
+      lang.lang.auditRepetition, lang.lang.actionButtons];
+  }
 
   ngOnInit(): void {
     this.initializeForm();
