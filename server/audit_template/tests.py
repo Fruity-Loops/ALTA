@@ -22,13 +22,13 @@ class AuditTemplateTestCase(APITestCase):
         # Template to create
         template = {
             "title": "meaningful title 1",
-            "location": ['A certain location'],
-            "plant": [],
-            "zones": [],
-            "aisles": [],
-            "bins": [],
-            "part_number": [],
-            "serial_number": [],
+            "Location": ['A certain location'],
+            "Plant": [],
+            "Zone": [],
+            "Aisle": [],
+            "Bin": [],
+            "Part_Number": [],
+            "Serial_Number": [],
             "description": "",
             "organization": 1,
             "start_date": '2021-01-25T13:50:00',
@@ -106,14 +106,14 @@ class AuditTemplateTestCase(APITestCase):
 
         # parsing data into python object because json fields return strings
         data = {k: json.loads(v.replace("\'", "\"")) if isinstance(v, str) and '[' in v else v for k, v in data.items()}
-        self.assertEqual(data['plant'], [])
+        self.assertEqual(data['Plant'], [])
 
         # creating and testing successful patch
-        data['plant'].append("new plant")
-        patch_request = self.client.patch(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/', data, format='json')
-        self.assertEqual(patch_request.status_code, status.HTTP_200_OK)
+        data['Plant'].append("new plant")
+        patch_req = self.client.patch(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/', data, format='json')
+        self.assertEqual(patch_req.status_code, status.HTTP_200_OK)
         new_template = self.client.get(f'{self.url}c8c1a994-1f7d-4224-9091-2cfebafe2899/')
-        self.assertEqual(new_template.data['plant'], "['new plant']")
+        self.assertEqual(new_template.data['Plant'], "['new plant']")
 
         # ensuring users can't patch templates for which they are not authorized
         failed_patch = self.client.patch(f'{self.url}90788fdd-9cd8-4a96-8402-6e27c9467720/', data, format='json')

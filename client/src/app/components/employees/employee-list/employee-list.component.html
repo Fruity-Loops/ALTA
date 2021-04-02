@@ -62,6 +62,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[25,50,100]"
+    [pageIndex]="pageIndex"
+    (page)="paginatorAction($event)">
+    </mat-paginator>
+    
   </div>
 </mat-card>

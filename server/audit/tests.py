@@ -102,11 +102,9 @@ class AuditTestCase(APITestCase):
         self.client.force_authenticate(user=self.inventory_manager)
         response = self.client.get('/audit/', {'organization': 1, 'status': 'Active'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['audit_id'], 1)
-        self.assertEqual(response.data[0]['status'], 'Active')
-        self.assertEqual(response.data[0]['organization'], 1)
-        self.assertEqual(response.data[0]['inventory_items'], [])
-        self.assertEqual(response.data[0]['assigned_sk'], [])
+        self.assertEqual(response.data['results'][0]['audit_id'], 1)
+        self.assertEqual(response.data['results'][0]['status'], 'Active')
+        self.assertEqual(response.data['results'][0]['organization'], 1)
 
 
 

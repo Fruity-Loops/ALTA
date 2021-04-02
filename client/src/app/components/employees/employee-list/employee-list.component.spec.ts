@@ -3,6 +3,7 @@ import {EmployeeListComponent} from './employee-list.component';
 import {HttpClientModule} from '@angular/common/http';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {RouterTestingModule} from '@angular/router/testing';
+import { FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 describe('ClientGridViewComponent', () => {
@@ -15,7 +16,10 @@ describe('ClientGridViewComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [EmployeeListComponent],
-      providers: [ManageMembersService],
+      providers: [
+        ManageMembersService,
+        FormBuilder,
+      ],
       imports: [HttpClientModule, RouterTestingModule],
     });
 

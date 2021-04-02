@@ -12,7 +12,9 @@ import { TokenInterceptor } from './services/authentication/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {FileUploadModule} from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     MatModule,
     FlexLayoutModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSnackBarModule,
+    FileUploadModule
   ],
   providers: [
     CookieService, // To manage cookie in frontend
@@ -36,7 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       provide: HTTP_INTERCEPTORS, // To be able to use the http interceptor in app
       useClass: TokenInterceptor,
       multi: true,
-    },
+    }
   ],
   bootstrap: [AppComponent],
 })
