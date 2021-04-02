@@ -1,10 +1,12 @@
-import {OnInit, Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ChartComponent} from 'ng-apexcharts';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {HttpParams} from '@angular/common/http';
+import {DashboardLangFactory} from './dashboard.language';
+import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,6 +41,9 @@ export class DashboardComponent implements OnInit {
       this.retrieveData(audit);
     });
     this.chartSetup();
+
+    const lang = new DashboardLangFactory(Language.ENGLISH);
+    [this.title, this.auditsTable, this.accuracyTitle] = [lang.lang.title, lang.lang.auditsTable, lang.lang.accuracyTitle];
   }
 
   ngOnInit(): void {
