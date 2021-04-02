@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {AuthService} from 'src/app/services/authentication/auth.service';
-import {Router} from '@angular/router';
-import {TokenService} from 'src/app/services/authentication/token.service';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/authentication/auth.service';
+import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/authentication/token.service';
 
 @Component({
   selector: 'app-login',
@@ -46,19 +46,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
-        // Set the logged in user's data for components to use when hiding or displaying elements
-        this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
-        if (data.role === 'SA') {
-          setTimeout(() => {
-            this.authService.turnOffOrgMode();
-            this.router.navigate(['manage-organizations']);
-          }, 1000);
-        } else {
-          setTimeout(() => {
-            this.authService.turnOnOrgMode({organization: data.organization_id, ...data}, true);
-            this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-          }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
-        }
+        this.populateUserInfo(data, true);
         this.successMessage = 'Login Successful';
         this.errorMessage = '';
         this.resetForm();
@@ -69,6 +57,35 @@ export class LoginComponent implements OnInit {
         }
       }
     );
+  }
+
+  populateUserInfo(data: any, fromLogin: boolean): void {
+    // Set the logged in user's data for components to use when hiding or displaying elements
+    this.authService.setNext(
+      data.user_id,
+      data.user,
+      data.role,
+      data.organization_id,
+      data.organization_name
+    );
+    if (data.role === 'SA') {
+      setTimeout(() => {
+        this.authService.turnOffOrgMode();
+        if (fromLogin) {
+          this.router.navigate(['manage-organizations']);
+        }
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        this.authService.turnOnOrgMode(
+          { organization: data.organization_id, ...data },
+          true
+        );
+        if (fromLogin) {
+          this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }
+      }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
+    }
   }
 
   resetForm(): void {
