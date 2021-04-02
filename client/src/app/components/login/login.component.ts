@@ -16,6 +16,10 @@ export class LoginComponent implements OnInit {
   successMessage: string;
   body: any;
 
+  email = 'E-mail address';
+  password = 'Password';
+  loginBtnLabel = 'Login';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
