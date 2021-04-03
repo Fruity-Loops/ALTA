@@ -23,6 +23,13 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   allExpandState = false;
   errorMessage = '';
   requestConfirmation = true;
+  title = 'Review Audit';
+  actionButtons = {
+    expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', confirm: 'Confirm', cancel: 'Cancel'
+  };
+  tableHeaders = {
+    stock_keeper: 'Stock Keeper', bins: 'Bins', num_parts: 'Number of Parts', init_by: 'Initiated by', init_on: 'Initiated on'
+  };
 
   constructor(
     private dialog: MatDialog,
