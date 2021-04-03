@@ -4,6 +4,7 @@ import { ManageAuditsService } from 'src/app/services/audits/manage-audits.servi
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
 import { TableManagementComponent } from '../TableManagement.component';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -44,7 +45,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   constructor(
     private auditService: ManageAuditsService,
-    protected fb: FormBuilder
+    protected fb: FormBuilder,
+    private router: Router,
   ) {
     super(fb);
     this.formg = fb;
@@ -124,20 +126,28 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   onRowSelection(row: any): void {
     this.selection.toggle(row);
-    if (this.selectedAudit == row['audit_id']) {
+    if (this.selectedAudit === row.audit_id) {
       this.selectedAudit = -1;
     }
     else {
-      this.selectedAudit = row['audit_id'];
+      this.selectedAudit = row.audit_id;
     }
   }
 
   cancelAudit(): void {
-    if (confirm("Are you sure to cancel this audit ?")) {
-      this.auditService.deleteAudit(this.selectedAudit).subscribe((
+    if (confirm('Are you sure to cancel this audit ?')) {
+      this.auditService.deleteAudit(this.selectedAudit).subscribe(
+        (_) => {
+          this.reloadPage();
+        },
         (err) => {
           this.errorMessage = err;
-        }));
+        });
     }
+  }
+
+  async reloadPage(): Promise<void> {
+    await this.router.navigateByUrl('/', { skipLocationChange: true });
+    this.router.navigateByUrl('audits');
   }
 }
