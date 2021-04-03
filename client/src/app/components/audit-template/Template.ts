@@ -1,11 +1,11 @@
 export interface Template {
-  location: any;
-  plant: any;
-  zones: any;
-  aisles: any;
-  bins: any;
-  part_number: any;
-  serial_number: any;
+  Location: any;
+  Plant: any;
+  Zone: any;
+  Aisle: any;
+  Bin: any;
+  Part_Number: any;
+  Serial_Number: any;
   start_date: any;
   repeat_every: any;
   on_day: any;

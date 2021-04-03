@@ -18,4 +18,7 @@ export class ManageInventoryItemsService {
     return this.http.get(`${BASEURL}/item/`, {params});
   }
 
+  getTemplateItems(params: HttpParams): Observable<any> {
+    return this.http.get(`${BASEURL}/item/template/`, {params});
+  }
 }
