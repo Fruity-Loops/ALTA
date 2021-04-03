@@ -1,4 +1,6 @@
 import {FormGroup} from '@angular/forms';
+import {Language} from '../../services/Language';
+import {OrganizationSettingsLangFactory, OrgSettingsCategories} from './organization-settings.language';
 
 export interface BaseOrganizationSettingsForm {
   time: string;
@@ -11,20 +13,15 @@ export abstract class OrganizationSettingsView {
   isEdit: boolean;
   loaded = false;
   errorMessage: string | undefined;
-  title = 'Organization Settings';
-  categories = {
-    inventory_extractions: {
-      title: 'Inventory Extractions',
-      fieldLabels: {ftp_location: 'FTP Location', repeat_every: 'Repeat Every', upload_extract: 'Upload Inventory Extract',
-        current_file: 'Current File', drop_file: 'Drop .csv here', repeat_options: {minutes: 'Minutes', hours: 'Hours',
-        days: 'Days', weeks: 'Weeks'}}
-    }
-  };
+  title: string;
+  categories: OrgSettingsCategories;
 
   orgSettingsForm: FormGroup | undefined;
 
   protected constructor() {
     this.isEdit = this.getIsEdit();
+    const lang = new OrganizationSettingsLangFactory(Language.ENGLISH);
+    [this.title, this.categories] = [lang.lang.title, lang.lang.categories];
   }
 
   abstract getIsEdit(): boolean;
