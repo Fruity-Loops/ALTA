@@ -26,6 +26,11 @@ export class ManageOrganizationsComponent extends TableManagementComponent imple
   filterTerm: string;
   selected = 'All';
 
+  title = 'Organizations';
+  searchPlaceholder = 'Search Organizations';
+  tableHeaders = {company_name: 'Company Name', activated_on: 'Activated On', status: 'Status', address: 'Address', settings: 'Settings'};
+  addButton = 'Add';
+
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ts-ignore
