@@ -5,6 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { TableManagementComponent } from '../TableManagement.component';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-manage-audits',
@@ -24,7 +25,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   errorMessage = '';
   formg: FormBuilder;
 
-  selectedAudits: number[];
+  selectedAudit: number;
+
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -36,6 +38,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
+  initialSelection = [];
+  allowMultiSelect = false;
+  selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+
   constructor(
     private auditService: ManageAuditsService,
     protected fb: FormBuilder
@@ -43,7 +49,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     super(fb);
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
-    this.selectedAudits = [];
+    this.selectedAudit = -1;
   }
 
   getSearchForm(): any {
@@ -65,7 +71,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
     this.params = this.params.append('status', 'Active');
     this.searchAudit();
-    this.selectedAudits = [];
   }
 
   searchAudit(): void {
@@ -117,15 +122,13 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.dataSource = new MatTableDataSource(this.audits);
   }
 
-  // If an Inventory item checkbox is selected then add the id to the list
-  onChange(value: number): void {
-    if (this.selectedAudits.includes(value)) {
-      this.selectedAudits.splice(
-        this.selectedAudits.indexOf(value),
-        1
-      );
-    } else {
-      this.selectedAudits.push(value);
+  onRowSelection(row: any): void {
+    this.selection.toggle(row);
+    if (this.selectedAudit == row['audit_id']) {
+      this.selectedAudit = -1;
+    }
+    else {
+      this.selectedAudit = row['audit_id'];
     }
   }
 }
