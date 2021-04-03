@@ -131,4 +131,13 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       this.selectedAudit = row['audit_id'];
     }
   }
+
+  cancelAudit(): void {
+    if (confirm("Are you sure to cancel this audit ?")) {
+      this.auditService.deleteAudit(this.selectedAudit).subscribe((
+        (err) => {
+          this.errorMessage = err;
+        }));
+    }
+  }
 }
