@@ -34,6 +34,7 @@ export class AuthGuard implements CanActivate {
     const token_from_param = next.queryParams['token'];
     const target_url = state.url.split('?')[0];
 
+    // we use a promise because we need the info of user to be populated before navigating to the route
     return new Promise((resolve, reject) => {
       if (token_from_param) {
         this.tokenService.SetToken(token_from_param);
