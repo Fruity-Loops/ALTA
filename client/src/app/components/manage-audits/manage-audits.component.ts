@@ -28,7 +28,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   selectedAudit: number;
 
-
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
