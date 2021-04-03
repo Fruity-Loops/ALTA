@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../../services/Language';
+import {LangFactory} from '../../../services/Language';
 
 export interface OrgViewLabels {
   name: string;
@@ -38,8 +38,8 @@ class OrganizationViewEnglish implements OrganizationViewLanguage {
 
 export class OrganizationViewLangFactory extends LangFactory {
   lang: OrganizationViewLanguage;
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as OrganizationViewLanguage;
   }
 

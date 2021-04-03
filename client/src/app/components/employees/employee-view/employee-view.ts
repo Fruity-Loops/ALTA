@@ -1,5 +1,4 @@
 import {FormGroup} from '@angular/forms';
-import {Language} from '../../../services/Language';
 import {EmployeeViewActionLabels, EmployeeViewLabels, EmployeeViewLangFactory, EmployeeViewPlaceHolders} from './employee-view.language';
 
 export interface BaseEmployeeForm {
@@ -25,7 +24,7 @@ export abstract class EmployeeView {
   protected constructor() {
     this.title = this.getTitle();
     this.isEdit = this.getIsEdit();
-    const lang = new EmployeeViewLangFactory(Language.ENGLISH);
+    const lang = new EmployeeViewLangFactory();
     [this.fieldLabels, this.fieldPlaceholders, this.actionButtonLabels] = [lang.lang.fieldLabels, lang.lang.fieldPlaceholders,
       lang.lang.actionLabels];
   }

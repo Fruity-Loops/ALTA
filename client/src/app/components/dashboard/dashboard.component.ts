@@ -6,7 +6,6 @@ import {ChartComponent} from 'ng-apexcharts';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {HttpParams} from '@angular/common/http';
 import {DashboardLangFactory} from './dashboard.language';
-import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-dashboard',
@@ -42,7 +41,7 @@ export class DashboardComponent implements OnInit {
     });
     this.chartSetup();
 
-    const lang = new DashboardLangFactory(Language.ENGLISH);
+    const lang = new DashboardLangFactory();
     [this.title, this.auditsTable, this.accuracyTitle] = [lang.lang.title, lang.lang.auditsTable, lang.lang.accuracyTitle];
   }
 

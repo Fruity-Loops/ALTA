@@ -8,7 +8,6 @@ import {Router} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
-import {Language} from '../../services/Language';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -48,7 +47,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     private authService: AuthService,
     private router: Router
   ) {
-    const lang = new AssignStockKeepersLangFactory(Language.ENGLISH);
+    const lang = new AssignStockKeepersLangFactory();
     [this.title, this.skTable, this.actionButtons] = [lang.lang.title, lang.lang.skTable, lang.lang.actionButtons];
 
     this.dataSource = new MatTableDataSource<User>();

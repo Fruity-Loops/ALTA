@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../services/Language';
+import {LangFactory} from '../../services/Language';
 
 export interface SKTable {
   select: string;
@@ -40,8 +40,8 @@ class AssignStockKeepersEnglish implements AssignStockKeepersLanguage {
 
 export class AssignStockKeepersLangFactory extends LangFactory {
   lang: AssignStockKeepersLanguage;
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as AssignStockKeepersLanguage;
   }
 

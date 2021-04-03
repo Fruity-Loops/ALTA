@@ -1,4 +1,4 @@
-import {ComponentLang, LangFactory, Language} from '../../../services/Language';
+import {ComponentLang, LangFactory} from '../../../services/Language';
 
 export interface ManageOrganizationTableHeaders {
   company_name: string;
@@ -30,8 +30,8 @@ class ManageOrganizationsEnglish implements  ManageOrganizationsLanguage {
 
 export class ManageOrganizationsLangFactory extends LangFactory {
   lang: ManageOrganizationsLanguage;
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as ManageOrganizationsLanguage;
   }
 

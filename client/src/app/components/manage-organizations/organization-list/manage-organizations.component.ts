@@ -9,7 +9,6 @@ import {FormBuilder} from '@angular/forms';
 import {Organization} from 'src/app/models/organization';
 import {MatDialog} from '@angular/material/dialog';
 import {ManageOrganizationsLangFactory, ManageOrganizationTableHeaders} from './manage-organizations.language';
-import {Language} from '../../../services/Language';
 
 @Component({
   selector: 'app-manage-organizations',
@@ -59,7 +58,7 @@ export class ManageOrganizationsComponent extends TableManagementComponent imple
     this.dataSource = new MatTableDataSource();
     this.filterTerm = '';
 
-    const lang = new ManageOrganizationsLangFactory(Language.ENGLISH);
+    const lang = new ManageOrganizationsLangFactory();
     [this.title, this.searchPlaceholder, this.tableHeaders, this.addButton] = [lang.lang.title, lang.lang.searchPlaceholder,
       lang.lang.tableHeaders, lang.lang.addButton];
   }

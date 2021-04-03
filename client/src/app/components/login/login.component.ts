@@ -4,7 +4,6 @@ import {AuthService} from 'src/app/services/authentication/auth.service';
 import {Router} from '@angular/router';
 import {TokenService} from 'src/app/services/authentication/token.service';
 import {LoginLangFactory} from './login.language';
-import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    const lang = new LoginLangFactory(Language.ENGLISH);
+    const lang = new LoginLangFactory();
     [this.email, this.password, this.loginBtnLabel] = [lang.lang.email, lang.lang.password, lang.lang.loginBtnLabel];
   }
 

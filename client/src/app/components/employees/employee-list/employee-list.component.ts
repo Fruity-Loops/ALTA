@@ -6,7 +6,6 @@ import {MatSort} from '@angular/material/sort';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import roles from 'src/app/fixtures/roles.json';
 import {EmployeeListLangFactory, EmployeeListTable} from './employee-list.language';
-import {Language} from '../../../services/Language';
 import { FormBuilder } from '@angular/forms';
 import { TableManagementComponent } from 'src/app/components/TableManagement.component';
 
@@ -49,7 +48,7 @@ export class EmployeeListComponent extends TableManagementComponent implements O
     this.users = new Array<User>();
     this.filterTerm = '';
     this.selected = 'All';
-    const lang = new EmployeeListLangFactory(Language.ENGLISH);
+    const lang = new EmployeeListLangFactory();
     [this.title, this.searchPlaceholder, this.table] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.table];
   }
 

@@ -6,7 +6,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {IDeactivateComponent} from '../../guards/can-deactivate.guard';
 import {ReviewAuditActionButtons, ReviewAuditLangFactory, ReviewAuditTableHeaders} from './review-audit.language';
-import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-review-audit',
@@ -38,7 +37,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
     this.locationsAndUsers = [];
     this.currentUser = null;
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
-    const lang = new ReviewAuditLangFactory(Language.ENGLISH);
+    const lang = new ReviewAuditLangFactory();
     [this.title, this.actionButtons, this.tableHeaders] = [lang.lang.title, lang.lang.actionButtons, lang.lang.tableHeaders];
   }
 

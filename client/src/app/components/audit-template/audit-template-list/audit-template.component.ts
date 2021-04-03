@@ -2,7 +2,6 @@ import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../../services/audits/audit-template.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {AuditTemplateListLangFactory, TemplateOptionLabels} from './audit-template-list.language';
-import {Language} from '../../../services/Language';
 
 interface Template {
   author: string;
@@ -30,7 +29,7 @@ export class AuditTemplateComponent implements OnInit {
   constructor(private auditTemplateService: AuditTemplateService,
               public dialog: MatDialog
   ) {
-    const lang = new AuditTemplateListLangFactory(Language.ENGLISH);
+    const lang = new AuditTemplateListLangFactory();
     [this.title, this.searchPlaceholder, this.addButton, this.optionLabels] = [
       lang.lang.title, lang.lang.searchPlaceholder, lang.lang.addButton, lang.lang.optionLabels];
   }

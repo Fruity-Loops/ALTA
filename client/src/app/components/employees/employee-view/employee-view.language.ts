@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../../services/Language';
+import {LangFactory} from '../../../services/Language';
 
 export interface EmployeeViewPlaceHolders {
   first_name: string;
@@ -49,8 +49,8 @@ class EmployeeViewEnglish implements EmployeeViewLanguage {
 export class EmployeeViewLangFactory extends LangFactory {
   lang: EmployeeViewLanguage;
 
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as EmployeeViewLanguage;
   }
 

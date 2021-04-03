@@ -11,7 +11,6 @@ import {
   TemplateLabels,
   TemplateScheduling
 } from './audit-template-view.language';
-import {Language} from '../../../services/Language';
 
 interface DaysCheckBox {
   name: string;
@@ -117,7 +116,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   constructor(
     private itemsService: ManageInventoryItemsService
   ) {
-    const lang = new AuditTemplateViewLangFactory(Language.ENGLISH);
+    const lang = new AuditTemplateViewLangFactory();
     [this.templateLabels, this.scheduling, this.repetition, this.actionButtons] = [lang.lang.templateLabels, lang.lang.scheduling,
       lang.lang.auditRepetition, lang.lang.actionButtons];
   }

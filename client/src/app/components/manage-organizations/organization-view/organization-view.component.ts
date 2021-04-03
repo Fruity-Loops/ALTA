@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as XLSX from 'xlsx';
 import {OrganizationViewLangFactory, OrgViewActionButtons, OrgViewLabels, OrgViewPlaceholders} from './organization-view.language';
-import {Language} from '../../../services/Language';
+
 
 @Component({
   template: '',
@@ -28,7 +28,7 @@ export abstract class OrganizationViewComponent implements OnInit {
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be
     [this.location, this.orgName] = ['', ''];
-    const lang = new OrganizationViewLangFactory(Language.ENGLISH);
+    const lang = new OrganizationViewLangFactory();
     [this.fieldLabels, this.fieldPlaceholders, this.actionButtons] = [lang.lang.fieldLabels, lang.lang.fieldPlaceholders,
       lang.lang.actionButtons];
   }

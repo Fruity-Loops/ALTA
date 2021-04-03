@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../services/Language';
+import {LangFactory} from '../../services/Language';
 
 interface InventoryExtractRepetitionOptions {
   minutes: string;
@@ -49,8 +49,8 @@ class OrganizationSettingsEnglish implements OrganizationSettingsLanguage {
 export class OrganizationSettingsLangFactory extends LangFactory {
   lang: OrganizationSettingsLanguage;
 
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as OrganizationSettingsLanguage;
   }
 

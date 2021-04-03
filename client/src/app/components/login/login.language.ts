@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../services/Language';
+import {LangFactory} from '../../services/Language';
 
 export interface LoginLanguage {
   email: string;
@@ -19,8 +19,8 @@ class LoginEnglish implements LoginLanguage{
 
 export class LoginLangFactory extends LangFactory {
   lang: LoginLanguage;
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as LoginLanguage;
   }
 

@@ -6,7 +6,6 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import {TableManagementComponent} from '../TableManagement.component';
 import {ManageAuditsLangFactory} from './manage-audits.language';
-import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-manage-audits',
@@ -50,7 +49,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.dataSource = new MatTableDataSource<any>();
     this.selectedAudits = [];
 
-    const lang = new ManageAuditsLangFactory(Language.ENGLISH);
+    const lang = new ManageAuditsLangFactory();
     [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
   }
 

@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../services/Language';
+import {LangFactory} from '../../services/Language';
 
 interface ManageAuditsLanguage {
   title: string;
@@ -18,8 +18,8 @@ class ManageAuditsEnglish implements ManageAuditsLanguage{
 export class ManageAuditsLangFactory extends LangFactory {
   lang: ManageAuditsLanguage;
 
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as ManageAuditsLanguage;
   }
 

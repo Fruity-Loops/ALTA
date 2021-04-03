@@ -10,7 +10,6 @@ import {
   ManageStockKeepersDesignationActionButtons,
   ManageStockKeepersDesignationLangFactory
 } from './manage-stock-keepers-designation.language';
-import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
@@ -43,7 +42,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.holdBinIdsOfPreviousAssign = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
 
-    const lang = new ManageStockKeepersDesignationLangFactory(Language.ENGLISH);
+    const lang = new ManageStockKeepersDesignationLangFactory();
     [this.title, this.binsTitle, this.actionButtons] = [lang.lang.title, lang.lang.binsTitle, lang.lang.actionButtons];
   }
 

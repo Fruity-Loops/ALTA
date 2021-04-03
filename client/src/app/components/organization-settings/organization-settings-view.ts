@@ -1,5 +1,4 @@
 import {FormGroup} from '@angular/forms';
-import {Language} from '../../services/Language';
 import {OrganizationSettingsLangFactory, OrgSettingsCategories} from './organization-settings.language';
 
 export interface BaseOrganizationSettingsForm {
@@ -20,7 +19,7 @@ export abstract class OrganizationSettingsView {
 
   protected constructor() {
     this.isEdit = this.getIsEdit();
-    const lang = new OrganizationSettingsLangFactory(Language.ENGLISH);
+    const lang = new OrganizationSettingsLangFactory();
     [this.title, this.categories] = [lang.lang.title, lang.lang.categories];
   }
 

@@ -1,4 +1,4 @@
-import {LangFactory, Language} from '../../../services/Language';
+import {LangFactory} from '../../../services/Language';
 
 export interface TemplateOptionLabels {
   edit: string;
@@ -27,8 +27,8 @@ class AuditTemplateListEnglish implements AuditTemplateListLanguage{
 
 export class AuditTemplateListLangFactory extends LangFactory {
   lang: AuditTemplateListLanguage;
-  constructor(language: Language) {
-    super(language);
+  constructor() {
+    super();
     this.lang = this.getComponentLang() as AuditTemplateListLanguage;
   }
 

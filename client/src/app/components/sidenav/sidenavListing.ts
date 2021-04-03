@@ -1,8 +1,7 @@
 import {SideNavOption} from './sidenavOption';
 import {SideNavLangFactory} from './sidenav.language';
-import {Language} from '../../services/Language';
 
-const lang = new SideNavLangFactory(Language.ENGLISH);
+const lang = new SideNavLangFactory();
 
 // These are the menu options listed that can be chosen from the sidenav menu
 export const SystemNavListings: SideNavOption[] = [
