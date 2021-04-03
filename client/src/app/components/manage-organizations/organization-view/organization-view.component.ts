@@ -19,6 +19,10 @@ export abstract class OrganizationViewComponent implements OnInit {
   locationFileName = '';
   locations: string[] = [];
 
+  fieldLabels = {name: 'Name', location: 'Location', or: 'OR', status: 'Status'};
+  fieldPlaceholders = {org_name: 'Organization Name', location: 'Location Code,Location Description'};
+  actionButtons = {save: 'SAVE', edit: 'EDIT', cancel: 'CANCEL'};
+
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be
     [this.location, this.orgName] = ['', ''];
