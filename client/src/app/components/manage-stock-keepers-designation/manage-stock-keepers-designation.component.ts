@@ -25,6 +25,13 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   errorMessage = '';
   requestConfirmation = true;
 
+  title = 'Designate Bins to Stock-Keepers';
+  binsTitle = 'Bins';
+  actionButtons = {
+    expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', assign: 'Assign', cancel: 'Cancel',
+    auto_assign: 'Auto Assign'
+  };
+
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
