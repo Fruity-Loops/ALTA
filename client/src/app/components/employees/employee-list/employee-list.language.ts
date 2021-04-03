@@ -1,4 +1,4 @@
-import {Language} from '../../../services/Language';
+import {LangFactory, Language} from '../../../services/Language';
 
 export interface EmployeeListTable {
   first_name: string;
@@ -29,14 +29,15 @@ class EmployeeListEnglish implements EmployeeListLanguage {
   }
 }
 
-export class EmployeeListLangFactory {
+export class EmployeeListLangFactory extends LangFactory {
   lang: EmployeeListLanguage;
 
   constructor(language: Language) {
-     if (language === Language.ENGLISH) {
-       this.lang = new EmployeeListEnglish();
-     } else {
-       this.lang = new EmployeeListEnglish();
-     }
+    super(language);
+    this.lang = this.getComponentLang() as EmployeeListLanguage;
+  }
+
+  getEnglish(): EmployeeListLanguage {
+    return new EmployeeListEnglish();
   }
 }

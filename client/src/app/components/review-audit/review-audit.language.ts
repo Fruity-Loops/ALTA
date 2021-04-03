@@ -1,4 +1,4 @@
-import {Language} from '../../services/Language';
+import {ComponentLang, LangFactory, Language} from '../../services/Language';
 
 export interface ReviewAuditActionButtons {
   expand: string;
@@ -17,7 +17,7 @@ export interface ReviewAuditTableHeaders {
   init_on: string;
 }
 
-interface ReviewAuditLanguage {
+interface ReviewAuditLanguage extends ComponentLang {
   title: string;
   actionButtons: ReviewAuditActionButtons;
   tableHeaders: ReviewAuditTableHeaders;
@@ -38,14 +38,15 @@ class ReviewAuditEnglish implements ReviewAuditLanguage {
   }
 }
 
-export class ReviewAuditLangFactory {
+export class ReviewAuditLangFactory extends LangFactory {
   lang: ReviewAuditLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new ReviewAuditEnglish();
-    } else {
-      this.lang = new ReviewAuditEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as ReviewAuditLanguage;
+  }
+
+  getEnglish(): ReviewAuditLanguage {
+    return new ReviewAuditEnglish();
   }
 }
 

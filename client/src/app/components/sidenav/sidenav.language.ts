@@ -1,4 +1,4 @@
-import {Language} from '../../services/Language';
+import {ComponentLang, LangFactory, Language} from '../../services/Language';
 
 export interface SideNavSysTitles {
   manageOrgs: string;
@@ -16,7 +16,7 @@ export interface SideNavOrgTitles {
   orgSettings: string;
 }
 
-interface SidenavLanguage {
+interface SidenavLanguage extends ComponentLang {
   SystemNavTitles: SideNavSysTitles;
   OrganizationNavTitles: SideNavOrgTitles;
 }
@@ -31,14 +31,15 @@ class SidenavEnglish implements SidenavLanguage {
   }
 }
 
-export class SideNavLangFactory {
+export class SideNavLangFactory extends LangFactory {
   lang: SidenavLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new SidenavEnglish();
-    } else {
-      this.lang = new SidenavEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as SidenavLanguage;
+  }
+
+  getEnglish(): ComponentLang {
+    return new SidenavEnglish();
   }
 }
 

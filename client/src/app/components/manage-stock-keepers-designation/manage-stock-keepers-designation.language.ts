@@ -1,4 +1,4 @@
-import {Language} from '../../services/Language';
+import {ComponentLang, LangFactory, Language} from '../../services/Language';
 
 export interface ManageStockKeepersDesignationActionButtons {
   expand: string;
@@ -30,14 +30,15 @@ class ManageStockKeepersDesignationEnglish implements ManageStockKeepersDesignat
   }
 }
 
-export class ManageStockKeepersDesignationLangFactory {
+export class ManageStockKeepersDesignationLangFactory extends LangFactory {
   lang: ManageStockKeepersDesignationLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new ManageStockKeepersDesignationEnglish();
-    } else {
-      this.lang = new ManageStockKeepersDesignationEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as ManageStockKeepersDesignationLanguage;
+  }
+
+  getEnglish(): ComponentLang {
+    return new ManageStockKeepersDesignationEnglish();
   }
 }
 

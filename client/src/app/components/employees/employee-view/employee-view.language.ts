@@ -1,4 +1,4 @@
-import {Language} from '../../../services/Language';
+import {LangFactory, Language} from '../../../services/Language';
 
 export interface EmployeeViewPlaceHolders {
   first_name: string;
@@ -32,18 +32,6 @@ export interface EmployeeViewLanguage {
   actionLabels: EmployeeViewActionLabels;
 }
 
-export class EmployeeViewLangFactory {
-  lang: EmployeeViewLanguage;
-
-  constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new EmployeeViewEnglish();
-    } else {
-      this.lang = new EmployeeViewEnglish();
-    }
-  }
-}
-
 class EmployeeViewEnglish implements EmployeeViewLanguage {
   fieldLabels: EmployeeViewLabels;
   fieldPlaceholders: EmployeeViewPlaceHolders;
@@ -55,5 +43,18 @@ class EmployeeViewEnglish implements EmployeeViewLanguage {
     this.fieldPlaceholders = {first_name: 'First name', email: 'E-mail address', last_name: 'Last name', employee_id: 'Employee ID',
       password: 'Password', location: 'Employment Location'};
     this.actionLabels = {save: 'Save', edit: 'Edit', cancel: 'Cancel'};
+  }
+}
+
+export class EmployeeViewLangFactory extends LangFactory {
+  lang: EmployeeViewLanguage;
+
+  constructor(language: Language) {
+    super(language);
+    this.lang = this.getComponentLang() as EmployeeViewLanguage;
+  }
+
+  getEnglish(): EmployeeViewLanguage {
+    return new EmployeeViewEnglish();
   }
 }

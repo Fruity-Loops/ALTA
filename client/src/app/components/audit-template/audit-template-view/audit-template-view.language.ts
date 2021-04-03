@@ -1,4 +1,4 @@
-import {Language} from '../../../services/Language';
+import {LangFactory, Language} from '../../../services/Language';
 
 export interface TemplateLabels {
   title: string;
@@ -61,13 +61,14 @@ class AuditTemplateViewEnglish implements AuditTemplateViewLanguage {
   }
 }
 
-export class AuditTemplateViewLangFactory {
+export class AuditTemplateViewLangFactory extends LangFactory {
   lang: AuditTemplateViewLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new AuditTemplateViewEnglish();
-    } else {
-      this.lang = new AuditTemplateViewEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as AuditTemplateViewLanguage;
+  }
+
+  getEnglish(): AuditTemplateViewLanguage {
+    return new AuditTemplateViewEnglish();
   }
 }

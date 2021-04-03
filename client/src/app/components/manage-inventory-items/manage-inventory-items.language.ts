@@ -1,4 +1,4 @@
-import {Language} from '../../services/Language';
+import {LangFactory, Language} from '../../services/Language';
 
 interface ManageInventoryItemsLanguage {
   title: string;
@@ -17,13 +17,14 @@ class ManageInventoryItemsEnglish implements ManageInventoryItemsLanguage{
   }
 }
 
-export class ManageInventoryItemsLangFactory {
+export class ManageInventoryItemsLangFactory extends LangFactory {
   lang: ManageInventoryItemsLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new ManageInventoryItemsEnglish();
-    } else {
-      this.lang = new ManageInventoryItemsEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as ManageInventoryItemsLanguage;
+  }
+
+  getEnglish(): ManageInventoryItemsLanguage {
+    return new ManageInventoryItemsEnglish();
   }
 }

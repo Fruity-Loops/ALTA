@@ -1,4 +1,4 @@
-import {Language} from '../../services/Language';
+import {LangFactory, Language} from '../../services/Language';
 
 export interface AuditsTable {
   title: string;
@@ -30,13 +30,14 @@ class DashboardEnglish implements DashboardLanguage{
   }
 }
 
-export class DashboardLangFactory {
+export class DashboardLangFactory extends LangFactory {
   lang: DashboardLanguage;
   constructor(language: Language) {
-    if (language === Language.ENGLISH) {
-      this.lang = new DashboardEnglish();
-    } else {
-      this.lang = new DashboardEnglish();
-    }
+    super(language);
+    this.lang = this.getComponentLang() as DashboardLanguage;
+  }
+
+  getEnglish(): DashboardLanguage {
+    return new DashboardEnglish();
   }
 }
