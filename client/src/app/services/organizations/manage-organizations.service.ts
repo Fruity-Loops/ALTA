@@ -1,6 +1,6 @@
 import {env} from 'src/environments/environment';
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 // Connection with the backend
@@ -16,6 +16,10 @@ export class ManageOrganizationsService {
 
   getAllOrganizations(): Observable<any> {
     return this.http.get(`${BASEURL}/organization/`);
+  }
+
+  getPagedOrganizations(params: HttpParams): Observable<any> {
+    return this.http.get(`${BASEURL}/organization/`,  {params});
   }
 
   getOneOrganization(id: any): Observable<any> {

@@ -18,7 +18,7 @@ import { AssignStockKeepersComponent } from 'src/app/components/assign-stock-kee
 import { ManageStockKeepersDesignationComponent } from 'src/app/components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 import { ManageAuditsComponent } from 'src/app/components/manage-audits/manage-audits.component';
-import {EditOrganizationSettingsComponent} from "../../components/organization-settings/edit-organization-settings/edit-organization-settings.component";
+import {EditOrganizationSettingsComponent} from 'src/app/components/organization-settings/edit-organization-settings/edit-organization-settings.component';
 
 
 export const routes: Routes = [

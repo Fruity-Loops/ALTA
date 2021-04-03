@@ -8,6 +8,7 @@ from inventory_item.updater import start_new_job
 from user_account.permissions import PermissionFactory
 
 from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.pagination import PageNumberPagination
 
 from .serializers import OrganizationSerializer
 from .models import Organization
@@ -17,14 +18,19 @@ from threading import Thread
 from inventory_item.updater import main
 
 
+class OrganizationSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class OrganizationViewSet(LoggingViewset):
     """
     API endpoint that allows organizations to be viewed or edited.
     """
 
-    queryset = Organization.objects.all()
+    queryset = Organization.objects.all().order_by('org_name')
     serializer_class = OrganizationSerializer
+    pagination_class = OrganizationSetPagination
 
     def get_permissions(self):
         super().set_request_data(self.request)

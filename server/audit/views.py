@@ -5,6 +5,7 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
@@ -19,12 +20,18 @@ from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
 from .models import Audit, Assignment, BinToSK, Record
 
 
+class AuditSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
 class AuditViewSet(LoggingViewset):
     """
     API endpoint that allows Audits to be created.
     """
     http_method_names = ['post', 'patch', 'get', 'delete']
-    queryset = Audit.objects.all()
+    queryset = Audit.objects.all().order_by('audit_id')
+    pagination_class = AuditSetPagination
 
     def get_permissions(self):
         super().set_request_data(self.request)
@@ -55,6 +62,13 @@ class AuditViewSet(LoggingViewset):
         if exclude_status:
             self.queryset = self.queryset.exclude(status=exclude_status)
         self.queryset = self.queryset.filter(organization_id=org_id)
+
+        no_pagination = request.query_params.get('no_pagination')
+        page = self.paginate_queryset(self.queryset)
+
+        if page is not None and not no_pagination:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)

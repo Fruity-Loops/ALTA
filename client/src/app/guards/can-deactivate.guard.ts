@@ -7,8 +7,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AssignStockKeepersComponent } from '../components/assign-stock-keepers/assign-stock-keepers.component';
-import { ManageStockKeepersDesignationComponent }
-  from '../components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
+import { ManageStockKeepersDesignationComponent } from '../components/manage-stock-keepers-designation/manage-stock-keepers-designation.component';
 import { ReviewAuditComponent } from 'src/app/components/review-audit/review-audit.component';
 
 export interface IDeactivateComponent {
@@ -34,11 +33,11 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
     if (component.requestConfirmation) {
       if (confirm('Warning, there are unsaved changes. If you confirm the changes will be lost.')) {
         return (this.checkAssignStockKeepersNav(component, nextState) ||
-                this.checkManageStockKeepersDesignationNav(component, nextState) ||
-                this.checkReviewAuditNav(component, nextState));
+          this.checkManageStockKeepersDesignationNav(component, nextState) ||
+          this.checkReviewAuditNav(component, nextState));
       }
     }
-   return !component.requestConfirmation;
+    return !component.requestConfirmation;
   }
 
   checkAssignStockKeepersNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
@@ -54,8 +53,8 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
   checkManageStockKeepersDesignationNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
     if (component instanceof ManageStockKeepersDesignationComponent) {
       if (nextState.url !== '/audits/assign-sk' &&
-          nextState.url !== '/audits/assign-sk/designate-sk/review-audit') {
-            this.initiateAuditDiscard(component);
+        nextState.url !== '/audits/assign-sk/designate-sk/review-audit') {
+        this.initiateAuditDiscard(component);
       }
       return true;
     }
@@ -65,15 +64,15 @@ export class CanDeactivateGuard implements CanDeactivate<IDeactivateComponent> {
   checkReviewAuditNav(component: IDeactivateComponent, nextState: RouterStateSnapshot): boolean {
     if (component instanceof ReviewAuditComponent) {
       if (nextState.url !== '/audits/assign-sk/designate-sk' &&
-          nextState.url !== '/audits') {
-            this.initiateAuditDiscard(component);
+        nextState.url !== '/audits') {
+        this.initiateAuditDiscard(component);
       }
       return true;
     }
     return false;
   }
 
-  initiateAuditDiscard(component: IDeactivateComponent) {
+  initiateAuditDiscard(component: IDeactivateComponent): void {
     component.requestConfirmation = false;
     component.deleteAudit();
   }

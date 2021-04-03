@@ -132,7 +132,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   }
   // handles page refresh and out-of-app navigation
   @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler(event: any) {
+  beforeUnloadHandler(event: any): boolean {
     return confirm('');
   }
 }

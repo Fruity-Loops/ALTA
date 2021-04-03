@@ -56,14 +56,16 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   ngOnInit(): void {
     this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
+    this.params = this.params.append('no_pagination', 'True');
+
 
     this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
         this.busySKs = response.map((obj: any) => obj.assigned_sk).flat();
 
         this.manageMembersService.getAllClients()
-          .subscribe((user) => {
-            this.populateTable(user);
+          .subscribe((data) => {
+            this.populateTable(data);
           });
       });
   }
@@ -104,10 +106,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       const locTotalBins = new Set(correspondingObj.inventory_items.filter((item: any) =>
         item.Location === location).map((ob: any) => ob.Bin)).size;
 
-        this.maxAssignPerLocation.push({
-          location: location,
-          totalBins: locTotalBins
-        });
+      this.maxAssignPerLocation.push({
+        location,
+        totalBins: locTotalBins
+      });
     }
   }
 
@@ -115,19 +117,19 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
       const getSKForLoc = clients.filter((user: any) =>
         user.location === location && user.role === 'SK');
-        if (getSKForLoc.length !== 0) {
-          this.locationsAndUsers.push(
-            {
-              location: location,
-              users: getSKForLoc
-            });
-        } else {
-          this.locationsAndUsers.push(
-            {
-              location: location,
-              users: []
-            });
-        }
+      if (getSKForLoc.length !== 0) {
+        this.locationsAndUsers.push(
+          {
+            location,
+            users: getSKForLoc
+          });
+      } else {
+        this.locationsAndUsers.push(
+          {
+            location,
+            users: []
+          });
+      }
     }
   }
 
@@ -296,7 +298,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   // handles page refresh and out-of-app navigation
   @HostListener('window:beforeunload', ['$event'])
-  beforeUnloadHandler(event: any) {
+  beforeUnloadHandler(event: any): boolean {
     return confirm('');
   }
 }

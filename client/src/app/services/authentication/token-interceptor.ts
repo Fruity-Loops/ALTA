@@ -27,7 +27,7 @@ export class TokenInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    let headersConfig = {
+    const headersConfig = {
       Accept: 'application/json',
       Authorization: '',
     };
