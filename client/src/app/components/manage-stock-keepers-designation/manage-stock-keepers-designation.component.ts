@@ -6,6 +6,11 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { SKUser } from 'src/app/models/user.model';
 import { Item } from 'src/app/models/item.model';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
+import {
+  ManageStockKeepersDesignationActionButtons,
+  ManageStockKeepersDesignationLangFactory
+} from './manage-stock-keepers-designation.language';
+import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-manage-stock-keepers-designation',
@@ -25,12 +30,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   errorMessage = '';
   requestConfirmation = true;
 
-  title = 'Designate Bins to Stock-Keepers';
-  binsTitle = 'Bins';
-  actionButtons = {
-    expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', assign: 'Assign', cancel: 'Cancel',
-    auto_assign: 'Auto Assign'
-  };
+  title: string;
+  binsTitle: string;
+  actionButtons: ManageStockKeepersDesignationActionButtons;
 
   constructor(
     private dialog: MatDialog,
@@ -40,6 +42,9 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
     this.binToSks = new Array<any>();
     this.holdBinIdsOfPreviousAssign = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
+
+    const lang = new ManageStockKeepersDesignationLangFactory(Language.ENGLISH);
+    [this.title, this.binsTitle, this.actionButtons] = [lang.lang.title, lang.lang.binsTitle, lang.lang.actionButtons];
   }
 
   ngOnInit(): void {
