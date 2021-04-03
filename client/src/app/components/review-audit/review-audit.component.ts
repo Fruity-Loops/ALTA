@@ -1,10 +1,12 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { AuthService } from 'src/app/services/authentication/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {IDeactivateComponent} from '../../guards/can-deactivate.guard';
+import {ReviewAuditActionButtons, ReviewAuditLangFactory, ReviewAuditTableHeaders} from './review-audit.language';
+import {Language} from '../../services/Language';
 
 @Component({
   selector: 'app-review-audit',
@@ -23,13 +25,9 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   allExpandState = false;
   errorMessage = '';
   requestConfirmation = true;
-  title = 'Review Audit';
-  actionButtons = {
-    expand: 'Expand All', collapse: 'Collapse All', back: 'Go Back', discard: 'Discard', confirm: 'Confirm', cancel: 'Cancel'
-  };
-  tableHeaders = {
-    stock_keeper: 'Stock Keeper', bins: 'Bins', num_parts: 'Number of Parts', init_by: 'Initiated by', init_on: 'Initiated on'
-  };
+  title: string;
+  actionButtons: ReviewAuditActionButtons;
+  tableHeaders: ReviewAuditTableHeaders;
 
   constructor(
     private dialog: MatDialog,
@@ -40,6 +38,8 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
     this.locationsAndUsers = [];
     this.currentUser = null;
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
+    const lang = new ReviewAuditLangFactory(Language.ENGLISH);
+    [this.title, this.actionButtons, this.tableHeaders] = [lang.lang.title, lang.lang.actionButtons, lang.lang.tableHeaders];
   }
 
   ngOnInit(): void {
