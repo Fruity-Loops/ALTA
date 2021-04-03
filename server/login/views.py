@@ -95,10 +95,14 @@ class LoginMobileEmailView(generics.GenericAPIView):
                 pin = save_new_pin(receiver_email, user)
                 sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
                 sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
+                message = 'Your Pin is:'
+                subject = 'ALTA Pin'
                 send_email(
                     sender_email,
                     sender_password,
                     receiver_email,
+                    subject,
+                    message,
                     pin)
                 response = Response(data, status=status.HTTP_200_OK)
 
@@ -110,10 +114,10 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 def save_new_pin(email, user):
     first_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     second_part = '-'
     third_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
     request.user = email
@@ -127,18 +131,18 @@ def save_new_pin(email, user):
     return request.data['password']
 
 
-def send_email(sender, sender_password, receiver, pin):
+def send_email(sender, sender_password, receiver, subject, message, pin):
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = 'ALTA Pin'
+    msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = receiver
 
-    text = "Pin: " + pin
+    text = subject + pin
     html = """\
     <html>
       <head></head>
       <body>
-        <p>Your Pin is: """ + pin + """</p>
+        <p> """ + message + """ """ + pin + """</p>
       </body>
     </html>
     """
@@ -255,23 +259,21 @@ class ResetPasswordEmailView(generics.GenericAPIView):
                     token = Token.objects.create(user=user)
                 if user.role == 'SA':
                     url += '/#/sa-settings?token=' + str(token.key)
-                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                            'organization_id': "",
-                            'organization_name': "",
-                            'token': token.key}
+                    data = {'token': token.key}
                 else:
                     url += '/#/settings?token=' + str(token.key)
-                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
-                            'organization_id': user.organization.org_id,
-                            'organization_name': user.organization.org_name, 'token': token.key}
+                    data = {'token': token.key}
 
-
-                sender_email = 'Neehamk@gmail.com'
-                sender_password = 'yzkxhffpbobeitxz'
+                sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
+                sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
+                message = 'Reset your password using this link :'
+                subject = 'ALTA reset password link'
                 send_email(
                     sender_email,
                     sender_password,
                     receiver_email,
+                    subject,
+                    message,
                     url)
                 response = Response(data, status=status.HTTP_200_OK)
 
@@ -283,7 +285,7 @@ class ResetPasswordEmailView(generics.GenericAPIView):
 
 class UserFromToken(generics.GenericAPIView):
     """
-    Reset a password of a user through his email.
+    Get user from token.
     """
     serializer_class = CustomUserSerializer
 
@@ -302,7 +304,6 @@ class UserFromToken(generics.GenericAPIView):
                     data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
                             'organization_id': user.organization.org_id,
                             'organization_name': user.organization.org_name}
-
 
                 response = Response(data, status=status.HTTP_200_OK)
 
