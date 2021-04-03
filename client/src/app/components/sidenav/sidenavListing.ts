@@ -1,57 +1,53 @@
 import {SideNavOption} from './sidenavOption';
+import {SideNavLangFactory} from './sidenav.language';
+import {Language} from '../../services/Language';
 
-// TODO: settings is unused, should it be deleted?
-// @ts-ignore
-const settings: SideNavOption = {
-  title: 'Settings',
-  routerLink: 'settings',
-  subMenuOptions: [],
-};
+const lang = new SideNavLangFactory(Language.ENGLISH);
 
 // These are the menu options listed that can be chosen from the sidenav menu
 export const SystemNavListings: SideNavOption[] = [
   {
-    title: 'Manage Organizations',
+    title: lang.lang.SystemNavTitles.manageOrgs,
     routerLink: 'manage-organizations',
     subMenuOptions: [],
   },
   {
-    title: 'Manage Members',
+    title: lang.lang.SystemNavTitles.manageMembers,
     routerLink: 'sa-modify-members',
     subMenuOptions: [],
   },
   {
-    title: 'Settings',
+    title: lang.lang.SystemNavTitles.settings,
     routerLink: 'sa-settings',
     subMenuOptions: [],
   },
 ];
 
 export const OrganizationNavListings: SideNavOption[] = [
-  {title: 'Dashboard', routerLink: 'dashboard', subMenuOptions: []},
-  {title: 'Audits', routerLink: 'audits', subMenuOptions: []},
+  {title: lang.lang.OrganizationNavTitles.dashboard, routerLink: 'dashboard', subMenuOptions: []},
+  {title: lang.lang.OrganizationNavTitles.audits, routerLink: 'audits', subMenuOptions: []},
   {
-    title: 'Template',
+    title: lang.lang.OrganizationNavTitles.template,
     routerLink: 'template',
     subMenuOptions: [],
   },
   {
-    title: 'Employees',
+    title: lang.lang.OrganizationNavTitles.employees,
     routerLink: 'modify-members',
     subMenuOptions: [],
   },
   {
-    title: 'Inventory Items',
+    title: lang.lang.OrganizationNavTitles.invItems,
     routerLink: 'manage-items',
     subMenuOptions: [],
   },
   {
-    title: 'Settings',
+    title: lang.lang.OrganizationNavTitles.settings,
     routerLink: 'settings',
     subMenuOptions: [],
   },
   {
-    title: 'Organization Settings',
+    title: lang.lang.OrganizationNavTitles.orgSettings,
     routerLink: 'organization-settings',
     subMenuOptions: [],
   }
