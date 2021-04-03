@@ -65,14 +65,14 @@ def create_orgs_users_items_templates(seeder):
     seeder.add_entity(AuditTemplate, 10, {
         "author": lambda x: seeder.faker.simple_profile()['username'],
         "title": lambda x: seeder.faker.sentence(),
-        "location": lambda x: [random.choice(LOCATIONS)],
-        "plant": [],
-        "zones": [],
-        "aisles": [],
-        "bins": [],
-        "part_number": [],
+        "Location": lambda x: [random.choice(LOCATIONS)],
+        "Plant": [],
+        "Zone": [],
+        "Aisle": [],
+        "Bin": [],
+        "Part_Number": [],
         "description": "",
-        "serial_number": [],
+        "Serial_Number": [],
         "start_date": "2021-02-04T21:57:00.012Z",
         "repeat_every": "1",
         "on_day": ["True", "True", "False", "False", "False", "False", "False"],
@@ -107,7 +107,7 @@ def create_audit(seeder, org_id, user_ids, item_ids, template_ids):
     initiated_by_id = random.choice(user_ids)
     initiated_by = CustomUser.objects.get(pk=initiated_by_id)
 
-    seeder.add_entity(Audit, 1, {
+    seeder.add_entity(Audit, 3, {
         # 'status': lambda x: random.choice(['Pending', 'Complete', 'Active']),
         'status': lambda x: random.choice(['Active']),
         'organization': organization,
