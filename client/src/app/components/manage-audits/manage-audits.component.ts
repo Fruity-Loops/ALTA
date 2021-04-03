@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {FormBuilder} from '@angular/forms';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {MatPaginator} from '@angular/material/paginator';
@@ -12,6 +13,13 @@ import {ChartComponent} from 'ng-apexcharts';
   selector: 'app-manage-audits',
   templateUrl: './manage-audits.component.html',
   styleUrls: ['./manage-audits.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
 
@@ -23,6 +31,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     super(fb);
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
+    this.innerDataSource = new MatTableDataSource<any>();
     this.selectedAudits = [];
     this.chartSetup();
   }
@@ -91,8 +100,11 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   };
 
   dataSource: MatTableDataSource<any>;
+  innerDataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
+  innerDisplayedColumns: string[] = [];
+  expandedElement: any | null;
 
   getSearchForm(): any {
     return {
@@ -135,8 +147,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
             this.displayedColumns.push(key);
           }
         }
+        // console.log(this.displayedColumns)
 
         this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
+        this.displayedColumns = this.displayedColumns.concat('Overview');
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -145,6 +159,21 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.errorMessage = err;
       }
     );
+  }
+
+  toggleExpand(auditId: any) {
+    this.auditService.getAuditData(auditId).subscribe(
+      (data: any) => {
+          this.innerDisplayedColumns = Object.keys(data.inventory_items[0]).filter(title => title !== 'organization');
+          this.innerDataSource = new MatTableDataSource(data.inventory_items);
+        },
+        (err: any) => {
+          this.errorMessage = err;
+        }
+    );
+
+    // toggle expand/hide arrow button
+    this.expandedElement = auditId;
   }
 
   // updates data in table
