@@ -77,4 +77,8 @@ export class ManageMembersService {
   getUserFromToken(): Observable<any> {
     return this.http.get(`${this.BASEURL}/user-from-token/`);
   }
+
+  resetPassword(email: object): Observable<any> {
+    return this.http.post(`${this.BASEURL}/reset-password/`, email);
+  }
 }
