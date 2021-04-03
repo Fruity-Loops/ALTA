@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/authentication/token.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +13,19 @@ import { TokenService } from 'src/app/services/authentication/token.service';
 export class LoginComponent implements OnInit {
   // @ts-ignore
   loginForm: FormGroup;
+  // @ts-ignore
+  resetPasswordForm: FormGroup;
   errorMessage: string;
   successMessage: string;
   body: any;
+  panelOpenState = false;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private userService: ManageMembersService
   ) {
     this.errorMessage = '';
     this.successMessage = '';
@@ -34,6 +39,10 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+    });
+
+    this.resetPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -92,6 +101,17 @@ export class LoginComponent implements OnInit {
     this.loginForm.reset();
     Object.keys(this.loginForm.controls).forEach((key) => {
       this.loginForm.controls[key].setErrors(null);
+    });
+  }
+
+  resetPassword(): void {
+    this.body = {
+      email: this.resetPasswordForm.value.email,
+    };
+
+    this.userService.resetPassword(this.body).subscribe((data) => {
+      this.resetPasswordForm.reset();
+      this.panelOpenState = false;
     });
   }
 }
