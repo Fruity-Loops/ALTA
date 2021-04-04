@@ -49,13 +49,16 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
     this.organizationSettings.getOrganization(this.id!).subscribe((organization: any) => {
 
       this.orgSettingsForm = this.fb.group({
-        ftpLocation: new FormControl({ value: organization.ftp_location, disabled: !this.edit }, [Validators.required]),
+        ftpLocation: new FormControl({ value: organization.ftp_location, disabled: !this.edit }, ),
         time: new FormControl({ value: organization.inventory_items_refresh_job, disabled: !this.edit }, [Validators.required]),
         interval: new FormControl({ value: organization.repeat_interval, disabled: !this.edit }, [Validators.required]),
         organization_id: [localStorage.getItem('organization_id')]
       });
-      const fileArr = organization.file.split('/');
-      this.currentFile = fileArr[fileArr.length - 1];
+      if (organization.file != null) {
+        // tslint:disable-next-line:variable-name
+        const file_arr = organization.file.split('/');
+        this.currentFile = file_arr[file_arr.length - 1];
+      }
       this.isLoaded();
     });
   }
