@@ -3,7 +3,7 @@ import django
 
 # This must be executed before the rest of the imports
 # Setup the django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'django_server.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'django_server.test_settings')
 django.setup()
 
 import random
@@ -22,13 +22,24 @@ import datetime
 LOCATIONS = ['Montreal', 'Florida']
 
 
+def gen_item_id(flag):
+
+    global batch_number
+    if not flag:
+        batch_number = f'{seeder.faker.ean13()}'
+
+    return batch_number
+
 def create_orgs_users_items_templates(seeder):
+
     seeder.add_entity(Organization, 1, {
         'org_name': lambda x: seeder.faker.company(),
         "address": lambda x: [seeder.faker.city()],
         "status": True,
         "inventory_items_refresh_job": 1,
-        "calendar_date": "2021/01/02"
+        "ftp_location": None,
+        "calendar_date": "2021/01/02",
+        "file": "",
     })
 
     seeder.add_entity(CustomUser, 10, {
@@ -43,8 +54,12 @@ def create_orgs_users_items_templates(seeder):
         "email": lambda x: seeder.faker.email(),
     })
 
+
+
+
     seeder.add_entity(Item, 100, {
-        "Item_Id": lambda x: f'{seeder.faker.ean13()}',
+        "Batch_Number": lambda x: gen_item_id(flag=False),
+        "Item_Id": lambda x: gen_item_id(flag=True),
         "Location": lambda x: random.choice(LOCATIONS),
         "Plant": lambda x: f'Plant-{random.randint(1, 10)}',
         "Zone": lambda x: random.choice(string.ascii_uppercase),
