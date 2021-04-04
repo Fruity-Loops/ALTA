@@ -167,8 +167,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       if (auditStatus === 'Complete') {
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
-            console.log(data)
-
             this.innerDisplayedColumns = Object.keys(data[0]).filter(title =>
                                           title !== 'organization' &&
                                           title !== 'record_id' &&
@@ -184,7 +182,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
               (err: any) => {
                 this.errorMessage = err;
               }
-
         );
       } else {
         this.auditService.getAuditData(auditId).subscribe(
@@ -356,9 +353,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     }
   }
 
-  goToReport(id: number): void {
-    this.router.navigate(['audit-report/' + id]);
-    // console.log(id);
+  navToReport(obj: any, col: any): void {
+    this.router.navigate(['audits/audit-report/' + obj.audit_id]);
   }
 
 }

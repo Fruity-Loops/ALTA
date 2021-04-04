@@ -304,7 +304,7 @@ class RecordViewSet(LoggingViewset):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
-            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord]
+            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord | ValidateSKOfSameOrg]
         elif self.request.method in ['PATCH', 'DELETE']:
             sk_perms = [IsAssignedToRecord]
         else:
@@ -335,13 +335,7 @@ class RecordViewSet(LoggingViewset):
         set_bin_accuracy(instance.bin_to_sk.bin_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    '''# There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
-    def list(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    '''
     def list(self, request):
-        # TODO: implement permissions
         org_id = request.query_params.get('organization')
         audit_id = request.query_params.get('audit_id')
 

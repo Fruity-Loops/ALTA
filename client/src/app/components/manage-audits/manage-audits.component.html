@@ -70,20 +70,26 @@
               <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ column.replaceAll('_', ' ') | titlecase }}</th>
               <td mat-cell *matCellDef="let object">
-                <div *ngIf="column == 'audit_id'; else elseBlock">
-                  <a [routerLink]="'audit-report/'+object['audit_id']">
-                    {{ object[column]}}
-                  </a>
+                <div *ngIf="column == 'status'; else elseBlock"
+                     [ngClass]="{'pending-audit' : (object[column] == 'Pending'),
+                                 'active-audit' : (object[column] == 'Active'),
+                                 'complete-audit' : (object[column] == 'Complete')}">
+                  {{ object[column]}}
                 </div>
                 <ng-template #elseBlock>
                   <div class="innerTableButton" *ngIf="column == 'Overview'">
-                    <mat-icon-button (click)="toggleExpand(object['audit_id'], object['status'])" mat-icon-button>
-                      <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
-                      <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
+                    <mat-icon-button
+                      (click)="$event.stopPropagation();toggleExpand(object['audit_id'], object['status'])"
+                      mat-icon-button>
+                        <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
+                        <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
                     </mat-icon-button>
                   </div>
                   {{ object[column]}}
                 </ng-template>
+
+
+
               </td>
             </ng-container>
 
@@ -100,7 +106,7 @@
                           [ngClass]="{'missing-result' : (column == 'status' && object[column] == 'Missing'),
                                       'provided-result' : (column == 'status' && object[column] == 'Provided'),
                                       'new-result': (column == 'status' && object[column] == 'New')}">
-                            {{ object[column]}}
+                        {{ object[column]}}
                       </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="innerDisplayedColumns"></tr>
@@ -113,6 +119,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let object; columns: displayedColumns;"
                 class="audit-element-row"
+                (click)="navToReport(object, columns)"
                 [class.example-expanded-row]="expandedElement === object">
             </tr>
 
@@ -127,8 +134,6 @@
             [pageIndex]="pageIndex"
             (page)="paginatorAction($event)">
           </mat-paginator>
-
-
         </div>
 
       </ng-template>
