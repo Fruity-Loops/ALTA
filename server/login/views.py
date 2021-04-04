@@ -134,10 +134,7 @@ def send_email(sender, sender_password, receiver, pin):
     msg['Subject'] = 'ALTA Pin'
     msg['From'] = sender
     msg['To'] = receiver
-
     text = "Pin: " + pin
-
-    print(os.getcwd())
     emailBody = open('./login/email/message.html').read().format(pinToSend=pin, year=datetime.datetime.now().year)
 
     # Record the MIME types of both parts - text/plain and text/html.
@@ -154,7 +151,7 @@ def send_email(sender, sender_password, receiver, pin):
     msgImage = MIMEImage(fp.read())
     fp.close()
 
-    # Define the image's ID as referenced above
+    # Define the image's ID as referenced in message.html
     msgImage.add_header('Content-ID', '<image1>')
     msg.attach(msgImage)
 
