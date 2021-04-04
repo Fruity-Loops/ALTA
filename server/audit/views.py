@@ -335,9 +335,23 @@ class RecordViewSet(LoggingViewset):
         set_bin_accuracy(instance.bin_to_sk.bin_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    # There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
+    '''# There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    '''
+    def list(self, request):
+        # TODO: implement permissions
+        org_id = request.query_params.get('organization')
+        audit_id = request.query_params.get('audit_id')
+
+        if audit_id:
+            self.queryset = self.queryset.filter(audit_id=audit_id)
+
+        self.queryset = self.queryset.filter(audit__organization_id=org_id)
+
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['GET'], name='Get Completed Items')
     def completed_items(self, request):

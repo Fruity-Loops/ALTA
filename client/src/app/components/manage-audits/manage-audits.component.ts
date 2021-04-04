@@ -15,9 +15,10 @@ import {ChartComponent} from 'ng-apexcharts';
   styleUrls: ['./manage-audits.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
+      state('collapsed, void', style({ height: '0px', minHeight: '0', display: 'none' })),
+      state('expanded', style({ height: '*' })),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> void', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
     ]),
   ],
 })
@@ -122,8 +123,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   ngOnInit(): void {
     this.params = this.params.append('page', String(this.pageIndex))
       .append('page_size', String(this.pageSize))
-      .append('organization', String(localStorage.getItem('organization_id')))
-      .append('status', 'Active');
+      .append('organization', String(localStorage.getItem('organization_id')));
+      // .append('status', 'Complete');
     this.searchAudit();
     this.selectedAudits = [];
   }
@@ -147,8 +148,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
             this.displayedColumns.push(key);
           }
         }
-        // console.log(this.displayedColumns)
-
         this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.displayedColumns = this.displayedColumns.concat('Overview');
         this.updatePaginator();
@@ -161,19 +160,47 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
   }
 
-  toggleExpand(auditId: any) {
-    this.auditService.getAuditData(auditId).subscribe(
-      (data: any) => {
-          this.innerDisplayedColumns = Object.keys(data.inventory_items[0]).filter(title => title !== 'organization');
-          this.innerDataSource = new MatTableDataSource(data.inventory_items);
-        },
-        (err: any) => {
-          this.errorMessage = err;
-        }
-    );
+  toggleExpand(auditId: any, auditStatus: any) {
+    if(this.expandedElement == auditId) {
+      this.expandedElement = null;
+    } else {
+      if (auditStatus === 'Complete') {
+        this.auditService.getCompleteAudit(auditId).subscribe(
+          (data: any) => {
+            console.log(data)
 
-    // toggle expand/hide arrow button
-    this.expandedElement = auditId;
+            this.innerDisplayedColumns = Object.keys(data[0]).filter(title =>
+                                          title !== 'organization' &&
+                                          title !== 'record_id' &&
+                                          title !== 'audit' &&
+                                          title !== 'item_id'&&
+                                          title !== 'comment' &&
+                                          title !== 'first_verified_on'&&
+                                          title !== 'last_verified_on'&&
+                                          title !== 'flagged'&&
+                                          title !== 'bin_to_sk');
+            this.innerDataSource = new MatTableDataSource(data);
+          },
+              (err: any) => {
+                this.errorMessage = err;
+              }
+
+        );
+      } else {
+        this.auditService.getAuditData(auditId).subscribe(
+          (data: any) => {
+              this.innerDisplayedColumns = Object.keys(data.inventory_items[0]).filter(title => title !== 'organization');
+              this.innerDataSource = new MatTableDataSource(data.inventory_items);
+            },
+            (err: any) => {
+              this.errorMessage = err;
+            }
+        );
+      }
+
+      // toggle expand/hide arrow button
+      this.expandedElement = auditId;
+    }
   }
 
   // updates data in table
@@ -200,8 +227,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.items = this.data;
     this.errorMessage = '';
 
+    this.items.forEach((audit: any) => {
+      audit.isSelected = false;
+
+    }  );
+
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
+    // console.log(this.items)
   }
 
   chartSetup(): void {
@@ -325,7 +358,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   goToReport(id: number): void {
     this.router.navigate(['audit-report/' + id]);
-    console.log(id);
+    // console.log(id);
   }
 
 }

@@ -67,7 +67,8 @@
      -->
             <!-- MAIN TABLE -->
             <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-              <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
+              <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{ column.replaceAll('_', ' ') | titlecase }}</th>
               <td mat-cell *matCellDef="let object">
                 <div *ngIf="column == 'audit_id'; else elseBlock">
                   <a [routerLink]="'audit-report/'+object['audit_id']">
@@ -76,8 +77,9 @@
                 </div>
                 <ng-template #elseBlock>
                   <div class="innerTableButton" *ngIf="column == 'Overview'">
-                    <mat-icon-button (click)="toggleExpand(object['audit_id'])" mat-icon-button>
-                      <mat-icon>arrow_drop_down</mat-icon>
+                    <mat-icon-button (click)="toggleExpand(object['audit_id'], object['status'])" mat-icon-button>
+                      <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
+                      <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
                     </mat-icon-button>
                   </div>
                   {{ object[column]}}
@@ -88,13 +90,17 @@
             <!-- EXPANDED INNER TABLE  -->
             <ng-container matColumnDef="expandedDetail">
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
-                <div class="audit-element-detail"
+                <div class="audit-element-detail innerTable"
                      [@detailExpand]="element.audit_id == expandedElement ? 'expanded' : 'collapsed'">
                   <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="innerDataSource" matSort>
                     <ng-container *ngFor="let column of innerDisplayedColumns" [matColumnDef]="column">
-                      <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
-                      <td mat-cell *matCellDef="let object">
-                          {{ object[column]}}
+                      <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
+                        {{ column.replaceAll('_', ' ') | titlecase }}</th>
+                      <td mat-cell *matCellDef="let object"
+                          [ngClass]="{'missing-result' : (column == 'status' && object[column] == 'Missing'),
+                                      'provided-result' : (column == 'status' && object[column] == 'Provided'),
+                                      'new-result': (column == 'status' && object[column] == 'New')}">
+                            {{ object[column]}}
                       </td>
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="innerDisplayedColumns"></tr>
@@ -106,7 +112,7 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let object; columns: displayedColumns;"
-                class="example-element-row"
+                class="audit-element-row"
                 [class.example-expanded-row]="expandedElement === object">
             </tr>
 

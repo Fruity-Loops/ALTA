@@ -87,9 +87,39 @@ tr.audit-detail-row {
 }
 
 tr.audit-element-row:not(.audit-expanded-row):hover {
-    background: whitesmoke;
+  background: whitesmoke;
 }
 
 tr.audit-element-row:not(.audit-expanded-row):active {
-    background: #efefef;
+  background: #efefef;
+}
+
+.audit-element-row td {
+  border-bottom-width: 0;
+}
+
+.missing-result {
+  background: #ff9e9e;
+}
+
+.provided-result {
+  background: #daffd1;
+}
+
+.new-result {
+  background: orange;
+}
+
+td {
+  text-align: center;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.innerTable {
+  box-shadow: 2px 2px 5px #888;
+  margin: 20px;
+  overflow: auto;
 }
