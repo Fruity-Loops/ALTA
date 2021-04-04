@@ -58,6 +58,106 @@ class IMUser(HttpUser):
             self.client.patch(f'template/{new_temp_id}/', json=new_data, headers=self.headers, name="/template/?id/")
             self.client.delete(f'template/{new_temp_id}/', headers=self.headers, name="/template/?id/")
 
+    @task
+    def get_audit(self):
+        data = {'organization': 1, 'status': 'Active'}
+        id = str(self.response['user_id'])
+        self.client.get('audit/', json=data, headers=self.headers, name='/audit/?id')
+
+    @task
+    def get_proper_audit(self):
+        data = {'organization': 1, 'status': 'Active'}
+        id = str(self.response['user_id'])
+        self.client.get('audit/proper_audits/', json=data, headers=self.headers, name='/audit/proper_audits/?id')
+
+    @task
+    def get_audit_progression_metrics(self):
+        data = {'audit_id': 1, 'status': 'Active'}
+        id = str(self.response['user_id'])
+        self.client.get('audit/progression_metrics/' + id + "/", json=data, headers=self.headers, name='/audit/progression_metrics/?id')
+
+    # @task
+    # def create_delete_bin(self):
+    #     data = {
+    #         "Bin": "A10",
+    #         "init_audit": random_id,
+    #         "customuser": 3,
+    #         "item_ids": [12731370]
+    #     }
+    #     id = str(self.response['user_id'])
+    #     response = self.client.post('audit/bin-to-sk/', json=data, headers=self.headers, name='/bin-to-sk/')
+    #     self.client.delete('audit/bin-to-sk/' + response['bin_id'], json=data, headers=self.headers, name='/bin-to-sk/')
+
+    @task
+    def modify_bin(self):
+        data = {
+            "item_ids": [12731371]
+        }
+        id = str(self.response['user_id'])
+        self.client.patch('audit/bin-to-sk/' + str(2) + "/", json=data, headers=self.headers, name='/bin-to-sk/')
+
+    @task
+    def get_bins(self):
+        data = {
+            "customuser_id": 3,
+            "bin_status": "Pending",
+            "init_audit_id": 1
+        }
+        id = str(self.response['user_id'])
+        self.client.get('audit/bin-to-sk/', json=data, headers=self.headers, name='/bin-to-sk/')
+
+    @task
+    def get_bin_progression_metrics(self):
+        data = {
+            "bin_id": 2,
+        }
+        id = str(self.response['user_id'])
+        self.client.get('audit/bin-to-sk/progression_metrics', json=data, headers=self.headers, name='/bin-to-sk/progression_metrics/')
+
+    @task
+    def get_items_in_bin(self):
+        data = {
+            "bin_id": 2,
+            "audit_id": 1
+        }
+        id = str(self.response['user_id'])
+        self.client.get('audit/bin-to-sk/items', json=data, headers=self.headers, name='/bin-to-sk/items/')
+
+    @task
+    def record_operations(self):
+        data = {
+            "status": "Pending",
+            "audit": 1,
+            "bin_to_sk": 2,
+            "item_id": 12731370,
+            "location": "YUL"
+        }
+        id = str(self.response['user_id'])
+        response = self.client.post('audit/record/', json=data, headers=self.headers, name='/record/')
+        response = self.client.get('audit/record/completed_items/', json={"status": "Pending"}, headers=self.headers, name='/record/completed_items/')
+        response = self.client.patch('audit/record/', json={"location": "Florida"}, headers=self.headers, name='/record/')
+        self.client.delete('audit/record/' + response['record_id'], headers=self.headers, name='/record/')
+
+    @task
+    def get_reccomendations(self):
+        data = {
+            "organization": 1
+        }
+        id = str(self.response['user_id'])
+        self.client.get('recommendation/', json=data, headers=self.headers, name='/recommendation/')
+
+    @task
+    def assignment_operations(self):
+        data = {
+            "audit": 1,
+            "assigned_sk": 3
+        }
+        id = str(self.response['user_id'])
+        response = self.client.post('assignment/', json=data, headers=self.headers, name='/assignment/')
+        response = self.client.get('assignment/', json={"organization": 1}, headers=self.headers, name='/assignment/')
+        response = self.client.patch('assignment/', json={"assigned_sk": 3}, headers=self.headers, name='/assignment/')
+        self.client.delete('assignment/' + response['id'], headers=self.headers, name='/assignment/')
+
 
 class SAUser(HttpUser):
     weight = 1
@@ -129,3 +229,4 @@ class SAUser(HttpUser):
                 "location": ""
                 }
         self.client.post("open-registration/", json=data)
+
