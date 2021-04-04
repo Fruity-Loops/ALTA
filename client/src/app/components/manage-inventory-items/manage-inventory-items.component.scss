@@ -2,6 +2,8 @@
 
 .mat-table {
   width: 100%;
+  border-collapse: separate;
+  border-spacing: 3px 3px;
 }
 mat-expansion-panel {
   padding-top: 1em;
@@ -43,3 +45,6 @@ mat-panel-title {
   justify-content: flex-end;
 }
 
+td , th {
+    text-align:center;
+}
