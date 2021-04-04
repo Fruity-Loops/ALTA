@@ -110,12 +110,14 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 def save_new_pin(email, user):
     first_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     second_part = '-'
     third_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
+    # For e2e purposes, uncomment this line:
+    # request.data = {'password': 'password'}
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()
