@@ -87,13 +87,13 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   };
 
   template: Template = {
-    location: [],
-    plant: [],
-    zones: [],
-    aisles: [],
-    bins: [],
-    part_number: [],
-    serial_number: [],
+    Location: [],
+    Plant: [],
+    Zone: [],
+    Aisle: [],
+    Bin: [],
+    Part_Number: [],
+    Serial_Number: [],
     start_date: '',
     repeat_every: '',
     on_day: [],
@@ -129,7 +129,6 @@ export abstract class AuditTemplateViewComponent implements OnInit {
   abstract initializeForm(): void;
 
   addItem(term: string | number, value: string): void {
-
     // although not obvious, the includes statement here is also necessary for the proper functionality of the remove function
     // @ts-ignore
     if (value !== '' && !this.template[term].includes(value)) {

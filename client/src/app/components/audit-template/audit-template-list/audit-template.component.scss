@@ -30,9 +30,11 @@
   grid-template-areas:
     'personname personname personname personname buttonicon'
     'templatename templatename templatename templatename buttonicon'
-    'date date date date date';
+    'date date date date date'
+    'clickable clickable clickable clickable clickable';
   grid-gap: 1px;
   padding: 20px;
+  position: relative;
 }
 
 .grid-container > div {
@@ -40,6 +42,15 @@
   text-align: left;
   padding: 5px;
   font-size: 12px;
+}
+
+.grid-container > div.clickable {
+  position: absolute;
+  height: 90%;
+  width: 73%;
+  z-index: 99;
+  background-color: transparent;
+  cursor: pointer;
 }
 
 .mat-stroked-button {

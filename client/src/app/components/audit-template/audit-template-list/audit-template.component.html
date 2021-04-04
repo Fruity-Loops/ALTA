@@ -22,6 +22,7 @@
   <div class="wrapper">
 
     <div class="grid-container shadow-border" *ngFor="let template of auditTemplates">
+      <div class="clickable" (click)="startAudit(template.template_id)"></div>
       <div class="person-name">By: {{template.author}}</div>
       <div class="template-name">{{template.title}}</div>
       <div class="button-icon text-align-right">
