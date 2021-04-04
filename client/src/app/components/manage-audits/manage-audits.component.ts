@@ -45,7 +45,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   // Items data
   data: any;
-  audits = [];
+  items = [];
   errorMessage = '';
   formg: FormBuilder;
 
@@ -160,24 +160,24 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
   }
 
-  toggleExpand(auditId: any, auditStatus: any) {
-    if(this.expandedElement == auditId) {
+  toggleExpand(auditId: any, auditStatus: any): void {
+    if (this.expandedElement === auditId) {
       this.expandedElement = null;
     } else {
       if (auditStatus === 'Complete') {
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
-            console.log(data)
+            console.log(data);
 
             this.innerDisplayedColumns = Object.keys(data[0]).filter(title =>
                                           title !== 'organization' &&
                                           title !== 'record_id' &&
                                           title !== 'audit' &&
-                                          title !== 'item_id'&&
+                                          title !== 'item_id' &&
                                           title !== 'comment' &&
-                                          title !== 'first_verified_on'&&
-                                          title !== 'last_verified_on'&&
-                                          title !== 'flagged'&&
+                                          title !== 'first_verified_on' &&
+                                          title !== 'last_verified_on' &&
+                                          title !== 'flagged' &&
                                           title !== 'bin_to_sk');
             this.innerDataSource = new MatTableDataSource(data);
           },
@@ -224,7 +224,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    this.audits = this.data;
+    this.items = this.data;
     this.errorMessage = '';
 
     this.items.forEach((audit: any) => {

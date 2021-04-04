@@ -13,7 +13,6 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AuditReportComponent } from './components/audit-report/audit-report.component';
-import {ReactiveFormsModule} from '@angular/forms';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FileUploadModule} from 'ng2-file-upload';
 
