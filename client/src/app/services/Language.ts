@@ -18,11 +18,8 @@ export interface ComponentLang {}
 export abstract class LangFactory {
 
   getComponentLang(): ComponentLang {
-    if (CurrentSystemLanguage.language === Language.ENGLISH) {
-      return this.getEnglish();
-    } else {
-      return this.getEnglish();
-    }
+    // in the future when adding a new language, add a switch case for each enum value, and the default should be english
+    return this.getEnglish();
   }
 
   abstract getEnglish(): ComponentLang;
