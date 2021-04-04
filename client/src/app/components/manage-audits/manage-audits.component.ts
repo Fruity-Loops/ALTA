@@ -45,7 +45,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   // Items data
   data: any;
-  items = [];
+  audits = [];
   errorMessage = '';
   formg: FormBuilder;
 
@@ -224,7 +224,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    this.items = this.data;
+    this.audits = this.data;
     this.errorMessage = '';
 
     this.items.forEach((audit: any) => {

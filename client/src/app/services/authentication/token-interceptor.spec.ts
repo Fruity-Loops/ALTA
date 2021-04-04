@@ -55,14 +55,10 @@ describe('TokenInterceptor', () => {
     const httpReq = httpMock.expectOne(`${BASEURL}/login/`);
 
     // We can assert that the httpRequest’s request.headers object contains a header
-    // With the names of ‘Accept’ and ‘Content-Type’. If this is the case then our interceptor has successfully added.
-    expect(httpReq.request.headers.has('Content-Type')).toEqual(true);
+    // With the names of ‘Accept’. If this is the case then our interceptor has successfully added.
     expect(httpReq.request.headers.has('Accept')).toEqual(true);
 
-    // Now we need to check whether included ‘Accept’ and ‘Content-Type’ header contains the values we expect
-    expect(httpReq.request.headers.get('Content-Type')).toBe(
-      'application/json'
-    );
+    // Now we need to check whether included ‘Accept’ header contains the values we expect
     expect(httpReq.request.headers.get('Accept')).toBe('application/json');
 
     //  TODO: Should check out how to see if authentication are set

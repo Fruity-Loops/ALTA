@@ -49,6 +49,11 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSIONS_CLASSES': (
         'rest_framework.permission.IsAuthenticated'
     ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ]
 }
 
 # Application definition
@@ -157,6 +162,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/django_server/org_files/'
+MEDIA_ROOT = os.path.join(BASE_DIR,  'django_server/org_files')
 
 
 # LOGGING https://docs.djangoproject.com/en/3.0/topics/logging/
