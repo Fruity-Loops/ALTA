@@ -186,7 +186,7 @@ export class ItemsPage implements OnInit, OnDestroy {
     this.cameraScanner.scan(
       {
         showTorchButton: true, // iOS and Android
-        prompt: `Place a barcode inside the rectangle to scan it. Alternatively, you could chose to input a barcode number manually.`, // Android
+        prompt: `Place a barcode inside the rectangle to scan it. Alternatively, a barcode can also be entered manually.`, // Android
       }
     ).then(barcodeData => {
       if (barcodeData.cancelled === false) {
@@ -308,7 +308,11 @@ export class ItemsPage implements OnInit, OnDestroy {
                     };
                     this.presentRecordModal(modalData);
                   }
-                }
+                },
+                {
+                  text: 'Input Barcode',
+                  handler: () => this.handleManualInput(),
+                },
               ]
             });
             await noMatchAlert.present();
