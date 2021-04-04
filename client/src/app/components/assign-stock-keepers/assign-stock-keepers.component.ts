@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { User } from 'src/app/models/user.model';
@@ -7,26 +7,33 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { HttpParams } from '@angular/common/http';
 import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
+import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
   selector: 'app-assign-stock-keepers',
   templateUrl: './assign-stock-keepers.component.html',
   styleUrls: ['./assign-stock-keepers.component.scss']
 })
-export class AssignStockKeepersComponent implements OnInit {
+
+export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
   skToAssign: Array<any>;
   assignments: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
+  holdItemsLocation: Array<any>;
+  maxAssignPerLocation: Array<any>;
   auditID: number;
 
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
+  missingAssignedLocations = true;
+  requestConfirmation = true;
 
   params = new HttpParams();
+
 
   constructor(
     private manageMembersService: ManageMembersService,
@@ -40,22 +47,25 @@ export class AssignStockKeepersComponent implements OnInit {
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.assignments = [];
+    this.holdItemsLocation = [];
+    this.maxAssignPerLocation = new Array<any>();
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
-
     this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
     this.params = this.params.append('status', 'Active');
+    this.params = this.params.append('no_pagination', 'True');
+
 
     this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
         this.busySKs = response.map((obj: any) => obj.assigned_sk).flat();
 
         this.manageMembersService.getAllClients()
-          .subscribe((user) => {
-            this.populateTable(user);
+          .subscribe((data) => {
+            this.populateTable(data);
           });
       });
   }
@@ -65,54 +75,153 @@ export class AssignStockKeepersComponent implements OnInit {
     * 1. sending all an organization's users with a realistic amount of users
     * 2. how slow this can be to compute on the front-end
     */
+    this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
 
-    clients.forEach((element: any) => {
-      if (element.role === 'SK') {
-        const isBusy = this.busySKs.find(user => user === element.id);
-        if (isBusy === undefined) {
-          element.availability = 'Available';
-        } else {
-          element.availability = 'Busy';
-        }
+      this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
+      this.holdItemsLocation.forEach((location: any) => {
 
-        const obj = this.locationsAndUsers.find(item => item.location === element.location);
-        if (obj === undefined) {
-          this.locationsAndUsers.push(
-            {
-              location: element.location,
-              users: new Array<User>(element)
-            });
-        }
-        else {
-          obj.users.push(element);
-        }
+        this.setMaxAssignPerLocation(location, selectedItems);
+
+        this.addLocationWithSKs(location, clients);
+      });
+
+
+      if (selectedItems.assigned_sk !== []) {
+        this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
       }
-    });
 
-    this.dataSource = new MatTableDataSource();
-    this.locationsAndUsers.forEach(item => {
-      item.users.forEach((user: User) => {
-        this.dataSource.data.push(user);
+      this.setCheckboxDisableStatus();
+
+      this.dataSource = new MatTableDataSource();
+      this.locationsAndUsers.forEach(item => {
+        item.users.forEach((user: User) => {
+          this.dataSource.data.push(user);
+        });
       });
     });
   }
 
-  // If a stock-keeper checkbox is selected then add the id to the list
-  onChange(value: any): void {
-    if (this.skToAssign.includes(value)) {
-      this.skToAssign.splice(
-        this.skToAssign.indexOf(value),
-        1
-      );
-      this.assignments = this.assignments.filter(obj => obj.assigned_sk !== value);
-    } else {
-      this.skToAssign.push(value);
-      this.assignments.push({
-        audit: this.auditID,
-        assigned_sk: value,
-        seen: false
+  setMaxAssignPerLocation(location: any, correspondingObj: any): void {
+    if (!this.maxAssignPerLocation.some((item: any) => item.location === location)) {
+      const locTotalBins = new Set(correspondingObj.inventory_items.filter((item: any) =>
+        item.Location === location).map((ob: any) => ob.Bin)).size;
+
+      this.maxAssignPerLocation.push({
+        location,
+        totalBins: locTotalBins
       });
     }
+  }
+
+  addLocationWithSKs(location: any, clients: any): void {
+    if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
+      const getSKForLoc = clients.filter((user: any) =>
+        user.location === location && user.role === 'SK');
+      if (getSKForLoc.length !== 0) {
+        this.locationsAndUsers.push(
+          {
+            location,
+            users: getSKForLoc
+          });
+      } else {
+        this.locationsAndUsers.push(
+          {
+            location,
+            users: []
+          });
+      }
+    }
+  }
+
+  setCheckboxDisableStatus(): void {
+    this.locationsAndUsers.forEach((location: any) => {
+
+      const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
+      let counter = 0;
+
+      location.users.forEach((user: any) => {
+        this.setBusyStatus(user);
+
+        // enable the checkbox for previously selected SKs
+        if (this.skToAssign.includes(user.id)) {
+          user.disabled = false;
+          counter++;
+        }
+      });
+
+      // disable other SKs if assign limit is reached for location
+      if (counter >= maxPerLocation) {
+        location.users.forEach((user: any) => {
+          if (!this.skToAssign.includes(user.id)) {
+            user.disabled = true;
+          }
+        });
+      }
+    });
+  }
+
+  setBusyStatus(user: any): void {
+    const isBusy = this.busySKs.find(busyUser => busyUser.id === user.id);
+    if (isBusy === undefined) {
+      user.availability = 'Available';
+    } else {
+      user.availability = 'Busy';
+    }
+  }
+
+  isChecked(userId: any): boolean {
+    return this.skToAssign.indexOf(userId) !== -1;
+  }
+
+  onChange(userId: any, loc: any): void {
+
+    const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
+    const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
+      map((obj: any) => obj.users).flat(1);
+
+    // get all the user id's for this location
+    const sksFromLocation = holdUsersForThisLocation.map((user: any) => user.id);
+
+    if (this.skToAssign.includes(userId)) {
+      this.skToAssign.splice(
+        this.skToAssign.indexOf(userId),
+        1
+      );
+      this.assignments = this.assignments.filter(obj => obj.assigned_sk !== userId);
+
+      // get the updated intersection of selected SKs for this location
+      const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
+
+      // if there are still SKs to assign after unselecting a user
+      if (intersection.length < getLimitOfAssignees) {
+        sksFromLocation.forEach((sk: any) => {
+          // enable the selection of other SKs of this location
+          if (!intersection.some((id: any) => id === sk)) {
+            holdUsersForThisLocation.find((user: any) => user.id === sk).disabled = false;
+          }
+        });
+      }
+    } else {
+      this.skToAssign.push(userId);
+      this.assignments.push({
+        audit: this.auditID,
+        assigned_sk: userId,
+        seen: false
+      });
+
+      // get the updated intersection of selected SKs for this location
+      const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
+
+      if (intersection.length >= getLimitOfAssignees) {
+        sksFromLocation.forEach((sk: any) => {
+          // disable the selection of other SKs of this location
+          if (!intersection.some((id: any) => id === sk)) {
+            holdUsersForThisLocation.find((user: any) => user.id === sk).disabled = true;
+          }
+        });
+      }
+    }
+    this.requestConfirmation = this.skToAssign?.length > 0 ? true : false;
   }
 
   submitAssignedSKs(): void {
@@ -131,6 +240,7 @@ export class AssignStockKeepersComponent implements OnInit {
             this.errorMessage = err;
           }
         );
+        this.requestConfirmation = false;
         setTimeout(() => {
           this.router.navigate(['audits/assign-sk/designate-sk']);
         }, 1000);
@@ -149,13 +259,6 @@ export class AssignStockKeepersComponent implements OnInit {
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
-  @HostListener('window:popstate', ['$event'])
-  onBrowserBack(event: Event): void {
-    // Overrides browser back button
-    event.preventDefault();
-    this.goBackIventory();
-  }
-
   goBackIventory(): void {
     // TODO: Show previously selected info is kept data so when user goes back to previous page
     setTimeout(() => {
@@ -172,7 +275,30 @@ export class AssignStockKeepersComponent implements OnInit {
   }
 
   discardAudit(): void {
+    this.requestConfirmation = false;
     this.deleteAudit();
     this.dialog.closeAll();
+  }
+
+  disableAssign(): boolean {
+    if (this.skToAssign.length === 0) {
+      return true;
+    }
+
+    let counter = 0;
+    this.locationsAndUsers.forEach((loc: any) => {
+      const intersection = new Set(loc.users.flat().map((obj: any) => obj.id).filter((x: any) => this.skToAssign.includes(x)));
+      if (intersection.size !== 0) {
+        counter++;
+      }
+    });
+
+    return counter < this.locationsAndUsers.length;
+  }
+
+  // handles page refresh and out-of-app navigation
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: any): boolean {
+    return confirm('');
   }
 }

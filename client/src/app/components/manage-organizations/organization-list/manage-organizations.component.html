@@ -57,7 +57,14 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="turnOnOrgMode(row)"></tr>
     </table>
+    
+    <mat-paginator
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[25,50,100]"
+    [pageIndex]="pageIndex"
+    (page)="paginatorAction($event)">
+  </mat-paginator>
 
-    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
   </div>
 </mat-card>

@@ -25,6 +25,7 @@
     "@schematics/angular": "^10.2.0",
     "apexcharts": "^3.25.0",
     "ng-apexcharts": "^1.5.8",
+    "ng2-file-upload": "^1.4.0",
     "ngx-cookie-service": "^10.1.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.3",

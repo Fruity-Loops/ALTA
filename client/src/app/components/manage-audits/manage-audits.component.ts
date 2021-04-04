@@ -160,8 +160,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
   }
 
-  toggleExpand(auditId: any, auditStatus: any) {
-    if(this.expandedElement == auditId) {
+  toggleExpand(auditId: any, auditStatus: any): void {
+    if (this.expandedElement === auditId) {
       this.expandedElement = null;
     } else {
       if (auditStatus === 'Complete') {
@@ -171,11 +171,11 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
                                           title !== 'organization' &&
                                           title !== 'record_id' &&
                                           title !== 'audit' &&
-                                          title !== 'item_id'&&
+                                          title !== 'item_id' &&
                                           title !== 'comment' &&
-                                          title !== 'first_verified_on'&&
-                                          title !== 'last_verified_on'&&
-                                          title !== 'flagged'&&
+                                          title !== 'first_verified_on' &&
+                                          title !== 'last_verified_on' &&
+                                          title !== 'flagged' &&
                                           title !== 'bin_to_sk');
             this.innerDataSource = new MatTableDataSource(data);
           },
