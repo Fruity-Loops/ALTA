@@ -80,7 +80,7 @@ describe('AssignStockKeepersComponent', () => {
     spyOn(tokenService, 'GetToken').and.returnValue('');
 
     component.goBackAssignSK();
-    expect(component.errorMessage).toBe('A member with that employee ID already exists');
+    expect(component.errorMessage).toBe('');
   }));
 
 });

@@ -24,4 +24,18 @@ describe('OrganizationViewComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // Test the dialog window
+  it('Call the dialog object', () => {
+    try {
+      component.submitSave()
+    }
+    catch (err) {
+      expect(component.orgError).toBe('Please enter a name for the organization');
+    }
+  });
+  
+
+  
+
 });
