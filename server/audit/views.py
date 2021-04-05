@@ -144,7 +144,7 @@ def calculate_accuracy(record_queryset):
     missing = record_queryset.filter(status='Missing').count()
     found = record_queryset.filter(status='Provided').count()
     total_records_no_new = found + missing
-    return 0.0 if total_records_no_new == 0 else found / total_records_no_new
+    return 0.0 if total_records_no_new == 0 else round((found / total_records_no_new) * 100, 2)
 
 
 def compile_progression_metrics(completed_items, total_items, accuracy):

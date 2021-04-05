@@ -1,11 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {TableManagementComponent} from "../TableManagement.component";
 import {AuditReportService} from "../../services/audits/audit-report.service";
+import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {FormBuilder} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
+import {DatePipe} from '@angular/common';
 
 //audit information
 //inv information
@@ -29,6 +32,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   formg: FormBuilder;
 
   selectedItems: number[];
+  allExpandState = false;
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -38,34 +42,42 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   dataSource: MatTableDataSource<any>;
   metaDataSource: MatTableDataSource<any>;
+
+
   displayedColumns: string[] = [];
   displayedMetaColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
+  resultsDisplayedColumns: string[] = [];
+  resultsDataSource: MatTableDataSource<any>;
+  hideResult = true;
+
   constructor(
     private auditReportService: AuditReportService,
+    private auditService: ManageAuditsService,
+    private userService: ManageMembersService,
     protected fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    public datePipe: DatePipe,
   ) {
     super(fb);
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
     this.metaDataSource = new MatTableDataSource<any>();
+    this.resultsDataSource = new MatTableDataSource<any>();
     this.selectedItems = [];
     this.parsedMetaData = [];
   }
 
   ngOnInit(): void {
-    this.params = this.params.append('page', String(this.pageIndex))
-      .append('page_size', String(this.pageSize))
-      .append('organization', String(localStorage.getItem('organization_id')))
-      .append('status', 'Active');
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
       // TODO: Display Meta Data about the Audit
       this.setAuditInfo();
       // TODO: Display Audit's Items Data
       this.setAuditData();
+
+      this.setResultsData()
     });
   }
 
@@ -92,21 +104,43 @@ export class AuditReportComponent extends TableManagementComponent implements On
     };
   }
 
-
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
-        this.metaData = metaData;
-        this.cleanMetaData();
-        console.log(metaData);
+        this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
+          this.metaData = metaData;
+          this.metaData.initiated_by = String(user.first_name + ' ' + user.last_name);
+          this.cleanMetaData();
 
-        // Getting the field name of the item object returned and populating the column of the table
-        for (const key in this.metaData) {
-          if (this.metaData.hasOwnProperty(key)) {
-            this.displayedMetaColumns.push(key);
+          // Getting the field name of the item object returned and populating the column of the table
+          for (const key in this.metaData) {
+            if (this.metaData.hasOwnProperty(key)) {
+              this.displayedMetaColumns.push(key);
+            }
           }
-        }
-        this.updateMetaData();
+          this.displayedMetaColumns = this.displayedMetaColumns
+                                        .filter((title: any) => title !== 'organization' &&
+                                                                title !== 'template_id');
+          this.updateMetaData();
+        },
+          // if SA initiated audit
+          (err: any) => {
+            this.metaData = metaData;
+            this.metaData.initiated_by = "System Administrator";
+            this.cleanMetaData();
+
+            // Getting the field name of the item object returned and populating the column of the table
+            for (const key in this.metaData) {
+              if (this.metaData.hasOwnProperty(key)) {
+                this.displayedMetaColumns.push(key);
+              }
+            }
+            this.displayedMetaColumns = this.displayedMetaColumns
+                                          .filter((title: any) => title !== 'organization' &&
+                                                                  title !== 'template_id');
+            this.updateMetaData();
+          }
+        );
       },
       (err: any) => {
         this.errorMessage = err;
@@ -119,11 +153,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
     delete this.metaData.inventory_items;
     this.metaData.assigned_sk = this.metaData.assigned_sk[0].first_name + ' ' + this.metaData.assigned_sk[0].last_name;
 
-    let initiated_date = new Date();
-    initiated_date.setTime(Date.parse(this.metaData.initiated_on))
-    // this.metaData.initiated_on = initiated_date;
-    console.log(initiated_date);
-
+    this.metaData.initiated_on = this.datePipe.transform(this.metaData.initiated_on, 'EEEE, MMMM d, y - H:mm');
+    this.metaData.last_modified_on = this.datePipe.transform(this.metaData.last_modified_on, 'EEEE, MMMM d, y - H:mm');
   }
 
   //  TODO
@@ -136,13 +167,50 @@ export class AuditReportComponent extends TableManagementComponent implements On
             this.displayedColumns.push(key);
           }
         }
-        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
+
+        this.displayedColumns = this.displayedColumns.filter((title: any) => title !== 'organization');
+
+        // this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
       }
     )
+  }
+
+  setResultsData(): void {
+    this.auditService.getCompleteAudit(this.id).subscribe(
+      (data: any) => {
+        if (data.length) {
+          this.hideResult = false;
+          this.resultsDisplayedColumns = Object.keys(data[0]).filter((title: any) =>
+                                            title === 'Batch_Number' ||
+                                            title === 'Location' ||
+                                            title === 'Bin' ||
+                                            title === 'Part_Number' ||
+                                            title === 'flagged' ||
+                                            title === 'first_verified_on' ||
+                                            title === 'last_verified_on');
+
+          // display item_id first
+          this.resultsDisplayedColumns = ['item_id'].concat(this.resultsDisplayedColumns);
+
+          // display quantity and status last
+          this.resultsDisplayedColumns = this.resultsDisplayedColumns.concat(['Quantity', 'status']);
+
+          let cleanData = data;
+          cleanData.forEach((record: any) => {
+            record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
+            record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
+          });
+          this.resultsDataSource = new MatTableDataSource(cleanData);
+        }
+      },
+      (err: any) => {
+        this.errorMessage = err;
+      }
+    );
   }
 
   updatePage(): void {
@@ -163,8 +231,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     }
     this.items = this.data;
     this.errorMessage = '';
-
-    console.log(this.items);
 
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
