@@ -14,8 +14,8 @@ describe('HomeComponent', () => {
   let tokenService: TokenService;
   let sidenavService: SidenavService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [HomeComponent],
       imports: [
         HttpClientTestingModule,
@@ -31,9 +31,7 @@ describe('HomeComponent', () => {
 
     tokenService = TestBed.inject(TokenService);
     sidenavService = TestBed.inject(SidenavService);
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

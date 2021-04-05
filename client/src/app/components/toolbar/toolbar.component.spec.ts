@@ -11,8 +11,8 @@ describe('ToolbarComponent', () => {
   // @ts-ignore
   let authService: AuthService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ToolbarComponent],
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
@@ -26,9 +26,6 @@ describe('ToolbarComponent', () => {
     }).compileComponents();
 
     authService = TestBed.inject(AuthService);
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

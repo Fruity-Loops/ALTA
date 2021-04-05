@@ -15,15 +15,13 @@ describe('AssignStockKeepersComponent', () => {
   // @ts-ignore
   let service2: ManageAuditsService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [AssignStockKeepersComponent],
       providers: [ManageMembersService, ManageAuditsService],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(AssignStockKeepersComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);

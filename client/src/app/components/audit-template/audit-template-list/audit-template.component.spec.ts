@@ -8,15 +8,12 @@ describe('AuditTemplateComponent', () => {
   let component: AuditTemplateComponent;
   let fixture: ComponentFixture<AuditTemplateComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [AuditTemplateComponent],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
-    })
-      .compileComponents();
-  });
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(AuditTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

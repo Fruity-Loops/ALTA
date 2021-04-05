@@ -19,8 +19,8 @@ describe('SignupComponent', () => {
   // @ts-ignore
   let manageOrganizationsService: ManageOrganizationsService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [CreateEmployeeComponent],
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
@@ -40,9 +40,7 @@ describe('SignupComponent', () => {
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
     manageOrganizationsService = TestBed.inject(ManageOrganizationsService);
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(CreateEmployeeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -5,13 +5,11 @@ describe('AuthTabsComponent', () => {
   let component: GreetingComponent;
   let fixture: ComponentFixture<GreetingComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [GreetingComponent],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(GreetingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

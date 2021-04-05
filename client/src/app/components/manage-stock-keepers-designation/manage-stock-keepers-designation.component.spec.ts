@@ -22,8 +22,8 @@ describe('ManageStockeepersDesignationComponent', () => {
   // @ts-ignore
   let tokenService: TokenService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ManageStockKeepersDesignationComponent],
       providers: [ManageMembersService,
         ManageAuditsService, {
@@ -38,9 +38,7 @@ describe('ManageStockeepersDesignationComponent', () => {
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
 
-});
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);

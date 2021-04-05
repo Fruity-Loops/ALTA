@@ -14,8 +14,8 @@ describe('LoginComponent', () => {
   // @ts-ignore
   let tokenService: TokenService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
@@ -31,9 +31,7 @@ describe('LoginComponent', () => {
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
-  });
-
-  beforeEach(() => {
+    
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

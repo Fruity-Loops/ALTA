@@ -17,8 +17,8 @@ describe('CreateAuditTemplateComponent', () => {
   let startTimeInput: HTMLInputElement;
   let templateInput: HTMLInputElement;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [CreateAuditTemplateComponent],
       imports: [
         HttpClientTestingModule,
@@ -31,11 +31,8 @@ describe('CreateAuditTemplateComponent', () => {
           provide: AuditTemplateService,
         },
       ],
-    })
-      .compileComponents();
-  });
-
-  beforeEach(() => {
+    }).compileComponents();
+    
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(AuditTemplateService);
