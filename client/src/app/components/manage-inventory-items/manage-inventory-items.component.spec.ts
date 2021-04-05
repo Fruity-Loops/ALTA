@@ -49,21 +49,6 @@ describe('ManageInventoryItemsComponent', () => {
     expect(button.nativeElement.disabled).toBeTruthy();
   });
 
-  // Test that Start Audit button is disabled when no items selected
-  it('should enable Start button when item(s) selected', () => {
-    fixture.detectChanges();
-    const checkboxArray = fixture.debugElement.queryAll(By.css('.mat-checkbox-input'));
-     // expect(checkboxArray.length).toBeGreaterThan(0);
-    expect(checkboxArray.length).toBe(0);
-    for (const input  of checkboxArray){
-        expect(input.nativeElement.checked).toBeFalsy();
-        input.nativeElement.click();
-        fixture.detectChanges();
-        const button = fixture.debugElement.query(By.css('button'));
-        expect(button.nativeElement.disabled).toBeFalsy();
-      }
-  });
-
   it('should check initial time input is empty', () => {
     fixture.detectChanges();
     expect(timeInput.value).toBe('');
