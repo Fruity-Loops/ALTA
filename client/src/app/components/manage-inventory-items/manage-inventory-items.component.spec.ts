@@ -5,12 +5,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageInventoryItemsComponent } from './manage-inventory-items.component';
 import { FormBuilder } from '@angular/forms';
+import { AuthService } from 'src/app/services/authentication/auth.service';
+import { By } from '@angular/platform-browser';
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
   let fixture: ComponentFixture<ManageInventoryItemsComponent>;
   // @ts-ignore
   let service: ManageInventoryItemsService;
+  // @ts-ignore
+  let service2: ManageAuditsService;
+  // @ts-ignore
+  let service3: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,6 +25,7 @@ describe('ManageInventoryItemsComponent', () => {
         FormBuilder,
         { provide: ManageInventoryItemsService },
         { provide: ManageAuditsService },
+        { provide: AuthService },
       ],
       imports: [HttpClientModule, RouterTestingModule],
     });
@@ -26,10 +33,19 @@ describe('ManageInventoryItemsComponent', () => {
     fixture = TestBed.createComponent(ManageInventoryItemsComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageInventoryItemsService);
+    service2 = TestBed.inject(ManageAuditsService);
+    service3 = TestBed.inject(AuthService);
     fixture.detectChanges();
   });
 
   it('should create Inventory Items Component', () => {
     expect(component).toBeTruthy();
+  });
+
+  // Test that Start Audit button is disabled when no items selected
+  it('should disable Start button when no item selected', () => {
+    fixture.detectChanges();
+    const button = fixture.debugElement.query(By.css('#create'));
+    expect(button.nativeElement.disabled).toBeTruthy();
   });
 });
