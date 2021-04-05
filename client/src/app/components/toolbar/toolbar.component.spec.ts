@@ -4,6 +4,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {ToolbarComponent} from './toolbar.component';
+import { AppModule } from 'src/app/app.module'
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
@@ -14,7 +15,7 @@ describe('ToolbarComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ToolbarComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
       providers: [
         {
           provide: SidenavService,

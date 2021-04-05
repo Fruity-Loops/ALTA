@@ -5,6 +5,7 @@ import {ManageMembersService} from 'src/app/services/users/manage-members.servic
 import {RouterTestingModule} from '@angular/router/testing';
 import { FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { AppModule } from 'src/app/app.module'
 
 describe('ClientGridViewComponent', () => {
   let component: EmployeeListComponent;
@@ -20,7 +21,7 @@ describe('ClientGridViewComponent', () => {
         ManageMembersService,
         FormBuilder,
       ],
-      imports: [HttpClientModule, RouterTestingModule],
+      imports: [HttpClientModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(EmployeeListComponent);

@@ -8,6 +8,7 @@ import {FormBuilder} from '@angular/forms';
 import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import 'zone.js/dist/zone-testing';
 import {throwError} from 'rxjs';
+import { AppModule } from 'src/app/app.module'
 
 describe('SignupComponent', () => {
   let component: CreateEmployeeComponent;
@@ -22,7 +23,7 @@ describe('SignupComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [CreateEmployeeComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
       providers: [
         FormBuilder,
         {

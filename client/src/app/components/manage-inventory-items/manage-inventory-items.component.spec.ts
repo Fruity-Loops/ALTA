@@ -7,6 +7,7 @@ import { ManageInventoryItemsComponent } from './manage-inventory-items.componen
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { By } from '@angular/platform-browser';
+import { AppModule } from 'src/app/app.module'
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
@@ -27,7 +28,7 @@ describe('ManageInventoryItemsComponent', () => {
         { provide: ManageAuditsService },
         { provide: AuthService },
       ],
-      imports: [HttpClientModule, RouterTestingModule],
+      imports: [HttpClientModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(ManageInventoryItemsComponent);

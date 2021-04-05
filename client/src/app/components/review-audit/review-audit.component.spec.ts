@@ -6,6 +6,7 @@ import { ManageMembersService } from 'src/app/services/users/manage-members.serv
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
+import { AppModule } from 'src/app/app.module'
 
 describe('AssignStockKeepersComponent', () => {
   let component: ReviewAuditComponent;
@@ -19,7 +20,7 @@ describe('AssignStockKeepersComponent', () => {
         { provide: ManageMembersService },
         { provide: ManageAuditsService }
       ],
-      imports: [HttpClientModule, RouterTestingModule, MatDialogModule ],
+      imports: [HttpClientModule, RouterTestingModule, MatDialogModule, AppModule ],
     });
 
     fixture = TestBed.createComponent(ReviewAuditComponent);

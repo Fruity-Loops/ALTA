@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageAuditsComponent } from './manage-audits.component';
 import { FormBuilder } from '@angular/forms';
+import { AppModule } from 'src/app/app.module'
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageAuditsComponent;
@@ -19,7 +20,7 @@ describe('ManageInventoryItemsComponent', () => {
         FormBuilder,
         { provide: ManageAuditsService },
       ],
-      imports: [HttpClientModule, RouterTestingModule],
+      imports: [HttpClientModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(ManageAuditsComponent);

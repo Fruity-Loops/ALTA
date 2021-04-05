@@ -6,6 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 import {ManageOrganizationsComponent} from './manage-organizations.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { AppModule } from 'src/app/app.module'
 
 describe('ManageOrganizationsComponent', () => {
   let component: ManageOrganizationsComponent;
@@ -16,7 +17,7 @@ describe('ManageOrganizationsComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ManageOrganizationsComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
       providers: [
         FormBuilder,
         {

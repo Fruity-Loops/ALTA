@@ -6,6 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { By } from '@angular/platform-browser';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
+import { AppModule } from 'src/app/app.module'
 
 describe('AssignStockKeepersComponent', () => {
   let component: AssignStockKeepersComponent;
@@ -19,7 +20,7 @@ describe('AssignStockKeepersComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AssignStockKeepersComponent],
       providers: [ManageMembersService, ManageAuditsService],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
     }).compileComponents();
     
     fixture = TestBed.createComponent(AssignStockKeepersComponent);
