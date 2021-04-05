@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {EmployeeListComponent} from './employee-list.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import { FormBuilder } from '@angular/forms';
@@ -21,7 +21,7 @@ describe('ClientGridViewComponent', () => {
         ManageMembersService,
         FormBuilder,
       ],
-      imports: [HttpClientModule, RouterTestingModule, AppModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(EmployeeListComponent);

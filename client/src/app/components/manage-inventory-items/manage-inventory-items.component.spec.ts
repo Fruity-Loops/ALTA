@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageInventoryItemsComponent } from './manage-inventory-items.component';
 import { FormBuilder } from '@angular/forms';
@@ -28,7 +28,7 @@ describe('ManageInventoryItemsComponent', () => {
         { provide: ManageAuditsService },
         { provide: AuthService },
       ],
-      imports: [HttpClientModule, RouterTestingModule, AppModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(ManageInventoryItemsComponent);
