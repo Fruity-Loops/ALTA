@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed, flush } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { ManageStockKeepersDesignationComponent } from './manage-stock-keepers-designation.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -81,7 +81,7 @@ describe('AssignStockKeepersComponent', () => {
 
     component.goBackAssignSK();
     expect(component.errorMessage).toBe('');
-    flush();
+
   }));
 
 });
