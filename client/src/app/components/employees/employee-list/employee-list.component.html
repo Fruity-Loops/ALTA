@@ -1,6 +1,6 @@
 <mat-card>
   <button mat-stroked-button id="create" class="create" routerLink="/create-members">Create</button>
-  <mat-card-title>Employees</mat-card-title>
+  <mat-card-title>{{title}}</mat-card-title>
   <div class="search-icon">
     <button mat-icon-button disabled>
       <mat-icon>search</mat-icon>
@@ -8,7 +8,7 @@
   </div>
   <div class="search-header">
     <mat-form-field appearance="fill">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search Employees">
+      <input matInput (keyup)="applyFilter($event.target.value)" [placeholder]="searchPlaceholder">
     </mat-form-field>
   </div>
   <mat-label class="moveMeRight">Show:</mat-label>
@@ -25,32 +25,36 @@
       <div id="employees">List of employees.</div>
 
       <ng-container matColumnDef="First_Name">
-        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header> First Name</th>
+        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header> {{table.first_name}}</th>
         <td class="cell_first_name" mat-cell *matCellDef="let row"> {{row.first_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Last_Name">
-        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header> Last Name</th>
+        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{table.last_name}}</th>
         <td class="cell_last_name" mat-cell *matCellDef="let row"> {{row.last_name}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Role">
-        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header> Role</th>
+        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{table.role}}</th>
         <td class="cell_role" mat-cell *matCellDef="let row"> {{row.role}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Location">
-        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header> Location</th>
+        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{table.location}}</th>
         <td class="cell_location" mat-cell *matCellDef="let row"> {{row.location}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Status">
-        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+        <th scope="col" class="mat-column-alignment" mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{table.is_active}}</th>
         <td class="cell_is_active" mat-cell *matCellDef="let row"> {{row.is_active}} </td>
       </ng-container>
 
       <ng-container matColumnDef="Settings">
-        <th scope="col" mat-header-cell *matHeaderCellDef> Settings</th>
+        <th scope="col" mat-header-cell *matHeaderCellDef>{{table.settings}}</th>
         <td mat-cell *matCellDef="let row">
           <a class="cell_settings" [routerLink]="['/modify-members', row.id]" [id]="row.first_name + row.last_name + 'settings'">
             <span class="dot"></span>

@@ -15,7 +15,7 @@
     <mat-card-content>
       <form class="col s12" [formGroup]="loginForm" novalidate (ngSubmit)="loginUser()">
         <mat-form-field appearance="legacy" class="input">
-          <mat-label for="email">E-mail address</mat-label>
+          <mat-label for="email">{{email}}</mat-label>
           <input matInput id="email" type="text" formControlName="email"/>
 
           <mat-error class="error" *ngIf="
@@ -38,7 +38,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="legacy" class="input">
-          <mat-label for="password">Password</mat-label>
+          <mat-label for="password">{{password}}</mat-label>
           <input matInput id="password" type="password" formControlName="password"/>
           <mat-error class="error" *ngIf="
             !loginForm.controls['password'].valid &&
@@ -50,7 +50,7 @@
         </mat-form-field>
         <br/>
         <button mat-raised-button id="loginbtn" color="accent" [disabled]="!loginForm.valid">
-          Login
+          {{loginBtnLabel}}
         </button>
       </form>
     </mat-card-content>
