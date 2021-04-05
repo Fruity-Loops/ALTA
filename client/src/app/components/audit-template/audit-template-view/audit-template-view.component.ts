@@ -1,9 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Template } from '../Template';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Template} from '../Template';
 import timeZones from '../audit-template-view/create-audit-template/timezone.json';
-import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
-import { HttpParams } from '@angular/common/http';
+import {ManageInventoryItemsService} from 'src/app/services/inventory-items/manage-inventory-items.service';
+import {HttpParams} from '@angular/common/http';
+import {
+  AuditRepetition,
+  AuditTemplateViewLangFactory,
+  TemplateActionButtons,
+  TemplateLabels,
+  TemplateScheduling
+} from './audit-template-view.language';
 
 interface DaysCheckBox {
   name: string;
@@ -94,6 +101,10 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     time_zone_utc: ''
   };
   templateValues: Template | undefined;
+  templateLabels: TemplateLabels;
+  scheduling: TemplateScheduling;
+  repetition: AuditRepetition;
+  actionButtons: TemplateActionButtons;
   title = '';
   description = '';
 
@@ -104,7 +115,11 @@ export abstract class AuditTemplateViewComponent implements OnInit {
 
   constructor(
     private itemsService: ManageInventoryItemsService
-  ) { }
+  ) {
+    const lang = new AuditTemplateViewLangFactory();
+    [this.templateLabels, this.scheduling, this.repetition, this.actionButtons] = [lang.lang.templateLabels, lang.lang.scheduling,
+      lang.lang.auditRepetition, lang.lang.actionButtons];
+  }
 
   ngOnInit(): void {
     this.initializeForm();
