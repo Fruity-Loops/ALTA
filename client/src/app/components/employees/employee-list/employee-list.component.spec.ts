@@ -46,6 +46,10 @@ describe('ClientGridViewComponent', () => {
     component.applyFilter('');
   });
 
+/*
+* The test below is commented out is to show as an example how to setup test
+*/
+
   // Test the populateTable()
   // it('Call method', () => {
   //   try {

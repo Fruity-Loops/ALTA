@@ -80,6 +80,10 @@ describe('CreateAuditTemplateComponent', () => {
     expect(templateInput.value).toBe('Test 001');
 });
 
+/*
+* The test below is commented out is to show as an example how to setup test
+*/
+
   // // Test the submitQuery()
   // it('Call method', () => {
   //   component.submitQuery({
