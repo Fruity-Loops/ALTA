@@ -1,0 +1,7 @@
+FROM node:12.13 AS builder
+
+WORKDIR /root
+COPY . .	
+
+RUN npm install && npm install -g @angular/cli &&  ng build --prod
+

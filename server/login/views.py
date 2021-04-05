@@ -116,6 +116,7 @@ def save_new_pin(email, user):
                          for _i in range(3)) #NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
+    logger.error(request.data)
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()
