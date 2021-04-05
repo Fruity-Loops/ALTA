@@ -27,7 +27,6 @@ describe('AssignStockKeepersComponent', () => {
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
   });
 
   it('should create', () => {
@@ -60,14 +59,14 @@ describe('AssignStockKeepersComponent', () => {
   });
 
   // Test the goBackIventory()
-  it('Call goBackIventory', () => {
-    try {
-      component.goBackIventory();
-    }
-    catch (err) {
-    console.error(err);
-    }
-  });
+  // it('Call goBackIventory', () => {
+  //   try {
+  //     component.goBackIventory();
+  //   }
+  //   catch (err) {
+  //   console.error(err);
+  //   }
+  // });
 
    // Test the dialog window
   it('Call the dialog object', () => {
