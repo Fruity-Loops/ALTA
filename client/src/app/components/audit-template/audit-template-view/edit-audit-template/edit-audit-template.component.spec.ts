@@ -6,7 +6,7 @@ import { EditAuditTemplateComponent } from './edit-audit-template.component';
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-describe('AuditTemplateComponent', () => {
+describe('EditAuditTemplateComponent', () => {
   let component: EditAuditTemplateComponent;
   let fixture: ComponentFixture<EditAuditTemplateComponent>;
 

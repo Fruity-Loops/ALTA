@@ -36,7 +36,7 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
-    private router: Router) {
+    public router: Router) {
     this.locationsWithBinsAndSKs = new Array<any>();
     this.binToSks = new Array<any>();
     this.holdBinIdsOfPreviousAssign = new Array<any>();

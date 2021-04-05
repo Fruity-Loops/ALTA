@@ -45,6 +45,7 @@ describe('ManageInventoryItemsComponent', () => {
   // Test that Start Audit button is disabled when no items selected
   it('should disable Start button when no item selected', () => {
     fixture.detectChanges();
+    spyOn(component.router, 'navigate');
     const button = fixture.debugElement.query(By.css('#create'));
     expect(button.nativeElement.disabled).toBeTruthy();
   });

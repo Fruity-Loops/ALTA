@@ -29,6 +29,7 @@ describe('AssignStockKeepersComponent', () => {
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
+    spyOn(component.router, 'navigate');
   });
 
   it('should create', () => {

@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { ManageStockKeepersDesignationComponent } from './manage-stock-keepers-designation.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/services/authentication/auth.service';
 import { TokenService } from 'src/app/services/authentication/token.service';
 import { throwError } from 'rxjs';
 
-describe('AssignStockKeepersComponent', () => {
+describe('ManageStockeepersDesignationComponent', () => {
   let component: ManageStockKeepersDesignationComponent;
   let fixture: ComponentFixture<ManageStockKeepersDesignationComponent>;
   // @ts-ignore
@@ -46,6 +46,7 @@ describe('AssignStockKeepersComponent', () => {
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
+    spyOn(component.router, 'navigate');
   });
 
   it('should create', () => {
@@ -78,10 +79,8 @@ describe('AssignStockKeepersComponent', () => {
 
     spyOn(authService, 'openRegister').and.returnValue(throwError({ error: { email: 'nich', user_name: 'nok' } }));
     spyOn(tokenService, 'GetToken').and.returnValue('');
-
     component.goBackAssignSK();
     expect(component.errorMessage).toBe('');
-
+    flush();
   }));
-
 });

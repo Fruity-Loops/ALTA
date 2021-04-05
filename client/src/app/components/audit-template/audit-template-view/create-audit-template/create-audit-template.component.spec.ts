@@ -7,7 +7,7 @@ import { AuditTemplateService } from 'src/app/services/audits/audit-template.ser
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { By } from '@angular/platform-browser';
 
-describe('AuditTemplateComponent', () => {
+describe('CreateAuditTemplateComponent', () => {
   let component: CreateAuditTemplateComponent;
   let fixture: ComponentFixture<CreateAuditTemplateComponent>;
 
@@ -44,7 +44,7 @@ describe('AuditTemplateComponent', () => {
     startTimeInput = fixture.debugElement.query(By.css('#time')).nativeElement;
     templateInput = fixture.debugElement.query(By.css('#title')).nativeElement;
     fixture.detectChanges();
-});
+  });
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -53,12 +53,14 @@ describe('AuditTemplateComponent', () => {
      // Test that Save button creates a new template
   it('should create a new template', () => {
       fixture.detectChanges();
+      spyOn(component.router, 'navigate');
       const button = fixture.debugElement.query(By.css('#create-template-button')).nativeElement;
       expect(button.disabled).toBeFalsy();
   });
 
   it('should be able to enter Start Date', () => {
     fixture.detectChanges();
+    spyOn(component.router, 'navigate');
     startDateInput.value = '2021-01-18T15:37:42';
     startDateInput.dispatchEvent(new Event('change'));
     expect(startDateInput.value).toBe('2021-01-18T15:37:42');

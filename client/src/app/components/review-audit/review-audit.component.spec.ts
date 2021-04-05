@@ -25,6 +25,7 @@ describe('AssignStockKeepersComponent', () => {
     fixture = TestBed.createComponent(ReviewAuditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    spyOn(component.router, 'navigate');
   });
 
   it('should create Review Audit s Component', () => {
