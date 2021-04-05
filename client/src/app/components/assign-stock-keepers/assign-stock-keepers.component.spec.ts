@@ -7,6 +7,7 @@ import { ManageMembersService } from 'src/app/services/users/manage-members.serv
 import { By } from '@angular/platform-browser';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import { AppModule } from 'src/app/app.module'
+import {AltaMainRoutingModule} from 'src/app/modules/alta-main-routing/alta-main-routing.module'
 
 describe('AssignStockKeepersComponent', () => {
   let component: AssignStockKeepersComponent;
@@ -20,7 +21,11 @@ describe('AssignStockKeepersComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AssignStockKeepersComponent],
       providers: [ManageMembersService, ManageAuditsService],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
+      imports: [HttpClientTestingModule,
+                RouterTestingModule,
+                MatDialogModule,
+                AppModule,
+                AltaMainRoutingModule],
     }).compileComponents();
     
     fixture = TestBed.createComponent(AssignStockKeepersComponent);
@@ -60,14 +65,14 @@ describe('AssignStockKeepersComponent', () => {
   });
 
   // Test the goBackIventory()
-  // it('Call goBackIventory', () => {
-  //   try {
-  //     component.goBackIventory();
-  //   }
-  //   catch (err) {
-  //   console.error(err);
-  //   }
-  // });
+  it('Call goBackIventory', () => {
+    try {
+      component.goBackIventory();
+    }
+    catch (err) {
+    console.error(err);
+    }
+  });
 
    // Test the dialog window
   it('Call the dialog object', () => {
