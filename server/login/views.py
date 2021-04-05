@@ -17,6 +17,8 @@ from rest_framework.response import Response
 from user_account.serializers import CustomUserSerializer
 from user_account.models import CustomUser
 from user_account.views import CustomUserView
+from email.mime.image import MIMEImage
+import datetime
 
 logger = logging.getLogger(__name__)
 login_failed = {"detail": "Login Failed"}
@@ -110,12 +112,14 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 def save_new_pin(email, user):
     first_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     second_part = '-'
     third_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
+    # For e2e purposes, uncomment this line:
+    # request.data = {'password': 'password'}
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()
@@ -132,26 +136,26 @@ def send_email(sender, sender_password, receiver, pin):
     msg['Subject'] = 'ALTA Pin'
     msg['From'] = sender
     msg['To'] = receiver
-
     text = "Pin: " + pin
-    html = """\
-    <html>
-      <head></head>
-      <body>
-        <p>Your Pin is: """ + pin + """</p>
-      </body>
-    </html>
-    """
+    emailBody = open('./login/email/message.html').read().format(pinToSend=pin, year=datetime.datetime.now().year)
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
-    part2 = MIMEText(html, 'html')
+    part2 = MIMEText(emailBody, 'html')
 
     # Attach parts into message container.
     # According to RFC 2046, the last part of a multipart message, in this case
     # the HTML message, is best and preferred.
     msg.attach(part1)
     msg.attach(part2)
+
+    fp = open('./login/email//alta-logo.png', 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
+
+    # Define the image's ID as referenced in message.html
+    msgImage.add_header('Content-ID', '<image1>')
+    msg.attach(msgImage)
 
     # Send the message via local SMTP server.
     try:

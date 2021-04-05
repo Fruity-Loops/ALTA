@@ -1,4 +1,5 @@
 import {FormGroup} from '@angular/forms';
+import {EmployeeViewActionLabels, EmployeeViewLabels, EmployeeViewLangFactory, EmployeeViewPlaceHolders} from './employee-view.language';
 
 export interface BaseEmployeeForm {
   user_name: string;
@@ -16,10 +17,16 @@ export abstract class EmployeeView {
   errorMessage: string | undefined;
 
   employeeForm: FormGroup | undefined;
+  fieldLabels: EmployeeViewLabels;
+  fieldPlaceholders: EmployeeViewPlaceHolders;
+  actionButtonLabels: EmployeeViewActionLabels;
 
   protected constructor() {
     this.title = this.getTitle();
     this.isEdit = this.getIsEdit();
+    const lang = new EmployeeViewLangFactory();
+    [this.fieldLabels, this.fieldPlaceholders, this.actionButtonLabels] = [lang.lang.fieldLabels, lang.lang.fieldPlaceholders,
+      lang.lang.actionLabels];
   }
 
   abstract getTitle(): string;
