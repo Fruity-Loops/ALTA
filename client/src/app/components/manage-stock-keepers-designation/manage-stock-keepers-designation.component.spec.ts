@@ -7,7 +7,7 @@ import { ManageMembersService } from 'src/app/services/users/manage-members.serv
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
 import 'zone.js/dist/zone-testing';
 import { AuthService } from 'src/app/services/authentication/auth.service';
-import { TokenService } from 'src/app/services/authentication/token.service'
+import { TokenService } from 'src/app/services/authentication/token.service';
 import { throwError } from 'rxjs';
 
 describe('AssignStockKeepersComponent', () => {
@@ -31,12 +31,12 @@ describe('AssignStockKeepersComponent', () => {
         },
         {
           provide: TokenService,
-        },],
+        }, ],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
     }).compileComponents();
 
-  authService = TestBed.inject(AuthService);
-  tokenService = TestBed.inject(TokenService);
+    authService = TestBed.inject(AuthService);
+    tokenService = TestBed.inject(TokenService);
 
 });
 
@@ -55,8 +55,8 @@ describe('AssignStockKeepersComponent', () => {
   // Test the deleteAudit()
   it('Call deleteAudit', () => {
     try {
-      component.deleteAudit()
-      component.discardAudit()
+      component.deleteAudit();
+      component.discardAudit();
     }
     catch (errorMessage) {
       console.error(errorMessage);
@@ -66,7 +66,7 @@ describe('AssignStockKeepersComponent', () => {
   // Test the dialog window
   it('Call the dialog object', () => {
     try {
-      component.cancelDialog()
+      component.cancelDialog();
     }
     catch (err) {
       console.error(err);

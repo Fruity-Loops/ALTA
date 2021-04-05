@@ -13,10 +13,8 @@ describe('AuditTemplateComponent', () => {
 
   // @ts-ignore
   let service: AuditTemplateService;
-
   let startDateInput: HTMLInputElement;
   let startTimeInput: HTMLInputElement;
-  
   let templateInput: HTMLInputElement;
 
   beforeEach(async () => {
@@ -44,49 +42,45 @@ describe('AuditTemplateComponent', () => {
 
     startDateInput = fixture.debugElement.query(By.css('#date')).nativeElement;
     startTimeInput = fixture.debugElement.query(By.css('#time')).nativeElement;
-    
     templateInput = fixture.debugElement.query(By.css('#title')).nativeElement;
-    
     fixture.detectChanges();
-  });
+});
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
      // Test that Save button creates a new template
-     it('should create a new template', () => {
+  it('should create a new template', () => {
       fixture.detectChanges();
-      const button = fixture.debugElement.query(By.css("#create-template-button")).nativeElement;
+      const button = fixture.debugElement.query(By.css('#create-template-button')).nativeElement;
       expect(button.disabled).toBeFalsy();
-    });
+  });
 
   it('should be able to enter Start Date', () => {
     fixture.detectChanges();
-      startDateInput.value = '2021-01-18T15:37:42';
-      startDateInput.dispatchEvent(new Event('change'));
-      expect(startDateInput.value).toBe('2021-01-18T15:37:42');
-
-  });
+    startDateInput.value = '2021-01-18T15:37:42';
+    startDateInput.dispatchEvent(new Event('change'));
+    expect(startDateInput.value).toBe('2021-01-18T15:37:42');
+});
 
   it('should be able to enter Start Time', () => {
     fixture.detectChanges();
 
-      startTimeInput.value = '23:33';
-      startTimeInput.dispatchEvent(new Event('change'));
-      expect(startTimeInput.value).toBe('23:33');
-  });
+    startTimeInput.value = '23:33';
+    startTimeInput.dispatchEvent(new Event('change'));
+    expect(startTimeInput.value).toBe('23:33');
+});
 
   it('should be able to enter Template name', () => {
     fixture.detectChanges();
-      templateInput.value = 'Test 001';
-      templateInput.dispatchEvent(new Event('change'));
-      expect(templateInput.value).toBe('Test 001');
-  });
-  
+    templateInput.value = 'Test 001';
+    templateInput.dispatchEvent(new Event('change'));
+    expect(templateInput.value).toBe('Test 001');
+});
+
   // // Test the submitQuery()
   // it('Call method', () => {
-
   //   component.submitQuery({
   //     location: '',
   //     plant: '',
@@ -103,7 +97,7 @@ describe('AuditTemplateComponent', () => {
   //     });
   //     expect(component.errorMessage).toBe('Please choose at least one day');
   //   });
-    
+
   // it('should be able to submit a new query', () => {
   //   try {
   //     component.submitQuery([{
@@ -120,5 +114,4 @@ describe('AuditTemplateComponent', () => {
   //   console.error(error);
   //   }
   // });
-
 });

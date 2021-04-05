@@ -41,7 +41,7 @@ describe('DashboardComponent', () => {
         dateObj : 'MM/DD/YYYY',
         date : '03/12/2021',
         thirtyDaysAgo : 'MM/DD/YYYY',
-      }])
+      }]);
     }
     catch (errorMessage) {
       console.error(errorMessage);
