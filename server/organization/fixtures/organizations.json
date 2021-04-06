@@ -320,7 +320,7 @@
     },
     {
         "model": "organization.organization",
-        "pk": 32,
+        "pk": 2,
         "fields": {
             "org_name": "test32",
             "address": ["Florida"],
@@ -331,7 +331,7 @@
     },
     {
         "model": "organization.organization",
-        "pk": 33,
+        "pk": 4,
         "fields": {
             "org_name": "test33",
             "address": ["Florida2"],
