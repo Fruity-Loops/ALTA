@@ -49,7 +49,7 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
     private authService: AuthService,
-    private router: Router,
+    public router: Router,
     protected fb: FormBuilder
   ) {
     super(fb);
