@@ -9,9 +9,10 @@ import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {MatModule} from '../material/material-module';
 import {FlexModule} from '@angular/flex-layout';
+import {ForgotCredentialsComponent} from 'src/app/components/login/login.component';
 
 @NgModule({
-  declarations: [GreetingComponent, LoginComponent, CreateEmployeeComponent],
+  declarations: [GreetingComponent, LoginComponent, CreateEmployeeComponent, ForgotCredentialsComponent],
   imports: [
     CommonModule,
     FormsModule,

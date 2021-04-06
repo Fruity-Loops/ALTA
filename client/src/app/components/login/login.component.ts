@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/authentication/token.service';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -13,19 +14,19 @@ import { ManageMembersService } from 'src/app/services/users/manage-members.serv
 export class LoginComponent implements OnInit {
   // @ts-ignore
   loginForm: FormGroup;
-  // @ts-ignore
-  resetPasswordForm: FormGroup;
   errorMessage: string;
   successMessage: string;
   body: any;
   panelOpenState = false;
+  dialogRef: any;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService,
-    private userService: ManageMembersService
+    private userService: ManageMembersService,
+    private dialog: MatDialog
   ) {
     this.errorMessage = '';
     this.successMessage = '';
@@ -39,10 +40,6 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-    });
-
-    this.resetPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -104,14 +101,67 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  openForgotCredentials(): void {
+    this.dialogRef = this.dialog.open(ForgotCredentialsComponent, {data: {
+        fb: this.fb,
+        userService: this.userService
+      }
+    });
+  }
+}
+
+interface ForgotCredentialsData {
+  fb: FormBuilder;
+  userService: ManageMembersService;
+}
+
+@Component({
+  selector: 'app-forgot-credentials-component',
+  templateUrl: 'login.forgotcredentials.html',
+  styleUrls: ['login.component.scss']
+})
+export class ForgotCredentialsComponent {
+  // @ts-ignore
+  resetPasswordForm: FormGroup;
+  fb: FormBuilder;
+  userService: ManageMembersService;
+  success = false;
+  emailNoExist = false;
+
+  constructor(
+    public dialogRef: MatDialogRef<ForgotCredentialsComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ForgotCredentialsData) {
+    this.fb = data.fb;
+    this.resetPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+    this.userService = data.userService;
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+  disableOrganization(): void {
+    this.dialogRef.close();
+  }
+
   resetPassword(): void {
-    this.body = {
+    const body = {
       email: this.resetPasswordForm.value.email,
     };
 
-    this.userService.resetPassword(this.body).subscribe((data) => {
-      this.resetPasswordForm.reset();
-      this.panelOpenState = false;
+    this.userService.resetPassword(body).subscribe(() => {
+      this.success = true;
+      setTimeout( () => {
+        this.resetPasswordForm.reset();
+        this.closeDialog();
+      }, 5000);
+    }, (err) => {
+      if (err.status === 404) {
+        this.emailNoExist = true;
+      }
     });
   }
+
 }

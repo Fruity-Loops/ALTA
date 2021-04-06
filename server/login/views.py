@@ -246,7 +246,7 @@ class ResetPasswordEmailView(generics.GenericAPIView):
     def post(self, request):
         data = request.data
         receiver_email = data.get('email', '')
-        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
+        response = Response({'message': 'Email not found!'}, status=status.HTTP_404_NOT_FOUND)
         url = os.getenv('SERVER_URL', ' http://localhost:4200')
 
         try:

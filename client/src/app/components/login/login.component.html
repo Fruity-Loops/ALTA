@@ -53,48 +53,7 @@
           Login
         </button>
       </form>
-    
+      <a class="forgot-credentials" (click)="openForgotCredentials()">Forgot Credentials</a>
     </mat-card-content>
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                           (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Forgot my password
-          </mat-panel-title>
-          <mat-panel-description>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <form class="col s12" [formGroup]="resetPasswordForm" novalidate (ngSubmit)="resetPassword()">
-          <mat-form-field appearance="legacy" class="input">
-            <mat-label for="email">E-mail address</mat-label>
-            <input matInput id="email" type="text" formControlName="email"/>
-  
-            <mat-error class="error" *ngIf="
-            resetPasswordForm.controls['email'].errors?.required &&
-            resetPasswordForm.controls['email'].touched
-            ">
-              <!-- Handeling error -->
-              Email is required
-            </mat-error>
-  
-            <mat-error class="error" *ngIf="
-            resetPasswordForm.controls['email'].errors?.email &&
-              !resetPasswordForm.controls['email'].errors?.required &&
-              resetPasswordForm.controls['email'].touched
-            ">
-              <!-- Handeling error -->
-              Email format is not valid
-            </mat-error>
-  
-          </mat-form-field>
-
-          <br/>
-          <button mat-raised-button id="loginbtn" color="accent" [disabled]="!resetPasswordForm.valid">
-            Send reset link
-          </button>
-        </form>
-      </mat-expansion-panel>
-    </mat-accordion>
   </mat-card>
 </div>
