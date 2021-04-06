@@ -1,0 +1,24 @@
+[
+	{
+		"model": "audit.comment",
+		"pk": 1,
+		"fields": {
+			"ref_audit": 1,
+			"org_id": 1,
+			"content": "this 1st comment is from the DB",
+			"author": "user1",
+			"created_timestamp": "2021-02-04T21:57:00.012Z"
+		}
+	},
+	{
+		"model": "audit.comment",
+		"pk": 2,
+		"fields": {
+			"ref_audit": 1,
+			"org_id": 1,
+			"content": "this 2st comment is from the DB",
+			"author": "user1",
+			"created_timestamp": "2021-02-04T21:57:00.012Z"
+		}
+	}
+]

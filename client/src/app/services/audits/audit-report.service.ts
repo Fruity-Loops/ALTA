@@ -32,6 +32,15 @@ export class AuditReportService implements LocalStorageInterface {
   getProperAudits(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
   }
+
+  getComments(): Observable<any> {
+    return this.http.get(`${BASEURL}/comment/`);
+  }
+
+  postComment(comment: any): Observable<any> {
+    return this.http.post(`${BASEURL}/comment/`, {comment});
+  }
+
 }
 
 export enum AuditLocalStorage {

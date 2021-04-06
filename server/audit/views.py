@@ -6,17 +6,19 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+import json
+
 from django_server.custom_logging import LoggingViewset
 from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer, GetAssignmentSerializer
+        AssignmentSerializer, GetAssignmentSerializer, CommentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
         CheckAssignmentOrganizationById
-from .models import Audit, Assignment, BinToSK, Record
+from .models import Audit, Assignment, BinToSK, Record, Comment
 
 
 class AuditViewSet(LoggingViewset):
@@ -432,3 +434,42 @@ class RecommendationViewSet(LoggingViewset):
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
                 'items_recommendation': items_to_recommend}
         return Response(data)
+
+
+class CommentViewSet(LoggingViewset):
+    http_method_names = ['get', 'post']
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = SKPermissionFactory(self.request)
+        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
+        permission_classes = factory.get_general_permissions(
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
+        )
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        # org_id = request.query_params.get('org_id')
+        # self.queryset = self.queryset.filter(audit__organization_id=org_id)
+        serializer = self.get_serializer(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        data = request.data['comment']
+        print(data)
+        print(dir(data))
+        for item in data:
+            print(item)
+        comment = Comment.objects.create()
+        comment.org_id = data.get('org_id', '')
+        comment.audit_id = data.get('audit_id', '')
+        comment.content = data.get('content', '')
+        comment.author = data.get('author', '')
+        comment.save()
+        return Response(
+            status=status.HTTP_200_OK)
+
+

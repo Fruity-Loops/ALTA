@@ -78,3 +78,13 @@ class Record(ItemFields):
         (NEW, 'New')
     ]
     status = models.CharField(max_length=8, choices=RECORD_STATUS, default=PENDING)
+
+
+class Comment(models.Model):
+    comment_id = models.AutoField(primary_key=True)
+    ref_audit = models.CharField(max_length=256, null=False)
+    org_id = models.CharField(max_length=256, null=False)
+    content = models.TextField(blank=True)
+    author = models.CharField(max_length=256, null=False)
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+

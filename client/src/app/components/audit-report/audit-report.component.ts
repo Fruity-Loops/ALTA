@@ -6,9 +6,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
+import {HttpParams} from "@angular/common/http";
 
-//audit information
-//inv information
 @Component({
   selector: 'app-audit-report',
   templateUrl: './audit-report.component.html',
@@ -29,6 +28,11 @@ export class AuditReportComponent extends TableManagementComponent implements On
   formg: FormBuilder;
 
   selectedItems: number[];
+
+  comment_value = ""
+  comments: string[];
+
+
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -53,6 +57,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.metaDataSource = new MatTableDataSource<any>();
     this.selectedItems = [];
     this.parsedMetaData = [];
+    this.comments = [];
   }
 
   ngOnInit(): void {
@@ -66,7 +71,13 @@ export class AuditReportComponent extends TableManagementComponent implements On
       this.setAuditInfo();
       // TODO: Display Audit's Items Data
       this.setAuditData();
+      this.setCommentData();
     });
+    // this.comments = [
+    //   "hello",
+    //   "hi",
+    //   "This is a very long comment to see how the wrapping works",
+    // ];
   }
 
   // TODO: Fix appropriate backend calls
@@ -98,7 +109,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
       (metaData: any) => {
         this.metaData = metaData;
         this.cleanMetaData();
-        console.log(metaData);
 
         // Getting the field name of the item object returned and populating the column of the table
         for (const key in this.metaData) {
@@ -122,7 +132,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     let initiated_date = new Date();
     initiated_date.setTime(Date.parse(this.metaData.initiated_on))
     // this.metaData.initiated_on = initiated_date;
-    console.log(initiated_date);
 
   }
 
@@ -140,7 +149,21 @@ export class AuditReportComponent extends TableManagementComponent implements On
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        if (data.comments){
+          this.comments = data.comments;
+        }
 
+      }
+    )
+  }
+
+  setCommentData(): void {
+    this.auditReportService.getComments().subscribe(
+      (data: any) => {
+        console.log(data);
+        for (let i =0; i<data.length; i++){
+          this.comments.unshift(data[i].content);
+        }
       }
     )
   }
@@ -164,7 +187,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.items = this.data;
     this.errorMessage = '';
 
-    console.log(this.items);
 
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
@@ -180,5 +202,34 @@ export class AuditReportComponent extends TableManagementComponent implements On
     } else {
       this.selectedItems.push(value);
     }
+  }
+
+  comment(): void {
+    console.log(localStorage);
+    let params = new HttpParams();
+    params = params.append('org_id', String(localStorage.getItem('organization_id')))
+      .append('audit_id', String(this.id))
+      .append('content', this.comment_value)
+      .append('author', 'johnyy');
+
+    let comment = {
+      "org_id": String(localStorage.getItem('organization_id')),
+      "audit_id": String(this.id),
+      "content": String(this.comment_value),
+      "author": "johny"
+    }
+
+    this.auditReportService.postComment(comment).subscribe(
+      (data) => {
+        this.comments.push(this.comment_value);
+        this.comment_value = '';
+      },
+      (err) => {
+        console.log("Comment posting failed");
+      }
+    )
+    // let elem = document.getElementById('comment-history');
+    // @ts-ignore
+    // elem.scrollTop = elem.scrollHeight;
   }
 }

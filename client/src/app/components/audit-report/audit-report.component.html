@@ -1,143 +1,84 @@
 <mat-card>
-  <mat-card-title>Audit #{{id}}</mat-card-title>
-  <mat-divider></mat-divider>
-  <div>
-<!--    <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchItem()" (keydown.Enter)="searchItem();">-->
-<!--      <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel >-->
-<!--        <mat-expansion-panel-header hideToggle="true">-->
-<!--          <mat-panel-title (click)="$event.stopPropagation();"-->
-<!--                           (keydown.Space)="$event.stopImmediatePropagation();"-->
-<!--                           (keydown.Enter)="$event.stopImmediatePropagation();">-->
-<!--            <mat-form-field class="searchInventoryBar" style="width: 100%" >-->
+  <mat-card-title>
+    Audit #{{id}}
+    <mat-icon id="questionanswericon" class="position-right" (click)="drawer.toggle()">
+      question_answer
+    </mat-icon>
+  </mat-card-title>
+  <mat-drawer-container class="comment-container">
+    <mat-drawer #drawer class="comment" mode="side" position="end">
+      <div class="comment">
+        <div class="comment-header" fxLayoutAlign="center">
+          <h2>Comment Board</h2>
+        </div>
+        <div id="comment-history" class="comment-history">
+          <div *ngFor="let comment of comments">
+            <div class="comment-text">
+              {{comment}}
+            </div>
+          </div>
+        </div>
 
-<!--              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="inventorySearchBar">-->
-<!--            </mat-form-field>-->
-<!--            <button mat-icon-button id="searchbtn" class="save">-->
-<!--              <mat-icon matSuffix>search</mat-icon>-->
-<!--            </button>-->
-<!--          </mat-panel-title>-->
-<!--          <mat-panel-description class="expandSearchButton">-->
-<!--            <mat-icon *ngIf="!expansionPanel.expanded">filter_list</mat-icon>-->
-<!--            <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>-->
-<!--          </mat-panel-description>-->
-<!--        </mat-expansion-panel-header>-->
-<!--        <p>-->
-<!--          ID-->
-<!--        </p>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_id_from" type="text" formControlName="_id_from" placeholder="from"/>-->
-<!--        </mat-form-field>-->
-<!--        - -->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_id_to" type="text" formControlName="_id_to" placeholder="to"/>-->
-<!--        </mat-form-field>-->
-<!--        <p>Localisation</p>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_location2" type="text" formControlName="Location" placeholder="Location"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_zone" type="text" formControlName="Zone" placeholder="Zone"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_aisle" type="text" formControlName="Aisle" placeholder="Aisle"/>-->
-<!--        </mat-form-field>-->
-<!--        <p>Item details</p>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_part_number" type="text" formControlName="Part_Number" placeholder="Part Number"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_sn" type="text" formControlName="Serial_Number" placeholder="Serial Number"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_condition" type="text" formControlName="Condition" placeholder="Condition"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_category" type="text" formControlName="Category" placeholder="Category"/>-->
-<!--        </mat-form-field>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_owner" type="text" formControlName="Owner" placeholder="Owner"/>-->
-<!--        </mat-form-field>-->
-<!--        <p>-->
-<!--          Average Cost-->
-<!--        </p>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_average_cost_from" type="text" formControlName="Average_Cost_from" placeholder="from"/>-->
-<!--        </mat-form-field>-->
-<!--        - -->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_average_cost_to" type="text" formControlName="Average_Cost_to" placeholder="to"/>-->
-<!--        </mat-form-field>-->
-<!--        <p>-->
-<!--          Quantity-->
-<!--        </p>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_quantity_from" type="text" formControlName="Quantity_from" placeholder="from"/>-->
-<!--        </mat-form-field>-->
-<!--        - -->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_quantity_to" type="text" formControlName="Quantity_to" placeholder="to"/>-->
-<!--        </mat-form-field>-->
-<!--        <br/>-->
-<!--        <mat-form-field appearance="outline">-->
-<!--          <input matInput id="item_unit_of_measure" type="text" formControlName="Unit_of_Measure"-->
-<!--                 placeholder="Unit of Measure"/>-->
-<!--        </mat-form-field>-->
-<!--      </mat-expansion-panel>-->
+        <div class="comment-message">
+          <form>
+            <mat-form-field class="comment-input">
+              <mat-label>Enter Comment</mat-label>
+              <input matInput type="text" [(ngModel)]="comment_value" [ngModelOptions]="{standalone: true}" rows="1">
+              <button mat-button *ngIf="comment_value" matSuffix mat-icon-button aria-label="Comment"
+                      (click)="this.comment()">
+                <mat-icon id="sendicon">send</mat-icon>
+              </button>
+            </mat-form-field>
+          </form>
+        </div>
 
-<!--    </form>-->
-  </div>
+      </div>
+    </mat-drawer>
+    <mat-drawer-content>
 
-  <mat-divider></mat-divider>
-  <div>
+      <mat-divider></mat-divider>
+      <!--  AUDIT META DATA -->
+      <div>
 
-      <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="metaDataSource" matSort>
+        <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="metaDataSource" matSort>
+          <ng-container *ngFor="let column of displayedMetaColumns" [matColumnDef]="column">
+            <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
+            <td mat-cell *matCellDef="let object">
+              {{ object[column]}}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedMetaColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedMetaColumns;"></tr>
+        </table>
 
-      <ng-container *ngFor="let column of displayedMetaColumns" [matColumnDef]="column">
-        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
-        <td mat-cell *matCellDef="let object">
-          {{ object[column]}}
-        </td>
-      </ng-container>
+        <mat-card class="auditinfo">
+          <mat-card-content>
+
+            <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+              <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+                <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
+                <td mat-cell *matCellDef="let object">
+                  {{ object[column]}}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator
+              [length]="length"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[25,50,100]"
+              [pageIndex]="pageIndex"
+              (page)="paginatorAction($event)">
+            </mat-paginator>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
 
 
-        <tr mat-header-row *matHeaderRowDef="displayedMetaColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedMetaColumns;"></tr>
-    </table>
+    </mat-drawer-content>
+  </mat-drawer-container>
 
-    <mat-divider></mat-divider>
-
-    <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
-      <div id="audit">List of Audits.</div>
-
-<!--      CHECKBOX TO EXPORT SPECIFIC ITEMS-->
-<!--      <ng-container matColumnDef="Select">-->
-<!--        <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>-->
-<!--        <td mat-cell *matCellDef="let object">-->
-<!--          <mat-checkbox  (change)='onChange(object["audit_id"])' [id]="'checkBox' + object['audit_id']"></mat-checkbox>-->
-<!--        </td>-->
-<!--      </ng-container>-->
-
-
-      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
-        <td mat-cell *matCellDef="let object">
-            {{ object[column]}}
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-    </table>
-
-    <mat-paginator
-      [length]="length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[25,50,100]"
-      [pageIndex]="pageIndex"
-      (page)="paginatorAction($event)">
-    </mat-paginator>
-
-
-  </div>
 </mat-card>
