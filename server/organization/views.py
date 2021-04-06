@@ -12,6 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 
 from .serializers import OrganizationSerializer
 from .models import Organization
+from user_account.models import CustomUser
 from .permissions import ValidateOrgMatchesUser
 
 from threading import Thread
@@ -47,6 +48,20 @@ class OrganizationViewSet(LoggingViewset):
         date_today = today.strftime("%Y/%m/%d")
         data['calendar_date'] = date_today
         return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        current_status = instance.status
+        if 'status' in request.data:
+            patch_status = request.data['status']
+            if current_status != patch_status: # Org status changed
+                CustomUser.objects.filter(organization=instance.org_id).update(is_active=patch_status)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
 class ModifyOrganizationInventoryItemsDataUpdate(generics.GenericAPIView):
