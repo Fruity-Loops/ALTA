@@ -227,6 +227,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   setCommentData(): void {
+    this.comments = [];
     this.auditReportService.getComments().subscribe(
       (data: any) => {
         console.log(data);
@@ -282,8 +283,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
     this.auditReportService.postComment(comment).subscribe(
       (data) => {
-        this.comments.push(this.comment_value);
         this.comment_value = '';
+        this.setCommentData();
       },
       (err) => {
         console.log("Comment posting failed");

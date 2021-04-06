@@ -475,15 +475,12 @@ class CommentViewSet(LoggingViewset):
 
     def create(self, request):
         data = request.data['comment']
-        print(data)
-        print(dir(data))
-        for item in data:
-            print(item)
-        comment = Comment.objects.create()
-        comment.org_id = data.get('org_id', '')
-        comment.ref_audit = data.get('ref_audit', '')
-        comment.content = data.get('content', '')
-        comment.author = data.get('author', '')
+        comment = Comment.objects.create(
+            org_id=data.get('org_id', ''),
+            ref_audit=data.get('ref_audit', ''),
+            content=data.get('content', ''),
+            author=data.get('author', '')
+        )
         comment.save()
         return Response(
             status=status.HTTP_200_OK)

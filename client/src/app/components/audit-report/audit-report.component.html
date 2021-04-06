@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>
     Audit #{{id}}
-    <mat-icon id="questionanswericon" class="position-right" (click)="drawer.toggle()">
+    <mat-icon id="questionanswericon" class="position-right" (click)="drawer.toggle(); setCommentData()">
       question_answer
     </mat-icon>
   </mat-card-title>
@@ -170,5 +170,5 @@
 
     </mat-drawer-content>
   </mat-drawer-container>
-  
+
 </mat-card>

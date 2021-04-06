@@ -81,9 +81,9 @@ class Record(ItemFields):
 
 
 class Comment(models.Model):
-    comment_id = models.IntegerField(primary_key=True)
-    ref_audit = models.CharField(max_length=256, null=False)
-    org_id = models.CharField(max_length=256, null=False)
+    _id = models.AutoField(primary_key=True)
+    ref_audit = models.IntegerField(null=False)
+    org_id = models.IntegerField(null=False)
     content = models.TextField(blank=True)
     author = models.CharField(max_length=256, null=False)
     created_timestamp = models.DateTimeField(auto_now_add=True)
