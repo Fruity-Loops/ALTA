@@ -231,7 +231,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
       (data: any) => {
         console.log(data);
         for (let i =0; i<data.length; i++){
-          this.comments.unshift(data[i].content);
+          this.comments.push(data[i].content);
         }
       }
     )
@@ -273,13 +273,11 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   comment(): void {
-    console.log(localStorage);
-
     let comment = {
       "org_id": String(localStorage.getItem('organization_id')),
-      "audit_id": String(this.id),
+      "ref_audit": this.id,
       "content": String(this.comment_value),
-      "author": "johny"
+      "author": String(localStorage.getItem('username'))
     }
 
     this.auditReportService.postComment(comment).subscribe(
@@ -291,8 +289,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
         console.log("Comment posting failed");
       }
     )
-    // let elem = document.getElementById('comment-history');
-    // @ts-ignore
-    // elem.scrollTop = elem.scrollHeight;
+
   }
 }

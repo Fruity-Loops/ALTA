@@ -481,7 +481,7 @@ class CommentViewSet(LoggingViewset):
             print(item)
         comment = Comment.objects.create()
         comment.org_id = data.get('org_id', '')
-        comment.audit_id = data.get('audit_id', '')
+        comment.ref_audit = data.get('ref_audit', '')
         comment.content = data.get('content', '')
         comment.author = data.get('author', '')
         comment.save()
