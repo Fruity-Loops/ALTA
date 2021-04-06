@@ -54,9 +54,6 @@ def create_orgs_users_items_templates(seeder):
         "email": lambda x: seeder.faker.email(),
     })
 
-
-
-
     seeder.add_entity(Item, 100, {
         "Batch_Number": lambda x: gen_item_id(flag=False),
         "Item_Id": lambda x: gen_item_id(flag=True),
