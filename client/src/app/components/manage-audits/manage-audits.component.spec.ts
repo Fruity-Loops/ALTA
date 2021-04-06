@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageAuditsComponent } from './manage-audits.component';
 import { FormBuilder } from '@angular/forms';
+import { AppModule } from 'src/app/app.module'
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageAuditsComponent;
@@ -19,7 +20,7 @@ describe('ManageInventoryItemsComponent', () => {
         FormBuilder,
         { provide: ManageAuditsService },
       ],
-      imports: [HttpClientModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
     fixture = TestBed.createComponent(ManageAuditsComponent);

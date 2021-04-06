@@ -56,6 +56,10 @@ export class OrganizationPage {
     return element(by.id('disableOrgNameInput'));
   }
 
+  nextPageButton(): ElementFinder {
+    return element(by.className('mat-paginator-navigation-next'));
+  }
+
   getDisableOrgConfirmationButton(): ElementFinder {
     return element(by.id('confirmDisableOrg'));
   }

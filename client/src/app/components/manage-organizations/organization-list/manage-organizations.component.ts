@@ -1,7 +1,6 @@
-import {Component, Input, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import {AuthService} from 'src/app/services/authentication/auth.service';
-import {ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {TableManagementComponent} from 'src/app/components/TableManagement.component';
@@ -9,6 +8,7 @@ import {MatSort} from '@angular/material/sort';
 import {FormBuilder} from '@angular/forms';
 import {Organization} from 'src/app/models/organization';
 import {MatDialog} from '@angular/material/dialog';
+import {ManageOrganizationsLangFactory, ManageOrganizationTableHeaders} from './manage-organizations.language';
 
 @Component({
   selector: 'app-manage-organizations',
@@ -25,6 +25,11 @@ export class ManageOrganizationsComponent extends TableManagementComponent imple
   displayedColumns: string[] = ['Company_name', 'Activated_On', 'Status', 'Address', '2'];
   filterTerm: string;
   selected = 'All';
+
+  title: string;
+  searchPlaceholder: string;
+  tableHeaders: ManageOrganizationTableHeaders;
+  addButton: string;
 
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -52,6 +57,10 @@ export class ManageOrganizationsComponent extends TableManagementComponent imple
     this.activeStates = [{status: 'active'}, {status: 'disabled'}];
     this.dataSource = new MatTableDataSource();
     this.filterTerm = '';
+
+    const lang = new ManageOrganizationsLangFactory();
+    [this.title, this.searchPlaceholder, this.tableHeaders, this.addButton] = [lang.lang.title, lang.lang.searchPlaceholder,
+      lang.lang.tableHeaders, lang.lang.addButton];
   }
 
   ngOnInit(): void {

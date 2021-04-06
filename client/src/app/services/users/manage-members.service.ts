@@ -20,7 +20,7 @@ export class ManageMembersService {
   constructor(
     private http: HttpClient, // We inject the http client in the constructor to do our REST operations
     private authService: AuthService
-  ) {}
+  ) { }
 
   getOrgId(): any {
     let orgId = this.authService.getLocalStorage(UserLocalStorage.OrgId);

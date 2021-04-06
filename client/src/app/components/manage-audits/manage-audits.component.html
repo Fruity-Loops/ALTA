@@ -1,5 +1,6 @@
 <mat-card>
-  <mat-card-title>List of Audits</mat-card-title>
+  <button mat-stroked-button [disabled]="selectedAudit==-1" id="cancel" class="cancel" (click)="cancelAudit()">Cancel Audit</button>
+  <mat-card-title>{{title}}</mat-card-title>
   <div>
 
       <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">
@@ -11,7 +12,8 @@
                            (keydown.Enter)="$event.stopImmediatePropagation();">
             <mat-form-field class="searchInventoryBar" style="width: 100%" >
 
-              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="auditSearchBar">
+              <input  matInput id="search" type="string" formControlName="search" [placeholder]="searchPlaceholder"
+                      autocomplete="off" style="width: 100%" id="auditSearchBar">
             </mat-form-field>
             <button mat-icon-button id="searchbtn" class="save">
               <mat-icon matSuffix>search</mat-icon>
@@ -55,11 +57,15 @@
       <div id="audit">List of Audits.</div>
 
       <ng-container matColumnDef="Select">
-        <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
-        <td mat-cell *matCellDef="let object">
-          <mat-checkbox  (change)='onChange(object["audit_id"])' [id]="'checkBox' + object['audit_id']"></mat-checkbox>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? onRowSelection(row) : null"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
         </td>
       </ng-container>
+      
 
       <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
         <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>

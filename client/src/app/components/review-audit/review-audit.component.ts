@@ -1,10 +1,11 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { AuthService } from 'src/app/services/authentication/auth.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {AuthService} from 'src/app/services/authentication/auth.service';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {IDeactivateComponent} from '../../guards/can-deactivate.guard';
+import {ReviewAuditActionButtons, ReviewAuditLangFactory, ReviewAuditTableHeaders} from './review-audit.language';
 
 @Component({
   selector: 'app-review-audit',
@@ -23,16 +24,21 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   allExpandState = false;
   errorMessage = '';
   requestConfirmation = true;
+  title: string;
+  actionButtons: ReviewAuditActionButtons;
+  tableHeaders: ReviewAuditTableHeaders;
 
   constructor(
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authservice: AuthService,
-    private router: Router) {
+    public router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
     this.currentUser = null;
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
+    const lang = new ReviewAuditLangFactory();
+    [this.title, this.actionButtons, this.tableHeaders] = [lang.lang.title, lang.lang.actionButtons, lang.lang.tableHeaders];
   }
 
   ngOnInit(): void {

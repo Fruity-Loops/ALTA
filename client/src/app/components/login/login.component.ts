@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { TokenService } from 'src/app/services/authentication/token.service';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {LoginLangFactory} from './login.language';
 
 @Component({
   selector: 'app-login',
@@ -20,9 +21,13 @@ export class LoginComponent implements OnInit {
   panelOpenState = false;
   dialogRef: any;
 
+  email: string;
+  password: string;
+  loginBtnLabel: string;
+
   constructor(
     private fb: FormBuilder,
-    private router: Router,
+    public router: Router,
     private authService: AuthService,
     private tokenService: TokenService,
     private userService: ManageMembersService,
@@ -30,6 +35,9 @@ export class LoginComponent implements OnInit {
   ) {
     this.errorMessage = '';
     this.successMessage = '';
+
+    const lang = new LoginLangFactory();
+    [this.email, this.password, this.loginBtnLabel] = [lang.lang.email, lang.lang.password, lang.lang.loginBtnLabel];
   }
 
   ngOnInit(): void {
