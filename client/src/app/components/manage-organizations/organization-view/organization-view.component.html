@@ -7,15 +7,15 @@
       <mat-error *ngIf="orgError">
         {{orgError}}
       </mat-error>
-      <mat-label>Name:</mat-label>
+      <mat-label>{{fieldLabels.name}}:</mat-label>
       <mat-form-field appearance="outline" class="text-input">
-        <input matInput placeholder="Organization Name" [(ngModel)]="orgName" [disabled]="isEdit && !editOn" id="EditOrgName"/>
+        <input matInput [placeholder]="fieldPlaceholders.org_name" [(ngModel)]="orgName" [disabled]="isEdit && !editOn" id="EditOrgName"/>
       </mat-form-field>
     </div>
     <div>
       <div *ngIf="!isEdit" class="vertical-stack"></div>
       <div *ngIf="isEdit" class="vertical-stack">
-        <mat-label>Status</mat-label>
+        <mat-label>{{fieldLabels.status}}:</mat-label>
         <mat-form-field appearance="outline" class="text-input">
           <mat-select class="statusDropDown" id="active" [(value)]="isActive" [disabled]="isEdit && !editOn" id="orgStatusDropDown">
             <mat-option *ngFor="let active of activeStates" [value]="active" [id]="active">
@@ -28,12 +28,12 @@
     <div class="take-two-columns">
 <!--      TODO: For 3.8 display old csv file -->
       <div class="vertical-stack">
-        <mat-label>Location:</mat-label>
+        <mat-label>{{fieldLabels.location}}:</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <input matInput placeholder="Location Code,Location Description" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
+          <input matInput [placeholder]="fieldPlaceholders.location" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
         </mat-form-field>
       </div>
-      <div class="upload-button-spacer">OR</div>
+      <div class="upload-button-spacer">{{fieldLabels.or}}</div>
       <div class="upload-button-spacer">
         <input #csvInput hidden="true" type="file" (change)="readFromExcelFile($event.target.files)" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
         <button mat-stroked-button color="primary" class="upload-button" (click)="csvInput.click()" [disabled]="isEdit && !editOn"> Submit (.xlsx) file</button>
@@ -48,13 +48,13 @@
       <div class="button-side-by-side" *ngIf="editOn">
         <button mat-stroked-button id="create-template-button" class="save-button-bg footer-button"
                 (click)="submitSave()" id="saveEditOrganizationButton">
-          SAVE</button><!-- if checks throws error then do not send data -->
+          {{actionButtons.save}}</button><!-- if checks throws error then do not send data -->
       </div>
       <div class="button-side-by-side" *ngIf="editOn">
-        <button mat-stroked-button routerLink="/manage-organizations" class="footer-button" id="cancelEditOrganizationButton">CANCEL</button>
+        <button mat-stroked-button routerLink="/manage-organizations" class="footer-button" id="cancelEditOrganizationButton">{{actionButtons.cancel}}</button>
       </div>
       <div class="button-side-by-side" *ngIf="!editOn">
-        <button mat-stroked-button class="footer-button" (click)="turnOnEdit()" id="editOrganizationButton">EDIT</button>
+        <button mat-stroked-button class="footer-button" (click)="turnOnEdit()" id="editOrganizationButton">{{actionButtons.edit}}</button>
       </div>
     </div>
   </mat-card-footer>

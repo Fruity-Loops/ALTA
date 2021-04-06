@@ -15,7 +15,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
   disabled = false;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private auditTemplateService: AuditTemplateService,
     itemsService: ManageInventoryItemsService
   ) {

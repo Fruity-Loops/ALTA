@@ -139,6 +139,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
     settingsPage.getStatusDropDown().click();
     settingsPage.getStatusDisabled().click();
     settingsPage.getSaveButton().click();
+    browser.sleep(3000); // Need this pause, page refresh after saving changes.
     settingsPage.getEditButton().click();
     expect(settingsPage.getFirstNameField().getAttribute('value')).toBe('a_good_first_name');
     expect(settingsPage.getLastNameField().getAttribute('value')).toBe('a_good_last_name');

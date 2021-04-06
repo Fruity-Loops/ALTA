@@ -1,6 +1,7 @@
 <mat-card>
-  <button mat-stroked-button [disabled]="inventoryItemToAudit.length<=0" id="create" class="create" (click)="submitAudit()">Start Audit</button>
-  <mat-card-title>Inventory Items</mat-card-title>
+  <button mat-stroked-button [disabled]="inventoryItemToAudit.length<=0" id="create" class="create"
+          (click)="submitAudit()">{{startAuditBtn}}</button>
+  <mat-card-title>{{title}}</mat-card-title>
   <div>
 
       <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchItem()" (keydown.Enter)="searchItem();">
@@ -12,7 +13,8 @@
                            (keydown.Enter)="$event.stopImmediatePropagation();">
             <mat-form-field class="searchInventoryBar" style="width: 100%" >
 
-              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="inventorySearchBar">
+              <input  matInput id="search" type="string" formControlName="search" [placeholder]="searchPlaceholder"
+                      autocomplete="off" style="width: 100%" id="inventorySearchBar">
             </mat-form-field>
             <button mat-icon-button id="searchbtn" class="save">
               <mat-icon matSuffix>search</mat-icon>

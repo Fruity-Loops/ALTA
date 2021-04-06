@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { TableManagementComponent } from '../TableManagement.component';
 import { SelectionModel } from '@angular/cdk/collections';
+import {ManageAuditsLangFactory} from './manage-audits.language';
 
 @Component({
   selector: 'app-manage-audits',
@@ -41,6 +42,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   initialSelection = [];
   allowMultiSelect = false;
   selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+  title: string;
+  searchPlaceholder: string;
 
   constructor(
     private auditService: ManageAuditsService,
@@ -51,6 +54,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
     this.selectedAudit = -1;
+    const lang = new ManageAuditsLangFactory();
+    [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
   }
 
   getSearchForm(): any {

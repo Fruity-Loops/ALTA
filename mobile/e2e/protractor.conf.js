@@ -10,13 +10,14 @@ const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
 exports.config = {
   allScriptsTimeout: 11000,
   specs: [
-    './src/**/*.e2e-spec.ts'
+    './src/**/backend-service.e2e-spec.ts',
+    './src/**/epic_4/*.e2e-spec.ts',
   ],
   capabilities: {
     browserName: 'chrome'
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  baseUrl: 'http://localhost:8100/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

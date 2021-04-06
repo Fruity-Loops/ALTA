@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
 import { TableManagementComponent } from '../TableManagement.component';
 import { SelectionModel } from '@angular/cdk/collections';
+import {ManageInventoryItemsLangFactory} from './manage-inventory-items.language';
 
 @Component({
   selector: 'app-manage-inventory-items',
@@ -36,6 +37,11 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
   // @ts-ignore
   @ViewChild(MatSort) sort: MatSort;
 
+
+  title = 'Inventory Items';
+  searchPlaceholder = 'Search...';
+  startAuditBtn = 'Start Audit';
+
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
@@ -48,12 +54,15 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     private itemsService: ManageInventoryItemsService,
     private auditService: ManageAuditsService,
     private authService: AuthService,
-    private router: Router,
+    public router: Router,
     protected fb: FormBuilder
   ) {
     super(fb);
     this.dataSource = new MatTableDataSource<any>();
     this.inventoryItemToAudit = [];
+
+    const lang = new ManageInventoryItemsLangFactory();
+    [this.title, this.searchPlaceholder, this.startAuditBtn] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.startAuditBtn];
   }
 
   getSearchForm(): any {

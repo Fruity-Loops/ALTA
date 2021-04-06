@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientModule} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import {OrganizationSettingsService} from 'src/app/services/organization-settings.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {EditOrganizationSettingsComponent} from './edit-organization-settings/edit-organization-settings.component';
+import {EditOrganizationSettingsComponent} from './edit-organization-settings.component';
+import { AppModule } from 'src/app/app.module'
 
 describe('OrganizationSettingsComponent', () => {
   let component: EditOrganizationSettingsComponent;
@@ -18,7 +19,7 @@ describe('OrganizationSettingsComponent', () => {
         FormBuilder,
         { provide: OrganizationSettingsService}
       ],
-      imports: [HttpClientModule, MatSnackBarModule]
+      imports: [HttpClientTestingModule, MatSnackBarModule, AppModule]
     });
 
     fixture = TestBed.createComponent(EditOrganizationSettingsComponent);
