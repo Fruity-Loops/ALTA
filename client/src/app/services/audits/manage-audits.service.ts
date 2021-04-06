@@ -54,6 +54,10 @@ export class ManageAuditsService implements LocalStorageInterface {
     return this.http.post(`${BASEURL}/bin-to-sk/`, preAuditData);
   }
 
+  updatePreAudit(auditId: any, preAuditData: any): Observable<any> {
+    return this.http.patch(`${BASEURL}/bin-to-sk/${auditId}/`, preAuditData);
+  }
+
   getAssignedBins(auditId: any): Observable<any> {
     return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
   }
@@ -67,7 +71,6 @@ export class ManageAuditsService implements LocalStorageInterface {
   }
 
   getCompleteAudit(auditId: any): Observable<any> {
-
     let params = new HttpParams();
      params = params.append('organization', String(localStorage.getItem('organization_id')))
                     .append('audit_id', String(auditId));

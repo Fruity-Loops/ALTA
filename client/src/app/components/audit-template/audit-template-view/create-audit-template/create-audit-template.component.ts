@@ -24,13 +24,13 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
 
   initializeForm(): void {
     this.templateValues = {
-      location: '',
-      plant: '',
-      zones: '',
-      aisles: '',
-      bins: '',
-      part_number: '',
-      serial_number: '',
+      Location: '',
+      Plant: '',
+      Zone: '',
+      Aisle: '',
+      Bin: '',
+      Part_Number: '',
+      Serial_Number: '',
       start_date: '',
       repeat_every: this.repeatEvery,
       on_day: this.dayArray,

@@ -10,7 +10,10 @@ class Organization(models.Model):
     address = models.JSONField(null=False, blank=False)
     status = models.BooleanField(default=False)
     inventory_items_refresh_job = models.IntegerField(default=1)
+    repeat_interval = models.CharField(max_length=256, default='days')
+    ftp_location = models.CharField(max_length=256, null=True)
     calendar_date = models.CharField(max_length=100)
+    file = models.FileField(null=True)
 
 
 @receiver(post_save, sender=Organization)

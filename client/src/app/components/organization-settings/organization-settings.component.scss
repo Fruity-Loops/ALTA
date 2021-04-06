@@ -1,0 +1,101 @@
+@import "../../../theme";
+
+.form-settings{
+  padding-left: 2em;
+}
+
+.subtitle{
+  margin: 1em;
+}
+
+.centerMe {
+  margin: auto;
+  padding: 2%;
+  width: 350px;
+  z-index: 1;
+  text-align: center;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field + .mat-form-field {
+  padding-top: 5%;
+}
+
+.upload-csv {
+  width: 100%;
+  padding-top: 5%;
+}
+
+.mat-form-field + .mat-form-field {
+  padding-top: 5%;
+}
+
+.mat-card-title {
+  color: map-get($alta-primary, 500);
+}
+
+.mat-label {
+  color: map-get($alta-primary, 500);
+}
+
+.mat-card {
+  width: 95%;
+  max-width: 900px;
+}
+
+.mat-button {
+  color: map-get($alta-primary, A200);
+  border: 1px solid map-get($alta-primary, A200);
+}
+
+div.form-group {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding-left: 20%;
+  padding-right: 20%;
+  margin: 0;
+}
+
+div.repeat-every-form-group {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+}
+
+.area {
+  width: 25em;
+  padding: 15px;
+  background: rgba(0,0,0,0.01);
+}
+#dropZone {
+  border: 2px dashed map-get($alta-accent, 300);
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  color: map-get($alta-accent, 600);
+}
+
+#file {
+  color: map-get($alta-accent, 600);
+}
+
+#fileupload {
+  color: black;
+  background: rgba(0,0,0,0);
+}

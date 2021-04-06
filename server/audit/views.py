@@ -5,6 +5,7 @@ from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.pagination import PageNumberPagination
 
 import json
 
@@ -21,12 +22,18 @@ from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
 from .models import Audit, Assignment, BinToSK, Record, Comment
 
 
+class AuditSetPagination(PageNumberPagination):
+    page_size = 25
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
 class AuditViewSet(LoggingViewset):
     """
     API endpoint that allows Audits to be created.
     """
     http_method_names = ['post', 'patch', 'get', 'delete']
-    queryset = Audit.objects.all()
+    queryset = Audit.objects.all().order_by('audit_id')
+    pagination_class = AuditSetPagination
 
     def get_permissions(self):
         super().set_request_data(self.request)
@@ -57,6 +64,13 @@ class AuditViewSet(LoggingViewset):
         if exclude_status:
             self.queryset = self.queryset.exclude(status=exclude_status)
         self.queryset = self.queryset.filter(organization_id=org_id)
+
+        no_pagination = request.query_params.get('no_pagination')
+        page = self.paginate_queryset(self.queryset)
+
+        if page is not None and not no_pagination:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
@@ -132,7 +146,7 @@ def calculate_accuracy(record_queryset):
     missing = record_queryset.filter(status='Missing').count()
     found = record_queryset.filter(status='Provided').count()
     total_records_no_new = found + missing
-    return 0.0 if total_records_no_new == 0 else found / total_records_no_new
+    return 0.0 if total_records_no_new == 0 else round((found / total_records_no_new) * 100, 2)
 
 
 def compile_progression_metrics(completed_items, total_items, accuracy):
@@ -253,6 +267,14 @@ class BinToSKViewSet(LoggingViewset):
             bins_left = BinToSK.objects.filter(init_audit_id=audit_id).exclude(status='Complete')
             if len(bins_left) == 1:
                 self.complete_audit(audit_id)
+
+        if 'customuser' in request.data and 'bin_id' in request.data:
+            assigned_bin = BinToSK.objects.get(bin_id=request.data['bin_id'])
+            setattr(assigned_bin, 'customuser_id', request.data['customuser'])
+            assigned_bin.save()
+            serializer = self.get_serializer(assigned_bin)
+            return Response(serializer.data)
+
         return super().update(request, *args, **kwargs)
 
     def complete_audit(self, audit_id):
@@ -306,7 +328,7 @@ class RecordViewSet(LoggingViewset):
         super().set_request_data(self.request)
         factory = SKPermissionFactory(self.request)
         if self.request.method == 'GET':
-            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord]
+            sk_perms = [CanAccessAuditQParam, IsAssignedToRecord | ValidateSKOfSameOrg]
         elif self.request.method in ['PATCH', 'DELETE']:
             sk_perms = [IsAssignedToRecord]
         else:
@@ -337,13 +359,7 @@ class RecordViewSet(LoggingViewset):
         set_bin_accuracy(instance.bin_to_sk.bin_id)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    '''# There's no permissions for this method, and no use, so this method will return 404 to avoid vulnerabilities
-    def list(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    '''
     def list(self, request):
-        # TODO: implement permissions
         org_id = request.query_params.get('organization')
         audit_id = request.query_params.get('audit_id')
 

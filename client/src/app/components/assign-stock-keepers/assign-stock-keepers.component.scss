@@ -70,13 +70,13 @@
   border-radius: 20%/50%;
   -moz-border-radius: 20%/50%;
   padding: 10px;
-  width: 50px;
+  width: 70px;
   text-align: center;
 }
 
 .available-sk {
   background-color: #ecf9f3;
-  color: #2cd171;
+  color: #00a646;
   display: inline-block;
   border-radius: 20%/50%;
   -moz-border-radius: 20%/50%;
@@ -162,4 +162,12 @@ button.bottom-assign {
   position: inline;
   left: 0;
   margin-left: -11px;
+}
+
+.error-no-SK {
+  background-color: #d64242;
+  color: white;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px;
 }
