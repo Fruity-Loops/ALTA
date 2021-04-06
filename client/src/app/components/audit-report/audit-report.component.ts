@@ -151,8 +151,16 @@ export class AuditReportComponent extends TableManagementComponent implements On
   // TODO: parse date to more readable
   cleanMetaData(): void {
     delete this.metaData.inventory_items;
-    this.metaData.assigned_sk = this.metaData.assigned_sk[0].first_name + ' ' + this.metaData.assigned_sk[0].last_name;
 
+    // set all assigned employees
+    const holdValue = this.metaData.assigned_sk;
+    this.metaData.assigned_sk = [];
+
+    holdValue.forEach((user: any) => {
+      this.metaData.assigned_sk.push(user.first_name + ' ' +  user.last_name + '\n');
+    });
+
+    // format date and time
     this.metaData.initiated_on = this.datePipe.transform(this.metaData.initiated_on, 'EEEE, MMMM d, y - H:mm');
     this.metaData.last_modified_on = this.datePipe.transform(this.metaData.last_modified_on, 'EEEE, MMMM d, y - H:mm');
   }

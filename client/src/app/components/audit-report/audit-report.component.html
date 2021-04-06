@@ -118,7 +118,12 @@
                   {{ object[column]}}
             </div>
             <ng-template #elseBlock>
-              {{ object[column]}}
+              <div *ngIf="column == 'assigned_sk'" class="assigned_sks">
+                {{ object[column] }}
+              </div>
+              <div *ngIf="column != 'assigned_sk'">
+                {{ object[column]}}
+              </div>
             </ng-template>
           </td>
 
