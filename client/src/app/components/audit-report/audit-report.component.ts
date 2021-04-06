@@ -274,11 +274,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   comment(): void {
     console.log(localStorage);
-    let params = new HttpParams();
-    params = params.append('org_id', String(localStorage.getItem('organization_id')))
-      .append('audit_id', String(this.id))
-      .append('content', this.comment_value)
-      .append('author', 'johnyy');
 
     let comment = {
       "org_id": String(localStorage.getItem('organization_id')),
