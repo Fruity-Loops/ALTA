@@ -32,7 +32,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authservice: AuthService,
-    private router: Router) {
+    public router: Router) {
     this.dataSource = new MatTableDataSource<any>();
     this.locationsAndUsers = [];
     this.currentUser = null;

@@ -45,7 +45,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authService: AuthService,
-    private router: Router
+    public router: Router
   ) {
     const lang = new AssignStockKeepersLangFactory();
     [this.title, this.skTable, this.actionButtons] = [lang.lang.title, lang.lang.skTable, lang.lang.actionButtons];
