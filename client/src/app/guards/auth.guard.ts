@@ -71,10 +71,8 @@ export class AuthGuard implements CanActivate {
 
   getGuard(token: any) {
     if (token) {
-      console.log(token);
       return true;
     } else {
-      console.log('here');
       this.router.navigate(['login']); // If no token exist redirect user to login/register page
       return false;
     }

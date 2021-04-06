@@ -49,8 +49,6 @@ export class EditEmployeeComponent extends EmployeeView {
       this.id = routeParams.ID
         ? routeParams.ID
         : this.authService.getLocalStorage(UserLocalStorage.UserID);
-      console.log('FROM HERRRRR');
-      console.log(this.id);
 
       // Verifying that the logged in user is accessing their own information
       if (
