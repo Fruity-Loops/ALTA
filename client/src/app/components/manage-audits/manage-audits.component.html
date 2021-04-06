@@ -95,19 +95,31 @@
 
             <!-- EXPANDED INNER TABLE  -->
             <ng-container matColumnDef="expandedDetail">
+
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+
+                <div class="error-no-SK" *ngIf="ongoingAudit && element.audit_id == expandedElement">
+                    Notice: The results will update as this audit is in process
+                </div>
+
                 <div class="audit-element-detail innerTable"
                      [@detailExpand]="element.audit_id == expandedElement ? 'expanded' : 'collapsed'">
+
                   <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="innerDataSource" matSort>
                     <ng-container *ngFor="let column of innerDisplayedColumns" [matColumnDef]="column">
                       <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
                         {{ column.replaceAll('_', ' ') | titlecase }}</th>
-                      <td mat-cell *matCellDef="let object"
-                          [ngClass]="{'missing-result' : (column == 'Number_of_Found_Items' && object['Status'] === 'Missing'),
+                     <div >
+                       <td mat-cell *matCellDef="let object"
+                           [ngClass]="{'missing-result' : (column == 'Number_of_Found_Items' && object['Status'] === 'Missing'),
                                       'provided-result' : (column == 'Number_of_Found_Items' && object['Status'] === 'Provided'),
                                       'new-result': (column == 'Number_of_Found_Items' && object['Status'] === 'New')}">
                         {{ object[column]}}
                       </td>
+
+                     </div>
+
+
                     </ng-container>
                     <tr mat-header-row *matHeaderRowDef="innerDisplayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: innerDisplayedColumns;"></tr>

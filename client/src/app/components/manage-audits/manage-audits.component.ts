@@ -59,6 +59,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   maxDate = '';
 
   selectedAudits: number[];
+  ongoingAudit = false;
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -164,18 +165,25 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     if (this.expandedElement === auditId) {
       this.expandedElement = null;
     } else {
-      if (auditStatus === 'Complete') {
+      if (auditStatus === 'Complete' || auditStatus === 'Active') {
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
 
-            this.innerDisplayedColumns = ['Location', 'Bin', 'Number_of_Items', 'Number_of_Found_Items'];
+            // used to display warning message
+            if (auditStatus === 'Active') {
+              this.ongoingAudit = true;
+            } else {
+              this.ongoingAudit = false;
+            }
 
+            this.innerDisplayedColumns = ['Location', 'Bin', 'Assigned_Employee', 'Bin_Accuracy', 'Number_of_Items', 'Number_of_Found_Items'];
             let holdInterpretedData: any[] = [];
             data.forEach((record: any) => {
 
               let checkExistingLocationAndBin = holdInterpretedData.find(element =>
                                                   element.Location === record.Location &&
                                                   element.Bin === record.Bin)
+
               if (checkExistingLocationAndBin !== undefined) {
 
                 if (record.status === 'Provided') {
@@ -221,31 +229,28 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
               } else {
                 val.Status = 'New';
               }
-
-
             });
 
+            this.auditService.getAssignedBins(auditId).subscribe(
+              (assigned_users: any) => {
+                holdInterpretedData.forEach((locationWithBin: any) => {
+                  let getDataGivenBin = assigned_users.find((obj: any) =>
+                    obj.Bin === locationWithBin.Bin &&
+                    obj.customuser.location === locationWithBin.Location);
 
+                  if (getDataGivenBin !== undefined) {
+                    locationWithBin.Assigned_Employee = getDataGivenBin.customuser.first_name + ' ' +
+                                                        getDataGivenBin.customuser.last_name;
+                    locationWithBin.Bin_Accuracy = getDataGivenBin.accuracy + '%';
+                  }
+                });
+            });
 
             this.innerDataSource = new MatTableDataSource(holdInterpretedData);
-
-/*
-            this.innerDisplayedColumns = Object.keys(data[0]).filter(title =>
-                                          title !== 'organization' &&
-                                          title !== 'record_id' &&
-                                          title !== 'audit' &&
-                                          title !== 'item_id' &&
-                                          title !== 'comment' &&
-                                          title !== 'first_verified_on' &&
-                                          title !== 'last_verified_on' &&
-                                          title !== 'flagged' &&
-                                          title !== 'bin_to_sk');
-            this.innerDataSource = new MatTableDataSource(data);
-*/
           },
-              (err: any) => {
-                this.errorMessage = err;
-              }
+          (err: any) => {
+            this.errorMessage = err;
+          }
         );
       } else {
         this.auditService.getAuditData(auditId).subscribe(
