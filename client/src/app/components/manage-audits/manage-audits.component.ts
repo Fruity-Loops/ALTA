@@ -139,7 +139,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   }
 
   cancelAudit(): void {
-    if (confirm('Are you sure to cancel this audit ?')) {
+    if (confirm('Are you sure you want to cancel this audit?')) {
       this.auditService.deleteAudit(this.selectedAudit).subscribe(
         (_) => {
           this.reloadPage();
