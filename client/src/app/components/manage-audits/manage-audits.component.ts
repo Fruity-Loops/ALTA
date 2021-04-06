@@ -167,6 +167,69 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       if (auditStatus === 'Complete') {
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
+
+            this.innerDisplayedColumns = ['Location', 'Bin', 'Number_of_Items', 'Number_of_Found_Items'];
+
+            let holdInterpretedData: any[] = [];
+            data.forEach((record: any) => {
+
+              let checkExistingLocationAndBin = holdInterpretedData.find(element =>
+                                                  element.Location === record.Location &&
+                                                  element.Bin === record.Bin)
+              if (checkExistingLocationAndBin !== undefined) {
+
+                if (record.status === 'Provided') {
+                  checkExistingLocationAndBin.Number_of_Items++;
+                  checkExistingLocationAndBin.Number_of_Found_Items++;
+                } else if (record.status === 'Missing') {
+                  checkExistingLocationAndBin.Number_of_Items++;
+                } else if (record.status === 'New') {
+                  checkExistingLocationAndBin.Number_of_Found_Items++;
+                }
+
+              } else {
+                if (record.status === 'Provided') {
+                  holdInterpretedData.push({
+                    Location: record.Location,
+                    Bin: record.Bin,
+                    Number_of_Items: 1,
+                    Number_of_Found_Items: 1
+                  });
+                } else if (record.status === 'Missing') {
+                  holdInterpretedData.push({
+                    Location: record.Location,
+                    Bin: record.Bin,
+                    Number_of_Items: 1,
+                    Number_of_Found_Items: 0
+                  });
+                } else if (record.status === 'New') {
+                  holdInterpretedData.push({
+                    Location: record.Location,
+                    Bin: record.Bin,
+                    Number_of_Items: 0,
+                    Number_of_Found_Items: 1
+                  });
+                }
+              }
+            });
+
+            holdInterpretedData.forEach(val => {
+              if (val.Number_of_Items == val.Number_of_Found_Items) {
+                val.Status = 'Provided';
+              } else if (val.Number_of_Items > val.Number_of_Found_Items) {
+                val.Status = 'Missing';
+              } else {
+                val.Status = 'New';
+              }
+
+
+            });
+
+
+
+            this.innerDataSource = new MatTableDataSource(holdInterpretedData);
+
+/*
             this.innerDisplayedColumns = Object.keys(data[0]).filter(title =>
                                           title !== 'organization' &&
                                           title !== 'record_id' &&
@@ -178,6 +241,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
                                           title !== 'flagged' &&
                                           title !== 'bin_to_sk');
             this.innerDataSource = new MatTableDataSource(data);
+*/
           },
               (err: any) => {
                 this.errorMessage = err;
@@ -200,7 +264,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     }
   }
 
-  // updates data in table
+  // updates data in table  <- is this needed?
   updatePage(): void {
     this.auditService.getProperAudits(this.params).subscribe(
       (data: any) => {
