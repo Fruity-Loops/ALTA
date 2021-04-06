@@ -10,8 +10,6 @@ import {MatSort} from "@angular/material/sort";
 import {ActivatedRoute} from "@angular/router";
 import {DatePipe} from '@angular/common';
 
-//audit information
-//inv information
 @Component({
   selector: 'app-audit-report',
   templateUrl: './audit-report.component.html',
@@ -33,6 +31,11 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   selectedItems: number[];
   allExpandState = false;
+
+  comment_value = ""
+  comments: string[];
+
+
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -67,6 +70,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.resultsDataSource = new MatTableDataSource<any>();
     this.selectedItems = [];
     this.parsedMetaData = [];
+    this.comments = [];
   }
 
   ngOnInit(): void {
@@ -78,7 +82,13 @@ export class AuditReportComponent extends TableManagementComponent implements On
       this.setAuditData();
 
       this.setResultsData()
+      this.setCommentData();
     });
+    // this.comments = [
+    //   "hello",
+    //   "hi",
+    //   "This is a very long comment to see how the wrapping works",
+    // ];
   }
 
   // TODO: Fix appropriate backend calls
@@ -182,6 +192,9 @@ export class AuditReportComponent extends TableManagementComponent implements On
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        if (data.comments){
+          this.comments = data.comments;
+        }
 
       }
     )
@@ -221,6 +234,18 @@ export class AuditReportComponent extends TableManagementComponent implements On
     );
   }
 
+  setCommentData(): void {
+    this.comments = [];
+    this.auditReportService.getComments().subscribe(
+      (data: any) => {
+        console.log(data);
+        for (let i =0; i<data.length; i++){
+          this.comments.push(data[i].content);
+        }
+      }
+    )
+  }
+
   updatePage(): void {
     this.updatePaginator();
   }
@@ -254,5 +279,25 @@ export class AuditReportComponent extends TableManagementComponent implements On
     } else {
       this.selectedItems.push(value);
     }
+  }
+
+  comment(): void {
+    let comment = {
+      "org_id": String(localStorage.getItem('organization_id')),
+      "ref_audit": this.id,
+      "content": String(this.comment_value),
+      "author": String(localStorage.getItem('username'))
+    }
+
+    this.auditReportService.postComment(comment).subscribe(
+      (data) => {
+        this.comment_value = '';
+        this.setCommentData();
+      },
+      (err) => {
+        console.log("Comment posting failed");
+      }
+    )
+
   }
 }

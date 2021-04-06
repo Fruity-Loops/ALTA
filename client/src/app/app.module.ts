@@ -11,6 +11,7 @@ import { TokenInterceptor } from './services/authentication/token-interceptor';
 import { CookieService } from 'ngx-cookie-service';
 import { MatModule } from './modules/material/material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AuditReportComponent } from './components/audit-report/audit-report.component';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FileUploadModule} from 'ng2-file-upload';
@@ -31,6 +32,8 @@ import { DatePipe } from '@angular/common';
     HttpClientModule,
     MatModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
+    FormsModule,
     MatSnackBarModule,
     FileUploadModule
   ],

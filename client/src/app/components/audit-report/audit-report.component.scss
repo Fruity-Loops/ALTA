@@ -118,3 +118,52 @@ mat-panel-description {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+
+.auditinfo{
+  margin-top: 1em;
+}
+
+.position-right {
+  float: right;
+}
+
+#questionanswericon{
+  color: map-get($alta-accent, 600);
+  font-size: x-large;
+}
+
+#sendicon{
+  color: map-get($alta-accent, 600);
+  font-size: x-large;
+}
+
+.comment-text {
+  background: map-get($alta-accent, 900);
+  border: #2aabd2;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em;
+  word-wrap: normal;
+  color: white;
+  word-break: break-all;
+}
+
+.comment{
+  height: inherit;
+  max-width: 400px;
+}
+
+.comment-input {
+  width: 90%;
+  position: relative;
+  //bottom: -2.5em;
+  margin-left: 1em;
+}
+
+.comment-history{
+  overflow-y: scroll;
+  height: 70%;
+  position: relative;
+}
+
+
