@@ -3,5 +3,5 @@ FROM python:3.8-buster
 COPY . /ws
 WORKDIR /ws
 RUN pip3 install -r requirements.txt
-ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000","--settings", "django_server.prod_settings"] 
+ENTRYPOINT ["python3", "manage.py", "runserver", "0.0.0.0:8000","--settings", "django_server.test_settings"]
 

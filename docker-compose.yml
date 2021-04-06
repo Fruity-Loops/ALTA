@@ -9,6 +9,6 @@ services:
         mongo:
                 image: mongo
                 network_mode: "host"
-                volumes:
-                  - ./db:/data/db
+#                volumes:
+#                  - ./db:/data/db
 
