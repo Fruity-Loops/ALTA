@@ -39,7 +39,7 @@
           (click)="handleItemClick($event, item.Item_Id, false)">
           <ion-icon size="large" name="checkmark-done-circle-sharp"></ion-icon>
         </ion-button>
-        <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="danger"
+        <ion-button id="flag{{ item.Batch_Number }}" onclick="this.blur()" fill="clear" size="large" shape="round" color="danger"
           (click)="handleItemClick($event, item.Item_Id, true)">
           <ion-icon button size="large" name="flag"></ion-icon>
         </ion-button>

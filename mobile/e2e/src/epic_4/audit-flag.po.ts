@@ -10,27 +10,11 @@ export class AuditAssigned {
         return element(by.id('binItemC69'));
     }
 
-    getInputButton(): ElementFinder {
-        return element(by.id('manualInputButton'));
+    getFlagButton(): ElementFinder {
+        return element(by.id('flag12731370'));
     }
 
-    getInputField(): ElementFinder {
-        return element(by.id('barCodeNumberField'));
-    }
-
-    getConfirmButton(): ElementFinder {
-        return element(by.className('confirmButton'));
-    }
-
-    getaddAsNewButton(): ElementFinder {
-        return element(by.className('addAsNewButton'));
-    }
-
-    getQuantityField(): ElementFinder {
-        return element(by.css('ion-input[formcontrolname="Quantity"] input'));
-    }
-
-    getFlag(): ElementFinder {
+    getFlagChecked(): ElementFinder {
         return element(by.css('ion-checkbox[formcontrolname="flagged"]'));
     }
 
@@ -46,7 +30,7 @@ export class AuditAssigned {
         return element(by.id('completedItemsButton'));
     }
 
-    getCompletedManualItems(): ElementFinder {
-        return element(by.id('completedItems123456789'));
+    getCompletedItems(): ElementFinder {
+        return element(by.id('completedItems12731370'));
     }
 }

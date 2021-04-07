@@ -39,16 +39,17 @@ describe('AT-4.4: Manually input an item’s data', () => {
         auditManually.getaddAsNewButton().click();
         browser.wait(ExpectedConditions.visibilityOf(auditManually.getQuantityField()), 5000);
         auditManually.getQuantityField().sendKeys(911);
+        expect(auditManually.getFlag().getAttribute('aria-checked')).toBe('true');
         auditManually.getSubmitButton().click();
         browser.wait(ExpectedConditions.visibilityOf(auditManually.getDismissButton()), 5000);
         auditManually.getDismissButton().click();
     });
 
     it('Confirms the item has been added', () => {
-        browser.wait(ExpectedConditions.visibilityOf(auditManually.getCompeletedItemsButton()), 5000);
-        auditManually.getCompeletedItemsButton().click();
-        browser.wait(ExpectedConditions.visibilityOf(auditManually.getCompeletedManualItems()), 5000);
-        expect(auditManually.getCompeletedManualItems().isDisplayed()).toBeTruthy();
+        browser.wait(ExpectedConditions.visibilityOf(auditManually.getCompletedItemsButton()), 5000);
+        auditManually.getCompletedItemsButton().click();
+        browser.wait(ExpectedConditions.visibilityOf(auditManually.getCompletedManualItems()), 5000);
+        expect(auditManually.getCompletedManualItems().isDisplayed()).toBeTruthy();
         browser.refresh();
     });
 });

@@ -21,6 +21,7 @@ export class Logout {
     greetingPage: GreetingPage = new GreetingPage();
 
     logout(): void {
+        browser.sleep(5000);
         browser.wait(ExpectedConditions.visibilityOf(this.greetingPage.getProfileButton()), 5000);
         this.greetingPage.getProfileButton().click();
         browser.wait(ExpectedConditions.visibilityOf(this.greetingPage.getlogoutButton()), 5000);
