@@ -60,10 +60,10 @@ describe('AT-4.2: Review the list of inputted items of an ongoing audit', () => 
     });
 
     it('Confirms the item is now presented under Completed Items tab', () => {
-        browser.wait(ExpectedConditions.visibilityOf(auditProgress.getCompeltedItemsButton()), 5000);
-        auditProgress.getCompeltedItemsButton().click();
-        browser.wait(ExpectedConditions.visibilityOf(auditProgress.getCompeltedItems()), 5000);
-        expect(auditProgress.getCompeltedItems().isDisplayed()).toBeTruthy();
+        browser.wait(ExpectedConditions.visibilityOf(auditProgress.getCompeletedItemsButton()), 5000);
+        auditProgress.getCompeletedItemsButton().click();
+        browser.wait(ExpectedConditions.visibilityOf(auditProgress.getCompeletedItems()), 5000);
+        expect(auditProgress.getCompeletedItems().isDisplayed()).toBeTruthy();
         browser.refresh();
     });
 });

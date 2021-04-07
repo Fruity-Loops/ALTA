@@ -207,7 +207,8 @@ export class ItemsPage implements OnInit, OnDestroy {
         {
           name: 'barcode',
           type: 'number',
-          placeholder: 'Barcode Number'
+          placeholder: 'Barcode Number',
+          id: 'barCodeNumberField'
         },
       ],
       buttons: [
@@ -216,6 +217,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           role: 'cancel',
         }, {
           text: 'Confirm',
+          cssClass: 'confirmButton',
           handler: input => {
             if (input && input.barcode) {
               this.barcode = input.barcode;
@@ -293,6 +295,7 @@ export class ItemsPage implements OnInit, OnDestroy {
                   text: 'Dismiss',
                 }, {
                   text: 'Add as NEW',
+                  cssClass: 'addAsNewButton',
                   handler: () => {
                     modalData.itemData = {
                       item_id: `${barcode}_${this.loggedInUser.organization_id}`,

@@ -49,11 +49,11 @@ export class AuditAssigned {
         return element(by.className('alert-button-inner sc-ion-alert-md'));
     }
 
-    getCompeltedItemsButton(): ElementFinder {
+    getCompeletedItemsButton(): ElementFinder {
         return element(by.id('completedItemsButton'));
     }
 
-    getCompeltedItems(): ElementFinder {
+    getCompeletedItems(): ElementFinder {
         return element(by.id('completedItems12731370'));
     }
 }
