@@ -6,6 +6,7 @@ import {DashboardComponent} from './dashboard.component';
 import {FormBuilder} from '@angular/forms';
 import { AppModule } from 'src/app/app.module'
 import { of } from 'rxjs';
+import { audit } from 'rxjs/operators';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -45,11 +46,22 @@ describe('DashboardComponent', () => {
         dateObj : 'MM/DD/YYYY',
         date : '03/12/2021',
         thirtyDaysAgo : 'MM/DD/YYYY',
+        audit,
       }]);
     }
     catch (errorMessage) {
       console.error(errorMessage);
     }
   }));
+
+  // Test the retrieveData table
+  it('Call retrieveData', () => {
+    try {
+      component.retrieveData(audit)
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
 
 });
