@@ -1,9 +1,9 @@
 <mat-card>
-    <mat-card-title>Designate Bins to Stock-Keepers </mat-card-title>
+    <mat-card-title>{{title}}</mat-card-title>
     <div id="top-div">
-      <button mat-button class="top-buttons" (click)="allExpandState=true">Expand All </button>
-      <button mat-button class="top-buttons" (click)="allExpandState=false">Collapse All </button>
-      <button mat-button class="top-buttons auto-assign" (click)="autoAssign()">Auto Assign</button>
+      <button mat-button class="top-buttons" (click)="allExpandState=true">{{actionButtons.expand}}</button>
+      <button mat-button class="top-buttons" (click)="allExpandState=false">{{actionButtons.collapse}}</button>
+      <button mat-button class="top-buttons auto-assign" (click)="autoAssign()">{{actionButtons.auto_assign}}</button>
     </div>
   </mat-card>
   <br>
@@ -21,7 +21,7 @@
       <div class="row card-separator">
         <div cdkDropListGroup>
           <div class="column">
-            <h2 class="column-header">Bins</h2>
+            <h2 class="column-header">{{binsTitle}}</h2>
               <div class="drag-drop-containers">
                 <div
                   cdkDropList
@@ -59,20 +59,20 @@
 
   <div class="bottom-buttons">
       <button mat-stroked-button  id="goback" class="bottom-goback"
-            (click)="goBackAssignSK()">Go Back</button>
+            (click)="goBackAssignSK()">{{actionButtons.back}}</button>
     <button mat-stroked-button  id="discard" class="bottom-discard"
-            (click)="openDialogWithRef(discardDialog)">Discard</button>
+            (click)="openDialogWithRef(discardDialog)">{{actionButtons.discard}}</button>
     <button mat-stroked-button  id="assign" class="bottom-assign"
             [disabled]="disableAssign()"
-            (click)="submitPreAuditData()">Assign</button>
+            (click)="submitPreAuditData()">{{actionButtons.assign}}</button>
   </div>
 
   <ng-template #discardDialog>
     <h2 matDialogTitle>Discard Audit</h2>
     <h3 matDialogContent>Are you sure you wish to discard audit initiation?</h3>
     <div mat-dialog-actions>
-      <button mat-button routerLink="/audits" (click)="discardAudit()">Discard</button>
-      <button mat-button (click)="cancelDialog()">Cancel</button>
+      <button mat-button routerLink="/audits" (click)="discardAudit()">{{actionButtons.discard}}</button>
+      <button mat-button (click)="cancelDialog()">{{actionButtons.cancel}}</button>
     </div>
   </ng-template>
 

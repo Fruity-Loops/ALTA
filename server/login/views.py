@@ -66,7 +66,10 @@ class LoginView(generics.GenericAPIView):
                         'token': token.key}
 
                 response = Response(data, status=status.HTTP_200_OK)
-
+            elif is_verified and not user.is_active: # Account not active
+                error_msg = {"detail": "Login Failed. Please contact an ALTA representative for more information."}
+                response = Response(error_msg, status=status.HTTP_401_UNAUTHORIZED)
+            
         except ObjectDoesNotExist:
             pass
 
@@ -118,6 +121,8 @@ def save_new_pin(email, user):
                          for _i in range(3))  # NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
+    # For e2e purposes, uncomment this line:
+    # request.data = {'password': 'password'}
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()

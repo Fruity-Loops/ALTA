@@ -5,18 +5,20 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EditAuditTemplateComponent } from './edit-audit-template.component';
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AppModule } from 'src/app/app.module'
 
-describe('AuditTemplateComponent', () => {
+describe('EditAuditTemplateComponent', () => {
   let component: EditAuditTemplateComponent;
   let fixture: ComponentFixture<EditAuditTemplateComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [EditAuditTemplateComponent],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        AppModule
       ],
       providers: [
         FormBuilder,
@@ -24,11 +26,8 @@ describe('AuditTemplateComponent', () => {
           provide: AuditTemplateService,
         },
       ],
-    })
-      .compileComponents();
-  });
-
-  beforeEach(() => {
+    }).compileComponents();
+    
     fixture = TestBed.createComponent(EditAuditTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

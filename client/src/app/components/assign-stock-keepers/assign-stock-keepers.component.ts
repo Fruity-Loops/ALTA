@@ -1,12 +1,13 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/users/manage-members.service';
-import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { User } from 'src/app/models/user.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
-import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
+import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {User} from 'src/app/models/user.model';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {HttpParams} from '@angular/common/http';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -26,6 +27,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   maxAssignPerLocation: Array<any>;
   auditID: number;
 
+  title: string;
+  skTable: SKTable;
+  actionButtons: ActionButtons;
+
   panelOpenState = false;
   allExpandState = false;
   errorMessage = '';
@@ -40,8 +45,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     private dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authService: AuthService,
-    private router: Router
+    public router: Router
   ) {
+    const lang = new AssignStockKeepersLangFactory();
+    [this.title, this.skTable, this.actionButtons] = [lang.lang.title, lang.lang.skTable, lang.lang.actionButtons];
 
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
@@ -177,6 +184,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
     const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
+      // @ts-ignore
       map((obj: any) => obj.users).flat(1);
 
     // get all the user id's for this location

@@ -7,7 +7,7 @@ import {FormBuilder} from '@angular/forms';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
 
 @Component({
@@ -62,6 +62,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     protected fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     public datePipe: DatePipe,
+    private router: Router
   ) {
     super(fb);
     this.formg = fb;
@@ -292,5 +293,22 @@ export class AuditReportComponent extends TableManagementComponent implements On
       }
     );
 
+  }
+
+  cancelAudit(): void {
+    if (confirm('Are you sure you want to cancel this audit?')) {
+      this.auditService.deleteAudit(this.id).subscribe(
+        (_) => {
+          this.reloadPage();
+        },
+        (err) => {
+          this.errorMessage = err;
+        });
+    }
+  }
+
+  async reloadPage(): Promise<void> {
+    await this.router.navigateByUrl('/', { skipLocationChange: true });
+    await this.router.navigateByUrl('audits');
   }
 }
