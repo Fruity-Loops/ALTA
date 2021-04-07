@@ -11,7 +11,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [
     './src/**/backend-service.e2e-spec.ts',
-    './src/**/epic_4/*.e2e-spec.ts',
+    './src/**/epic_4/audit-review.e2e-spec.ts',
   ],
   capabilities: {
     browserName: 'chrome'

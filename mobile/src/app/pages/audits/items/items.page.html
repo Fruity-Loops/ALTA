@@ -8,7 +8,7 @@
   <ion-segment-button value="items">
     <ion-label>Items</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="completedItems">
+  <ion-segment-button id="completedItemsButton" value="completedItems">
     <ion-label>Completed Items</ion-label>
   </ion-segment-button>
 </ion-segment>
@@ -35,7 +35,7 @@
           <p *ngIf="item.Category === 'SERIALIZED'"> Serial no. {{ item.Serial_Number }}</p>
           <p *ngIf="item.Category !== 'SERIALIZED'">Quantity: {{item.Quantity}}</p>
         </ion-label>
-        <ion-button onclick="this.blur()" fill="clear" size="large" shape="round" color="secondary"
+        <ion-button id="{{ item.Batch_Number }}" onclick="this.blur()" fill="clear" size="large" shape="round" color="secondary"
           (click)="handleItemClick($event, item.Item_Id, false)">
           <ion-icon size="large" name="checkmark-done-circle-sharp"></ion-icon>
         </ion-button>
@@ -54,7 +54,7 @@
       </ion-text>
     </div>
     <ion-list lines="none" inset="true">
-      <ion-item *ngFor="let item of completedItems" lines="none" class="list-items" onclick="this.blur()">
+      <ion-item id="completedItems{{ item.Batch_Number }}" *ngFor="let item of completedItems" lines="none" class="list-items" onclick="this.blur()">
         <ion-thumbnail slot="start" class="thumbnail">
           <span *ngIf="item?.status == 'Provided'" class="valid_ellipse"></span>
           <span *ngIf="item?.status == 'Missing'" class="missing_ellipse"></span>

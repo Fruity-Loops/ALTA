@@ -21,14 +21,14 @@
     </div>
 
     <ion-list lines="none" inset="true">
-      <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
+      <ion-item id="binItem{{ bin.Bin }}" *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
         <ion-label>
           <ion-text color="dark">
             <h2>Bin {{ bin.Bin }}</h2>
           </ion-text>
           <p> Total Items: {{ bin.item_ids?.length }}</p>
         </ion-label>
-        <ion-button fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event, bin.bin_id)">
+        <ion-button id="infoButtonBin{{ bin.Bin }}"fill="clear" size="large" color="medium" shape="round" (click)="displayProgression($event, bin.bin_id)">
           <ion-icon button size="large" name="information-circle"></ion-icon>
         </ion-button>
       </ion-item>
