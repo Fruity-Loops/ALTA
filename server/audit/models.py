@@ -81,7 +81,6 @@ class Record(ItemFields):
 
 
 class Comment(models.Model):
-    _id = models.AutoField(primary_key=True)
     ref_audit = models.IntegerField(null=False)
     org_id = models.IntegerField(null=False)
     content = models.TextField(blank=True)
