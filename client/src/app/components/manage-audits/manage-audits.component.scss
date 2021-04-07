@@ -90,6 +90,7 @@ tr.audit-detail-row {
 
 tr.audit-element-row:not(.audit-expanded-row):hover {
   background: whitesmoke;
+  cursor: pointer;
 }
 
 tr.audit-element-row:not(.audit-expanded-row):active {

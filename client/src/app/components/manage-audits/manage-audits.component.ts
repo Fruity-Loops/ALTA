@@ -175,90 +175,54 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   toggleExpand(auditId: any, auditStatus: any): void {
     if (this.expandedElement === auditId) {
       this.expandedElement = null;
+      this.innerDisplayedColumns = [];
+      this.innerDataSource = new MatTableDataSource();
     } else {
       if (auditStatus === 'Complete' || auditStatus === 'Active') {
+
+        this.innerDisplayedColumns =
+          ['Location',
+           'Bin',
+           'Assigned_Employee',
+           'Bin_Accuracy',
+           'Number_of_Audited_Items',
+           'Number_of_Provided_Items',
+           'Number_of_Missing_Items',
+           'Number_of_New_Items'];
+
+        this.displayWarningMessage(auditStatus);
+
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
 
-            // used to display warning message
-            if (auditStatus === 'Active') {
-              this.ongoingAudit = true;
-            } else {
-              this.ongoingAudit = false;
-            }
+            // filter required data
+            const getItemBinLocationStatus = [];
 
-            this.innerDisplayedColumns =
-              ['Location',
-              'Bin',
-              'Assigned_Employee',
-              'Bin_Accuracy',
-              'Number_of_Audited_Items',
-              'Number_of_Provided_Items',
-              'Number_of_Missing_Items',
-              'Number_of_New_Items'];
-
-            let holdInterpretedData: any[] = [];
-
-            data.forEach((record: any) => {
-
-              let checkExistingLocationAndBin = holdInterpretedData.find(element =>
-                                                  element.Location === record.Location &&
-                                                  element.Bin === record.Bin)
-
-              if (checkExistingLocationAndBin !== undefined) {
-
-                if (record.status === 'Provided') {
-                  checkExistingLocationAndBin.Number_of_Provided_Items++;
-                } else if (record.status === 'Missing') {
-                  checkExistingLocationAndBin.Number_of_Missing_Items++;
-                } else if (record.status === 'New') {
-                  checkExistingLocationAndBin.Number_of_New_Items++;
-                }
-
-                checkExistingLocationAndBin.Number_of_Audited_Items++;
-
-              } else {
-                holdInterpretedData.push({
-                  Location: record.Location,
-                  Bin: record.Bin,
-                  Number_of_Audited_Items: 1,
-                  Number_of_Provided_Items: record.status == 'Provided' ? 1 : 0,
-                  Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
-                  Number_of_New_Items: record.status == 'New' ? 1 : 0
-                });
-              }
+            data.forEach(obj => {
+              getItemBinLocationStatus.push({
+                Bin: obj.Bin,
+                Location: obj.Location,
+                status: obj.status
+              });
             });
-
-           if (!holdInterpretedData.map(val => val.Number_of_Provided_Items).find(val => val !== 0)) {
-            this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Provided_Items');
-           }
-
-           if (!holdInterpretedData.map(val => val.Number_of_Missing_Items).find(val => val !== 0)) {
-            this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Missing_Items');
-           }
-
-           if (!holdInterpretedData.map(val => val.Number_of_New_Items).find(val => val !== 0)) {
-            this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_New_Items');
-           }
-
 
             this.auditService.getAssignedBins(auditId).subscribe(
               (assigned_users: any) => {
-                holdInterpretedData.forEach((locationWithBin: any) => {
-                  let getDataGivenBin = assigned_users.find((obj: any) =>
-                    obj.Bin === locationWithBin.Bin &&
-                    obj.customuser.location === locationWithBin.Location);
 
-                  if (getDataGivenBin !== undefined) {
-                    locationWithBin.Assigned_Employee = getDataGivenBin.customuser.first_name + ' ' +
-                                                        getDataGivenBin.customuser.last_name;
-                    locationWithBin.Bin_Accuracy = getDataGivenBin.accuracy + '%';
-                  }
+                // filter required data
+                const getAssignedSKBinAccuracy = [];
+
+                assigned_users.forEach(obj => {
+                  getAssignedSKBinAccuracy.push({
+                    location: obj.customuser.location,
+                    Bin: obj.Bin,
+                    Assigned_Employee: obj.customuser.first_name + ' ' + obj.customuser.last_name,
+                    Bin_Accuracy: obj.accuracy + '%'
+                  });
                 });
-            });
 
-
-            this.innerDataSource = new MatTableDataSource(holdInterpretedData);
+                this.setInnerTable(getItemBinLocationStatus, getAssignedSKBinAccuracy);
+             });
           },
           (err: any) => {
             this.errorMessage = err;
@@ -281,6 +245,82 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     }
   }
 
+  displayWarningMessage(auditStatus: any): void {
+    if (auditStatus === 'Active') {
+      this.ongoingAudit = true;
+    } else {
+      this.ongoingAudit = false;
+    }
+  }
+
+  setInnerTable(data: any, assigned_users: any): void {
+    let holdInterpretedData: any[] = [];
+
+    data.forEach((record: any) => {
+
+      let holdCurrentSK = '';
+      let holdCurrentBinAccuracy = '';
+
+      // find assigned bin and location
+      let getDataGivenBin = assigned_users.find((obj: any) =>
+        obj.Bin === record.Bin &&
+        obj.location === record.Location);
+
+      if (getDataGivenBin !== undefined) {
+        holdCurrentSK = getDataGivenBin.Assigned_Employee;
+        holdCurrentBinAccuracy = getDataGivenBin.Bin_Accuracy;
+      }
+
+      let checkExistingLocationAndBin = holdInterpretedData.find(element =>
+        element.Location === record.Location &&
+        element.Bin === record.Bin);
+
+      // bin with location already exists in table
+      if (checkExistingLocationAndBin !== undefined) {
+
+        if (record.status === 'Provided') {
+          checkExistingLocationAndBin.Number_of_Provided_Items++;
+        } else if (record.status === 'Missing') {
+          checkExistingLocationAndBin.Number_of_Missing_Items++;
+        } else if (record.status === 'New') {
+          checkExistingLocationAndBin.Number_of_New_Items++;
+        }
+
+        checkExistingLocationAndBin.Number_of_Audited_Items++;
+
+      } else {
+        holdInterpretedData.push({
+          Location: record.Location,
+          Bin: record.Bin,
+          Assigned_Employee: holdCurrentSK,
+          Bin_Accuracy: holdCurrentBinAccuracy,
+          Number_of_Audited_Items: 1,
+          Number_of_Provided_Items: record.status == 'Provided' ? 1 : 0,
+          Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
+          Number_of_New_Items: record.status == 'New' ? 1 : 0
+        });
+      }
+    });
+
+    this.removeZeroValueColumns(holdInterpretedData);
+    this.innerDataSource = new MatTableDataSource(holdInterpretedData);
+  }
+
+  removeZeroValueColumns(holdInterpretedData: any): void {
+
+    if (!holdInterpretedData.map((val: any) => val.Number_of_Provided_Items).find((val: any) => val !== 0)) {
+      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Provided_Items');
+    }
+
+    if (!holdInterpretedData.map((val: any) => val.Number_of_Missing_Items).find((val: any) => val !== 0)) {
+      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Missing_Items');
+    }
+
+    if (!holdInterpretedData.map((val:any) => val.Number_of_New_Items).find((val: any) => val !== 0)) {
+      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_New_Items');
+    }
+  }
+
   // updates data in table
   updatePage(): void {
     this.auditService.getProperAudits(this.params).subscribe(
@@ -292,7 +332,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.errorMessage = err;
       }
     );
-
   }
 
   updatePaginator(): void {

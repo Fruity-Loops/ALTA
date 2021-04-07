@@ -187,7 +187,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
         this.displayedColumns = this.displayedColumns.filter((title: any) => title !== 'organization');
 
-        // this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
+        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
