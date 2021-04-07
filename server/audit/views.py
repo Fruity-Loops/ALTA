@@ -459,20 +459,19 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         factory = SKPermissionFactory(self.request)
-        audit_permissions = [CheckAuditOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-            im_additional_perms=audit_permissions,
-            sk_additional_perms=audit_permissions
+            im_additional_perms=[],
+            sk_additional_perms=[]
         )
         return [permission() for permission in permission_classes]
 
     def list(self, request, *args, **kwargs):
-        org_id = request.GET.get("org_id", None)
+        org_id = request.GET.get("organization", None)
         audit_id = request.GET.get("ref_audit", None)
         if org_id is None or audit_id is None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         queryset = self.filter_queryset(self.get_queryset()).filter(org_id=org_id).filter(ref_audit=audit_id)
-
         serializer = self.get_serializer(queryset, many=True)
+
         return Response(serializer.data)
