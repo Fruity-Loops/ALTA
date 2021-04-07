@@ -23,8 +23,8 @@
                 </ion-text>
                 <ion-text color="dark" *ngIf="!audit?.seen">
                     <h1>
-                        <b>Audit {{ audit?.audit.audit_id }}</b>
-                        <ion-icon class="alertIcon" name="alert-circle-sharp" size="small" color="danger"></ion-icon>
+                        <b id="audit{{ audit?.audit.audit_id }}">Audit {{ audit?.audit.audit_id }}</b>
+                        <ion-icon id="alertIcon{{ audit?.audit.audit_id }}" class="alertIcon" name="alert-circle-sharp" size="small" color="danger"></ion-icon>
                     </h1>
 
                 </ion-text>

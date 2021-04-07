@@ -22,7 +22,7 @@ export class Logout {
 
     logout(): void {
         this.greetingPage.getProfileButton().click();
-        browser.sleep(1000);
+        browser.wait(ExpectedConditions.visibilityOf(this.greetingPage.getlogoutButton()), 5000);
         this.greetingPage.getlogoutButton().click();
         browser.wait(ExpectedConditions.urlContains('signin'), 5000);
     }
