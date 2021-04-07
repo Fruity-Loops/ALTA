@@ -33,12 +33,12 @@ export class AuditReportService implements LocalStorageInterface {
     return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
   }
 
-  getComments(): Observable<any> {
-    return this.http.get(`${BASEURL}/comment/`);
+  getComments(orgId: any, auditId: any): Observable<any> {
+    return this.http.get(`${BASEURL}/comment/?organization=${orgId}&ref_audit=${auditId}`);
   }
 
   postComment(comment: any): Observable<any> {
-    return this.http.post(`${BASEURL}/comment/`, {comment});
+    return this.http.post(`${BASEURL}/comment/`, comment);
   }
 
 }

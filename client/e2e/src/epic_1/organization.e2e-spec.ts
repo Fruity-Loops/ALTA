@@ -41,6 +41,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
     organizationPage.getOrganizationNameDialogueField().sendKeys(newOrganizationName);
     organizationPage.getOrganizationLocationDialogueField().sendKeys(location);
     organizationPage.getSaveOrganizationButton().click();
+    browser.wait(ExpectedConditions.visibilityOf(organizationPage.getOrganizationTable()), 5000);
     expect(organizationPage.getOrganizationTable().isDisplayed()).toBeTruthy();
     browser.wait(ExpectedConditions.visibilityOf(
       organizationPage.getOrganizationNameColumn(newOrganizationName)), 5000);
@@ -56,6 +57,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
    * vi) The table displays the changes.
    */
   it('should update the created organization’s name', () => {
+    browser.wait(ExpectedConditions.visibilityOf( organizationPage.getOrgSettings(newOrganizationName)), 5000);
     organizationPage.getOrgSettings(newOrganizationName).click();
     organizationPage.getOrgEditButton().click();
     const orgNameDialogueField = organizationPage.getOrganizationNameDialogueField();
@@ -63,6 +65,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
     orgNameDialogueField.sendKeys(updatedOrganizationName);
     organizationPage.getSaveOrganizationButton().click();
     organizationPage.navigateTo();
+    organizationPage.nextPageButton().click();
     expect(organizationPage.getOrganizationTable().isDisplayed()).toBeTruthy();
     browser.wait(ExpectedConditions.visibilityOf(
       organizationPage.getOrganizationNameColumn(updatedOrganizationName)), 5000);
@@ -86,7 +89,10 @@ describe('AT-1.3: System administrator manages organizations', () => {
     organizationPage.getSaveOrganizationButton().click();
     organizationPage.getDisableOrgNameInput().sendKeys(updatedOrganizationName);
     organizationPage.getDisableOrgConfirmationButton().click();
+    browser.sleep(5000);
     organizationPage.navigateTo();
+    browser.sleep(5000);
+    organizationPage.nextPageButton().click();
     expect(organizationPage.getOrganizationTable().isDisplayed()).toBeTruthy();
     browser.wait(ExpectedConditions.visibilityOf(
       organizationPage.getOrganizationStatusColumn(updatedOrganizationName)), 5000);

@@ -8,6 +8,8 @@ import {MatSort} from '@angular/material/sort';
 import {TableManagementComponent} from '../TableManagement.component';
 import {Router} from '@angular/router';
 import {ChartComponent} from 'ng-apexcharts';
+import { SelectionModel } from '@angular/cdk/collections';
+import {ManageAuditsLangFactory} from './manage-audits.language';
 
 @Component({
   selector: 'app-manage-audits',
@@ -24,18 +26,6 @@ import {ChartComponent} from 'ng-apexcharts';
 })
 export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
 
-  constructor(
-    private auditService: ManageAuditsService,
-    protected fb: FormBuilder,
-    private router: Router
-  ) {
-    super(fb);
-    this.formg = fb;
-    this.dataSource = new MatTableDataSource<any>();
-    this.innerDataSource = new MatTableDataSource<any>();
-    this.selectedAudits = [];
-    this.chartSetup();
-  }
 
   body: any;
   subscription: any;
@@ -105,8 +95,31 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   innerDataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
   displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
+
   innerDisplayedColumns: string[] = [];
   expandedElement: any | null;
+
+  initialSelection = [];
+  allowMultiSelect = false;
+  selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+  title: string;
+  searchPlaceholder: string;
+
+  constructor(
+    private auditService: ManageAuditsService,
+    protected fb: FormBuilder,
+    private router: Router,
+  ) {
+    super(fb);
+    this.formg = fb;
+    this.dataSource = new MatTableDataSource<any>();
+    const lang = new ManageAuditsLangFactory();
+    this.innerDataSource = new MatTableDataSource<any>();
+    this.selectedAudits = [];
+    this.chartSetup();
+    [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
+  }
+
 
   getSearchForm(): any {
     return {
@@ -126,7 +139,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       .append('page_size', String(this.pageSize))
       .append('organization', String(localStorage.getItem('organization_id')));
     this.searchAudit();
-    this.selectedAudits = [];
   }
 
   searchAudit(): void {
@@ -410,20 +422,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.chart.updateOptions(this.updateOptionsData[option], false, true, true);
   }
 
-  // If an Inventory item checkbox is selected then add the id to the list
-  onChange(value: number): void {
-    if (this.selectedAudits.includes(value)) {
-      this.selectedAudits.splice(
-        this.selectedAudits.indexOf(value),
-        1
-      );
-    } else {
-      this.selectedAudits.push(value);
-    }
-  }
 
   navToReport(obj: any, col: any): void {
     this.router.navigate(['audits/audit-report/' + obj.audit_id]);
   }
-
 }

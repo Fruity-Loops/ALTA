@@ -1,5 +1,6 @@
 <mat-card>
 
+
   <mat-tab-group>
     <mat-tab label="List of Audits">
       <ng-template matTabContent>
@@ -57,14 +58,14 @@
           <table multiTemplateDataRows aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
             <div id="audit">List of Audits.</div>
 
-     <!--       <ng-container matColumnDef="Select">
-              <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
-              <td mat-cell *matCellDef="let object">
-                <mat-checkbox (change)='onChange(object["audit_id"])'
-                              [id]="'checkBox' + object['audit_id']"></mat-checkbox>
-              </td>
-            </ng-container>
-     -->
+            <!--       <ng-container matColumnDef="Select">
+                     <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
+                     <td mat-cell *matCellDef="let object">
+                       <mat-checkbox (change)='onChange(object["audit_id"])'
+                                     [id]="'checkBox' + object['audit_id']"></mat-checkbox>
+                     </td>
+                   </ng-container>
+            -->
             <!-- MAIN TABLE -->
             <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
               <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -81,8 +82,8 @@
                     <mat-icon-button
                       (click)="$event.stopPropagation();toggleExpand(object['audit_id'], object['status'])"
                       mat-icon-button>
-                        <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
-                        <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
+                      <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
+                      <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
                     </mat-icon-button>
                   </div>
                   {{ object[column]}}<t *ngIf="column == 'accuracy'">%</t>

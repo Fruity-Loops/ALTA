@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {TableManagementComponent} from "../TableManagement.component";
-import {AuditReportService} from "../../services/audits/audit-report.service";
+import {TableManagementComponent} from '../TableManagement.component';
+import {AuditReportService} from '../../services/audits/audit-report.service';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
-import {FormBuilder} from "@angular/forms";
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {ActivatedRoute} from "@angular/router";
+import {FormBuilder} from '@angular/forms';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
 
 @Component({
@@ -22,7 +22,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   subscription: any;
 
   // Audit data
-  metaData: any
+  metaData: any;
   parsedMetaData: [];
   data: any;
   items = [];
@@ -32,7 +32,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   selectedItems: number[];
   allExpandState = false;
 
-  comment_value = ""
+  comment_value = '';
   comments: string[];
 
 
@@ -62,6 +62,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     protected fb: FormBuilder,
     private activatedRoute: ActivatedRoute,
     public datePipe: DatePipe,
+    private router: Router
   ) {
     super(fb);
     this.formg = fb;
@@ -81,7 +82,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
       // TODO: Display Audit's Items Data
       this.setAuditData();
 
-      this.setResultsData()
+      this.setResultsData();
       this.setCommentData();
     });
     // this.comments = [
@@ -136,7 +137,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
           // if SA initiated audit
           (err: any) => {
             this.metaData = metaData;
-            this.metaData.initiated_by = "System Administrator";
+            this.metaData.initiated_by = 'System Administrator';
             this.cleanMetaData();
 
             // Getting the field name of the item object returned and populating the column of the table
@@ -195,7 +196,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
         }
 
       }
-    )
+    );
   }
 
   setResultsData(): void {
@@ -218,7 +219,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
           // display quantity and status last
           this.resultsDisplayedColumns = this.resultsDisplayedColumns.concat(['Quantity', 'status']);
 
-          let cleanData = data;
+          const cleanData = data;
           cleanData.forEach((record: any) => {
             record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
             record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
@@ -234,14 +235,14 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   setCommentData(): void {
     this.comments = [];
-    this.auditReportService.getComments().subscribe(
+    this.auditReportService.getComments(this.userService.getOrgId(), this.id).subscribe(
       (data: any) => {
         console.log(data);
-        for (let i =0; i<data.length; i++){
+        for (let i = 0; i < data.length; i++){
           this.comments.push(data[i].content);
         }
       }
-    )
+    );
   }
 
   updatePage(): void {
@@ -280,12 +281,13 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   comment(): void {
-    let comment = {
-      "org_id": String(localStorage.getItem('organization_id')),
-      "ref_audit": this.id,
-      "content": String(this.comment_value),
-      "author": String(localStorage.getItem('username'))
-    }
+    const comment = {
+      org_id: String(localStorage.getItem('organization_id')),
+      ref_audit: this.id,
+      content: String(this.comment_value),
+      author: String(localStorage.getItem('username'))
+    };
+    console.log(this.id);
 
     this.auditReportService.postComment(comment).subscribe(
       (data) => {
@@ -293,9 +295,26 @@ export class AuditReportComponent extends TableManagementComponent implements On
         this.setCommentData();
       },
       (err) => {
-        console.log("Comment posting failed");
+        console.log('Comment posting failed');
       }
-    )
+    );
 
+  }
+
+  cancelAudit(): void {
+    if (confirm('Are you sure you want to cancel this audit?')) {
+      this.auditService.deleteAudit(this.id).subscribe(
+        (_) => {
+          this.reloadPage();
+        },
+        (err) => {
+          this.errorMessage = err;
+        });
+    }
+  }
+
+  async reloadPage(): Promise<void> {
+    await this.router.navigateByUrl('/', { skipLocationChange: true });
+    await this.router.navigateByUrl('audits');
   }
 }

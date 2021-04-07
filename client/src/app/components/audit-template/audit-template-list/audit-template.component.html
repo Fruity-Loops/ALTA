@@ -1,7 +1,7 @@
 <mat-card>
-  <mat-card-title class="align-side-by-side">Templates</mat-card-title>
+  <mat-card-title class="align-side-by-side">{{title}}</mat-card-title>
   <button class="position-right" mat-stroked-button routerLink="create-template">
-    ADD
+    {{addButton}}
   </button>
 
   <form>
@@ -10,7 +10,7 @@
         <mat-icon>search</mat-icon> &nbsp;
       </span>
       <label>
-        <input type="text" matInput placeholder="Search Templates">
+        <input type="text" matInput [placeholder]="searchPlaceholder">
       </label>
     </mat-form-field>
   </form>
@@ -33,11 +33,11 @@
       <mat-menu #menu="matMenu" xPosition="after">
         <button mat-menu-item [routerLink]="'edit-template/' + template.template_id">
           <mat-icon>create</mat-icon>
-          <span>Edit</span>
+          <span>{{optionLabels.edit}}</span>
         </button>
         <button mat-menu-item (click)="openDialog(template.template_id, template.title)">
           <mat-icon>delete</mat-icon>
-          <span>Delete</span>
+          <span>{{optionLabels.delete}}</span>
         </button>
       </mat-menu>
       <div class="date">{{template.calendar_date}}</div>
