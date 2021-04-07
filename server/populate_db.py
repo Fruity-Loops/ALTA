@@ -74,25 +74,25 @@ def create_orgs_users_items_templates(seeder):
         "Unit_of_Measure": lambda x: random.choice(['EA', 'OZ', 'BX200', 'CS48']),
     })
 
-    seeder.add_entity(AuditTemplate, 10, {
-        "author": lambda x: seeder.faker.simple_profile()['username'],
-        "title": lambda x: seeder.faker.sentence(),
-        "Location": lambda x: [random.choice(LOCATIONS)],
-        "Plant": [],
-        "Zone": [],
-        "Aisle": [],
-        "Bin": [],
-        "Part_Number": [],
-        "description": "",
-        "Serial_Number": [],
-        "start_date": "2021-02-04T21:57:00.012Z",
-        "repeat_every": "1",
-        "on_day": ["True", "True", "False", "False", "False", "False", "False"],
-        "for_month": ["True", "True", "False", "False", "False", "False", "False", "False", "False", "False", "False",
-                      "False"],
-        "calendar_date": "January 08, 2021",
-        "time_zone_utc": "America/Detroit",
-    })
+    # seeder.add_entity(AuditTemplate, 10, {
+    #     "author": lambda x: seeder.faker.simple_profile()['username'],
+    #     "title": lambda x: seeder.faker.sentence(),
+    #     "Location": lambda x: [random.choice(LOCATIONS)],
+    #     "Plant": [],
+    #     "Zone": [],
+    #     "Aisle": [],
+    #     "Bin": [],
+    #     "Part_Number": [],
+    #     "description": "",
+    #     "Serial_Number": [],
+    #     "start_date": "2021-02-04T21:57:00.012Z",
+    #     "repeat_every": "1",
+    #     "on_day": ["True", "True", "False", "False", "False", "False", "False"],
+    #     "for_month": ["True", "True", "False", "False", "False", "False", "False", "False", "False", "False", "False",
+    #                   "False"],
+    #     "calendar_date": "January 08, 2021",
+    #     "time_zone_utc": "America/Detroit",
+    # })
 
     # insert the created instances into the DB and returned the primary keys of these instances
     inserted_pks = seeder.execute()
@@ -107,13 +107,13 @@ def get_random_list_of_items(org_id):
     items = queryset[:random_size]
     return items
 
-def create_audit(seeder, org_id, user_ids, item_ids, template_ids):
+def create_audit(seeder, org_id, user_ids, item_ids):
     # get the organization object from the DB to be used while creating the audit
     organization = Organization.objects.get(pk=org_id)
 
     # Select a random template and get the Template object from the DB to be used while creating the audit
-    random_template_id = random.choice(template_ids)
-    audit_template = AuditTemplate.objects.get(pk=random_template_id)
+    # random_template_id = random.choice(template_ids)
+    # audit_template = AuditTemplate.objects.get(pk=random_template_id)
 
     # select a random user from the organization to be the one who initiates the audit
     initiated_by_id = random.choice(user_ids)
@@ -124,7 +124,7 @@ def create_audit(seeder, org_id, user_ids, item_ids, template_ids):
         'status': lambda x: random.choice(['Active']),
         'organization': organization,
         'initiated_by': initiated_by,
-        'template_id': audit_template,
+        'template_id': None,
         'initiated_on': datetime.datetime.now(),
         'last_modified_on': datetime.datetime.now()
     })
@@ -264,6 +264,7 @@ if __name__ == "__main__":
     created_org_id = inserted_pks[Organization][0]
     created_user_ids = inserted_pks[CustomUser]
     created_item_ids = inserted_pks[Item]
-    created_template_ids = inserted_pks[AuditTemplate]
+    # created_template_ids = inserted_pks[AuditTemplate]
 
-    create_audit(seeder, created_org_id, created_user_ids, created_item_ids, created_template_ids)
+    # create_audit(seeder, created_org_id, created_user_ids, created_item_ids, created_template_ids)
+    create_audit(seeder, created_org_id, created_user_ids, created_item_ids)
