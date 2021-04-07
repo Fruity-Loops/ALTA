@@ -18,6 +18,10 @@ export class AuditAssigned {
         return element(by.css('ion-checkbox[formcontrolname="flagged"]'));
     }
 
+    getCommentBox(): ElementFinder {
+        return element(by.css('ion-textarea[formcontrolname="comment"] textarea'));
+    }
+
     getSubmitButton(): ElementFinder {
         return element(by.id('validateButton'));
     }
@@ -32,5 +36,13 @@ export class AuditAssigned {
 
     getCompletedItems(): ElementFinder {
         return element(by.id('completedItems12731370'));
+    }
+
+    getOptionsButton(): ElementFinder {
+        return element(by.id('optionsButton'));
+    }
+
+    getEditButton(): ElementFinder {
+        return element(by.className('editButton'));
     }
 }

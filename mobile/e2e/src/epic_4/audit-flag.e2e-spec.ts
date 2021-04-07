@@ -4,8 +4,10 @@ import {browser, ExpectedConditions} from 'protractor';
 
 /**
  * https://github.com/fruity-loops/alta/issues/60
+ * https://github.com/fruity-loops/alta/issues/61
+ * https://github.com/fruity-loops/alta/issues/70
  */
-describe('AT-4.5: Flag an item as missing or new', () => {
+describe('AT-4.5: Flag an item as missing or new, AT-4.6: Comment on a flagged item and AT-4.7: View items assigned to an audit', () => {
 
     const auditFlag: AuditAssigned = new AuditAssigned();
 
@@ -35,16 +37,21 @@ describe('AT-4.5: Flag an item as missing or new', () => {
         auditFlag.getFlagButton().click();
         browser.wait(ExpectedConditions.visibilityOf(auditFlag.getSubmitButton()), 5000);
         expect(auditFlag.getFlagChecked().getAttribute('aria-checked')).toBe('true');
+        auditFlag.getCommentBox().sendKeys('Adding some comments :)');
         auditFlag.getSubmitButton().click();
         browser.wait(ExpectedConditions.visibilityOf(auditFlag.getDismissButton()), 5000);
         auditFlag.getDismissButton().click();
     });
 
-    it('Confirms the flagged item has been added under completed items', () => {
+    it('Confirms the flagged item has been added under completed items and the comment is there as well', () => {
         browser.wait(ExpectedConditions.visibilityOf(auditFlag.getCompletedItemsButton()), 5000);
         auditFlag.getCompletedItemsButton().click();
         browser.wait(ExpectedConditions.visibilityOf(auditFlag.getCompletedItems()), 5000);
         expect(auditFlag.getCompletedItems().isDisplayed()).toBeTruthy();
+        auditFlag.getOptionsButton().click();
+        browser.wait(ExpectedConditions.visibilityOf(auditFlag.getEditButton()), 5000);
+        auditFlag.getEditButton().click();
+        expect(auditFlag.getCommentBox().getAttribute('value')).toBe('Adding some comments :)');
         browser.refresh();
     });
 });

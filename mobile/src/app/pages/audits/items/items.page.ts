@@ -460,6 +460,7 @@ export class ItemsPage implements OnInit, OnDestroy {
         {
           text: 'Edit',
           icon: 'create',
+          cssClass: 'editButton',
           handler: () => {
             this.getRecord(recordID);
           }
