@@ -290,14 +290,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
       // bin with location already exists in table
       if (checkExistingLocationAndBin !== undefined) {
-
-        if (record.status === 'Provided') {
-          checkExistingLocationAndBin.Number_of_Provided_Items++;
-        } else if (record.status === 'Missing') {
-          checkExistingLocationAndBin.Number_of_Missing_Items++;
-        } else if (record.status === 'New') {
-          checkExistingLocationAndBin.Number_of_New_Items++;
-        }
+        checkExistingLocationAndBin['Number_of_'+record.status +'_Items']++;
 
         checkExistingLocationAndBin.Number_of_Audited_Items++;
 
@@ -331,7 +324,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     // removes provided, missing, or new column if results display 0 items
     Object.entries(holdStatusValues).forEach(([key, value]) => {
       if (!value.find((val: any) => val !== 0)) {
-        console.log(key)
         this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== key);
       }
     });
