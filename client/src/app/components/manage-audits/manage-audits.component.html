@@ -85,7 +85,7 @@
                         <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
                     </mat-icon-button>
                   </div>
-                  {{ object[column]}}
+                  {{ object[column]}}<t *ngIf="column == 'accuracy'">%</t>
                 </ng-template>
 
 
@@ -111,10 +111,11 @@
                         {{ column.replaceAll('_', ' ') | titlecase }}</th>
                      <div >
                        <td mat-cell *matCellDef="let object"
-                           [ngClass]="{'missing-result' : (column == 'Number_of_Found_Items' && object['Status'] === 'Missing'),
-                                      'provided-result' : (column == 'Number_of_Found_Items' && object['Status'] === 'Provided'),
-                                      'new-result': (column == 'Number_of_Found_Items' && object['Status'] === 'New')}">
-                        {{ object[column]}}
+                           [ngClass]="{'missing-result' : (column == 'Number_of_Missing_Items' && object[column] != 0),
+                                      'provided-result' : (column == 'Number_of_Provided_Items' && object[column] != 0),
+                                      'new-result': (column == 'Number_of_New_Items' && object[column] != 0)}">
+                        <t *ngIf="object[column] != 0">{{ object[column]}}</t>
+                        <t *ngIf="object[column] == 0">-</t>
                       </td>
 
                      </div>

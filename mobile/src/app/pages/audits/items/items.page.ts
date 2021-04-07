@@ -37,6 +37,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   completedItems: any;
   auditID: string;
   binID: string;
+  binName: string;
   itemsBlankMessage: string;
   completedItemsBlankMessage: string;
   refreshEvent: any;
@@ -83,6 +84,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   getSelectedBin() {
     this.auditID = this.activatedRoute.snapshot.paramMap.get('audit_id');
     this.binID = this.activatedRoute.snapshot.paramMap.get('bin_id');
+    this.binName = this.activatedRoute.snapshot.queryParamMap.get('Bin_Name');
   }
 
   async getItems(withLoading: boolean, loadingMesage = 'Fetching Items...') {
@@ -299,7 +301,9 @@ export class ItemsPage implements OnInit, OnDestroy {
                       Batch_Number: barcode,
                       status: 'New',
                       Quantity: 0, // expected quantity was 0
-                      flagged: true
+                      flagged: true,
+                      Bin: this.binName,
+                      Location: this.loggedInUser.location
                     };
                     this.presentRecordModal(modalData);
                   }

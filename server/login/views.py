@@ -90,6 +90,7 @@ class LoginMobileEmailView(generics.GenericAPIView):
                 org_id = user.organization.org_id
                 org_name = user.organization.org_name
                 data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'location': user.location,
                         'organization_id': org_id,
                         'organization_name': org_name}
 

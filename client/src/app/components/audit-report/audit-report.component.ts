@@ -158,7 +158,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     );
   }
 
-  // TODO: parse date to more readable
   cleanMetaData(): void {
     delete this.metaData.inventory_items;
 
@@ -175,7 +174,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.metaData.last_modified_on = this.datePipe.transform(this.metaData.last_modified_on, 'EEEE, MMMM d, y - H:mm');
   }
 
-  //  TODO
   setAuditData(): void{
     this.auditReportService.getAuditData(this.id).subscribe(
       (data: any) => {
