@@ -99,7 +99,7 @@
 
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
 
-                <div class="error-no-SK" *ngIf="ongoingAudit && element.audit_id == expandedElement">
+                <div class="ongoing-audit-warning" *ngIf="ongoingAudit && element.audit_id == expandedElement">
                     Notice: The results will update as this audit is in process
                 </div>
 

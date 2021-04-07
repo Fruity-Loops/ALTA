@@ -172,6 +172,33 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     );
   }
 
+  filterAuditData(fullData: any): any[] {
+    const filteredData: any[] = [];
+
+    fullData.forEach(obj => {
+      filteredData.push({
+        Bin: obj.Bin,
+        Location: obj.Location,
+        status: obj.status
+      });
+    });
+    return filteredData;
+  }
+
+  filterBinToSKData(fullData: any): any[] {
+    const filteredData = [];
+
+    fullData.forEach(obj => {
+      filteredData.push({
+        location: obj.customuser.location,
+        Bin: obj.Bin,
+        Assigned_Employee: obj.customuser.first_name + ' ' + obj.customuser.last_name,
+        Bin_Accuracy: obj.accuracy + '%'
+      });
+    });
+    return filteredData;
+  }
+
   toggleExpand(auditId: any, auditStatus: any): void {
     if (this.expandedElement === auditId) {
       this.expandedElement = null;
@@ -179,6 +206,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       this.innerDataSource = new MatTableDataSource();
     } else {
       if (auditStatus === 'Complete' || auditStatus === 'Active') {
+       // clear previously set data
+       this.innerDataSource = new MatTableDataSource();
 
         this.innerDisplayedColumns =
           ['Location',
@@ -192,42 +221,26 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
         this.displayWarningMessage(auditStatus);
 
+        let getFilteredAuditData = [];
+        let getFilteredBinSKData = [];
+
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
-
-            // filter required data
-            const getItemBinLocationStatus = [];
-
-            data.forEach(obj => {
-              getItemBinLocationStatus.push({
-                Bin: obj.Bin,
-                Location: obj.Location,
-                status: obj.status
-              });
-            });
+            getFilteredAuditData = this.filterAuditData(data);
 
             this.auditService.getAssignedBins(auditId).subscribe(
               (assigned_users: any) => {
+                getFilteredBinSKData = this.filterBinToSKData(assigned_users);
 
-                // filter required data
-                const getAssignedSKBinAccuracy = [];
-
-                assigned_users.forEach(obj => {
-                  getAssignedSKBinAccuracy.push({
-                    location: obj.customuser.location,
-                    Bin: obj.Bin,
-                    Assigned_Employee: obj.customuser.first_name + ' ' + obj.customuser.last_name,
-                    Bin_Accuracy: obj.accuracy + '%'
-                  });
-                });
-
-                this.setInnerTable(getItemBinLocationStatus, getAssignedSKBinAccuracy);
+                this.setInnerTable(getFilteredAuditData, getFilteredBinSKData);
              });
           },
           (err: any) => {
             this.errorMessage = err;
           }
         );
+
+
       } else {
         this.auditService.getAuditData(auditId).subscribe(
           (data: any) => {
@@ -261,7 +274,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       let holdCurrentSK = '';
       let holdCurrentBinAccuracy = '';
 
-      // find assigned bin and location
+      // find and set sk and bin accuracy to bin with location
       let getDataGivenBin = assigned_users.find((obj: any) =>
         obj.Bin === record.Bin &&
         obj.location === record.Location);
@@ -302,23 +315,26 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       }
     });
 
-    this.removeZeroValueColumns(holdInterpretedData);
+    if (holdInterpretedData.length)
+      this.removeZeroValueColumns(holdInterpretedData);
+
     this.innerDataSource = new MatTableDataSource(holdInterpretedData);
   }
 
   removeZeroValueColumns(holdInterpretedData: any): void {
+    const holdStatusValues = {
+      'Number_of_Provided_Items': holdInterpretedData.map((val: any) => val.Number_of_Provided_Items),
+      'Number_of_Missing_Items': holdInterpretedData.map((val: any) => val.Number_of_Missing_Items),
+      'Number_of_New_Items': holdInterpretedData.map((val:any) => val.Number_of_New_Items)
+    };
 
-    if (!holdInterpretedData.map((val: any) => val.Number_of_Provided_Items).find((val: any) => val !== 0)) {
-      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Provided_Items');
-    }
-
-    if (!holdInterpretedData.map((val: any) => val.Number_of_Missing_Items).find((val: any) => val !== 0)) {
-      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_Missing_Items');
-    }
-
-    if (!holdInterpretedData.map((val:any) => val.Number_of_New_Items).find((val: any) => val !== 0)) {
-      this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== 'Number_of_New_Items');
-    }
+    // removes provided, missing, or new column if results display 0 items
+    Object.entries(holdStatusValues).forEach(([key, value]) => {
+      if (!value.find((val: any) => val !== 0)) {
+        console.log(key)
+        this.innerDisplayedColumns = this.innerDisplayedColumns.filter(obj => obj !== key);
+      }
+    });
   }
 
   // updates data in table
