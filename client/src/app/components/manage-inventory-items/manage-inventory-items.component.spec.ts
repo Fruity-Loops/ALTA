@@ -81,4 +81,14 @@ describe('ManageInventoryItemsComponent', () => {
     }
   });
 
+  // Test the submitAudit
+  it('Call submitAudit', () => {
+    try {
+      component.submitAudit()
+    }
+    catch (err) {
+      console.error(err);
+    }
+  }); 
+  
 });
