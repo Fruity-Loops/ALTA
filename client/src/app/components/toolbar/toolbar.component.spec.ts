@@ -36,4 +36,24 @@ describe('ToolbarComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  // Test the toggle drawer
+  it('Call toggle drawer', () => {
+    try {
+      component.toggleDrawer()
+    }
+    catch (e) {
+      console.error(e);
+    }
+  });
+
+  // Test the destroy
+  it('Call OnDestroy', () => {
+    try {
+      component.OnDestroy()
+    }
+    catch (e) {
+      console.error(e);
+    }
+  });
+
 });
