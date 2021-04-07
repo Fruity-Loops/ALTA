@@ -1,4 +1,4 @@
-import {AuditAssigned} from './audit-review.po';
+import {AuditReview} from './audit-review.po';
 import {Login, Logout} from '../login.po';
 import {browser, ExpectedConditions} from 'protractor';
 
@@ -7,7 +7,7 @@ import {browser, ExpectedConditions} from 'protractor';
  */
 describe('AT-4.2: Review the list of inputted items of an ongoing audit', () => {
 
-    const auditProgress: AuditAssigned = new AuditAssigned();
+    const auditProgress: AuditReview = new AuditReview();
 
     /**
      * Login as a Stock Keeper

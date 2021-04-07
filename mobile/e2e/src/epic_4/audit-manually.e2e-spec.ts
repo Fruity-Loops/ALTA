@@ -1,4 +1,4 @@
-import {AuditAssigned} from './audit-manually.po';
+import {AuditManually} from './audit-manually.po';
 import {Login, Logout} from '../login.po';
 import {browser, ExpectedConditions} from 'protractor';
 
@@ -7,7 +7,7 @@ import {browser, ExpectedConditions} from 'protractor';
  */
 describe('AT-4.4: Manually input an item’s data', () => {
 
-    const auditManually: AuditAssigned = new AuditAssigned();
+    const auditManually: AuditManually = new AuditManually();
 
     /**
      * Login as a Stock Keeper

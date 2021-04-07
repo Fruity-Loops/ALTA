@@ -1,4 +1,4 @@
-import {AuditAssigned} from './audit-flag.po';
+import {AuditFlag} from './audit-flag.po';
 import {Login, Logout} from '../login.po';
 import {browser, ExpectedConditions} from 'protractor';
 
@@ -9,7 +9,7 @@ import {browser, ExpectedConditions} from 'protractor';
  */
 describe('AT-4.5: Flag an item as missing or new, AT-4.6: Comment on a flagged item and AT-4.7: View items assigned to an audit', () => {
 
-    const auditFlag: AuditAssigned = new AuditAssigned();
+    const auditFlag: AuditFlag = new AuditFlag();
 
     /**
      * Login as a Stock Keeper

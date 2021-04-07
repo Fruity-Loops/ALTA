@@ -1,6 +1,6 @@
 import {by, element, ElementFinder} from 'protractor';
 
-export class AuditAssigned {
+export class AuditReview {
     getInfoButton(): ElementFinder {
         return element(by.id('infoButton9'));
     }

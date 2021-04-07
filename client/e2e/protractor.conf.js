@@ -11,7 +11,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [ // Order of specs
     './src/**/backend-service.e2e-spec.ts',
-    './src/**/epic_3/create-sk-account.e2e-spec.ts',
+    './src/**/epic_3/modify-sk-account.e2e-spec.ts',
   ],
   capabilities: {
     browserName: 'chrome'
