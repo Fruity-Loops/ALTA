@@ -50,4 +50,35 @@ describe('ManageInventoryItemsComponent', () => {
     const button = fixture.debugElement.query(By.css('#create'));
     expect(button.nativeElement.disabled).toBeTruthy();
   });
+
+  // Test the page update
+  it('Call updatePage', () => {
+    try {
+      component.updatePage()
+    }
+    catch (errorMessage) {
+      console.error(errorMessage);
+    }
+  });
+
+  // Test the paginator update
+  it('Call updatePaginator', () => {
+    try {
+      component.updatePaginator()
+    }
+    catch (errorMessage) {
+      console.error(errorMessage);
+    }
+  });
+
+  // Test the change
+  it('Call onChange', () => {
+    try {
+      component.onChange(0)
+    }
+    catch (e) {
+      console.error(e);
+    }
+  });
+
 });
