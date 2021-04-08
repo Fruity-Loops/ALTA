@@ -14,16 +14,17 @@ export class ManageMembersService {
   // Connection with the backend
   BASEURL = env.api_root;
 
-  constructor(private http: HttpClient, // We inject the http client in the constructor to do our REST operations
-              private authService: AuthService) {
-  }
+  constructor(
+    private http: HttpClient, // We inject the http client in the constructor to do our REST operations
+    private authService: AuthService
+  ) { }
 
   getOrgId(): any {
     let orgId = this.authService.getLocalStorage(UserLocalStorage.OrgId);
     if (!orgId) {
       orgId = '';
     }
-    return orgId ;
+    return orgId;
   }
 
   getAllClients(): Observable<any> {
@@ -32,7 +33,7 @@ export class ManageMembersService {
       params = params.append('organization', this.getOrgId());
       params = params.append('no_pagination', 'True');
       return this.http.get(`${this.BASEURL}/user/`,
-        {params});
+        { params });
     } else {
       return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
         catchError((err: HttpErrorResponse) => {
