@@ -426,7 +426,7 @@ class RecommendationViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        org_id = request.data['organization']
+        org_id = request.GET.get('organization',None)
         bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
                                  annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
 
