@@ -11,7 +11,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [ // Order of specs
     './src/**/backend-service.e2e-spec.ts',
-    './src/**/epic_3/sk-to-inventory.e2e-spec.ts',
+    './src/**/epic_2/manage-inventory.e2e-spec.ts',
   ],
   capabilities: {
     browserName: 'chrome'
