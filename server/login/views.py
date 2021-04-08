@@ -268,9 +268,11 @@ class ResetPasswordEmailView(generics.GenericAPIView):
                 if user.role == 'SA':
                     url += '/#/sa-settings?token=' + str(token.key)
                     data = {'token': token.key}
-                else:
+                elif user.role == 'IM':
                     url += '/#/settings?token=' + str(token.key)
                     data = {'token': token.key}
+                else:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
 
                 sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
                 sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')

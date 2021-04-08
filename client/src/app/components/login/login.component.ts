@@ -135,6 +135,7 @@ export class ForgotCredentialsComponent {
   userService: ManageMembersService;
   success = false;
   emailNoExist = false;
+  unauthorized = false;
 
   constructor(
     public dialogRef: MatDialogRef<ForgotCredentialsComponent>,
@@ -164,6 +165,8 @@ export class ForgotCredentialsComponent {
     }, (err) => {
       if (err.status === 404) {
         this.emailNoExist = true;
+      } else if (err.status === 401) {
+        this.unauthorized = true;
       }
     });
   }
