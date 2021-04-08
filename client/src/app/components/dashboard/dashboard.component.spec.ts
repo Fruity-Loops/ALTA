@@ -41,12 +41,14 @@ describe('DashboardComponent', () => {
   it('Call retrieveData to populate the audit', fakeAsync(() => {
     try {
       component.retrieveData([{
-        getDate : '',
-        splitDate : '   ',
-        dateObj : 'MM/DD/YYYY',
-        date : '03/12/2021',
-        thirtyDaysAgo : 'MM/DD/YYYY',
+        getDate : '03/30/2021',
+        splitDate : '03 30 2021', 
+        dateObj : '03/30/2021',
+        date : '03/30/2021',
+        thirtyDaysAgo : '03/01/2021',
         audit,
+        xData : 'datetime',
+        yData : 'datetime',
       }]);
     }
     catch (errorMessage) {
