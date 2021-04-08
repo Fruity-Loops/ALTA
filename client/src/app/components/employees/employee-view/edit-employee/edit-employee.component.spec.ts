@@ -9,7 +9,7 @@ import {ManageOrganizationsService} from 'src/app/services/organizations/manage-
 import 'zone.js/dist/zone-testing';
 import { AppModule } from 'src/app/app.module'
 
-describe('SignupComponent', () => {
+describe('EditEmployeeComponent', () => {
   let component: EditEmployeeComponent;
   let fixture: ComponentFixture<EditEmployeeComponent>;
   // @ts-ignore
