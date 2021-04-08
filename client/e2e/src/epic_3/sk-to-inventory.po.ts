@@ -14,8 +14,8 @@ export class SKToInventory {
     return element(by.id(name));
   }
 
-  getSelectCheck(): ElementFinder {
-    return element(by.id('row3'));
+  getChooseSK(rowNumber: string): ElementFinder {
+    return element(by.id(rowNumber));
   }
 
   getAssignButton(): ElementFinder {
@@ -27,11 +27,23 @@ export class SKToInventory {
   }
 
   getBoxToDropIn(): ElementFinder {
-    return element(by.id('boxToDropIn'));
+    return element(by.id('boxToDropIn3'));
   }
 
   getconfirmButton(): ElementFinder {
     return element(by.id('confirm'));
+  }
+
+  getAutoAssignButton(): ElementFinder {
+    return element(by.id('designateBinsAutoAssign'));
+  }
+
+  getFirstSKBin(): ElementFinder {
+    return element(by.xpath('//div[@id=\'boxToDropIn3\']/div[contains(string(), "C69")]'));
+  }
+
+  getSecondSKBin(): ElementFinder {
+    return element(by.xpath('//div[@id=\'boxToDropIn5\']/div[contains(string(), "C20")]'));
   }
 
 }

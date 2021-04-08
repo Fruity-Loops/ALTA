@@ -3,7 +3,7 @@
     <div id="top-div">
       <button id="designateBinsPanelExpand" mat-button class="top-buttons" (click)="allExpandState=true">{{actionButtons.expand}}</button>
       <button id="designateBinsPanelCollapse" mat-button class="top-buttons" (click)="allExpandState=false">{{actionButtons.collapse}}</button>
-      <button mat-button class="top-buttons auto-assign" (click)="autoAssign()">{{actionButtons.auto_assign}}</button>
+      <button id="designateBinsAutoAssign" mat-button class="top-buttons auto-assign" (click)="autoAssign()">{{actionButtons.auto_assign}}</button>
     </div>
   </mat-card>
   <br>
@@ -39,7 +39,7 @@
             <div *ngFor="let sk of auditComp.sk;">
               <h2 class="column-header">{{sk.first_name}} {{sk.last_name}}</h2>
             <div class="drag-drop-containers">
-                <div id="boxToDropIn"
+                <div id="boxToDropIn{{sk.id}}"
                   cdkDropList
                   [cdkDropListData]="identifyUser(sk.id)"
                   class="drag-drop-list"
