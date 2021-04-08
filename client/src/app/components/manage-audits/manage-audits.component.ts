@@ -175,20 +175,22 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   filterAuditData(fullData: any): any[] {
     const filteredData: any[] = [];
 
-    fullData.forEach(obj => {
+    fullData.forEach((obj: any) => {
       filteredData.push({
         Bin: obj.Bin,
         Location: obj.Location,
-        status: obj.status
+        status: obj.status,
+        Quantity: obj.Quantity
       });
     });
+
     return filteredData;
   }
 
   filterBinToSKData(fullData: any): any[] {
-    const filteredData = [];
+    const filteredData: any[] = [];
 
-    fullData.forEach(obj => {
+    fullData.forEach((obj: any) => {
       filteredData.push({
         location: obj.customuser.location,
         Bin: obj.Bin,
@@ -209,20 +211,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
        // clear previously set data
        this.innerDataSource = new MatTableDataSource();
 
-        this.innerDisplayedColumns =
-          ['Location',
-           'Bin',
-           'Assigned_Employee',
-           'Bin_Accuracy',
-           'Number_of_Audited_Items',
-           'Number_of_Provided_Items',
-           'Number_of_Missing_Items',
-           'Number_of_New_Items'];
-
         this.displayWarningMessage(auditStatus);
 
-        let getFilteredAuditData = [];
-        let getFilteredBinSKData = [];
+        let getFilteredAuditData: any[] = [];
+        let getFilteredBinSKData: any[] = [];
 
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
@@ -290,9 +282,17 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
       // bin with location already exists in table
       if (checkExistingLocationAndBin !== undefined) {
-        checkExistingLocationAndBin['Number_of_'+record.status +'_Items']++;
 
-        checkExistingLocationAndBin.Number_of_Audited_Items++;
+        if (record.Quantity != 0) {
+          checkExistingLocationAndBin['Number_of_'+record.status +'_Items'] =
+            checkExistingLocationAndBin['Number_of_'+record.status +'_Items'] + record.Quantity;
+
+          checkExistingLocationAndBin.Number_of_Audited_Items =
+            checkExistingLocationAndBin.Number_of_Audited_Items + record.Quantity;
+        } else {
+          checkExistingLocationAndBin['Number_of_'+record.status +'_Items']++;
+          checkExistingLocationAndBin.Number_of_Audited_Items++;
+        }
 
       } else {
         holdInterpretedData.push({
@@ -300,13 +300,23 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
           Bin: record.Bin,
           Assigned_Employee: holdCurrentSK,
           Bin_Accuracy: holdCurrentBinAccuracy,
-          Number_of_Audited_Items: 1,
-          Number_of_Provided_Items: record.status == 'Provided' ? 1 : 0,
+          Number_of_Audited_Items: record.Quantity !== 0 ? record.Quantity : 1,
+          Number_of_Provided_Items: record.status == 'Provided' ? record.Quantity : 0,
           Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
-          Number_of_New_Items: record.status == 'New' ? 1 : 0
+          Number_of_New_Items: record.status == 'New' ? record.Quantity : 0
         });
       }
     });
+
+    this.innerDisplayedColumns =
+                  ['Location',
+                   'Bin',
+                   'Assigned_Employee',
+                   'Bin_Accuracy',
+                   'Number_of_Audited_Items',
+                   'Number_of_Provided_Items',
+                   'Number_of_Missing_Items',
+                   'Number_of_New_Items'];
 
     if (holdInterpretedData.length)
       this.removeZeroValueColumns(holdInterpretedData);
