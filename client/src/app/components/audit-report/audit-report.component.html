@@ -5,13 +5,11 @@
     </mat-card-title>
     <div class="top-buttons">
       <button mat-stroked-button *ngIf="ongoing" id="cancel" class="cancel" (click)="cancelAudit()">Cancel Audit</button>
-      <mat-icon id="questionanswericon" class="position-right" (click)="drawer.toggle(); setCommentData()">
+      <mat-icon id="questionanswericon" class="comment-button" (click)="drawer.toggle(); setCommentData()">
         question_answer
       </mat-icon>
     </div>
   </mat-card-title-group>
-
-
 
   <mat-drawer-container class="comment-container">
     <mat-drawer #drawer class="comment" mode="side" position="end">
