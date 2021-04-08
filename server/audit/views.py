@@ -448,10 +448,14 @@ class RecommendationViewSet(LoggingViewset):
 
         random_items_to_recommend = get_random_items(all_bins, all_parts, org_id, 2)
 
-        print(f"******** {random_items_to_recommend}")
+        # Recommend items with high criticality
+        high_criticality_items = list(
+            Item.objects.filter(organization=org_id, Criticality='High').values(
+                'Item_Id'))
 
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
-                'items_recommendation': items_to_recommend, 'random_items': random_items_to_recommend}
+                'items_recommendation': items_to_recommend, 'random_items': random_items_to_recommend,
+                'item_based_on_category': high_criticality_items}
         return Response(data)
 
 
