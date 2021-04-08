@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title class="align-side-by-side">{{title}}</mat-card-title>
-  <button class="position-right" mat-stroked-button routerLink="create-template">
+  <button id="addTemplateButton" class="position-right" mat-stroked-button routerLink="create-template">
     {{addButton}}
   </button>
 
@@ -21,7 +21,7 @@
 
   <div class="wrapper">
 
-    <div class="grid-container shadow-border" *ngFor="let template of auditTemplates">
+    <div id="{{template.title}}" class="grid-container shadow-border" *ngFor="let template of auditTemplates">
       <div class="clickable" (click)="startAudit(template.template_id)"></div>
       <div class="person-name">By: {{template.author}}</div>
       <div class="template-name">{{template.title}}</div>

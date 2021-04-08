@@ -31,6 +31,13 @@ export class Navigation {
             );
     }
 
+  templatesOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Templates')
+    );
+  }
+
     // Organization View
 
     employeesOption(): ElementFinder {
