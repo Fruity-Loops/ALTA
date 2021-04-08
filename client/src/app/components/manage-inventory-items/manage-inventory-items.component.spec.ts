@@ -89,6 +89,17 @@ describe('ManageInventoryItemsComponent', () => {
     catch (err) {
       console.error(err);
     }
-  }); 
+  });
+
+  // Test the Items getter
+  it('Call items getter', () => {
+    try {
+      component.getItems()
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
   
 });
