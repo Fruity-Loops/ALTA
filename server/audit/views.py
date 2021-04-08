@@ -511,18 +511,34 @@ class InsightsViewSet(LoggingViewset):
             Record.objects.filter(). \
                 values('first_verified_on', 'last_verified_on'))
 
-        print(durations_of_audits)
         time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
-        print(time_deltas)
-        print('average')
+        print(timedelta)
+
         # giving datetime.timedelta(0) as the start value makes sum work on tds
         average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
-        print(average_timedelta)
-
         days, hours, minutes = get_days_hour_min(average_timedelta)
 
+        today = datetime.now()
+        year = today.year
+        month = today.month
+
+
+        last_week_audit_count = list(
+            Audit.objects.filter(organization=org_id,
+                                 initiated_on__range=get_week_range()).annotate(total=Count('audit_id')))
+
+        last_month_audit_count = Audit.objects.filter(organization=org_id,
+                                 initiated_on__year=year).count() # check month
+
+        last_year_audit_count = Audit.objects.filter(organization=org_id,
+                                 initiated_on__year=year).count()
+        print('last_year_audit_count',month)
+
         data = {'average_accuracy': accuracy_average,
-                'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta}}
+                'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta},
+                'last_week_audit_count': last_week_audit_count, 'last_month_audit_count':last_month_audit_count,
+                'last_year_audit_count': last_year_audit_count}
+
         return Response(data)
 
 
@@ -540,3 +556,10 @@ def get_days_hour_min(seconds):
     minutes = (seconds - (days * seconds_in_day) - (hours * seconds_in_hour)) // seconds_in_minute
 
     return days, hours, minutes
+
+
+def get_week_range():
+    date = datetime.now()
+    start_week = date - timedelta(date.weekday())
+    end_week = start_week + timedelta(7)
+    return (start_week, end_week)
