@@ -63,6 +63,15 @@ export class ManageAuditsComponent
   dataSourceRandomItem: any = [];
   dataSourceCategoryItem: any = [];
 
+  last_week_audit_count: any;
+  last_month_audit_count: any;
+  last_year_audit_count: any;
+  average_audit_accuracy: any;
+  average_time_audit_seconds: any;
+  average_time_audit_min: any;
+  average_time_audit_hour: any;
+  average_time_audit_day: any;
+
   organization: any;
 
   constructor(
@@ -108,6 +117,7 @@ export class ManageAuditsComponent
     this.params = this.params.append('status', 'Active');
     this.searchAudit();
     this.getRecommendations();
+    this.getInsights();
   }
 
   searchAudit(): void {
@@ -194,6 +204,24 @@ export class ManageAuditsComponent
         this.dataSourceItem = data['items_recommendation'];
         this.dataSourceRandomItem = data['random_items'];
         this.dataSourceCategoryItem = data['item_based_on_category'];
+      },
+      (err: any) => {
+        this.errorMessage = err;
+      }
+    );
+  }
+
+  getInsights(): void {
+    this.dashService.getInsights(this.organization).subscribe(
+      (data) => {
+        this.last_week_audit_count = data['last_week_audit_count'];
+        this.last_month_audit_count = data['last_month_audit_count'];
+        this.last_year_audit_count = data['last_year_audit_count'];
+        this.average_audit_accuracy = data['average_accuracy'];
+        this.average_time_audit_seconds = data['average_audit_time']['seconds'];
+        this.average_time_audit_min = data['average_audit_time']['minutes'];
+        this.average_time_audit_hour = data['average_audit_time']['hours'];
+        this.average_time_audit_day = data['average_audit_time']['days'];
       },
       (err: any) => {
         this.errorMessage = err;
