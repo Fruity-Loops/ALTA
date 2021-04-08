@@ -493,6 +493,7 @@ class InsightsViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
+        org_id = request.data['organization']
         org_id = request.GET.get('organization', None)
         accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete'). \
                                                values('accuracy')), 'accuracy')
@@ -520,19 +521,15 @@ class InsightsViewSet(LoggingViewset):
 
         today = datetime.now()
         year = today.year
-        month = today.month
+        start = today - timedelta(days=today.weekday())
 
-
-        last_week_audit_count = list(
-            Audit.objects.filter(organization=org_id,
-                                 initiated_on__range=get_week_range()).annotate(total=Count('audit_id')))
+        last_week_audit_count = Audit.objects.filter(organization=org_id, initiated_on__gte=start).count()
 
         last_month_audit_count = Audit.objects.filter(organization=org_id,
-                                 initiated_on__year=year).count() # check month
+                                 initiated_on__gte=datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)).count() # check month
 
         last_year_audit_count = Audit.objects.filter(organization=org_id,
                                  initiated_on__year=year).count()
-        print('last_year_audit_count',month)
 
         data = {'average_accuracy': accuracy_average,
                 'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta},
@@ -557,9 +554,3 @@ def get_days_hour_min(seconds):
 
     return days, hours, minutes
 
-
-def get_week_range():
-    date = datetime.now()
-    start_week = date - timedelta(date.weekday())
-    end_week = start_week + timedelta(7)
-    return (start_week, end_week)
