@@ -211,7 +211,7 @@ export class ManageAuditsComponent
   }
 
   getInsights(): void {
-    this.dashService.getInsights(this.organization).subscribe(
+    this.auditService.getInsights(this.organization).subscribe(
       (data) => {
         this.last_week_audit_count = data['last_week_audit_count'];
         this.last_month_audit_count = data['last_month_audit_count'];

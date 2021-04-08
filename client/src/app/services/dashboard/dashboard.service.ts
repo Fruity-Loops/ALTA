@@ -19,8 +19,4 @@ export class DashboardService {
   getRecommendations(params: HttpParams): Observable<any> {
     return this.http.get(`${BASEURL}/recommendation/`, { params });
   }
-
-  getInsights(params: HttpParams): Observable<any> {
-    return this.http.get(`${BASEURL}/insights/`, { params });
-  }
 }
