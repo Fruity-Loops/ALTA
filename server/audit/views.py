@@ -1,4 +1,5 @@
 from datetime import datetime
+import random
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import Http404
@@ -12,18 +13,20 @@ from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer, GetAssignmentSerializer
+    AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
-        CheckAssignmentOrganizationById
+    CheckAssignmentOrganizationById
 from .models import Audit, Assignment, BinToSK, Record
+from inventory_item.models import Item
 
 
 class AuditSetPagination(PageNumberPagination):
     page_size = 25
     page_size_query_param = 'page_size'
     max_page_size = 1000
+
 
 class AuditViewSet(LoggingViewset):
     """
@@ -169,6 +172,7 @@ def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
 
+
 class AssignmentViewSet(LoggingViewset):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Assignment.objects.all()
@@ -184,8 +188,8 @@ class AssignmentViewSet(LoggingViewset):
         factory = SKPermissionFactory(self.request)
         audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-                im_additional_perms=audit_permissions,
-                sk_additional_perms=audit_permissions
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
 
@@ -205,7 +209,6 @@ class AssignmentViewSet(LoggingViewset):
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
-
 
     def create(self, request, *args, **kwargs):
         is_many = isinstance(request.data, list)
@@ -423,20 +426,50 @@ class RecommendationViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        org_id = request.GET.get("organization", None)
+        org_id = request.data['organization']
         bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
                                  annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
 
         parts_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
                 total=Count('Part_Number'))
-            .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
+                .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
 
         items_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
-                total=Count('item_id'))
-            .values('item_id', 'total').order_by('-total')[:5])
+                total=Count('item_id')).values('item_id', 'total').order_by('-total')[:5])
+
+        # Recommend an Ad-hoc audit : random selection od bins or parts
+        all_bins = get_values(list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').distinct()),
+                              'Bin')
+        all_parts = get_values(
+            list(Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').distinct()),
+            'Part_Number')
+
+        random_items_to_recommend = get_random_items(all_bins, all_parts, org_id, 2)
+
+        print(f"******** {random_items_to_recommend}")
 
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
-                'items_recommendation': items_to_recommend}
+                'items_recommendation': items_to_recommend, 'random_items': random_items_to_recommend}
         return Response(data)
+
+
+def get_values(list_of_dict, key):
+    return [val[key] for val in list_of_dict]
+
+
+def get_random_items(all_bins, all_parts, org_id, frequency_of_bins_or_parts):
+    random_bins_or_parts = random.sample(["bins", "parts"], 1)[0]
+    if random_bins_or_parts == "bins":
+        print('bins')
+        random_bin = random.sample(all_bins, frequency_of_bins_or_parts)  # increase if we want more items
+        return list(
+            Item.objects.filter(organization=org_id, Bin__in=random_bin).values(
+                'Item_Id'))
+    else:
+        print('part')
+        random_part = random.sample(all_parts, 2)  # increase if we want more items
+        return list(
+            Item.objects.filter(organization=org_id, Part_Number__in=random_part).values(
+                'Item_Id'))
