@@ -1,7 +1,7 @@
 @import "./src/theme.scss";
 
 .login-card {
-  margin: 30px 35% 30% 35%;
+  margin: 30px 25% 30% 25%;
   padding-top: 2%;
   width: 290px;
   max-height: 600px;
@@ -10,8 +10,36 @@
   color: map-get($alta-primary, 100);
 }
 
+.forget-pass {
+  background-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary, 100);
+}
+
+.forgot-credentials {
+  color: map-get($alta-primary, 100);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.dabuttons {
+  border: 2px solid map-get($alta-primary, A100) !important;
+  color: map-get($alta-primary, A100);
+}
+
 .error {
   color: red;
+}
+
+.success {
+  padding: 10px;
+  border: #2cd171 solid;
+  margin: 15px;
+}
+
+.missing {
+  padding: 20px 10px;
+  border: red solid;
+  margin: 15px;
 }
 
 #errorMsg {
@@ -40,4 +68,3 @@ mat-label {
 button {
   margin: 5%;
 }
-

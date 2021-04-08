@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from 'src/app/services/authentication/auth.service';
-import {Router} from '@angular/router';
-import {TokenService} from 'src/app/services/authentication/token.service';
+import {Component, Inject, OnInit, Optional} from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/authentication/auth.service';
+import { Router } from '@angular/router';
+import { TokenService } from 'src/app/services/authentication/token.service';
+import { ManageMembersService } from 'src/app/services/users/manage-members.service';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {LoginLangFactory} from './login.language';
 
 @Component({
@@ -16,6 +18,8 @@ export class LoginComponent implements OnInit {
   errorMessage: string;
   successMessage: string;
   body: any;
+  panelOpenState = false;
+  dialogRef: any;
 
   email: string;
   password: string;
@@ -25,7 +29,9 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     public router: Router,
     private authService: AuthService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private userService: ManageMembersService,
+    private dialog: MatDialog
   ) {
     this.errorMessage = '';
     this.successMessage = '';
@@ -54,19 +60,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.body).subscribe(
       (data) => {
         this.tokenService.SetToken(data.token); // Setting token in cookie for logged in users
-        // Set the logged in user's data for components to use when hiding or displaying elements
-        this.authService.setNext(data.user_id, data.user, data.role, data.organization_id, data.organization_name);
-        if (data.role === 'SA') {
-          setTimeout(() => {
-            this.authService.turnOffOrgMode();
-            this.router.navigate(['manage-organizations']);
-          }, 1000);
-        } else {
-          setTimeout(() => {
-            this.authService.turnOnOrgMode({organization: data.organization_id, ...data}, true);
-            this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
-          }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
-        }
+        this.populateUserInfo(data, true);
         this.successMessage = 'Login Successful';
         this.errorMessage = '';
         this.resetForm();
@@ -79,10 +73,102 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  populateUserInfo(data: any, fromLogin: boolean): void {
+    // Set the logged in user's data for components to use when hiding or displaying elements
+    this.authService.setNext(
+      data.user_id,
+      data.user,
+      data.role,
+      data.organization_id,
+      data.organization_name
+    );
+    if (data.role === 'SA') {
+      setTimeout(() => {
+        this.authService.turnOffOrgMode();
+        if (fromLogin) {
+          this.router.navigate(['manage-organizations']);
+        }
+      }, 1000);
+    } else {
+      setTimeout(() => {
+        this.authService.turnOnOrgMode(
+          { organization: data.organization_id, ...data },
+          true
+        );
+        if (fromLogin) {
+          this.router.navigate(['']); // Redirect user to component in path:home (defined in alta-home-routing.module.ts)
+        }
+      }, 1000); // Redirect the user after 1 seconds ( in case we want to add a loading bar when we click on button )
+    }
+  }
+
   resetForm(): void {
     this.loginForm.reset();
     Object.keys(this.loginForm.controls).forEach((key) => {
       this.loginForm.controls[key].setErrors(null);
     });
   }
+
+  openForgotCredentials(): void {
+    this.dialogRef = this.dialog.open(ForgotCredentialsComponent, {data: {
+        fb: this.fb,
+        userService: this.userService
+      }
+    });
+  }
+}
+
+interface ForgotCredentialsData {
+  fb: FormBuilder;
+  userService: ManageMembersService;
+}
+
+@Component({
+  selector: 'app-forgot-credentials-component',
+  templateUrl: 'login.forgotcredentials.html',
+  styleUrls: ['login.component.scss']
+})
+export class ForgotCredentialsComponent {
+  // @ts-ignore
+  resetPasswordForm: FormGroup;
+  fb: FormBuilder;
+  userService: ManageMembersService;
+  success = false;
+  emailNoExist = false;
+  unauthorized = false;
+
+  constructor(
+    public dialogRef: MatDialogRef<ForgotCredentialsComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ForgotCredentialsData) {
+    this.fb = data.fb;
+    this.resetPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+    this.userService = data.userService;
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+  disableOrganization(): void {
+    this.dialogRef.close();
+  }
+
+  resetPassword(): void {
+    const body = {
+      email: this.resetPasswordForm.value.email,
+    };
+
+    this.userService.resetPassword(body).subscribe(() => {
+      this.success = true;
+    }, (err) => {
+      if (err.status === 404) {
+        this.emailNoExist = true;
+      } else if (err.status === 401) {
+        this.unauthorized = true;
+      }
+    });
+  }
+
 }
