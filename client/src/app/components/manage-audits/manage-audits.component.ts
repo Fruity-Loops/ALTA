@@ -7,14 +7,16 @@ import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { TableManagementComponent } from '../TableManagement.component';
 import { SelectionModel } from '@angular/cdk/collections';
-import {ManageAuditsLangFactory} from './manage-audits.language';
+import { ManageAuditsLangFactory } from './manage-audits.language';
 
 @Component({
   selector: 'app-manage-audits',
   templateUrl: './manage-audits.component.html',
   styleUrls: ['./manage-audits.component.scss'],
 })
-export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
+export class ManageAuditsComponent
+  extends TableManagementComponent
+  implements OnInit {
   body: any;
   subscription: any;
 
@@ -41,21 +43,29 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   initialSelection = [];
   allowMultiSelect = false;
-  selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+  selection = new SelectionModel<any>(
+    this.allowMultiSelect,
+    this.initialSelection
+  );
   title: string;
   searchPlaceholder: string;
+
+  panelOpenState = false;
 
   constructor(
     private auditService: ManageAuditsService,
     protected fb: FormBuilder,
-    private router: Router,
+    private router: Router
   ) {
     super(fb);
     this.formg = fb;
     this.dataSource = new MatTableDataSource<any>();
     this.selectedAudit = -1;
     const lang = new ManageAuditsLangFactory();
-    [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
+    [this.title, this.searchPlaceholder] = [
+      lang.lang.title,
+      lang.lang.searchPlaceholder,
+    ];
   }
 
   getSearchForm(): any {
@@ -74,7 +84,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   ngOnInit(): void {
     this.params = this.params.append('page', String(this.pageIndex));
     this.params = this.params.append('page_size', String(this.pageSize));
-    this.params = this.params.append('organization', String(localStorage.getItem('organization_id')));
+    this.params = this.params.append(
+      'organization',
+      String(localStorage.getItem('organization_id'))
+    );
     this.params = this.params.append('status', 'Active');
     this.searchAudit();
   }
@@ -111,7 +124,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.errorMessage = err;
       }
     );
-
   }
 
   // updates data in table
@@ -132,8 +144,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.selection.toggle(row);
     if (this.selectedAudit === row.audit_id) {
       this.selectedAudit = -1;
-    }
-    else {
+    } else {
       this.selectedAudit = row.audit_id;
     }
   }
@@ -146,7 +157,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         },
         (err) => {
           this.errorMessage = err;
-        });
+        }
+      );
     }
   }
 
