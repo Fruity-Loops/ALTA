@@ -71,16 +71,6 @@ describe('ManageInventoryItemsComponent', () => {
     }
   });
 
-  // Test the change
-  it('Call onChange', () => {
-    try {
-      component.onChange(0)
-    }
-    catch (e) {
-      console.error(e);
-    }
-  });
-
   // Test the submitAudit
   it('Call submitAudit', () => {
     try {
