@@ -6,7 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 import {ManageOrganizationsComponent} from './manage-organizations.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ManageOrganizationsComponent', () => {
   let component: ManageOrganizationsComponent;
@@ -27,7 +27,6 @@ describe('ManageOrganizationsComponent', () => {
     }).compileComponents();
 
     organizationService = TestBed.inject(ManageOrganizationsService);
-    
     fixture = TestBed.createComponent(ManageOrganizationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

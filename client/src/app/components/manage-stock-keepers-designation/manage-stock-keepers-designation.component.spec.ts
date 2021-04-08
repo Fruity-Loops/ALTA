@@ -9,7 +9,7 @@ import 'zone.js/dist/zone-testing';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { TokenService } from 'src/app/services/authentication/token.service';
 import { throwError } from 'rxjs';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ManageStockeepersDesignationComponent', () => {
   let component: ManageStockKeepersDesignationComponent;
@@ -38,8 +38,6 @@ describe('ManageStockeepersDesignationComponent', () => {
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
-
-    
     fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);

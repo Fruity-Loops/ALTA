@@ -4,7 +4,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {DashboardComponent} from './dashboard.component';
 import {FormBuilder} from '@angular/forms';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 import { of } from 'rxjs';
 import { audit } from 'rxjs/operators';
 
@@ -26,7 +26,6 @@ describe('DashboardComponent', () => {
     service = TestBed.inject(ManageAuditsService);
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    
     fixture.detectChanges();
   });
 
@@ -42,7 +41,7 @@ describe('DashboardComponent', () => {
     try {
       component.retrieveData([{
         getDate : '03/30/2021',
-        splitDate : '03 30 2021', 
+        splitDate : '03 30 2021',
         dateObj : '03/30/2021',
         date : '03/30/2021',
         thirtyDaysAgo : '03/01/2021',
@@ -59,7 +58,7 @@ describe('DashboardComponent', () => {
   // Test the retrieveData table
   it('Call retrieveData', () => {
     try {
-      component.retrieveData(audit)
+      component.retrieveData(audit);
     }
     catch (err) {
       console.error(err);

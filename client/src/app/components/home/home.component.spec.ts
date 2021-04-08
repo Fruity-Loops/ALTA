@@ -6,7 +6,7 @@ import {HomeComponent} from './home.component';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -33,7 +33,6 @@ describe('HomeComponent', () => {
 
     tokenService = TestBed.inject(TokenService);
     sidenavService = TestBed.inject(SidenavService);
-    
     fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -6,7 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 import {CreateOrganizationComponent} from './create-organization.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('CreateOrganizationComponent', () => {
   let component: CreateOrganizationComponent;
@@ -27,7 +27,6 @@ describe('CreateOrganizationComponent', () => {
     }).compileComponents();
 
     organizationService = TestBed.inject(ManageOrganizationsService);
-    
     fixture = TestBed.createComponent(CreateOrganizationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -37,10 +36,10 @@ describe('CreateOrganizationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Test the submitQuery 
+  // Test the submitQuery
   it('Call submitQuery', () => {
     try {
-      component.submitQuery()
+      component.submitQuery();
     }
     catch (err) {
       console.error(err);

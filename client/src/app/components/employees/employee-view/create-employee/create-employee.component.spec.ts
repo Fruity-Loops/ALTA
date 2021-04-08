@@ -8,7 +8,7 @@ import {FormBuilder} from '@angular/forms';
 import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import 'zone.js/dist/zone-testing';
 import {throwError} from 'rxjs';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('SignupComponent', () => {
   let component: CreateEmployeeComponent;
@@ -41,7 +41,6 @@ describe('SignupComponent', () => {
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
     manageOrganizationsService = TestBed.inject(ManageOrganizationsService);
-    
     fixture = TestBed.createComponent(CreateEmployeeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

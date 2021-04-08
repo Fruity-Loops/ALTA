@@ -6,9 +6,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { By } from '@angular/platform-browser';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 // import {AltaMainRoutingModule} from 'src/app/modules/alta-main-routing/alta-main-routing.module'
-import {ManageInventoryItemsComponent} from 'src/app/components/manage-inventory-items/manage-inventory-items.component'
+import {ManageInventoryItemsComponent} from 'src/app/components/manage-inventory-items/manage-inventory-items.component';
 
 describe('AssignStockKeepersComponent', () => {
   let component: AssignStockKeepersComponent;
@@ -30,7 +30,6 @@ describe('AssignStockKeepersComponent', () => {
                 AppModule,
                 ],
     }).compileComponents();
-    
     fixture = TestBed.createComponent(AssignStockKeepersComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);

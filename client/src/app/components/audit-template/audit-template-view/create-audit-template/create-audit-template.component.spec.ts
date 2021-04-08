@@ -6,7 +6,7 @@ import { CreateAuditTemplateComponent } from './create-audit-template.component'
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { By } from '@angular/platform-browser';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('CreateAuditTemplateComponent', () => {
   let component: CreateAuditTemplateComponent;
@@ -34,7 +34,6 @@ describe('CreateAuditTemplateComponent', () => {
         },
       ],
     }).compileComponents();
-    
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(AuditTemplateService);

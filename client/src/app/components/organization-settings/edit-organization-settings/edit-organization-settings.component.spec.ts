@@ -4,7 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import {OrganizationSettingsService} from 'src/app/services/organization-settings.service';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {EditOrganizationSettingsComponent} from './edit-organization-settings.component';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('OrganizationSettingsComponent', () => {
   let component: EditOrganizationSettingsComponent;

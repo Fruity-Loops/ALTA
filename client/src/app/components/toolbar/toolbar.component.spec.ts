@@ -4,7 +4,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {ToolbarComponent} from './toolbar.component';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
@@ -39,7 +39,7 @@ describe('ToolbarComponent', () => {
   // Test the toggle drawer
   it('Call toggle drawer', () => {
     try {
-      component.toggleDrawer()
+      component.toggleDrawer();
     }
     catch (e) {
       console.error(e);
@@ -49,7 +49,7 @@ describe('ToolbarComponent', () => {
   // Test the destroy
   it('Call OnDestroy', () => {
     try {
-      component.OnDestroy()
+      component.OnDestroy();
     }
     catch (e) {
       console.error(e);

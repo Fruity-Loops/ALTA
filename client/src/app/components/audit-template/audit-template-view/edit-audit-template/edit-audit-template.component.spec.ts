@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { EditAuditTemplateComponent } from './edit-audit-template.component';
 import { AuditTemplateService } from 'src/app/services/audits/audit-template.service';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('EditAuditTemplateComponent', () => {
   let component: EditAuditTemplateComponent;
@@ -27,7 +27,6 @@ describe('EditAuditTemplateComponent', () => {
         },
       ],
     }).compileComponents();
-    
     fixture = TestBed.createComponent(EditAuditTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

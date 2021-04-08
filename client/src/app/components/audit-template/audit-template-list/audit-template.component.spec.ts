@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AuditTemplateComponent } from './audit-template.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('AuditTemplateComponent', () => {
   let component: AuditTemplateComponent;

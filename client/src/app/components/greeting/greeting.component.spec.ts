@@ -1,6 +1,6 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {GreetingComponent} from './greeting.component';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('AuthTabsComponent', () => {
   let component: GreetingComponent;
@@ -11,7 +11,6 @@ describe('AuthTabsComponent', () => {
       declarations: [GreetingComponent],
       imports: [AppModule]
     }).compileComponents();
-    
     fixture = TestBed.createComponent(GreetingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -7,7 +7,7 @@ import { ManageInventoryItemsComponent } from './manage-inventory-items.componen
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { By } from '@angular/platform-browser';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
@@ -54,7 +54,7 @@ describe('ManageInventoryItemsComponent', () => {
   // Test the page update
   it('Call updatePage', () => {
     try {
-      component.updatePage()
+      component.updatePage();
     }
     catch (errorMessage) {
       console.error(errorMessage);
@@ -64,7 +64,7 @@ describe('ManageInventoryItemsComponent', () => {
   // Test the paginator update
   it('Call updatePaginator', () => {
     try {
-      component.updatePaginator()
+      component.updatePaginator();
     }
     catch (errorMessage) {
       console.error(errorMessage);
@@ -74,7 +74,7 @@ describe('ManageInventoryItemsComponent', () => {
   // Test the submitAudit
   it('Call submitAudit', () => {
     try {
-      component.submitAudit()
+      component.submitAudit();
     }
     catch (err) {
       console.error(err);
@@ -84,12 +84,10 @@ describe('ManageInventoryItemsComponent', () => {
   // Test the Items getter
   it('Call items getter', () => {
     try {
-      component.getItems()
+      component.getItems();
     }
     catch (err) {
       console.error(err);
     }
   });
-
-  
 });

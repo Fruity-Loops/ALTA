@@ -5,7 +5,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {FormBuilder} from '@angular/forms';
 import {LoginComponent} from './login.component';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -32,7 +32,6 @@ describe('LoginComponent', () => {
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
-    
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

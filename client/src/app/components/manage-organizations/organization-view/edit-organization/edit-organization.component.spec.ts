@@ -5,7 +5,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {EditOrganizationComponent} from './edit-organization.component';
 import {MatDialogModule} from '@angular/material/dialog';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('EditOrganizationComponent', () => {
   let component: EditOrganizationComponent;
@@ -26,7 +26,6 @@ describe('EditOrganizationComponent', () => {
     }).compileComponents();
 
     organizationService = TestBed.inject(ManageOrganizationsService);
-    
     fixture = TestBed.createComponent(EditOrganizationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -36,30 +35,30 @@ describe('EditOrganizationComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  // Test the submitQuery 
+  // Test the submitQuery
   it('Call submitQuery', () => {
     try {
-      component.submitQuery()
+      component.submitQuery();
     }
     catch (err) {
       console.error(err);
     }
   });
 
-  // Test the turnOnEdit 
+  // Test the turnOnEdit
   it('Call turnOnEdit', () => {
     try {
-      component.turnOnEdit()
+      component.turnOnEdit();
     }
     catch (err) {
       console.error(err);
     }
   });
 
-  // Test the constructor 
+  // Test the constructor
   it('Call constructor', () => {
     try {
-      component.constructor()
+      component.constructor();
     }
     catch (err) {
       console.error(err);

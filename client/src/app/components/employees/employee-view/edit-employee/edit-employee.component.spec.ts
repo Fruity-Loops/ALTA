@@ -7,7 +7,7 @@ import {EditEmployeeComponent} from './edit-employee.component';
 import {FormBuilder} from '@angular/forms';
 import {ManageOrganizationsService} from 'src/app/services/organizations/manage-organizations.service';
 import 'zone.js/dist/zone-testing';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('EditEmployeeComponent', () => {
   let component: EditEmployeeComponent;
@@ -40,7 +40,6 @@ describe('EditEmployeeComponent', () => {
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
     manageOrganizationsService = TestBed.inject(ManageOrganizationsService);
-    
     fixture = TestBed.createComponent(EditEmployeeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -50,14 +49,13 @@ describe('EditEmployeeComponent', () => {
     expect(component).toBeTruthy();
   });
 
- // Test the setSelectors table
- it('Call setSelectors', () => {
+  // Test the setSelectors table
+  it('Call setSelectors', () => {
   try {
-    component.setSelectors()
+    component.setSelectors();
   }
   catch (err) {
     console.error(err);
   }
-});
-
+  });
 });
