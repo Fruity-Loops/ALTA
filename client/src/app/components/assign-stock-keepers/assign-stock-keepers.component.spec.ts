@@ -18,7 +18,7 @@ describe('AssignStockKeepersComponent', () => {
   // @ts-ignore
   let service2: ManageAuditsService;
 
-  beforeEach(() => {
+  beforeEach(() => {    
     TestBed.configureTestingModule({
       declarations: [AssignStockKeepersComponent],
       providers: [ManageMembersService, ManageAuditsService],
@@ -35,6 +35,13 @@ describe('AssignStockKeepersComponent', () => {
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
+    service2 = null;
   });
 
   it('should create', () => {

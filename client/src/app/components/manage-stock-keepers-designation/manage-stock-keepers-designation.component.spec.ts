@@ -38,12 +38,20 @@ describe('ManageStockeepersDesignationComponent', () => {
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
-    fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
-    component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
+    fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+    tokenService = null;
+    service = null;
+    service2 = null;
   });
 
   it('should create', () => {

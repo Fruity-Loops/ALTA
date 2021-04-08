@@ -22,12 +22,15 @@ describe('AssignStockKeepersComponent', () => {
       ],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule ],
     });
-
     fixture = TestBed.createComponent(ReviewAuditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
   });
+
+  afterEach(() => {
+    component = null;
+    fixture = null;
+  })
 
   it('should create Review Audit s Component', () => {
     expect(component).toBeTruthy();

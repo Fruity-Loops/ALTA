@@ -14,11 +14,16 @@ describe('AuditTemplateComponent', () => {
       declarations: [AuditTemplateComponent],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
     }).compileComponents();
-
+    
     fixture = TestBed.createComponent(AuditTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+  })
 
   it('should create', () => {
     expect(component).toBeTruthy();

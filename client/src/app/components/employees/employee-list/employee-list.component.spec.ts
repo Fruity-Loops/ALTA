@@ -23,11 +23,16 @@ describe('ClientGridViewComponent', () => {
       ],
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
-
+    service = TestBed.inject(ManageMembersService);
     fixture = TestBed.createComponent(EmployeeListComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create Client grid view component', () => {

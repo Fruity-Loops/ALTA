@@ -36,13 +36,20 @@ describe('EditEmployeeComponent', () => {
         },
       ],
     }).compileComponents();
-
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
     manageOrganizationsService = TestBed.inject(ManageOrganizationsService);
     fixture = TestBed.createComponent(EditEmployeeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+    tokenService = null;
+    manageOrganizationsService = null;
   });
 
   it('should create edit-employee component', () => {

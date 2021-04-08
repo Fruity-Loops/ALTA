@@ -23,10 +23,16 @@ describe('ManageInventoryItemsComponent', () => {
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
+    service = TestBed.inject(ManageInventoryItemsService);
     fixture = TestBed.createComponent(ManageAuditsComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(ManageInventoryItemsService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create Inventory Items Component', () => {

@@ -31,12 +31,20 @@ describe('ManageInventoryItemsComponent', () => {
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
-    fixture = TestBed.createComponent(ManageInventoryItemsComponent);
-    component = fixture.componentInstance;
     service = TestBed.inject(ManageInventoryItemsService);
     service2 = TestBed.inject(ManageAuditsService);
     service3 = TestBed.inject(AuthService);
+    fixture = TestBed.createComponent(ManageInventoryItemsComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
+    service2 = null;
+    service3 = null;
   });
 
   it('should create Inventory Items Component', () => {
@@ -46,7 +54,6 @@ describe('ManageInventoryItemsComponent', () => {
   // Test that Start Audit button is disabled when no items selected
   it('should disable Start button when no item selected', () => {
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
     const button = fixture.debugElement.query(By.css('#create'));
     expect(button.nativeElement.disabled).toBeTruthy();
   });

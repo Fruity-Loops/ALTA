@@ -38,6 +38,13 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    tokenService = null;
+    sidenavService = null;
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

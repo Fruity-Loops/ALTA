@@ -32,6 +32,11 @@ describe('EditAuditTemplateComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

@@ -35,7 +35,13 @@ describe('LoginComponent', () => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+    tokenService = null;
   });
 
   it('should create login component', () => {

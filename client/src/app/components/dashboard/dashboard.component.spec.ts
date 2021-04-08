@@ -11,9 +11,9 @@ import { audit } from 'rxjs/operators';
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-
   // @ts-ignore
   let service: ManageAuditsService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
@@ -27,6 +27,12 @@ describe('DashboardComponent', () => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create Dashboard Component', fakeAsync(() => {

@@ -22,10 +22,16 @@ describe('OrganizationSettingsComponent', () => {
       imports: [HttpClientTestingModule, MatSnackBarModule, AppModule]
     });
 
+    service = TestBed.inject(OrganizationSettingsService);
     fixture = TestBed.createComponent(EditOrganizationSettingsComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(OrganizationSettingsService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create', () => {

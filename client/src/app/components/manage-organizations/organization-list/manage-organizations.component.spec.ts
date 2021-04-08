@@ -32,6 +32,12 @@ describe('ManageOrganizationsComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    organizationService = null;
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });

@@ -46,6 +46,14 @@ describe('SignupComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+    tokenService = null;
+    manageOrganizationsService = null;
+  });
+
   it('should create create-employee component', () => {
     expect(component).toBeTruthy();
   });

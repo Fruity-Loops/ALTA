@@ -34,14 +34,24 @@ describe('CreateAuditTemplateComponent', () => {
         },
       ],
     }).compileComponents();
+
+    service = TestBed.inject(AuditTemplateService);
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(AuditTemplateService);
 
     startDateInput = fixture.debugElement.query(By.css('#date')).nativeElement;
     startTimeInput = fixture.debugElement.query(By.css('#time')).nativeElement;
     templateInput = fixture.debugElement.query(By.css('#title')).nativeElement;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    service = null;
+    fixture = null;
+    component = null;
+    startDateInput = null;
+    startTimeInput = null;
+    templateInput = null;
   });
 
   it('should create', () => {
@@ -51,14 +61,12 @@ describe('CreateAuditTemplateComponent', () => {
      // Test that Save button creates a new template
   it('should create a new template', () => {
       fixture.detectChanges();
-      spyOn(component.router, 'navigate');
       const button = fixture.debugElement.query(By.css('#create-template-button')).nativeElement;
       expect(button.disabled).toBeFalsy();
   });
 
   it('should be able to enter Start Date', () => {
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
     startDateInput.value = '2021-01-18T15:37:42';
     startDateInput.dispatchEvent(new Event('change'));
     expect(startDateInput.value).toBe('2021-01-18T15:37:42');

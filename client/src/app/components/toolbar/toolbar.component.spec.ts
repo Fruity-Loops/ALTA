@@ -32,6 +32,12 @@ describe('ToolbarComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+  });
+
   it('should create component', () => {
     expect(component).toBeTruthy();
   });

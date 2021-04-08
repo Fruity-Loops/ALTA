@@ -16,6 +16,11 @@ describe('AuthTabsComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+  });
+
   it('should create auth tabs component', () => {
     expect(component).toBeTruthy();
   });
