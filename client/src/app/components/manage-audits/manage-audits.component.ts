@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { TableManagementComponent } from '../TableManagement.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ManageAuditsLangFactory } from './manage-audits.language';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-manage-audits',
@@ -51,11 +52,24 @@ export class ManageAuditsComponent
   searchPlaceholder: string;
 
   panelOpenState = false;
+  displayedColumnsBin: string[] = ['Bin'];
+  displayedColumnsPart: string[] = ['Part'];
+  displayedColumnsItem: string[] = ['Item'];
+  displayedColumnsRandomItem: string[] = ['Random Item'];
+  displayedColumnsCategoryItem: string[] = ['Item By Category'];
+  dataSourceBin: any = [];
+  dataSourcePart: any = [];
+  dataSourceItem: any = [];
+  dataSourceRandomItem: any = [];
+  dataSourceCategoryItem: any = [];
+
+  organization: any;
 
   constructor(
     private auditService: ManageAuditsService,
     protected fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private dashService: DashboardService
   ) {
     super(fb);
     this.formg = fb;
@@ -88,8 +102,12 @@ export class ManageAuditsComponent
       'organization',
       String(localStorage.getItem('organization_id'))
     );
+    this.organization = {
+      organization: localStorage.getItem('organization_id'),
+    };
     this.params = this.params.append('status', 'Active');
     this.searchAudit();
+    this.getRecommendations();
   }
 
   searchAudit(): void {
@@ -165,5 +183,21 @@ export class ManageAuditsComponent
   async reloadPage(): Promise<void> {
     await this.router.navigateByUrl('/', { skipLocationChange: true });
     this.router.navigateByUrl('audits');
+  }
+
+  getRecommendations(): void {
+    this.dashService.getRecommendations(this.organization).subscribe(
+      (data) => {
+        // this.response = data['bins_recommendation'];
+        this.dataSourceBin = data['bins_recommendation'];
+        this.dataSourcePart = data['parts_recommendation'];
+        this.dataSourceItem = data['items_recommendation'];
+        this.dataSourceRandomItem = data['random_items'];
+        this.dataSourceCategoryItem = data['item_based_on_category'];
+      },
+      (err: any) => {
+        this.errorMessage = err;
+      }
+    );
   }
 }
