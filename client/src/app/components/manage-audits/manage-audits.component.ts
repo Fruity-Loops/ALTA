@@ -198,7 +198,6 @@ export class ManageAuditsComponent
   getRecommendations(): void {
     this.dashService.getRecommendations(this.organization).subscribe(
       (data) => {
-        // this.response = data['bins_recommendation'];
         this.dataSourceBin = data['bins_recommendation'];
         this.dataSourcePart = data['parts_recommendation'];
         this.dataSourceItem = data['items_recommendation'];
