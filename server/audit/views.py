@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, F, DurationField, ExpressionWrapper
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -426,7 +426,7 @@ class RecommendationViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        org_id = request.GET.get('organization',None)
+        org_id = request.GET.get('organization', None)
         bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
                                  annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
 
@@ -477,3 +477,66 @@ def get_random_items(all_bins, all_parts, org_id, frequency_of_bins_or_parts):
         return list(
             Item.objects.filter(organization=org_id, Part_Number__in=random_part).values(
                 'Item_Id'))
+
+
+class InsightsViewSet(LoggingViewset):
+    """
+    Allows getting recommendations on what to audit next
+    """
+    http_method_names = ['get']
+    serializer_class = GetBinToSKSerializer
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([])
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.GET.get('organization', None)
+        accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete'). \
+                                               values('accuracy')), 'accuracy')
+
+        # Check so that we don't divide by zero
+        accuracy_average = 0
+        if len(accuracies_of_audits):
+            accuracy_average = sum(accuracies_of_audits) / len(accuracies_of_audits)
+
+        # Not able to do the duration on the query has django is not supporting the difference on a datetimefield
+        # durations_of_audits = list(Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \
+        #      values('first_verified_on', 'last_verified_on'). \
+        #      annotate(duration=ExpressionWrapper(F('last_verified_on') - F('first_verified_on'), output_field=DurationField())).values('duration'))
+
+        durations_of_audits = list(
+            Record.objects.filter(). \
+                values('first_verified_on', 'last_verified_on'))
+
+        print(durations_of_audits)
+        time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
+        print(time_deltas)
+        print('average')
+        # giving datetime.timedelta(0) as the start value makes sum work on tds
+        average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+        print(average_timedelta)
+
+        days, hours, minutes = get_days_hour_min(average_timedelta)
+
+        data = {'average_accuracy': accuracy_average,
+                'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta}}
+        return Response(data)
+
+
+def days_hours_minutes(td):
+    return td.days, td.seconds // 3600, (td.seconds // 60) % 60
+
+
+def get_days_hour_min(seconds):
+    seconds_in_day = 60 * 60 * 24
+    seconds_in_hour = 60 * 60
+    seconds_in_minute = 60
+
+    days = seconds // seconds_in_day
+    hours = (seconds - (days * seconds_in_day)) // seconds_in_hour
+    minutes = (seconds - (days * seconds_in_day) - (hours * seconds_in_hour)) // seconds_in_minute
+
+    return days, hours, minutes
