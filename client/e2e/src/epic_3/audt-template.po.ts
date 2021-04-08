@@ -1,13 +1,9 @@
 import {by, element, ElementFinder} from 'protractor';
 
-export class CreateAuditTemplate {
+export class AuditTemplate {
 
   getaddTemplateButton(): ElementFinder {
     return element(by.id('addTemplateButton'));
-  }
-
-  getEditButton(): ElementFinder {
-    return element(by.id('editButton'));
   }
 
   getTitleField(): ElementFinder {
@@ -78,7 +74,24 @@ export class CreateAuditTemplate {
     return element(by.id('create-template-button'));
   }
 
-  getTemplateID(): ElementFinder {
-    return element(by.id('Testing Template'));
+  getTemplateID(templateName: string): ElementFinder {
+    return element(by.id(templateName));
   }
+
+  getMenu(): ElementFinder {
+    return element(by.id('menuTesting Template'));
+  }
+
+  getEditOption(): ElementFinder {
+    return element(by.id('editTesting Template'));
+  }
+
+  getEditButton(): ElementFinder {
+    return element(by.id('edit-template-button'));
+  }
+
+  getRemoveItem(item: string): ElementFinder {
+    return element(by.id(item));
+  }
+
 }

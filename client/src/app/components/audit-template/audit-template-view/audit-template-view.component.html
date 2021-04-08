@@ -175,7 +175,7 @@
           <div *ngFor="let loc of template | keyvalue">
             <mat-chip *ngFor="let value of loc.value" [removable]="true" (removed)="remove(loc.key, value)">
               {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
-              <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
+              <mat-icon id="{{loc.key.replace('_', ' ') | titlecase}}: {{value}}" matChipRemove *ngIf="!disabled">cancel</mat-icon>
             </mat-chip>
           </div>
         </mat-chip-list>

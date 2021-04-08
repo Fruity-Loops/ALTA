@@ -26,16 +26,16 @@
       <div class="person-name">By: {{template.author}}</div>
       <div class="template-name">{{template.title}}</div>
       <div class="button-icon text-align-right">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <button id="menu{{template.title}}" mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
       <mat-menu #menu="matMenu" xPosition="after">
-        <button mat-menu-item [routerLink]="'edit-template/' + template.template_id">
+        <button id="edit{{template.title}}" mat-menu-item [routerLink]="'edit-template/' + template.template_id">
           <mat-icon>create</mat-icon>
           <span>{{optionLabels.edit}}</span>
         </button>
-        <button mat-menu-item (click)="openDialog(template.template_id, template.title)">
+        <button id="delete{{template.title}}" mat-menu-item (click)="openDialog(template.template_id, template.title)">
           <mat-icon>delete</mat-icon>
           <span>{{optionLabels.delete}}</span>
         </button>
