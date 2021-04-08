@@ -60,33 +60,4 @@ describe('SignupComponent', () => {
   }
 });
 
-  // Test the getTitle table
-  it('Call getTitle', () => {
-    try {
-      component.getTitle()
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
-
-  // Test the editMode table
-  it('Call editMode', () => {
-    try {
-      component.editMode(false)
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
-
-  // Test the reloadPage table
-  it('Call reloadPage', () => {
-    try {
-      component.reloadPage()
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
 });
