@@ -161,10 +161,6 @@ export class ForgotCredentialsComponent {
 
     this.userService.resetPassword(body).subscribe(() => {
       this.success = true;
-      setTimeout( () => {
-        this.resetPasswordForm.reset();
-        this.closeDialog();
-      }, 5000);
     }, (err) => {
       if (err.status === 404) {
         this.emailNoExist = true;
