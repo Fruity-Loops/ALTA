@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, F, DurationField, ExpressionWrapper
+from django.db.models import Count
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -493,7 +493,6 @@ class InsightsViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        org_id = request.data['organization']
         org_id = request.GET.get('organization', None)
         accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete'). \
                                                values('accuracy')), 'accuracy')
@@ -503,17 +502,11 @@ class InsightsViewSet(LoggingViewset):
         if len(accuracies_of_audits):
             accuracy_average = sum(accuracies_of_audits) / len(accuracies_of_audits)
 
-        # Not able to do the duration on the query has django is not supporting the difference on a datetimefield
-        # durations_of_audits = list(Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \
-        #      values('first_verified_on', 'last_verified_on'). \
-        #      annotate(duration=ExpressionWrapper(F('last_verified_on') - F('first_verified_on'), output_field=DurationField())).values('duration'))
-
         durations_of_audits = list(
-            Record.objects.filter(). \
+            Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \
                 values('first_verified_on', 'last_verified_on'))
 
         time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
-        print(timedelta)
 
         # giving datetime.timedelta(0) as the start value makes sum work on tds
         average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
