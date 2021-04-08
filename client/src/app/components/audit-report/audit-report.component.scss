@@ -123,14 +123,10 @@ mat-panel-description {
   margin-top: 1em;
 }
 
-.position-right {
-  float: right;
-  cursor: pointer;
-}
-
 #questionanswericon{
   color: map-get($alta-accent, 600);
   font-size: x-large;
+  cursor: pointer;
 }
 
 #sendicon{
@@ -167,4 +163,17 @@ mat-panel-description {
   position: relative;
 }
 
+button.cancel {
+  margin-right: 15%;
+  margin-bottom: 15px;
+  padding-left: 3em;
+  padding-right: 3em;
+  border-color: map-get($alta-primary, 500);
+  color: map-get($alta-primary, 500);
+}
 
+.top-buttons {
+  float: right;
+  display: inline-block;
+  width: 230px;
+}

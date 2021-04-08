@@ -54,6 +54,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   resultsDisplayedColumns: string[] = [];
   resultsDataSource: MatTableDataSource<any>;
   hideResult = true;
+  ongoing = false;
 
   constructor(
     private auditReportService: AuditReportService,
@@ -118,6 +119,11 @@ export class AuditReportComponent extends TableManagementComponent implements On
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
+
+        if (metaData.status === 'Active') {
+          this.ongoing = true;
+        }
+
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
           this.metaData = metaData;
           this.metaData.initiated_by = String(user.first_name + ' ' + user.last_name);
