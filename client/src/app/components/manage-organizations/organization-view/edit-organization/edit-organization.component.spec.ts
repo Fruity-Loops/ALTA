@@ -3,20 +3,19 @@ import {ManageOrganizationsService} from 'src/app/services/organizations/manage-
 import {FormBuilder} from '@angular/forms';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
-
-import {CreateOrganizationComponent} from './create-organization.component';
+import {EditOrganizationComponent} from './edit-organization.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { AppModule } from 'src/app/app.module'
 
-describe('CreateOrganizationComponent', () => {
-  let component: CreateOrganizationComponent;
-  let fixture: ComponentFixture<CreateOrganizationComponent>;
+describe('EditOrganizationComponent', () => {
+  let component: EditOrganizationComponent;
+  let fixture: ComponentFixture<EditOrganizationComponent>;
   // @ts-ignore
   let organizationService: ManageOrganizationsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CreateOrganizationComponent],
+      declarations: [EditOrganizationComponent],
       imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
       providers: [
         FormBuilder,
@@ -28,7 +27,7 @@ describe('CreateOrganizationComponent', () => {
 
     organizationService = TestBed.inject(ManageOrganizationsService);
     
-    fixture = TestBed.createComponent(CreateOrganizationComponent);
+    fixture = TestBed.createComponent(EditOrganizationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -47,4 +46,23 @@ describe('CreateOrganizationComponent', () => {
     }
   });
 
+  // Test the turnOnEdit 
+  it('Call turnOnEdit', () => {
+    try {
+      component.turnOnEdit()
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Test the constructor 
+  it('Call constructor', () => {
+    try {
+      component.constructor()
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
 });
