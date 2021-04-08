@@ -5,10 +5,9 @@ import { env } from 'src/environments/environment';
 import { HttpParams } from '@angular/common/http';
 
 describe('ManageAuditsService', () => {
-  let service: ManageAuditsService;
-  // @ts-ignore
-  let httpTestingController: HttpTestingController;
   const BASEURL = env.api_root;
+  let service: ManageAuditsService;
+  let httpTestingController: HttpTestingController;
 
   let store = {};
   const mockLocalStorage = {
@@ -60,21 +59,20 @@ describe('ManageAuditsService', () => {
   it('should store the audit id in localStorage',
     () => {
       service.updateLocalStorage(AuditLocalStorage.AuditId, '4');
-      expect(localStorage.setItem).toHaveBeenCalledWith('audit_id', '4');
+      expect(localStorage.getItem(AuditLocalStorage.AuditId)).toBe('4');
   });
   
   it('should return the audit id from localStorage',
     () => {
-      localStorage.setItem('AuditId', '4');
-      service.getLocalStorage(AuditLocalStorage.AuditId);
-      expect(localStorage.getItem).toHaveBeenCalledWith('audit_id');
+      localStorage.setItem(AuditLocalStorage.AuditId, '4');
+      expect(service.getLocalStorage(AuditLocalStorage.AuditId)).toBe('4');
   });
 
   it('should delete the audit id from localStorage',
     () => {
-      localStorage.setItem('AuditId', '6');
+      localStorage.setItem(AuditLocalStorage.AuditId, '6');
       service.removeFromLocalStorage(AuditLocalStorage.AuditId);
-      expect(localStorage.removeItem).toHaveBeenCalledWith('audit_id');
+      expect(localStorage.removeItem).toHaveBeenCalledWith(AuditLocalStorage.AuditId);
   });
   
 
