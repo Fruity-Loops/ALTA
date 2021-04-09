@@ -466,12 +466,18 @@ def get_values(list_of_dict, key):
 def get_random_items(all_bins, all_parts, org_id, frequency_of_bins_or_parts):
     random_bins_or_parts = random.sample(["bins", "parts"], 1)[0]
     if random_bins_or_parts == "bins":
-        random_bin = random.sample(all_bins, frequency_of_bins_or_parts)  # increase if we want more items
+        random_bin = random.sample(
+            all_bins,
+            frequency_of_bins_or_parts if len(all_bins) > frequency_of_bins_or_parts else len(all_bins)
+            )  
         return list(
             Item.objects.filter(organization=org_id, Bin__in=random_bin).values(
                 'Item_Id'))
     else:
-        random_part = random.sample(all_parts, 2)  # increase if we want more items
+        random_part = random.sample(
+            all_parts,
+            frequency_of_bins_or_parts if len(all_parts) > frequency_of_bins_or_parts else len(all_parts)
+            )
         return list(
             Item.objects.filter(organization=org_id, Part_Number__in=random_part).values(
                 'Item_Id'))
