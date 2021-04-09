@@ -114,4 +114,28 @@ describe('CreateAuditTemplateComponent', () => {
     expect(component.templateValues.Location).toBe('');
   }));
 
+  it('Ensure setAllCheckBoxMonth + Day dont set to true if null', () => {
+    component.filter('hello', 'hi');
+    component.recurrenceDay.subCheckBox = null;
+    component.recurrenceMonth.subCheckBox = null;
+    component.setAllCheckboxMonth(true);
+    component.setAllCheckboxDay(true);
+    expect(component.recurrenceMonth.subCheckBox).toBe(null);
+    expect(component.recurrenceDay.subCheckBox).toBe(null);
+  });
+
+  it('checking setAllCheckBoxMonth and setAllCheckBoxDay', () => {
+    component.setAllCheckboxMonth(true);
+    component.setAllCheckboxDay(true);
+    expect(component.recurrenceMonth.subCheckBox[1].checked).toBe(true);
+    expect(component.recurrenceDay.subCheckBox[1].checked).toBe(true);
+  });
+
+  it('check open and close, and adding + removing item', () => {
+    component.recurrenceExpand();
+    component.recurrenceCollapsed();
+    component.addItem('Bin', ' ');
+    component.remove('Bin', ' ');
+  });
+
 });
