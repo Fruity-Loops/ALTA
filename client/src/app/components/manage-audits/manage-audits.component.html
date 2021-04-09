@@ -78,7 +78,7 @@
                   {{ object[column]}}
                 </div>
                 <ng-template #elseBlock>
-                  <div id="innerTableAuditID{{object['audit_id']}}}" class="innerTableButton" *ngIf="column == 'Overview'">
+                  <div id="innerTableAuditID{{object['audit_id']}}" class="innerTableButton" *ngIf="column == 'Overview'">
                     <mat-icon-button
                       (click)="$event.stopPropagation();toggleExpand(object['audit_id'], object['status'])"
                       mat-icon-button>
