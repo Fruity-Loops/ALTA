@@ -1,11 +1,19 @@
-import {Component, Input} from '@angular/core';
-import {ManageMembersService} from '../../../../services/users/manage-members.service';
-import {ActivatedRoute} from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { ManageMembersService } from '../../../../services/users/manage-members.service';
+import { ActivatedRoute } from '@angular/router';
 import roles from 'src/app/fixtures/roles.json';
-import {BaseEmployeeForm, EmployeeView} from '../employee-view';
-import {BehaviorSubject} from 'rxjs';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {AuthService, UserLocalStorage} from '../../../../services/authentication/auth.service';
+import { BaseEmployeeForm, EmployeeView } from '../employee-view';
+import { BehaviorSubject } from 'rxjs';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  AuthService,
+  UserLocalStorage,
+} from '../../../../services/authentication/auth.service';
 
 @Component({
   selector: 'app-employee-settings',
@@ -33,15 +41,19 @@ export class EditEmployeeComponent extends EmployeeView {
     private manageMembersService: ManageMembersService,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {
     super();
     // If the ID changes in the route param then reload the component
     this.activatedRoute.params.subscribe((routeParams) => {
-      this.id = routeParams.ID ? routeParams.ID : this.authService.getLocalStorage(UserLocalStorage.UserID);
+      this.id = routeParams.ID
+        ? routeParams.ID
+        : this.authService.getLocalStorage(UserLocalStorage.UserID);
 
       // Verifying that the logged in user is accessing their own information
-      if (this.id === this.authService.getLocalStorage(UserLocalStorage.UserID)) {
+      if (
+        this.id === this.authService.getLocalStorage(UserLocalStorage.UserID)
+      ) {
         // tslint:disable-next-line:no-non-null-assertion
         // @ts-ignore
         this.isLoggedInUser.next(true);
@@ -53,10 +65,11 @@ export class EditEmployeeComponent extends EmployeeView {
   getTitle(): string {
     // need to initialize here because the super constructor needs to be the first thing that gets called
     this.isLoggedInUser = new BehaviorSubject<boolean>(false);
-    const generateString = () => (this.isLoggedInUser?.getValue() ? 'Profile' : 'Employee') +  ' Settings';
+    const generateString = () =>
+      (this.isLoggedInUser?.getValue() ? 'Profile' : 'Employee') + ' Settings';
 
     // put a subscription in case of changes for whether the user is logged in or not
-    this.isLoggedInUser.subscribe(_ => {
+    this.isLoggedInUser.subscribe((_) => {
       this.title = generateString();
     });
     return generateString();
@@ -76,13 +89,27 @@ export class EditEmployeeComponent extends EmployeeView {
       this.setSelectors();
       this.employeeForm = this.fb.group({
         // Each username,email,password is piped from the HTML using the "formControlName"
-        id: new FormControl({value: employee.id, disabled: !this.edit}, [Validators.required]),
-        email: new FormControl({value: employee.email, disabled: !this.edit}, [Validators.email, Validators.required]),
-        first_name: new FormControl({value: employee.first_name, disabled: !this.edit}, [Validators.required]),
-        last_name: new FormControl({value: employee.last_name, disabled: !this.edit}, [Validators.required]),
-        location: !this.isSystemAdmin ?
-          new FormControl({value: employee.location, disabled: !this.isSystemAdmin}, [Validators.required]) :
-          undefined,
+        id: new FormControl({ value: employee.id, disabled: !this.edit }, [
+          Validators.required,
+        ]),
+        email: new FormControl(
+          { value: employee.email, disabled: !this.edit },
+          [Validators.email, Validators.required]
+        ),
+        first_name: new FormControl(
+          { value: employee.first_name, disabled: !this.edit },
+          [Validators.required]
+        ),
+        last_name: new FormControl(
+          { value: employee.last_name, disabled: !this.edit },
+          [Validators.required]
+        ),
+        location: !this.isSystemAdmin
+          ? new FormControl(
+              { value: employee.location, disabled: !this.isSystemAdmin },
+              [Validators.required]
+            )
+          : undefined,
       });
       this.isLoaded();
     });
@@ -93,7 +120,7 @@ export class EditEmployeeComponent extends EmployeeView {
     if (this.employee.role === 'SA') {
       this.isSystemAdmin = true;
     } else {
-      this.roles = this.roles.filter(({ abbrev}) => abbrev !== 'SA');
+      this.roles = this.roles.filter(({ abbrev }) => abbrev !== 'SA');
     }
 
     this.roles.forEach((role) => {
@@ -106,7 +133,7 @@ export class EditEmployeeComponent extends EmployeeView {
   editMode(turnOn: boolean): void {
     this.edit = turnOn;
     // @ts-ignore
-    Object.keys(this.employeeForm.controls).forEach(key => {
+    Object.keys(this.employeeForm.controls).forEach((key) => {
       if (this.alwaysDisabled.indexOf(key) < 0) {
         this.employeeForm?.controls[key].enable();
       }
@@ -132,7 +159,7 @@ export class EditEmployeeComponent extends EmployeeView {
     });
 
     // employee info needs to be overridden/replaced by the body of the form, since it's not updated by user input
-    const patchedEmployee = {...this.employee, ...base};
+    const patchedEmployee = { ...this.employee, ...base };
 
     delete patchedEmployee.id;
     delete patchedEmployee.email;
@@ -144,14 +171,16 @@ export class EditEmployeeComponent extends EmployeeView {
         // update user password
         if (this.password.length > 0) {
           // tslint:disable-next-line:no-non-null-assertion
-          this.manageMembersService.updatePassword({password: this.password}, this.id!).subscribe(
-             _ => {
-              location.reload();
-            },
-            (err) => {
-              console.log(err);
-            }
-          );
+          this.manageMembersService
+            .updatePassword({ password: this.password }, this.id!)
+            .subscribe(
+              (_) => {
+                location.reload();
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
         } else {
           location.reload();
         }
