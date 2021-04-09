@@ -42,10 +42,10 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
       this.auditTemplateService.getATemplate(this.id).subscribe((temp) => {
-        this.setComponentParameters(this.formTemplate(temp));
         this.title = temp.title;
         this.description = temp.description;
         this.id = temp.template_id;
+        this.setComponentParameters(this.formTemplate(temp));
         // TODO take scheduling into consideration when editing.
       });
     });
