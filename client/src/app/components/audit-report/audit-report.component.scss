@@ -144,25 +144,43 @@ mat-panel-description {
 
 .comment{
   height: inherit;
-  max-width: 400px;
+  min-width: 20em;
+  max-width: 35em;
 }
 
 .comment-input {
   width: 90%;
-  position: relative;
-  //bottom: -2.5em;
+  position: absolute;
+  bottom: 0px;
   margin-left: 1em;
 }
 
 .comment-history{
   overflow-y: scroll;
-  height: 70%;
+  height: 80%;
   position: relative;
 }
 
 .comment-button {
   position: absolute;
   right: 20px;
+}
+
+.comment-author {
+  position: relative;
+  margin-left: 1em;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.comment-component {
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+
+.comment-date {
+  position: absolute;
+  right: 1em;
+  color: rgba(0, 0, 0, 0.54);
 }
 
 button.cancel {

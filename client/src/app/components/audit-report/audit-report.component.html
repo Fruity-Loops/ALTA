@@ -21,9 +21,18 @@
           <h2>Comment Board</h2>
         </div>
         <div id="comment-history" class="comment-history">
-          <div *ngFor="let comment of comments">
-            <div class="comment-text">
-              {{comment}}
+          <div class="comment-component" *ngFor="let comment of comments" >
+
+            <div class="comment-content">
+              <div class="comment-author">
+                {{comment.author}}
+              </div>
+              <div class="comment-text">
+                {{comment.content}}
+              </div>
+              <div class="comment-date">
+                {{comment.timestamp.toLocaleString("en-US")}}
+              </div>
             </div>
           </div>
         </div>

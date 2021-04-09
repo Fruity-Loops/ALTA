@@ -34,7 +34,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   allExpandState = false;
 
   comment_value = '';
-  comments: string[];
+  comments: any[];
 
 
 
@@ -85,11 +85,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
       this.setResultsData();
       this.setCommentData();
     });
-    // this.comments = [
-    //   "hello",
-    //   "hi",
-    //   "This is a very long comment to see how the wrapping works",
-    // ];
   }
 
   // TODO: Fix appropriate backend calls
@@ -242,9 +237,14 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.comments = [];
     this.auditReportService.getComments(this.userService.getOrgId(), this.id).subscribe(
       (data: any) => {
-        console.log(data);
         for (let i = 0; i < data.length; i++){
-          this.comments.push(data[i].content);
+          let newComment = {
+            author: data[i].author,
+            content: data[i].content,
+            timestamp: new Date(Date.parse(data[i].created_timestamp))
+          }
+          newComment.timestamp.toLocaleDateString();
+          this.comments.push(newComment);
         }
       }
     );
@@ -292,7 +292,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
       content: String(this.comment_value),
       author: String(localStorage.getItem('username'))
     };
-    console.log(this.id);
 
     this.auditReportService.postComment(comment).subscribe(
       (data) => {
