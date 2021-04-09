@@ -37,16 +37,20 @@ export const routes: Routes = [
       {path: 'modify-members', component: EmployeeListComponent},
       {path: 'sa-modify-members', component: EmployeeListComponent},
       {
-        path: 'manage-organizations', children: [
+        path: 'manage-organizations',
+        children: [
           {
-            path: '', component: ManageOrganizationsComponent
+            path: '',
+            component: ManageOrganizationsComponent,
           },
           {
-            path: 'create-organization', component: CreateOrganizationComponent
+            path: 'create-organization',
+            component: CreateOrganizationComponent,
           },
           {
-            path: 'edit-organization/:ID', component: EditOrganizationComponent
-          }
+            path: 'edit-organization/:ID',
+            component: EditOrganizationComponent,
+          },
         ],
       },
       {path: 'modify-members/:ID', component: EditEmployeeComponent},
@@ -57,22 +61,26 @@ export const routes: Routes = [
       {path: 'designate-sk', component: ManageStockKeepersDesignationComponent},
       {path: 'review-audit', component: ReviewAuditComponent},
       {
-        path: 'audits', children: [
+        path: 'audits',
+        children: [
           {
-            path: '', component: ManageAuditsComponent
+            path: '',
+            component: ManageAuditsComponent,
           },
           {
             path: 'audit-report/:ID', component: AuditReportComponent
           },
           {
-            path: 'assign-sk', children: [
+            path: 'assign-sk',
+            children: [
               {
                 path: '',
                 component: AssignStockKeepersComponent,
                 canDeactivate: [CanDeactivateGuard],
               },
               {
-                path: 'designate-sk', children: [
+                path: 'designate-sk',
+                children: [
                   {
                     path: '',
                     component: ManageStockKeepersDesignationComponent,
@@ -82,27 +90,35 @@ export const routes: Routes = [
                     path: 'review-audit',
                     component: ReviewAuditComponent,
                     canDeactivate: [CanDeactivateGuard],
-                  }
-                ]
-              }
-            ]
+                  },
+                ],
+              },
+            ],
           },
-        ]
+        ],
       },
       {
-        path: 'template', children: [
+        path: 'template',
+        children: [
           {
-            path: '', component: AuditTemplateComponent
+            path: '',
+            component: AuditTemplateComponent,
           },
           {
-            path: 'create-template', component: CreateAuditTemplateComponent
+            path: 'create-template',
+            component: CreateAuditTemplateComponent,
           },
           {
-            path: 'edit-template/:ID', component: EditAuditTemplateComponent
-          }
-        ]
+
+            path: 'edit-template/:ID',
+            component: EditAuditTemplateComponent,
+          },
+        ],
       },
-      {path: 'organization-settings', component: EditOrganizationSettingsComponent}
+      {
+        path: 'organization-settings',
+        component: EditOrganizationSettingsComponent,
+      },
     ],
   },
 ];
@@ -111,5 +127,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AltaMainRoutingModule {
-}
+export class AltaMainRoutingModule {}
