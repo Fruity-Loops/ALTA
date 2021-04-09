@@ -1,8 +1,8 @@
-import {env} from "../../../environments/environment";
+import {env} from '../../../environments/environment';
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import { LocalStorageInterface} from "../LocalStorage.interface";
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import { LocalStorageInterface} from '../LocalStorage.interface';
 
 const BASEURL = env.api_root;
 
@@ -41,6 +41,9 @@ export class AuditReportService implements LocalStorageInterface {
     return this.http.post(`${BASEURL}/comment/`, comment);
   }
 
+  getAuditFile(params: any): Observable<any> {
+    return this.http.get(`${BASEURL}/audit/audit_file/`, {params, responseType: 'blob'});
+  }
 }
 
 export enum AuditLocalStorage {
