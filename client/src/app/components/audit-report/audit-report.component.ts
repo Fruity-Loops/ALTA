@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
 import {TableManagementComponent} from '../TableManagement.component';
 import {AuditReportService} from '../../services/audits/audit-report.service';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
@@ -16,7 +16,7 @@ import {saveAs} from 'file-saver';
   templateUrl: './audit-report.component.html',
   styleUrls: ['./audit-report.component.scss']
 })
-export class AuditReportComponent extends TableManagementComponent implements OnInit {
+export class AuditReportComponent extends TableManagementComponent implements OnInit, AfterViewChecked {
 
   id: any;
   body: any;
@@ -85,6 +85,10 @@ export class AuditReportComponent extends TableManagementComponent implements On
       this.setResultsData();
       this.setCommentData();
     });
+  }
+
+  ngAfterViewChecked(){
+    this.scrollToBottom();
   }
 
   // TODO: Fix appropriate backend calls
@@ -247,6 +251,15 @@ export class AuditReportComponent extends TableManagementComponent implements On
         }
       }
     );
+  }
+
+  scrollToBottom = () => {
+    try {
+      let ch = document.getElementById("comment-history");
+      if (ch != null){
+        ch.scrollTop = ch.scrollHeight;
+      }
+    } catch (err) {}
   }
 
   updatePage(): void {
