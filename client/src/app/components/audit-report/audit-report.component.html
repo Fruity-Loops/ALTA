@@ -4,10 +4,8 @@
       Audit #{{id}}
     </mat-card-title>
     <div class="top-buttons">
-      <button mat-stroked-button id="export-audit" class="export-audit" (click)="downloadAudit()">Export Audit</button>
-
+      <button mat-stroked-button *ngIf="!ongoing" id="export-audit" class="export-audit" (click)="downloadAudit()">Export Audit</button>
       <button mat-stroked-button *ngIf="ongoing" id="cancel" class="cancel" (click)="cancelAudit()">Cancel Audit</button>
-
       <mat-icon id="questionanswericon" class="comment-button" (click)="drawer.toggle(); setCommentData()">
         question_answer
       </mat-icon>
