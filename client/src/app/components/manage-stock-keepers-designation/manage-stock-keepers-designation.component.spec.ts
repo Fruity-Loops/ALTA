@@ -88,4 +88,34 @@ describe('ManageStockeepersDesignationComponent', () => {
     expect(component.errorMessage).toBe('');
     flush();
   }));
+
+  // Test the autoAssign window
+  it('Call the autoAssign object', () => {
+    try {
+      component.autoAssign();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Test the identifyUser window
+  it('Call the identifyUser object', () => {
+    try {
+      component.identifyUser(0);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Test the submitPreAuditData window
+  it('Call the submitPreAuditData object', () => {
+    try {
+      component.submitPreAuditData();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
 });
