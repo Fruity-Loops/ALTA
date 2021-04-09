@@ -70,7 +70,7 @@
             <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
               <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ column.replaceAll('_', ' ') | titlecase }}</th>
-              <td mat-cell *matCellDef="let object">
+              <td class="outerTableAuditID{{object['audit_id']}}" mat-cell *matCellDef="let object">
                 <div *ngIf="column == 'status'; else elseBlock"
                      [ngClass]="{'pending-audit' : (object[column] == 'Pending'),
                                  'active-audit' : (object[column] == 'Active'),
@@ -78,7 +78,7 @@
                   {{ object[column]}}
                 </div>
                 <ng-template #elseBlock>
-                  <div class="innerTableButton" *ngIf="column == 'Overview'">
+                  <div id="innerTableAuditID{{object['audit_id']}}}" class="innerTableButton" *ngIf="column == 'Overview'">
                     <mat-icon-button
                       (click)="$event.stopPropagation();toggleExpand(object['audit_id'], object['status'])"
                       mat-icon-button>
