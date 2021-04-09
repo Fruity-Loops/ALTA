@@ -25,7 +25,7 @@ export class ReviewAuditSpecVariables {
         },
         init_audit: {
             audit_id: ReviewAuditSpecVariables.auditId,
-            initiated_on: "2021-04-09",
+            initiated_on: "",
             last_modified_on: "2021-04-08T04:15:21.265000Z",
             accuracy: 0,
             status: "Pending",
@@ -56,7 +56,7 @@ export class ReviewAuditSpecVariables {
         },
         init_audit: {
             audit_id: ReviewAuditSpecVariables.auditId,
-            initiated_on: "2021-04-09",
+            initiated_on: "",
             last_modified_on: "2021-04-08T04:15:21.265000Z",
             accuracy: 0,
             status: "Pending",
