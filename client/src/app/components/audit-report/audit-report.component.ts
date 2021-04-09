@@ -78,9 +78,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
-      // TODO: Display Meta Data about the Audit
       this.setAuditInfo();
-      // TODO: Display Audit's Items Data
       this.setAuditData();
 
       this.setResultsData();

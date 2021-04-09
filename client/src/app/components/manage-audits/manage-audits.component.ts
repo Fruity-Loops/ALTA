@@ -120,7 +120,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     [this.title, this.searchPlaceholder] = [lang.lang.title, lang.lang.searchPlaceholder];
   }
 
-
   getSearchForm(): any {
     return {
       search: [''],
@@ -231,8 +230,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
             this.errorMessage = err;
           }
         );
-
-
       } else {
         this.auditService.getAuditData(auditId).subscribe(
           (data: any) => {
@@ -258,6 +255,19 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     }
   }
 
+  getCorrespondingData(data: any, record: any): any {
+    if (data.map((obj: any) => obj.location).includes(undefined)) {
+      return data.find((obj: any) =>
+        obj.Location === record.Location &&
+        obj.Bin === record.Bin
+      );
+    }
+    return data.find((obj: any) =>
+      obj.location === record.Location &&
+      obj.Bin === record.Bin
+    );
+  }
+
   setInnerTable(data: any, assigned_users: any): void {
     let holdInterpretedData: any[] = [];
 
@@ -267,32 +277,19 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       let holdCurrentBinAccuracy = '';
 
       // find and set sk and bin accuracy to bin with location
-      let getDataGivenBin = assigned_users.find((obj: any) =>
-        obj.Bin === record.Bin &&
-        obj.location === record.Location);
+      let getDataGivenBin = this.getCorrespondingData(assigned_users, record);
 
       if (getDataGivenBin !== undefined) {
         holdCurrentSK = getDataGivenBin.Assigned_Employee;
         holdCurrentBinAccuracy = getDataGivenBin.Bin_Accuracy;
       }
 
-      let checkExistingLocationAndBin = holdInterpretedData.find(element =>
-        element.Location === record.Location &&
-        element.Bin === record.Bin);
+      let checkExistingLocationAndBin = this.getCorrespondingData(holdInterpretedData, record);
 
       // bin with location already exists in table
       if (checkExistingLocationAndBin !== undefined) {
 
-        if (record.Quantity != 0) {
-          checkExistingLocationAndBin['Number_of_'+record.status +'_Items'] =
-            checkExistingLocationAndBin['Number_of_'+record.status +'_Items'] + record.Quantity;
-
-          checkExistingLocationAndBin.Number_of_Audited_Items =
-            checkExistingLocationAndBin.Number_of_Audited_Items + record.Quantity;
-        } else {
-          checkExistingLocationAndBin['Number_of_'+record.status +'_Items']++;
-          checkExistingLocationAndBin.Number_of_Audited_Items++;
-        }
+        this.adjustQuantity(record, checkExistingLocationAndBin);
 
       } else {
         holdInterpretedData.push({
@@ -322,6 +319,20 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       this.removeZeroValueColumns(holdInterpretedData);
 
     this.innerDataSource = new MatTableDataSource(holdInterpretedData);
+  }
+
+  adjustQuantity(record: any, checkExistingLocationAndBin: any): any {
+    if (record.Quantity != 0) {
+      checkExistingLocationAndBin['Number_of_'+record.status+'_Items'] =
+        checkExistingLocationAndBin['Number_of_'+record.status+'_Items'] + record.Quantity;
+
+      checkExistingLocationAndBin.Number_of_Audited_Items =
+        checkExistingLocationAndBin.Number_of_Audited_Items + record.Quantity;
+      return;
+    }
+
+    checkExistingLocationAndBin['Number_of_'+record.status+'_Items']++;
+    checkExistingLocationAndBin.Number_of_Audited_Items++;
   }
 
   removeZeroValueColumns(holdInterpretedData: any): void {

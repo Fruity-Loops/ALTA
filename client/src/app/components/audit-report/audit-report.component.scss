@@ -22,10 +22,6 @@ button.create {
   color: map-get($alta-primary, 500);
 }
 
-mat-expansion-panel-header {
-  width: 100%;
-}
-
 mat-panel-title {
   width: 90%;
 }
@@ -73,6 +69,7 @@ mat-expansion-panel-header {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
 }
 
 .pending-audit {
