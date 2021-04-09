@@ -237,50 +237,6 @@
     </mat-accordion>
   </div>
   <div class="dropdown">
-    <mat-accordion>
-      <mat-expansion-panel (opened)="panelOpenState = true"
-                           (closed)="panelOpenState = false">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-           Random Items to audit again
-          </mat-panel-title>
-          <mat-panel-description>
-            <mat-icon>expand_more</mat-icon>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>Selection of random items based on a random selection of parts and bins</p>
-        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourceRandomItem" class="mat-elevation-z8">
-          <ng-container matColumnDef="Random Item">
-            <th mat-header-cell *matHeaderCellDef> Audit Random Item </th>
-            <td mat-cell *matCellDef="let element"> {{element.Item_Id}} </td>
-          </ng-container>
-          <ng-container matColumnDef="Location">
-            <th mat-header-cell *matHeaderCellDef> Location </th>
-            <td mat-cell *matCellDef="let element"> {{element.Location}} </td>
-          </ng-container>
-          <ng-container matColumnDef="Bin">
-            <th mat-header-cell *matHeaderCellDef> Bin </th>
-            <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
-          </ng-container>
-          <ng-container matColumnDef="Zone">
-            <th mat-header-cell *matHeaderCellDef> Zone </th>
-            <td mat-cell *matCellDef="let element"> {{element.Zone}} </td>
-          </ng-container>
-          <ng-container matColumnDef="Aisle">
-            <th mat-header-cell *matHeaderCellDef> Aisle </th>
-            <td mat-cell *matCellDef="let element"> {{element.Aisle}} </td>
-          </ng-container>
-          <ng-container matColumnDef="Part_Number">
-            <th mat-header-cell *matHeaderCellDef> Part Number </th>
-            <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsRandomItem"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsRandomItem;"></tr>
-        </table>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
-  <div class="dropdown">
     <mat-expansion-panel>
       <mat-expansion-panel-header>
         <mat-panel-title>

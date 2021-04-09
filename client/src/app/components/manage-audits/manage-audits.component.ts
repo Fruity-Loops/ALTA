@@ -55,7 +55,6 @@ export class ManageAuditsComponent
   displayedColumnsBin: string[] = ['Bin', 'Count'];
   displayedColumnsPart: string[] = ['Part', 'Count'];
   displayedColumnsItem: string[] = ['Item', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number', 'Count'];
-  displayedColumnsRandomItem: string[] = ['Random Item', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number'];
   displayedColumnsCategoryItem: string[] = ['Item By Category', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number'];
   dataSourceBin: any = [];
   dataSourcePart: any = [];
