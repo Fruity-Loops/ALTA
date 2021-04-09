@@ -54,8 +54,8 @@ export class ManageAuditsComponent
   panelOpenState = false;
   displayedColumnsBin: string[] = ['Bin', 'Count'];
   displayedColumnsPart: string[] = ['Part', 'Count'];
-  displayedColumnsItem: string[] = ['Item', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number', 'Count'];
-  displayedColumnsCategoryItem: string[] = ['Item By Category', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number'];
+  displayedColumnsItem: string[] = ['Part_Number', 'Count'];
+  displayedColumnsCategoryItem: string[] = ['Part_Number'];
   dataSourceBin: any = [];
   dataSourcePart: any = [];
   dataSourceItem: any = [];
