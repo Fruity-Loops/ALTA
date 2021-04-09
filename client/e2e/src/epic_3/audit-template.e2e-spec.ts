@@ -5,6 +5,7 @@ import {browser, ExpectedConditions} from 'protractor';
 
 /**
  * https://github.com/fruity-loops/alta/issues/51
+ * https://github.com/fruity-loops/alta/issues/52
  */
 describe('AT-3.3: Create an audit template', () => {
   const nav: Navigation = new Navigation();
@@ -75,47 +76,26 @@ describe('AT-3.3: Create an audit template', () => {
     browser.wait(ExpectedConditions.urlContains('template'), 5000);
     expect(auditTemplate.getTemplateID('Testing Template').isDisplayed()).toBeTruthy();
   });
-});
 
-/**
- * https://github.com/fruity-loops/alta/issues/52
- */
-describe('AT-3.4: Modify audit template', () => {
-  const nav: Navigation = new Navigation();
-  const auditTemplate: AuditTemplate = new AuditTemplate();
-
-  /**
-   * Login as an Inventory Manager
-   */
-  beforeAll(function init(): void {
-    const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+  describe('AT-3.4: Modify audit template', () => {
+    it('Modify an Audit Template', () => {
+      nav.templatesOption().click();
+      browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getMenu()), 5000);
+      auditTemplate.getMenu().click();
+      browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditOption()), 5000);
+      auditTemplate.getEditOption().click();
+      browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditButton()), 5000);
+      auditTemplate.getEditButton().click();
+      auditTemplate.getTitleField().clear();
+      auditTemplate.getTitleField().sendKeys('Modified Testing Template');
+      auditTemplate.getRemoveItem('Aisle: Rows').click();
+      auditTemplate.getRemoveItem('Bin: C20').click();
+      auditTemplate.getCreateButton().click();
+      browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditButton()), 5000);
+      nav.templatesOption().click();
+      browser.wait(ExpectedConditions.urlContains('template'), 5000);
+      expect(auditTemplate.getTemplateID('Modified Testing Template').isDisplayed()).toBeTruthy();
+    });
   });
 
-  /**
-   * Logout
-   */
-  afterAll(function endit(): void {
-    const logoutPage = new Logout();
-    logoutPage.logout();
-  });
-
-  it('Modify an Audit Template', () => {
-    nav.templatesOption().click();
-    browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getMenu()), 5000);
-    auditTemplate.getMenu().click();
-    browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditOption()), 5000);
-    auditTemplate.getEditOption().click();
-    browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditButton()), 5000);
-    auditTemplate.getEditButton().click();
-    auditTemplate.getTitleField().clear();
-    auditTemplate.getTitleField().sendKeys('Modified Testing Template');
-    auditTemplate.getRemoveItem('Aisle: Rows').click();
-    auditTemplate.getRemoveItem('Bin: C20').click();
-    auditTemplate.getCreateButton().click();
-    browser.wait(ExpectedConditions.visibilityOf(auditTemplate.getEditButton()), 5000);
-    nav.templatesOption().click();
-    browser.wait(ExpectedConditions.urlContains('template'), 5000);
-    expect(auditTemplate.getTemplateID('Modified Testing Template').isDisplayed()).toBeTruthy();
-  });
 });
