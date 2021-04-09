@@ -9,6 +9,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
+import {saveAs} from 'file-saver';
 
 @Component({
   selector: 'app-audit-report',
@@ -316,6 +317,20 @@ export class AuditReportComponent extends TableManagementComponent implements On
         });
     }
   }
+
+  downloadAudit(): void{
+    const requestParams = {audit_id: this.id};
+    this.auditReportService.getAuditFile(requestParams).subscribe(
+      (data) => {
+        saveAs(data, 'audit_' + this.id.toString() + '_report.csv');
+      },
+      (err: any) => {
+        alert('error');
+        this.errorMessage = err;
+      }
+    );
+  }
+
 
   async reloadPage(): Promise<void> {
     await this.router.navigateByUrl('/', { skipLocationChange: true });
