@@ -68,7 +68,7 @@ describe('AssignStockKeepersComponent', () => {
         "bins": "C69",
         "numberOfParts": 1,
         "initiatedBy": "inventory manager",
-        "date": "4/8/2021 0:15",
+        "date": "NaN/NaN/NaN NaN:NaN",
         "location": "Florida"
       },
       {
@@ -76,7 +76,7 @@ describe('AssignStockKeepersComponent', () => {
         "bins": "C20",
         "numberOfParts": 1,
         "initiatedBy": "inventory manager",
-        "date": "4/8/2021 0:15",
+        "date": "NaN/NaN/NaN NaN:NaN",
         "location": "Florida"
       }
     ]
