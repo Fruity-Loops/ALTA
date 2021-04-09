@@ -161,12 +161,13 @@ describe('ManageAuditsService', () => {
   });
 
   it('should return the audits properly formatted', () => {
+    let orgId = 1;
     let params = new HttpParams();
     let pageIndex = 1;
     let pageSize = 25;
     params = params.append('page', String(pageIndex));
     params = params.append('page_size', String(pageSize));
-    params = params.append('organization', String(localStorage.getItem('organization_id')));
+    params = params.append('organization', String(orgId));
     params = params.append('status', 'Active');
 
     service.getProperAudits(params).subscribe(audits => {
