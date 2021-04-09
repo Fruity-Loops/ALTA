@@ -52,11 +52,11 @@ export class ManageAuditsComponent
   searchPlaceholder: string;
 
   panelOpenState = false;
-  displayedColumnsBin: string[] = ['Bin'];
-  displayedColumnsPart: string[] = ['Part'];
-  displayedColumnsItem: string[] = ['Item'];
-  displayedColumnsRandomItem: string[] = ['Random Item'];
-  displayedColumnsCategoryItem: string[] = ['Item By Category'];
+  displayedColumnsBin: string[] = ['Bin', 'Count'];
+  displayedColumnsPart: string[] = ['Part', 'Count'];
+  displayedColumnsItem: string[] = ['Item', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number', 'Count'];
+  displayedColumnsRandomItem: string[] = ['Random Item', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number'];
+  displayedColumnsCategoryItem: string[] = ['Item By Category', 'Location', 'Bin', 'Zone', 'Aisle', 'Part_Number'];
   dataSourceBin: any = [];
   dataSourcePart: any = [];
   dataSourceItem: any = [];

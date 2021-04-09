@@ -427,31 +427,49 @@ class RecommendationViewSet(LoggingViewset):
 
     def list(self, request):
         org_id = request.GET.get('organization', None)
-        bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
-                                 annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
+        # The top 5 frequently audited bins
+        bins_to_recommend = list(
+            BinToSK.objects.filter(
+                init_audit__organization=org_id)
+                .values('Bin')
+                .annotate(total=Count('Bin')).values('Bin', 'total')
+                .order_by('-total')[:5])
 
+        # The top 5 frequently audited parts
         parts_to_recommend = list(
-            Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
-                total=Count('Part_Number'))
-                .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Part_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total').order_by('total')
+                .order_by('-total')[:5])
 
+        # The top 5 frequently lost items
         items_to_recommend = list(
-            Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
-                total=Count('item_id')).values('item_id', 'total').order_by('-total')[:5])
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id, flagged=True)
+                .values('item_id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number')
+                .annotate(total=Count('item_id'))
+                .values('item_id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number', 'total')
+                .order_by('-total')[:5])
 
-        # Recommend an Ad-hoc audit : random selection od bins or parts
-        all_bins = get_values(list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').distinct()),
-                              'Bin')
+        # Recommend an Ad-hoc audit : random selection of bins or parts
+        all_bins = get_values(
+            list(
+                BinToSK.objects.filter(init_audit__organization=org_id)
+                .values('Bin')
+                .distinct()),'Bin')
         all_parts = get_values(
-            list(Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').distinct()),
-            'Part_Number')
+            list(
+                Record.objects.filter(bin_to_sk__init_audit__organization=org_id)
+                .values('Part_Number')
+                .distinct()), 'Part_Number')
 
         random_items_to_recommend = get_random_items(all_bins, all_parts, org_id, 2)
 
         # Recommend items with high criticality
         high_criticality_items = list(
-            Item.objects.filter(organization=org_id, Criticality='High').values(
-                'Item_Id'))
+            Item.objects.filter(organization=org_id, Criticality='High')
+            .values('Item_Id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number'))
 
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
                 'items_recommendation': items_to_recommend, 'random_items': random_items_to_recommend,
@@ -472,7 +490,7 @@ def get_random_items(all_bins, all_parts, org_id, frequency_of_bins_or_parts):
             )  
         return list(
             Item.objects.filter(organization=org_id, Bin__in=random_bin).values(
-                'Item_Id'))
+                'Item_Id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number'))
     else:
         random_part = random.sample(
             all_parts,
@@ -480,7 +498,7 @@ def get_random_items(all_bins, all_parts, org_id, frequency_of_bins_or_parts):
             )
         return list(
             Item.objects.filter(organization=org_id, Part_Number__in=random_part).values(
-                'Item_Id'))
+                'Item_Id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number'))
 
 
 class InsightsViewSet(LoggingViewset):

@@ -26,6 +26,8 @@ mat-expansion-panel-header {
 
 mat-panel-title {
   width: 90%;
+  color: map-get($alta-primary, 500);
+  font-size: 15px;
 }
 
 .mat-card-title {
