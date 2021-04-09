@@ -243,7 +243,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
             content: data[i].content,
             timestamp: new Date(Date.parse(data[i].created_timestamp))
           }
-          newComment.timestamp.toLocaleDateString();
           this.comments.push(newComment);
         }
       }
