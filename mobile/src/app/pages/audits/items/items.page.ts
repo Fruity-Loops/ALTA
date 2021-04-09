@@ -183,7 +183,12 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
   handleCameraScan() {
-    this.cameraScanner.scan().then(barcodeData => {
+    this.cameraScanner.scan(
+      {
+        showTorchButton: true, // iOS and Android
+        prompt: `Place a barcode inside the rectangle to scan it. Alternatively, a barcode can also be entered manually.`, // Android
+      }
+    ).then(barcodeData => {
       if (barcodeData.cancelled === false) {
         this.barcode = barcodeData.text;
         this.validateItem(false, true);
@@ -229,8 +234,8 @@ export class ItemsPage implements OnInit, OnDestroy {
     });
     await alert.present();
     alert.onDidDismiss()
-    .then(_ => {
-      this.isScanning = false;
+      .then(_ => {
+        this.isScanning = false;
       });
   }
 
@@ -306,7 +311,11 @@ export class ItemsPage implements OnInit, OnDestroy {
                     };
                     this.presentRecordModal(modalData);
                   }
-                }
+                },
+                {
+                  text: 'Input Barcode',
+                  handler: () => this.handleManualInput(),
+                },
               ]
             });
             await noMatchAlert.present();
