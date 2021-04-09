@@ -46,7 +46,7 @@ describe('EditAuditTemplateComponent', () => {
 
   it('', () => {
     spyOn(service, 'getATemplate').and.returnValue(of({
-      title: 'hello', description: 'hi', id: 'id', Bin: '[\'A10\''}));
+      title: 'hello', description: 'hi', id: 'id', Bin: '[\'A10\']'}));
     component.initializeForm();
   });
 
