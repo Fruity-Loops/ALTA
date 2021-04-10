@@ -18,7 +18,7 @@ describe('AssignStockKeepersComponent', () => {
   // @ts-ignore
   let service2: ManageAuditsService;
 
-  beforeEach(() => {    
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [AssignStockKeepersComponent],
       providers: [ManageMembersService, ManageAuditsService],
@@ -73,10 +73,10 @@ describe('AssignStockKeepersComponent', () => {
     }
   });
 
-  // Test the goBackIventory()
-  it('Call goBackIventory', () => {
+  // Test the goBackInventory()
+  it('Call goBackInventory', () => {
     try {
-      component.goBackIventory();
+      component.goBackInventory();
     }
     catch (err) {
     console.error(err);
