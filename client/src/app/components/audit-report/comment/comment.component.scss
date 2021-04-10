@@ -22,3 +22,27 @@
   right: 1em;
   color: rgba(0, 0, 0, 0.54);
 }
+
+#sendicon{
+  color: map-get($alta-accent, 600);
+  font-size: x-large;
+}
+
+.comment-input {
+  width: 90%;
+  position: absolute;
+  bottom: 0px;
+  margin-left: 1em;
+}
+
+.comment-text {
+  background: map-get($alta-accent, 900);
+  border: #2aabd2;
+  border-radius: 5px;
+  padding: 1em;
+  margin: 1em;
+  word-wrap: normal;
+  color: white;
+  word-break: break-all;
+}
+

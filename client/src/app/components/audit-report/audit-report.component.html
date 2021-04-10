@@ -6,7 +6,7 @@
     <div class="top-buttons">
       <button mat-stroked-button *ngIf="!ongoing" id="export-audit" class="export-audit" (click)="downloadAudit()">Export Audit</button>
       <button mat-stroked-button *ngIf="ongoing" id="cancel" class="cancel" (click)="cancelAudit()">Cancel Audit</button>
-      <mat-icon id="questionanswericon" class="comment-button" (click)="drawer.toggle(); setCommentData()">
+      <mat-icon id="questionanswericon" class="comment-button" (click)="drawer.toggle();">
         question_answer
       </mat-icon>
     </div>
@@ -16,21 +16,6 @@
     <mat-drawer #drawer class="comment" mode="side" position="end">
       <div class="comment">
         <app-comment></app-comment>
-
-
-        <div class="comment-message">
-          <form>
-            <mat-form-field class="comment-input">
-              <mat-label>Enter Comment</mat-label>
-              <input matInput type="text" [(ngModel)]="comment_value" [ngModelOptions]="{standalone: true}" rows="1">
-              <button mat-button *ngIf="comment_value" matSuffix mat-icon-button aria-label="Comment"
-                      (click)="this.comment()">
-                <mat-icon id="sendicon">send</mat-icon>
-              </button>
-            </mat-form-field>
-          </form>
-        </div>
-
       </div>
     </mat-drawer>
     <mat-drawer-content>

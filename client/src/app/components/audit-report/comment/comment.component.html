@@ -17,3 +17,15 @@
     </div>
   </div>
 </div>
+<div class="comment-message">
+  <form>
+    <mat-form-field class="comment-input">
+      <mat-label>Enter Comment</mat-label>
+      <input matInput type="text" [(ngModel)]="comment_value" [ngModelOptions]="{standalone: true}" rows="1">
+      <button mat-button *ngIf="comment_value" matSuffix mat-icon-button aria-label="Comment"
+              (click)="this.comment()">
+        <mat-icon id="sendicon">send</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+</div>
