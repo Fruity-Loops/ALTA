@@ -429,10 +429,10 @@ class RecommendationViewSet(LoggingViewset):
         org_id = request.GET.get('organization', None)
         # The top 5 frequently audited bins
         bins_to_recommend = list(
-            BinToSK.objects.filter(
-                init_audit__organization=org_id)
-                .values('Bin')
-                .annotate(total=Count('Bin')).values('Bin', 'total')
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Bin', 'Location', 'Zone', 'Aisle')
+                .annotate(total=Count('Bin')).values('Bin', 'total', 'Location', 'Zone', 'Aisle')
                 .order_by('-total')[:5])
 
         # The top 5 frequently audited parts
