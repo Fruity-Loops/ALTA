@@ -51,6 +51,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   resultsDataSource: MatTableDataSource<any>;
   hideResult = true;
   ongoing = false;
+  pending = false;
 
   constructor(
     private auditReportService: AuditReportService,
@@ -109,6 +110,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
         if (metaData.status === 'Active') {
           this.ongoing = true;
+        } else if (metaData.status === 'Pending') {
+          this.pending = true;
         }
 
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
