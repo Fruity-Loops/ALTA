@@ -15,11 +15,11 @@ from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer, GetAssignmentSerializer, CommentSerializer
+    AssignmentSerializer, GetAssignmentSerializer, CommentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
-        CheckAssignmentOrganizationById
+    CheckAssignmentOrganizationById
 from .models import Audit, Assignment, BinToSK, Record, Comment
 
 
@@ -27,6 +27,7 @@ class AuditSetPagination(PageNumberPagination):
     page_size = 25
     page_size_query_param = 'page_size'
     max_page_size = 1000
+
 
 class AuditViewSet(LoggingViewset):
     """
@@ -128,11 +129,22 @@ class AuditViewSet(LoggingViewset):
         writer = csv.writer(response)
         headers = ['Batch_Number', 'Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Part_Description',
                    'Serial_Number', 'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity',
-                   'Unit_of_Measure']
+                   'Unit_of_Measure', 'status']
         writer.writerow(headers)
 
         for item in audit_items:
-            writer.writerow(item)
+            item_batch_number = item[0]
+            # if a record exists for the item, then the status is either 'Provided' or 'Missing', else it is 'pending
+            try:
+                item_record = Record.objects.get(Batch_Number=item_batch_number)
+                item_status = item_record.status
+            except:
+                item_status = 'Pending'
+
+            item_as_list = list(item) + [item_status]   # item is a tuple so change it into a list and ass status to it
+
+            # write the item as a row into the csv
+            writer.writerow(item_as_list)
 
         return response
 
@@ -201,6 +213,7 @@ def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
 
+
 class AssignmentViewSet(LoggingViewset):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Assignment.objects.all()
@@ -216,8 +229,8 @@ class AssignmentViewSet(LoggingViewset):
         factory = SKPermissionFactory(self.request)
         audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-                im_additional_perms=audit_permissions,
-                sk_additional_perms=audit_permissions
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
 
@@ -237,7 +250,6 @@ class AssignmentViewSet(LoggingViewset):
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
-
 
     def create(self, request, *args, **kwargs):
         is_many = isinstance(request.data, list)
@@ -470,12 +482,12 @@ class RecommendationViewSet(LoggingViewset):
         parts_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
                 total=Count('Part_Number'))
-            .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
+                .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
 
         items_to_recommend = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
                 total=Count('item_id'))
-            .values('item_id', 'total').order_by('-total')[:5])
+                .values('item_id', 'total').order_by('-total')[:5])
 
         data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
                 'items_recommendation': items_to_recommend}
