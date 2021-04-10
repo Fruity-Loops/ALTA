@@ -23,7 +23,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
-  holdItemsLocation: Array<any>;
   maxAssignPerLocation: Array<any>;
   auditID: number;
 
@@ -53,7 +52,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.assignments = [];
-    this.holdItemsLocation = [];
     this.maxAssignPerLocation = new Array<any>();
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
@@ -82,8 +80,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     * 2. how slow this can be to compute on the front-end
     */
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
-      this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
-      this.holdItemsLocation.forEach((location: any) => {
+      selectedItems.inventory_items.map((obj: any) => obj.Location).forEach((location: any) => {
 
         this.setMaxAssignPerLocation(location, selectedItems);
 
@@ -108,12 +105,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   setMaxAssignPerLocation(location: any, correspondingObj: any): void {
     if (!this.maxAssignPerLocation.some((item: any) => item.location === location)) {
-      const locTotalBins = new Set(correspondingObj.inventory_items.filter((item: any) =>
-        item.Location === location).map((ob: any) => ob.Bin)).size;
-
       this.maxAssignPerLocation.push({
         location,
-        totalBins: locTotalBins
+        totalBins: new Set(correspondingObj.inventory_items.filter((item: any) =>
+                   item.Location === location).map((ob: any) => ob.Bin)).size
       });
     }
   }
@@ -133,8 +128,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   setCheckboxDisableStatus(): void {
     this.locationsAndUsers.forEach((location: any) => {
-
-      const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
       let counter = 0;
 
       location.users.forEach((user: any) => {
@@ -148,7 +141,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       });
 
       // disable other SKs if assign limit is reached for location
-      if (counter >= maxPerLocation) {
+      if (counter >= this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins) {
         location.users.forEach((user: any) => {
           if (!this.skToAssign.includes(user.id)) {
             user.disabled = true;
@@ -222,11 +215,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   submitAssignedSKs(): void {
-    let bodyAssignedSK: any;
-    bodyAssignedSK = {
-      assigned_sk: this.skToAssign,
-    };
-    this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
+    this.manageAuditsService.assignSK({assigned_sk: this.skToAssign,}, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
         this.manageAuditsService.createAuditAssignments(this.assignments).subscribe(
