@@ -8,7 +8,7 @@ import {CreateOrganizationComponent} from './create-organization.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { AppModule } from 'src/app/app.module';
 
-fdescribe('CreateOrganizationComponent', () => {
+describe('CreateOrganizationComponent', () => {
   let component: CreateOrganizationComponent;
   let fixture: ComponentFixture<CreateOrganizationComponent>;
   // @ts-ignore
