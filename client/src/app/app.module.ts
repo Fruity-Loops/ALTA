@@ -16,11 +16,13 @@ import { AuditReportComponent } from './components/audit-report/audit-report.com
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {FileUploadModule} from 'ng2-file-upload';
 import { DatePipe } from '@angular/common';
+import { CommentComponent } from './components/audit-report/comment/comment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AuditReportComponent,
+    CommentComponent,
   ],
   imports: [
     BrowserModule,
