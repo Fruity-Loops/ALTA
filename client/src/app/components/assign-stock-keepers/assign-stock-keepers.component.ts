@@ -58,10 +58,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   ngOnInit(): void {
-    this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
-    this.params = this.params.append('status', 'Active');
-    this.params = this.params.append('no_pagination', 'True');
-
+    this.params = this.params.
+                    append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId))).
+                    append('status', 'Active').
+                    append('no_pagination', 'True');
 
     this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
@@ -82,7 +82,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
       selectedItems.inventory_items.map((obj: any) => obj.Location).forEach((location: any) => {
 
-        this.setMaxAssignPerLocation(location, selectedItems);
+        this.maxAssignPerLocation = this.maxAssignPerLocation.
+                                    concat(this.getMaxAssignPerLocation(location, selectedItems));
 
         this.locationsAndUsers = this.locationsAndUsers.concat(this.addLocationWithSKs(location, clients));
       });
@@ -103,14 +104,15 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
   }
 
-  setMaxAssignPerLocation(location: any, correspondingObj: any): void {
+  getMaxAssignPerLocation(location: any, correspondingObj: any): any {
     if (!this.maxAssignPerLocation.some((item: any) => item.location === location)) {
-      this.maxAssignPerLocation.push({
+      return [{
         location,
         totalBins: new Set(correspondingObj.inventory_items.filter((item: any) =>
                    item.Location === location).map((ob: any) => ob.Bin)).size
-      });
+      }];
     }
+    return [];
   }
 
   addLocationWithSKs(location: any, clients: any): any {
