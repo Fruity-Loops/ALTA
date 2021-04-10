@@ -75,10 +75,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   populateTable(clients: any): void {
-    /* TODO: look into performance impact of:
-    * 1. sending all an organization's users with a realistic amount of users
-    * 2. how slow this can be to compute on the front-end
-    */
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
       selectedItems.inventory_items.map((obj: any) => obj.Location).forEach((location: any) => {
 
@@ -166,7 +162,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   onChange(userId: any, loc: any): void {
-    const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
       // @ts-ignore
       map((obj: any) => obj.users).flat(1);
@@ -185,7 +180,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
 
       // if there are still SKs to assign after unselecting a user
-      if (intersection.length < getLimitOfAssignees) {
+      if (intersection.length < this.maxAssignPerLocation.find(total => total.location === loc).totalBins) {
         sksFromLocation.forEach((sk: any) => {
           // enable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
@@ -204,7 +199,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       // get the updated intersection of selected SKs for this location
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
 
-      if (intersection.length >= getLimitOfAssignees) {
+      if (intersection.length >= this.maxAssignPerLocation.find(total => total.location === loc).totalBins) {
         sksFromLocation.forEach((sk: any) => {
           // disable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
