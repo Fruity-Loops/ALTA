@@ -17,7 +17,6 @@ describe('AssignStockKeepersComponent', () => {
   let fixture: ComponentFixture<ReviewAuditComponent>;
   let authService: AuthService;
   let auditService: ManageAuditsService;
-  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -28,7 +27,6 @@ describe('AssignStockKeepersComponent', () => {
         ManageAuditsService
       ],
       imports: [
-        HttpClientTestingModule,
         MatDialogModule,
         AppModule,
         RouterTestingModule.withRoutes([
@@ -41,7 +39,6 @@ describe('AssignStockKeepersComponent', () => {
     fixture = TestBed.createComponent(ReviewAuditComponent);
     authService = TestBed.inject(AuthService);
     auditService = TestBed.inject(ManageAuditsService);
-    httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -51,8 +48,6 @@ describe('AssignStockKeepersComponent', () => {
     fixture = null;
     authService = null;
     auditService = null;
-    httpTestingController.verify();
-    httpTestingController = null;
   });
 
   it('should create Review Audit Component', () => {
@@ -186,5 +181,11 @@ describe('AssignStockKeepersComponent', () => {
     expect(component.requestConfirmation).toEqual(false);
     expect(component.deleteAudit).toHaveBeenCalledWith();
     expect(component.dialog.closeAll).toHaveBeenCalledWith();
+  });
+
+  it('should request to confirm', () => {
+    let returnValue = true;
+    spyOn(window, 'confirm').and.returnValue(returnValue);
+    expect(component.beforeUnloadHandler({})).toEqual((returnValue));
   });
 });
