@@ -143,19 +143,23 @@ describe('ManageAuditsService', () => {
   });
 
   it('should return the active SKs', () => {
-    let auditId = 1;
-    let params = {organization: '1', status: 'Active', no_pagination: 'True'}
+    let orgId = '1'
+    let status = 'Active';
+    let params = new HttpParams();
+    params = params.append('organization', orgId);
+    params = params.append('status', status);
+    params = params.append('no_pagination', 'True');
 
-    service.getAuditData(auditId).subscribe(audits => {
+    service.getBusySKs(params).subscribe(audits => {
       expect(audits).toEqual(ManageAuditsSpecVariables.auditListing);
       for (let audit of audits)
       {
-        expect(audit.status).toEqual(params.status);
-        expect(audit.organization).toEqual(Number(params.organization))
+        expect(audit.status).toEqual(status);
+        expect(audit.organization).toEqual(Number(orgId))
       }
     });
 
-    const req = httpTestingController.expectOne(`${BASEURL}/audit/${auditId}/`);
+    const req = httpTestingController.expectOne(`${BASEURL}/audit/?` + params.toString());
     expect(req.request.method).toBe("GET");
     req.flush(ManageAuditsSpecVariables.auditListing);
   });
