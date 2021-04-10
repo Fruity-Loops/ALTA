@@ -283,8 +283,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
     let counter = 0;
     this.locationsAndUsers.forEach((loc: any) => {
-      const intersection = new Set(loc.users.flat().map((obj: any) => obj.id).filter((x: any) => this.skToAssign.includes(x)));
-      if (intersection.size !== 0) {
+      if (new Set(loc.users.flat().map((obj: any) => obj.id).
+            filter((x: any) => this.skToAssign.includes(x))).size !== 0) {
         counter++;
       }
     });
