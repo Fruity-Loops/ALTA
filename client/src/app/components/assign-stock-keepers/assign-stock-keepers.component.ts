@@ -76,6 +76,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   populateTable(clients: any): void {
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
+
+      if (selectedItems.assigned_sk !== [])
+          this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
+
       selectedItems.inventory_items.map((obj: any) => obj.Location).forEach((location: any) => {
 
         this.maxAssignPerLocation = this.maxAssignPerLocation.
@@ -83,11 +87,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
         this.locationsAndUsers = this.locationsAndUsers.concat(this.addLocationWithSKs(location, clients));
       });
-
-
-      if (selectedItems.assigned_sk !== []) {
-        this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
-      }
 
       this.setCheckboxDisableStatus();
 
