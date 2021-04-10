@@ -226,4 +226,9 @@ export class ManageAuditsComponent
       }
     );
   }
+
+  createTempalte(data: any): void {
+    this.router.navigate(['template/create-template'], { state: { data }});
+  }
+
 }

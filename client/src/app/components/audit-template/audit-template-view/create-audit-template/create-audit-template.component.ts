@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuditTemplateService } from '../../../../services/audits/audit-template.service';
 import { Template } from '../../Template';
 import { AuditTemplateViewComponent } from '../audit-template-view.component';
@@ -10,16 +10,24 @@ import {ManageInventoryItemsService} from 'src/app/services/inventory-items/mana
   templateUrl: '../audit-template-view.component.html',
   styleUrls: ['../audit-template-view.component.scss']
 })
-export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
+export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
 
   disabled = false;
+  routeParams: any;
 
   constructor(
+    public activatedRoute: ActivatedRoute,
     public router: Router,
     private auditTemplateService: AuditTemplateService,
     itemsService: ManageInventoryItemsService
   ) {
     super(itemsService);
+    this.getRouteParams();
+  }
+
+  getRouteParams(): void {
+    this.routeParams = this.router.getCurrentNavigation()?.extras.state?.data;
+    console.log(JSON.stringify(this.routeParams));
   }
 
   initializeForm(): void {
