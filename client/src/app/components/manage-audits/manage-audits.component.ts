@@ -292,16 +292,13 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.adjustQuantity(record, checkExistingLocationAndBin);
 
       } else {
-        holdInterpretedData.push({
-          Location: record.Location,
-          Bin: record.Bin,
-          Assigned_Employee: holdCurrentSK,
-          Bin_Accuracy: holdCurrentBinAccuracy,
-          Number_of_Audited_Items: record.Quantity !== 0 ? record.Quantity : 1,
-          Number_of_Provided_Items: record.status == 'Provided' ? record.Quantity : 0,
-          Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
-          Number_of_New_Items: record.status == 'New' ? record.Quantity : 0
-        });
+        holdInterpretedData.push(
+          Object.assign(this.addNewBinWithLocation(record),
+          {
+            Assigned_Employee: holdCurrentSK,
+            Bin_Accuracy: holdCurrentBinAccuracy
+          }
+        ));
       }
     });
 
@@ -319,6 +316,17 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       this.removeZeroValueColumns(holdInterpretedData);
 
     this.innerDataSource = new MatTableDataSource(holdInterpretedData);
+  }
+
+  addNewBinWithLocation(record: any): any {
+    return {
+      Location: record.Location,
+      Bin: record.Bin,
+      Number_of_Audited_Items: record.Quantity !== 0 ? record.Quantity : 1,
+      Number_of_Provided_Items: record.status == 'Provided' ? record.Quantity : 0,
+      Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
+      Number_of_New_Items: record.status == 'New' ? record.Quantity : 0
+    };
   }
 
   adjustQuantity(record: any, checkExistingLocationAndBin: any): any {
