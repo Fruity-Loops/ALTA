@@ -52,10 +52,10 @@ export class ManageAuditsComponent
   searchPlaceholder: string;
 
   panelOpenState = false;
-  displayedColumnsBin: string[] = ['Bin', 'Count'];
-  displayedColumnsPart: string[] = ['Part', 'Count'];
-  displayedColumnsItem: string[] = ['Part_Number', 'Count'];
-  displayedColumnsCategoryItem: string[] = ['Part_Number'];
+  displayedColumnsBin: string[] = ['Location', 'Zone', 'Aisle', 'Bin', 'Count'];
+  displayedColumnsPart: string[] = ['Batch_Number', 'Part', 'Serial_Number', 'Count'];
+  displayedColumnsItem: string[] = ['Batch_Number', 'Part_Number', 'Serial_Number', 'Count'];
+  displayedColumnsCategoryItem: string[] = ['Batch_Number', 'Part_Number', 'Serial_Number'];
   dataSourceBin: any = [];
   dataSourcePart: any = [];
   dataSourceItem: any = [];
