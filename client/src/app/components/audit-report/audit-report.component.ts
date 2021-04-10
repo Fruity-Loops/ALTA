@@ -33,11 +33,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
   selectedItems: number[];
   allExpandState = false;
 
-  comment_value = '';
-  comments: any[];
-
-
-
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -73,7 +68,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.resultsDataSource = new MatTableDataSource<any>();
     this.selectedItems = [];
     this.parsedMetaData = [];
-    this.comments = [];
   }
 
   ngOnInit(): void {
@@ -295,26 +289,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     } else {
       this.selectedItems.push(value);
     }
-  }
-
-  comment(): void {
-    const comment = {
-      org_id: String(localStorage.getItem('organization_id')),
-      ref_audit: this.id,
-      content: String(this.comment_value),
-      author: String(localStorage.getItem('username'))
-    };
-
-    this.auditReportService.postComment(comment).subscribe(
-      (data) => {
-        this.comment_value = '';
-        this.setCommentData();
-      },
-      (err) => {
-        console.log('Comment posting failed');
-      }
-    );
-
   }
 
   cancelAudit(): void {

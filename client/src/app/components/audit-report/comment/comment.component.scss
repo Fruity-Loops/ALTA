@@ -1,0 +1,24 @@
+@import "./src/theme.scss";
+
+.comment-history{
+  overflow-y: scroll;
+  height: 80%;
+  position: relative;
+}
+
+.comment-author {
+  position: relative;
+  margin-left: 1em;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.comment-component {
+  margin-top: 4em;
+  margin-bottom: 4em;
+}
+
+.comment-date {
+  position: absolute;
+  right: 1em;
+  color: rgba(0, 0, 0, 0.54);
+}
