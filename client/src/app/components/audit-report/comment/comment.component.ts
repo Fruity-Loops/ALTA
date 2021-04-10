@@ -1,6 +1,7 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
 import {AuditReportService} from "../../../services/audits/audit-report.service";
 import {ManageMembersService} from "../../../services/users/manage-members.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-comment',
@@ -16,11 +17,15 @@ export class CommentComponent implements OnInit, AfterViewChecked {
   constructor(
     private auditReportService: AuditReportService,
     private userService: ManageMembersService,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.comments = [];
   }
 
   ngOnInit(): void {
+    this.activatedRoute.params.subscribe((routeParams) => {
+      this.id = routeParams.ID;
+    });
     this.setCommentData();
   }
 
