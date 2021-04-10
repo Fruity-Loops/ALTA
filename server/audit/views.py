@@ -129,19 +129,23 @@ class AuditViewSet(LoggingViewset):
         writer = csv.writer(response)
         headers = ['Batch_Number', 'Location', 'Plant', 'Zone', 'Aisle', 'Bin', 'Part_Number', 'Part_Description',
                    'Serial_Number', 'Condition', 'Category', 'Owner', 'Criticality', 'Average_Cost', 'Quantity',
-                   'Unit_of_Measure', 'status']
+                   'Unit_of_Measure', 'status', 'Audited Quantity']
         writer.writerow(headers)
 
         for item in audit_items:
+            item_as_list = list(item)
             item_batch_number = item[0]
+            item_quantity = ''
+
             # if a record exists for the item, then the status is either 'Provided' or 'Missing', else it is 'pending
             try:
-                item_record = Record.objects.get(Batch_Number=item_batch_number)
+                item_record = Record.objects.get(Batch_Number=item_batch_number, audit=audit_id)
                 item_status = item_record.status
+                item_quantity = item_record.Quantity
             except:
                 item_status = 'Pending'
 
-            item_as_list = list(item) + [item_status]   # item is a tuple so change it into a list and ass status to it
+            item_as_list = item_as_list + [item_status, item_quantity]
 
             # write the item as a row into the csv
             writer.writerow(item_as_list)
