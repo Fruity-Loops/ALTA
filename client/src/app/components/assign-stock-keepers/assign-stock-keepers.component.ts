@@ -111,10 +111,10 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   addLocationWithSKs(location: any, clients: any): any {
-    if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
+    if (!this.locationsAndUsers.find((item: any) => item.location === location)) {
       const getSKForLoc = clients.filter((user: any) =>
         user.location === location && user.role === 'SK');
-      if (getSKForLoc.length !== 0) {
+      if (getSKForLoc.length) {
         return [{location, users: getSKForLoc}];
       } else {
         return [{location, users: []}];
@@ -149,7 +149,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   setBusyStatus(user: any, isBusy: any): void {
-    if (isBusy === undefined) {
+    if (!isBusy) {
       user.availability = 'Available';
     } else {
       user.availability = 'Busy';
@@ -262,7 +262,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   disableAssign(): boolean {
-    if (this.skToAssign.length === 0) {
+    if (!this.skToAssign.length) {
       return true;
     }
 
