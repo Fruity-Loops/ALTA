@@ -183,15 +183,6 @@ describe('AssignStockKeepersComponent', () => {
     expect(component.dialog.closeAll).toHaveBeenCalledWith();
   });
 
-  it('should discard the audit', () => {
-    spyOn(component.dialog, 'closeAll');
-    spyOn(component, 'deleteAudit').and.callFake(() => {});
-    component.discardAudit();
-    expect(component.requestConfirmation).toEqual(false);
-    expect(component.deleteAudit).toHaveBeenCalledWith();
-    expect(component.dialog.closeAll).toHaveBeenCalledWith();
-  });
-
   it('should request to confirm', () => {
     let returnValue = true;
     spyOn(window, 'confirm').and.returnValue(returnValue);
