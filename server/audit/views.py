@@ -439,23 +439,23 @@ class RecommendationViewSet(LoggingViewset):
         parts_to_recommend = list(
             Record.objects.filter(
                 bin_to_sk__init_audit__organization=org_id)
-                .values('Part_Number').annotate(total=Count('Part_Number'))
-                .values('Part_Number', 'total').order_by('total')
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
                 .order_by('-total')[:5])
 
         # The top 5 frequently lost items
         items_to_recommend = list(
             Record.objects.filter(
-                bin_to_sk__init_audit__organization=org_id, flagged=True)
-                .values('item_id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number')
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Batch_Number', 'Part_Number', 'Serial_Number', )
                 .annotate(total=Count('item_id'))
-                .values('item_id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number', 'total')
+                .values('Batch_Number', 'Part_Number', 'total', 'Serial_Number')
                 .order_by('-total')[:5])
 
         # Recommend items with high criticality
         high_criticality_items = list(
             Item.objects.filter(organization=org_id, Criticality='High')
-            .values('Item_Id', 'Location', 'Bin', 'Aisle', 'Zone', 'Part_Number'))
+            .values('Item_Id', 'Part_Number', 'Serial_Number'))
 
         data = {
             'bins_recommendation': bins_to_recommend,
