@@ -126,61 +126,15 @@ mat-panel-description {
   cursor: pointer;
 }
 
-#sendicon{
-  color: map-get($alta-accent, 600);
-  font-size: x-large;
-}
-
-.comment-text {
-  background: map-get($alta-accent, 900);
-  border: #2aabd2;
-  border-radius: 5px;
-  padding: 1em;
-  margin: 1em;
-  word-wrap: normal;
-  color: white;
-  word-break: break-all;
-}
-
 .comment{
   height: inherit;
   min-width: 20em;
   max-width: 35em;
 }
 
-.comment-input {
-  width: 90%;
-  position: absolute;
-  bottom: 0px;
-  margin-left: 1em;
-}
-
-.comment-history{
-  overflow-y: scroll;
-  height: 80%;
-  position: relative;
-}
-
 .comment-button {
   position: absolute;
   right: 20px;
-}
-
-.comment-author {
-  position: relative;
-  margin-left: 1em;
-  color: rgba(0, 0, 0, 0.54);
-}
-
-.comment-component {
-  margin-top: 4em;
-  margin-bottom: 4em;
-}
-
-.comment-date {
-  position: absolute;
-  right: 1em;
-  color: rgba(0, 0, 0, 0.54);
 }
 
 button.cancel {

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, AfterViewChecked} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TableManagementComponent} from '../TableManagement.component';
 import {AuditReportService} from '../../services/audits/audit-report.service';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
@@ -16,7 +16,7 @@ import {saveAs} from 'file-saver';
   templateUrl: './audit-report.component.html',
   styleUrls: ['./audit-report.component.scss']
 })
-export class AuditReportComponent extends TableManagementComponent implements OnInit, AfterViewChecked {
+export class AuditReportComponent extends TableManagementComponent implements OnInit{
 
   id: any;
   body: any;
@@ -32,11 +32,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   selectedItems: number[];
   allExpandState = false;
-
-  comment_value = '';
-  comments: any[];
-
-
 
   // Member variable is automatically initialized after view init is completed
   // @ts-ignore
@@ -73,7 +68,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     this.resultsDataSource = new MatTableDataSource<any>();
     this.selectedItems = [];
     this.parsedMetaData = [];
-    this.comments = [];
   }
 
   ngOnInit(): void {
@@ -83,12 +77,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
       this.setAuditData();
 
       this.setResultsData();
-      this.setCommentData();
     });
-  }
-
-  ngAfterViewChecked(){
-    this.scrollToBottom();
   }
 
   // TODO: Fix appropriate backend calls
@@ -195,10 +184,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        if (data.comments){
-          this.comments = data.comments;
-        }
-
       }
     );
   }
@@ -237,30 +222,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     );
   }
 
-  setCommentData(): void {
-    this.comments = [];
-    this.auditReportService.getComments(this.userService.getOrgId(), this.id).subscribe(
-      (data: any) => {
-        for (let i = 0; i < data.length; i++){
-          let newComment = {
-            author: data[i].author,
-            content: data[i].content,
-            timestamp: new Date(Date.parse(data[i].created_timestamp))
-          }
-          this.comments.push(newComment);
-        }
-      }
-    );
-  }
 
-  scrollToBottom = () => {
-    try {
-      let ch = document.getElementById("comment-history");
-      if (ch != null){
-        ch.scrollTop = ch.scrollHeight;
-      }
-    } catch (err) {}
-  }
 
   updatePage(): void {
     this.updatePaginator();
@@ -295,26 +257,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     } else {
       this.selectedItems.push(value);
     }
-  }
-
-  comment(): void {
-    const comment = {
-      org_id: String(localStorage.getItem('organization_id')),
-      ref_audit: this.id,
-      content: String(this.comment_value),
-      author: String(localStorage.getItem('username'))
-    };
-
-    this.auditReportService.postComment(comment).subscribe(
-      (data) => {
-        this.comment_value = '';
-        this.setCommentData();
-      },
-      (err) => {
-        console.log('Comment posting failed');
-      }
-    );
-
   }
 
   cancelAudit(): void {
