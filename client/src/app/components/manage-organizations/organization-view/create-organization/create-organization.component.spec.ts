@@ -8,7 +8,7 @@ import {CreateOrganizationComponent} from './create-organization.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { AppModule } from 'src/app/app.module';
 
-describe('CreateOrganizationComponent', () => {
+fdescribe('CreateOrganizationComponent', () => {
   let component: CreateOrganizationComponent;
   let fixture: ComponentFixture<CreateOrganizationComponent>;
   // @ts-ignore
@@ -45,5 +45,13 @@ describe('CreateOrganizationComponent', () => {
       console.error(err);
     }
   });
+
+  it('test getEditInfo()', () => {
+    expect(component.getEditInfo()).toEqual([true, false]);
+  })
+
+  it('test getComponentTitle()', () => {
+    expect(component.getComponentTitle()).toEqual('Organization Creation');
+  })
 
 });
