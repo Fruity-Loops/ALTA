@@ -21,7 +21,7 @@
     </div>
 
     <ion-list lines="none" inset="true">
-      <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id">
+      <ion-item *ngFor="let bin of bins" lines="none" class="list-items" [routerLink]="bin.bin_id" [queryParams]="{Bin_Name: bin.Bin}">
         <ion-label>
           <ion-text color="dark">
             <h2>Bin {{ bin.Bin }}</h2>
