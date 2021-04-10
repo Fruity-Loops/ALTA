@@ -15,9 +15,7 @@
   <mat-drawer-container class="comment-container">
     <mat-drawer #drawer class="comment" mode="side" position="end">
       <div class="comment">
-        <div class="comment-header" fxLayoutAlign="center">
-          <h2>Comment Board</h2>
-        </div>
+        <app-comment></app-comment>
         <div id="comment-history" class="comment-history">
           <div class="comment-component" *ngFor="let comment of comments" >
 
