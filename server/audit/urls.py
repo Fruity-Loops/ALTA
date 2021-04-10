@@ -12,6 +12,7 @@ router.register(r'record', views.RecordViewSet, basename='record')
 router.register(r'assignment', views.AssignmentViewSet, basename='assignment')
 router.register(r'recommendation', views.RecommendationViewSet, basename='recommendation')
 router.register(r'comment', views.CommentViewSet, basename='comment')
+router.register(r'insights', views.InsightsViewSet, basename='insights')
 
 urlpatterns = [
     path('', include(router.urls)),

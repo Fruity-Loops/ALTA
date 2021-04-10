@@ -9,7 +9,8 @@ import {TableManagementComponent} from '../TableManagement.component';
 import {Router} from '@angular/router';
 import {ChartComponent} from 'ng-apexcharts';
 import { SelectionModel } from '@angular/cdk/collections';
-import {ManageAuditsLangFactory} from './manage-audits.language';
+import { ManageAuditsLangFactory } from './manage-audits.language';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-manage-audits',
@@ -24,9 +25,8 @@ import {ManageAuditsLangFactory} from './manage-audits.language';
     ]),
   ],
 })
+
 export class ManageAuditsComponent extends TableManagementComponent implements OnInit {
-
-
   body: any;
   subscription: any;
 
@@ -101,14 +101,40 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
   initialSelection = [];
   allowMultiSelect = false;
-  selection = new SelectionModel<any>(this.allowMultiSelect, this.initialSelection);
+  selection = new SelectionModel<any>(
+    this.allowMultiSelect,
+    this.initialSelection
+  );
   title: string;
   searchPlaceholder: string;
+
+  panelOpenState = false;
+  displayedColumnsBin: string[] = ['Location', 'Zone', 'Aisle', 'Bin', 'Count'];
+  displayedColumnsPart: string[] = ['Batch_Number', 'Part', 'Serial_Number', 'Count'];
+  displayedColumnsItem: string[] = ['Batch_Number', 'Part_Number', 'Serial_Number', 'Count'];
+  displayedColumnsCategoryItem: string[] = ['Batch_Number', 'Part_Number', 'Serial_Number'];
+  dataSourceBin: any = [];
+  dataSourcePart: any = [];
+  dataSourceItem: any = [];
+  dataSourceRandomItem: any = [];
+  dataSourceCategoryItem: any = [];
+
+  last_week_audit_count: any;
+  last_month_audit_count: any;
+  last_year_audit_count: any;
+  average_audit_accuracy: any;
+  average_time_audit_seconds: any;
+  average_time_audit_min: any;
+  average_time_audit_hour: any;
+  average_time_audit_day: any;
+
+  organization: any;
 
   constructor(
     private auditService: ManageAuditsService,
     protected fb: FormBuilder,
     private router: Router,
+    private dashService: DashboardService
   ) {
     super(fb);
     this.formg = fb;
@@ -137,7 +163,12 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     this.params = this.params.append('page', String(this.pageIndex))
       .append('page_size', String(this.pageSize))
       .append('organization', String(localStorage.getItem('organization_id')));
+    this.organization = {
+      organization: localStorage.getItem('organization_id'),
+    };
     this.searchAudit();
+    this.getRecommendations();
+    this.getInsights();
   }
 
   searchAudit(): void {
@@ -207,8 +238,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       this.innerDataSource = new MatTableDataSource();
     } else {
       if (auditStatus === 'Complete' || auditStatus === 'Active') {
-       // clear previously set data
-       this.innerDataSource = new MatTableDataSource();
+        // clear previously set data
+        this.innerDataSource = new MatTableDataSource();
 
         this.displayWarningMessage(auditStatus);
 
@@ -224,7 +255,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
                 getFilteredBinSKData = this.filterBinToSKData(assigned_users);
 
                 this.setInnerTable(getFilteredAuditData, getFilteredBinSKData);
-             });
+              });
           },
           (err: any) => {
             this.errorMessage = err;
@@ -233,12 +264,12 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
       } else {
         this.auditService.getAuditData(auditId).subscribe(
           (data: any) => {
-              this.innerDisplayedColumns = Object.keys(data.inventory_items[0]).filter(title => title !== 'organization');
-              this.innerDataSource = new MatTableDataSource(data.inventory_items);
-            },
-            (err: any) => {
-              this.errorMessage = err;
-            }
+            this.innerDisplayedColumns = Object.keys(data.inventory_items[0]).filter(title => title !== 'organization');
+            this.innerDataSource = new MatTableDataSource(data.inventory_items);
+          },
+          (err: any) => {
+            this.errorMessage = err;
+          }
         );
       }
 
@@ -391,6 +422,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     // console.log(this.items)
   }
 
+
   chartSetup(): void {
     this.chartOptions = {
       accuracyOverTime: [
@@ -502,4 +534,42 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   navToReport(obj: any, col: any): void {
     this.router.navigate(['audits/audit-report/' + obj.audit_id]);
   }
+
+  getRecommendations(): void {
+    this.dashService.getRecommendations(this.organization).subscribe(
+      (data) => {
+        this.dataSourceBin = data['bins_recommendation'];
+        this.dataSourcePart = data['parts_recommendation'];
+        this.dataSourceItem = data['items_recommendation'];
+        this.dataSourceRandomItem = data['random_items'];
+        this.dataSourceCategoryItem = data['item_based_on_category'];
+      },
+      (err: any) => {
+        this.errorMessage = err;
+      }
+    );
+  }
+
+  getInsights(): void {
+    this.auditService.getInsights(this.organization).subscribe(
+      (data) => {
+        this.last_week_audit_count = data['last_week_audit_count'];
+        this.last_month_audit_count = data['last_month_audit_count'];
+        this.last_year_audit_count = data['last_year_audit_count'];
+        this.average_audit_accuracy = data['average_accuracy'];
+        this.average_time_audit_seconds = data['average_audit_time']['seconds'];
+        this.average_time_audit_min = data['average_audit_time']['minutes'];
+        this.average_time_audit_hour = data['average_audit_time']['hours'];
+        this.average_time_audit_day = data['average_audit_time']['days'];
+      },
+      (err: any) => {
+        this.errorMessage = err;
+      }
+    );
+  }
+
+  createTempalte(data: any): void {
+    this.router.navigate(['template/create-template'], { state: { data }});
+  }
+
 }
