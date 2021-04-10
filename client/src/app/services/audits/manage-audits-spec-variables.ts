@@ -28,7 +28,47 @@ export class ManageAuditsSpecVariables {
         'organization': 1,
         'initiated_by': ManageAuditsSpecVariables.initiatedBy,
         'template_id': null,
-        'inventory_items': ['12752843', '12731370'],
+        'inventory_items': [{
+            "Item_Id": "12731370",
+            "Batch_Number": "12731370",
+            "Location": "Florida",
+            "Plant": "False",
+            "Zone": "B",
+            "Aisle": 3,
+            "Bin": "C69",
+            "Part_Number": "PART-4",
+            "Part_Description": "Dummy Part 1",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": "High",
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1,
+            "Unit_of_Measure": "EA",
+            "organization": 1
+        },
+        {
+            "Item_Id": "12752843",
+            "Batch_Number": "12752843",
+            "Location": "Florida",
+            "Plant": "True",
+            "Zone": "B",
+            "Aisle": 1,
+            "Bin": "C20",
+            "Part_Number": "PART-3",
+            "Part_Description": "Dummy Part 2",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": "High",
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1,
+            "Unit_of_Measure": "EA",
+            "organization": 1
+        }
+    ],
         'assigned_sk': []
     };
 
@@ -51,6 +91,72 @@ export class ManageAuditsSpecVariables {
         {audit_id: 4, inventory_items: ['12731370'], assigned_sk: [3], initiated_on: "2021-02-04T21:57:00.012000Z", last_modified_on: null, organization: 1, status: "Active", template_id: null},
         {audit_id: 7, inventory_items: ['12731370', '12752843'], assigned_sk: [3], initiated_on: "2021-02-04T21:57:00.012000Z", last_modified_on: null, organization: 1, status: "Active", template_id: null},
         {audit_id: 9, inventory_items: ['12731370', '12752843'], assigned_sk: [3], initiated_on: "2021-03-31T07:41:07.403000Z", last_modified_on: "2021-03-31T07:42:32.790000Z", organization: 1, status: "Active", template_id: null}
+    ];
+
+    public static busySKs = [
+        {
+            "id": 3,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk",
+            "location": "Florida"
+        },
+        {
+            "id": 5,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk1000",
+            "location": "YYZ"
+        },
+        {
+            "id": 3,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk",
+            "location": "Florida"
+        },
+        {
+            "id": 5,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk1000",
+            "location": "YYZ"
+        },
+        {
+            "id": 5,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk1000",
+            "location": "YYZ"
+        },
+        {
+            "id": 3,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk",
+            "location": "Florida"
+        },
+        {
+            "id": 5,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk1000",
+            "location": "YYZ"
+        },
+        {
+            "id": 3,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk",
+            "location": "Florida"
+        },
+        {
+            "id": 3,
+            "first_name": "stock",
+            "last_name": "keeper",
+            "user_name": "sk",
+            "location": "Florida"
+        }
     ];
 
     public static formattedAudits = [

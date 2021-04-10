@@ -9,6 +9,7 @@ import {HttpParams} from '@angular/common/http';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
+import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-assign-stock-keepers',
@@ -17,6 +18,7 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 })
 
 export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
+  @ViewChild('discardDialog', { static: true }) template: TemplateRef<any>;
   skToAssign: Array<any>;
   assignments: Array<any>;
   busySKs: Array<any>;
@@ -40,7 +42,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   constructor(
     private manageMembersService: ManageMembersService,
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authService: AuthService,
     public router: Router

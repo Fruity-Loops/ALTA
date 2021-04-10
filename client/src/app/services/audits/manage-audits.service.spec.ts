@@ -64,14 +64,14 @@ describe('ManageAuditsService', () => {
   it('should create an audit', () => {
     const auditCreationInfo = {
       initiated_by: 2,
-      inventory_items: ["12752843", "12731370"],
+      inventory_items: ["12731370", "12752843"],
       organization: 1
     };
 
     service.createAudit(auditCreationInfo).subscribe(audit => {
       expect(audit).toEqual(ManageAuditsSpecVariables.auditReturnInfo);
       expect(audit.initiated_by).toEqual(auditCreationInfo.initiated_by);
-      expect(audit.inventory_items).toEqual(auditCreationInfo.inventory_items);
+      expect(audit.inventory_items.map((obj: any) => obj.Item_Id)).toEqual(auditCreationInfo.inventory_items);
       expect(audit.organization).toEqual(auditCreationInfo.organization);
     });
 

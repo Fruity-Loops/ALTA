@@ -6,6 +6,9 @@ export interface User {
   id: number;
   email: string;
   location: string;
+  organization: Number;
+  user_name: string;
+  availability: string;
 }
 
 export interface SKUser {
