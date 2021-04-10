@@ -19,7 +19,7 @@ describe('AT-3.2: Inventory manager modifies stock-keeper\'s user information', 
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+    loginPage.login_as('im@test.com', 'password', false);
   });
 
   /**

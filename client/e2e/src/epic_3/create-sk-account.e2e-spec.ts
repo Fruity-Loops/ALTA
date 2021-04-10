@@ -17,7 +17,7 @@ describe('AT-3.1: Inventory manager creates stock-keeper account', () => {
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+    loginPage.login_as('im@test.com', 'password', false);
   });
 
   /**

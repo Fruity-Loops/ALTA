@@ -16,7 +16,7 @@ describe('AT-3.5: Assign stock-keepers to audits and AT-3.7: Review/Recap audit 
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+    loginPage.login_as('im@test.com', 'password', false);
   });
 
   /**

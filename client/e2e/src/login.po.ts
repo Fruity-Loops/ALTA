@@ -5,10 +5,10 @@ import { SideNav } from './side_nav.po';
 export class Login{
     greetingPage: GreetingPage = new GreetingPage();
 
-    login_as(email: string, isAdmin: boolean): void {
+    login_as(email: string, password: string, isAdmin: boolean): void {
         this.greetingPage.navigateTo();
         this.greetingPage.getEmailInputField().sendKeys(email);
-        this.greetingPage.getPasswordInputField().sendKeys('password');
+        this.greetingPage.getPasswordInputField().sendKeys(password);
         this.greetingPage.getLoginButton().click();
         let pageAfterLogin;
         if (isAdmin)

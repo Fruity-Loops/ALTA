@@ -15,7 +15,7 @@ describe('AT-3.10: Cancel an active audit', () => {
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+    loginPage.login_as('im@test.com', 'password', false);
   });
 
   /**

@@ -16,7 +16,7 @@ describe('AT-2.2: Inventory Manager can modify their own settings', () => {
      */
     beforeAll(function init(): void {
       const loginPage = new Login();
-      loginPage.login_as('im@test.com', false);
+      loginPage.login_as('im@test.com', 'password', false);
       browser.sleep(5000);
     });
 
