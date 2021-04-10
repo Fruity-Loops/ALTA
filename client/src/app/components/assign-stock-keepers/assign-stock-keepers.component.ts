@@ -87,7 +87,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
         this.setMaxAssignPerLocation(location, selectedItems);
 
-        this.addLocationWithSKs(location, clients);
+        this.locationsAndUsers = this.locationsAndUsers.concat(this.addLocationWithSKs(location, clients));
       });
 
 
@@ -118,24 +118,17 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     }
   }
 
-  addLocationWithSKs(location: any, clients: any): void {
+  addLocationWithSKs(location: any, clients: any): any {
     if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
       const getSKForLoc = clients.filter((user: any) =>
         user.location === location && user.role === 'SK');
       if (getSKForLoc.length !== 0) {
-        this.locationsAndUsers.push(
-          {
-            location,
-            users: getSKForLoc
-          });
+        return [{location, users: getSKForLoc}];
       } else {
-        this.locationsAndUsers.push(
-          {
-            location,
-            users: []
-          });
+        return [{location, users: []}];
       }
     }
+    return [];
   }
 
   setCheckboxDisableStatus(): void {
