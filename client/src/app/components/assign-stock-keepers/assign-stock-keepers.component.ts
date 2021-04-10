@@ -39,7 +39,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   params = new HttpParams();
 
-
   constructor(
     private manageMembersService: ManageMembersService,
     private dialog: MatDialog,
@@ -83,7 +82,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     * 2. how slow this can be to compute on the front-end
     */
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
-
       this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
       this.holdItemsLocation.forEach((location: any) => {
 
@@ -147,7 +145,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       let counter = 0;
 
       location.users.forEach((user: any) => {
-        this.setBusyStatus(user);
+        this.setBusyStatus(user, this.busySKs.find(busyUser => busyUser.id === user.id));
 
         // enable the checkbox for previously selected SKs
         if (this.skToAssign.includes(user.id)) {
@@ -167,8 +165,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
   }
 
-  setBusyStatus(user: any): void {
-    const isBusy = this.busySKs.find(busyUser => busyUser.id === user.id);
+  setBusyStatus(user: any, isBusy: any): void {
     if (isBusy === undefined) {
       user.availability = 'Available';
     } else {
@@ -181,7 +178,6 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   onChange(userId: any, loc: any): void {
-
     const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
       // @ts-ignore
@@ -267,8 +263,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
-  goBackIventory(): void {
-    // TODO: Show previously selected info is kept data so when user goes back to previous page
+  goBackInventory(): void {
     setTimeout(() => {
       this.router.navigate(['manage-items'], { replaceUrl: true });
     }, 1000);
