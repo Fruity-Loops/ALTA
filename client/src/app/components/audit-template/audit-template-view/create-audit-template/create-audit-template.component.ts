@@ -30,7 +30,8 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
     if (this.routeParams != null) {
       for (const recommendedItems of this.routeParams) {
         Object.keys(recommendedItems).forEach(recommendedLabel => {
-          if (recommendedLabel in this.template) {
+          // @ts-ignore
+          if ((recommendedLabel in this.template) && !(this.template[recommendedLabel].includes(recommendedItems[recommendedLabel]))) {
             // @ts-ignore
             this.template[recommendedLabel].push(recommendedItems[recommendedLabel]);
           }
