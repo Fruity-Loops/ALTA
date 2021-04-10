@@ -58,6 +58,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatExpansionModule,
     DragDropModule,
     MatAutocompleteModule,
-  ]
+  ],
 })
 export class MatModule {}

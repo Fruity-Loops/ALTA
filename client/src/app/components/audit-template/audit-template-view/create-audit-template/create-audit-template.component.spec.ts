@@ -33,6 +33,7 @@ describe('CreateAuditTemplateComponent', () => {
       ],
     }).compileComponents();
 
+
     service = TestBed.inject(AuditTemplateService);
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
@@ -113,6 +114,7 @@ describe('CreateAuditTemplateComponent', () => {
     flush();
     expect(component.templateValues.Location).toBe('');
   }));
+
 
   it('Ensure setAllCheckBoxMonth + Day dont set to true if null', () => {
     component.filter('hello', 'hi');

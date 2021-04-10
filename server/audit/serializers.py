@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from inventory_item.serializers import ItemSerializer
 from user_account.serializers import UserAuditSerializer
-from .models import Audit, Assignment, BinToSK, Record
+from .models import Audit, Assignment, BinToSK, Record, Comment
 
 
 class AuditSerializer(serializers.ModelSerializer):
@@ -57,15 +57,23 @@ class RecordSerializer(serializers.ModelSerializer):
         model = Record
         fields = "__all__"
 
+
 class AssignmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Assignment
         fields = "__all__"
 
+
 class GetAssignmentSerializer(serializers.ModelSerializer):
     audit = AuditSerializer(read_only=True, many=False)
 
     class Meta:
         model = Assignment
+        fields = "__all__"
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
         fields = "__all__"
