@@ -26,6 +26,8 @@ mat-expansion-panel-header {
 
 mat-panel-title {
   width: 90%;
+  color: map-get($alta-primary, 500);
+  font-size: 15px;
 }
 
 .mat-card-title {
@@ -43,3 +45,36 @@ mat-panel-title {
   justify-content: flex-end;
 }
 
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.dropdown {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.insight-card {
+  width: 20%;
+  float: left;
+  margin: 8px 8px 8px 8px;
+}
+
+.counter {
+  font-size: x-large;
+  font-weight: bold;
+  float: right;
+}
+
+.counter-date {
+  font-size: x-large;
+  font-weight: bold;
+  float: left;
+}
+
+.createTemplate{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  float: right;
+}

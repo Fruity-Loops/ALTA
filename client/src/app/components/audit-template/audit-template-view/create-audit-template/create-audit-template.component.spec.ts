@@ -34,7 +34,7 @@ describe('CreateAuditTemplateComponent', () => {
         },
       ],
     }).compileComponents();
-    
+
     fixture = TestBed.createComponent(CreateAuditTemplateComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(AuditTemplateService);
@@ -79,44 +79,4 @@ describe('CreateAuditTemplateComponent', () => {
     templateInput.dispatchEvent(new Event('change'));
     expect(templateInput.value).toBe('Test 001');
 });
-
-/*
-* The test below is commented out is to show as an example how to setup test
-*/
-
-  // // Test the submitQuery()
-  // it('Call method', () => {
-  //   component.submitQuery({
-  //     location: '',
-  //     plant: '',
-  //     zones: '',
-  //     aisles: '',
-  //     bins: '',
-  //     part_number: '',
-  //     serial_number: '',
-  //     start_date: '',
-  //     repeat_every: '',
-  //     on_day: '',
-  //     for_month: '',
-  //     time_zone_utc: '',
-  //     });
-  //     expect(component.errorMessage).toBe('Please choose at least one day');
-  //   });
-
-  // it('should be able to submit a new query', () => {
-  //   try {
-  //     component.submitQuery([{
-  //       dayArray: [],
-  //       monthArray: [],
-  //       year: 2020,
-  //       month: ,
-  //       day: ,
-  //       hour: ,
-  //       minute: ,
-  //     }])
-  //   }
-  //   catch (error) {
-  //   console.error(error);
-  //   }
-  // });
 });

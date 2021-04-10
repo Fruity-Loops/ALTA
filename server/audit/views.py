@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+import random
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import Http404
@@ -12,18 +13,20 @@ from inventory_item.serializers import ItemSerializer
 from user_account.permissions import PermissionFactory
 from .serializers import GetAuditSerializer, GetBinToSKSerializer, \
     PostBinToSKSerializer, RecordSerializer, AuditSerializer, ProperAuditSerializer, \
-        AssignmentSerializer, GetAssignmentSerializer
+    AssignmentSerializer, GetAssignmentSerializer
 from .permissions import SKPermissionFactory, CheckAuditOrganizationById, \
     ValidateSKOfSameOrg, IsAssignedToBin, IsAssignedToAudit, \
     IsAssignedToRecord, CanCreateRecord, CanAccessAuditQParam, \
-        CheckAssignmentOrganizationById
+    CheckAssignmentOrganizationById
 from .models import Audit, Assignment, BinToSK, Record
+from inventory_item.models import Item
 
 
 class AuditSetPagination(PageNumberPagination):
     page_size = 25
     page_size_query_param = 'page_size'
     max_page_size = 1000
+
 
 class AuditViewSet(LoggingViewset):
     """
@@ -169,6 +172,7 @@ def get_item_serializer(*args, **kwargs):  # pylint: disable=no-self-use
 def get_proper_serializer(*args, **kwargs):
     return ProperAuditSerializer(*args, **kwargs)
 
+
 class AssignmentViewSet(LoggingViewset):
     http_method_names = ['post', 'get', 'patch', 'delete']
     queryset = Assignment.objects.all()
@@ -184,8 +188,8 @@ class AssignmentViewSet(LoggingViewset):
         factory = SKPermissionFactory(self.request)
         audit_permissions = [CheckAssignmentOrganizationById, ValidateSKOfSameOrg]
         permission_classes = factory.get_general_permissions(
-                im_additional_perms=audit_permissions,
-                sk_additional_perms=audit_permissions
+            im_additional_perms=audit_permissions,
+            sk_additional_perms=audit_permissions
         )
         return [permission() for permission in permission_classes]
 
@@ -205,7 +209,6 @@ class AssignmentViewSet(LoggingViewset):
 
         serializer = self.get_serializer(self.queryset, many=True)
         return Response(serializer.data)
-
 
     def create(self, request, *args, **kwargs):
         is_many = isinstance(request.data, list)
@@ -423,20 +426,114 @@ class RecommendationViewSet(LoggingViewset):
         return [permission() for permission in permission_classes]
 
     def list(self, request):
-        org_id = request.GET.get("organization", None)
-        bins_to_recommend = list(BinToSK.objects.filter(init_audit__organization=org_id).values('Bin').
-                                 annotate(total=Count('Bin')).values('Bin', 'total').order_by('-total')[:5])
+        org_id = request.GET.get('organization', None)
+        # The top 5 frequently audited bins
+        bins_to_recommend = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Bin', 'Location', 'Zone', 'Aisle')
+                .annotate(total=Count('Bin')).values('Bin', 'total', 'Location', 'Zone', 'Aisle')
+                .order_by('-total')[:5])
 
+        # The top 5 frequently audited parts
         parts_to_recommend = list(
-            Record.objects.filter(bin_to_sk__init_audit__organization=org_id).values('Part_Number').annotate(
-                total=Count('Part_Number'))
-            .values('Part_Number', 'total').order_by('total').order_by('-total')[:5])
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
+                .order_by('-total')[:5])
 
+        # The top 5 frequently lost items
         items_to_recommend = list(
-            Record.objects.filter(bin_to_sk__init_audit__organization=org_id, flagged=True).values('item_id').annotate(
-                total=Count('item_id'))
-            .values('item_id', 'total').order_by('-total')[:5])
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Batch_Number', 'Part_Number', 'Serial_Number', )
+                .annotate(total=Count('item_id'))
+                .values('Batch_Number', 'Part_Number', 'total', 'Serial_Number')
+                .order_by('-total')[:5])
 
-        data = {'bins_recommendation': bins_to_recommend, 'parts_recommendation': parts_to_recommend,
-                'items_recommendation': items_to_recommend}
+        # Recommend items with high criticality
+        high_criticality_items = list(
+            Item.objects.filter(organization=org_id, Criticality='High')
+            .values('Item_Id', 'Part_Number', 'Serial_Number'))
+
+        data = {
+            'bins_recommendation': bins_to_recommend,
+            'parts_recommendation': parts_to_recommend,
+            'items_recommendation': items_to_recommend,
+            'item_based_on_category': high_criticality_items
+            }
         return Response(data)
+
+
+def get_values(list_of_dict, key):
+    return [val[key] for val in list_of_dict]
+
+class InsightsViewSet(LoggingViewset):
+    """
+    Allows getting recommendations on what to audit next
+    """
+    http_method_names = ['get']
+    serializer_class = GetBinToSKSerializer
+
+    def get_permissions(self):
+        super().set_request_data(self.request)
+        factory = PermissionFactory(self.request)
+        permission_classes = factory.get_general_permissions([])
+        return [permission() for permission in permission_classes]
+
+    def list(self, request):
+        org_id = request.GET.get('organization', None)
+        accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete'). \
+                                               values('accuracy')), 'accuracy')
+
+        # Check so that we don't divide by zero
+        accuracy_average = 0
+        if len(accuracies_of_audits):
+            accuracy_average = sum(accuracies_of_audits) / len(accuracies_of_audits)
+
+        durations_of_audits = list(
+            Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \
+                values('first_verified_on', 'last_verified_on'))
+
+        time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
+
+        # giving datetime.timedelta(0) as the start value makes sum work on tds
+        average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+        days, hours, minutes = get_days_hour_min(average_timedelta)
+
+        today = datetime.now()
+        year = today.year
+        start = today - timedelta(days=today.weekday())
+
+        last_week_audit_count = Audit.objects.filter(organization=org_id, initiated_on__gte=start).count()
+
+        last_month_audit_count = Audit.objects.filter(organization=org_id,
+                                 initiated_on__gte=datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)).count() # check month
+
+        last_year_audit_count = Audit.objects.filter(organization=org_id,
+                                 initiated_on__year=year).count()
+
+        data = {'average_accuracy': accuracy_average,
+                'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta},
+                'last_week_audit_count': last_week_audit_count, 'last_month_audit_count':last_month_audit_count,
+                'last_year_audit_count': last_year_audit_count}
+
+        return Response(data)
+
+
+def days_hours_minutes(td):
+    return td.days, td.seconds // 3600, (td.seconds // 60) % 60
+
+
+def get_days_hour_min(seconds):
+    seconds_in_day = 60 * 60 * 24
+    seconds_in_hour = 60 * 60
+    seconds_in_minute = 60
+
+    days = seconds // seconds_in_day
+    hours = (seconds - (days * seconds_in_day)) // seconds_in_hour
+    minutes = (seconds - (days * seconds_in_day) - (hours * seconds_in_hour)) // seconds_in_minute
+
+    return days, hours, minutes
+

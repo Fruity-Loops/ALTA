@@ -1,8 +1,8 @@
 import { env } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {LocalStorageInterface} from '../LocalStorage.interface';
+import { LocalStorageInterface } from '../LocalStorage.interface';
 
 // Connection with the backend
 const BASEURL = env.api_root;
@@ -11,7 +11,6 @@ const BASEURL = env.api_root;
   providedIn: 'root',
 })
 export class ManageAuditsService implements LocalStorageInterface {
-
   constructor(private http: HttpClient) {}
 
   updateLocalStorage(storageId: AuditLocalStorage, value: any): void {
@@ -47,7 +46,7 @@ export class ManageAuditsService implements LocalStorageInterface {
   }
 
   getBusySKs(params: HttpParams): Observable<any> {
-    return this.http.get(`${BASEURL}/audit/`, {params});
+    return this.http.get(`${BASEURL}/audit/`, { params });
   }
 
   initiatePreAudit(preAuditData: any): Observable<any> {
@@ -59,7 +58,9 @@ export class ManageAuditsService implements LocalStorageInterface {
   }
 
   getAssignedBins(auditId: any): Observable<any> {
-    return this.http.get(`${BASEURL}/bin-to-sk/`, {params: {init_audit_id: auditId}});
+    return this.http.get(`${BASEURL}/bin-to-sk/`, {
+      params: { init_audit_id: auditId },
+    });
   }
 
   deletePreAudit(id: any): Observable<any> {
@@ -67,10 +68,14 @@ export class ManageAuditsService implements LocalStorageInterface {
   }
 
   getProperAudits(params: HttpParams): Observable<any> {
-    return this.http.get(`${BASEURL}/audit/proper_audits/`, {params});
+    return this.http.get(`${BASEURL}/audit/proper_audits/`, { params });
+  }
+
+  getInsights(params: HttpParams): Observable<any> {
+    return this.http.get(`${BASEURL}/insights/`, { params });
   }
 }
 
 export enum AuditLocalStorage {
-  AuditId = 'audit_id'
+  AuditId = 'audit_id',
 }
