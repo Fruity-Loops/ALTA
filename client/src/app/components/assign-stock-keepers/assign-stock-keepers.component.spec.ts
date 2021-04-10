@@ -333,7 +333,7 @@ describe('AssignStockKeepersComponent', () => {
     spyOn(auditService, 'removeFromLocalStorage').and.returnValue();
     spyOn(auditService, 'deleteAudit').and.callFake(() => {
       return new Observable((observer) => {
-        observer.error(new Error("Parsing is not possible"));
+        observer.next({errorStatus: 'garbage'});
         observer.complete();
       });
     }
