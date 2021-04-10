@@ -27,14 +27,17 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
 
   getRouteParams(): void {
     this.routeParams = this.router.getCurrentNavigation()?.extras.state?.data;
-    for (const k of this.routeParams) {
-      Object.keys(k).forEach(l => {
-        if (l in this.template) {
-          // @ts-ignore
-          this.template[l].push(k[l]);
-        }
-      });
+    if (this.routeParams != null) {
+      for (const k of this.routeParams) {
+        Object.keys(k).forEach(l => {
+          if (l in this.template) {
+            // @ts-ignore
+            this.template[l].push(k[l]);
+          }
+        });
+      }
     }
+
   }
 
   initializeForm(): void {
