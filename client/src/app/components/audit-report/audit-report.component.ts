@@ -275,8 +275,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   downloadAudit(): void{
-    const requestParams = {audit_id: this.id};
-    this.auditReportService.getAuditFile(requestParams).subscribe(
+    this.auditReportService.getAuditFile({audit_id: this.id}).subscribe(
       (data) => {
         saveAs(data, 'audit_' + this.id.toString() + '_report.csv');
       },

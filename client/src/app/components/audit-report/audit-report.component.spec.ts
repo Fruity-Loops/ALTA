@@ -45,12 +45,18 @@ describe('AuditReportComponent', () => {
         },
       ],
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule]
-    })
+    });
 
     fixture = TestBed.createComponent(AuditReportComponent);
     component = fixture.componentInstance;
     service = TestBed.inject(ManageAuditsService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    service = null;
+    fixture = null;
+    component = null;
   });
 
   it('should create Audit Report Component', () => {

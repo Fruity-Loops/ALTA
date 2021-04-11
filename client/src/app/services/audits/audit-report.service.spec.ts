@@ -18,6 +18,11 @@ describe('AuditReportService', () => {
     service = TestBed.inject(AuditReportService);
   });
 
+  afterEach(() => {
+    service = null;
+    httpTestingController = null;
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

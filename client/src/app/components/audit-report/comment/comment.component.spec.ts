@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommentComponent } from './comment.component';
 import {HttpClientModule} from "@angular/common/http";
 import {RouterTestingModule} from "@angular/router/testing";
+import {AuditReportService} from '../../../services/audits/audit-report.service';
 
 describe('CommentComponent', () => {
   let component: CommentComponent;
@@ -13,6 +14,11 @@ describe('CommentComponent', () => {
       declarations: [ CommentComponent ],
       imports: [HttpClientModule,
         RouterTestingModule,
+      ],
+      providers: [
+        {
+          provide: AuditReportService
+        }
       ]
     })
     .compileComponents();
@@ -22,6 +28,11 @@ describe('CommentComponent', () => {
     fixture = TestBed.createComponent(CommentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
   });
 
   it('should create', () => {
