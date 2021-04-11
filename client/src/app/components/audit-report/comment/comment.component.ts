@@ -11,7 +11,7 @@ import {ActivatedRoute} from "@angular/router";
 export class CommentComponent implements OnInit, AfterViewChecked {
 
   id: any;
-  commentValue = '';
+  comment_value = '';
   comments: any[];
 
   constructor(
@@ -37,13 +37,13 @@ export class CommentComponent implements OnInit, AfterViewChecked {
     const comment = {
       org_id: String(localStorage.getItem('organization_id')),
       ref_audit: this.id,
-      content: String(this.commentValue),
+      content: String(this.comment_value),
       author: String(localStorage.getItem('username'))
     };
 
     this.auditReportService.postComment(comment).subscribe(
       (data) => {
-        this.commentValue = '';
+        this.comment_value = '';
         this.setCommentData();
       },
       (err) => {

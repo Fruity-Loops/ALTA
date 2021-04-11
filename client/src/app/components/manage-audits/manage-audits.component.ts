@@ -118,14 +118,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   dataSourceRandomItem: any = [];
   dataSourceCategoryItem: any = [];
 
-  lastWeekAuditCount: any;
-  lastMonthAuditCount: any;
-  lastYearAuditCount: any;
+  last_week_audit_count: any;
+  last_month_audit_count: any;
+  last_year_audit_count: any;
   average_audit_accuracy: any;
-  averageTimeAuditSeconds: any;
-  averageTimeAuditMin: any;
-  averageTimeAuditHour: any;
-  averageTimeAuditDay: any;
+  average_time_audit_seconds: any;
+  average_time_audit_min: any;
+  average_time_audit_hour: any;
+  average_time_audit_day: any;
 
   organization: any;
 
@@ -544,14 +544,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   getInsights(): void {
     this.auditService.getInsights(this.organization).subscribe(
       (data) => {
-        this.lastWeekAuditCount = data['lastWeekAuditCount'];
-        this.lastMonthAuditCount = data['lastMonthAuditCount'];
-        this.lastYearAuditCount = data['lastYearAuditCount'];
+        this.last_week_audit_count = data['last_week_audit_count'];
+        this.last_month_audit_count = data['last_month_audit_count'];
+        this.last_year_audit_count = data['last_year_audit_count'];
         this.average_audit_accuracy = data['average_accuracy'];
-        this.averageTimeAuditSeconds = data['average_audit_time']['seconds'];
-        this.averageTimeAuditMin = data['average_audit_time']['minutes'];
-        this.averageTimeAuditHour = data['average_audit_time']['hours'];
-        this.averageTimeAuditDay = data['average_audit_time']['days'];
+        this.average_time_audit_seconds = data['average_audit_time']['seconds'];
+        this.average_time_audit_min = data['average_audit_time']['minutes'];
+        this.average_time_audit_hour = data['average_audit_time']['hours'];
+        this.average_time_audit_day = data['average_audit_time']['days'];
       },
       (err: any) => {
         this.errorMessage = err;
