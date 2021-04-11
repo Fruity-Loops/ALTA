@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 
 export class ManageMemberSpecVariables {
     public static initiatedBy = 2;

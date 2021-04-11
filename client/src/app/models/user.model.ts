@@ -6,7 +6,7 @@ export interface User {
   id: number;
   email: string;
   location: string;
-  organization: Number;
+  organization: number;
   user_name: string;
   availability: string;
 }
