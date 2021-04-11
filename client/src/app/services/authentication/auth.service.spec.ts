@@ -1,12 +1,9 @@
 import {env} from 'src/environments/environment';
 // Http testing module and mocking controller
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 
 import {TestBed} from '@angular/core/testing';
-import {AuthService} from './auth.service';
+import {AuthService, UserLocalStorage} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('AuthService', () => {
@@ -91,4 +88,63 @@ describe('AuthService', () => {
       req.flush(mockSysAdmin2);
     });
   });
+
+  // set next
+  it('test setNext method', () => {
+    spyOn(authService, 'updateLocalStorage').and.callFake(() => {});
+    authService.setNext(1, 2, 3, 4, 5);
+  });
+
+  // setLogOut
+  it('test setLogOut method', () => {
+    spyOn(authService, 'setNext').and.callFake(() => {});
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    authService.setLogOut();
+  });
+
+  // turnOnOrgMode
+  it('test turnOnOrgMode method', () => {
+    spyOn(authService, 'updateLocalStorage').and.callFake(() => {});
+    authService.turnOnOrgMode(1, false);
+  });
+
+  // turnOffOrgMode
+  it('test turnOffOrgMode method', () => {
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    authService.turnOffOrgMode();
+  });
+
+  // removeFromLocalStorage
+  it('test removeFromLocalStorage method', () => {
+    spyOn(localStorage, 'removeItem').and.callFake(() => {});
+    authService.removeFromLocalStorage(UserLocalStorage.OrgId);
+  });
+
+  // updateLocalStorage
+  it('test updateLocalStorage method', () => {
+    spyOn(localStorage, 'setItem').and.callFake(() => {});
+    authService.updateLocalStorage(UserLocalStorage.OrgId, 1);
+  });
+
+  // getOrgMode
+  it('test getOrgMode method', () => {
+    authService.getOrgMode();
+  });
+
+    // setOrgMode
+  it('test setOrgMode method', () => {
+    authService.setOrgMode(false);
+  });
+
+  // // getCurrentUser
+  // it('test getCurrentUser method', () => {
+  //   authService.getCurrentUser('1');
+  //   httpMock.expectOne(`${BASEURL}/user/1`);
+  // });
+
+  // OnDestroy
+  it('test OnDestroy method', () => {
+    authService.OnDestroy();
+  });
+
 });
