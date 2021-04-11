@@ -36,7 +36,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Location', templateValues.Location)"
+              <button id="locationButton" mat-icon-button matSuffix (click)="addItem('Location', templateValues.Location)"
                 [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -47,7 +47,7 @@
           <div class="form-group" *ngIf="templateValues.Plant  || templateValues.Plant === ''">
             <mat-label>{{templateLabels.plant}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Plant" type="text" matInput [(ngModel)]="templateValues.Plant"
+              <input class="form-control" id="plant" type="text" matInput [(ngModel)]="templateValues.Plant"
                      [placeholder]="templateLabels.plant" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.PLANT"
                 (focus)="onAutoFieldFocusIn($event, AutoFields.PLANT)" onclick="this.blur()"/>
 
@@ -57,7 +57,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Plant', templateValues.Plant)" [disabled]="disabled">
+              <button id="plantButton" mat-icon-button matSuffix (click)="addItem('Plant', templateValues.Plant)" [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -66,7 +66,7 @@
           <div class="form-group" *ngIf="templateValues.Zone  || templateValues.Zone === ''">
             <mat-label>{{templateLabels.zones}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Zone" type="text" matInput [(ngModel)]="templateValues.Zone"
+              <input class="form-control" id="zone" type="text" matInput [(ngModel)]="templateValues.Zone"
                      [placeholder]="templateLabels.zones" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.ZONE"
                 (focus)="onAutoFieldFocusIn($event, AutoFields.ZONE)" />
 
@@ -76,7 +76,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Zone', templateValues.Zone)" [disabled]="disabled">
+              <button id="zoneButton" mat-icon-button matSuffix (click)="addItem('Zone', templateValues.Zone)" [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -85,7 +85,7 @@
           <div class="form-group" *ngIf="templateValues.Aisle  || templateValues.Aisle === ''">
             <mat-label>{{templateLabels.aisles}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Aisle" type="text" matInput [(ngModel)]="templateValues.Aisle"
+              <input class="form-control" id="aisle" type="text" matInput [(ngModel)]="templateValues.Aisle"
                      [placeholder]="templateLabels.aisles" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.AISLE"
                 (focus)="onAutoFieldFocusIn($event, AutoFields.AISLE)" />
 
@@ -95,7 +95,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Aisle', templateValues.Aisle)"
+              <button id="aisleButton" mat-icon-button matSuffix (click)="addItem('Aisle', templateValues.Aisle)"
                 [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -106,7 +106,7 @@
           <div class="form-group" *ngIf="templateValues.Bin  || templateValues.Bin === ''">
             <mat-label>{{templateLabels.bins}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Bin" type="text" matInput [(ngModel)]="templateValues.Bin"
+              <input class="form-control" id="bin" type="text" matInput [(ngModel)]="templateValues.Bin"
                      [placeholder]="templateLabels.bins" [disabled]="disabled" [matAutocomplete]="auto" [formControlName]="AutoFields.BIN"
                 (focus)="onAutoFieldFocusIn($event, AutoFields.BIN)" />
 
@@ -116,7 +116,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Bin', templateValues.Bin)" [disabled]="disabled">
+              <button id="binButton" mat-icon-button matSuffix (click)="addItem('Bin', templateValues.Bin)" [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
             </mat-form-field>
@@ -125,7 +125,7 @@
           <div class="form-group" *ngIf="templateValues.Part_Number  || templateValues.Part_Number === ''">
             <mat-label>{{templateLabels.part_number}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Part_Number" type="text" matInput [(ngModel)]="templateValues.Part_Number"
+              <input class="form-control" id="partNumber" type="text" matInput [(ngModel)]="templateValues.Part_Number"
                      [placeholder]="templateLabels.part_number" [disabled]="disabled" [matAutocomplete]="auto"
                 [formControlName]="AutoFields.PART_NUMBER"
                 (focus)="onAutoFieldFocusIn($event, AutoFields.PART_NUMBER)" />
@@ -136,7 +136,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Part_Number', templateValues.Part_Number)"
+              <button id="partNumberButton" mat-icon-button matSuffix (click)="addItem('Part_Number', templateValues.Part_Number)"
                 [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -147,7 +147,7 @@
           <div class="form-group" *ngIf="templateValues.Serial_Number  || templateValues.Serial_Number === ''">
             <mat-label>{{templateLabels.serial_number}}</mat-label>
             <mat-form-field appearance="outline">
-              <input class="form-control" id="Serial_Number" type="text" matInput [disabled]="disabled"
+              <input class="form-control" id="serialNumber" type="text" matInput [disabled]="disabled"
                 [(ngModel)]="templateValues.Serial_Number" [placeholder]="templateLabels.serial_number" [matAutocomplete]="auto"
                 [formControlName]="AutoFields.SERIAL_NUMBER"
                 (focus)="onAutoFieldFocusIn($event,AutoFields.SERIAL_NUMBER)" />
@@ -158,7 +158,7 @@
                 </mat-option>
               </mat-autocomplete>
 
-              <button mat-icon-button matSuffix (click)="addItem('Serial_Number', templateValues.Serial_Number)"
+              <button id="serialNumberButton" mat-icon-button matSuffix (click)="addItem('Serial_Number', templateValues.Serial_Number)"
                 [disabled]="disabled">
                 <mat-icon>add_circle_outline</mat-icon>
               </button>
@@ -175,7 +175,7 @@
           <div *ngFor="let loc of template | keyvalue">
             <mat-chip *ngFor="let value of loc.value" [removable]="true" (removed)="remove(loc.key, value)">
               {{loc.key.replace('_', ' ') | titlecase}}: {{value}}
-              <mat-icon matChipRemove *ngIf="!disabled">cancel</mat-icon>
+              <mat-icon id="{{loc.key.replace('_', ' ') | titlecase}}: {{value}}" matChipRemove *ngIf="!disabled">cancel</mat-icon>
             </mat-chip>
           </div>
         </mat-chip-list>

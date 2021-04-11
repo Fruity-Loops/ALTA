@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -12,7 +12,7 @@ import {DashboardLangFactory} from './dashboard.language';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   dataSource: MatTableDataSource<any>;
   audits: Array<any>;
@@ -45,9 +45,6 @@ export class DashboardComponent implements OnInit {
     [this.title, this.auditsTable, this.accuracyTitle] = [lang.lang.title, lang.lang.auditsTable, lang.lang.accuracyTitle];
   }
 
-  ngOnInit(): void {
-  }
-
   retrieveData(audit: any): void {
     audit.forEach((element: any) => {
       const getDate = element.initiated_on.replace(/\//g, ' '); // Remove forward slash from initiated date.
@@ -65,10 +62,10 @@ export class DashboardComponent implements OnInit {
         this.yData.push(element.accuracy);
       }
     });
-    // tslint:disable-next-line:no-non-null-assertion
-    this.dataSource.paginator = this.paginator!;
-    // tslint:disable-next-line:no-non-null-assertion
-    this.dataSource.sort = this.sort!;
+    // @ts-ignore
+    this.dataSource.paginator = this.paginator;
+    // @ts-ignore
+    this.dataSource.sort = this.sort;
   }
 
   chartSetup(): void {

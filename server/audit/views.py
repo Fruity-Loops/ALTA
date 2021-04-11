@@ -144,7 +144,7 @@ class AuditViewSet(LoggingViewset):
                 item_record = Record.objects.get(Batch_Number=item_batch_number, audit=audit_id)
                 item_status = item_record.status
                 item_quantity = item_record.Quantity
-            except:
+            except ObjectDoesNotExist:
                 item_status = 'Pending'
 
             item_as_list = item_as_list + [item_status, item_quantity]

@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {AuditReportService} from "../../../services/audits/audit-report.service";
-import {ManageMembersService} from "../../../services/users/manage-members.service";
+import {AuditReportService} from "src/app/services/audits/audit-report.service";
+import {ManageMembersService} from "src/app/services/users/manage-members.service";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({
@@ -29,7 +29,7 @@ export class CommentComponent implements OnInit, AfterViewChecked {
     this.setCommentData();
   }
 
-  ngAfterViewChecked(){
+  ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
 
@@ -57,12 +57,12 @@ export class CommentComponent implements OnInit, AfterViewChecked {
     this.comments = [];
     this.auditReportService.getComments(this.userService.getOrgId(), this.id).subscribe(
       (data: any) => {
-        for (let i = 0; i < data.length; i++){
-          let newComment = {
-            author: data[i].author,
-            content: data[i].content,
-            timestamp: new Date(Date.parse(data[i].created_timestamp))
-          }
+        for (const item of data) {
+          const newComment = {
+            author: item.author,
+            content: item.content,
+            timestamp: new Date(Date.parse(item.created_timestamp))
+          };
           this.comments.push(newComment);
         }
       }
@@ -71,7 +71,7 @@ export class CommentComponent implements OnInit, AfterViewChecked {
 
   scrollToBottom = () => {
     try {
-      let ch = document.getElementById("comment-history");
+      const ch = document.getElementById('comment-history');
       if (ch != null){
         ch.scrollTop = ch.scrollHeight;
       }

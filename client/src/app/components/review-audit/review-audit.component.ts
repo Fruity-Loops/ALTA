@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {Component, HostListener, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {AuthService} from 'src/app/services/authentication/auth.service';
 import {MatTableDataSource} from '@angular/material/table';
@@ -13,6 +13,7 @@ import {ReviewAuditActionButtons, ReviewAuditLangFactory, ReviewAuditTableHeader
   styleUrls: ['./review-audit.component.scss']
 })
 export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
+  @ViewChild('discardDialog', { static: true }) template: TemplateRef<any>;
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['stockkeeper', 'bins', 'numberparts', 'initiator', 'initiationdate'];
   locationsAndUsers: Array<any>;
@@ -29,7 +30,7 @@ export class ReviewAuditComponent implements OnInit, IDeactivateComponent {
   tableHeaders: ReviewAuditTableHeaders;
 
   constructor(
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authservice: AuthService,
     public router: Router) {

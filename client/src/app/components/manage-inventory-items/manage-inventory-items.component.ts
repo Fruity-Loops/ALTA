@@ -20,10 +20,6 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
   body: any;
   subscription: any;
 
-  // MatPaginator Output
-  // TODO: dead code?
-  // pageEvent: PageEvent;
-
   // Items data
   data: any;
   items = [];
@@ -65,39 +61,12 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     [this.title, this.searchPlaceholder, this.startAuditBtn] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.startAuditBtn];
   }
 
-  getSearchForm(): any {
-    return {
-      search: [''],
-      _id_from: [''],
-      _id_to: [''],
-      Location: [''],
-      Zone: [''],
-      Aisle: [''],
-      Bin: [''],
-      Part_Number: [''],
-      Serial_Number: [''],
-      Condition: [''],
-      Category: [''],
-      Owner: [''],
-      Average_Cost_from: [''],
-      Average_Cost_to: [''],
-      Quantity_from: [''],
-      Quantity_to: [''],
-      Unit_of_Measure: [''],
-    };
-  }
-
   ngOnInit(): void {
     this.params = this.params.append('page', String(this.pageIndex))
       .append('page_size', String(this.pageSize))
       .append('organization', String(localStorage.getItem('organization_id')));
     this.getItems();
-    this.init();
     this.inventoryItemToAudit = [];
-  }
-
-  init(): void {
-
   }
 
   getItems(): void {
@@ -146,11 +115,9 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
 
-    // TODO: define proper types
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }

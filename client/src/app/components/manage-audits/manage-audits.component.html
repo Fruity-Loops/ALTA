@@ -161,11 +161,11 @@
       </div>
 
     </mat-tab>
-    <mat-tab label="Recommendation">
+    <mat-tab id="Recommendation" label="Recommendation">
       <mat-card>
         <div class="dropdown">
           <mat-accordion>
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel id="FreqAuditedBins" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   By Frequently Audited Bins
@@ -207,7 +207,7 @@
         </div>
         <div class="dropdown">
           <mat-accordion>
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+            <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   By Frequently Audited Parts

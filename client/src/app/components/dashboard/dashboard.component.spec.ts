@@ -4,15 +4,16 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {DashboardComponent} from './dashboard.component';
 import {FormBuilder} from '@angular/forms';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 import { of } from 'rxjs';
+import { audit } from 'rxjs/operators';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-
   // @ts-ignore
   let service: ManageAuditsService;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [DashboardComponent],
@@ -25,8 +26,13 @@ describe('DashboardComponent', () => {
     service = TestBed.inject(ManageAuditsService);
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-    
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create Dashboard Component', fakeAsync(() => {
@@ -40,16 +46,29 @@ describe('DashboardComponent', () => {
   it('Call retrieveData to populate the audit', fakeAsync(() => {
     try {
       component.retrieveData([{
-        getDate : '',
-        splitDate : '   ',
-        dateObj : 'MM/DD/YYYY',
-        date : '03/12/2021',
-        thirtyDaysAgo : 'MM/DD/YYYY',
+        getDate : '03/30/2021',
+        splitDate : '03 30 2021',
+        dateObj : '03/30/2021',
+        date : '03/30/2021',
+        thirtyDaysAgo : '03/01/2021',
+        audit,
+        xData : 'datetime',
+        yData : 'datetime',
       }]);
     }
     catch (errorMessage) {
       console.error(errorMessage);
     }
   }));
+
+  // Test the retrieveData table
+  it('Call retrieveData', () => {
+    try {
+      component.retrieveData(audit);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
 
 });

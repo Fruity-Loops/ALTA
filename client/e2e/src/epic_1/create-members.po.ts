@@ -35,7 +35,7 @@ export class CreateMembersPage {
   }
 
   getRoleDropDown(): ElementFinder {
-    return element(by.className('roleDropDown'));
+    return element(by.id('roleDropDown'));
   }
 
   getRoleIM(): ElementFinder {

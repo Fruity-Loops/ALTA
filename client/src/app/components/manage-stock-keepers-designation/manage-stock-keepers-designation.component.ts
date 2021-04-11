@@ -114,10 +114,6 @@ export class ManageStockKeepersDesignationComponent implements OnInit, IDeactiva
   }
 
   populateBinsAndSKs(selectedItems: Item[], assignedSks: SKUser[]): void {
-    /* TODO: look into performance impact of:
-    * 1. returning a large amount of items
-    * 2. returning a large amount of users
-    */
     selectedItems.forEach(auditItem => {
       const obj = this.locationsWithBinsAndSKs.find(predefinedLoc => predefinedLoc.Location === auditItem.Location);
       if (obj === undefined) {

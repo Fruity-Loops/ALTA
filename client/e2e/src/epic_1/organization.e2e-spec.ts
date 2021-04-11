@@ -17,7 +17,7 @@ describe('AT-1.3: System administrator manages organizations', () => {
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com', true);
+    loginPage.login_as('sa@test.com', 'password', true);
   });
 
   /**

@@ -42,10 +42,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
   dataSource: MatTableDataSource<any>;
   metaDataSource: MatTableDataSource<any>;
 
-
   displayedColumns: string[] = [];
   displayedMetaColumns: string[] = [];
-  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   resultsDisplayedColumns: string[] = [];
   resultsDataSource: MatTableDataSource<any>;
@@ -74,78 +72,53 @@ export class AuditReportComponent extends TableManagementComponent implements On
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
+
       this.setAuditInfo();
       this.setAuditData();
-
       this.setResultsData();
     });
   }
 
-  // TODO: Fix appropriate backend calls
-  getSearchForm(): any {
-    return {
-      search: [''],
-      _id_from: [''],
-      _id_to: [''],
-      Location: [''],
-      Zone: [''],
-      Aisle: [''],
-      Bin: [''],
-      Part_Number: [''],
-      Serial_Number: [''],
-      Condition: [''],
-      Category: [''],
-      Owner: [''],
-      Average_Cost_from: [''],
-      Average_Cost_to: [''],
-      Quantity_from: [''],
-      Quantity_to: [''],
-      Unit_of_Measure: [''],
-    };
+  handleStatusFlag(status: any): void {
+    if (status === 'Active') {
+      this.ongoing = true;
+    } else if (status === 'Pending') {
+      this.pending = true;
+    }
+  }
+
+  setDisplayedMetaColumns(metaData: any): void {
+    for (const key in metaData) {
+      if (metaData.hasOwnProperty(key)) {
+        this.displayedMetaColumns.push(key);
+      }
+    }
+  }
+
+  setMetaData(metaData: any, initiatedBy: any): void {
+    metaData.initiated_by = initiatedBy;
+    this.cleanMetaData();
+    // Getting the field name of the item object returned and populating the column of the table
+    this.setDisplayedMetaColumns(this.metaData);
+
+    this.displayedMetaColumns = this.displayedMetaColumns.
+                                     filter((title: any) => title !== 'organization' &&
+                                                            title !== 'template_id');
+     this.updateMetaData();
   }
 
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
-
-        if (metaData.status === 'Active') {
-          this.ongoing = true;
-        } else if (metaData.status === 'Pending') {
-          this.pending = true;
-        }
+        this.metaData = metaData;
+        this.handleStatusFlag(metaData.status);
 
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
-          this.metaData = metaData;
-          this.metaData.initiated_by = String(user.first_name + ' ' + user.last_name);
-          this.cleanMetaData();
-
-          // Getting the field name of the item object returned and populating the column of the table
-          for (const key in this.metaData) {
-            if (this.metaData.hasOwnProperty(key)) {
-              this.displayedMetaColumns.push(key);
-            }
-          }
-          this.displayedMetaColumns = this.displayedMetaColumns
-                                        .filter((title: any) => title !== 'organization' &&
-                                                                title !== 'template_id');
-          this.updateMetaData();
+          this.setMetaData(this.metaData, String(user.first_name + ' ' + user.last_name));
         },
           // if SA initiated audit
           (err: any) => {
-            this.metaData = metaData;
-            this.metaData.initiated_by = 'System Administrator';
-            this.cleanMetaData();
-
-            // Getting the field name of the item object returned and populating the column of the table
-            for (const key in this.metaData) {
-              if (this.metaData.hasOwnProperty(key)) {
-                this.displayedMetaColumns.push(key);
-              }
-            }
-            this.displayedMetaColumns = this.displayedMetaColumns
-                                          .filter((title: any) => title !== 'organization' &&
-                                                                  title !== 'template_id');
-            this.updateMetaData();
+            this.setMetaData(this.metaData, 'System Administrator');
           }
         );
       },
@@ -182,8 +155,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
         }
 
         this.displayedColumns = this.displayedColumns.filter((title: any) => title !== 'organization');
-
-        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -211,12 +182,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
           // display quantity and status last
           this.resultsDisplayedColumns = this.resultsDisplayedColumns.concat(['Quantity', 'status']);
 
-          const cleanData = data;
-          cleanData.forEach((record: any) => {
-            record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
-            record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
-          });
-          this.resultsDataSource = new MatTableDataSource(cleanData);
+          this.resultsDataSource = new MatTableDataSource(this.getCleanData(data));
         }
       },
       (err: any) => {
@@ -225,7 +191,13 @@ export class AuditReportComponent extends TableManagementComponent implements On
     );
   }
 
-
+  getCleanData(data: any): any {
+    data.forEach((record: any) => {
+      record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
+      record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
+    });
+    return data;
+  }
 
   updatePage(): void {
     this.updatePaginator();
@@ -240,7 +212,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     const count = 'count';
     this.length = this.data[count];
     if (this.pageIndex > 0) {
-  //     Angular paginator starts at 0, Django pagination starts at 1
+      // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
     this.items = this.data;
@@ -275,8 +247,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   downloadAudit(): void{
-    const requestParams = {audit_id: this.id};
-    this.auditReportService.getAuditFile(requestParams).subscribe(
+    this.auditReportService.getAuditFile({audit_id: this.id}).subscribe(
       (data) => {
         saveAs(data, 'audit_' + this.id.toString() + '_report.csv');
       },
@@ -286,7 +257,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
       }
     );
   }
-
 
   async reloadPage(): Promise<void> {
     await this.router.navigateByUrl('/', { skipLocationChange: true });

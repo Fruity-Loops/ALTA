@@ -8,8 +8,6 @@ import {AuthService, UserLocalStorage} from '../../../services/authentication/au
 import {ManageInventoryItemsService} from '../../../services/inventory-items/manage-inventory-items.service';
 import {HttpParams} from '@angular/common/http';
 
-// import {Template as Temp} from '../Template';
-
 interface Template {
   author: string;
   calendar_date: string;
@@ -22,7 +20,6 @@ interface Template {
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
-  // TODO
   // @ts-ignore
   auditTemplates: [Template];
   errorMessage = '';

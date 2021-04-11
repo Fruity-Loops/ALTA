@@ -9,7 +9,7 @@ import 'zone.js/dist/zone-testing';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { TokenService } from 'src/app/services/authentication/token.service';
 import { throwError } from 'rxjs';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ManageStockeepersDesignationComponent', () => {
   let component: ManageStockKeepersDesignationComponent;
@@ -38,14 +38,20 @@ describe('ManageStockeepersDesignationComponent', () => {
 
     authService = TestBed.inject(AuthService);
     tokenService = TestBed.inject(TokenService);
-
-    
-    fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
-    component = fixture.componentInstance;
     service = TestBed.inject(ManageMembersService);
     service2 = TestBed.inject(ManageAuditsService);
+    fixture = TestBed.createComponent(ManageStockKeepersDesignationComponent);
+    component = fixture.componentInstance;
     fixture.detectChanges();
-    spyOn(component.router, 'navigate');
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+    tokenService = null;
+    service = null;
+    service2 = null;
   });
 
   it('should create', () => {
@@ -82,4 +88,34 @@ describe('ManageStockeepersDesignationComponent', () => {
     expect(component.errorMessage).toBe('');
     flush();
   }));
+
+  // Test the autoAssign window
+  it('Call the autoAssign object', () => {
+    try {
+      component.autoAssign();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Test the identifyUser window
+  it('Call the identifyUser object', () => {
+    try {
+      component.identifyUser(0);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
+
+  // Test the submitPreAuditData window
+  it('Call the submitPreAuditData object', () => {
+    try {
+      component.submitPreAuditData();
+    }
+    catch (err) {
+      console.error(err);
+    }
+  });
 });

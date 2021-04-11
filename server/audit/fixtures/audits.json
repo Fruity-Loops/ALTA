@@ -1,142 +1,158 @@
 [
-{
+  {
     "model": "audit.audit",
     "pk": 1,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370,
-            12752843
-        ],
-        "assigned_sk": [
-            3
-        ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        3
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 2,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370,
-            12752843
-        ],
-        "assigned_sk": [
-          5
-        ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        5
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 3,
     "fields": {
-        "organization": 3,
-        "status": "Active",
-        "inventory_items": [
-            12752842
-        ],
-        "assigned_sk": [
-            6
-        ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 3,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12752842"
+      ],
+      "assigned_sk": [
+        6
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 4,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370
-        ],
-        "assigned_sk": [ 3 ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370"
+      ],
+      "assigned_sk": [
+        3
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 5,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370
-        ],
-        "assigned_sk": [ 5 ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370"
+      ],
+      "assigned_sk": [
+        5
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 6,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370
-        ],
-        "assigned_sk": [ 5 ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370"
+      ],
+      "assigned_sk": [
+        5
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 7,
     "fields": {
-        "organization": 1,
-        "status": "Active",
-        "inventory_items": [
-            12731370,
-            12752843
-        ],
-        "assigned_sk": [ 3 ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "accuracy": 1.0,
+      "status": "Active",
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        3
+      ]
     }
-},
-{
+  },
+  {
     "model": "audit.audit",
     "pk": 8,
     "fields": {
-        "organization": 1,
-        "status": "Pending",
-        "inventory_items": [
-            12731370,
-            12752843
-        ],
-        "assigned_sk": [
-            5
-        ],
-        "initiated_by": 2,
-        "initiated_on": "2021-02-04T21:57:00.012Z",
-        "status": "Active",
-        "accuracy": "100"
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-02-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "status": "Active",
+      "accuracy": 1.0,
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        5
+      ]
     }
-}
+  }
 ]

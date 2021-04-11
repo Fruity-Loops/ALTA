@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title class="align-side-by-side">{{title}}</mat-card-title>
-  <button class="position-right" mat-stroked-button routerLink="create-template">
+  <button id="addTemplateButton" class="position-right" mat-stroked-button routerLink="create-template">
     {{addButton}}
   </button>
 
@@ -21,21 +21,21 @@
 
   <div class="wrapper">
 
-    <div class="grid-container shadow-border" *ngFor="let template of auditTemplates">
+    <div id="{{template.title}}" class="grid-container shadow-border" *ngFor="let template of auditTemplates">
       <div class="clickable" (click)="startAudit(template.template_id)"></div>
       <div class="person-name">By: {{template.author}}</div>
       <div class="template-name">{{template.title}}</div>
       <div class="button-icon text-align-right">
-        <button mat-icon-button [matMenuTriggerFor]="menu">
+        <button id="menu{{template.title}}" mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>more_vert</mat-icon>
         </button>
       </div>
       <mat-menu #menu="matMenu" xPosition="after">
-        <button mat-menu-item [routerLink]="'edit-template/' + template.template_id">
+        <button id="edit{{template.title}}" mat-menu-item [routerLink]="'edit-template/' + template.template_id">
           <mat-icon>create</mat-icon>
           <span>{{optionLabels.edit}}</span>
         </button>
-        <button mat-menu-item (click)="openDialog(template.template_id, template.title)">
+        <button id="delete{{template.title}}" mat-menu-item (click)="openDialog(template.template_id, template.title)">
           <mat-icon>delete</mat-icon>
           <span>{{optionLabels.delete}}</span>
         </button>

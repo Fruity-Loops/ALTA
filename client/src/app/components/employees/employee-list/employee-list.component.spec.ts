@@ -5,7 +5,7 @@ import {ManageMembersService} from 'src/app/services/users/manage-members.servic
 import {RouterTestingModule} from '@angular/router/testing';
 import { FormBuilder } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { AppModule } from 'src/app/app.module'
+import { AppModule } from 'src/app/app.module';
 
 describe('ClientGridViewComponent', () => {
   let component: EmployeeListComponent;
@@ -23,11 +23,16 @@ describe('ClientGridViewComponent', () => {
       ],
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
-
+    service = TestBed.inject(ManageMembersService);
     fixture = TestBed.createComponent(EmployeeListComponent);
     component = fixture.componentInstance;
-    service = TestBed.inject(ManageMembersService);
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    service = null;
   });
 
   it('should create Client grid view component', () => {
@@ -43,6 +48,22 @@ describe('ClientGridViewComponent', () => {
 
   // Test the applyFilter()
   it('Call method', () => {
+    component.applyFilter('');
+  });
+
+  // Test the updatePaginator()
+  it('Call updatePaginator method', () => {
+    component.userData = {count: 0};
+    component.updatePaginator();
+  });
+
+  // Test the updatePage()
+  it('Call updatePage method', () => {
+    component.updatePage();
+  });
+
+  // Test the applyFilter()
+  it('Call applyFilter method', () => {
     component.applyFilter('');
   });
 

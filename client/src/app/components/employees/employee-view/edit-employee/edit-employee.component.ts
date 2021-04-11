@@ -80,8 +80,7 @@ export class EditEmployeeComponent extends EmployeeView {
   }
 
   getEmployee(): void {
-    // tslint:disable-next-line:no-non-null-assertion
-    this.manageMembersService.getEmployee(this.id!).subscribe((employee) => {
+    this.manageMembersService.getEmployee(this.id).subscribe((employee) => {
       this.employee = {
         role: employee.role,
         is_active: employee.is_active,
@@ -165,14 +164,13 @@ export class EditEmployeeComponent extends EmployeeView {
     delete patchedEmployee.email;
 
     this.manageMembersService
-      // tslint:disable-next-line:no-non-null-assertion
-      .updateClientInfo(patchedEmployee, this.id!)
+      .updateClientInfo(patchedEmployee, this.id)
       .subscribe((response) => {
         // update user password
         if (this.password.length > 0) {
           // tslint:disable-next-line:no-non-null-assertion
           this.manageMembersService
-            .updatePassword({ password: this.password }, this.id!)
+            .updatePassword({ password: this.password }, this.id)
             .subscribe(
               (_) => {
                 location.reload();
