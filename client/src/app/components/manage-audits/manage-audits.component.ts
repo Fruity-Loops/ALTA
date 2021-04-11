@@ -94,7 +94,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   dataSource: MatTableDataSource<any>;
   innerDataSource: MatTableDataSource<any>;
   displayedColumns: string[] = [];
-  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   innerDisplayedColumns: string[] = [];
   expandedElement: any | null;
@@ -190,7 +189,6 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
             this.displayedColumns.push(key);
           }
         }
-        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.displayedColumns = this.displayedColumns.concat('Overview');
         this.updatePaginator();
         this.dataSource.paginator = this.paginator;
@@ -242,19 +240,14 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.innerDataSource = new MatTableDataSource();
 
         this.displayWarningMessage(auditStatus);
-
-        let getFilteredAuditData: any[] = [];
-        let getFilteredBinSKData: any[] = [];
-
+        
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
-            getFilteredAuditData = this.filterAuditData(data);
 
             this.auditService.getAssignedBins(auditId).subscribe(
               (assigned_users: any) => {
-                getFilteredBinSKData = this.filterBinToSKData(assigned_users);
 
-                this.setInnerTable(getFilteredAuditData, getFilteredBinSKData);
+                this.setInnerTable(this.filterAuditData(data), this.filterBinToSKData(assigned_users));
               });
           },
           (err: any) => {
