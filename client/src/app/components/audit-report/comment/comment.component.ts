@@ -57,12 +57,12 @@ export class CommentComponent implements OnInit, AfterViewChecked {
     this.comments = [];
     this.auditReportService.getComments(this.userService.getOrgId(), this.id).subscribe(
       (data: any) => {
-        for (let i = 0; i < data.length; i++){
-          let newComment = {
-            author: data[i].author,
-            content: data[i].content,
-            timestamp: new Date(Date.parse(data[i].created_timestamp))
-          }
+        for (const item of data) {
+          const newComment = {
+            author: item.author,
+            content: item.content,
+            timestamp: new Date(Date.parse(item.created_timestamp))
+          };
           this.comments.push(newComment);
         }
       }
