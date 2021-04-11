@@ -29,7 +29,7 @@ export class CommentComponent implements OnInit, AfterViewChecked {
     this.setCommentData();
   }
 
-  ngAfterViewChecked(){
+  ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
 
@@ -71,7 +71,7 @@ export class CommentComponent implements OnInit, AfterViewChecked {
 
   scrollToBottom = () => {
     try {
-      let ch = document.getElementById("comment-history");
+      const ch = document.getElementById('comment-history');
       if (ch != null){
         ch.scrollTop = ch.scrollHeight;
       }
