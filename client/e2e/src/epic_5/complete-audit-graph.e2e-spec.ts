@@ -1,7 +1,6 @@
 import {CompleteAuditGraph} from './complete-audit-graph.po';
 import {Login, Logout} from '../login.po';
 import {Navigation} from '../navigation.po';
-import {CreateMembersPage} from '../epic_1/create-members.po';
 import {browser, ExpectedConditions} from 'protractor';
 
 /**
