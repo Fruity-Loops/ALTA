@@ -228,8 +228,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     );
   }
 
-
-
   updatePage(): void {
     this.updatePaginator();
   }
@@ -243,7 +241,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
     const count = 'count';
     this.length = this.data[count];
     if (this.pageIndex > 0) {
-  //     Angular paginator starts at 0, Django pagination starts at 1
+      // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
     this.items = this.data;
@@ -278,8 +276,7 @@ export class AuditReportComponent extends TableManagementComponent implements On
   }
 
   downloadAudit(): void{
-    const requestParams = {audit_id: this.id};
-    this.auditReportService.getAuditFile(requestParams).subscribe(
+    this.auditReportService.getAuditFile({audit_id: this.id}).subscribe(
       (data) => {
         saveAs(data, 'audit_' + this.id.toString() + '_report.csv');
       },
