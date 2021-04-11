@@ -104,15 +104,19 @@ export class AuditReportComponent extends TableManagementComponent implements On
     };
   }
 
+  handleStatusFlag(status: any): void {
+    if (status === 'Active') {
+      this.ongoing = true;
+    } else if (status === 'Pending') {
+      this.pending = true;
+    }
+  }
+
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
 
-        if (metaData.status === 'Active') {
-          this.ongoing = true;
-        } else if (metaData.status === 'Pending') {
-          this.pending = true;
-        }
+        this.handleStatusFlag(metaData.status);
 
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
           this.metaData = metaData;
