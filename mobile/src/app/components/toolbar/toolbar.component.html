@@ -8,9 +8,9 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button color="secondary" shape="round" (click)="presentNotificationPopover($event)">
+      <ion-button id="bellIcon" color="secondary" shape="round" (click)="presentNotificationPopover($event)">
         <ion-icon name="notifications-outline" size="large"></ion-icon>
-        <ion-badge color="danger">{{notificationNumber}}</ion-badge>
+        <ion-badge id="bellNotificationValue" color="danger">{{notificationNumber}}</ion-badge>
       </ion-button>
       <ion-button id="profileButton" color="secondary" shape="round" (click)="presentProfilePopover($event)">
         <ion-icon name="person-circle" size="large"></ion-icon>

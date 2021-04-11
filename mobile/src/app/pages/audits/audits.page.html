@@ -15,7 +15,7 @@
         </ion-text>
     </div>
     <ion-list lines="none" inset="true">
-        <ion-item *ngFor="let audit of audits" lines="none" class="list-items" (click)="setAuditAssignmentSeen(audit?.id)"
+        <ion-item id="auditItem{{ audit?.audit.audit_id }}" *ngFor="let audit of audits" lines="none" class="list-items" (click)="setAuditAssignmentSeen(audit?.id)"
          [routerLink]="audit?.audit.audit_id">
             <ion-label>
                 <ion-text color="dark" *ngIf="audit?.seen">
@@ -23,14 +23,14 @@
                 </ion-text>
                 <ion-text color="dark" *ngIf="!audit?.seen">
                     <h1>
-                        <b>Audit {{ audit?.audit.audit_id }}</b>
-                        <ion-icon class="alertIcon" name="alert-circle-sharp" size="small" color="danger"></ion-icon>
+                        <b id="audit{{ audit?.audit.audit_id }}">Audit {{ audit?.audit.audit_id }}</b>
+                        <ion-icon id="alertIcon{{ audit?.audit.audit_id }}" class="alertIcon" name="alert-circle-sharp" size="small" color="danger"></ion-icon>
                     </h1>
 
                 </ion-text>
                 <p> Total Items: {{ audit?.audit.inventory_items.length }}</p>
             </ion-label>
-            <ion-button fill="clear" size="large" color="medium" shape="round"
+            <ion-button id="infoButton{{ audit?.audit.audit_id }}" fill="clear" size="large" color="medium" shape="round"
                 (click)="displayProgression($event, audit?.audit.audit_id)">
                 <ion-icon button size="large" name="information-circle"></ion-icon>
             </ion-button>

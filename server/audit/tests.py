@@ -189,7 +189,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data[0]['bin_id'], 2)
         self.assertEqual(response.data[0]['Bin'], 'C20')
         self.assertEqual(response.data[0]['customuser']['user_name'], 'sk')
-        self.assertEqual(response.data[0]['item_ids'], str([int(item) for item in
+        self.assertEqual(response.data[0]['item_ids'], str([item for item in
                                                             [self.item_one.Batch_Number, self.item_two.Batch_Number]]))
 
     def test_bin_to_sk_retrieve(self):
@@ -199,7 +199,7 @@ class BinTestCase(APITestCase):
         self.assertEqual(response.data['bin_id'], 2)
         self.assertEqual(response.data['Bin'], 'C20')
         self.assertEqual(response.data['customuser']['user_name'], 'sk')
-        self.assertEqual(response.data['item_ids'], str([int(item) for item in
+        self.assertEqual(response.data['item_ids'], str([item for item in
                                                          [self.item_one.Batch_Number, self.item_two.Batch_Number]]))
 
     def test_bins_get_items(self):
