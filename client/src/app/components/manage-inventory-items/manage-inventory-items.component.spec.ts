@@ -1,23 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { ManageInventoryItemsService } from 'src/app/services/inventory-items/manage-inventory-items.service';
 import { ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ManageInventoryItemsComponent } from './manage-inventory-items.component';
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/authentication/auth.service';
 import { By } from '@angular/platform-browser';
 import { AppModule } from 'src/app/app.module';
+import { ManageInventoryItemsSpecVariables } from 'src/app/services/inventory-items/manage-inventory-items-spec-variables';
+import { Observable, of, throwError } from 'rxjs';
 
-describe('ManageInventoryItemsComponent', () => {
+fdescribe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
   let fixture: ComponentFixture<ManageInventoryItemsComponent>;
   // @ts-ignore
-  let service: ManageInventoryItemsService;
+  let manageinventoryService: ManageInventoryItemsService;
   // @ts-ignore
-  let service2: ManageAuditsService;
+  let manageauditService: ManageAuditsService;
   // @ts-ignore
-  let service3: AuthService;
+  let authService: AuthService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,10 +34,11 @@ describe('ManageInventoryItemsComponent', () => {
       imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
     });
 
-    service = TestBed.inject(ManageInventoryItemsService);
-    service2 = TestBed.inject(ManageAuditsService);
-    service3 = TestBed.inject(AuthService);
+    manageinventoryService = TestBed.inject(ManageInventoryItemsService);
+    manageauditService = TestBed.inject(ManageAuditsService);
+    authService = TestBed.inject(AuthService);
     fixture = TestBed.createComponent(ManageInventoryItemsComponent);
+    httpTestingController = TestBed.inject(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -42,13 +46,17 @@ describe('ManageInventoryItemsComponent', () => {
   afterEach(() => {
     fixture = null;
     component = null;
-    service = null;
-    service2 = null;
-    service3 = null;
+    manageinventoryService = null;
+    manageauditService = null;
+    authService = null;
+    httpTestingController = null;
   });
 
   it('should create Inventory Items Component', () => {
     expect(component).toBeTruthy();
+    expect(manageinventoryService).toBeTruthy();
+    expect(manageauditService).toBeTruthy();
+    expect(authService).toBeTruthy();
   });
 
   // Test that Start Audit button is disabled when no items selected
@@ -58,43 +66,39 @@ describe('ManageInventoryItemsComponent', () => {
     expect(button.nativeElement.disabled).toBeTruthy();
   });
 
-  // Test the page update
-  it('Call updatePage', () => {
-    try {
-      component.updatePage();
-    }
-    catch (errorMessage) {
-      console.error(errorMessage);
-    }
+// Test the initilization of items data
+it('should initialize properly', () => {
+  spyOn(component, 'getItems').and.callFake(() => {});
+  component.ngOnInit();
+  expect(component.getItems).toHaveBeenCalledWith();
+});
+
+// Test the update page method
+  it('test updatePage', () => {
+    spyOn(manageinventoryService, 'getPageItems').and.returnValues(of({
+      test: 0
+    }), throwError('error!'));
+    component.updatePage();
+    expect(component.data.test).toBe(0);
+    component.updatePage();
+    expect(component.errorMessage).toBe('error!');
   });
 
-  // Test the paginator update
-  it('Call updatePaginator', () => {
-    try {
-      component.updatePaginator();
-    }
-    catch (errorMessage) {
-      console.error(errorMessage);
-    }
-  });
+// Test the items data
+it('test getItems', () => {
+  component.getItems();
+  expect(component.errorMessage).toBe('');
+});
 
-  // Test the submitAudit
-  it('Call submitAudit', () => {
-    try {
-      component.submitAudit();
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
+// Test the submit audit method
+it('test submitAudit', () => {
+  component.submitAudit();
+  expect(component.errorMessage).toBe('');
+});
 
-  // Test the Items getter
-  it('Call items getter', () => {
-    try {
-      component.getItems();
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
+// Test the on row selection method
+it('test updatePage', () => {
+  component.updatePage();
+  expect(component.errorMessage).toBe('');
+});
 });

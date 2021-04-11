@@ -20,10 +20,6 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
   body: any;
   subscription: any;
 
-  // MatPaginator Output
-  // TODO: dead code?
-  // pageEvent: PageEvent;
-
   // Items data
   data: any;
   items = [];
