@@ -1,6 +1,6 @@
 import {AfterViewChecked, Component, OnInit} from '@angular/core';
-import {AuditReportService} from "../../../services/audits/audit-report.service";
-import {ManageMembersService} from "../../../services/users/manage-members.service";
+import {AuditReportService} from "src/app/services/audits/audit-report.service";
+import {ManageMembersService} from "src/app/services/users/manage-members.service";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({

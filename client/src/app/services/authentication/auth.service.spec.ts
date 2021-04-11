@@ -121,12 +121,6 @@ describe('AuthService', () => {
     authService.turnOffOrgMode();
   });
 
-  // turnOffOrgMode
-  it('test turnOffOrgMode method', () => {
-    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
-    authService.turnOffOrgMode();
-  });
-
   // removeFromLocalStorage
   it('test removeFromLocalStorage method', () => {
     spyOn(localStorage, 'removeItem').and.callFake(() => {});
@@ -157,7 +151,6 @@ describe('AuthService', () => {
   // getCurrentUser
   it('test getCurrentUser method', () => {
     let userId = '7';
-    // let updateInfo = {first_name: 'a good name', last_name: "admin"};
     authService.getCurrentUser(userId).subscribe(data => {
       expect(data.id).toEqual(Number(userId));
     });
@@ -168,7 +161,6 @@ describe('AuthService', () => {
 
   // openRegister
   it('test openRegister method', () => {
-    // let updateInfo = {first_name: 'a good name', last_name: "admin"};
     authService.openRegister({}).subscribe(data => {
       expect(data).toEqual({});
     });
