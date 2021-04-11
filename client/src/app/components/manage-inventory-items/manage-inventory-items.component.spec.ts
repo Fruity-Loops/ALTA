@@ -11,7 +11,7 @@ import { AppModule } from 'src/app/app.module';
 import { ManageInventoryItemsSpecVariables } from 'src/app/services/inventory-items/manage-inventory-items-spec-variables';
 import { Observable, of, throwError } from 'rxjs';
 
-fdescribe('ManageInventoryItemsComponent', () => {
+describe('ManageInventoryItemsComponent', () => {
   let component: ManageInventoryItemsComponent;
   let fixture: ComponentFixture<ManageInventoryItemsComponent>;
   // @ts-ignore
