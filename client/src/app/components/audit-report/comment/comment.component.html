@@ -21,8 +21,8 @@
   <form>
     <mat-form-field class="comment-input">
       <mat-label>Enter Comment</mat-label>
-      <input id="enterComment" matInput type="text" [(ngModel)]="comment_value" [ngModelOptions]="{standalone: true}" rows="1">
-      <button mat-button *ngIf="comment_value" matSuffix mat-icon-button aria-label="Comment"
+      <input id="enterComment" matInput type="text" [(ngModel)]="commentValue" [ngModelOptions]="{standalone: true}" rows="1">
+      <button mat-button *ngIf="commentValue" matSuffix mat-icon-button aria-label="Comment"
               (click)="this.comment()">
         <mat-icon id="sendicon">send</mat-icon>
       </button>

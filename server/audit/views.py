@@ -561,18 +561,18 @@ class InsightsViewSet(LoggingViewset):
         year = today.year
         start = today - timedelta(days=today.weekday())
 
-        last_week_audit_count = Audit.objects.filter(organization=org_id, initiated_on__gte=start).count()
+        lastWeekAuditCount = Audit.objects.filter(organization=org_id, initiated_on__gte=start).count()
 
-        last_month_audit_count = Audit.objects.filter(organization=org_id,
+        lastMonthAuditCount = Audit.objects.filter(organization=org_id,
                                  initiated_on__gte=datetime.today().replace(day=1, hour=0, minute=0, second=0, microsecond=0)).count() # check month
 
-        last_year_audit_count = Audit.objects.filter(organization=org_id,
+        lastYearAuditCount = Audit.objects.filter(organization=org_id,
                                  initiated_on__year=year).count()
 
         data = {'average_accuracy': accuracy_average,
                 'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta},
-                'last_week_audit_count': last_week_audit_count, 'last_month_audit_count':last_month_audit_count,
-                'last_year_audit_count': last_year_audit_count}
+                'lastWeekAuditCount': lastWeekAuditCount, 'lastMonthAuditCount':lastMonthAuditCount,
+                'lastYearAuditCount': lastYearAuditCount}
 
         return Response(data)
 
