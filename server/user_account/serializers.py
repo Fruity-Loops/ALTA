@@ -16,9 +16,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
                 user = CustomUser.objects.get(pk=self.context)
         except ObjectDoesNotExist:
             pass
-        if 'user_name' in data and 'email' in data and not user:
-            if data['user_name'] and data['email']:
-                user = CustomUser()
+        if 'user_name' in data and 'email' in data and not user and data['user_name'] and data['email']:
+            user = CustomUser()
         if user:
             self.save_password(user, data)
             for save_field in data:

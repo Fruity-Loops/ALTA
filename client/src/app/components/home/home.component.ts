@@ -8,7 +8,7 @@ import {SidenavService} from 'src/app/services/sidenav.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
+export class HomeComponent implements OnDestroy, AfterViewInit {
   mobileQuery: MediaQueryList;
   private mobileQueryListener: () => void;
 
@@ -23,9 +23,6 @@ export class HomeComponent implements OnDestroy, AfterViewInit, OnInit {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this.mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnDestroy(): void {
