@@ -51,6 +51,22 @@ describe('ClientGridViewComponent', () => {
     component.applyFilter('');
   });
 
+  // Test the updatePaginator()
+  it('Call updatePaginator method', () => {
+    component.userData = {count: 0};
+    component.updatePaginator();
+  });
+
+  // Test the updatePage()
+  it('Call updatePage method', () => {
+    component.updatePage();
+  });
+
+  // Test the applyFilter()
+  it('Call applyFilter method', () => {
+    component.applyFilter('');
+  });
+
 /*
 * The test below is commented out is to show as an example how to setup test
 */

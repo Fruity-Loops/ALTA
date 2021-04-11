@@ -11,7 +11,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   specs: [ // Order of specs
     './src/**/backend-service.e2e-spec.ts',
-    './src/**/epic_6/forgot-password.e2e-spec.ts',
+    './src/**/epic_5/dashboard.e2e-spec.ts',
   ],
   capabilities: {
     browserName: 'chrome'
