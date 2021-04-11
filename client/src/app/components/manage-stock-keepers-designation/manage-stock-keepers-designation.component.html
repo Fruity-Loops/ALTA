@@ -1,9 +1,9 @@
 <mat-card>
     <mat-card-title>{{title}}</mat-card-title>
     <div id="top-div">
-      <button mat-button class="top-buttons" (click)="allExpandState=true">{{actionButtons.expand}}</button>
-      <button mat-button class="top-buttons" (click)="allExpandState=false">{{actionButtons.collapse}}</button>
-      <button mat-button class="top-buttons auto-assign" (click)="autoAssign()">{{actionButtons.auto_assign}}</button>
+      <button id="designateBinsPanelExpand" mat-button class="top-buttons" (click)="allExpandState=true">{{actionButtons.expand}}</button>
+      <button id="designateBinsPanelCollapse" mat-button class="top-buttons" (click)="allExpandState=false">{{actionButtons.collapse}}</button>
+      <button id="designateBinsAutoAssign" mat-button class="top-buttons auto-assign" (click)="autoAssign()">{{actionButtons.auto_assign}}</button>
     </div>
   </mat-card>
   <br>
@@ -28,7 +28,7 @@
                   [cdkDropListData]="auditComp.bins"
                   class="drag-drop-list"
                   (cdkDropListDropped)="drop($event)">
-                  <div class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
+                  <div id="{{bin}}" class="drag-drop-box" *ngFor="let bin of auditComp.bins" cdkDrag>
                     {{bin}}
                   </div>
                 </div>
@@ -39,7 +39,7 @@
             <div *ngFor="let sk of auditComp.sk;">
               <h2 class="column-header">{{sk.first_name}} {{sk.last_name}}</h2>
             <div class="drag-drop-containers">
-                <div
+                <div id="boxToDropIn{{sk.id}}"
                   cdkDropList
                   [cdkDropListData]="identifyUser(sk.id)"
                   class="drag-drop-list"

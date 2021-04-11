@@ -19,7 +19,7 @@ describe('AT-1.1: System administrator creates a system administrator account', 
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com', true);
+    loginPage.login_as('sa@test.com', 'password', true);
   });
 
   /**

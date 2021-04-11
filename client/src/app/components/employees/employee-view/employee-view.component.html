@@ -114,9 +114,9 @@
           <div class="form-group">
             <mat-label for="pass-word">{{fieldLabels.role}}:</mat-label>
             <mat-form-field appearance="outline">
-              <mat-select class="roleDropDown" formControlName="role">
+              <mat-select id="roleDropDown" formControlName="role">
                 <mat-option value="">Choose a role</mat-option>
-                <mat-option *ngFor="let role of createMembersRoles" [value]="role">
+                <mat-option id="{{ role.name }}" *ngFor="let role of createMembersRoles" [value]="role">
                   {{ role.name }}
                 </mat-option>
               </mat-select>
