@@ -16,7 +16,6 @@ export class SideNavComponent implements OnInit {
   // contains the listing of all sidenav menu items
   options = SystemNavListings;
   // contains the last option chosen, it defaults to the first
-  // TODO: selectedOption has no initializer in the constructor
   // @ts-ignore
   selectedOption: SideNavOption;
 
@@ -30,9 +29,6 @@ export class SideNavComponent implements OnInit {
     private authService: AuthService,
     private tokenService: TokenService
     ) {
-
-    // TODO: what strings should be assigned by default
-    //  which wouldn't hinder our security
     this.loggedInUser = '';
     this.loggedInUserRole = '';
   }
@@ -66,7 +62,6 @@ export class SideNavComponent implements OnInit {
     this.tokenService.DeleteToken(); // Delete token when user logout
     this.authService.setLogOut();   // Extra step - sets the sharedUser data to ''
     this.router.navigate(['login']); // Redirect user to login/register pager
-    // TODO: Check out if we want to delete also the token from the db, in order to regenerate a new one while logging in
   }
 
   subscribeSelected(): void {
@@ -94,7 +89,6 @@ export class SideNavComponent implements OnInit {
     if (url === '/create-members') {
       if (this.options === SystemNavListings) {
         // @ts-ignore
-        // TODO: should there be a default url if routes[] is undefined?
         url = routes[0].children[4].path; // '/sa-modify-members';
       }
       else if (this.options === OrganizationNavListings) {

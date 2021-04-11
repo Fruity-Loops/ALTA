@@ -1,6 +1,6 @@
 import {env} from 'src/environments/environment';
 // @ts-ignore
-import {Component, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, BehaviorSubject, combineLatest} from 'rxjs';
 import {map, debounceTime} from 'rxjs/operators';
@@ -40,7 +40,6 @@ export class AuthService implements LocalStorageInterface {
             this.updateLocalStorage(UserLocalStorage.OrgId, data.organization);
             this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName) as string);
           }
-          // TODO: update GET call to return organization's name
           if (data.role === 'IM') {
             this.turnOnOrgMode({organization_name: this.getLocalStorage(UserLocalStorage.OrgName), ...data}, false);
           }

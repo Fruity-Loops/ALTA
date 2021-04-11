@@ -40,7 +40,7 @@ export class ManageMembersService {
       return this.http.get<User[]>(`${this.BASEURL}/accessClients/`).pipe(
         catchError((err: HttpErrorResponse) => {
           console.error(`Error: ${err.status}: ${err.error}`);
-          return EMPTY; // TODO: Implement proper error handling
+          return EMPTY;
         })
       );
     }
@@ -56,7 +56,7 @@ export class ManageMembersService {
         .pipe(
           catchError((err: HttpErrorResponse) => {
             console.error(`Error: ${err.status}: ${err.error}`);
-            return EMPTY; // TODO: Implement proper error handling
+            return EMPTY;
           })
         );
     }

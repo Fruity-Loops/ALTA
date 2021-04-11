@@ -35,8 +35,7 @@ class CustomUser(AbstractBaseUser):
         return self.role
 
     @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-    # TODO: Refactor method
-    def create_auth_token(sender, instance=None, created=False, **kwargs):
+    def create_auth_token(self, instance=None, created=False, **kwargs):
         # pylint: disable=no-self-argument
         # pylint: disable=unused-argument 
         # pylint: disable=no-self-use 
