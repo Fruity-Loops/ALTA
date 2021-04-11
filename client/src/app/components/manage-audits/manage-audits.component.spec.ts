@@ -157,9 +157,9 @@ describe('ManageInventoryItemsComponent', () => {
 
   it('test getInsights', () => {
     spyOn(auditService, 'getInsights').and.returnValues(of({
-      last_week_audit_count: 1,
-      last_month_audit_count: 1,
-      last_year_audit_count: 1,
+      lastWeekAuditCount: 1,
+      lastMonthAuditCount: 1,
+      lastYearAuditCount: 1,
       average_accuracy: 0.5,
       average_audit_time: {
         seconds: 1,
@@ -169,7 +169,7 @@ describe('ManageInventoryItemsComponent', () => {
       }
     }), throwError('error!'));
     component.getInsights();
-    expect(component.last_week_audit_count).toBe(1);
+    expect(component.lastWeekAuditCount).toBe(1);
     component.getInsights();
     expect(component.errorMessage).toBe('error!');
   });
