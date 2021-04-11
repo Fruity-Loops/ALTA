@@ -117,6 +117,18 @@ export class AuditReportComponent extends TableManagementComponent implements On
     }
   }
 
+  setMetaData(metaData: any, initiatedBy: any): void {
+    metaData.initiated_by = initiatedBy;
+    this.cleanMetaData();
+    // Getting the field name of the item object returned and populating the column of the table
+    this.setDisplayedMetaColumns(this.metaData);
+
+    this.displayedMetaColumns = this.displayedMetaColumns.
+                                     filter((title: any) => title !== 'organization' &&
+                                                            title !== 'template_id');
+     this.updateMetaData();
+  }
+
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
@@ -124,29 +136,11 @@ export class AuditReportComponent extends TableManagementComponent implements On
         this.handleStatusFlag(metaData.status);
 
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
-          this.metaData.initiated_by = String(user.first_name + ' ' + user.last_name);
-          this.cleanMetaData();
-
-          // Getting the field name of the item object returned and populating the column of the table
-          this.setDisplayedMetaColumns(this.metaData);
-
-          this.displayedMetaColumns = this.displayedMetaColumns
-                                        .filter((title: any) => title !== 'organization' &&
-                                                                title !== 'template_id');
-          this.updateMetaData();
+          this.setMetaData(this.metaData, String(user.first_name + ' ' + user.last_name));
         },
           // if SA initiated audit
           (err: any) => {
-            this.metaData.initiated_by = 'System Administrator';
-            this.cleanMetaData();
-
-            // Getting the field name of the item object returned and populating the column of the table
-            this.setDisplayedMetaColumns(this.metaData);
-
-            this.displayedMetaColumns = this.displayedMetaColumns
-                                          .filter((title: any) => title !== 'organization' &&
-                                                                  title !== 'template_id');
-            this.updateMetaData();
+            this.setMetaData(this.metaData, 'System Administrator');
           }
         );
       },
