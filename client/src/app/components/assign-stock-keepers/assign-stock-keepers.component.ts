@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, TemplateRef} from '@angular/core';
+import {Component, HostListener, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ManageMembersService} from 'src/app/services/users/manage-members.service';
 import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {User} from 'src/app/models/user.model';
@@ -9,7 +9,6 @@ import {HttpParams} from '@angular/common/http';
 import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
 import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
-import { ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-assign-stock-keepers',

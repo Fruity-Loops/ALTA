@@ -46,8 +46,7 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
   }
 
   getOrganization(): void {
-    this.organizationSettings.getOrganization(this.id!).subscribe((organization: any) => {
-      console.log(organization);
+    this.organizationSettings.getOrganization(this.id).subscribe((organization: any) => {
 
       this.orgSettingsForm = this.fb.group({
         ftpLocation: new FormControl({ value: organization.ftp_location, disabled: !this.edit }, ),

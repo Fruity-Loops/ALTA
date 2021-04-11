@@ -81,24 +81,8 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
       // @ts-ignore
       this.repeatEvery = null;
     } else {
-      // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
-      // @ts-ignore
-      for (const checkbox of this.recurrenceDay.subCheckBox) {
-        // @ts-ignore
-        this.dayArray.push(checkbox.checked);
-        if (checkbox.checked) {
-          checkedDay = true;
-        }
-      }
-      // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
-      // @ts-ignore
-      for (const checkbox of this.recurrenceMonth.subCheckBox) {
-        // @ts-ignore
-        this.monthArray.push(checkbox.checked);
-        if (checkbox.checked) {
-          checkedMonth = true;
-        }
-      }
+      checkedDay = this.didCheckDay(checkedDay);
+      checkedMonth = this.didCheckMonth(checkedMonth);
     }
 
     body.start_date = date;
@@ -107,6 +91,36 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
     body.for_month = this.monthArray;
     body.time_zone_utc = this.timeZoneUTC;
 
+    this.submitTemplate(checkedDay, checkedMonth, body);
+  }
+
+  private didCheckMonth(checkedMonth: boolean): boolean {
+    // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
+    // @ts-ignore
+    for (const checkbox of this.recurrenceMonth.subCheckBox) {
+      // @ts-ignore
+      this.monthArray.push(checkbox.checked);
+      if (checkbox.checked) {
+        checkedMonth = true;
+      }
+    }
+    return checkedMonth;
+  }
+
+  private didCheckDay(checkedDay: boolean): boolean {
+    // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
+    // @ts-ignore
+    for (const checkbox of this.recurrenceDay.subCheckBox) {
+      // @ts-ignore
+      this.dayArray.push(checkbox.checked);
+      if (checkbox.checked) {
+        checkedDay = true;
+      }
+    }
+    return checkedDay;
+  }
+
+  private submitTemplate(checkedDay: boolean, checkedMonth: boolean, body: Template): void {
     if (this.panelOpenState && !checkedDay) {
       this.errorMessageCheckboxDay = 'Please choose at least one day';
     } else if (this.panelOpenState && !checkedMonth) {
@@ -131,5 +145,4 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
       );
     }
   }
-
 }
