@@ -1,91 +1,413 @@
 <mat-card>
-  <button mat-stroked-button [disabled]="selectedAudit==-1" id="cancel" class="cancel" (click)="cancelAudit()">Cancel Audit</button>
-  <mat-card-title>{{title}}</mat-card-title>
-  <div>
 
-      <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">
+
+  <mat-tab-group>
+    <mat-tab label="List of Audits">
+      <ng-template matTabContent>
+        <div>
+        </div>
+
         <mat-divider></mat-divider>
-      <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel >
-        <mat-expansion-panel-header hideToggle="true">
-          <mat-panel-title (click)="$event.stopPropagation();"
-                           (keydown.Space)="$event.stopImmediatePropagation();"
-                           (keydown.Enter)="$event.stopImmediatePropagation();">
-            <mat-form-field class="searchInventoryBar" style="width: 100%" >
-
-              <input  matInput id="search" type="string" formControlName="search" [placeholder]="searchPlaceholder"
-                      autocomplete="off" style="width: 100%" id="auditSearchBar">
-            </mat-form-field>
-            <button mat-icon-button id="searchbtn" class="save">
-              <mat-icon matSuffix>search</mat-icon>
-            </button>
-          </mat-panel-title>
-          <mat-panel-description class="expandSearchButton">
-            <mat-icon *ngIf="!expansionPanel.expanded">filter_list</mat-icon>
-            <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
-        <p>Audit details</p>
-      <mat-form-field appearance="outline">
-        <input matInput id="inventory_items" type="text" formControlName="inventory_items" placeholder="Inventory Items"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="assigned_sk" type="text" formControlName="assigned_sk" placeholder="Assigned SK"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="initiated_by" type="text" formControlName="initiated_by" placeholder="Initiated By"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="initiated_on" type="text" formControlName="initiated_on" placeholder="Initiated On"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="last_modified_on" type="text" formControlName="last_modified_on" placeholder="Last Modified Date"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="template_id" type="text" formControlName="template_id" placeholder="Template ID"/>
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <input matInput id="accuracy" type="text" formControlName="accuracy" placeholder="Acuracy"/>
-      </mat-form-field>
-      </mat-expansion-panel>
-
-    </form>
-  </div>
-
-  <mat-divider></mat-divider>
-  <div>
-    <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
-      <div id="audit">List of Audits.</div>
-
-      <ng-container matColumnDef="Select">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()"
-                        (change)="$event ? onRowSelection(row) : null"
-                        [checked]="selection.isSelected(row)">
-          </mat-checkbox>
-        </td>
-      </ng-container>
-      
-
-      <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
-        <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
-        <td mat-cell *matCellDef="let object">{{ object[column]}}</td>
-      </ng-container>
+        <div>
+          <table multiTemplateDataRows aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+            <div id="audit">List of Audits.</div>
+            <!-- MAIN TABLE -->
+            <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+              <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>
+                {{ column.replaceAll('_', ' ') | titlecase }}</th>
+              <td class="outerTableAuditID{{object['audit_id']}}" mat-cell *matCellDef="let object">
+                <div *ngIf="column == 'status'; else elseBlock"
+                     [ngClass]="{'pending-audit' : (object[column] == 'Pending'),
+                                 'active-audit' : (object[column] == 'Active'),
+                                 'complete-audit' : (object[column] == 'Complete')}">
+                  {{ object[column]}}
+                </div>
+                <ng-template #elseBlock>
+                  <div id="innerTableAuditID{{object['audit_id']}}" class="innerTableButton" *ngIf="column == 'Overview'">
+                    <mat-icon-button
+                      (click)="$event.stopPropagation();toggleExpand(object['audit_id'], object['status'])"
+                      mat-icon-button>
+                      <mat-icon *ngIf="expandedElement == object['audit_id']">keyboard_arrow_down</mat-icon>
+                      <mat-icon *ngIf="expandedElement != object['audit_id']">keyboard_arrow_right</mat-icon>
+                    </mat-icon-button>
+                  </div>
+                  {{ object[column]}}<t *ngIf="column == 'accuracy'">%</t>
+                </ng-template>
 
 
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsStatic"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumnsStatic;"></tr>
-    </table>
+              </td>
+            </ng-container>
 
-    <mat-paginator
-      [length]="length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[25,50,100]"
-      [pageIndex]="pageIndex"
-      (page)="paginatorAction($event)">
-    </mat-paginator>
+            <!-- EXPANDED INNER TABLE  -->
+            <ng-container matColumnDef="expandedDetail">
+
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+
+                <div class="ongoing-audit-warning" *ngIf="ongoingAudit && element.audit_id == expandedElement">
+                    Notice: The results will update as this audit is in process
+                </div>
+
+                <div class="audit-element-detail innerTable"
+                     [@detailExpand]="element.audit_id == expandedElement ? 'expanded' : 'collapsed'">
+
+                  <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="innerDataSource" matSort>
+                    <ng-container *ngFor="let column of innerDisplayedColumns" [matColumnDef]="column">
+                      <th scope="col" mat-header-cell *matHeaderCellDef>
+                        {{ column.replaceAll('_', ' ') | titlecase }}</th>
+                     <div >
+                       <td mat-cell *matCellDef="let object"
+                           [ngClass]="{'missing-result' : (column == 'Number_of_Missing_Items' && object[column] != 0),
+                                      'provided-result' : (column == 'Number_of_Provided_Items' && object[column] != 0),
+                                      'new-result': (column == 'Number_of_New_Items' && object[column] != 0)}">
+                        <t *ngIf="object[column] != 0">{{ object[column]}}</t>
+                        <t *ngIf="object[column] == 0">-</t>
+                      </td>
+
+                     </div>
 
 
-  </div>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="innerDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: innerDisplayedColumns;"></tr>
+                  </table>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let object; columns: displayedColumns;"
+                class="audit-element-row"
+                (click)="navToReport(object, columns)"
+                [class.example-expanded-row]="expandedElement === object">
+            </tr>
+
+            <!-- EXPANDED ROW-->
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="audit-detail-row"></tr>
+          </table>
+
+          <mat-paginator
+            [length]="length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[25,50,100]"
+            [pageIndex]="pageIndex"
+            (page)="paginatorAction($event)">
+          </mat-paginator>
+        </div>
+
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Graphs and Trends">
+      <ng-template matTabContent>
+        <br>
+        <div id="chart">
+          <button (click)="updateOptions( '1m' )" [class.active]="activeOptionButton=='1m'">1M</button>
+          <button (click)="updateOptions( '6m' )" [class.active]="activeOptionButton=='6m'">6M</button>
+          <button (click)="updateOptions( '1y' )" [class.active]="activeOptionButton=='1y'">1Y</button>
+          <button (click)="updateOptions( '1yd' )" [class.active]="activeOptionButton=='1yd'">1YD</button>
+          <button (click)="updateOptions( 'all' )" [class.active]="activeOptionButton=='all'">All</button>
+          <apx-chart
+            #chart
+            [series]="chartOptions.accuracyOverTime"
+            [chart]="chartOptions.chart"
+            [xaxis]="chartOptions.xaxis"
+            [stroke]="chartOptions.stroke"
+            [dataLabels]="chartOptions.dataLabels"
+            [yaxis]="chartOptions.yaxis"
+            [labels]="chartOptions.labels"
+            [title]="chartOptions.title"
+          ></apx-chart>
+        </div>
+        <br>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Insights">
+      <div class="insights">
+        <mat-card class="insight-card">
+          <p>Last week audit count</p>
+          <br>
+          <p class='counter'>{{last_week_audit_count}}</p>
+        </mat-card>
+        <mat-card class="insight-card">
+          <p>Last month audit count</p>
+          <br>
+          <p class='counter'>{{last_month_audit_count}}</p>
+
+        </mat-card>
+        <mat-card class="insight-card">
+          <p>Last year audit count</p>
+          <br>
+          <p class='counter'>{{last_year_audit_count}}</p>
+
+        </mat-card>
+        <mat-card class="insight-card">
+          <p>Cumulative audit accuracy</p>
+          <br>
+          <p class='counter'>{{average_audit_accuracy}} %</p>
+
+        </mat-card>
+        <mat-card class="insight-card">
+          <p>Average audit time</p>
+          <br>
+          <p class='counter_date'><b>Days:</b> {{average_time_audit_day}}</p>
+          <br>
+          <p class='counter_date'><b>Hours: </b>{{average_time_audit_hour}}</p>
+          <br>
+          <p class='counter_date'><b>Minutes:</b> {{average_time_audit_min}}</p>
+          <br>
+          <p class='counter_date'><b>Seconds:</b> {{average_time_audit_seconds}}</p>
+
+        </mat-card>
+      </div>
+
+    </mat-tab>
+    <mat-tab label="Recommendation">
+      <mat-card>
+        <div class="dropdown">
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  By Frequently Audited Bins
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>expand_more</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>The top 5 frequently audited bins</p>
+              <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourceBin"
+                     class="mat-elevation-z8">
+                <ng-container matColumnDef="Location">
+                  <th mat-header-cell *matHeaderCellDef> Location </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Location}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Zone">
+                  <th mat-header-cell *matHeaderCellDef> Zone </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Zone}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Aisle">
+                  <th mat-header-cell *matHeaderCellDef> Aisle </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Aisle}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Bin">
+                  <th mat-header-cell *matHeaderCellDef> Bin </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Count">
+                  <th mat-header-cell *matHeaderCellDef> Count </th>
+                  <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsBin"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsBin;"></tr>
+              </table>
+              <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourceBin)">Create
+                Audit Template From Table</button>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="dropdown">
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  By Frequently Audited Parts
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>expand_more</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>The top 5 frequently audited parts</p>
+              <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourcePart"
+                     class="mat-elevation-z8">
+                <ng-container matColumnDef="Batch_Number">
+                  <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Part">
+                  <th mat-header-cell *matHeaderCellDef> Part </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Serial_Number">
+                  <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Count">
+                  <th mat-header-cell *matHeaderCellDef> Count </th>
+                  <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPart"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
+              </table>
+              <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourcePart)">Create
+                Audit Template From Table</button>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="dropdown">
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  By Frequently Lost Items
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-icon>expand_more</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <p>The top 5 frequently lost items</p>
+              <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourceItem"
+                     class="mat-elevation-z8">
+                <ng-container matColumnDef="Batch_Number">
+                  <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Part_Number">
+                  <th mat-header-cell *matHeaderCellDef> Part Number </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Serial_Number">
+                  <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                  <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Count">
+                  <th mat-header-cell *matHeaderCellDef> Lost Count </th>
+                  <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsItem"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsItem;"></tr>
+              </table>
+              <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourceItem)">Create
+                Audit Template From Table</button>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="dropdown">
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                By Criticality
+              </mat-panel-title>
+              <mat-panel-description>
+                <mat-icon>expand_more</mat-icon>
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Selection of items that have a status of High Criticality</p>
+            <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourceCategoryItem"
+                   class="mat-elevation-z8">
+              <ng-container matColumnDef="Batch_Number">
+                <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.Item_Id}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Part_Number">
+                <th mat-header-cell *matHeaderCellDef> Part Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+              </ng-container>
+              <ng-container matColumnDef="Serial_Number">
+                <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsCategoryItem"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsCategoryItem;"></tr>
+            </table>
+            <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourceCategoryItem)">Create
+              Audit Template From Table</button>
+          </mat-expansion-panel>
+        </div>
+      </mat-card>
+
+    </mat-tab>
+  </mat-tab-group>
 </mat-card>
+<!--=======-->
+<!--<mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">-->
+<!--  <mat-tab label="{{title}}">-->
+<!--    <mat-card>-->
+<!--      <button mat-stroked-button [disabled]="selectedAudit==-1" id="cancel" class="cancel"-->
+<!--        (click)="cancelAudit()">Cancel Audit</button>-->
+<!--      <mat-card-title>Audits</mat-card-title>-->
+<!--      <div>-->
+<!--        <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchAudit()" (keydown.Enter)="searchAudit();">-->
+<!--          <mat-divider></mat-divider>-->
+<!--          <mat-expansion-panel class="mat-elevation-z0" hideToggle="true" #expansionPanel>-->
+<!--            <mat-expansion-panel-header hideToggle="true">-->
+<!--              <mat-panel-title (click)="$event.stopPropagation();" (keydown.Space)="$event.stopImmediatePropagation();"-->
+<!--                (keydown.Enter)="$event.stopImmediatePropagation();">-->
+<!--                <mat-form-field class="searchInventoryBar" style="width: 100%">-->
+
+<!--                  <input matInput id="search" type="string" formControlName="search" [placeholder]="searchPlaceholder"-->
+<!--                    autocomplete="off" style="width: 100%" id="auditSearchBar">-->
+<!--                </mat-form-field>-->
+<!--                <button mat-icon-button id="searchbtn" class="save">-->
+<!--                  <mat-icon matSuffix>search</mat-icon>-->
+<!--                </button>-->
+<!--              </mat-panel-title>-->
+<!--              <mat-panel-description class="expandSearchButton">-->
+<!--                <mat-icon *ngIf="!expansionPanel.expanded">filter_list</mat-icon>-->
+<!--                <mat-icon *ngIf="expansionPanel.expanded">filter_list</mat-icon>-->
+<!--              </mat-panel-description>-->
+<!--            </mat-expansion-panel-header>-->
+<!--            <p>Audit details</p>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="inventory_items" type="text" formControlName="inventory_items"-->
+<!--                placeholder="Inventory Items" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="assigned_sk" type="text" formControlName="assigned_sk" placeholder="Assigned SK" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="initiated_by" type="text" formControlName="initiated_by" placeholder="Initiated By" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="initiated_on" type="text" formControlName="initiated_on" placeholder="Initiated On" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="last_modified_on" type="text" formControlName="last_modified_on"-->
+<!--                placeholder="Last Modified Date" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="template_id" type="text" formControlName="template_id" placeholder="Template ID" />-->
+<!--            </mat-form-field>-->
+<!--            <mat-form-field appearance="outline">-->
+<!--              <input matInput id="accuracy" type="text" formControlName="accuracy" placeholder="Acuracy" />-->
+<!--            </mat-form-field>-->
+<!--          </mat-expansion-panel>-->
+
+<!--        </form>-->
+<!--      </div>-->
+<!--      <mat-divider></mat-divider>-->
+<!--      <div>-->
+<!--        <table aria-describedby="audit" mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>-->
+<!--          <div id="audit">List of Audits.</div>-->
+
+<!--          <ng-container matColumnDef="Select">-->
+<!--            <th mat-header-cell *matHeaderCellDef></th>-->
+<!--            <td mat-cell *matCellDef="let row">-->
+<!--              <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? onRowSelection(row) : null"-->
+<!--                [checked]="selection.isSelected(row)">-->
+<!--              </mat-checkbox>-->
+<!--            </td>-->
+<!--          </ng-container>-->
+
+
+<!--          <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">-->
+<!--            <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>-->
+<!--            <td mat-cell *matCellDef="let object">{{ object[column]}}</td>-->
+<!--          </ng-container>-->
+
+
+
+<!--          <tr mat-header-row *matHeaderRowDef="displayedColumnsStatic"></tr>-->
+<!--          <tr mat-row *matRowDef="let row; columns: displayedColumnsStatic;"></tr>-->
+<!--        </table>-->
+
+<!--        <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="[25,50,100]" [pageIndex]="pageIndex"-->
+<!--          (page)="paginatorAction($event)">-->
+<!--        </mat-paginator>-->
+
+
+<!--      </div>-->
+<!--    </mat-card>-->
+<!--  </mat-tab>-->
+<!--  -->
+<!--</mat-tab-group>-->
+<!--&gt;>>>>>> 8013a75ed21390323928d00102423d3c094da08f-->

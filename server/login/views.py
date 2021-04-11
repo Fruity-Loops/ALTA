@@ -93,6 +93,7 @@ class LoginMobileEmailView(generics.GenericAPIView):
                 org_id = user.organization.org_id
                 org_name = user.organization.org_name
                 data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'location': user.location,
                         'organization_id': org_id,
                         'organization_name': org_name}
 
@@ -127,6 +128,7 @@ def save_new_pin(email, user):
     request.data = {'password': first_part + second_part + third_part}
     # For e2e purposes, uncomment this line:
     # request.data = {'password': 'password'}
+
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()

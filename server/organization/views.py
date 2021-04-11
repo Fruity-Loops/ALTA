@@ -118,13 +118,13 @@ class ModifyOrganizationInventoryItemFile(generics.GenericAPIView):
         # Replace existing file for organization
         os.remove('django_server/org_files/'+filename)
         file.name = str(org_id)+'.csv'
-        t = Thread(target=main, args=(org_id,))
-        t.start()
 
         try:
             organization = Organization.objects.get(org_id=org_id)
             organization.file = file
             organization.save()
+            t = Thread(target=main, args=(org_id,))
+            t.start()
             return Response({'detail': 'File has been updated'}, status=status.HTTP_200_OK)
 
         except Organization.DoesNotExist:
