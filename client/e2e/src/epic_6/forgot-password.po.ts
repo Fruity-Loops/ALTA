@@ -19,7 +19,7 @@ export class ResetPassword {
   }
 
   getLatestEmail(): ElementFinder {
-    return element(by.xpath('(//*[contains(@id,"row_alta490test")]/td[3])[1]'));
+    return element(by.xpath('(//*[contains(@id,"row_alta490")]/td[3])[1]'));
   }
 
   getTextButton(): ElementFinder {

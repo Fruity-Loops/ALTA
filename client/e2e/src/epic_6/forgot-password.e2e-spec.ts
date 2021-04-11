@@ -19,7 +19,7 @@ describe('AT-6.1: Reset account password', () => {
     browser.wait(ExpectedConditions.visibilityOf(resetPassword.getForgotCredentialsButton()), 5000);
     resetPassword.getForgotCredentialsButton().click();
     browser.wait(ExpectedConditions.visibilityOf(resetPassword.getEmailField()), 5000);
-    resetPassword.getEmailField().sendKeys('alta490test@mailinator.com');
+    resetPassword.getEmailField().sendKeys('alta490@mailinator.com');
     resetPassword.getSubmitButton().click();
     browser.wait(ExpectedConditions.visibilityOf(resetPassword.getCloseButton()), 5000);
     resetPassword.getCloseButton().click();
@@ -27,7 +27,7 @@ describe('AT-6.1: Reset account password', () => {
 
   it('Navigate to email to retrieve the link', () => {
     browser.waitForAngularEnabled(false);
-    browser.get('https://www.mailinator.com/v4/public/inboxes.jsp?to=alta490test');
+    browser.get('https://www.mailinator.com/v4/public/inboxes.jsp?to=alta490');
     browser.navigate().refresh();
     browser.wait(ExpectedConditions.visibilityOf(resetPassword.getLatestEmail()), 5000);
     resetPassword.getLatestEmail().click();
@@ -41,18 +41,16 @@ describe('AT-6.1: Reset account password', () => {
   });
 
   it('User provides new password', () => {
-    // browser.wait(ExpectedConditions.urlContains('settings'), 5000);
     browser.sleep(5000);
-    // browser.wait(ExpectedConditions.visibilityOf(SAModifies.getEditButton()), 5000);
-    browser.getAllWindowHandles().then(function (handles) {
-      let newWindowHandle = handles[1]; // this is your new window
-      browser.switchTo().window(newWindowHandle).then(function () {
-          // fill in the form here
-          browser.sleep(5000);
+    // tslint:disable-next-line:only-arrow-functions typedef
+    browser.getAllWindowHandles().then(function(handles) {
+      const newWindowHandle = handles[1];
+      // tslint:disable-next-line:only-arrow-functions typedef
+      browser.switchTo().window(newWindowHandle).then(function() {
       });
   });
+    browser.wait(ExpectedConditions.visibilityOf(SAModifies.getEditButton()), 5000);
     SAModifies.getEditButton().click();
-    browser.sleep(5000);
     browser.wait(ExpectedConditions.visibilityOf(SAModifies.getPasswordField()), 5000);
     SAModifies.getPasswordField().sendKeys('hello');
     SAModifies.getSaveButton().click();
@@ -61,7 +59,7 @@ describe('AT-6.1: Reset account password', () => {
   });
 
   it('User logs in with the new password', () => {
-    loginPage.login_as('alta490test@mailinator.com', 'hello', false);
+    loginPage.login_as('alta490@mailinator.com', 'hello', false);
     logoutPage.logout();
   });
 });
