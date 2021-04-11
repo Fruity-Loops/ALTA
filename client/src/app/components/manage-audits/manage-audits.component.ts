@@ -346,7 +346,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
     return {
       Location: record.Location,
       Bin: record.Bin,
-      Number_of_Audited_Items: record.Quantity !== 0 ? record.Quantity : 1,
+      Number_of_Audited_Items: record.Quantity ? record.Quantity : 1,
       Number_of_Provided_Items: record.status == 'Provided' ? record.Quantity : 0,
       Number_of_Missing_Items: record.status == 'Missing' ? 1 : 0,
       Number_of_New_Items: record.status == 'New' ? record.Quantity : 0
@@ -354,7 +354,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   }
 
   adjustQuantity(record: any, checkExistingLocationAndBin: any): any {
-    if (record.Quantity != 0) {
+    if (record.Quantity) {
       checkExistingLocationAndBin['Number_of_'+record.status+'_Items'] =
         checkExistingLocationAndBin['Number_of_'+record.status+'_Items'] + record.Quantity;
 
