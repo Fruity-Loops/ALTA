@@ -31,14 +31,15 @@ export class AuthService implements LocalStorageInterface {
     this.sharedUser = this.getSharedUser();
 
     if (this.getLocalStorage(UserLocalStorage.UserID)) {
-      this.subscription = this.getCurrentUser(this.getLocalStorage(UserLocalStorage.UserID) as string)
+      // @ts-ignore
+      this.subscription = this.getCurrentUser(this.getLocalStorage(UserLocalStorage.UserID))
         .subscribe((data) => {
           this.updateLocalStorage(UserLocalStorage.UserID, data.id);
           this.updateLocalStorage(UserLocalStorage.Username, data.user_name);
           this.updateLocalStorage(UserLocalStorage.Role, data.role);
           if (data.organization) {
             this.updateLocalStorage(UserLocalStorage.OrgId, data.organization);
-            this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName) as string);
+            this.updateLocalStorage(UserLocalStorage.OrgName, this.getLocalStorage(UserLocalStorage.OrgName));
           }
           if (data.role === 'IM') {
             this.turnOnOrgMode({organization_name: this.getLocalStorage(UserLocalStorage.OrgName), ...data}, false);

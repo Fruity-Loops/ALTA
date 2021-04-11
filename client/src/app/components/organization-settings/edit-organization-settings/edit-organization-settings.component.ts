@@ -46,6 +46,7 @@ export class EditOrganizationSettingsComponent extends OrganizationSettingsView 
   }
 
   getOrganization(): void {
+    // @ts-ignore
     this.organizationSettings.getOrganization(this.id).subscribe((organization: any) => {
 
       this.orgSettingsForm = this.fb.group({
