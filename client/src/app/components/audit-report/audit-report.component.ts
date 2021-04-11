@@ -42,7 +42,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
   dataSource: MatTableDataSource<any>;
   metaDataSource: MatTableDataSource<any>;
 
-
   displayedColumns: string[] = [];
   displayedMetaColumns: string[] = [];
 
@@ -73,14 +72,13 @@ export class AuditReportComponent extends TableManagementComponent implements On
   ngOnInit(): void {
     this.activatedRoute.params.subscribe((routeParams) => {
       this.id = routeParams.ID;
+
       this.setAuditInfo();
       this.setAuditData();
-
       this.setResultsData();
     });
   }
 
-  // TODO: Fix appropriate backend calls
   getSearchForm(): any {
     return {
       search: [''],
@@ -122,11 +120,10 @@ export class AuditReportComponent extends TableManagementComponent implements On
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
-
+        this.metaData = metaData;
         this.handleStatusFlag(metaData.status);
 
         this.userService.getEmployee(metaData.initiated_by).subscribe((user: any) => {
-          this.metaData = metaData;
           this.metaData.initiated_by = String(user.first_name + ' ' + user.last_name);
           this.cleanMetaData();
 
@@ -140,7 +137,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
         },
           // if SA initiated audit
           (err: any) => {
-            this.metaData = metaData;
             this.metaData.initiated_by = 'System Administrator';
             this.cleanMetaData();
 
