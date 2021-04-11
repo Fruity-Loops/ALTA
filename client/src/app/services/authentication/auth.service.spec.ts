@@ -174,7 +174,7 @@ describe('AuthService', () => {
     });
 
     const req = httpTestingController.expectOne(`${BASEURL}/open-registration/`);
-    expect(req.request.method).toBe('Post');
+    expect(req.request.method).toBe('POST');
   });
 
   // openRegister
@@ -185,6 +185,6 @@ describe('AuthService', () => {
     });
 
     const req = httpTestingController.expectOne(`${BASEURL}/login-mobile/`);
-    expect(req.request.method).toBe('Post');
+    expect(req.request.method).toBe('POST');
   });
 });
