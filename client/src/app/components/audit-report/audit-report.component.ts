@@ -45,7 +45,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
 
   displayedColumns: string[] = [];
   displayedMetaColumns: string[] = [];
-  displayedColumnsStatic: string[] = []; // to add a static column among all the dynamic ones
 
   resultsDisplayedColumns: string[] = [];
   resultsDataSource: MatTableDataSource<any>;
@@ -188,8 +187,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
         }
 
         this.displayedColumns = this.displayedColumns.filter((title: any) => title !== 'organization');
-
-        this.displayedColumnsStatic = ['Select'].concat(this.displayedColumns); // adding select at the beginning of columns
         this.updatePage();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
