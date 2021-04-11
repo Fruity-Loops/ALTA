@@ -61,28 +61,6 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
     [this.title, this.searchPlaceholder, this.startAuditBtn] = [lang.lang.title, lang.lang.searchPlaceholder, lang.lang.startAuditBtn];
   }
 
-  getSearchForm(): any {
-    return {
-      search: [''],
-      _id_from: [''],
-      _id_to: [''],
-      Location: [''],
-      Zone: [''],
-      Aisle: [''],
-      Bin: [''],
-      Part_Number: [''],
-      Serial_Number: [''],
-      Condition: [''],
-      Category: [''],
-      Owner: [''],
-      Average_Cost_from: [''],
-      Average_Cost_to: [''],
-      Quantity_from: [''],
-      Quantity_to: [''],
-      Unit_of_Measure: [''],
-    };
-  }
-
   ngOnInit(): void {
     this.params = this.params.append('page', String(this.pageIndex))
       .append('page_size', String(this.pageSize))

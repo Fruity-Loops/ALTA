@@ -79,28 +79,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
     });
   }
 
-  getSearchForm(): any {
-    return {
-      search: [''],
-      _id_from: [''],
-      _id_to: [''],
-      Location: [''],
-      Zone: [''],
-      Aisle: [''],
-      Bin: [''],
-      Part_Number: [''],
-      Serial_Number: [''],
-      Condition: [''],
-      Category: [''],
-      Owner: [''],
-      Average_Cost_from: [''],
-      Average_Cost_to: [''],
-      Quantity_from: [''],
-      Quantity_to: [''],
-      Unit_of_Measure: [''],
-    };
-  }
-
   handleStatusFlag(status: any): void {
     if (status === 'Active') {
       this.ongoing = true;
