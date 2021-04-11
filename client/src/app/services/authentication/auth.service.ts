@@ -26,7 +26,7 @@ export class AuthService implements LocalStorageInterface {
 
   constructor(
     private http: HttpClient, // We inject the http client in the constructor to do our REST operations
-    private router: Router) {
+    public router: Router) {
     this.initializeObservables();
     this.sharedUser = this.getSharedUser();
 

@@ -6,6 +6,7 @@ import {TestBed} from '@angular/core/testing';
 import {AuthService, UserLocalStorage} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ManageMemberSpecVariables} from '../users/manage-members-spec-variables';
+import {DashboardComponent} from 'src/app/components/dashboard/dashboard.component'
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -17,7 +18,12 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Import the HttpClient mocking services
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([
+          {path: 'dashboard', component: DashboardComponent}
+        ]),
+      ],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
 
@@ -118,6 +124,13 @@ describe('AuthService', () => {
   // turnOffOrgMode
   it('test turnOffOrgMode method', () => {
     spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    authService.turnOffOrgMode();
+  });
+
+  // turnOffOrgMode
+  it('test turnOffOrgMode method', () => {
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    spyOn(authService.router, 'navigate');
     authService.turnOffOrgMode();
   });
 
