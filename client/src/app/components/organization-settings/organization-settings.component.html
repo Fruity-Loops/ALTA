@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>
-      Organization Settings
+      {{title}}
     </mat-card-title>
   </mat-card-header>
 
@@ -10,7 +10,7 @@
   <div class="container">
     <div class="subtitle">
       <mat-card-header>
-        Inventory Extractions
+        {{categories.inventory_extractions.title}}
       </mat-card-header>
     </div>
 
@@ -25,7 +25,7 @@
           <!--      FTP LOCATION-->
           <mat-grid-tile colspan="2">
             <div class="form-group">
-              <mat-label for="ftpLocation">FTP Location:</mat-label>
+              <mat-label for="ftpLocation">{{categories.inventory_extractions.fieldLabels.ftp_location}}:</mat-label>
               <mat-form-field appearance="outline">
                 <input matInput id="ftpLocation" formControlName="ftpLocation" placeholder="ftp://example/invetory1">
               </mat-form-field>
@@ -35,7 +35,7 @@
           <!--      REPEAT TIME-->
           <mat-grid-tile>
             <div class="repeat-every-form-group">
-              <mat-label>Repeat Every:</mat-label>
+              <mat-label>{{categories.inventory_extractions.fieldLabels.repeat_every}}:</mat-label>
               <mat-form-field appearance="outline">
                 <input matInput id="time" type="number" required formControlName="time" placeholder="Time unit"/>
               </mat-form-field>
@@ -48,10 +48,10 @@
               <mat-form-field appearance="outline">
                 <mat-select matNativeControl required formControlName="interval" placeholder="Repeat"
                             floatlLabel="never">
-                  <mat-option value="minutes">Minutes</mat-option>
-                  <mat-option value="hours">Hours</mat-option>
-                  <mat-option value="days">Days</mat-option>
-                  <mat-option value="weeks">Weeks</mat-option>
+                  <mat-option value="minutes">{{categories.inventory_extractions.fieldLabels.repeat_options.minutes}}</mat-option>
+                  <mat-option value="hours">{{categories.inventory_extractions.fieldLabels.repeat_options.hours}}</mat-option>
+                  <mat-option value="days">{{categories.inventory_extractions.fieldLabels.repeat_options.days}}</mat-option>
+                  <mat-option value="weeks">{{categories.inventory_extractions.fieldLabels.repeat_options.weeks}}</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -61,7 +61,7 @@
 
           <mat-grid-tile colspan="4">
             <mat-grid-tile-header id="fileupload">
-              Upload Inventory Extract
+              {{categories.inventory_extractions.fieldLabels.upload_extract}}
             </mat-grid-tile-header>
             <br/>
 
@@ -74,20 +74,20 @@
                    class="area">
 
                 <div id="dropZone">
-                  Drop .csv here
+                  {{categories.inventory_extractions.fieldLabels.drop_file}}
                   <br/>
                   <div id="file" *ngIf="uploader.queue.length>0; else other">
                     {{ uploader.queue[uploader.queue.length - 1].file?.name}}
                   </div>
                   <ng-template #other>
-                    Current file: {{ current_file }}
+                    {{categories.inventory_extractions.fieldLabels.current_file}}: {{ current_file }}
                   </ng-template>
                 </div>
               </div>
             </div>
 
             <ng-template #show_file>
-                Current file: {{ current_file }}
+              {{categories.inventory_extractions.fieldLabels.current_file}}: {{ current_file }}
             </ng-template>
 
           </mat-grid-tile>

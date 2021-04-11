@@ -13,11 +13,11 @@ Name | GitHub Username
 |:------------------------|:--------:|
 Amanda Kolopanis | Amanda-Kolopa
 Avery Singh | Averynder
-Daphne Augier | daphneaugier
+Daphné Augier | daphneaugier
 Dominik Ludera | domludera
 Donya Meshgin | meshgin
 Khaled Badran | KhaledBadran
-Markram Adaime | makchamp
-Robert Beaudenon | RobertBeaudenon
+Makram Adaime | makchamp
 Neeham Khalid | Neeham
 Nicholas Nagy | NicholasNagy
+Robert Beaudenon | RobertBeaudenon

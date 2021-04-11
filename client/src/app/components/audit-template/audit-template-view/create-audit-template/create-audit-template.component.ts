@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuditTemplateService } from '../../../../services/audits/audit-template.service';
 import { Template } from '../../Template';
 import { AuditTemplateViewComponent } from '../audit-template-view.component';
@@ -10,16 +10,35 @@ import {ManageInventoryItemsService} from 'src/app/services/inventory-items/mana
   templateUrl: '../audit-template-view.component.html',
   styleUrls: ['../audit-template-view.component.scss']
 })
-export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
+export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
 
   disabled = false;
+  routeParams: any;
 
   constructor(
-    private router: Router,
+    public activatedRoute: ActivatedRoute,
+    public router: Router,
     private auditTemplateService: AuditTemplateService,
     itemsService: ManageInventoryItemsService
   ) {
     super(itemsService);
+    this.getRouteParams();
+  }
+
+  getRouteParams(): void {
+    this.routeParams = this.router.getCurrentNavigation()?.extras.state?.data;
+    if (this.routeParams != null) {
+      for (const recommendedItems of this.routeParams) {
+        Object.keys(recommendedItems).forEach(recommendedLabel => {
+          // @ts-ignore
+          if ((recommendedLabel in this.template) && !(this.template[recommendedLabel].includes(recommendedItems[recommendedLabel]))) {
+            // @ts-ignore
+            this.template[recommendedLabel].push(recommendedItems[recommendedLabel]);
+          }
+        });
+      }
+    }
+
   }
 
   initializeForm(): void {
@@ -62,24 +81,8 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
       // @ts-ignore
       this.repeatEvery = null;
     } else {
-      // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
-      // @ts-ignore
-      for (const checkbox of this.recurrenceDay.subCheckBox) {
-        // @ts-ignore
-        this.dayArray.push(checkbox.checked);
-        if (checkbox.checked) {
-          checkedDay = true;
-        }
-      }
-      // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
-      // @ts-ignore
-      for (const checkbox of this.recurrenceMonth.subCheckBox) {
-        // @ts-ignore
-        this.monthArray.push(checkbox.checked);
-        if (checkbox.checked) {
-          checkedMonth = true;
-        }
-      }
+      checkedDay = this.didCheckDay(checkedDay);
+      checkedMonth = this.didCheckMonth(checkedMonth);
     }
 
     body.start_date = date;
@@ -88,6 +91,36 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
     body.for_month = this.monthArray;
     body.time_zone_utc = this.timeZoneUTC;
 
+    this.submitTemplate(checkedDay, checkedMonth, body);
+  }
+
+  private didCheckMonth(checkedMonth: boolean): boolean {
+    // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
+    // @ts-ignore
+    for (const checkbox of this.recurrenceMonth.subCheckBox) {
+      // @ts-ignore
+      this.monthArray.push(checkbox.checked);
+      if (checkbox.checked) {
+        checkedMonth = true;
+      }
+    }
+    return checkedMonth;
+  }
+
+  private didCheckDay(checkedDay: boolean): boolean {
+    // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
+    // @ts-ignore
+    for (const checkbox of this.recurrenceDay.subCheckBox) {
+      // @ts-ignore
+      this.dayArray.push(checkbox.checked);
+      if (checkbox.checked) {
+        checkedDay = true;
+      }
+    }
+    return checkedDay;
+  }
+
+  private submitTemplate(checkedDay: boolean, checkedMonth: boolean, body: Template): void {
     if (this.panelOpenState && !checkedDay) {
       this.errorMessageCheckboxDay = 'Please choose at least one day';
     } else if (this.panelOpenState && !checkedMonth) {
@@ -97,8 +130,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['template']).then(() => {
-            });
+            this.router.navigate(['template']).then();
           }, 1000); // Waiting 1 second before redirecting the user
           this.initializeForm();
           this.errorMessage = '';
@@ -112,5 +144,4 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent {
       );
     }
   }
-
 }

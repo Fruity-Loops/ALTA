@@ -2,6 +2,7 @@
 
 .mat-table {
   width: 100%;
+
 }
 mat-expansion-panel {
   padding-top: 1em;
@@ -9,7 +10,7 @@ mat-expansion-panel {
   width: 100%;
 }
 
-button.create {
+button.cancel {
   position: relative;
   float: right;
   display: inline;
@@ -26,6 +27,8 @@ mat-expansion-panel-header {
 
 mat-panel-title {
   width: 90%;
+  color: map-get($alta-primary, 500);
+  font-size: 15px;
 }
 
 .mat-card-title {
@@ -43,3 +46,166 @@ mat-panel-title {
   justify-content: flex-end;
 }
 
+
+#chart {
+  max-width: 90%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button {
+  background: #fff;
+  color: #222;
+  border: 1px solid #e7e7e7;
+  border-bottom: 2px solid #ddd;
+  border-radius: 2px;
+  padding: 4px 17px;
+  margin: 5px;
+}
+
+button.active {
+  color: #fff;
+  background: #008ffb;
+  border: 1px solid blue;
+  border-bottom: 2px solid blue;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.audit-element-detail {
+   overflow-x: hidden;
+   overflow-y: scroll;
+   max-height: 300px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: white;
+   box-shadow: inset 2px 3px 8px #c1c1c1;
+   border-radius: 8px;
+}
+
+tr.audit-detail-row {
+    height: 0;
+}
+
+tr.audit-element-row:not(.audit-expanded-row):hover {
+  background: whitesmoke;
+  cursor: pointer;
+}
+
+tr.audit-element-row:not(.audit-expanded-row):active {
+  background: #efefef;
+}
+
+.audit-element-row td {
+  border-bottom-width: 0;
+}
+
+.missing-result {
+  background: #ff9e9e;
+}
+
+.provided-result {
+  background: #daffd1;
+}
+
+.new-result {
+  background: #ffe366;
+}
+
+td {
+  text-align: center;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.innerTable {
+  box-shadow: 2px 2px 5px #888;
+  margin: 20px;
+  overflow: auto;
+}
+
+.pending-audit {
+  background-color: #ebebeb;
+  color: #878787;
+  display: inline-block;
+  border-radius: 20%/50%;
+  -moz-border-radius: 20%/50%;
+  padding: 10px;
+  width: 70px;
+  text-align: center;
+}
+
+.active-audit {
+  background-color: #e3f2fd;
+  color: #177fcf;
+  display: inline-block;
+  border-radius: 20%/50%;
+  -moz-border-radius: 20%/50%;
+  padding: 10px;
+  width: 70px;
+  text-align: center;
+}
+
+.complete-audit{
+  background-color: #ecf9f3;
+  color: #00a646;
+  display: inline-block;
+  border-radius: 20%/50%;
+  -moz-border-radius: 20%/50%;
+  padding: 10px;
+  width: 70px;
+  text-align: center;
+}
+
+.ongoing-audit-warning {
+  background-color: #ffcf69;
+  opacity: 0.65;
+  color: black;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 30px;
+}
+
+th.mat-header-cell {
+  text-align: center !important;
+}
+.mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+.dropdown {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.insight-card {
+  width: 20%;
+  float: left;
+  margin: 8px 8px 8px 8px;
+}
+
+.counter {
+  font-size: x-large;
+  font-weight: bold;
+  float: right;
+}
+
+.counter-date {
+  font-size: x-large;
+  font-weight: bold;
+  float: left;
+}
+
+.createTemplate{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  float: right;
+}

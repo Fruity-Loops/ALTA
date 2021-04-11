@@ -1,4 +1,5 @@
 import {FormGroup} from '@angular/forms';
+import {OrganizationSettingsLangFactory, OrgSettingsCategories} from './organization-settings.language';
 
 export interface BaseOrganizationSettingsForm {
   time: string;
@@ -11,11 +12,15 @@ export abstract class OrganizationSettingsView {
   isEdit: boolean;
   loaded = false;
   errorMessage: string | undefined;
+  title: string;
+  categories: OrgSettingsCategories;
 
   orgSettingsForm: FormGroup | undefined;
 
   protected constructor() {
     this.isEdit = this.getIsEdit();
+    const lang = new OrganizationSettingsLangFactory();
+    [this.title, this.categories] = [lang.lang.title, lang.lang.categories];
   }
 
   abstract getIsEdit(): boolean;

@@ -2,10 +2,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "strict": true,
-    "noUnusedLocals": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

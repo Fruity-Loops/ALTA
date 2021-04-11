@@ -19,7 +19,7 @@ describe('AT-2.1: Inventory Manager creates an inventory manager account', () =>
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('im@test.com', false);
+    loginPage.login_as('im@test.com', 'password', false);
   });
 
   /**

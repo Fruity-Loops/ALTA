@@ -1,17 +1,18 @@
-import {OnInit, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
 import {ChartComponent} from 'ng-apexcharts';
 import {ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
 import {HttpParams} from '@angular/common/http';
+import {DashboardLangFactory} from './dashboard.language';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   dataSource: MatTableDataSource<any>;
   audits: Array<any>;
@@ -20,6 +21,11 @@ export class DashboardComponent implements OnInit {
   private params = new HttpParams();
   private xData = [];
   private yData = [];
+
+  title = 'Dashboard';
+  auditsTable = {title: 'Most Recent Audits', dateInitiated: 'Date Initiated', id: 'ID', location: 'Location', bin: 'Bin',
+    initiated_by: 'Initiated By', accuracy: 'Accuracy', status: 'Status'};
+  accuracyTitle = 'Audit Accuracy over Time';
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -34,9 +40,9 @@ export class DashboardComponent implements OnInit {
       this.retrieveData(audit);
     });
     this.chartSetup();
-  }
 
-  ngOnInit(): void {
+    const lang = new DashboardLangFactory();
+    [this.title, this.auditsTable, this.accuracyTitle] = [lang.lang.title, lang.lang.auditsTable, lang.lang.accuracyTitle];
   }
 
   retrieveData(audit: any): void {
@@ -56,10 +62,10 @@ export class DashboardComponent implements OnInit {
         this.yData.push(element.accuracy);
       }
     });
-    // tslint:disable-next-line:no-non-null-assertion
-    this.dataSource.paginator = this.paginator!;
-    // tslint:disable-next-line:no-non-null-assertion
-    this.dataSource.sort = this.sort!;
+    // @ts-ignore
+    this.dataSource.paginator = this.paginator;
+    // @ts-ignore
+    this.dataSource.sort = this.sort;
   }
 
   chartSetup(): void {
@@ -87,7 +93,7 @@ export class DashboardComponent implements OnInit {
         width: 2,
       },
       title: {
-        text: 'Audit Accuracy over Time',
+        text: this.accuracyTitle,
         align: 'left'
       },
       labels: this.xData,

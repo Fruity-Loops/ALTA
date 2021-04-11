@@ -1,13 +1,12 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
 import {AuditTemplateService} from '../../../services/audits/audit-template.service';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {AuditTemplateListLangFactory, TemplateOptionLabels} from './audit-template-list.language';
 import {Router} from '@angular/router';
 import {ManageAuditsService, AuditLocalStorage} from '../../../services/audits/manage-audits.service';
 import {AuthService, UserLocalStorage} from '../../../services/authentication/auth.service';
 import {ManageInventoryItemsService} from '../../../services/inventory-items/manage-inventory-items.service';
 import {HttpParams} from '@angular/common/http';
-
-// import {Template as Temp} from '../Template';
 
 interface Template {
   author: string;
@@ -21,13 +20,17 @@ interface Template {
   styleUrls: ['./audit-template.component.scss']
 })
 export class AuditTemplateComponent implements OnInit {
-  // TODO
   // @ts-ignore
   auditTemplates: [Template];
   errorMessage = '';
   dialogRef: any;
   params = new HttpParams();
 
+
+  title: string;
+  searchPlaceholder: string;
+  addButton: string;
+  optionLabels: TemplateOptionLabels;
   constructor(
     private auditTemplateService: AuditTemplateService,
     public dialog: MatDialog,
@@ -36,6 +39,9 @@ export class AuditTemplateComponent implements OnInit {
     private authService: AuthService,
     private itemService: ManageInventoryItemsService,
   ) {
+    const lang = new AuditTemplateListLangFactory();
+    [this.title, this.searchPlaceholder, this.addButton, this.optionLabels] = [
+      lang.lang.title, lang.lang.searchPlaceholder, lang.lang.addButton, lang.lang.optionLabels];
   }
 
   ngOnInit(): void {
@@ -78,35 +84,40 @@ export class AuditTemplateComponent implements OnInit {
 
   getItemsForTemplate(auditTemplate: object, id: string): void {
     this.params = this.params = new HttpParams();
-    for (let key in auditTemplate)
+    // tslint:disable-next-line:forin
+    for (const key in auditTemplate)
     {
       // @ts-ignore
-      let value = auditTemplate[key]
-      if (value != "[]" && value != "" && value != null)
+      let value = auditTemplate[key];
+      // tslint:disable-next-line:triple-equals
+      if (value != '[]' && value != '' && value != null)
       {
-        if (value.toString().indexOf("[") > -1)
+        if (value.toString().indexOf('[') > -1)
         {
-          let arrayFromString = value.replace(/'/g, '"');
+          const arrayFromString = value.replace(/'/g, '"');
           value = JSON.parse(arrayFromString);
         }
         this.params = this.params.set(key, value);
       }
     }
-    let badKeys = ['template_id', 'author', 'title', 'start_date', 'calendar_date', 'time_zone_utc'];
-    for (let key in badKeys)
+    const badKeys = ['template_id', 'author', 'title', 'start_date', 'calendar_date', 'time_zone_utc'];
+    // tslint:disable-next-line:forin
+    for (const key in badKeys)
     {
       this.params = this.params.delete(badKeys[key]);
     }
     this.itemService.getTemplateItems(this.params).subscribe((data) => {
       if (data.length > 0)
       {
-        let items = [];
-        for (let item of data)
-          items.push(item.Item_Id)
+        const items = [];
+        for (const item of data) {
+          items.push(item.Item_Id);
+        }
         this.createAudit(items, id);
       }
-      else
-        alert("Template is Invalid");
+      else {
+        alert('Template is Invalid');
+      }
     },
     (err) => {
       this.errorMessage = err;

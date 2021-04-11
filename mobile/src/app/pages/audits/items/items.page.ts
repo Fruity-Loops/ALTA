@@ -37,6 +37,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   completedItems: any;
   auditID: string;
   binID: string;
+  binName: string;
   itemsBlankMessage: string;
   completedItemsBlankMessage: string;
   refreshEvent: any;
@@ -83,6 +84,7 @@ export class ItemsPage implements OnInit, OnDestroy {
   getSelectedBin() {
     this.auditID = this.activatedRoute.snapshot.paramMap.get('audit_id');
     this.binID = this.activatedRoute.snapshot.paramMap.get('bin_id');
+    this.binName = this.activatedRoute.snapshot.queryParamMap.get('Bin_Name');
   }
 
   async getItems(withLoading: boolean, loadingMesage = 'Fetching Items...') {
@@ -183,7 +185,12 @@ export class ItemsPage implements OnInit, OnDestroy {
   }
 
   handleCameraScan() {
-    this.cameraScanner.scan().then(barcodeData => {
+    this.cameraScanner.scan(
+      {
+        showTorchButton: true, // iOS and Android
+        prompt: `Place a barcode inside the rectangle to scan it. Alternatively, a barcode can also be entered manually.`, // Android
+      }
+    ).then(barcodeData => {
       if (barcodeData.cancelled === false) {
         this.barcode = barcodeData.text;
         this.validateItem(false, true);
@@ -207,7 +214,8 @@ export class ItemsPage implements OnInit, OnDestroy {
         {
           name: 'barcode',
           type: 'number',
-          placeholder: 'Barcode Number'
+          placeholder: 'Barcode Number',
+          id: 'barCodeNumberField'
         },
       ],
       buttons: [
@@ -216,6 +224,7 @@ export class ItemsPage implements OnInit, OnDestroy {
           role: 'cancel',
         }, {
           text: 'Confirm',
+          cssClass: 'confirmButton',
           handler: input => {
             if (input && input.barcode) {
               this.barcode = input.barcode;
@@ -227,8 +236,8 @@ export class ItemsPage implements OnInit, OnDestroy {
     });
     await alert.present();
     alert.onDidDismiss()
-    .then(_ => {
-      this.isScanning = false;
+      .then(_ => {
+        this.isScanning = false;
       });
   }
 
@@ -293,17 +302,24 @@ export class ItemsPage implements OnInit, OnDestroy {
                   text: 'Dismiss',
                 }, {
                   text: 'Add as NEW',
+                  cssClass: 'addAsNewButton',
                   handler: () => {
                     modalData.itemData = {
                       item_id: `${barcode}_${this.loggedInUser.organization_id}`,
                       Batch_Number: barcode,
                       status: 'New',
                       Quantity: 0, // expected quantity was 0
-                      flagged: true
+                      flagged: true,
+                      Bin: this.binName,
+                      Location: this.loggedInUser.location
                     };
                     this.presentRecordModal(modalData);
                   }
-                }
+                },
+                {
+                  text: 'Input Barcode',
+                  handler: () => this.handleManualInput(),
+                },
               ]
             });
             await noMatchAlert.present();
@@ -457,6 +473,7 @@ export class ItemsPage implements OnInit, OnDestroy {
         {
           text: 'Edit',
           icon: 'create',
+          cssClass: 'editButton',
           handler: () => {
             this.getRecord(recordID);
           }

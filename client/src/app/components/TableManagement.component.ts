@@ -63,7 +63,27 @@ export abstract class TableManagementComponent {
     this.updatePage();
   }
 
-  abstract getSearchForm(): any;
-
   abstract updatePage(): void;
+
+  getSearchForm(): any {
+    return {
+      search: [''],
+      _id_from: [''],
+      _id_to: [''],
+      Location: [''],
+      Zone: [''],
+      Aisle: [''],
+      Bin: [''],
+      Part_Number: [''],
+      Serial_Number: [''],
+      Condition: [''],
+      Category: [''],
+      Owner: [''],
+      Average_Cost_from: [''],
+      Average_Cost_to: [''],
+      Quantity_from: [''],
+      Quantity_to: [''],
+      Unit_of_Measure: [''],
+    };
+  }
 }

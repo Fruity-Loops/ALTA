@@ -1,24 +1,31 @@
 import {env} from 'src/environments/environment';
 // Http testing module and mocking controller
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 
 import {TestBed} from '@angular/core/testing';
-import {AuthService} from './auth.service';
+import {AuthService, UserLocalStorage} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
+import {ManageMemberSpecVariables} from '../users/manage-members-spec-variables';
+import {DashboardComponent} from 'src/app/components/dashboard/dashboard.component'
 
 describe('AuthService', () => {
   let authService: AuthService;
   let httpMock: HttpTestingController;
   const BASEURL = env.api_root;
+  let httpTestingController: HttpTestingController;
+
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       // Import the HttpClient mocking services
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes([
+          {path: 'dashboard', component: DashboardComponent}
+        ]),
+      ],
     });
+    httpTestingController = TestBed.inject(HttpTestingController);
 
     // Inject the http, test controller, and service-under-test
     // As they will be referenced by each test.
@@ -29,6 +36,8 @@ describe('AuthService', () => {
   afterEach(() => {
     // After every test, assert that there are no more pending requests.
     httpMock.verify();
+    httpTestingController.verify();
+    httpTestingController = null;
   });
 
   /// AuthService method tests begin ///
@@ -36,6 +45,7 @@ describe('AuthService', () => {
   // Angular default test added when you generate a service using the CLI
   it('should be created', () => {
     expect(authService).toBeTruthy();
+    expect(httpTestingController).toBeTruthy();
   });
 
   // Test registration
@@ -90,5 +100,96 @@ describe('AuthService', () => {
 
       req.flush(mockSysAdmin2);
     });
+  });
+
+  // set next
+  it('test setNext method', () => {
+    spyOn(authService, 'updateLocalStorage').and.callFake(() => {});
+    authService.setNext(1, 2, 3, 4, 5);
+  });
+
+  // setLogOut
+  it('test setLogOut method', () => {
+    spyOn(authService, 'setNext').and.callFake(() => {});
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    authService.setLogOut();
+  });
+
+  // turnOnOrgMode
+  it('test turnOnOrgMode method', () => {
+    spyOn(authService, 'updateLocalStorage').and.callFake(() => {});
+    authService.turnOnOrgMode(1, false);
+  });
+
+  // turnOffOrgMode
+  it('test turnOffOrgMode method', () => {
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    authService.turnOffOrgMode();
+  });
+
+  // turnOffOrgMode
+  it('test turnOffOrgMode method', () => {
+    spyOn(authService, 'removeFromLocalStorage').and.callFake(() => {});
+    spyOn(authService.router, 'navigate');
+    authService.turnOffOrgMode();
+  });
+
+  // removeFromLocalStorage
+  it('test removeFromLocalStorage method', () => {
+    spyOn(localStorage, 'removeItem').and.callFake(() => {});
+    authService.removeFromLocalStorage(UserLocalStorage.OrgId);
+  });
+
+  // updateLocalStorage
+  it('test updateLocalStorage method', () => {
+    spyOn(localStorage, 'setItem').and.callFake(() => {});
+    authService.updateLocalStorage(UserLocalStorage.OrgId, 1);
+  });
+
+  // getOrgMode
+  it('test getOrgMode method', () => {
+    authService.getOrgMode();
+  });
+
+    // setOrgMode
+  it('test setOrgMode method', () => {
+    authService.setOrgMode(false);
+  });
+
+  // OnDestroy
+  it('test OnDestroy method', () => {
+    authService.OnDestroy();
+  });
+
+  // getCurrentUser
+  it('test getCurrentUser method', () => {
+    let userId = '7';
+    authService.getCurrentUser(userId).subscribe(data => {
+      expect(data.id).toEqual(Number(userId));
+    });
+
+    const req = httpTestingController.expectOne(`${BASEURL}/user/${userId}/`);
+    expect(req.request.method).toBe("GET");
+  });
+
+  // openRegister
+  it('test openRegister method', () => {
+    authService.openRegister({}).subscribe(data => {
+      expect(data).toEqual({});
+    });
+
+    const req = httpTestingController.expectOne(`${BASEURL}/open-registration/`);
+    expect(req.request.method).toBe('POST');
+  });
+
+  // openRegister
+  it('test loginMobile method', () => {
+    // let updateInfo = {first_name: 'a good name', last_name: "admin"};
+    authService.loginMobile({}).subscribe(data => {
+      expect(data).toEqual({});
+    });
+
+    const req = httpTestingController.expectOne(`${BASEURL}/login-mobile/`);
+    expect(req.request.method).toBe('POST');
   });
 });

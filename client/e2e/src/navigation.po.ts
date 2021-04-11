@@ -1,49 +1,63 @@
-import { by, element, ElementFinder } from 'protractor';
+import {by, element, ElementFinder} from 'protractor';
 
 // Navigation through the SIDE MENU
 export class Navigation {
 
-    home(): ElementFinder {
-        return element(by.id('alta_logo'));
-    }
+  home(): ElementFinder {
+    return element(by.id('alta_logo'));
+  }
 
-    // Default View
+  // Default View
 
-    manageOrganizationOption(): ElementFinder {
-        return element(by.cssContainingText(
-            '.option-tab',
-            'Manage Organizations'
-            )
-        );
-    }
+  manageOrganizationOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Manage Organizations'
+      )
+    );
+  }
 
-    manageMembersOption(): ElementFinder {
-        return element(by.cssContainingText(
-            '.option-tab',
-            'Manage Members')
-            );
-    }
+  manageMembersOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Manage Members')
+    );
+  }
 
-    settingsOption(): ElementFinder {
-        return element(by.cssContainingText(
-            '.option-tab',
-            'Settings')
-            );
-    }
+  settingsOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Settings')
+    );
+  }
 
-    // Organization View
+  templatesOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Templates')
+    );
+  }
 
-    employeesOption(): ElementFinder {
-        return element(by.cssContainingText(
-            '.option-tab',
-            'Employees')
-            );
-    }
+  // Organization View
 
-    inventoryOption(): ElementFinder {
-        return element(by.cssContainingText(
-            '.option-tab',
-            'Inventory Items')
-            );
-    }
+  employeesOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Employees')
+    );
+  }
+
+  inventoryOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Inventory Items')
+    );
+  }
+
+  auditsOption(): ElementFinder {
+    return element(by.cssContainingText(
+      '.option-tab',
+      'Audits')
+    );
+  }
 }

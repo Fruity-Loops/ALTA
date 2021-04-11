@@ -13,5 +13,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view()),
     path('logout/', views.LogoutView.as_view()),
     path('login-mobile/', views.LoginMobileEmailView.as_view()),
-    path('login-mobile-pin/', views.LoginMobilePinView.as_view())
+    path('login-mobile-pin/', views.LoginMobilePinView.as_view()),
+    path('reset-password/', views.ResetPasswordEmailView.as_view()),
+    path('user-from-token/', views.UserFromToken.as_view())
 ]

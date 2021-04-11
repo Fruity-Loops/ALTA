@@ -13,9 +13,10 @@
       <mat-grid-list cols="2" rowHeight="38:9">
         <mat-grid-tile>
           <div class="form-group">
-            <mat-label for="power">First Name:</mat-label>
+            <mat-label for="power">{{fieldLabels.first_name}}:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="firstname" type="text" formControlName="first_name" placeholder="First name"/>
+              <input matInput id="firstname" type="text" formControlName="first_name"
+                     [placeholder]="fieldPlaceholders.first_name"/>
               <mat-error class="error" *ngIf="
                   !employeeForm.controls['first_name'].valid &&
                   employeeForm.controls['first_name'].touched
@@ -28,9 +29,9 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
-            <mat-label for="power">E-mail address:</mat-label>
+            <mat-label for="power">{{fieldLabels.email}}:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="email" type="email" formControlName="email" placeholder="E-mail address"/>
+              <input matInput id="email" type="email" formControlName="email" [placeholder]="fieldPlaceholders.email"/>
               <mat-error class="error" *ngIf="
                 !employeeForm.controls['email'].valid &&
                 employeeForm.controls['email'].touched
@@ -43,9 +44,10 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
-            <mat-label for="lastname">Last name:</mat-label>
+            <mat-label for="lastname">{{fieldLabels.last_name}}:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="lastname" type="text" formControlName="last_name" placeholder="Last name"/>
+              <input matInput id="lastname" type="text" formControlName="last_name"
+                     [placeholder]="fieldPlaceholders.last_name"/>
               <mat-error class="error" *ngIf="
                 !employeeForm.controls['last_name'].valid &&
                 employeeForm.controls['last_name'].touched
@@ -58,9 +60,10 @@
         </mat-grid-tile>
         <mat-grid-tile>
           <div class="form-group">
-            <mat-label for="username">Employee ID:</mat-label>
+            <mat-label for="username">{{fieldLabels.employee_id}}:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="user_name" type="text" formControlName="id" placeholder="Employee ID"/>
+              <input matInput id="user_name" type="text" formControlName="id"
+                     [placeholder]="fieldPlaceholders.employee_id"/>
               <mat-error class="error" *ngIf="
                 !employeeForm.controls['id'].valid &&
                 employeeForm.controls['id'].touched
@@ -73,9 +76,10 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="!isEdit || (isEdit && isLoggedInUser.value)">
           <div class="form-group">
-            <mat-label for="pass-word">Password:</mat-label>
+            <mat-label for="pass-word">{{fieldLabels.password}}:</mat-label>
             <mat-form-field appearance="outline" *ngIf="!isEdit">
-              <input matInput id="passwordCreate" type="password" formControlName="password" placeholder="Password"/>
+              <input matInput id="passwordCreate" type="password" formControlName="password"
+                     [placeholder]="fieldPlaceholders.password"/>
               <mat-error class="error" *ngIf="
                 !employeeForm.controls['password'].valid &&
                 employeeForm.controls['password'].touched
@@ -92,9 +96,10 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="(!isEdit && isEmployee) || (isEdit && !isSystemAdmin)">
           <div class="form-group">
-            <mat-label for="power">Employment Location:</mat-label>
+            <mat-label for="power">{{fieldLabels.location}}:</mat-label>
             <mat-form-field appearance="outline">
-              <input matInput id="location" type="text" formControlName="location" placeholder="Employment Location"/>
+              <input matInput id="location" type="text" formControlName="location"
+                     [placeholder]="fieldPlaceholders.location"/>
               <mat-error class="error" *ngIf="
                 !employeeForm.controls['location'].valid &&
                 employeeForm.controls['location'].touched
@@ -107,11 +112,11 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="(!isEdit && isEmployee)">
           <div class="form-group">
-            <mat-label for="pass-word">Role:</mat-label>
+            <mat-label for="pass-word">{{fieldLabels.role}}:</mat-label>
             <mat-form-field appearance="outline">
-              <mat-select class="roleDropDown" formControlName="role">
+              <mat-select id="roleDropDown" formControlName="role">
                 <mat-option value="">Choose a role</mat-option>
-                <mat-option *ngFor="let role of createMembersRoles" [value]="role">
+                <mat-option id="{{ role.name }}" *ngFor="let role of createMembersRoles" [value]="role">
                   {{ role.name }}
                 </mat-option>
               </mat-select>
@@ -120,7 +125,7 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="isEdit && !isLoggedInUser.value">
           <div class="form-group">
-            <mat-label for="pass-word">Role:</mat-label>
+            <mat-label for="pass-word">{{fieldLabels.role}}:</mat-label>
             <mat-form-field appearance="outline">
               <mat-select class="roleDropDown" [(ngModel)]="role" [disabled]=true
                           [ngModelOptions]="{standalone: true}">
@@ -133,7 +138,7 @@
         </mat-grid-tile>
         <mat-grid-tile *ngIf="isEdit && !isLoggedInUser.value">
           <div class="form-group">
-            <mat-label for="is-active">Is Active</mat-label>
+            <mat-label for="is-active">{{fieldLabels.is_active}}:</mat-label>
             <mat-form-field appearance="outline">
               <mat-select class="statusDropDown" id="active" [(ngModel)]="isActive" [disabled]="!edit"
                           [ngModelOptions]="{standalone: true}">
@@ -150,12 +155,14 @@
     <mat-card-actions align="center">
 
       <!-- Show edit button if not in edit mode -->
-      <button id="editButton" *ngIf="isEdit && !edit" mat-button class="edit" (click)="this.editMode(true)">Edit</button>
+      <button id="editButton" *ngIf="isEdit && !edit" mat-button class="edit" (click)="this.editMode(true)">
+        {{actionButtonLabels.edit}}</button>
 
       <!-- Show Save and Cancel buttons if in edit mode -->
       <button id="saveButton" *ngIf="!isEdit || edit" mat-button class="save" (click)="this.edit=false; this.submitForm()"
-              [disabled]="employeeForm.invalid">Save</button>
-      <button id="cancelButton" *ngIf="isEdit && edit" mat-button class="cancel" (click)="this.edit=false; reloadPage();">Cancel</button>
+              [disabled]="employeeForm.invalid">{{actionButtonLabels.save}}</button>
+      <button id="cancelButton" *ngIf="isEdit && edit" mat-button class="cancel" (click)="this.edit=false; reloadPage();">
+        {{actionButtonLabels.cancel}}</button>
     </mat-card-actions>
 
   </form>

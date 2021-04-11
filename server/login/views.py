@@ -17,6 +17,8 @@ from rest_framework.response import Response
 from user_account.serializers import CustomUserSerializer
 from user_account.models import CustomUser
 from user_account.views import CustomUserView
+from email.mime.image import MIMEImage
+import datetime
 
 logger = logging.getLogger(__name__)
 login_failed = {"detail": "Login Failed"}
@@ -64,6 +66,9 @@ class LoginView(generics.GenericAPIView):
                         'token': token.key}
 
                 response = Response(data, status=status.HTTP_200_OK)
+            elif is_verified and not user.is_active:  # Account not active
+                error_msg = {"detail": "Login Failed. Please contact an ALTA representative for more information."}
+                response = Response(error_msg, status=status.HTTP_401_UNAUTHORIZED)
 
         except ObjectDoesNotExist:
             pass
@@ -88,6 +93,7 @@ class LoginMobileEmailView(generics.GenericAPIView):
                 org_id = user.organization.org_id
                 org_name = user.organization.org_name
                 data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                        'location': user.location,
                         'organization_id': org_id,
                         'organization_name': org_name}
 
@@ -95,10 +101,14 @@ class LoginMobileEmailView(generics.GenericAPIView):
                 pin = save_new_pin(receiver_email, user)
                 sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
                 sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
+                message = 'Please use the PIN below in order to login:'
+                subject = 'ALTA Pin'
                 send_email(
                     sender_email,
                     sender_password,
                     receiver_email,
+                    subject,
+                    message,
                     pin)
                 response = Response(data, status=status.HTTP_200_OK)
 
@@ -110,13 +120,15 @@ class LoginMobileEmailView(generics.GenericAPIView):
 
 def save_new_pin(email, user):
     first_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     second_part = '-'
     third_part = ''.join(secrets.choice(string.ascii_letters + string.digits)
-                         for _i in range(3)) #NOSONAR
+                         for _i in range(3))  # NOSONAR
     request = HttpRequest()
     request.data = {'password': first_part + second_part + third_part}
-    logger.error(request.data)
+    # For e2e purposes, uncomment this line:
+    # request.data = {'password': 'password'}
+
     request.user = email
     kwargs = {'partial': True, 'pk': user.id}
     custom_user_view = CustomUserView()
@@ -128,31 +140,32 @@ def save_new_pin(email, user):
     return request.data['password']
 
 
-def send_email(sender, sender_password, receiver, pin):
+def send_email(sender, sender_password, receiver, subject, message, pin):
     msg = MIMEMultipart('alternative')
-    msg['Subject'] = 'ALTA Pin'
+    msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = receiver
-
     text = "Pin: " + pin
-    html = """\
-    <html>
-      <head></head>
-      <body>
-        <p>Your Pin is: """ + pin + """</p>
-      </body>
-    </html>
-    """
+    email_body = open('./login/email/message.html').read().format(pinToSend=pin, year=datetime.datetime.now().year,
+                                                                  messageToSend=message)
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
-    part2 = MIMEText(html, 'html')
+    part2 = MIMEText(email_body, 'html')
 
     # Attach parts into message container.
     # According to RFC 2046, the last part of a multipart message, in this case
     # the HTML message, is best and preferred.
     msg.attach(part1)
     msg.attach(part2)
+
+    fp = open('./login/email//alta-logo.png', 'rb')
+    msg_image = MIMEImage(fp.read())
+    fp.close()
+
+    # Define the image's ID as referenced in message.html
+    msg_image.add_header('Content-ID', '<image1>')
+    msg.attach(msg_image)
 
     # Send the message via local SMTP server.
     try:
@@ -232,3 +245,81 @@ class LogoutView(generics.GenericAPIView):
 
         return Response({"success": "Successfully logged out."},
                         status=status.HTTP_200_OK)
+
+
+class ResetPasswordEmailView(generics.GenericAPIView):
+    """
+    Reset a password of a user through his email.
+    """
+    serializer_class = CustomUserSerializer
+
+    def post(self, request):
+        data = request.data
+        receiver_email = data.get('email', '')
+        response = Response({'message': 'Email not found!'}, status=status.HTTP_404_NOT_FOUND)
+        url = os.getenv('SERVER_URL', ' http://localhost:4200')
+
+        try:
+            user = CustomUser.objects.get(email=receiver_email)
+            if user.is_active:
+                has_token = Token.objects.filter(user=user).count()
+                if has_token:
+                    token = Token.objects.get(user=user)
+                else:
+                    token = Token.objects.create(user=user)
+                if user.role == 'SA':
+                    url += '/#/sa-settings?token=' + str(token.key)
+                    data = {'token': token.key}
+                elif user.role == 'IM':
+                    url += '/#/settings?token=' + str(token.key)
+                    data = {'token': token.key}
+                else:
+                    return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+                sender_email = os.getenv('SENDER_EMAIL', 'email@email.com')
+                sender_password = os.getenv('SENDER_PASSWORD', 'pass1234')
+                message = 'Please use the link below to verify your account and update your password:'
+                subject = 'ALTA reset password link'
+                send_email(
+                    sender_email,
+                    sender_password,
+                    receiver_email,
+                    subject,
+                    message,
+                    url)
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist as exception:
+            logger.error(exception)
+
+        return response
+
+
+class UserFromToken(generics.GenericAPIView):
+    """
+    Get user from token.
+    """
+    serializer_class = CustomUserSerializer
+
+    def get(self, request):
+        user_id = request.user
+        response = Response(login_failed, status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            user = CustomUser.objects.get(email=user_id)
+            if user.is_active:
+                if user.role == 'SA':
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': "",
+                            'organization_name': ""}
+                else:
+                    data = {'user': user.user_name, 'user_id': user.id, 'role': user.role,
+                            'organization_id': user.organization.org_id,
+                            'organization_name': user.organization.org_name}
+
+                response = Response(data, status=status.HTTP_200_OK)
+
+        except ObjectDoesNotExist as exception:
+            logger.error(exception)
+
+        return response

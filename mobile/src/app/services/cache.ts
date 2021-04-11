@@ -10,6 +10,7 @@ export async function setLoggedInUser(userObject): Promise<void> {
             username: userObject.user,
             user_id: userObject.user_id,
             role: userObject.role,
+            location: userObject.location,
             organization_id: userObject.organization_id,
             organization_name: userObject.organization_name
         })

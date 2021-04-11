@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as XLSX from 'xlsx';
+import {OrganizationViewLangFactory, OrgViewActionButtons, OrgViewLabels, OrgViewPlaceholders} from './organization-view.language';
+
 
 @Component({
   template: '',
@@ -19,9 +21,16 @@ export abstract class OrganizationViewComponent implements OnInit {
   locationFileName = '';
   locations: string[] = [];
 
+  fieldLabels: OrgViewLabels;
+  fieldPlaceholders: OrgViewPlaceholders;
+  actionButtons: OrgViewActionButtons;
+
   protected constructor() {
     // Setting defaults, will be changed asynchronously if need be
     [this.location, this.orgName] = ['', ''];
+    const lang = new OrganizationViewLangFactory();
+    [this.fieldLabels, this.fieldPlaceholders, this.actionButtons] = [lang.lang.fieldLabels, lang.lang.fieldPlaceholders,
+      lang.lang.actionButtons];
   }
 
   ngOnInit(): void {
@@ -75,8 +84,7 @@ export abstract class OrganizationViewComponent implements OnInit {
   // tslint:disable-next-line:typedef
   public readFromExcelFile(files: FileList) {
     // @ts-ignore
-    // tslint:disable-next-line:no-non-null-assertion
-    this.locationFileName = files.item(0).name!;
+    this.locationFileName = files.item(0).name;
     this.linesR = [];
     const reader = new FileReader();
     // @ts-ignore
@@ -92,15 +100,14 @@ export abstract class OrganizationViewComponent implements OnInit {
       const workbook = XLSX.read(arr.join(''), {type: 'binary'});
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonFormat = XLSX.utils.sheet_to_json(worksheet, {raw: true, blankrows: false});
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < jsonFormat.length; i++) {
+      jsonFormat.forEach(item => {
         const tarrR = [];
         // @ts-ignore
-        for (const value of Object.values(jsonFormat[i])) {
+        for (const value of Object.values(item)) {
           tarrR.push(value);
         }
         this.linesR.push(tarrR);
-      }
+      });
     };
   }
 

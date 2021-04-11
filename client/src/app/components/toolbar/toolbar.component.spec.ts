@@ -4,6 +4,7 @@ import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {ToolbarComponent} from './toolbar.component';
+import { AppModule } from 'src/app/app.module';
 
 describe('ToolbarComponent', () => {
   let component: ToolbarComponent;
@@ -11,10 +12,10 @@ describe('ToolbarComponent', () => {
   // @ts-ignore
   let authService: AuthService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ToolbarComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, AppModule],
       providers: [
         {
           provide: SidenavService,
@@ -26,16 +27,39 @@ describe('ToolbarComponent', () => {
     }).compileComponents();
 
     authService = TestBed.inject(AuthService);
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ToolbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    authService = null;
+  });
+
   it('should create component', () => {
     expect(component).toBeTruthy();
+  });
+
+  // Test the toggle drawer
+  it('Call toggle drawer', () => {
+    try {
+      component.toggleDrawer();
+    }
+    catch (e) {
+      console.error(e);
+    }
+  });
+
+  // Test the destroy
+  it('Call OnDestroy', () => {
+    try {
+      component.OnDestroy();
+    }
+    catch (e) {
+      console.error(e);
+    }
   });
 
 });

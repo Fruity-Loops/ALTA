@@ -6,6 +6,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 
 import {ManageOrganizationsComponent} from './manage-organizations.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import { AppModule } from 'src/app/app.module';
 
 describe('ManageOrganizationsComponent', () => {
   let component: ManageOrganizationsComponent;
@@ -13,10 +14,10 @@ describe('ManageOrganizationsComponent', () => {
   // @ts-ignore
   let organizationService: ManageOrganizationsService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       declarations: [ManageOrganizationsComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, MatDialogModule, AppModule],
       providers: [
         FormBuilder,
         {
@@ -26,12 +27,15 @@ describe('ManageOrganizationsComponent', () => {
     }).compileComponents();
 
     organizationService = TestBed.inject(ManageOrganizationsService);
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(ManageOrganizationsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  afterEach(() => {
+    fixture = null;
+    component = null;
+    organizationService = null;
   });
 
   it('should create', () => {

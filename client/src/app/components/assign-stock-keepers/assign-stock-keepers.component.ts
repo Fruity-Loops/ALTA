@@ -1,12 +1,13 @@
-import { Component, OnInit, HostListener, TemplateRef } from '@angular/core';
-import { ManageMembersService } from 'src/app/services/users/manage-members.service';
-import { AuditLocalStorage, ManageAuditsService } from 'src/app/services/audits/manage-audits.service';
-import { User } from 'src/app/models/user.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
-import { HttpParams } from '@angular/common/http';
-import { AuthService, UserLocalStorage } from '../../services/authentication/auth.service';
+import {Component, HostListener, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {ManageMembersService} from 'src/app/services/users/manage-members.service';
+import {AuditLocalStorage, ManageAuditsService} from 'src/app/services/audits/manage-audits.service';
+import {User} from 'src/app/models/user.model';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatDialog} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {HttpParams} from '@angular/common/http';
+import {AuthService, UserLocalStorage} from '../../services/authentication/auth.service';
+import {ActionButtons, AssignStockKeepersLangFactory, SKTable} from './assign-stock-keepers.language';
 import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 
 @Component({
@@ -16,15 +17,19 @@ import { IDeactivateComponent } from '../../guards/can-deactivate.guard';
 })
 
 export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent {
+  @ViewChild('discardDialog', { static: true }) template: TemplateRef<any>;
   skToAssign: Array<any>;
   assignments: Array<any>;
   busySKs: Array<any>;
   dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['Check_Boxes', 'First_Name', 'Last_Name', 'Availability'];
   locationsAndUsers: Array<any>;
-  holdItemsLocation: Array<any>;
   maxAssignPerLocation: Array<any>;
   auditID: number;
+
+  title: string;
+  skTable: SKTable;
+  actionButtons: ActionButtons;
 
   panelOpenState = false;
   allExpandState = false;
@@ -34,30 +39,30 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
 
   params = new HttpParams();
 
-
   constructor(
     private manageMembersService: ManageMembersService,
-    private dialog: MatDialog,
+    public dialog: MatDialog,
     private manageAuditsService: ManageAuditsService,
     private authService: AuthService,
-    private router: Router
+    public router: Router
   ) {
+    const lang = new AssignStockKeepersLangFactory();
+    [this.title, this.skTable, this.actionButtons] = [lang.lang.title, lang.lang.skTable, lang.lang.actionButtons];
 
     this.dataSource = new MatTableDataSource<User>();
     this.locationsAndUsers = new Array<any>();
     this.skToAssign = [];
     this.assignments = [];
-    this.holdItemsLocation = [];
     this.maxAssignPerLocation = new Array<any>();
     this.busySKs = new Array<any>();
     this.auditID = Number(this.manageAuditsService.getLocalStorage(AuditLocalStorage.AuditId));
   }
 
   ngOnInit(): void {
-    this.params = this.params.append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId)));
-    this.params = this.params.append('status', 'Active');
-    this.params = this.params.append('no_pagination', 'True');
-
+    this.params = this.params.
+                    append('organization', String(this.authService.getLocalStorage(UserLocalStorage.OrgId))).
+                    append('status', 'Active').
+                    append('no_pagination', 'True');
 
     this.manageAuditsService.getBusySKs(this.params)
       .subscribe((response) => {
@@ -71,24 +76,18 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   populateTable(clients: any): void {
-    /* TODO: look into performance impact of:
-    * 1. sending all an organization's users with a realistic amount of users
-    * 2. how slow this can be to compute on the front-end
-    */
     this.manageAuditsService.getAuditData(this.auditID).subscribe((selectedItems) => {
 
-      this.holdItemsLocation = selectedItems.inventory_items.map((obj: any) => obj.Location);
-      this.holdItemsLocation.forEach((location: any) => {
+      if (selectedItems.assigned_sk !== [])
+          this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
 
-        this.setMaxAssignPerLocation(location, selectedItems);
+      selectedItems.inventory_items.map((obj: any) => obj.Location).forEach((location: any) => {
 
-        this.addLocationWithSKs(location, clients);
+        this.maxAssignPerLocation = this.maxAssignPerLocation.
+                                    concat(this.getMaxAssignPerLocation(location, selectedItems));
+
+        this.locationsAndUsers = this.locationsAndUsers.concat(this.addLocationWithSKs(location, clients));
       });
-
-
-      if (selectedItems.assigned_sk !== []) {
-        this.skToAssign = selectedItems.assigned_sk.map((obj: any) => obj.id);
-      }
 
       this.setCheckboxDisableStatus();
 
@@ -101,46 +100,36 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
   }
 
-  setMaxAssignPerLocation(location: any, correspondingObj: any): void {
+  getMaxAssignPerLocation(location: any, correspondingObj: any): any {
     if (!this.maxAssignPerLocation.some((item: any) => item.location === location)) {
-      const locTotalBins = new Set(correspondingObj.inventory_items.filter((item: any) =>
-        item.Location === location).map((ob: any) => ob.Bin)).size;
-
-      this.maxAssignPerLocation.push({
+      return [{
         location,
-        totalBins: locTotalBins
-      });
+        totalBins: new Set(correspondingObj.inventory_items.filter((item: any) =>
+                   item.Location === location).map((ob: any) => ob.Bin)).size
+      }];
     }
+    return [];
   }
 
-  addLocationWithSKs(location: any, clients: any): void {
-    if (this.locationsAndUsers.find((item: any) => item.location === location) === undefined) {
+  addLocationWithSKs(location: any, clients: any): any {
+    if (!this.locationsAndUsers.find((item: any) => item.location === location)) {
       const getSKForLoc = clients.filter((user: any) =>
         user.location === location && user.role === 'SK');
-      if (getSKForLoc.length !== 0) {
-        this.locationsAndUsers.push(
-          {
-            location,
-            users: getSKForLoc
-          });
+      if (getSKForLoc.length) {
+        return [{location, users: getSKForLoc}];
       } else {
-        this.locationsAndUsers.push(
-          {
-            location,
-            users: []
-          });
+        return [{location, users: []}];
       }
     }
+    return [];
   }
 
   setCheckboxDisableStatus(): void {
     this.locationsAndUsers.forEach((location: any) => {
-
-      const maxPerLocation = this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins;
       let counter = 0;
 
       location.users.forEach((user: any) => {
-        this.setBusyStatus(user);
+        this.setBusyStatus(user, this.busySKs.find(busyUser => busyUser.id === user.id));
 
         // enable the checkbox for previously selected SKs
         if (this.skToAssign.includes(user.id)) {
@@ -150,7 +139,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       });
 
       // disable other SKs if assign limit is reached for location
-      if (counter >= maxPerLocation) {
+      if (counter >= this.maxAssignPerLocation.find(obj => obj.location === location.location).totalBins) {
         location.users.forEach((user: any) => {
           if (!this.skToAssign.includes(user.id)) {
             user.disabled = true;
@@ -160,9 +149,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     });
   }
 
-  setBusyStatus(user: any): void {
-    const isBusy = this.busySKs.find(busyUser => busyUser.id === user.id);
-    if (isBusy === undefined) {
+  setBusyStatus(user: any, isBusy: any): void {
+    if (!isBusy) {
       user.availability = 'Available';
     } else {
       user.availability = 'Busy';
@@ -174,9 +162,8 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   onChange(userId: any, loc: any): void {
-
-    const getLimitOfAssignees = this.maxAssignPerLocation.find(total => total.location === loc).totalBins;
     const holdUsersForThisLocation = this.locationsAndUsers.filter(user => user.location === loc).
+      // @ts-ignore
       map((obj: any) => obj.users).flat(1);
 
     // get all the user id's for this location
@@ -193,7 +180,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
 
       // if there are still SKs to assign after unselecting a user
-      if (intersection.length < getLimitOfAssignees) {
+      if (intersection.length < this.maxAssignPerLocation.find(total => total.location === loc).totalBins) {
         sksFromLocation.forEach((sk: any) => {
           // enable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
@@ -212,7 +199,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
       // get the updated intersection of selected SKs for this location
       const intersection = this.skToAssign.filter(x => sksFromLocation.includes(x));
 
-      if (intersection.length >= getLimitOfAssignees) {
+      if (intersection.length >= this.maxAssignPerLocation.find(total => total.location === loc).totalBins) {
         sksFromLocation.forEach((sk: any) => {
           // disable the selection of other SKs of this location
           if (!intersection.some((id: any) => id === sk)) {
@@ -225,11 +212,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   submitAssignedSKs(): void {
-    let bodyAssignedSK: any;
-    bodyAssignedSK = {
-      assigned_sk: this.skToAssign,
-    };
-    this.manageAuditsService.assignSK(bodyAssignedSK, this.auditID).subscribe(
+    this.manageAuditsService.assignSK({assigned_sk: this.skToAssign,}, this.auditID).subscribe(
       (data) => {
         this.skToAssign = [];
         this.manageAuditsService.createAuditAssignments(this.assignments).subscribe(
@@ -259,8 +242,7 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
     this.manageAuditsService.removeFromLocalStorage(AuditLocalStorage.AuditId);
   }
 
-  goBackIventory(): void {
-    // TODO: Show previously selected info is kept data so when user goes back to previous page
+  goBackInventory(): void {
     setTimeout(() => {
       this.router.navigate(['manage-items'], { replaceUrl: true });
     }, 1000);
@@ -281,14 +263,14 @@ export class AssignStockKeepersComponent implements OnInit, IDeactivateComponent
   }
 
   disableAssign(): boolean {
-    if (this.skToAssign.length === 0) {
+    if (!this.skToAssign.length) {
       return true;
     }
 
     let counter = 0;
     this.locationsAndUsers.forEach((loc: any) => {
-      const intersection = new Set(loc.users.flat().map((obj: any) => obj.id).filter((x: any) => this.skToAssign.includes(x)));
-      if (intersection.size !== 0) {
+      if (new Set(loc.users.flat().map((obj: any) => obj.id).
+            filter((x: any) => this.skToAssign.includes(x))).size !== 0) {
         counter++;
       }
     });

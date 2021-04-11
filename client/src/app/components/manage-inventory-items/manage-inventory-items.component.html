@@ -1,6 +1,7 @@
 <mat-card>
-  <button mat-stroked-button [disabled]="inventoryItemToAudit.length<=0" id="create" class="create" (click)="submitAudit()">Start Audit</button>
-  <mat-card-title>Inventory Items</mat-card-title>
+  <button mat-stroked-button [disabled]="inventoryItemToAudit.length<=0" id="create" class="create"
+          (click)="submitAudit()">{{startAuditBtn}}</button>
+  <mat-card-title>{{title}}</mat-card-title>
   <div>
 
       <form class="col s12" [formGroup]="searchForm" (ngSubmit)="searchItem()" (keydown.Enter)="searchItem();">
@@ -12,7 +13,8 @@
                            (keydown.Enter)="$event.stopImmediatePropagation();">
             <mat-form-field class="searchInventoryBar" style="width: 100%" >
 
-              <input  matInput id="search" type="string" formControlName="search" placeholder="Search..." autocomplete="off" style="width: 100%" id="inventorySearchBar">
+              <input  matInput id="search" type="string" formControlName="search" [placeholder]="searchPlaceholder"
+                      autocomplete="off" style="width: 100%" id="inventorySearchBar">
             </mat-form-field>
             <button mat-icon-button id="searchbtn" class="save">
               <mat-icon matSuffix>search</mat-icon>
@@ -95,9 +97,17 @@
       <div id="audit">List of Audits.</div>
 
       <ng-container matColumnDef="Select">
-        <th scope="col" mat-header-cell *matHeaderCellDef>Select</th>
-        <td mat-cell *matCellDef="let object">
-          <mat-checkbox  (change)='onChange(object["Item_Id"])' [id]="'checkBox' + object['Item_Id']"></mat-checkbox>
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox id="checkBox{{row.Item_Id}}" (click)="$event.stopPropagation()"
+                        (change)="$event ? onRowSelection(row) : null"
+                        [checked]="selection.isSelected(row)">
+          </mat-checkbox>
         </td>
       </ng-container>
 
@@ -105,8 +115,6 @@
         <th scope="col" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.replaceAll('_', ' ') }}</th>
         <td mat-cell *matCellDef="let object">{{ object[column]}}</td>
       </ng-container>
-
-
 
       <tr mat-header-row *matHeaderRowDef="displayedColumnsStatic"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumnsStatic;"></tr>
@@ -119,7 +127,6 @@
       [pageIndex]="pageIndex"
       (page)="paginatorAction($event)">
     </mat-paginator>
-
 
   </div>
 </mat-card>

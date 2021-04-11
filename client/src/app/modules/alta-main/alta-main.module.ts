@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HomeComponent } from 'src/app/components/home/home.component';
@@ -14,7 +14,6 @@ import { EmployeeListComponent } from 'src/app/components/employees/employee-lis
 import { ManageOrganizationsComponent } from 'src/app/components/manage-organizations/organization-list/manage-organizations.component';
 import { ManageMembersService } from 'src/app/services/users/manage-members.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
-import { FormsModule } from '@angular/forms';
 import { EditEmployeeComponent } from '../../components/employees/employee-view/edit-employee/edit-employee.component';
 import { EditOrganizationSettingsComponent} from '../../components/organization-settings/edit-organization-settings/edit-organization-settings.component';
 import { MatMenuModule } from '@angular/material/menu';

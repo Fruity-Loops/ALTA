@@ -36,8 +36,7 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['/manage-organizations']).then(() => {
-            });
+            this.router.navigate(['/manage-organizations']).then();
           }, 1000);
         },
         (err) => {

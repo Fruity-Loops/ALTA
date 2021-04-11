@@ -8,8 +8,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material';
-import { MatPaginatorModule } from '@angular/material/';
-import { MatTableModule } from '@angular/material/';
+import { MatPaginatorModule, MatTableModule } from '@angular/material/';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -58,6 +57,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatExpansionModule,
     DragDropModule,
     MatAutocompleteModule,
-  ]
+  ],
 })
 export class MatModule {}

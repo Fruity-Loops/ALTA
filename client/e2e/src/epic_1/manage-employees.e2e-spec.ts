@@ -22,7 +22,7 @@ describe('AT-1.4: System administrator can create employees accounts within an o
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com', true);
+    loginPage.login_as('sa@test.com', 'password', true);
   });
 
   /**
@@ -97,7 +97,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
    */
   beforeAll(function init(): void {
     const loginPage = new Login();
-    loginPage.login_as('sa@test.com', true);
+    loginPage.login_as('sa@test.com', 'password', true);
     browser.sleep(5000);
   });
 
@@ -139,6 +139,7 @@ describe('AT-1.5, 1.6: System administrator can modify an employee\'s account in
     settingsPage.getStatusDropDown().click();
     settingsPage.getStatusDisabled().click();
     settingsPage.getSaveButton().click();
+    browser.sleep(3000); // Need this pause, page refresh after saving changes.
     settingsPage.getEditButton().click();
     expect(settingsPage.getFirstNameField().getAttribute('value')).toBe('a_good_first_name');
     expect(settingsPage.getLastNameField().getAttribute('value')).toBe('a_good_last_name');
