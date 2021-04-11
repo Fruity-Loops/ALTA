@@ -44,8 +44,13 @@ describe('AT-6.1: Reset account password', () => {
     // browser.wait(ExpectedConditions.urlContains('settings'), 5000);
     browser.sleep(5000);
     // browser.wait(ExpectedConditions.visibilityOf(SAModifies.getEditButton()), 5000);
-    browser.refresh();
-    browser.sleep(5000);
+    browser.getAllWindowHandles().then(function (handles) {
+      let newWindowHandle = handles[1]; // this is your new window
+      browser.switchTo().window(newWindowHandle).then(function () {
+          // fill in the form here
+          browser.sleep(5000);
+      });
+  });
     SAModifies.getEditButton().click();
     browser.sleep(5000);
     browser.wait(ExpectedConditions.visibilityOf(SAModifies.getPasswordField()), 5000);
