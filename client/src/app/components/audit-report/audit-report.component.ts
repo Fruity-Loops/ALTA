@@ -112,6 +112,14 @@ export class AuditReportComponent extends TableManagementComponent implements On
     }
   }
 
+  setDisplayedMetaColumns(metaData: any): void {
+    for (const key in metaData) {
+      if (metaData.hasOwnProperty(key)) {
+        this.displayedMetaColumns.push(key);
+      }
+    }
+  }
+
   setAuditInfo(): void {
     this.auditReportService.getAuditData(this.id).subscribe(
       (metaData: any) => {
@@ -124,11 +132,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
           this.cleanMetaData();
 
           // Getting the field name of the item object returned and populating the column of the table
-          for (const key in this.metaData) {
-            if (this.metaData.hasOwnProperty(key)) {
-              this.displayedMetaColumns.push(key);
-            }
-          }
+          this.setDisplayedMetaColumns(this.metaData);
+
           this.displayedMetaColumns = this.displayedMetaColumns
                                         .filter((title: any) => title !== 'organization' &&
                                                                 title !== 'template_id');
@@ -141,11 +146,8 @@ export class AuditReportComponent extends TableManagementComponent implements On
             this.cleanMetaData();
 
             // Getting the field name of the item object returned and populating the column of the table
-            for (const key in this.metaData) {
-              if (this.metaData.hasOwnProperty(key)) {
-                this.displayedMetaColumns.push(key);
-              }
-            }
+            this.setDisplayedMetaColumns(this.metaData);
+
             this.displayedMetaColumns = this.displayedMetaColumns
                                           .filter((title: any) => title !== 'organization' &&
                                                                   title !== 'template_id');
