@@ -88,12 +88,7 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
       .append('page_size', String(this.pageSize))
       .append('organization', String(localStorage.getItem('organization_id')));
     this.getItems();
-    this.init();
     this.inventoryItemToAudit = [];
-  }
-
-  init(): void {
-
   }
 
   getItems(): void {
@@ -142,11 +137,9 @@ export class ManageInventoryItemsComponent extends TableManagementComponent impl
       // Angular paginator starts at 0, Django pagination starts at 1
       this.pageIndex = this.pageIndex - 1;
     }
-    // this.pageSize = this.data[results].length;
     this.items = this.data[results];
     this.errorMessage = '';
 
-    // TODO: define proper types
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
   }

@@ -2,10 +2,6 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {SidenavService} from 'src/app/services/sidenav.service';
 import {AuthService} from 'src/app/services/authentication/auth.service';
 
-// TODO: remove
-// import {Router} from '@angular/router';
-// import {TokenService} from 'src/app/services/token.service';
-
 @Component({
   selector: 'app-toolbar',
   templateUrl: './toolbar.component.html',
@@ -24,17 +20,11 @@ export class ToolbarComponent implements OnInit {
   orgMode: boolean;
 
   constructor(
-    // TODO: remove
-    // private tokenService: TokenService,
-    // private router: Router,
 
     private sidenav: SidenavService,
     private authService: AuthService
   ) {
     this.orgMode = false;
-
-    // TODO: what strings should be assigned by default
-    //  which wouldn't hinder our security
     this.organization = '';
     this.loggedInUser = '';
     this.loggedInUserRole = '';

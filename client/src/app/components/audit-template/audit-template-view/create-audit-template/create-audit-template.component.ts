@@ -130,8 +130,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
         () => {
           setTimeout(() => {
             // Redirect user back to list of templates
-            this.router.navigate(['template']).then(() => {
-            });
+            this.router.navigate(['template']).then();
           }, 1000); // Waiting 1 second before redirecting the user
           this.initializeForm();
           this.errorMessage = '';

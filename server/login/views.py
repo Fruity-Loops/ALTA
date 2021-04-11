@@ -160,12 +160,12 @@ def send_email(sender, sender_password, receiver, subject, message, pin):
     msg.attach(part2)
 
     fp = open('./login/email//alta-logo.png', 'rb')
-    msgImage = MIMEImage(fp.read())
+    msg_image = MIMEImage(fp.read())
     fp.close()
 
     # Define the image's ID as referenced in message.html
-    msgImage.add_header('Content-ID', '<image1>')
-    msg.attach(msgImage)
+    msg_image.add_header('Content-ID', '<image1>')
+    msg.attach(msg_image)
 
     # Send the message via local SMTP server.
     try:

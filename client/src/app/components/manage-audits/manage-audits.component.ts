@@ -240,7 +240,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.innerDataSource = new MatTableDataSource();
 
         this.displayWarningMessage(auditStatus);
-        
+
         this.auditService.getCompleteAudit(auditId).subscribe(
           (data: any) => {
 
@@ -407,12 +407,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
 
     this.items.forEach((audit: any) => {
       audit.isSelected = false;
-
-    }  );
+    });
 
     // @ts-ignore
     this.dataSource = new MatTableDataSource(this.items);
-    // console.log(this.items)
   }
 
 
