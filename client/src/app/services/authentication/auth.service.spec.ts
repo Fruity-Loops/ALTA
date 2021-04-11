@@ -7,7 +7,7 @@ import {AuthService, UserLocalStorage} from './auth.service';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ManageMemberSpecVariables} from '../users/manage-members-spec-variables';
 
-fdescribe('AuthService', () => {
+describe('AuthService', () => {
   let authService: AuthService;
   let httpMock: HttpTestingController;
   const BASEURL = env.api_root;
