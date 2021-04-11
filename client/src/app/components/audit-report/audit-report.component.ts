@@ -214,18 +214,21 @@ export class AuditReportComponent extends TableManagementComponent implements On
           // display quantity and status last
           this.resultsDisplayedColumns = this.resultsDisplayedColumns.concat(['Quantity', 'status']);
 
-          const cleanData = data;
-          cleanData.forEach((record: any) => {
-            record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
-            record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
-          });
-          this.resultsDataSource = new MatTableDataSource(cleanData);
+          this.resultsDataSource = new MatTableDataSource(this.getCleanData(data));
         }
       },
       (err: any) => {
         this.errorMessage = err;
       }
     );
+  }
+
+  getCleanData(data: any): any {
+    data.forEach((record: any) => {
+      record.first_verified_on = this.datePipe.transform(record.first_verified_on, 'EEEE, MMMM d, y - H:mm');
+      record.last_verified_on = this.datePipe.transform(record.last_verified_on, 'EEEE, MMMM d, y - H:mm');
+    });
+    return data;
   }
 
   updatePage(): void {
@@ -286,7 +289,6 @@ export class AuditReportComponent extends TableManagementComponent implements On
       }
     );
   }
-
 
   async reloadPage(): Promise<void> {
     await this.router.navigateByUrl('/', { skipLocationChange: true });
