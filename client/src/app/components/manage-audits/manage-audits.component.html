@@ -383,33 +383,37 @@
                       <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                         <mat-expansion-panel-header>
                           <mat-panel-title>
-                            By Frequently Audited Parts
+                            By Rarely Audited Bins
                           </mat-panel-title>
                           <mat-panel-description>
                             <mat-icon>expand_more</mat-icon>
                           </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <p>The top 5 frequently audited parts</p>
-                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourcePart"
+                        <p>The top 5 rarely audited parts</p>
+                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataRarelyAuditedBins"
                                class="mat-elevation-z8">
-                          <ng-container matColumnDef="Batch_Number">
-                            <th mat-header-cell *matHeaderCellDef> Batch Number </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
+                          <ng-container matColumnDef="Location">
+                            <th mat-header-cell *matHeaderCellDef> Location </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Location}} </td>
                           </ng-container>
-                          <ng-container matColumnDef="Part">
-                            <th mat-header-cell *matHeaderCellDef> Part </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+                          <ng-container matColumnDef="Zone">
+                            <th mat-header-cell *matHeaderCellDef> Zone </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Zone}} </td>
                           </ng-container>
-                          <ng-container matColumnDef="Serial_Number">
-                            <th mat-header-cell *matHeaderCellDef> Serial Number </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+                          <ng-container matColumnDef="Aisle">
+                            <th mat-header-cell *matHeaderCellDef> Aisle </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Aisle}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Bin">
+                            <th mat-header-cell *matHeaderCellDef> Bin </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
                           </ng-container>
                           <ng-container matColumnDef="Count">
                             <th mat-header-cell *matHeaderCellDef> Count </th>
                             <td mat-cell *matCellDef="let element"> {{element.total}} </td>
                           </ng-container>
-                          <tr mat-header-row *matHeaderRowDef="displayedColumnsPart"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsBin"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsBin;"></tr>
                         </table>
                         <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourcePart)">Create
                           Audit Template From Table</button>
@@ -468,21 +472,21 @@
                       <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                         <mat-expansion-panel-header>
                           <mat-panel-title>
-                            By Frequently Audited Parts
+                            By Rarely Audited Parts
                           </mat-panel-title>
                           <mat-panel-description>
                             <mat-icon>expand_more</mat-icon>
                           </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <p>The top 5 frequently audited parts</p>
-                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourcePart"
+                        <p>The top 5 rarely audited parts</p>
+                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataRarelyAuditedItems"
                                class="mat-elevation-z8">
                           <ng-container matColumnDef="Batch_Number">
                             <th mat-header-cell *matHeaderCellDef> Batch Number </th>
                             <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
                           </ng-container>
                           <ng-container matColumnDef="Part">
-                            <th mat-header-cell *matHeaderCellDef> Part </th>
+                            <th mat-header-cell *matHeaderCellDef> Part Number </th>
                             <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
                           </ng-container>
                           <ng-container matColumnDef="Serial_Number">
@@ -508,6 +512,8 @@
     </mat-tab>
   </mat-tab-group>
 </mat-card>
+
+
 
 <!--=======-->
 <!--<mat-tab-group mat-stretch-tabs class="example-stretched-tabs mat-elevation-z4">-->

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, IntegerField, Q
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -512,17 +512,75 @@ class RecommendationViewSet(LoggingViewset):
             Item.objects.filter(organization=org_id, Criticality='High')
             .values('Item_Id', 'Part_Number', 'Serial_Number'))
 
+        # The top 5 rarely audited bins
+        rarely_audited_bins = get_rarely_audited_bins(org_id)
+
+        # The top 5 rarely audited items
+        rarely_audited_items = get_rarely_audited_items(org_id)
+
         data = {
             'bins_recommendation': bins_to_recommend,
             'parts_recommendation': parts_to_recommend,
             'items_recommendation': items_to_recommend,
-            'item_based_on_category': high_criticality_items
+            'item_based_on_category': high_criticality_items,
+            'rarely_audited_bins': rarely_audited_bins,
+            'rarely_audited_items': rarely_audited_items
             }
         return Response(data)
 
 
+def get_rarely_audited_items(org_id):
+
+    # Audit recommendation - Rarely Audited Items
+    audited_items = list(Record.objects.filter(
+        bin_to_sk__init_audit__organization=org_id) \
+        .values('item_id', 'Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('item_id'))\
+        .values('item_id', 'Batch_Number', 'Part_Number', 'Serial_Number', 'total').order_by('-total'))
+
+    audited_item_ids = list(Record.objects.filter(
+        bin_to_sk__init_audit__organization=org_id) \
+        .values_list('item_id', flat=True))
+
+    never_audited_items = list(Item.objects.filter(organization=org_id).exclude(Item_Id__in=audited_item_ids)\
+        .values('Item_Id', 'Part_Number', 'Serial_Number', 'Batch_Number'))
+
+    # set total audit count to 0
+    for item in never_audited_items:
+        item['total'] = 0
+
+    rarely_audited_items = sorted((audited_items + never_audited_items), key=lambda d: d['total'])[:5]
+
+    return rarely_audited_items
+
+
+def get_rarely_audited_bins(org_id):
+    # Audit recommendation - Rarely Audited Items
+    audited_bins = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Bin', 'Location', 'Zone', 'Aisle')
+                .annotate(total=Count('Bin', distinct=True)).values('Bin', 'total', 'Location', 'Zone', 'Aisle')
+                .order_by('-total'))
+
+    never_audited_bins = list(Item.objects.filter(organization=org_id)
+                              .filter(~Q(Bin__in=audited_bins) &
+                                      ~Q(Location__in=audited_bins) &
+                                      ~Q(Zone__in=audited_bins) &
+                                      ~Q(Aisle__in=[d['Aisle'] for d in audited_bins]))
+                              .values('Bin', 'Location', 'Zone', 'Aisle'))
+
+    # set total audit count to 0
+    for item in never_audited_bins:
+        item['total'] = 0
+
+    rarely_audited_bins = sorted((audited_bins + list(never_audited_bins)), key=lambda d: d['total'])[:5]
+
+    return rarely_audited_bins
+
+
 def get_values(list_of_dict, key):
     return [val[key] for val in list_of_dict]
+
 
 class InsightsViewSet(LoggingViewset):
     """

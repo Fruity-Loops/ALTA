@@ -118,6 +118,9 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   dataSourceRandomItem: any = [];
   dataSourceCategoryItem: any = [];
 
+  dataRarelyAuditedItems: any = [];
+  dataRarelyAuditedBins: any = [];
+
   last_week_audit_count: any;
   last_month_audit_count: any;
   last_year_audit_count: any;
@@ -534,6 +537,8 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.dataSourceItem = data['items_recommendation'];
         this.dataSourceRandomItem = data['random_items'];
         this.dataSourceCategoryItem = data['item_based_on_category'];
+        this.dataRarelyAuditedBins = data['rarely_audited_bins'];
+        this.dataRarelyAuditedItems = data['rarely_audited_items'];
       },
       (err: any) => {
         this.errorMessage = err;
