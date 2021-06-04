@@ -518,13 +518,31 @@ class RecommendationViewSet(LoggingViewset):
         # The top 5 rarely audited items
         rarely_audited_items = get_rarely_audited_items(org_id)
 
+        # The top 5 newly found items in past 30 days
+        recent_new_items = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id, status='New', last_verified_on__gt=datetime.now()-timedelta(days=30))
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
+                .order_by('-total')[:5])
+
+        # The top 5 flagged items in past 30 days
+        flagged_items = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id, flagged=True, last_verified_on__gt=datetime.now()-timedelta(days=30))
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
+                .order_by('-total')[:5])
+
         data = {
             'bins_recommendation': bins_to_recommend,
             'parts_recommendation': parts_to_recommend,
             'items_recommendation': items_to_recommend,
             'item_based_on_category': high_criticality_items,
             'rarely_audited_bins': rarely_audited_bins,
-            'rarely_audited_items': rarely_audited_items
+            'rarely_audited_items': rarely_audited_items,
+            'top_flagged_items': flagged_items,
+            'recent_new_items': recent_new_items
             }
         return Response(data)
 

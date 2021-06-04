@@ -415,7 +415,7 @@
                           <tr mat-header-row *matHeaderRowDef="displayedColumnsBin"></tr>
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsBin;"></tr>
                         </table>
-                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourcePart)">Create
+                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataRarelyAuditedBins)">Create
                           Audit Template From Table</button>
                       </mat-expansion-panel>
                     </mat-accordion>
@@ -427,42 +427,38 @@
 
                   <div class="dropdown">
                     <mat-accordion>
-                      <mat-expansion-panel id="FreqAuditedBins" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                      <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
                         <mat-expansion-panel-header>
                           <mat-panel-title>
-                            By Frequently Audited Bins
+                            By Frequently Audited Parts
                           </mat-panel-title>
                           <mat-panel-description>
                             <mat-icon>expand_more</mat-icon>
                           </mat-panel-description>
                         </mat-expansion-panel-header>
-                        <p>The top 5 frequently audited bins</p>
-                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourceBin"
+                        <p>The top 5 frequently audited parts</p>
+                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataSourcePart"
                                class="mat-elevation-z8">
-                          <ng-container matColumnDef="Location">
-                            <th mat-header-cell *matHeaderCellDef> Location </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Location}} </td>
+                          <ng-container matColumnDef="Batch_Number">
+                            <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
                           </ng-container>
-                          <ng-container matColumnDef="Zone">
-                            <th mat-header-cell *matHeaderCellDef> Zone </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Zone}} </td>
+                          <ng-container matColumnDef="Part">
+                            <th mat-header-cell *matHeaderCellDef> Part Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
                           </ng-container>
-                          <ng-container matColumnDef="Aisle">
-                            <th mat-header-cell *matHeaderCellDef> Aisle </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Aisle}} </td>
-                          </ng-container>
-                          <ng-container matColumnDef="Bin">
-                            <th mat-header-cell *matHeaderCellDef> Bin </th>
-                            <td mat-cell *matCellDef="let element"> {{element.Bin}} </td>
+                          <ng-container matColumnDef="Serial_Number">
+                            <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
                           </ng-container>
                           <ng-container matColumnDef="Count">
                             <th mat-header-cell *matHeaderCellDef> Count </th>
                             <td mat-cell *matCellDef="let element"> {{element.total}} </td>
                           </ng-container>
-                          <tr mat-header-row *matHeaderRowDef="displayedColumnsBin"></tr>
-                          <tr mat-row *matRowDef="let row; columns: displayedColumnsBin;"></tr>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsPart"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
                         </table>
-                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourceBin)">Create
+                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourcePart)">Create
                           Audit Template From Table</button>
                       </mat-expansion-panel>
                     </mat-accordion>
@@ -501,6 +497,82 @@
                           <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
                         </table>
                         <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataSourcePart)">Create
+                          Audit Template From Table</button>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </div>
+                  <div class="dropdown">
+                    <mat-accordion>
+                      <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            By Newly Discovered Parts
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            <mat-icon>expand_more</mat-icon>
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p>The top 5 newly discovered parts in the past 30 days</p>
+                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataRecentNewItems"
+                               class="mat-elevation-z8">
+                          <ng-container matColumnDef="Batch_Number">
+                            <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Part">
+                            <th mat-header-cell *matHeaderCellDef> Part Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Serial_Number">
+                            <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Count">
+                            <th mat-header-cell *matHeaderCellDef> Count </th>
+                            <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsPart"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
+                        </table>
+                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataRecentNewItems)">Create
+                          Audit Template From Table</button>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </div>
+                  <div class="dropdown">
+                    <mat-accordion>
+                      <mat-expansion-panel id="FreqAuditedParts" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            By Frequently Flagged Parts
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            <mat-icon>expand_more</mat-icon>
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p>The top 5 frequently flagged parts in the past 30 days</p>
+                        <table style="float: left; margin-right: 30px" mat-table [dataSource]="dataTopFlaggedItems"
+                               class="mat-elevation-z8">
+                          <ng-container matColumnDef="Batch_Number">
+                            <th mat-header-cell *matHeaderCellDef> Batch Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Batch_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Part">
+                            <th mat-header-cell *matHeaderCellDef> Part Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Part_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Serial_Number">
+                            <th mat-header-cell *matHeaderCellDef> Serial Number </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Serial_Number}} </td>
+                          </ng-container>
+                          <ng-container matColumnDef="Count">
+                            <th mat-header-cell *matHeaderCellDef> Count </th>
+                            <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsPart"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsPart;"></tr>
+                        </table>
+                        <button mat-stroked-button class="createTemplate" (click)="createTempalte(dataTopFlaggedItems)">Create
                           Audit Template From Table</button>
                       </mat-expansion-panel>
                     </mat-accordion>
