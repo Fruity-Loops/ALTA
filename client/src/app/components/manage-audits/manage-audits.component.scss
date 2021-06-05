@@ -186,10 +186,31 @@ th.mat-header-cell {
   margin-bottom: 20px;
 }
 
-.insight-card {
-  width: 20%;
+.insight-card-count {
+  width: 30%;
   float: left;
   margin: 8px 8px 8px 8px;
+}
+
+.insight-card-accuracy {
+  width: 50%;
+  float: left;
+  margin: 8px 8px 8px 8px;
+}
+
+.insight-card-duration {
+  width: 100%;
+  float: left;
+  margin: 8px 8px 8px 8px;
+}
+
+.centerTitle {
+  justify-content: center;
+}
+
+.centerCard {
+  display: flex;
+  justify-content: center;
 }
 
 .counter {

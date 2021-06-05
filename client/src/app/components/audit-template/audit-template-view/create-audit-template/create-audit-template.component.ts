@@ -14,6 +14,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
 
   disabled = false;
   routeParams: any;
+  recommendation = false;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -28,6 +29,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
   getRouteParams(): void {
     this.routeParams = this.router.getCurrentNavigation()?.extras.state?.data;
     if (this.routeParams != null) {
+      this.recommendation = true;
       for (const recommendedItems of this.routeParams) {
         Object.keys(recommendedItems).forEach(recommendedLabel => {
           // @ts-ignore
@@ -51,6 +53,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
       Part_Number: '',
       Serial_Number: '',
       start_date: '',
+      recommendation: false,
       repeat_every: this.repeatEvery,
       on_day: this.dayArray,
       for_month: this.monthArray,
@@ -90,6 +93,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
     body.on_day = this.dayArray;
     body.for_month = this.monthArray;
     body.time_zone_utc = this.timeZoneUTC;
+    body.recommendation = this.recommendation;
 
     this.submitTemplate(checkedDay, checkedMonth, body);
   }

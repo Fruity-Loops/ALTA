@@ -94,6 +94,7 @@ export abstract class AuditTemplateViewComponent implements OnInit {
     Bin: [],
     Part_Number: [],
     Serial_Number: [],
+    recommendation: false,
     start_date: '',
     repeat_every: '',
     on_day: [],

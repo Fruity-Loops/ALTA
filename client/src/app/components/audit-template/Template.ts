@@ -11,4 +11,5 @@ export interface Template {
   on_day: any;
   for_month: any;
   time_zone_utc: any;
+  recommendation: any;
 }

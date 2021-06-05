@@ -33,6 +33,7 @@ export class EditAuditTemplateComponent extends AuditTemplateViewComponent {
       Bin: '',
       Part_Number: '',
       Serial_Number: '',
+      recommendation: false,
       start_date: '',
       repeat_every: '',
       on_day: '',

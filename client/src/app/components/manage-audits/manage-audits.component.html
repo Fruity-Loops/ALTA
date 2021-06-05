@@ -118,48 +118,79 @@
             [title]="chartOptions.title"
           ></apx-chart>
         </div>
-        <br>
       </ng-template>
     </mat-tab>
     <mat-tab label="Insights">
+      <br>
       <div class="insights">
-        <mat-card class="insight-card">
-          <p>Last week audit count</p>
-          <br>
-          <p class='counter'>{{last_week_audit_count}}</p>
-        </mat-card>
-        <mat-card class="insight-card">
-          <p>Last month audit count</p>
-          <br>
-          <p class='counter'>{{last_month_audit_count}}</p>
+        <div fxLayout="row wrap" fxLayoutGap="grid">
+          <div fxFlex="100%">
+            <mat-card-header class="centerTitle">
+              <mat-card-title>Count</mat-card-title>
+            </mat-card-header>
+            <mat-card class="insight-card-count">
+              <p>Last week audit count</p>
+              <br>
+              <p class='counter'>{{last_week_audit_count}}</p>
+            </mat-card>
+            <mat-card class="insight-card-count">
+              <p>Last month audit count</p>
+              <br>
+              <p class='counter'>{{last_month_audit_count}}</p>
 
-        </mat-card>
-        <mat-card class="insight-card">
-          <p>Last year audit count</p>
-          <br>
-          <p class='counter'>{{last_year_audit_count}}</p>
+            </mat-card>
+            <mat-card class="insight-card-count">
+              <p>Last year audit count</p>
+              <br>
+              <p class='counter'>{{last_year_audit_count}}</p>
 
-        </mat-card>
-        <mat-card class="insight-card">
-          <p>Cumulative audit accuracy</p>
-          <br>
-          <p class='counter'>{{average_audit_accuracy}} %</p>
+            </mat-card>
+          </div>
+        </div>
+        <br>
+        <div fxLayout="row wrap" fxLayoutGap="grid">
+          <div fxFlex="100%">
+            <mat-card-header class="centerTitle">
+              <mat-card-title>Accuracy</mat-card-title>
+            </mat-card-header>
+            <div class="centerCard">
+              <mat-card class="insight-card-accuracy">
+              <p>Cumulative audit accuracy without using recommendations</p>
+              <br>
+              <p class='counter'>{{average_audit_accuracy}} %</p>
 
-        </mat-card>
-        <mat-card class="insight-card">
-          <p>Average audit time</p>
-          <br>
-          <p class='counter_date'><b>Days:</b> {{average_time_audit_day}}</p>
-          <br>
-          <p class='counter_date'><b>Hours: </b>{{average_time_audit_hour}}</p>
-          <br>
-          <p class='counter_date'><b>Minutes:</b> {{average_time_audit_min}}</p>
-          <br>
-          <p class='counter_date'><b>Seconds:</b> {{average_time_audit_seconds}}</p>
+            </mat-card>
+            <mat-card class="insight-card-accuracy">
+              <p>Cumulative audit accuracy using recommendations</p>
+              <br>
+              <p class='counter'>{{recommendation_accuracy_average}} %</p>
 
-        </mat-card>
+            </mat-card>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div fxLayout="row wrap" fxLayoutGap="grid">
+          <div fxFlex="100%">
+            <mat-card-header class="centerTitle">
+              <mat-card-title>Duration</mat-card-title>
+            </mat-card-header>
+            <div class="centerCard">
+              <mat-card class="insight-card-duration">
+              <p>Average audit time</p>
+              <br>
+              <p class='counter_date'><b>Days:</b> {{average_time_audit_day}}</p>
+              <br>
+              <p class='counter_date'><b>Hours: </b>{{average_time_audit_hour}}</p>
+              <br>
+              <p class='counter_date'><b>Minutes:</b> {{average_time_audit_min}}</p>
+              <br>
+              <p class='counter_date'><b>Seconds:</b> {{average_time_audit_seconds}}</p>
+            </mat-card>
+            </div>
+          </div>
+        </div>
       </div>
-
     </mat-tab>
     <mat-tab id="Recommendation" label="Recommendation">
       <mat-card>
