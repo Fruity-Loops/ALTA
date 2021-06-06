@@ -186,6 +186,12 @@ th.mat-header-cell {
   margin-bottom: 20px;
 }
 
+.vertical-scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 500px;
+}
+
 .insight-card-count {
   width: 30%;
   float: left;
