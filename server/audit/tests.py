@@ -298,6 +298,7 @@ class RecommendationTestCase(APITestCase):
     def test_list_recommendations_as_im(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get("/recommendation/", {'organization': 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data['bins_recommendation']) <= 5, True)
         self.assertEqual(len(response.data['parts_recommendation']) <= 5, True)
         self.assertEqual(len(response.data['items_recommendation']) <= 5, True)
@@ -331,6 +332,7 @@ class InsightsTestCase(APITestCase):
     def test_list_insights_as_im(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get("/insights/", {'organization': 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(isinstance(response.data['average_accuracy'], (int, float)), True)
         self.assertEqual(100 >= response.data['average_accuracy'] >= 0, True)
         self.assertEqual(isinstance(response.data['recommendation_accuracy_average'], (int, float)), True)

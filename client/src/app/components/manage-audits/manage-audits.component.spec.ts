@@ -147,7 +147,11 @@ describe('ManageInventoryItemsComponent', () => {
       parts_recommendation: 'sourcepart',
       items_recommendation: 'sourceitem',
       random_items: 'randomitem',
-      item_based_on_category: 'category'
+      item_based_on_category: 'category',
+      rarely_audited_bins: 'rarelyauditedbins',
+      rarely_audited_items: 'rarelyauditeditems',
+      top_flagged_items: 'topflaggeditems',
+      recent_new_items: 'recentnewitems'
     }), throwError('error!'));
     component.getRecommendations();
     expect(component.dataSourceBin).toBe('sourcebin');
@@ -161,6 +165,7 @@ describe('ManageInventoryItemsComponent', () => {
       last_month_audit_count: 1,
       last_year_audit_count: 1,
       average_accuracy: 0.5,
+      recommendation_accuracy_average: 0.5,
       average_audit_time: {
         seconds: 1,
         minutes: 1,
