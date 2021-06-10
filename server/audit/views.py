@@ -473,6 +473,7 @@ class RecommendationViewSet(LoggingViewset):
     """
     http_method_names = ['get']
     serializer_class = GetBinToSKSerializer
+    queryset = Record.objects.all()
 
     def get_permissions(self):
         super().set_request_data(self.request)
@@ -639,8 +640,11 @@ class InsightsViewSet(LoggingViewset):
 
         time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
 
-        # giving datetime.timedelta(0) as the start value makes sum work on tds
-        average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+        average_timedelta = 0
+        if len(time_deltas):
+            # giving datetime.timedelta(0) as the start value makes sum work on tds
+            average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+
         days, hours, minutes = get_days_hour_min(average_timedelta)
 
         today = datetime.now()

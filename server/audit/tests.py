@@ -279,3 +279,65 @@ class AssignmentTestCase(APITestCase):
             }, format="json")
         self.assertEqual(response.status_code,
                          status.HTTP_201_CREATED)
+
+
+class RecommendationTestCase(APITestCase):
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json", "record.json"]
+
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create each type of user that could be making the registration request
+        self.inv_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
+
+        # Create the affiliated organization
+        self.org_id = Organization.objects.get(org_id="1")
+
+    # testing the retrieval of recommendations given an IM user role
+    def test_list_recommendations_as_im(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        response = self.client.get("/recommendation/", {'organization': 1})
+        self.assertEqual(len(response.data['bins_recommendation']) <= 5, True)
+        self.assertEqual(len(response.data['parts_recommendation']) <= 5, True)
+        self.assertEqual(len(response.data['items_recommendation']) <= 5, True)
+        self.assertEqual(len(response.data['item_based_on_category']) <= 5, True)
+        self.assertEqual(len(response.data['rarely_audited_bins']) <= 5, True)
+        self.assertEqual(len(response.data['rarely_audited_items']) <= 5, True)
+        self.assertEqual(len(response.data['top_flagged_items']) <= 5, True)
+        self.assertEqual(len(response.data['recent_new_items']) <= 5, True)
+
+    # testing the retrieval of recommendations as SK user role
+    def test_list_recommendations_as_sk(self):
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.get("/recommendation/", {'organization': 1})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class InsightsTestCase(APITestCase):
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json", "record.json"]
+
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create each type of user that could be making the registration request
+        self.inv_manager = CustomUser.objects.get(user_name="im")
+        self.stock_keeper = CustomUser.objects.get(user_name="sk")
+
+        # Create the affiliated organization
+        self.org_id = Organization.objects.get(org_id="1")
+
+    # testing the retrieval of recommendations given an IM user role
+    def test_list_insights_as_im(self):
+        self.client.force_authenticate(user=self.inv_manager)
+        response = self.client.get("/insights/", {'organization': 1})
+        self.assertEqual(isinstance(response.data['average_accuracy'], (int, float)), True)
+        self.assertEqual(100 >= response.data['average_accuracy'] >= 0, True)
+        self.assertEqual(isinstance(response.data['recommendation_accuracy_average'], (int, float)), True)
+        self.assertEqual(100 >= response.data['recommendation_accuracy_average'] >= 0, True)
+
+    # testing the retrieval of recommendations as SK user role
+    def test_list_insights_as_sk(self):
+        self.client.force_authenticate(user=self.stock_keeper)
+        response = self.client.get("/recommendation/", {'organization': 1})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
