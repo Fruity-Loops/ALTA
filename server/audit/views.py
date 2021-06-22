@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, IntegerField, Q
 from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
@@ -473,6 +473,7 @@ class RecommendationViewSet(LoggingViewset):
     """
     http_method_names = ['get']
     serializer_class = GetBinToSKSerializer
+    queryset = Record.objects.all()
 
     def get_permissions(self):
         super().set_request_data(self.request)
@@ -512,17 +513,93 @@ class RecommendationViewSet(LoggingViewset):
             Item.objects.filter(organization=org_id, Criticality='High')
             .values('Item_Id', 'Part_Number', 'Serial_Number'))
 
+        # The top 5 rarely audited bins
+        rarely_audited_bins = get_rarely_audited_bins(org_id)
+
+        # The top 5 rarely audited items
+        rarely_audited_items = get_rarely_audited_items(org_id)
+
+        # The top 5 newly found items in past 30 days
+        recent_new_items = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id, status='New', last_verified_on__gt=datetime.now()-timedelta(days=30))
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
+                .order_by('-total')[:5])
+
+        # The top 5 flagged items in past 30 days
+        flagged_items = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id, flagged=True, last_verified_on__gt=datetime.now()-timedelta(days=30))
+                .values('Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('Part_Number'))
+                .values('Part_Number', 'total', 'Serial_Number', 'Batch_Number').order_by('total')
+                .order_by('-total')[:5])
+
         data = {
             'bins_recommendation': bins_to_recommend,
             'parts_recommendation': parts_to_recommend,
             'items_recommendation': items_to_recommend,
-            'item_based_on_category': high_criticality_items
+            'item_based_on_category': high_criticality_items,
+            'rarely_audited_bins': rarely_audited_bins,
+            'rarely_audited_items': rarely_audited_items,
+            'top_flagged_items': flagged_items,
+            'recent_new_items': recent_new_items
             }
         return Response(data)
 
 
+def get_rarely_audited_items(org_id):
+
+    # Audit recommendation - Rarely Audited Items
+    audited_items = list(Record.objects.filter(
+        bin_to_sk__init_audit__organization=org_id) \
+        .values('item_id', 'Part_Number', 'Serial_Number', 'Batch_Number').annotate(total=Count('item_id'))\
+        .values('item_id', 'Batch_Number', 'Part_Number', 'Serial_Number', 'total').order_by('-total'))
+
+    audited_item_ids = list(Record.objects.filter(
+        bin_to_sk__init_audit__organization=org_id) \
+        .values_list('item_id', flat=True))
+
+    never_audited_items = list(Item.objects.filter(organization=org_id).exclude(Item_Id__in=audited_item_ids)\
+        .values('Item_Id', 'Part_Number', 'Serial_Number', 'Batch_Number'))
+
+    # set total audit count to 0
+    for item in never_audited_items:
+        item['total'] = 0
+
+    rarely_audited_items = sorted((audited_items + never_audited_items), key=lambda d: d['total'])[:5]
+
+    return rarely_audited_items
+
+
+def get_rarely_audited_bins(org_id):
+    # Audit recommendation - Rarely Audited Items
+    audited_bins = list(
+            Record.objects.filter(
+                bin_to_sk__init_audit__organization=org_id)
+                .values('Bin', 'Location', 'Zone', 'Aisle')
+                .annotate(total=Count('Bin', distinct=True)).values('Bin', 'total', 'Location', 'Zone', 'Aisle')
+                .order_by('-total'))
+
+    never_audited_bins = list(Item.objects.filter(organization=org_id)
+                              .filter(~Q(Bin__in=audited_bins) &
+                                      ~Q(Location__in=audited_bins) &
+                                      ~Q(Zone__in=audited_bins) &
+                                      ~Q(Aisle__in=[d['Aisle'] for d in audited_bins]))
+                              .values('Bin', 'Location', 'Zone', 'Aisle'))
+
+    # set total audit count to 0
+    for item in never_audited_bins:
+        item['total'] = 0
+
+    rarely_audited_bins = sorted((audited_bins + list(never_audited_bins)), key=lambda d: d['total'])[:5]
+
+    return rarely_audited_bins
+
+
 def get_values(list_of_dict, key):
     return [val[key] for val in list_of_dict]
+
 
 class InsightsViewSet(LoggingViewset):
     """
@@ -539,13 +616,24 @@ class InsightsViewSet(LoggingViewset):
 
     def list(self, request):
         org_id = request.GET.get('organization', None)
-        accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete'). \
-                                               values('accuracy')), 'accuracy')
+        accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete')
+                                               .exclude(template_id__recommendation=True)
+                                               .values('accuracy')), 'accuracy')
+
+        accuracies_of_audits_using_recommendation = get_values(list(Audit.objects
+                                                                 .filter(organization_id=org_id, status='Complete')
+                                                                 .filter(template_id__recommendation=True)
+                                                                 .values('accuracy')), 'accuracy')
 
         # Check so that we don't divide by zero
         accuracy_average = 0
         if len(accuracies_of_audits):
-            accuracy_average = sum(accuracies_of_audits) / len(accuracies_of_audits)
+            accuracy_average = sum(accuracies_of_audits) // len(accuracies_of_audits)
+
+        recommendation_accuracy_average = 0
+        if len(accuracies_of_audits_using_recommendation):
+            recommendation_accuracy_average = \
+                sum(accuracies_of_audits_using_recommendation) // len(accuracies_of_audits_using_recommendation)
 
         durations_of_audits = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \
@@ -553,8 +641,11 @@ class InsightsViewSet(LoggingViewset):
 
         time_deltas = [v['last_verified_on'] - v['first_verified_on'] for v in durations_of_audits]  # in seconds
 
-        # giving datetime.timedelta(0) as the start value makes sum work on tds
-        average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+        average_timedelta = 0
+        if len(time_deltas):
+            # giving datetime.timedelta(0) as the start value makes sum work on tds
+            average_timedelta = sum(time_deltas, timedelta(0)).total_seconds() / len(time_deltas)
+
         days, hours, minutes = get_days_hour_min(average_timedelta)
 
         today = datetime.now()
@@ -570,6 +661,7 @@ class InsightsViewSet(LoggingViewset):
                                  initiated_on__year=year).count()
 
         data = {'average_accuracy': accuracy_average,
+                'recommendation_accuracy_average': recommendation_accuracy_average,
                 'average_audit_time': {"days": days, "hours": hours, "minutes": minutes, "seconds": average_timedelta},
                 'last_week_audit_count': last_week_audit_count, 'last_month_audit_count':last_month_audit_count,
                 'last_year_audit_count': last_year_audit_count}

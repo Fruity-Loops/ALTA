@@ -14,6 +14,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
 
   disabled = false;
   routeParams: any;
+  recommendation = false;
 
   constructor(
     public activatedRoute: ActivatedRoute,
@@ -28,6 +29,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
   getRouteParams(): void {
     this.routeParams = this.router.getCurrentNavigation()?.extras.state?.data;
     if (this.routeParams != null) {
+      this.recommendation = true;
       for (const recommendedItems of this.routeParams) {
         Object.keys(recommendedItems).forEach(recommendedLabel => {
           // @ts-ignore
@@ -50,6 +52,7 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
       Bin: '',
       Part_Number: '',
       Serial_Number: '',
+      recommendation: false,
       start_date: '',
       repeat_every: this.repeatEvery,
       on_day: this.dayArray,
@@ -90,34 +93,37 @@ export class CreateAuditTemplateComponent extends AuditTemplateViewComponent  {
     body.on_day = this.dayArray;
     body.for_month = this.monthArray;
     body.time_zone_utc = this.timeZoneUTC;
+    body.recommendation = this.recommendation;
 
     this.submitTemplate(checkedDay, checkedMonth, body);
   }
 
   private didCheckMonth(checkedMonth: boolean): boolean {
+    let localCheckedMonth = checkedMonth;
     // Checking if at least one checkbox is checked from the sub checkbox as well as populating monthArray
     // @ts-ignore
     for (const checkbox of this.recurrenceMonth.subCheckBox) {
       // @ts-ignore
       this.monthArray.push(checkbox.checked);
       if (checkbox.checked) {
-        checkedMonth = true;
+        localCheckedMonth = true;
       }
     }
-    return checkedMonth;
+    return localCheckedMonth;
   }
 
   private didCheckDay(checkedDay: boolean): boolean {
+    let localCheckDay = checkedDay;
     // Checking if at least one checkbox is checked from the sub checkbox as well as populating dayArray
     // @ts-ignore
     for (const checkbox of this.recurrenceDay.subCheckBox) {
       // @ts-ignore
       this.dayArray.push(checkbox.checked);
       if (checkbox.checked) {
-        checkedDay = true;
+        localCheckDay = true;
       }
     }
-    return checkedDay;
+    return localCheckDay;
   }
 
   private submitTemplate(checkedDay: boolean, checkedMonth: boolean, body: Template): void {

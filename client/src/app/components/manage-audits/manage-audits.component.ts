@@ -118,10 +118,16 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
   dataSourceRandomItem: any = [];
   dataSourceCategoryItem: any = [];
 
+  dataRarelyAuditedItems: any = [];
+  dataRarelyAuditedBins: any = [];
+  dataTopFlaggedItems: any = [];
+  dataRecentNewItems: any = [];
+
   last_week_audit_count: any;
   last_month_audit_count: any;
   last_year_audit_count: any;
   average_audit_accuracy: any;
+  recommendation_accuracy_average: any;
   average_time_audit_seconds: any;
   average_time_audit_min: any;
   average_time_audit_hour: any;
@@ -442,7 +448,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         width: 2,
       },
       title: {
-        text: 'Audit Accuracy over Time',
+        text: 'Inventory Accuracy over Time',
         align: 'left'
       },
       labels: this.xData,
@@ -534,6 +540,10 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.dataSourceItem = data['items_recommendation'];
         this.dataSourceRandomItem = data['random_items'];
         this.dataSourceCategoryItem = data['item_based_on_category'];
+        this.dataRarelyAuditedBins = data['rarely_audited_bins'];
+        this.dataRarelyAuditedItems = data['rarely_audited_items'];
+        this.dataTopFlaggedItems = data['top_flagged_items'];
+        this.dataRecentNewItems = data['recent_new_items'];
       },
       (err: any) => {
         this.errorMessage = err;
@@ -548,6 +558,7 @@ export class ManageAuditsComponent extends TableManagementComponent implements O
         this.last_month_audit_count = data['last_month_audit_count'];
         this.last_year_audit_count = data['last_year_audit_count'];
         this.average_audit_accuracy = data['average_accuracy'];
+        this.recommendation_accuracy_average = data['recommendation_accuracy_average'];
         this.average_time_audit_seconds = data['average_audit_time']['seconds'];
         this.average_time_audit_min = data['average_audit_time']['minutes'];
         this.average_time_audit_hour = data['average_audit_time']['hours'];

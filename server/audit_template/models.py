@@ -23,3 +23,4 @@ class AuditTemplate(models.Model):
     calendar_date = models.CharField(max_length=100)
     organization = models.ForeignKey(to='organization.Organization',
                                      on_delete=models.CASCADE, blank=True, null=True)
+    recommendation = models.BooleanField(default=False)

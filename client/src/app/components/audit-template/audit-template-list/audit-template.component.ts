@@ -74,6 +74,7 @@ export class AuditTemplateComponent implements OnInit {
   startAudit(id: string): void {
     this.auditTemplateService.getATemplate(id).subscribe(
       (data) => {
+        delete data.recommendation
         this.getItemsForTemplate(data, id);
       },
       (err) => {
