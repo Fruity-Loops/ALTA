@@ -298,7 +298,9 @@ class RecommendationTestCase(APITestCase):
     def test_list_recommendations_as_im(self):
         self.client.force_authenticate(user=self.inv_manager)
         response = self.client.get("/recommendation/", {'organization': 1})
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # ensure it retrieves a list of size between 0 and 5
         self.assertEqual(len(response.data['bins_recommendation']) <= 5, True)
         self.assertEqual(len(response.data['parts_recommendation']) <= 5, True)
         self.assertEqual(len(response.data['items_recommendation']) <= 5, True)
@@ -307,6 +309,17 @@ class RecommendationTestCase(APITestCase):
         self.assertEqual(len(response.data['rarely_audited_items']) <= 5, True)
         self.assertEqual(len(response.data['top_flagged_items']) <= 5, True)
         self.assertEqual(len(response.data['recent_new_items']) <= 5, True)
+
+        # ensures the retrieved values match the predefined fixture data
+        self.assertEqual(response.data['rarely_audited_bins'][0]['Bin'], 'X45')
+        self.assertEqual(response.data['rarely_audited_items'][0]['Item_Id'], '12731377')
+
+        self.assertEqual(response.data['bins_recommendation'][0]['Bin'], 'C20')
+        self.assertEqual(response.data['bins_recommendation'][0]['Location'], 'Florida')
+
+        self.assertEqual(response.data['parts_recommendation'][0]['Batch_Number'], '12752843')
+        self.assertEqual(response.data['top_flagged_items'][0]['Batch_Number'], '12731370')
+        self.assertEqual(response.data['recent_new_items'][0]['Batch_Number'], '12752420')
 
     # testing the retrieval of recommendations as SK user role
     def test_list_recommendations_as_sk(self):

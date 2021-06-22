@@ -91,6 +91,29 @@
             "Unit_of_Measure": "EA",
             "organization": 1
         }
+    },
+        {
+        "model": "inventory_item.item",
+        "pk": 12731377,
+        "fields": {
+            "Batch_Number": 12731377,
+            "Location": "New York",
+            "Plant": "False",
+            "Zone": "D",
+            "Aisle": 10,
+            "Bin": "X45",
+            "Part_Number": "PART-5",
+            "Part_Description": "Dummy Part 4",
+            "Serial_Number": "SN-4",
+            "Condition": "Serviceable",
+            "Category": "SERIALIZED",
+            "Owner": "FG",
+            "Criticality": "High",
+            "Average_Cost": " $9,000.00 ",
+            "Quantity": 1,
+            "Unit_of_Measure": "EA",
+            "organization": 1
+        }
     }
 ]
     

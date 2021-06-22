@@ -59,7 +59,7 @@
       "status": "Provided"
     }
   },
-    {
+  {
     "model": "audit.record",
     "pk": 3,
     "fields": {
@@ -87,6 +87,36 @@
       "first_verified_on": "2021-06-01T15:37:07.296+00:00",
       "last_verified_on": "2021-06-01T15:37:07.296+00:00",
       "status": "New"
+    }
+  },
+      {
+    "model": "audit.record",
+    "pk": 4,
+    "fields": {
+      "Batch_Number": 12752843,
+      "Location": "Florida",
+      "Plant": "True",
+      "Zone": "B",
+      "Aisle": 1,
+      "Bin": "C20",
+      "Part_Number": "PART-3",
+      "Part_Description": "Dummy Part 2",
+      "Serial_Number": "SN-4",
+      "Condition": "Serviceable",
+      "Category": "SERIALIZED",
+      "Owner": "FG",
+      "Criticality": "High",
+      "Average_Cost": "$9,000.00",
+      "Quantity": 1,
+      "Unit_of_Measure": "EA",
+      "item_id": "12752843",
+      "audit_id": 2,
+      "bin_to_sk_id": 2,
+      "comment": "",
+      "flagged": false,
+      "first_verified_on": "2021-06-11T15:37:07.296+00:00",
+      "last_verified_on": "2021-06-11T15:37:07.296+00:00",
+      "status": "Provided"
     }
   }
 ]
