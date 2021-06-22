@@ -154,5 +154,45 @@
         5
       ]
     }
+  },
+  {
+    "model": "audit.audit",
+    "pk": 9,
+    "fields": {
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-03-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": null,
+      "status": "Complete",
+      "accuracy": 100,
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "audit.audit",
+    "pk": 10,
+    "fields": {
+      "organization": 1,
+      "initiated_by": 2,
+      "initiated_on": "2021-03-04T21:57:00.012Z",
+      "last_modified_on": null,
+      "template_id": "c8c1a994-1f7d-4224-4201-2cfebafe2899",
+      "status": "Complete",
+      "accuracy": 50,
+      "inventory_items": [
+        "12731370",
+        "12752843"
+      ],
+      "assigned_sk": [
+        5
+      ]
+    }
   }
 ]

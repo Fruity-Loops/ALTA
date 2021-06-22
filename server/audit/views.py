@@ -617,22 +617,23 @@ class InsightsViewSet(LoggingViewset):
     def list(self, request):
         org_id = request.GET.get('organization', None)
         accuracies_of_audits = get_values(list(Audit.objects.filter(organization_id=org_id, status='Complete')
-                                               .exclude(template_id__recommendation=False)
+                                               .exclude(template_id__recommendation=True)
                                                .values('accuracy')), 'accuracy')
 
         accuracies_of_audits_using_recommendation = get_values(list(Audit.objects
                                                                  .filter(organization_id=org_id, status='Complete')
-                                                                 .filter(template_id__recommendation=False)
+                                                                 .filter(template_id__recommendation=True)
                                                                  .values('accuracy')), 'accuracy')
 
         # Check so that we don't divide by zero
         accuracy_average = 0
         if len(accuracies_of_audits):
-            accuracy_average = sum(accuracies_of_audits) / len(accuracies_of_audits)
+            accuracy_average = sum(accuracies_of_audits) // len(accuracies_of_audits)
 
         recommendation_accuracy_average = 0
         if len(accuracies_of_audits_using_recommendation):
-            recommendation_accuracy_average = sum(accuracies_of_audits_using_recommendation) / len(accuracies_of_audits_using_recommendation)
+            recommendation_accuracy_average = \
+                sum(accuracies_of_audits_using_recommendation) // len(accuracies_of_audits_using_recommendation)
 
         durations_of_audits = list(
             Record.objects.filter(bin_to_sk__init_audit__organization=org_id, audit__status='Complete'). \

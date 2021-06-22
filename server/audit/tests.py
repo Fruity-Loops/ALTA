@@ -107,7 +107,6 @@ class AuditTestCase(APITestCase):
         self.assertEqual(response.data['results'][0]['organization'], 1)
 
 
-
 class BinTestCase(APITestCase):
     fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json"]
 
@@ -138,7 +137,6 @@ class BinTestCase(APITestCase):
 
         response2 = self.client.get("/bin-to-sk/1/")
         self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN)
-
 
     def test_bin_to_sk_create(self):
         """ Create BinToSK designation as inventory manager """
@@ -246,6 +244,7 @@ class RecordTestCase(APITestCase):
             }, format="json")
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
 
+
 class AssignmentTestCase(APITestCase):
     fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json"]
 
@@ -265,7 +264,6 @@ class AssignmentTestCase(APITestCase):
         self.item_two = Item.objects.get(Batch_Number=12752843)
         self.audit = Audit.objects.create()
         self.audit.inventory_items.add(self.item_one.Batch_Number, self.item_two.Batch_Number)  # check if this was there before
-
 
     def test_create_assignment(self):
         self.client.force_authenticate(user=self.inv_manager)
@@ -329,7 +327,8 @@ class RecommendationTestCase(APITestCase):
 
 
 class InsightsTestCase(APITestCase):
-    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json", "record.json"]
+    fixtures = ["items.json", "users.json", "organizations.json", "audits.json", "bins.json",
+                "record.json", "audit_template.json"]
 
     def setUp(self):
         self.client = APIClient()
@@ -350,6 +349,10 @@ class InsightsTestCase(APITestCase):
         self.assertEqual(100 >= response.data['average_accuracy'] >= 0, True)
         self.assertEqual(isinstance(response.data['recommendation_accuracy_average'], (int, float)), True)
         self.assertEqual(100 >= response.data['recommendation_accuracy_average'] >= 0, True)
+
+        # ensure correct accuracy is being retrieved (non-recommendation vs recommendation)
+        self.assertEqual(response.data['average_accuracy'], 100)
+        self.assertEqual(response.data['recommendation_accuracy_average'], 50)
 
     # testing the retrieval of recommendations as SK user role
     def test_list_insights_as_sk(self):
