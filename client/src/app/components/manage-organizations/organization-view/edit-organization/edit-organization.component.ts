@@ -34,7 +34,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
         this.isActive = organization.status ? this.activeStates[0] : this.activeStates[1];
         this.originalStatus = organization.status;
         this.orgName = organization.org_name;
-        this.location = organization.address.replace(/\[|\]|\'/g, '');
+        this.locations = organization.address.replace(/\[|\]|\'/g, '');
       });
     });
   }
