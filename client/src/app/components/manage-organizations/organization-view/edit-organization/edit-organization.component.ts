@@ -69,7 +69,7 @@ export class EditOrganizationComponent extends OrganizationViewComponent {
     this.organizationService.updateOrganization({
       org_id: this.orgID,
       org_name: this.orgName,
-      address: this.locations,
+      address: [this.locations],
       status: this.isActive === this.activeStates[0]
     }).subscribe(() => {
       location.reload();

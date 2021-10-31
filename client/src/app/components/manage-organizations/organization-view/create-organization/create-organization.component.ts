@@ -29,7 +29,7 @@ export class CreateOrganizationComponent extends OrganizationViewComponent {
     this.organizationService
       .createOrganization({
         org_name: this.orgName,
-        address: this.locations,
+        address: [this.locations.toString()],
         status: true,
       })
       .subscribe(

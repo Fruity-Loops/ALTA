@@ -30,7 +30,7 @@
       <div class="vertical-stack">
         <mat-label>{{fieldLabels.location}}:</mat-label>
         <mat-form-field appearance="outline" class="text-input">
-          <input matInput [placeholder]="fieldPlaceholders.location" [(ngModel)]="location" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
+          <input matInput [placeholder]="fieldPlaceholders.location" [(ngModel)]="locations" [disabled]="isEdit && !editOn" id="EditOrgLocation"/>
         </mat-form-field>
       </div>
       <div class="upload-button-spacer">{{fieldLabels.or}}</div>
